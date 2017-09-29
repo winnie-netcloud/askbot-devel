@@ -25,12 +25,14 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext, override
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
+from django.apps import apps
 from django.db import models
 from django.db.models import Count, Q
 from django.conf import settings as django_settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core import exceptions as django_exceptions
+
 from django_countries.fields import CountryField
 from askbot import exceptions as askbot_exceptions
 from askbot import const
@@ -81,12 +83,14 @@ from askbot import mail
 from askbot import signals
 from jsonfield import JSONField
 
+
 register_user_signal = partial(signals.register_generic_signal, sender=User)
 
 
 def get_model(model_name):
     """a shortcut for getting model for an askbot app"""
-    return models.get_model('askbot', model_name)
+    return apps.get_model('askbot', model_name)
+
 
 def get_admin():
     """returns admin with the lowest user ID
@@ -2786,7 +2790,7 @@ def user_get_personal_group(self):
     except Group.DoesNotExist:
         self.join_default_groups()
         return Group.objects.get(name=group_name)
-        
+
 
 def user_get_foreign_groups(self):
     """returns a query set of groups to which user does not belong"""
