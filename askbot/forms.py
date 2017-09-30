@@ -1,7 +1,6 @@
 """Forms, custom form fields and related utility functions
 used in AskBot"""
 import regex as re #todo: make explicit import
-import datetime
 import askbot
 import unicodedata
 from collections import OrderedDict
@@ -10,7 +9,7 @@ from askbot import const
 from askbot.const import message_keys
 from django.conf import settings as django_settings
 from django.core.exceptions import PermissionDenied
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
