@@ -1,0 +1,21 @@
+@import "basic";
+
+.page-link {
+    padding: 0.25rem 0.5rem;
+    color: $color-paginator;
+    .fa {
+        font-weight: bold;
+    }
+}
+
+.page-item:first-child,
+.page-item:last-child {
+    .page-link {
+        border-radius: 0;
+    }
+}
+
+.page-item.active .page-link {
+    border-color: $color-paginator;
+    background-color: $color-paginator;
+}

@@ -1,5 +1,5 @@
 /* Variables for fonts */
-/* line 47, basic.scss */
+/* line 48, basic.scss */
 body {
   background: #fff;
   color: #4b4b4b;
@@ -8,7 +8,7 @@ body {
   padding: 0;
   font-family: Arial;
 }
-/* line 55, basic.scss */
+/* line 56, basic.scss */
 body.user-messages {
   margin-top: 3.4em;
   box-sizing: border-box;
@@ -16,7 +16,7 @@ body.user-messages {
   -webkit-box-sizing: border-box;
 }
 
-/* line 63, basic.scss */
+/* line 64, basic.scss */
 a:hover {
   color: black;
   -moz-transition-duration: 0.5s;
@@ -25,18 +25,18 @@ a:hover {
   transition-duration: 0.5s;
 }
 
-/* line 68, basic.scss */
+/* line 69, basic.scss */
 h1 {
   font-size: 30px;
 }
 
-/* line 72, basic.scss */
+/* line 73, basic.scss */
 h2 {
   font-size: 24px;
 }
 
 /* ----- Red Popup notification ----- */
-/* line 78, basic.scss */
+/* line 79, basic.scss */
 .vote-notification {
   z-index: 1;
   cursor: pointer;
@@ -45,25 +45,25 @@ h2 {
   position: absolute;
   text-align: center;
 }
-/* line 85, basic.scss */
+/* line 86, basic.scss */
 .vote-notification h3 {
   font-size: 14px;
   margin-bottom: 5px;
   line-height: 20px;
   font-weight: normal;
 }
-/* line 91, basic.scss */
+/* line 92, basic.scss */
 .vote-notification a {
   text-decoration: underline;
   font-weight: bold;
 }
 
-/* line 98, basic.scss */
+/* line 99, basic.scss */
 .content-wrapper {
   min-height: 70vh;
 }
 
-/* line 101, basic.scss */
+/* line 102, basic.scss */
 .section-title {
   color: #7ea9b3;
   float: left;
@@ -72,90 +72,90 @@ h2 {
   font-size: 24px;
 }
 
-/* line 109, basic.scss */
+/* line 110, basic.scss */
 .ground {
   padding: 16px 0;
   background: #343a40;
   font-size: .95rem;
 }
-/* line 114, basic.scss */
+/* line 115, basic.scss */
 .ground a:hover {
   color: #ebff88;
 }
-/* line 118, basic.scss */
+/* line 119, basic.scss */
 .ground p {
   margin-bottom: 0;
 }
 
-/* line 123, basic.scss */
+/* line 124, basic.scss */
 .footer-links {
   color: #EEE;
   text-align: left;
 }
-/* line 127, basic.scss */
+/* line 128, basic.scss */
 .footer-links a {
   color: #e7e8a8;
 }
 
-/* line 132, basic.scss */
+/* line 133, basic.scss */
 .powered-link {
   text-align: left;
 }
-/* line 135, basic.scss */
+/* line 136, basic.scss */
 .powered-link a {
   color: #8ebcc7;
 }
 
-/* line 140, basic.scss */
+/* line 141, basic.scss */
 .copyright {
   color: #616161;
 }
-/* line 143, basic.scss */
+/* line 144, basic.scss */
 .copyright a {
   color: #8ebcc7;
 }
-/* line 147, basic.scss */
+/* line 148, basic.scss */
 .copyright img.license-logo {
   margin-left: 10px;
   float: right;
 }
 
-/* line 153, basic.scss */
+/* line 154, basic.scss */
 .hilite {
   background-color: #ff0;
 }
 
-/* line 157, basic.scss */
+/* line 158, basic.scss */
 .hilite1 {
   background-color: #ff0;
 }
 
-/* line 161, basic.scss */
+/* line 162, basic.scss */
 .hilite2 {
   background-color: #f0f;
 }
 
-/* line 165, basic.scss */
+/* line 166, basic.scss */
 .hilite3 {
   background-color: #0ff;
 }
 
-/* line 169, basic.scss */
+/* line 170, basic.scss */
 .gold, .badge1 {
   color: #FFCC00;
 }
 
-/* line 173, basic.scss */
+/* line 174, basic.scss */
 .silver, .badge2 {
   color: #CCCCCC;
 }
 
-/* line 177, basic.scss */
+/* line 178, basic.scss */
 .bronze, .badge3 {
   color: #CC9933;
 }
 
-/* line 181, basic.scss */
+/* line 182, basic.scss */
 .invisible {
   margin: -1px 0 0 -1px;
   height: 1px;
@@ -163,12 +163,12 @@ h2 {
   width: 1px;
 }
 
-/* line 189, basic.scss */
+/* line 190, basic.scss */
 .wmd-container textarea {
   width: 100% !important;
   box-sizing: border-box;
 }
-/* line 193, basic.scss */
+/* line 194, basic.scss */
 .wmd-container img {
   max-width: 100%;
 }
@@ -397,55 +397,252 @@ nav.question .cancelSearchBtn {
     display: none;
   }
 }
-/* line 5, style.scss */
+/* Variables for fonts */
+/* line 48, basic.scss */
+body {
+  background: #fff;
+  color: #4b4b4b;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+}
+/* line 56, basic.scss */
+body.user-messages {
+  margin-top: 3.4em;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+/* line 64, basic.scss */
+a:hover {
+  color: black;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+}
+
+/* line 69, basic.scss */
+h1 {
+  font-size: 30px;
+}
+
+/* line 73, basic.scss */
+h2 {
+  font-size: 24px;
+}
+
+/* ----- Red Popup notification ----- */
+/* line 79, basic.scss */
+.vote-notification {
+  z-index: 1;
+  cursor: pointer;
+  display: none;
+  padding-bottom: 10px;
+  position: absolute;
+  text-align: center;
+}
+/* line 86, basic.scss */
+.vote-notification h3 {
+  font-size: 14px;
+  margin-bottom: 5px;
+  line-height: 20px;
+  font-weight: normal;
+}
+/* line 92, basic.scss */
+.vote-notification a {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/* line 99, basic.scss */
+.content-wrapper {
+  min-height: 70vh;
+}
+
+/* line 102, basic.scss */
+.section-title {
+  color: #7ea9b3;
+  float: left;
+  font-family: "Open Sans Condensed", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+/* line 110, basic.scss */
+.ground {
+  padding: 16px 0;
+  background: #343a40;
+  font-size: .95rem;
+}
+/* line 115, basic.scss */
+.ground a:hover {
+  color: #ebff88;
+}
+/* line 119, basic.scss */
+.ground p {
+  margin-bottom: 0;
+}
+
+/* line 124, basic.scss */
+.footer-links {
+  color: #EEE;
+  text-align: left;
+}
+/* line 128, basic.scss */
+.footer-links a {
+  color: #e7e8a8;
+}
+
+/* line 133, basic.scss */
+.powered-link {
+  text-align: left;
+}
+/* line 136, basic.scss */
+.powered-link a {
+  color: #8ebcc7;
+}
+
+/* line 141, basic.scss */
+.copyright {
+  color: #616161;
+}
+/* line 144, basic.scss */
+.copyright a {
+  color: #8ebcc7;
+}
+/* line 148, basic.scss */
+.copyright img.license-logo {
+  margin-left: 10px;
+  float: right;
+}
+
+/* line 154, basic.scss */
+.hilite {
+  background-color: #ff0;
+}
+
+/* line 158, basic.scss */
+.hilite1 {
+  background-color: #ff0;
+}
+
+/* line 162, basic.scss */
+.hilite2 {
+  background-color: #f0f;
+}
+
+/* line 166, basic.scss */
+.hilite3 {
+  background-color: #0ff;
+}
+
+/* line 170, basic.scss */
+.gold, .badge1 {
+  color: #FFCC00;
+}
+
+/* line 174, basic.scss */
+.silver, .badge2 {
+  color: #CCCCCC;
+}
+
+/* line 178, basic.scss */
+.bronze, .badge3 {
+  color: #CC9933;
+}
+
+/* line 182, basic.scss */
+.invisible {
+  margin: -1px 0 0 -1px;
+  height: 1px;
+  overflow: hidden;
+  width: 1px;
+}
+
+/* line 190, basic.scss */
+.wmd-container textarea {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+/* line 194, basic.scss */
+.wmd-container img {
+  max-width: 100%;
+}
+
+/* line 3, paginator.scss */
+.page-link {
+  padding: 0.25rem 0.5rem;
+  color: #8ebcc7;
+}
+/* line 6, paginator.scss */
+.page-link .fa {
+  font-weight: bold;
+}
+
+/* line 13, paginator.scss */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+  border-radius: 0;
+}
+
+/* line 18, paginator.scss */
+.page-item.active .page-link {
+  border-color: #8ebcc7;
+  background-color: #8ebcc7;
+}
+
+/* line 6, style.scss */
 .alert p:last-child {
   margin-bottom: 0;
 }
 
-/* line 10, style.scss */
+/* line 11, style.scss */
 .tab-bar {
   float: right;
   font-size: 16px;
 }
-/* line 13, style.scss */
+/* line 14, style.scss */
 .tab-bar .input-group-addon {
   padding: .3rem .5rem;
 }
-/* line 16, style.scss */
+/* line 17, style.scss */
 .tab-bar span.input-group-addon {
   color: grey;
 }
-/* line 19, style.scss */
+/* line 20, style.scss */
 .tab-bar a.input-group-addon {
   text-decoration: none;
 }
-/* line 21, style.scss */
+/* line 22, style.scss */
 .tab-bar a.input-group-addon.on {
   color: black;
 }
-/* line 24, style.scss */
+/* line 25, style.scss */
 .tab-bar a.input-group-addon:hover {
   text-decoration: none;
 }
 
-/* line 30, style.scss */
+/* line 31, style.scss */
 .rss {
   float: right;
   color: #f57900;
   margin: 0 5px;
   line-height: 2.2;
 }
-/* line 35, style.scss */
+/* line 36, style.scss */
 .rss:hover {
   color: #c26000;
 }
 
-/* line 40, style.scss */
+/* line 41, style.scss */
 #questionCount {
   font-size: 22px;
   color: #7ea9b3;
 }
-/* line 44, style.scss */
+/* line 45, style.scss */
 #questionCount .count {
   font-weight: bold;
   font-size: 20px;
@@ -456,12 +653,12 @@ nav.question .cancelSearchBtn {
 }
 
 /* ----- Question list , check main_page/content.html and macros/macros.html----- */
-/* line 55, style.scss */
+/* line 56, style.scss */
 #question-list {
   position: relative;
 }
 
-/* line 59, style.scss */
+/* line 60, style.scss */
 .short-summary {
   position: relative;
   filter: inherit;
@@ -472,7 +669,7 @@ nav.question .cancelSearchBtn {
   width: 100%;
   float: left;
 }
-/* line 69, style.scss */
+/* line 70, style.scss */
 .short-summary h2 {
   font-size: 20px;
   font-weight: normal;
@@ -482,23 +679,23 @@ nav.question .cancelSearchBtn {
   display: block;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
-/* line 79, style.scss */
+/* line 80, style.scss */
 .short-summary a {
   color: #464646;
 }
-/* line 83, style.scss */
+/* line 84, style.scss */
 .short-summary .userinfo {
   text-align: right;
   line-height: 16px;
   font-family: Arial;
   padding-right: 4px;
 }
-/* line 89, style.scss */
+/* line 90, style.scss */
 .short-summary .userinfo a {
   font-weight: bold;
   font-size: 11px;
 }
-/* line 95, style.scss */
+/* line 96, style.scss */
 .short-summary .userinfo .timeago,
 .short-summary span.anonymous {
   font-size: 11px;
@@ -506,19 +703,19 @@ nav.question .cancelSearchBtn {
   font-weight: normal;
   color: #555;
 }
-/* line 103, style.scss */
+/* line 104, style.scss */
 .short-summary .counts {
   float: right;
   margin: 4px 0 0 5px;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
-/* line 108, style.scss */
+/* line 109, style.scss */
 .short-summary .counts .item-count {
   padding: 0 5px;
   font-size: 25px;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
-/* line 118, style.scss */
+/* line 119, style.scss */
 .short-summary .counts .votes div,
 .short-summary .counts .views div,
 .short-summary .counts .answers div,
@@ -528,11 +725,11 @@ nav.question .cancelSearchBtn {
   line-height: 14px;
   color: #646464;
 }
-/* line 127, style.scss */
+/* line 128, style.scss */
 .short-summary .tags {
   margin: 0 0 0 1px;
 }
-/* line 131, style.scss */
+/* line 132, style.scss */
 .short-summary .votes, .short-summary .answers, .short-summary .favorites, .short-summary .views {
   text-align: center;
   margin: 0 3px;
@@ -542,43 +739,43 @@ nav.question .cancelSearchBtn {
   height: 54px;
   border: #dbdbd4 1px solid;
 }
-/* line 141, style.scss */
+/* line 142, style.scss */
 .short-summary .votes {
   background: url(../images/vote-background.png) repeat-x;
 }
-/* line 145, style.scss */
+/* line 146, style.scss */
 .short-summary .answers {
   background: url(../images/answers-background.png) repeat-x;
 }
-/* line 149, style.scss */
+/* line 150, style.scss */
 .short-summary .views {
   background: url(../images/view-background.png) repeat-x;
 }
-/* line 153, style.scss */
+/* line 154, style.scss */
 .short-summary .no-votes .item-count {
   color: #b1b5b6;
 }
-/* line 157, style.scss */
+/* line 158, style.scss */
 .short-summary .some-votes .item-count {
   color: #4a757f;
 }
-/* line 161, style.scss */
+/* line 162, style.scss */
 .short-summary .no-answers .item-count {
   color: #b1b5b6;
 }
-/* line 165, style.scss */
+/* line 166, style.scss */
 .short-summary .some-answers .item-count {
   color: #eab243;
 }
-/* line 169, style.scss */
+/* line 170, style.scss */
 .short-summary .no-views .item-count {
   color: #b1b5b6;
 }
-/* line 173, style.scss */
+/* line 174, style.scss */
 .short-summary .some-views .item-count {
   color: #d33f00;
 }
-/* line 177, style.scss */
+/* line 178, style.scss */
 .short-summary .accepted .item-count {
   background: url(../images/accept.png) no-repeat top right;
   display: block;
@@ -586,18 +783,18 @@ nav.question .cancelSearchBtn {
   width: 40px;
   color: #eab243;
 }
-/* line 185, style.scss */
+/* line 186, style.scss */
 .short-summary .some-favorites .item-count {
   background: #338333;
   color: #d0f5a9;
 }
-/* line 190, style.scss */
+/* line 191, style.scss */
 .short-summary .no-favorites .item-count {
   background: #eab243;
   color: yellow;
 }
 
-/* line 196, style.scss */
+/* line 197, style.scss */
 ul.tags {
   list-style: none;
   margin: 0;
@@ -606,14 +803,14 @@ ul.tags {
   display: block;
 }
 
-/* line 204, style.scss */
+/* line 205, style.scss */
 .js-tag {
   display: block;
   height: 17px;
   margin: 0 5px 0 0;
   padding: 0;
 }
-/* line 210, style.scss */
+/* line 211, style.scss */
 .js-tag .js-delete-icon {
   -webkit-box-shadow: 0px 0px 5px #d3d6d7;
   -moz-box-shadow: 0px 0px 5px #d3d6d7;
@@ -630,23 +827,23 @@ ul.tags {
   cursor: default;
   color: #fff;
 }
-/* line 227, style.scss */
+/* line 228, style.scss */
 .js-tag .tag-number {
   float: none;
 }
 
-/* line 232, style.scss */
+/* line 233, style.scss */
 .merge-questions .js-tag {
   display: inline-block;
 }
 
-/* line 236, style.scss */
+/* line 237, style.scss */
 .js-tag-extra-content {
   padding-left: 4px;
   vertical-align: text-top;
 }
 
-/* line 241, style.scss */
+/* line 242, style.scss */
 .js-tag-name {
   cursor: pointer;
   background: #f3f6f6;
@@ -670,25 +867,25 @@ ul.tags {
   color: #585858;
 }
 
-/* line 263, style.scss */
+/* line 264, style.scss */
 .js-deletable-tag {
   margin-right: 3px;
   white-space: nowrap;
 }
 
-/* line 268, style.scss */
+/* line 269, style.scss */
 .tags a.js-tag-name,
 .tags span.js-tag-name {
   color: #585858;
   text-decoration: none;
 }
 
-/* line 274, style.scss */
+/* line 275, style.scss */
 .tags a:hover {
   color: #1A1A1A;
 }
 
-/* line 278, style.scss */
+/* line 279, style.scss */
 ul.tags li {
   display: inline-block;
   margin: 0 4px 8px 0;
@@ -696,25 +893,25 @@ ul.tags li {
   height: 20px;
 }
 
-/* line 285, style.scss */
+/* line 286, style.scss */
 .question-info {
   margin-left: 50px;
 }
 
-/* line 289, style.scss */
+/* line 290, style.scss */
 .ask-page {
   font-size: 16px;
 }
-/* line 291, style.scss */
+/* line 292, style.scss */
 .ask-page label {
   font-size: 16px;
 }
-/* line 295, style.scss */
+/* line 296, style.scss */
 .ask-page .checkbox label {
   font-size: 14px;
 }
 
-/* line 302, style.scss */
+/* line 303, style.scss */
 .js-error,
 .form-error {
   font-size: 12px;
@@ -722,12 +919,12 @@ ul.tags li {
 }
 
 /* ----- Sidebar Widgets Box, check main_page/sidebar.html or question/sidebar.html ----- */
-/* line 310, style.scss */
+/* line 311, style.scss */
 .card .card-header {
   font-size: 1.15em;
 }
 
-/* line 315, style.scss */
+/* line 316, style.scss */
 #tagSelector h2 {
   background: #eceeeb;
   text-align: right;
@@ -736,25 +933,25 @@ ul.tags li {
   padding: 10px 10px 10px 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
-/* line 324, style.scss */
+/* line 325, style.scss */
 #tagSelector h3 {
   color: #4a757f;
   font-size: 18px;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-/* line 332, style.scss */
+/* line 333, style.scss */
 #displayTagFilterControl p {
   margin-bottom: 0;
 }
-/* line 336, style.scss */
+/* line 337, style.scss */
 #displayTagFilterControl label {
   color: #707070;
   font-size: 15px;
   font-weight: 600;
 }
 
-/* line 343, style.scss */
+/* line 344, style.scss */
 .acResults {
   padding: 0;
   border: 1px solid WindowFrame;
@@ -763,14 +960,14 @@ ul.tags li {
   box-shadow: 0 1px 1px #BFBFBF;
   z-index: 100;
 }
-/* line 350, style.scss */
+/* line 351, style.scss */
 .acResults ul {
   width: 100%;
   padding: 0;
   margin: 0;
   list-style-type: none;
 }
-/* line 356, style.scss */
+/* line 357, style.scss */
 .acResults li {
   margin: 0;
   padding: 2px 5px;
@@ -779,31 +976,31 @@ ul.tags li {
   font-size: 14px;
   overflow: hidden;
 }
-/* line 364, style.scss */
+/* line 365, style.scss */
 .acResults .acSelect {
   background-color: Highlight;
   color: HighlightText;
 }
 
 @media screen and (max-width: 767px) {
-  /* line 372, style.scss */
+  /* line 373, style.scss */
   .views,
   .votes,
   .rss {
     display: none;
   }
 
-  /* line 377, style.scss */
+  /* line 378, style.scss */
   .tab-bar {
     float: none;
     margin-bottom: 10px;
   }
 }
-/* line 386, style.scss */
+/* line 387, style.scss */
 .post .social-share {
   margin-top: 8px;
 }
-/* line 388, style.scss */
+/* line 389, style.scss */
 .post .social-share a.facebook-share.icon,
 .post .social-share a.twitter-share.icon,
 .post .social-share a.linkedin-share.icon,
@@ -814,50 +1011,50 @@ ul.tags li {
   margin-bottom: 4px;
   cursor: pointer;
 }
-/* line 396, style.scss */
+/* line 397, style.scss */
 .post .social-share a.facebook-share.icon:hover,
 .post .social-share a.twitter-share.icon:hover,
 .post .social-share a.linkedin-share.icon:hover,
 .post .social-share a.identica-share.icon:hover {
   opacity: 0.8;
 }
-/* line 402, style.scss */
+/* line 403, style.scss */
 .post .social-share a.facebook-share.icon {
   color: #536cac;
 }
-/* line 404, style.scss */
+/* line 405, style.scss */
 .post .social-share a.facebook-share.icon:hover {
   color: #536cac;
 }
-/* line 414, style.scss */
+/* line 415, style.scss */
 .post .social-share a.twitter-share.icon {
   color: #6ba3eb;
 }
-/* line 416, style.scss */
+/* line 417, style.scss */
 .post .social-share a.twitter-share.icon:hover {
   color: #6ba3eb;
 }
-/* line 421, style.scss */
+/* line 422, style.scss */
 .post .social-share a.linkedin-share.icon {
   color: #4d79af;
 }
-/* line 423, style.scss */
+/* line 424, style.scss */
 .post .social-share a.linkedin-share.icon:hover {
   color: #4d79af;
 }
-/* line 430, style.scss */
+/* line 431, style.scss */
 .post .vote-buttons {
   color: #888;
   float: left;
   width: 35px;
   margin-left: -6px;
 }
-/* line 435, style.scss */
+/* line 436, style.scss */
 .post .vote-buttons .fa {
   display: inherit;
   line-height: 20px;
 }
-/* line 440, style.scss */
+/* line 441, style.scss */
 .post .vote-number {
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 23px;
@@ -867,7 +1064,7 @@ ul.tags li {
   line-height: 15px;
 }
 
-/* line 450, style.scss */
+/* line 451, style.scss */
 .question-img-upvote,
 .question-img-downvote,
 .answer-img-upvote,
@@ -876,7 +1073,7 @@ ul.tags li {
   line-height: 100%;
   cursor: pointer;
 }
-/* line 457, style.scss */
+/* line 458, style.scss */
 .question-img-upvote:hover,
 .question-img-downvote:hover,
 .answer-img-upvote:hover,
@@ -884,59 +1081,59 @@ ul.tags li {
   color: #28a745;
 }
 
-/* line 463, style.scss */
+/* line 464, style.scss */
 .question-img-downvote:hover,
 .answer-img-downvote:hover {
   color: #dc3545;
 }
 
-/* line 469, style.scss */
+/* line 470, style.scss */
 .question-page .js-text-error {
   margin-bottom: 4px;
 }
-/* line 472, style.scss */
+/* line 473, style.scss */
 .question-page .js-editable-controls .btn {
   margin-right: 10px;
 }
-/* line 476, style.scss */
+/* line 477, style.scss */
 .question-page h1 {
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
-/* line 478, style.scss */
+/* line 479, style.scss */
 .question-page h1 a {
   color: #464646;
   font-size: 26px;
   font-weight: normal;
   line-height: 1;
 }
-/* line 484, style.scss */
+/* line 485, style.scss */
 .question-page h1 .js-editable-content {
   display: inline;
 }
-/* line 487, style.scss */
+/* line 488, style.scss */
 .question-page h1 .js-editable-controls {
   display: inline;
 }
-/* line 490, style.scss */
+/* line 491, style.scss */
 .question-page h1 textarea.form-control {
   padding-top: 0;
   padding-bottom: 0;
 }
-/* line 495, style.scss */
+/* line 496, style.scss */
 .question-page h1 .btn-link {
   cursor: pointer;
   color: #888;
   padding: 0;
 }
-/* line 499, style.scss */
+/* line 500, style.scss */
 .question-page h1 .btn-link:hover {
   text-decoration: underline;
 }
-/* line 502, style.scss */
+/* line 503, style.scss */
 .question-page h1 .btn-link .fa {
   padding-left: 5px;
 }
-/* line 507, style.scss */
+/* line 508, style.scss */
 .question-page h1 .js-simple-editor textarea {
   color: #666;
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -945,7 +1142,7 @@ ul.tags li {
   height: 66px;
   width: 100% !important;
 }
-/* line 518, style.scss */
+/* line 519, style.scss */
 .question-page p.rss {
   float: none;
   clear: both;
@@ -955,69 +1152,69 @@ ul.tags li {
   width: auto;
   background-position: center left;
 }
-/* line 528, style.scss */
+/* line 529, style.scss */
 .question-page p.rss a {
   font-family: "Helvetica Neue", Arial, sans-serif;
   vertical-align: top;
 }
-/* line 533, style.scss */
+/* line 534, style.scss */
 .question-page .post {
   margin-bottom: 16px;
 }
-/* line 535, style.scss */
+/* line 536, style.scss */
 .question-page .post .mceEditor td {
   width: auto;
 }
-/* line 538, style.scss */
+/* line 539, style.scss */
 .question-page .post pre, .question-page .post code {
   clear: both;
 }
-/* line 543, style.scss */
+/* line 544, style.scss */
 .question-page .post-content {
   margin-left: 60px;
 }
-/* line 547, style.scss */
+/* line 548, style.scss */
 .question-page .js-question .post-content {
   margin-bottom: 10px;
 }
-/* line 551, style.scss */
+/* line 552, style.scss */
 .question-page .answer .post-content {
   border-bottom: 1px solid #D4D4D4;
 }
-/* line 555, style.scss */
+/* line 556, style.scss */
 .question-page .post-body {
   font-size: 16px;
 }
-/* line 557, style.scss */
+/* line 558, style.scss */
 .question-page .post-body img {
   max-width: 100%;
 }
-/* line 562, style.scss */
+/* line 563, style.scss */
 .question-page .js-question .post-body {
   border-top: #f0f0f0 1px solid;
 }
-/* line 566, style.scss */
+/* line 567, style.scss */
 .question-page .post-update-info {
   font-size: 12px;
 }
-/* line 568, style.scss */
+/* line 569, style.scss */
 .question-page .post-update-info .user-card .user-info,
 .question-page .post-update-info .action-date {
   margin-left: 40px;
 }
-/* line 572, style.scss */
+/* line 573, style.scss */
 .question-page .post-update-info .badges {
   white-space: nowrap;
 }
-/* line 575, style.scss */
+/* line 576, style.scss */
 .question-page .post-update-info a {
   color: #4b4b4b;
 }
-/* line 580, style.scss */
+/* line 581, style.scss */
 .question-page .post-update-info-container {
   margin: 5px 0;
 }
-/* line 583, style.scss */
+/* line 584, style.scss */
 .question-page .post-controls {
   font-size: 12px;
   margin-bottom: 8px;
@@ -1026,12 +1223,12 @@ ul.tags li {
   text-align: right;
 }
 @media screen and (max-width: 767px) {
-  /* line 583, style.scss */
+  /* line 584, style.scss */
   .question-page .post-controls {
     margin-left: 0;
   }
 }
-/* line 592, style.scss */
+/* line 593, style.scss */
 .question-page .post-controls a,
 .question-page .post-controls span.dropdown-toggle {
   color: #888;
@@ -1041,40 +1238,40 @@ ul.tags li {
   padding: 0 5px;
 }
 @media screen and (max-width: 767px) {
-  /* line 592, style.scss */
+  /* line 593, style.scss */
   .question-page .post-controls a,
   .question-page .post-controls span.dropdown-toggle {
     margin-left: 0;
   }
 }
-/* line 602, style.scss */
+/* line 603, style.scss */
 .question-page .post-controls a:hover,
 .question-page .post-controls span.dropdown-toggle:hover {
   text-decoration: none;
 }
-/* line 605, style.scss */
+/* line 606, style.scss */
 .question-page .post-controls a .fa,
 .question-page .post-controls span.dropdown-toggle .fa {
   padding-right: 3px;
 }
-/* line 610, style.scss */
+/* line 611, style.scss */
 .question-page .post-controls span.dropdown-toggle {
   position: relative;
 }
-/* line 614, style.scss */
+/* line 615, style.scss */
 .question-page .post-controls span.dropdown-toggle:hover form {
   margin: 0;
   display: block;
   width: 100%;
 }
-/* line 619, style.scss */
+/* line 620, style.scss */
 .question-page .post-controls span.dropdown-toggle:hover input {
   display: block !important;
   height: 20px !important;
   line-height: 20px !important;
   margin: 0;
 }
-/* line 625, style.scss */
+/* line 626, style.scss */
 .question-page .post-controls span.dropdown-toggle:hover .dropdown-menu {
   display: block;
   padding: 5px 0;
@@ -1082,7 +1279,7 @@ ul.tags li {
   left: auto;
   margin-top: -2px;
 }
-/* line 631, style.scss */
+/* line 632, style.scss */
 .question-page .post-controls span.dropdown-toggle:hover .dropdown-menu li,
 .question-page .post-controls span.dropdown-toggle:hover .dropdown-menu li:hover {
   display: block !important;
@@ -1090,32 +1287,32 @@ ul.tags li {
   padding: 0;
   width: 100% !important;
 }
-/* line 638, style.scss */
+/* line 639, style.scss */
 .question-page .post-controls span.dropdown-toggle:hover .dropdown-menu li:hover {
   background-color: #f5f0c9;
 }
-/* line 644, style.scss */
+/* line 645, style.scss */
 .question-page .post-controls .sep {
   color: #ccc;
   float: right;
   height: 18px;
   font-size: 18px;
 }
-/* line 652, style.scss */
+/* line 653, style.scss */
 .question-page .post-controls .answer-publish, .question-page .answer-controls .answer-publish {
   background: url(../images/publish.png) no-repeat center left;
 }
-/* line 655, style.scss */
+/* line 656, style.scss */
 .question-page .post-controls .answer-unpublish, .question-page .answer-controls .answer-unpublish {
   background: url(../images/unpublish.png) no-repeat 2px center;
 }
-/* line 659, style.scss */
+/* line 660, style.scss */
 .question-page .post-controls .answer-convert, .question-page .answer-controls .answer-convert {
   float: right;
   clear: left;
   /*background: url(../images/link.png) no-repeat center left;*/
 }
-/* line 665, style.scss */
+/* line 666, style.scss */
 .question-page .post-controls .answer-convert input, .question-page .answer-controls .answer-convert input {
   font-size: 12px;
   color: #888;
@@ -1133,67 +1330,67 @@ ul.tags li {
   margin-top: -2px;
   margin-left: 4px;
 }
-/* line 683, style.scss */
+/* line 684, style.scss */
 .question-page .post-controls .answer-convert input:hover, .question-page .answer-controls .answer-convert input:hover {
   background-color: #f5f0c9;
 }
-/* line 687, style.scss */
+/* line 688, style.scss */
 .question-page .tabBar {
   width: 100%;
 }
-/* line 691, style.scss */
+/* line 692, style.scss */
 .question-page .question-img-favorite:hover {
   background: url(../images/vote-favorite-on.png);
 }
-/* line 695, style.scss */
+/* line 696, style.scss */
 .question-page .comments.empty.ordering-forward {
   margin-top: -35px;
   float: left;
 }
 @media screen and (max-width: 767px) {
-  /* line 695, style.scss */
+  /* line 696, style.scss */
   .question-page .comments.empty.ordering-forward {
     margin-top: 0;
     float: none;
   }
 }
-/* line 704, style.scss */
+/* line 705, style.scss */
 .question-page .comments .truncated-post:nth-last-child(3) {
   float: left;
 }
-/* line 708, style.scss */
+/* line 709, style.scss */
 .question-page .comments div.controls {
   width: 100%;
   margin: 3px 0 20px 5px;
 }
-/* line 713, style.scss */
+/* line 714, style.scss */
 .question-page .comments .edit-comment-buttons {
   margin-top: 10px;
 }
-/* line 715, style.scss */
+/* line 716, style.scss */
 .question-page .comments .edit-comment-buttons .checkbox {
   margin: 8px 0 0 0;
 }
-/* line 718, style.scss */
+/* line 719, style.scss */
 .question-page .comments .edit-comment-buttons .btn {
   margin-right: 10px;
 }
-/* line 723, style.scss */
+/* line 724, style.scss */
 .question-page .comments .controls a {
   color: #988e4c;
   padding: 3px;
   padding-right: 15px;
   font-size: 14px;
 }
-/* line 728, style.scss */
+/* line 729, style.scss */
 .question-page .comments .controls a .fa {
   font-size: 18px;
 }
-/* line 733, style.scss */
+/* line 734, style.scss */
 .question-page .comments .controls a:hover {
   text-decoration: none;
 }
-/* line 737, style.scss */
+/* line 738, style.scss */
 .question-page .comments .js-open-editor-btn,
 .question-page .comments .js-load-comments-btn {
   color: #988e4c;
@@ -1201,21 +1398,21 @@ ul.tags li {
   padding: 3px;
   cursor: pointer;
 }
-/* line 745, style.scss */
+/* line 746, style.scss */
 .question-page .comments .js-open-editor-btn.new-comment-box {
   padding: 0 14px 0 29px;
 }
-/* line 747, style.scss */
+/* line 748, style.scss */
 .question-page .comments .js-open-editor-btn.new-comment-box .mock-editor {
   height: 50px;
 }
-/* line 752, style.scss */
+/* line 753, style.scss */
 .question-page .comments a {
   background-color: inherit;
   color: #1b79bd;
   padding: 0;
 }
-/* line 758, style.scss */
+/* line 759, style.scss */
 .question-page .comments textarea {
   box-sizing: border-box;
   color: #666;
@@ -1229,27 +1426,27 @@ ul.tags li {
   padding: 5px 19px 2px 6px;
   width: 100%;
 }
-/* line 771, style.scss */
+/* line 772, style.scss */
 .question-page .comments input {
   margin-left: 10px;
   margin-top: 1px;
   vertical-align: top;
   width: 100px;
 }
-/* line 778, style.scss */
+/* line 779, style.scss */
 .question-page .comments input[name="suppress_email"] {
   margin: 4px 5px 0 0;
   width: auto;
 }
-/* line 782, style.scss */
+/* line 783, style.scss */
 .question-page .comments label[for="suppress_email"] {
   vertical-align: top;
 }
-/* line 786, style.scss */
+/* line 787, style.scss */
 .question-page .comments button.submit {
   margin-right: 6px;
 }
-/* line 789, style.scss */
+/* line 790, style.scss */
 .question-page .comments .counter {
   display: inline-block;
   width: auto;
@@ -1258,75 +1455,75 @@ ul.tags li {
   font-family: Arial;
   text-align: right;
 }
-/* line 797, style.scss */
+/* line 798, style.scss */
 .question-page .comments .comment {
   border-bottom: 1px solid #edeeeb;
 }
-/* line 799, style.scss */
+/* line 800, style.scss */
 .question-page .comments .comment .comment-content {
   margin-left: 35px;
   padding: 5px 15px 5px 0;
 }
-/* line 803, style.scss */
+/* line 804, style.scss */
 .question-page .comments .comment .comment-votes {
   width: 30px;
   float: left;
 }
-/* line 808, style.scss */
+/* line 809, style.scss */
 .question-page .comments .comment:last-child {
   border-bottom: none;
 }
-/* line 811, style.scss */
+/* line 812, style.scss */
 .question-page .comments div.comment:hover {
   background-color: #efefef;
 }
-/* line 814, style.scss */
+/* line 815, style.scss */
 .question-page .comments a.author {
   background-color: inherit;
   color: #1b79bd;
   padding: 0;
 }
-/* line 819, style.scss */
+/* line 820, style.scss */
 .question-page .comments a.author:hover {
   text-decoration: underline;
 }
-/* line 822, style.scss */
+/* line 823, style.scss */
 .question-page .comments span.js-delete-icon:hover {
   color: #dc3545;
   cursor: pointer;
 }
-/* line 826, style.scss */
+/* line 827, style.scss */
 .question-page .comments .content {
   margin-bottom: 7px;
 }
-/* line 830, style.scss */
+/* line 831, style.scss */
 .question-page .comments .comment-votes {
   line-height: 130%;
   padding: 6px 5px 6px 3px;
 }
-/* line 836, style.scss */
+/* line 837, style.scss */
 .question-page .comments .comment-body p {
   margin-bottom: 4px;
 }
-/* line 841, style.scss */
+/* line 842, style.scss */
 .question-page .comments .comment-controls {
   padding-left: 3px;
 }
-/* line 843, style.scss */
+/* line 844, style.scss */
 .question-page .comments .comment-controls .js-avatar-box {
   margin-right: 4px;
 }
-/* line 848, style.scss */
+/* line 849, style.scss */
 .question-page .comments .js-edit {
   padding-left: 6px;
 }
-/* line 852, style.scss */
+/* line 853, style.scss */
 .question-page .comments .convert-comment {
   display: inline;
   white-space: nowrap;
   padding-left: 0;
 }
-/* line 856, style.scss */
+/* line 857, style.scss */
 .question-page .comments .convert-comment input {
   background: none;
   padding: 0;
@@ -1339,19 +1536,19 @@ ul.tags li {
   margin: 0 0 3px 8px;
   vertical-align: middle;
 }
-/* line 869, style.scss */
+/* line 870, style.scss */
 .question-page .comments .convert-comment input:hover {
   text-decoration: underline;
   cursor: pointer;
 }
-/* line 875, style.scss */
+/* line 876, style.scss */
 .question-page .comments .comment-delete {
   color: #aaa;
   font-size: 12px;
   float: right;
   padding-left: 10px;
 }
-/* line 882, style.scss */
+/* line 883, style.scss */
 .question-page .comments .upvote {
   margin: 0;
   padding-top: 2px;
@@ -1361,11 +1558,11 @@ ul.tags li {
   font-weight: bold;
   color: #888;
 }
-/* line 892, style.scss */
+/* line 893, style.scss */
 .question-page .comments .upvote.hover {
   position: relative;
 }
-/* line 894, style.scss */
+/* line 895, style.scss */
 .question-page .comments .upvote.hover:after {
   position: absolute;
   left: 0;
@@ -1380,12 +1577,12 @@ ul.tags li {
   -moz-osx-font-smoothing: grayscale;
   transform: translate(0, 0);
 }
-/* line 910, style.scss */
+/* line 911, style.scss */
 .question-page .comments .upvote:hover:after,
 .question-page .comments .upvote.upvoted {
   color: #dc3545;
 }
-/* line 915, style.scss */
+/* line 916, style.scss */
 .question-page .comments .help-text {
   float: right;
   text-align: right;
@@ -1394,13 +1591,13 @@ ul.tags li {
   margin-top: 0px;
   line-height: 50%;
 }
-/* line 924, style.scss */
+/* line 925, style.scss */
 .question-page #questionTools {
   font-size: 22px;
   margin-top: 11px;
   text-align: left;
 }
-/* line 930, style.scss */
+/* line 931, style.scss */
 .question-page .question-status {
   margin-top: 10px;
   margin-bottom: 15px;
@@ -1409,102 +1606,102 @@ ul.tags li {
   text-align: center;
   border: #e1c04a 1px solid;
 }
-/* line 939, style.scss */
+/* line 940, style.scss */
 .question-page .question-status h3 {
   font-size: 20px;
   color: #707070;
   font-weight: normal;
 }
-/* line 945, style.scss */
+/* line 946, style.scss */
 .question-page .vote-buttons .notify-sidebar {
   text-align: center;
   margin: 6px auto 0;
 }
-/* line 948, style.scss */
+/* line 949, style.scss */
 .question-page .vote-buttons .notify-sidebar label {
   vertical-align: top;
 }
-/* line 953, style.scss */
+/* line 954, style.scss */
 .question-page .tabBar-answer {
   padding-left: 7px;
   width: 723px;
   margin-top: 10px;
 }
-/* line 959, style.scss */
+/* line 960, style.scss */
 .question-page .accepted-answer {
   background-color: rgba(255, 243, 205, 0.8);
   padding: 10px;
 }
-/* line 965, style.scss */
+/* line 966, style.scss */
 .question-page .answered {
   background: #CCC;
   color: #999;
 }
-/* line 970, style.scss */
+/* line 971, style.scss */
 .question-page .answered-accepted {
   background: #DCDCDC;
   color: #763333;
 }
-/* line 974, style.scss */
+/* line 975, style.scss */
 .question-page .answered-accepted strong {
   color: #E1E818;
 }
-/* line 979, style.scss */
+/* line 980, style.scss */
 .question-page .answered-by-owner {
   background: #F1F1FF;
 }
-/* line 982, style.scss */
+/* line 983, style.scss */
 .question-page .answered-by-owner .comments {
   background-color: #E6ECFF;
 }
-/* line 984, style.scss */
+/* line 985, style.scss */
 .question-page .answered-by-owner .comments .js-load-comments-btn,
 .question-page .answered-by-owner .comments .js-open-editor-btn {
   background-color: #E6ECFF;
 }
-/* line 991, style.scss */
+/* line 992, style.scss */
 .question-page .answer-img-accept {
   font-size: 26px;
   cursor: pointer;
   margin-top: 8px;
 }
-/* line 997, style.scss */
+/* line 998, style.scss */
 .question-page .accepted-answer .answer-img-accept,
 .question-page .answer-img-accept:hover {
   color: #28a745;
 }
-/* line 1002, style.scss */
+/* line 1003, style.scss */
 .question-page #fmanswer {
   color: #707070;
   line-height: 1.2;
   margin-top: 10px;
 }
-/* line 1007, style.scss */
+/* line 1008, style.scss */
 .question-page #fmanswer h2 {
   font-family: "Helvetica Neue", Arial, sans-serif;
   color: #7ea9b3;
   font-size: 24px;
 }
-/* line 1012, style.scss */
+/* line 1013, style.scss */
 .question-page #fmanswer label {
   font-size: 13px;
 }
-/* line 1016, style.scss */
+/* line 1017, style.scss */
 .question-page .message {
   padding: 5px;
   margin: 0px 0 10px 0;
 }
 
-/* line 1023, style.scss */
+/* line 1024, style.scss */
 .vote-buttons {
   text-align: center;
 }
-/* line 1025, style.scss */
+/* line 1026, style.scss */
 .vote-buttons .js-question-follower-count {
   font-weight: bold;
 }
 
-/* line 1030, style.scss */
+/* line 1031, style.scss */
 .notify-sidebar .rss {
   float: none;
   display: inline-block;
@@ -1514,45 +1711,45 @@ ul.tags li {
   background-position: center left;
 }
 
-/* line 1040, style.scss */
+/* line 1041, style.scss */
 .questions-related p {
   border-bottom: #cccccc 1px solid;
 }
-/* line 1042, style.scss */
+/* line 1043, style.scss */
 .questions-related p:last-child {
   border-bottom: none;
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
 
-/* line 1053, style.scss */
+/* line 1054, style.scss */
 #contrib-users .row {
   margin-left: -1px;
   margin-right: -1px;
 }
-/* line 1056, style.scss */
+/* line 1057, style.scss */
 #contrib-users .row .col-md-3 {
   padding-left: 1px;
   padding-right: 1px;
   padding-bottom: 2px;
 }
-/* line 1062, style.scss */
+/* line 1063, style.scss */
 #contrib-users img {
   width: 100%;
   height: auto;
 }
 
-/* line 1068, style.scss */
+/* line 1069, style.scss */
 .wmd-previewer-toggle {
   color: #007bff;
   cursor: pointer;
 }
 
-/* line 1075, style.scss */
+/* line 1076, style.scss */
 .defaultSkin .mceIframeContainer {
   border-bottom: none !important;
 }
-/* line 1078, style.scss */
+/* line 1079, style.scss */
 .defaultSkin table.mceLayout {
   border-bottom: 1px solid #ccc !important;
 }
