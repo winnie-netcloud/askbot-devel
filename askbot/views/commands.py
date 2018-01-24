@@ -644,7 +644,7 @@ def set_question_title(request):
     question = get_object_or_404(models.Post, pk=question_id)
     user = request.user
     user.edit_question(question, title=title)
-    return {'title': title}
+    return {'title': question.thread.get_title()}
 
 
 @decorators.ajax_only
