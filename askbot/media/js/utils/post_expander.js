@@ -72,6 +72,9 @@ PostExpander.prototype.getExpandHandler = function () {
                     snippet.hide();
                     snippet.html(data.post_html);
                     snippet.fadeIn();
+                    if (askbot.settings.mathjaxEnabled === true) {
+                        runMathJax();
+                    }
                 }
             }
         });
