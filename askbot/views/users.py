@@ -40,7 +40,8 @@ from askbot.utils.slug import slugify
 from askbot.utils.html import sanitize_html
 from askbot.mail import send_mail
 from askbot.utils.translation import get_language
-from askbot.mail.messages import UnsubscribeLink
+from askbot.mail.messages import (AccountManagementRequest,
+                                  UnsubscribeLink)
 from askbot.utils.http import get_request_info
 from askbot.utils import decorators
 from askbot.utils import functions
@@ -54,6 +55,7 @@ from askbot import exceptions
 from askbot.models.badges import award_badges_signal
 from askbot.models.tag import format_personal_group_name
 from askbot.models.post import PostRevision
+from askbot.models.user import get_moderator_emails
 from askbot.search.state_manager import SearchState
 from askbot.utils import url_utils
 from askbot.utils.loading import load_module
@@ -259,9 +261,42 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
     return render(request, 'users.html', data)
 
 @csrf.csrf_protect
+def manage_account(request, subject, context):
+    """Allows requesting a data export, termination of account,
+    anonymization of data and termination of the account."""
+    if request.user != subject:
+        msg = _('Sorry, something is not right here...')
+        request.user.message_set.create(message=msg)
+        return HttpResponseRedirect(subject.get_absolute_url())
+
+    page_url = subject.get_profile_url(profile_section='manage-account')
+    if request.method == 'POST':
+        if 'terminate_account' in request.POST:
+            admin_msg = _('User %(username)s, id=%(id)s, %(email)s '
+                          'asked to terminate the account.')
+        elif 'export_data' in request.POST:
+            admin_msg = _('User %(username)s, id=%(id)s, %(email)s '
+                          'asked to export personal data.')
+        else:
+            return HttpResponseRedirect(page_url)
+
+        admin_msg = admin_msg % {'username': subject.username,
+                                 'id': subject.pk,
+                                 'email': subject.email}
+
+        email = AccountManagementRequest({'message': admin_msg,
+                                          'username': subject.username})
+        mod_emails = get_moderator_emails()
+        email.send(mod_emails)
+
+        user_msg = _('Thank you, you will soon hear from the site administrator.')
+        request.user.message_set.create(message=user_msg)
+
+    return render(request, 'user_profile/user_manage_account.html', context)
+
+@csrf.csrf_protect
 def user_moderate(request, subject, context):
-    """user subview for moderation
-    """
+    """User subview for moderation"""
     moderator = request.user
 
     if not (moderator.is_authenticated() and moderator.can_moderate_user(subject)):
@@ -1290,17 +1325,17 @@ def user_custom_tab(request, user, context):
     """works only if `ASKBOT_CUSTOM_USER_PROFILE_TAB`
     setting in the ``settings.py`` is properly configured"""
     tab_settings = django_settings.ASKBOT_CUSTOM_USER_PROFILE_TAB
-    module_path = tab_settings['CONTENT_GENERATOR']
-    content_generator = load_module(module_path)
+    module_path = tab_settings['CONTEXT_GENERATOR']
+    context_generator = load_module(module_path)
 
     page_title = _('profile - %(section)s') % \
         {'section': tab_settings['NAME']}
 
     context.update({
-        'custom_tab_content': content_generator(request, user),
         'tab_name': tab_settings['SLUG'],
         'page_title': page_title
     })
+    context.update(context_generator(request, user))
     return render(request, 'user_profile/custom_tab.html', context)
 
 USER_VIEW_CALL_TABLE = {
@@ -1313,6 +1348,7 @@ USER_VIEW_CALL_TABLE = {
     'votes': user_votes,
     'email_subscriptions': user_email_subscriptions,
     'moderation': user_moderate,
+    'manage-account': manage_account
 }
 
 CUSTOM_TAB = getattr(django_settings, 'ASKBOT_CUSTOM_USER_PROFILE_TAB', None)

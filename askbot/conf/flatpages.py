@@ -29,6 +29,17 @@ settings.register(
 settings.register(
     LongStringValue(
         FLATPAGES,
+        'AUTHENTICATION_PAGE_MESSAGE',
+        description=_('Message to display on the authentication pages'),
+        default='',
+        localized=True,
+        help_text=_('Markdown format is accepted')
+    )
+)
+
+settings.register(
+    LongStringValue(
+        FLATPAGES,
         'FORUM_HELP',
         description=_('Text of the Help page (html format)'),
         default='',

@@ -561,6 +561,14 @@ class RejectedPost(BaseEmail):
         return context
 
 
+class AccountManagementRequest(BaseEmail):
+    template_path = 'email/account_management_request'
+    title = _('Account management request')
+    description = _('Sent when user wants to cancel account or download data')
+    mock_contexts = ({'message': 'User Bob, id=52 asked to export personal data.',
+                      'username': 'Bob'},)
+
+
 class ModerationQueueNotification(BaseEmail):
     template_path = 'email/moderation_queue_notification'
     title = _('Moderation queue has items')

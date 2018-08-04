@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Giuliano Consoli, 2017
 # Marcello Bolognesi, 2013
 # Valter Mura <valtermura@gmail.com>, 2012
 msgid ""
@@ -10,8 +11,8 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-03-03 16:06+0000\n"
-"Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
+"PO-Revision-Date: 2017-10-05 14:48+0000\n"
+"Last-Translator: Giuliano Consoli\n"
 "Language-Team: Italian (http://www.transifex.com/askbot/askbot/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,11 +22,11 @@ msgstr ""
 
 #: media/js/group_messaging.js:132
 msgid "Type a message"
-msgstr ""
+msgstr "Scrivi un messaggio"
 
 #: media/js/group_messaging.js:141
 msgid "Add a recipient"
-msgstr ""
+msgstr "Aggiungi un destinatario"
 
 #: media/js/group_messaging.js:171
 msgid "message sent"
@@ -63,7 +64,7 @@ msgstr[1] ""
 
 #: media/js/live_search.js:315
 msgid "Search or ask your question"
-msgstr ""
+msgstr "Cerca o fai la tua domanda"
 
 #: media/js/post.js:28
 msgid "loading..."
@@ -89,11 +90,11 @@ msgstr "Il campo Tags non può essere vuoto"
 
 #: media/js/post.js:215
 msgid "details are required"
-msgstr ""
+msgstr "dettagli obbligatori"
 
 #: media/js/post.js:226
 msgid "enter your question"
-msgstr ""
+msgstr "inserisci la tua domanda"
 
 #: media/js/post.js:250
 msgid "content cannot be empty"
@@ -105,16 +106,16 @@ msgstr "Torna alla domanda"
 
 #: media/js/post.js:382 media/js/post.js.c:426 media/js/post.js.c:512
 msgid "Load preview"
-msgstr ""
+msgstr "Carica anteprima"
 
 #: media/js/post.js:420
 msgid "Merge"
-msgstr ""
+msgstr "Unisci"
 
 #: media/js/post.js:511 media/js/utils/modal_dialog.js:9
 #: media/js/utils/text_property_editor.js:48
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #: media/js/post.js:561
 msgid "draft saved..."
@@ -189,11 +190,11 @@ msgstr ""
 
 #: media/js/post.js:1865
 msgid "Preview: (hide)"
-msgstr ""
+msgstr "Anteprima: (nascondi)"
 
 #: media/js/post.js:1866
 msgid "Show preview"
-msgstr ""
+msgstr "Mostra anteprima"
 
 #: media/js/post.js:2283
 msgid "add comment"
@@ -237,7 +238,7 @@ msgstr ""
 
 #: media/js/post.js:2543 media/jslib/timeago.js:137
 msgid "just now"
-msgstr ""
+msgstr "adesso"
 
 #: media/js/post.js:2620
 msgid "delete this comment"
@@ -254,7 +255,7 @@ msgstr ""
 #: media/js/post.js:3364 media/js/post.js.c:4185 media/js/post.js.c:4378
 #: media/js/utils/editable.js:314
 msgid "save"
-msgstr ""
+msgstr "salva"
 
 #: media/js/post.js:3489
 msgid "Enter the logo url or upload an image"
@@ -266,11 +267,11 @@ msgstr ""
 
 #: media/js/post.js:3631
 msgid "change logo"
-msgstr ""
+msgstr "cambia logo"
 
 #: media/js/post.js:3632
 msgid "add logo"
-msgstr ""
+msgstr "aggiungi logo"
 
 #: media/js/post.js:3736
 #, c-format
@@ -286,7 +287,7 @@ msgstr[1] ""
 
 #: media/js/post.js:4114
 msgid "Delete category?"
-msgstr ""
+msgstr "Eliminare categoria?"
 
 #: media/js/post.js:4204 media/js/utils/edit_link.js:15
 msgid "edit"
@@ -294,7 +295,7 @@ msgstr "modifica"
 
 #: media/js/post.js:4291
 msgid "category name cannot be empty"
-msgstr ""
+msgstr "il nome della categoria non può essere vuoto"
 
 #: media/js/post.js:4328
 msgid "already exists at the current level!"
@@ -302,11 +303,11 @@ msgstr ""
 
 #: media/js/post.js:4364
 msgid "add category"
-msgstr ""
+msgstr "aggiungi categoria"
 
 #: media/js/post.js:4917
 msgid "save tags"
-msgstr ""
+msgstr "salva tags"
 
 #: media/js/post.js:4949 media/js/editors/folded_editor.js:38
 msgid "Sorry, you have only read access"
@@ -314,7 +315,7 @@ msgstr ""
 
 #: media/js/post.js:5022
 msgid "Group name:"
-msgstr ""
+msgstr "Nome del gruppo:"
 
 #: media/js/post.js:5048
 msgid "Shared with the following users:"
@@ -345,7 +346,7 @@ msgstr[1] ""
 
 #: media/js/utils.js:274
 msgid "and"
-msgstr ""
+msgstr "e"
 
 #: media/js/utils.js:292
 msgid "click to close"
@@ -368,15 +369,15 @@ msgstr "Al momento non hai un metodo di accesso: aggiungine almeno uno facendo c
 
 #: media/js/jquery-openid/jquery.authenticator.js:147
 msgid "enter username"
-msgstr ""
+msgstr "inserisci nome utente"
 
 #: media/js/jquery-openid/jquery.authenticator.js:149
 msgid "enter username or email"
-msgstr ""
+msgstr "inserisci nome utente o email"
 
 #: media/js/jquery-openid/jquery.authenticator.js:158
 msgid "enter password"
-msgstr ""
+msgstr "inserisci password"
 
 #: media/js/jquery-openid/jquery.authenticator.js:180
 msgid "passwords do not match"
@@ -419,11 +420,11 @@ msgstr "Crea un account protetto da password"
 
 #: media/js/user/group_adder_widget.js:12
 msgid "add group"
-msgstr ""
+msgstr "aggiungi gruppo"
 
 #: media/js/user/group_adder_widget.js:92
 msgid "add"
-msgstr ""
+msgstr "aggiungi"
 
 #: media/js/user/manage_reject_reasons_dialog.js:90
 msgid "Looks there are some things to fix:"
@@ -448,7 +449,7 @@ msgstr "Seleziona almeno un elemento"
 
 #: media/js/user/post_moderation_controls.js:113
 msgid "Load more items."
-msgstr ""
+msgstr "Carica più elementi."
 
 #: media/js/utils/comment_convert_link.js:26
 msgid "convert to answer"
@@ -465,11 +466,11 @@ msgstr ""
 
 #: media/js/utils/file_upload_dialog.js:152
 msgid "Choose a different file"
-msgstr ""
+msgstr "Scegli un file diverso"
 
 #: media/js/utils/file_upload_dialog.js:154
 msgid "Choose a different image"
-msgstr ""
+msgstr "Scegli un'immagine diversa"
 
 #: media/js/utils/file_upload_dialog.js:168
 msgid "Oops, looks like we had an error. Sorry."
@@ -477,11 +478,11 @@ msgstr ""
 
 #: media/js/utils/file_upload_dialog.js:228
 msgid "Choose a file to insert"
-msgstr ""
+msgstr "Scegli un file da inserire"
 
 #: media/js/utils/file_upload_dialog.js:230
 msgid "Choose an image to insert"
-msgstr ""
+msgstr "Scegli un'immagine da inserire"
 
 #: media/js/utils/file_upload_dialog.js:243
 msgid "Allowed file types are:"
@@ -494,11 +495,11 @@ msgstr ""
 
 #: media/js/utils/group_dropdown.js:18
 msgid "group name"
-msgstr ""
+msgstr "nome del gruppo"
 
 #: media/js/utils/group_dropdown.js:26
 msgid "add new group"
-msgstr ""
+msgstr "aggiungi nuovo gruppo"
 
 #: media/js/utils/group_dropdown.js:118
 msgid "Group %(name)s already exists. Group names are case-insensitive."
@@ -506,12 +507,12 @@ msgstr ""
 
 #: media/js/utils/modal_dialog.js:7
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: media/js/utils/paginator.js:115
 #, c-format
 msgid "page %s"
-msgstr ""
+msgstr "pagina %s"
 
 #: media/js/utils/tag.js:122
 #, c-format
@@ -520,97 +521,97 @@ msgstr "vedi le domande con tag '%s'"
 
 #: media/js/utils/text_property_editor.js:47
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: media/js/utils/text_property_editor.js:119
 msgid "saved"
-msgstr ""
+msgstr "Salvato"
 
 #: media/js/utils/toggle.js:88 media/js/utils/toggle.js.c:103
 msgid "enabled"
-msgstr ""
+msgstr "abilitato"
 
 #: media/js/utils/toggle.js:89 media/js/utils/toggle.js.c:104
 msgid "disabled"
-msgstr ""
+msgstr "disabilitato"
 
 #: media/jslib/timeago.js:90
 msgid "Jan"
-msgstr ""
+msgstr "Gen"
 
 #: media/jslib/timeago.js:91
 msgid "Feb"
-msgstr ""
+msgstr "Feb"
 
 #: media/jslib/timeago.js:92
 msgid "Mar"
-msgstr ""
+msgstr "Mar"
 
 #: media/jslib/timeago.js:93
 msgid "Apr"
-msgstr ""
+msgstr "Apr"
 
 #: media/jslib/timeago.js:94
 msgid "May"
-msgstr ""
+msgstr "Mag"
 
 #: media/jslib/timeago.js:95
 msgid "Jun"
-msgstr ""
+msgstr "Giu"
 
 #: media/jslib/timeago.js:96
 msgid "Jul"
-msgstr ""
+msgstr "Lug"
 
 #: media/jslib/timeago.js:97
 msgid "Aug"
-msgstr ""
+msgstr "Ago"
 
 #: media/jslib/timeago.js:98
 msgid "Sep"
-msgstr ""
+msgstr "Set"
 
 #: media/jslib/timeago.js:99
 msgid "Oct"
-msgstr ""
+msgstr "Ott"
 
 #: media/jslib/timeago.js:100
 msgid "Nov"
-msgstr ""
+msgstr "Nov"
 
 #: media/jslib/timeago.js:101
 msgid "Dec"
-msgstr ""
+msgstr "Dic"
 
 #: media/jslib/timeago.js:113
 msgid "2 days ago"
-msgstr ""
+msgstr "2 giorni fa"
 
 #: media/jslib/timeago.js:115
 msgid "yesterday"
-msgstr ""
+msgstr "ieri"
 
 #: media/jslib/timeago.js:120
 #, c-format
 msgid "%s hour ago"
 msgid_plural "%s hours ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s ora fa"
+msgstr[1] "%s ore fa"
 
 #: media/jslib/timeago.js:130
 #, c-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s minuto fa"
+msgstr[1] "%s minuti fa"
 
 #: media/tinymce/plugins/askbot_attachment/editor_plugin.js:71
 msgid "Insert a file"
-msgstr ""
+msgstr "Inserisci un file"
 
 #: media/tinymce/plugins/askbot_imageuploader/editor_plugin.js:70
 msgid "Insert image"
-msgstr ""
+msgstr "Inserisci immagine"
 
 #: media/wmd/wmd.js:31
 msgid "bold"

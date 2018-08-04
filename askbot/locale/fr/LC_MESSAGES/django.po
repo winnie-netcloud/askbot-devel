@@ -6,6 +6,7 @@
 # Alban Tiberghien <alban.tiberghien@gmail.com>, 2012
 # Anthony Monthe <anthony.monthe@gmail.com>, 2016
 # Axel Haustant, 2013
+# Axel Haustant, 2013
 # Benjamin Abel <bbig26@gmail.com>, 2014
 # Benjamin Abel <bbig26@gmail.com>, 2014
 # Benjamin Abel <bbig26@gmail.com>, 2014
@@ -14,25 +15,29 @@
 # ProfGra <christophegragnic@gmail.com>, 2014
 # Christophe CHAUVET <christophe.chauvet@gmail.com>, 2011-2013
 # Emmanuel <emmanuel@raviart.com>, 2013
-# evgeny <evgeny.fadeev@gmail.com>, 2009
+# evgeny <evgeny.fadeev@gmail.com>, 2009,2016
 # evgeny <evgeny.fadeev@gmail.com>, 2009
 # evgeny <evgeny.fadeev@gmail.com>, 2016
 # François Bureau, 2013
 # florent <fpam1108@gmail.com>, 2012
 # florent <fpam1108@gmail.com>, 2012
 # François Bureau, 2013
+# François Bureau, 2013
 # Camille Baldock <mademoisellegeek42@gmail.com>, 2011
 # Camille Baldock <mademoisellegeek42@gmail.com>, 2011
 # noirbizarre, 2013
 # Ogre Sympathique, 2016
+# Ogre Sympathique, 2016
+# pitchum pitchum <hnjoy7el6htp11c@jetable.org>, 2017
+# ProfGra <christophegragnic@gmail.com>, 2014
 # R Kaupp <RemiKaupp@wateraid.org>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-03-29 07:04+0000\n"
-"Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
+"PO-Revision-Date: 2017-09-23 18:05+0000\n"
+"Last-Translator: pitchum pitchum <hnjoy7el6htp11c@jetable.org>\n"
 "Language-Team: French (http://www.transifex.com/askbot/askbot/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,7 +55,7 @@ msgstr " - "
 
 #: feed.py:36 feed.py:108
 msgid "RSS feed"
-msgstr ""
+msgstr "Flux RSS"
 
 #: forms.py:100
 msgid "Wildcard tag must have only one '*' symbol"
@@ -108,19 +113,19 @@ msgstr[1] "doit avoir > %d de caractères non ponctués"
 #: forms.py:341
 #, python-format
 msgid "The input is too long, maximum %(length)d characters is allowed"
-msgstr ""
+msgstr "Le texte saisi est trop long, un maximum de %(length)d caractères est autorisé"
 
 #: forms.py:346
 #, python-format
 msgid "The input is too long, maximum %(length)d bytes is allowed"
-msgstr ""
+msgstr "Le texte saisi est trop long, un maximum de %(length)d octets est autorisé"
 
 #: forms.py:386
 #, python-format
 msgid "enter > %(length)d character"
 msgid_plural "enter > %(length)d characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Veuillez saisir plus de %(length)d caractère"
+msgstr[1] "Veuillez saisir plus de %(length)d caractères"
 
 #: forms.py:433
 #, python-format
@@ -681,7 +686,7 @@ msgstr "Réglages des médailles"
 #: conf/badges.py:27
 #, python-format
 msgid "Enable \"%s\" badge"
-msgstr "Autoriser le badge \"%s\""
+msgstr "Autoriser la médaille \"%s\""
 
 #: conf/badges.py:47 models/badges.py:709
 msgid "Associate Editor"
@@ -1086,7 +1091,7 @@ msgstr "Ce paramètre s'applique aux mots clés indiqués dans la ligne 'objet' 
 
 #: conf/email.py:371
 msgid "Enable posting and replying by email"
-msgstr ""
+msgstr "Permettre de poster et de répondre par email"
 
 #: conf/email.py:374
 msgid "To enable this feature make sure lamson is running"
@@ -1368,7 +1373,7 @@ msgstr ""
 
 #: conf/flatpages.py:48
 msgid "Text of the Q&amp;A forum FAQ page (html format)"
-msgstr ""
+msgstr "Texte de la page FAQ du forum Q&amp;R (format HTML)"
 
 #: conf/flatpages.py:52
 msgid ""
@@ -3208,7 +3213,7 @@ msgstr ""
 msgid ""
 "answer\n"
 "answers"
-msgstr "answer\nanswers"
+msgstr "réponse\nréponses"
 
 #: conf/words.py:285
 msgid "Countable plural forms for \"answer\""
@@ -3262,7 +3267,7 @@ msgstr "Nom de la médaille"
 
 #: conf/words.py:476 conf/words.py:477
 msgid "Show only questions from"
-msgstr "Tri des questions"
+msgstr "Filtre des questions"
 
 #: conf/words.py:486 conf/words.py:487
 msgid "Please ask your question here"
@@ -3861,7 +3866,7 @@ msgstr "Cliquez ici pour voir les questions les plus pertinentes"
 
 #: const/message_keys.py:17
 msgid "by relevance"
-msgstr ""
+msgstr "par pertinence"
 
 #: const/message_keys.py:18
 msgid "click to see the oldest questions"
@@ -3869,7 +3874,7 @@ msgstr "Cliquez ici pour voir les questions les moins récentes"
 
 #: const/message_keys.py:19
 msgid "by date"
-msgstr ""
+msgstr "par date"
 
 #: const/message_keys.py:20
 msgid "click to see the newest questions"
@@ -3881,7 +3886,7 @@ msgstr "Cliquez ici pour voir les questions mises à jour le moins récemment"
 
 #: const/message_keys.py:22
 msgid "by activity"
-msgstr ""
+msgstr "par activité"
 
 #: const/message_keys.py:23
 msgid "click to see the most recently updated questions"
@@ -3893,7 +3898,7 @@ msgstr "cliquer pour voir les questions avec le moins de réponses"
 
 #: const/message_keys.py:25
 msgid "by answers"
-msgstr ""
+msgstr "par réponses"
 
 #: const/message_keys.py:26
 msgid "click to see the most answered questions"
@@ -3905,7 +3910,7 @@ msgstr "Cliquez ici pour voir les questions ayant obtenu le moins de votes"
 
 #: const/message_keys.py:28
 msgid "by votes"
-msgstr ""
+msgstr "par votes"
 
 #: const/message_keys.py:29
 msgid "click to see most voted questions"
@@ -4264,11 +4269,11 @@ msgstr ""
 
 #: deps/livesettings/values.py:140
 msgid "Base Settings"
-msgstr ""
+msgstr "Réglages de base"
 
 #: deps/livesettings/values.py:256 deps/livesettings/values.py:290
 msgid "Default value: "
-msgstr ""
+msgstr "Valeur par défaut&nbsp;:"
 
 #: deps/livesettings/values.py:258
 #, python-format
@@ -5217,7 +5222,7 @@ msgstr ""
 #: templates/question_retag.html:5 templates/revisions.html:7
 #: templates/group_messaging/home.html:9
 msgid "back"
-msgstr ""
+msgstr "retour"
 
 #: templates/answer_edit.html:42 templates/question_edit.html:57
 msgid "Save edit"
@@ -5232,7 +5237,7 @@ msgstr ""
 #: templates/moderation/manage_reject_reasons_dialog.html:19
 #: templates/user_profile/user_edit.html:90
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: templates/answer_edit.html:85 templates/answer_edit.html.py:88
 #: templates/ask.html:66 templates/ask.html.py:69
@@ -5240,19 +5245,19 @@ msgstr ""
 #: templates/editors/rich_text.html:18 templates/question/javascript.html:132
 #: templates/question/javascript.html:135
 msgid "hide preview"
-msgstr ""
+msgstr "masquer l'aperçu"
 
 #: templates/answer_edit.html:88 templates/ask.html:69
 #: templates/question_edit.html:106 templates/question/javascript.html:135
 msgid "show preview"
-msgstr ""
+msgstr "afficher l'aperçu"
 
 #: templates/badge.html:5 templates/badge.html.py:9
 #: templates/user_profile/user_recent.html:18
 #: templates/user_profile/user_stats.html:79
 #, python-format
 msgid "%(name)s"
-msgstr ""
+msgstr "%(name)s"
 
 #: templates/badge.html:5
 msgid "Badge"
@@ -5272,8 +5277,8 @@ msgstr "%(description)s"
 #: templates/badge.html:14
 msgid "user received this badge:"
 msgid_plural "users received this badge:"
-msgstr[0] "L'utilisateur a reçut ce badge:"
-msgstr[1] "Les utilisateurs ont reçut ce badge:"
+msgstr[0] "L'utilisateur a reçut cette médaille&nbsp;:"
+msgstr[1] "Les utilisateurs ont reçut cette médaille&nbsp;:"
 
 #: templates/badges.html:3 templates/badges.html.py:5
 msgid "Badges"
@@ -5291,7 +5296,7 @@ msgstr "Badges communautaires"
 
 #: templates/badges.html:32
 msgid "gold badge: the highest honor and is very rare"
-msgstr "badge en or: la plus haute distinction, est très rare"
+msgstr "médaille d'or: la plus haute distinction, très rare"
 
 #: templates/badges.html:35
 msgid ""
@@ -5465,7 +5470,7 @@ msgstr ""
 
 #: templates/faq_static.html:72
 msgid "\"Login now!\""
-msgstr ""
+msgstr "Connectez-vous maintenant !"
 
 #: templates/faq_static.html:74
 msgid "Why other people can edit my questions/answers?"
@@ -5551,7 +5556,7 @@ msgstr ""
 
 #: templates/groups.html:31
 msgid "Number of members"
-msgstr ""
+msgstr "Nombre de membres"
 
 #: templates/help_static.html:2 templates/help_static.html.py:4
 #: views/meta.py:95
@@ -5561,7 +5566,7 @@ msgstr "Aide"
 #: templates/help_static.html:7
 #, python-format
 msgid "Welcome %(username)s,"
-msgstr ""
+msgstr "Bienvenue %(username)s,"
 
 #: templates/help_static.html:9
 msgid "Welcome,"
@@ -5580,67 +5585,67 @@ msgstr ""
 msgid ""
 "This site is for asking and answering questions, not for open-ended "
 "discussions."
-msgstr ""
+msgstr "Ce site sert pour des questions/réponses, pas pour des discussions ni des débats."
 
 #: templates/help_static.html:19
 msgid ""
 "We encourage everyone to use “question” space for asking and “answer” for "
 "answering."
-msgstr ""
+msgstr "Nous encourageons tout le monde à utiliser l'espace \"question\" pour poser des questions et l'espace \"réponse\" pour répondre."
 
 #: templates/help_static.html:22
 msgid ""
 "Despite that, each question and answer can be commented – \n"
 "    the comments are good for the limited discussions."
-msgstr ""
+msgstr "Néanmoins, chaque question ou réponse peut être commentée - \n  les commentaires sont une bonne solution pour de brèves discussions."
 
 #: templates/help_static.html:26
 msgid "Please search before asking your questions"
-msgstr ""
+msgstr "Cherchez avant de poser vos questions"
 
 #: templates/help_static.html:27
 msgid ""
 "Type your question in the search bar and see whether a similar question has "
 "been asked before"
-msgstr ""
+msgstr "Saisissez votre question dans la barre de recherche et voyez si une question similaire a déjà été posée avant"
 
 #: templates/help_static.html:29
 msgid "Search has advanced capabilities:"
-msgstr ""
+msgstr "La recherche dispose de fonctionnalités avancées&nbsp;:"
 
 #: templates/help_static.html:31
 msgid "to search in title - enter [title: your text]"
-msgstr ""
+msgstr "chercher dans le titre - tapez [title: votre texte]"
 
 #: templates/help_static.html:32
 msgid "to search by tags - enter [tag: sometag] or #sometag"
-msgstr ""
+msgstr "chercher dans les tags - tapez [tag: nomdutag] ou #nomdutag"
 
 #: templates/help_static.html:33
 msgid "to search by user - enter [user: somename] or @somename or @\"some name\""
-msgstr ""
+msgstr "chercher par utilisateur - tapez [user: nomutilisateur] ou @nomutilisateur ou @\"nom utilisateur\""
 
 #: templates/help_static.html:35
 msgid ""
 "In addition, it is possible to click on tags to add them to the search "
 "query."
-msgstr ""
+msgstr "De plus il est possible de cliquer sur les tags pour les ajouter aux critères de recherche."
 
 #: templates/help_static.html:37
 msgid ""
 "Finally, a separate tag search box is available in the side bar of the main "
 "page, where the search tags can be entered as well"
-msgstr ""
+msgstr "Enfin, un champ de recherche de tags est également disponible dans la barre latérale de la page principale, pour saisir les tags souhaités."
 
 #: templates/help_static.html:40
 msgid ""
 "<em>Important!!!</em> All search terms are combined with a logical \"AND\" "
 "expression - to narrow the search by adding new terms."
-msgstr ""
+msgstr "<em>Important !!!</em> Tous les termes saisis sont combinés par des OU logiques de sorte que la liste des résultats diminue à chaque terme ajouté."
 
 #: templates/help_static.html:42
 msgid "Voting"
-msgstr ""
+msgstr "Votez"
 
 #: templates/help_static.html:44
 #, python-format
@@ -5751,7 +5756,7 @@ msgstr ""
 
 #: templates/macros.html:61
 msgid "anonymous user"
-msgstr ""
+msgstr "utilisateur anonyme"
 
 #: templates/macros.html:86
 msgid "this post is marked as community wiki"
@@ -5771,12 +5776,12 @@ msgstr ""
 #: templates/macros.html:240 templates/macros.html.py:242
 #: templates/macros.html:261
 msgid "Join this group"
-msgstr ""
+msgstr "Rejoindre ce groupe"
 
 #: templates/macros.html:241 templates/macros.html.py:246
 #: templates/macros.html:256
 msgid "You are a member"
-msgstr ""
+msgstr "Vous êtes un membre"
 
 #: templates/macros.html:248
 msgid "Cancel application"
@@ -5794,19 +5799,19 @@ msgstr ""
 #: templates/macros.html:337 templates/macros.html.py:348
 #: templates/question.html:419
 msgid "add a comment"
-msgstr ""
+msgstr "ajouter un commentaire"
 
 #: templates/macros.html:341
 msgid "load older comments"
-msgstr ""
+msgstr "charger les commentaires plus anciens"
 
 #: templates/macros.html:343
 msgid "see more comments"
-msgstr ""
+msgstr "voir plus de commentaires"
 
 #: templates/macros.html:376
 msgid "delete this comment"
-msgstr ""
+msgstr "supprimer ce commentaire"
 
 #: templates/macros.html:379 templates/question/answer_card.html:25
 #: templates/question/question_card.html:34
@@ -5819,15 +5824,15 @@ msgstr ""
 #: templates/question/question_controls.html:1
 #: templates/user_profile/user_info.html:170
 msgid "edit"
-msgstr ""
+msgstr "éditer"
 
 #: templates/macros.html:404
 msgid "convert to answer"
-msgstr ""
+msgstr "convertir en réponse"
 
 #: templates/macros.html:435
 msgid "Comments"
-msgstr ""
+msgstr "Commentaires"
 
 #: templates/macros.html:584 templatetags/extra_tags.py:45
 #, python-format
@@ -5846,17 +5851,17 @@ msgstr ""
 
 #: templates/macros.html:633 templates/macros.html.py:688
 msgid "current page"
-msgstr ""
+msgstr "page courante"
 
 #: templates/macros.html:639 templates/macros.html.py:652
 #: templates/macros.html:690 templates/macros.html.py:697
 #, python-format
 msgid "page %(num)s"
-msgstr ""
+msgstr "page %(num)s"
 
 #: templates/macros.html:661 templates/macros.html.py:701
 msgid "next page"
-msgstr ""
+msgstr "page suivante"
 
 #: templates/macros.html:662
 msgid "next"
@@ -5900,7 +5905,7 @@ msgstr ""
 
 #: templates/question_edit.html:46
 msgid "Change language"
-msgstr ""
+msgstr "Changer la langue"
 
 #: templates/question_edit.html:64 templates/widgets/answer_edit_tips.html:3
 msgid "Tips"
@@ -5988,13 +5993,13 @@ msgstr ""
 #: templates/users.html:33 templates/main_page/tab_bar.html:12
 #: templates/tags/header.html:14
 msgid "Sort by &raquo;"
-msgstr ""
+msgstr "Trier &raquo;"
 
 #: templates/users.html:41 templates/user_profile/user_info.html:24
 #: templates/user_profile/user_reputation.html:4
 #: templates/user_profile/user_tabs.html:32
 msgid "karma"
-msgstr ""
+msgstr "karma"
 
 #: templates/users.html:48
 msgid "recent"
@@ -6017,7 +6022,7 @@ msgstr ""
 #: templates/authopenid/signin.html:181
 #: templates/authopenid/widget_signin.html:169
 msgid "Enter your email"
-msgstr ""
+msgstr "Saisissez votre adresse email"
 
 #: templates/authopenid/account_recovery_form.html:5
 msgid "Send a new recovery key"
@@ -6030,7 +6035,7 @@ msgstr ""
 #: templates/authopenid/signin.html:182
 #: templates/authopenid/widget_signin.html:170
 msgid "Recover account"
-msgstr ""
+msgstr "Récupérer votre compte"
 
 #: templates/authopenid/authopenid_macros.html:60
 msgid "Please enter your <span>user name</span>, then sign in"
@@ -6045,7 +6050,7 @@ msgstr ""
 #: templates/authopenid/signin.html:98
 #: templates/authopenid/widget_signin.html:88
 msgid "Sign in"
-msgstr ""
+msgstr "Connexion"
 
 #: templates/authopenid/complete.html:21 templates/authopenid/complete.html:30
 msgid "Complete registration"
@@ -6071,7 +6076,7 @@ msgstr ""
 #: templates/authopenid/signup_with_password.html:5
 #: templates/authopenid/signup_with_password.html:68
 msgid "Signup"
-msgstr ""
+msgstr "S'inscrire"
 
 #: templates/authopenid/complete.html:100
 msgid "Already have an account?"
@@ -6169,30 +6174,30 @@ msgstr ""
 msgid ""
 "Please check your email and visit the enclosed link to re-connect to your "
 "account"
-msgstr ""
+msgstr "Consultez l'email et ouvrez le lien fourni pour réassocier votre compte"
 
 #: templates/authopenid/signin.html:64
 msgid "or enter your <span>user name and password</span>"
-msgstr ""
+msgstr "ou saisissez vos <span>identifiants et mot de passe</span>"
 
 #: templates/authopenid/signin.html:68
 #: templates/authopenid/widget_signin.html:68
 msgid "Please, sign in"
-msgstr ""
+msgstr "Veuillez vous identifier"
 
 #: templates/authopenid/signin.html:73
 #: templates/authopenid/widget_signin.html:75
 msgid "Login failed, please try again"
-msgstr ""
+msgstr "Identification échouée, veuillez réessayer"
 
 #: templates/authopenid/signin.html:82
 msgid "Username"
-msgstr ""
+msgstr "Identifiant"
 
 #: templates/authopenid/signin.html:84
 #: templates/authopenid/widget_signin.html:79
 msgid "Username or email"
-msgstr ""
+msgstr "Identifiant ou mot de passe"
 
 #: templates/authopenid/signin.html:94
 #: templates/authopenid/signup_with_password.html:50
@@ -6208,18 +6213,18 @@ msgstr ""
 #: templates/authopenid/signin.html:115
 #: templates/authopenid/widget_signin.html:99
 msgid "New password"
-msgstr ""
+msgstr "Nouveau mot de passe"
 
 #: templates/authopenid/signin.html:125
 #: templates/authopenid/widget_signin.html:108
 msgid "Please, retype"
-msgstr ""
+msgstr "Veuillez le saisir à nouveau"
 
 #: templates/authopenid/signin.html:130
 #: templates/authopenid/widget_signin.html:118
 #: templates/livesettings/site_settings.html:24
 msgid "Change password"
-msgstr ""
+msgstr "Modifier le mot de passe"
 
 #: templates/authopenid/signin.html:144
 #: templates/authopenid/widget_signin.html:132
@@ -6242,7 +6247,7 @@ msgstr ""
 #: templates/question/question_controls.html:34
 #: templates/user_inbox/responses.html:10
 msgid "delete"
-msgstr ""
+msgstr "supprimer"
 
 #: templates/authopenid/signin.html:165
 #: templates/authopenid/widget_signin.html:153
@@ -6252,7 +6257,7 @@ msgstr ""
 #: templates/authopenid/signin.html:177
 #: templates/authopenid/widget_signin.html:165
 msgid "Having trouble signing in?"
-msgstr ""
+msgstr "Un problème pour vous connecter&nbsp;?"
 
 #: templates/authopenid/signup_with_password.html:10
 msgid ""
@@ -6299,7 +6304,7 @@ msgstr ""
 
 #: templates/authopenid/widget_signin.html:64
 msgid "or enter your <span>user name and password</span>, then sign in"
-msgstr ""
+msgstr "ou saisissez vos <span>identifiants et mot de passe</span>, puis connectez-vous"
 
 #: templates/authopenid/email_validation/body.html:2
 #: templates/authopenid/email_validation/body.html:3
@@ -6484,7 +6489,7 @@ msgstr ""
 
 #: templates/email/preview_email.html:19
 msgid "Subject"
-msgstr ""
+msgstr "Sujet"
 
 #: templates/email/preview_email.html:20
 msgid "Body text (below, email styling preserved)"
@@ -6697,7 +6702,7 @@ msgstr "Bienvenu à %(site_name)s"
 #: templates/email/welcome_respondable/body.html:4
 #, python-format
 msgid "Welcome to %(site_name)s!"
-msgstr ""
+msgstr "Bienvenue sur %(site_name)s !"
 
 #: templates/email/welcome_respondable/body.html:10
 msgid ""
@@ -6765,7 +6770,7 @@ msgstr ""
 
 #: templates/embed/widgets.html:3 templates/embed/widgets.html.py:5
 msgid "Widgets"
-msgstr ""
+msgstr "Composants"
 
 #: templates/embed/widgets.html:11
 msgid ""
@@ -6788,19 +6793,19 @@ msgstr ""
 #: templates/group_messaging/home.html:25
 #: templates/group_messaging/home.html:43
 msgid "Send"
-msgstr ""
+msgstr "Envoyer"
 
 #: templates/group_messaging/home.html:26
 msgid "Reply"
-msgstr ""
+msgstr "Répondre"
 
 #: templates/group_messaging/home.html:33
 msgid "Recipient"
-msgstr ""
+msgstr "Destinataire"
 
 #: templates/group_messaging/home.html:39
 msgid "Write your message"
-msgstr ""
+msgstr "Rédigez votre message"
 
 #: templates/group_messaging/macros.html:5
 #, python-format
@@ -6822,7 +6827,7 @@ msgstr ""
 
 #: templates/group_messaging/senders_list.html:16
 msgid "trash"
-msgstr ""
+msgstr "corbeille"
 
 #: templates/group_messaging/threads_list.html:25
 msgid "there are no messages yet..."
@@ -6831,7 +6836,7 @@ msgstr ""
 #: templates/group_messaging/email_alert/body.html:7
 #, python-format
 msgid "%(author)s wrote:"
-msgstr ""
+msgstr "%(author)s a écrit&nbsp;:"
 
 #: templates/group_messaging/email_alert/body.html:11
 msgid ""
@@ -6845,7 +6850,7 @@ msgstr ""
 
 #: templates/livesettings/group_settings.html:4
 msgid "Settings"
-msgstr ""
+msgstr "Réglages"
 
 #: templates/livesettings/group_settings.html:9
 #: templates/livesettings/site_settings.html:51
@@ -6866,11 +6871,11 @@ msgstr ""
 
 #: templates/livesettings/site_settings.html:24
 msgid "Documentation"
-msgstr ""
+msgstr "Documentation"
 
 #: templates/livesettings/site_settings.html:24
 msgid "Log out"
-msgstr ""
+msgstr "Déconnexion"
 
 #: templates/livesettings/site_settings.html:27
 msgid "Home"
@@ -6921,7 +6926,7 @@ msgstr ""
 #: templates/main_page/nothing_found.html:12
 #: templates/main_page/nothing_found.html:15
 msgid " or "
-msgstr ""
+msgstr " ou "
 
 #: templates/main_page/headline.html:28
 msgid "reset tags"
@@ -6974,7 +6979,7 @@ msgstr ""
 
 #: templates/main_page/tab_bar.html:7
 msgid "RSS"
-msgstr ""
+msgstr "RSS"
 
 #: templates/main_page/tag_search.html:2
 msgid "Tag search"
@@ -7026,19 +7031,19 @@ msgstr ""
 
 #: templates/moderation/manage_reject_reasons_dialog.html:18
 msgid "Save reason"
-msgstr ""
+msgstr "Enregistrer la raison"
 
 #: templates/moderation/manage_reject_reasons_dialog.html:37
 msgid "Edit this reason"
-msgstr ""
+msgstr "Éditer la raison"
 
 #: templates/moderation/manage_reject_reasons_dialog.html:38
 msgid "Delete this reason"
-msgstr ""
+msgstr "Supprimer cette raison"
 
 #: templates/moderation/manage_reject_reasons_dialog.html:39
 msgid "Add a new reason"
-msgstr ""
+msgstr "Ajouter une nouvelle raison"
 
 #: templates/moderation/queue.html:4 templates/moderation/queue.html.py:7
 msgid "Moderation queue"
@@ -7050,7 +7055,7 @@ msgstr ""
 
 #: templates/moderation/queue.html:12 templates/user_inbox/responses.html:13
 msgid "none"
-msgstr ""
+msgstr "aucune"
 
 #: templates/moderation/queue.html:14
 msgid "approve posts"
@@ -7087,7 +7092,7 @@ msgstr ""
 #: templates/question/answer_controls.html:10
 #: templates/question/question_controls.html:9
 msgid "remove flag"
-msgstr ""
+msgstr "retirer le signalement"
 
 #: templates/question/answer_controls.html:15
 #: templates/question/answer_controls.html:23
@@ -7096,27 +7101,27 @@ msgstr ""
 #: templates/question/question_controls.html:20
 msgid ""
 "report as offensive (i.e containing spam, advertising, malicious text, etc.)"
-msgstr ""
+msgstr "signaler comme inapproprié (contient du spam, de la publicité, un contenu malveillant, etc.)"
 
 #: templates/question/answer_controls.html:17
 #: templates/question/answer_controls.html:25
 #: templates/question/question_controls.html:15
 #: templates/question/question_controls.html:22
 msgid "flag offensive"
-msgstr ""
+msgstr "signaler"
 
 #: templates/question/answer_controls.html:30
 #: templates/question/question_controls.html:34
 msgid "undelete"
-msgstr ""
+msgstr "restaurer"
 
 #: templates/question/answer_controls.html:41
 msgid "unpublish"
-msgstr ""
+msgstr "dépublier"
 
 #: templates/question/answer_controls.html:46
 msgid "publish"
-msgstr ""
+msgstr "publier"
 
 #: templates/question/answer_controls.html:53
 msgid "permanent link"
@@ -7125,11 +7130,11 @@ msgstr ""
 #: templates/question/answer_controls.html:54
 #: templates/widgets/markdown_help.html:20
 msgid "link"
-msgstr ""
+msgstr "permalien"
 
 #: templates/question/answer_tab_bar.html:9
 msgid "Sort by »"
-msgstr ""
+msgstr "Trier par »"
 
 #: templates/question/answer_vote_buttons.html:10
 msgid "(click again to undo)"
@@ -7165,28 +7170,28 @@ msgstr "requalifier"
 
 #: templates/question/question_controls.html:26
 msgid "reopen"
-msgstr ""
+msgstr "réouvrir"
 
 #: templates/question/question_controls.html:28
 msgid "close"
-msgstr ""
+msgstr "fermer"
 
 #: templates/question/question_controls.html:30
 msgid "merge"
-msgstr ""
+msgstr "fusionner"
 
 #: templates/question/sidebar.html:11
 msgid "Unfollow"
-msgstr ""
+msgstr "Arrêter le suivi"
 
 #: templates/question/sidebar.html:12 templates/question/sidebar.html.py:14
 #: templates/question/sidebar.html:20
 msgid "Follow"
-msgstr ""
+msgstr "Suivre"
 
 #: templates/question/sidebar.html:13 templates/question/sidebar.html.py:18
 msgid "Following"
-msgstr ""
+msgstr "Suivi par moi"
 
 #: templates/question/sidebar.html:27
 #, python-format
@@ -7201,7 +7206,7 @@ msgstr ""
 
 #: templates/question/sidebar.html:36
 msgid "subscribe to rss feed"
-msgstr ""
+msgstr "s'abonner au flux RSS"
 
 #: templates/question/sidebar.html:46
 msgid "Invite"
@@ -7213,7 +7218,7 @@ msgstr ""
 #: templates/widgets/tag_selector.html:37
 #: templates/widgets/tag_selector.html:56
 msgid "add"
-msgstr ""
+msgstr "ajouter"
 
 #: templates/question/sidebar.html:53 templates/question/sidebar.html.py:59
 msgid "- or -"
@@ -7221,7 +7226,7 @@ msgstr ""
 
 #: templates/question/sidebar.html:71
 msgid "share with everyone"
-msgstr ""
+msgstr "partager avec quelqu'un"
 
 #: templates/question/sidebar.html:84
 msgid "Individual users"
@@ -7229,11 +7234,11 @@ msgstr ""
 
 #: templates/question/sidebar.html:89
 msgid "You"
-msgstr ""
+msgstr "Vous"
 
 #: templates/question/sidebar.html:96 templates/question/sidebar.html.py:116
 msgid "and"
-msgstr ""
+msgstr "et"
 
 #: templates/question/sidebar.html:121
 #, python-format
@@ -7252,23 +7257,23 @@ msgstr ""
 
 #: templates/question/sidebar.html:136
 msgid "Stats"
-msgstr ""
+msgstr "Stats"
 
 #: templates/question/sidebar.html:138
 msgid "Asked"
-msgstr ""
+msgstr "Posée"
 
 #: templates/question/sidebar.html:141
 msgid "Seen"
-msgstr ""
+msgstr "Consultée"
 
 #: templates/question/sidebar.html:141
 msgid "times"
-msgstr ""
+msgstr "fois"
 
 #: templates/question/sidebar.html:144
 msgid "Last updated"
-msgstr ""
+msgstr "Mise à jour"
 
 #: templates/tags/form_bulk_tag_subscription.html:4
 #: templates/tags/form_bulk_tag_subscription.html:6
@@ -7282,11 +7287,11 @@ msgstr "Mots-clés correspondant à \"%(tag_query)s\""
 
 #: templates/tags/header.html:20
 msgid "by name"
-msgstr ""
+msgstr "par nom"
 
 #: templates/tags/header.html:26
 msgid "by popularity"
-msgstr ""
+msgstr "par popularité"
 
 #: templates/tags/header.html:34 templates/tags/header.html.py:35
 msgid "suggested"
@@ -7348,20 +7353,20 @@ msgstr ""
 #: templates/user_inbox/messages.html:9
 #: templates/user_profile/user_tabs.html:13
 msgid "private messages"
-msgstr ""
+msgstr "messages privés"
 
 #: templates/user_inbox/responses.html:4
 #: templates/user_profile/user_tabs.html:10
 msgid "notifications"
-msgstr ""
+msgstr "notifications"
 
 #: templates/user_inbox/responses.html:9
 msgid "mark seen"
-msgstr ""
+msgstr "marque comme vu"
 
 #: templates/user_inbox/responses.html:11
 msgid "select:"
-msgstr ""
+msgstr "sélectionner&nbsp;:"
 
 #: templates/user_profile/twitter_sharing_controls.html:8
 #, python-format
@@ -7439,11 +7444,11 @@ msgstr ""
 #: templates/user_profile/user.html:13
 #, python-format
 msgid "%(username)s's profile"
-msgstr ""
+msgstr "Profil de %(username)s"
 
 #: templates/user_profile/user_edit.html:4
 msgid "Edit user profile"
-msgstr ""
+msgstr "Éditer profil utilisateur"
 
 #: templates/user_profile/user_edit.html:7
 msgid "edit profile"
@@ -7456,7 +7461,7 @@ msgstr ""
 
 #: templates/user_profile/user_edit.html:24
 msgid "Screen Name"
-msgstr ""
+msgstr "Nom affiché"
 
 #: templates/user_profile/user_edit.html:44
 msgid "(cannot be changed)"
@@ -7522,7 +7527,7 @@ msgstr ""
 
 #: templates/user_profile/user_info.html:74
 msgid "real name"
-msgstr ""
+msgstr "Nom réel"
 
 #: templates/user_profile/user_info.html:80
 msgid "email"
@@ -7538,36 +7543,36 @@ msgstr ""
 
 #: templates/user_profile/user_info.html:103
 msgid "member since"
-msgstr ""
+msgstr "Membre depuis"
 
 #: templates/user_profile/user_info.html:108
 msgid "last seen"
-msgstr ""
+msgstr "vu la dernière fois"
 
 #: templates/user_profile/user_info.html:114
 msgid "website"
-msgstr ""
+msgstr "Site Web"
 
 #: templates/user_profile/user_info.html:132
 msgid "location"
-msgstr ""
+msgstr "Localisation"
 
 #: templates/user_profile/user_info.html:138
 msgid "age, years"
-msgstr ""
+msgstr "âge (années)"
 
 #: templates/user_profile/user_info.html:144
 msgid "todays unused votes"
-msgstr ""
+msgstr "votes non utilisés aujourd'hui"
 
 #: templates/user_profile/user_info.html:145
 msgid "votes left"
-msgstr ""
+msgstr "votes restants"
 
 #: templates/user_profile/user_languages.html:3
 #: templates/user_profile/user_tabs.html:18
 msgid "languages"
-msgstr ""
+msgstr "langues"
 
 #: templates/user_profile/user_languages.html:12
 msgid "View and subscribe to posts in these languages"
@@ -7619,7 +7624,7 @@ msgstr ""
 
 #: templates/user_profile/user_moderate.html:43
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: templates/user_profile/user_moderate.html:47
 #, python-format
@@ -7634,11 +7639,11 @@ msgstr ""
 
 #: templates/user_profile/user_moderate.html:50
 msgid "Message sent"
-msgstr ""
+msgstr "Message envoyé"
 
 #: templates/user_profile/user_moderate.html:68
 msgid "Send message"
-msgstr ""
+msgstr "Envoyer un message"
 
 #: templates/user_profile/user_moderate.html:78
 msgid ""
@@ -7651,7 +7656,7 @@ msgstr ""
 msgid ""
 "Moderators have the same privileges as administrators, but cannot add or "
 "remove user status of 'moderator' or 'administrator'."
-msgstr ""
+msgstr "Les modérateurs ont les mêmes privilèges que les administrateurs mais ne peuvent pas retirer le statut 'modérateur' ou 'administrateur' d'un utilisateur."
 
 #: templates/user_profile/user_moderate.html:84
 msgid "'Approved' status means the same as regular user."
@@ -7670,37 +7675,37 @@ msgstr ""
 #: templates/user_profile/user_network.html:5
 #: templates/user_profile/user_tabs.html:27
 msgid "network"
-msgstr ""
+msgstr "réseau"
 
 #: templates/user_profile/user_network.html:10
 #, python-format
 msgid "Followed by %(count)s person"
 msgid_plural "Followed by %(count)s people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Suivi par %(count)s personne"
+msgstr[1] "Suivi par %(count)s personnes"
 
 #: templates/user_profile/user_network.html:14
 #, python-format
 msgid "Following %(count)s person"
 msgid_plural "Following %(count)s people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s personne suivie"
+msgstr[1] "%(count)s personnes suivies"
 
 #: templates/user_profile/user_network.html:19
 msgid ""
 "Your network is empty. Would you like to follow someone? - Just visit their "
 "profiles and click \"follow\""
-msgstr ""
+msgstr "Votre réseau est vide. Voulez-vous suivre d'autres personnes ? - Visitez leur profil et cliquer sur \"suivre\""
 
 #: templates/user_profile/user_network.html:21
 #, python-format
 msgid "%(username)s's network is empty"
-msgstr ""
+msgstr "Le réseau de %(username)s est vide"
 
 #: templates/user_profile/user_recent.html:5
 #: templates/user_profile/user_tabs.html:39
 msgid "activity"
-msgstr ""
+msgstr "activité"
 
 #: templates/user_profile/user_recent.html:25
 #: templates/user_profile/user_recent.html:30
@@ -7709,12 +7714,12 @@ msgstr ""
 
 #: templates/user_profile/user_reputation.html:10
 msgid "Your karma change log."
-msgstr ""
+msgstr "Évolution de votre karma"
 
 #: templates/user_profile/user_reputation.html:12
 #, python-format
 msgid "%(user_name)s's karma change log"
-msgstr ""
+msgstr "Évolution du karma de %(user_name)s"
 
 #: templates/user_profile/user_stats.html:6
 #: templates/user_profile/user_tabs.html:6
@@ -7748,7 +7753,7 @@ msgstr ""
 
 #: templates/user_profile/user_tabs.html:22
 msgid "email alerts"
-msgstr ""
+msgstr "alertes par email"
 
 #: templates/user_profile/user_tabs.html:43
 #: templates/user_profile/user_votes.html:5
@@ -7758,45 +7763,45 @@ msgstr ""
 #: templates/widgets/answer_edit_tips.html:8
 #: templates/widgets/question_edit_tips.html:10
 msgid "provide enough details"
-msgstr ""
+msgstr "fournissez suffisamment de détails"
 
 #: templates/widgets/answer_edit_tips.html:9
 #: templates/widgets/question_edit_tips.html:11
 msgid "be clear and concise"
-msgstr ""
+msgstr "soyez clair et concis"
 
 #: templates/widgets/ask_form.html:77
 msgid "Login/Signup to Post"
-msgstr ""
+msgstr "Connectez-vous pour poster un message"
 
 #: templates/widgets/contributors.html:3
 msgid "Contributors"
-msgstr ""
+msgstr "Contributeurs"
 
 #: templates/widgets/footer.html:33
 #, python-format
 msgid "Content on this site is licensed under a %(license)s"
-msgstr ""
+msgstr "Le contenu de ce site est sous licence %(license)s"
 
 #: templates/widgets/footer.html:38
 msgid "about"
-msgstr ""
+msgstr "à propos"
 
 #: templates/widgets/footer.html:40 templates/widgets/user_navigation.html:20
 msgid "help"
-msgstr ""
+msgstr "aide"
 
 #: templates/widgets/footer.html:42
 msgid "privacy policy"
-msgstr ""
+msgstr "politique de confidentialité"
 
 #: templates/widgets/footer.html:43
 msgid "terms of service"
-msgstr ""
+msgstr "conditions d'utilisation"
 
 #: templates/widgets/footer.html:55
 msgid "give feedback"
-msgstr ""
+msgstr "donner son avis"
 
 #: templates/widgets/group_info.html:3
 msgid "Group info"
@@ -7863,12 +7868,12 @@ msgstr ""
 
 #: templates/widgets/login_link.html:20
 msgid "Hi there! Please sign in"
-msgstr ""
+msgstr "Bonjour, veuillez vous identifier"
 
 #: templates/widgets/logo.html:6
 #, python-format
 msgid "%(site)s logo"
-msgstr ""
+msgstr "logo %(site)s"
 
 #: templates/widgets/markdown_help.html:2
 msgid "Markdown basics"
@@ -7974,15 +7979,15 @@ msgstr[1] ""
 
 #: templates/widgets/scope_nav.html:10
 msgid "ALL"
-msgstr ""
+msgstr "TOUTES"
 
 #: templates/widgets/scope_nav.html:20
 msgid "FOLLOWED"
-msgstr ""
+msgstr "SUIVIS"
 
 #: templates/widgets/search_bar.html:20
 msgid "Search or ask your question"
-msgstr ""
+msgstr "Chercher ou poser votre question"
 
 #: templates/widgets/tag_selector.html:4
 msgid "Interesting tags"
@@ -8029,23 +8034,23 @@ msgstr ""
 
 #: templates/widgets/user_long_score_and_badge_summary.html:10
 msgid "karma:"
-msgstr ""
+msgstr "karma&nbsp;:"
 
 #: templates/widgets/user_long_score_and_badge_summary.html:15
 msgid "badges:"
-msgstr ""
+msgstr "médailles"
 
 #: templates/widgets/user_navigation.html:11
 msgid "sign out"
-msgstr ""
+msgstr "déconnexion"
 
 #: templates/widgets/user_navigation.html:17
 msgid "settings"
-msgstr ""
+msgstr "réglages"
 
 #: templates/widgets/user_navigation.html:18
 msgid "widgets"
-msgstr ""
+msgstr "composants"
 
 #: templates/widgets/user_perms.html:1
 #, python-format
@@ -8289,7 +8294,7 @@ msgstr "Cette réponse est maintenant publiée"
 msgid ""
 "Preview failed possibly because of insufficient data or an error during the "
 "rendering"
-msgstr ""
+msgstr "L'aperçu a échoué probablement par manque de données ou à cause d'une erreur pendant le rendu"
 
 #: views/meta.py:78
 #, python-format

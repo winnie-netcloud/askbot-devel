@@ -1,4 +1,4 @@
-from askbot.management import NoArgsJob
+from askbot.management.base import NoArgsJob
 from askbot import models
 
 def fix_inbox_counts(user):

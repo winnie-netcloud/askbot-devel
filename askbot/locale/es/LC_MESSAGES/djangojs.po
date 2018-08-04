@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Adolfo Fitoria <adolfo.fitoria@gmail.com>, 2013
-# Gema Jiménez <gema@kronoscode.com>, 2016-2017
+# Hask, 2016-2017
 # Luis Sebastian Urrutia Fuentes <luisurrutiaf@gmail.com>, 2016
 # Victor Trujillo <>, 2012
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-03-03 16:06+0000\n"
+"PO-Revision-Date: 2017-09-19 10:50+0000\n"
 "Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/askbot/askbot/language/es/)\n"
 "MIME-Version: 1.0\n"

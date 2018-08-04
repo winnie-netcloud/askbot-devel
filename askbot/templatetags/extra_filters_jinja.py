@@ -269,9 +269,9 @@ def make_template_filter_from_permission_assertion(
     register.filter(filter_name, filter_function)
     return filter_function
 
-
 @register.filter
 def can_moderate_user(user, other_user):
+    """True, if user can moderate account of `other_user`"""
     if user.is_authenticated() and user.can_moderate_user(other_user):
         return True
     return False

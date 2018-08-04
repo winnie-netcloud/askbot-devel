@@ -320,7 +320,7 @@ settings.register(
             _('DANGER: makes impossible account recovery by email.'),
             ' ',
             settings.get_related_settings_info(
-                ('ACCESS_CONTROL', 'REQUIRE_VALID_EMAIL_FOR', True, _('Must be not be required')),
+                ('ACCESS_CONTROL', 'REQUIRE_VALID_EMAIL_FOR', True, _('Must be optional')),
             )
         )
     )

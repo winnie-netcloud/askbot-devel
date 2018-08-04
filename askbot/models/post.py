@@ -585,10 +585,10 @@ class Post(models.Model):
         is_private = kwargs.pop('is_private', False)
         group_id = kwargs.pop('group_id', None)
 
-        # this save must precede saving the mention activity
-        # as well as assigning groups to the post
-        # because generic relation needs primary key of the related object
-        super(self.__class__, self).save(**kwargs)
+        #this save must precede saving the mention activity
+        #as well as assigning groups to the post
+        #because generic relation needs primary key of the related object
+        super(Post, self).save(**kwargs)
 
         # TODO: move this group stuff out of this function
         if self.is_comment():
@@ -789,8 +789,8 @@ class Post(models.Model):
         if askbot_settings.MIN_REP_TO_TRIGGER_EMAIL:
             if not (updated_by.is_administrator() or updated_by.is_moderator()):
                 if updated_by.reputation < askbot_settings.MIN_REP_TO_TRIGGER_EMAIL:
-                    notify_sets['for_email'] = \
-                        [u for u in notify_sets['for_email'] if u.is_administrator()]
+                    for_email = [u for u in notify_sets['for_email'] if u.is_administrator()]
+                    notify_sets['for_email'] = for_email
 
         if not django_settings.CELERY_ALWAYS_EAGER:
             cache_key = 'instant-notification-%d-%d' % (self.thread.id, updated_by.id)

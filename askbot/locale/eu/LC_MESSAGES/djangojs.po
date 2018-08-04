@@ -7,14 +7,14 @@
 # assar <asier.sarasua@gmail.com>, 2016-2017
 # Gorka Azkarate Zubiaur <gorkaazkarate@gmail.com>, 2016
 # Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2016
-# julen <julenx@gmail.com>, 2016
+# julen, 2016
 # Osoitz <oelkoro@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-06-06 10:54+0000\n"
+"PO-Revision-Date: 2017-09-23 23:10+0000\n"
 "Last-Translator: assar <asier.sarasua@gmail.com>\n"
 "Language-Team: Basque (http://www.transifex.com/askbot/askbot/language/eu/)\n"
 "MIME-Version: 1.0\n"

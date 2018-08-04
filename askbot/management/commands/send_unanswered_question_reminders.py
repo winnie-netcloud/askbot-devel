@@ -1,18 +1,14 @@
+"""Command that sends reminders about unanswered questions"""
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
-from django.conf import settings as django_settings
 from django.db.models import Q
-from django.template.loader import get_template
+from django.conf import settings as django_settings
+from django.core.management.base import NoArgsCommand
 from django.utils import translation
 from askbot import models
 from askbot import const
 from askbot.conf import settings as askbot_settings
-from django.utils.translation import ungettext
 from askbot.mail.messages import UnansweredQuestionsReminder
 from askbot.utils.classes import ReminderSchedule
-from askbot.models.question import Thread
-from askbot.utils.html import site_url
-from django.template import Context
 
 DEBUG_THIS_COMMAND = False
 
@@ -21,18 +17,18 @@ class Command(NoArgsCommand):
     about unanswered questions to all users
     """
     def handle_noargs(self, **options):
-
+        """The function running the command."""
         translation.activate(django_settings.LANGUAGE_CODE)
-        if askbot_settings.ENABLE_EMAIL_ALERTS == False:
+        if askbot_settings.ENABLE_EMAIL_ALERTS is False:
             return
-        if askbot_settings.ENABLE_UNANSWERED_REMINDERS == False:
+        if askbot_settings.ENABLE_UNANSWERED_REMINDERS is False:
             return
         #get questions without answers, excluding closed and deleted
         #order it by descending added_at date
         schedule = ReminderSchedule(
             askbot_settings.DAYS_BEFORE_SENDING_UNANSWERED_REMINDER,
             askbot_settings.UNANSWERED_REMINDER_FREQUENCY,
-            max_reminders = askbot_settings.MAX_UNANSWERED_REMINDERS
+            max_reminders=askbot_settings.MAX_UNANSWERED_REMINDERS
         )
 
         questions = models.Post.objects.get_questions()
@@ -44,10 +40,8 @@ class Command(NoArgsCommand):
         questions = questions.exclude(exclude_filter)
 
         #select questions within the range of the reminder schedule
-        questions = questions.added_between(
-                        start=schedule.start_cutoff_date,
-                        end=schedule.end_cutoff_date
-                    )
+        questions = questions.added_between(start=schedule.start_cutoff_date,
+                                            end=schedule.end_cutoff_date)
 
         #take only questions with zero answers
         questions = questions.filter(thread__answer_count=0)

@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-06-01 16:45+0000\n"
+"PO-Revision-Date: 2017-09-27 18:27+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/askbot/askbot/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "抱歉，匿名訪問者無法存取此功能"
 
 #: feed.py:36 feed.py:108
 msgid " - "
-msgstr "-"
+msgstr " - "
 
 #: feed.py:36 feed.py:108
 msgid "RSS feed"
@@ -53,7 +53,7 @@ msgstr "RSS 消息饋流"
 
 #: forms.py:100
 msgid "Wildcard tag must have only one '*' symbol"
-msgstr "萬用字元必須只能有一個 '*' 代號"
+msgstr "萬用字元必須只能有一個「*」代號"
 
 #: forms.py:102
 msgid "Wildcard tag must have at least one symbol"
@@ -61,7 +61,7 @@ msgstr "萬用字元必須至少有一個代號"
 
 #: forms.py:108
 msgid "Wildcard tag must end with an '*' symbol"
-msgstr "萬用字元必須以 '*' 代號結尾"
+msgstr "萬用字元必須以「*」符號結尾"
 
 #: forms.py:190
 msgid "select country"
@@ -157,7 +157,7 @@ msgstr "至少需要下列一個標籤：%(tags)s"
 
 #: forms.py:547
 msgid "community wiki (karma is not awarded & many others can edit wiki post)"
-msgstr "社群共筆（無積分獎勵，其他用戶也可以編輯共筆文章）"
+msgstr "社群共筆（無積分獎勵，其他使用者也可以編輯共筆文章）"
 
 #: forms.py:590
 msgid "update summary:"
@@ -167,7 +167,7 @@ msgstr "更新概要："
 msgid ""
 "enter a brief summary of your revision (e.g. fixed spelling, grammar, "
 "improved style...), this field is optional"
-msgstr "輸入本次修改的簡短摘要（例如：修正錯字、語法、改進格式樣式等），選填。"
+msgstr "輸入本次修訂的簡短摘要（例如：修正錯字、語法、改進格式樣式等），此欄位選填"
 
 #: forms.py:716
 msgid "Enter number of points to add or subtract"
@@ -283,7 +283,7 @@ msgstr "請輸入文章署名。同時可以新建帳號。"
 
 #: forms.py:983 templates/question.html:421
 msgid "Email address:"
-msgstr "電子信箱地址"
+msgstr "電子信箱地址："
 
 #: forms.py:1033
 msgid "User name is required with the email"
@@ -353,19 +353,19 @@ msgstr "不會公開，只會顯示您的年齡，格式為：YYYY-MM-DD"
 
 #: forms.py:1500
 msgid "Profile"
-msgstr "個人簡介"
+msgstr "個人檔案"
 
 #: forms.py:1510
 msgid "Screen name"
-msgstr "暱稱"
+msgstr "顯示稱呼"
 
 #: forms.py:1548 forms.py:1552
 msgid "this email has already been registered, please use another one"
-msgstr "該電子郵件已被注冊，請選擇另一個再試。"
+msgstr "該電子郵件已被註冊，請選擇另一個再試"
 
 #: forms.py:1561
 msgid "Choose email tag filter"
-msgstr "選擇 Email 標籤篩選"
+msgstr "選擇電子郵件標籤篩選器"
 
 #: forms.py:1617
 msgid "Individually selected"
@@ -385,12 +385,12 @@ msgstr "請選上述選項之一"
 
 #: forms.py:1706
 msgid "okay, let's try!"
-msgstr "好, 試試看"
+msgstr "好，讓我們試試！"
 
 #: forms.py:1709
 #, python-format
 msgid "no %(sitename)s email please, thanks"
-msgstr "不要 %(sitename)s的電子郵件，謝謝"
+msgstr "不要收到 %(sitename)s 的電子郵件，謝謝"
 
 #: forms.py:1762 templates/reopen.html:7
 msgid "Title"
@@ -757,7 +757,7 @@ msgstr "最少觀看次數"
 
 #: conf/badges.py:115 conf/words.py:465 conf/words.py:466
 msgid "Favorite Question"
-msgstr "最愛提問"
+msgstr "收藏提問"
 
 #: conf/badges.py:117 conf/badges.py:228
 msgid "minimum followers"
@@ -813,7 +813,7 @@ msgstr "著名提問"
 
 #: conf/badges.py:194 models/badges.py:721
 msgid "Organizer"
-msgstr "分類者"
+msgstr "類別者"
 
 #: conf/badges.py:198
 msgid "Peer pressure"
@@ -857,7 +857,7 @@ msgstr "支持者"
 
 #: conf/badges.py:238 models/badges.py:852
 msgid "Taxonomist"
-msgstr "分類學者"
+msgstr "類別學者"
 
 #: conf/badges.py:240
 msgid "minimum tag use count"
@@ -879,7 +879,7 @@ msgstr "郵件主題前綴"
 msgid ""
 "This setting takes default from the django settingEMAIL_SUBJECT_PREFIX. A "
 "value entered here will overridethe default."
-msgstr ""
+msgstr "這個設定會從 django 設定 EMAIL_SUBJECT_PREFIX 取得預設值。此處輸入的數值會凌駕預設值。"
 
 #: conf/email.py:45
 msgid "Site administrator email address"
@@ -887,11 +887,11 @@ msgstr "網站管理員的電子郵件地址"
 
 #: conf/email.py:54
 msgid "Enable email alerts"
-msgstr "啟用電子郵件提醒"
+msgstr "啟用電子郵件通知"
 
 #: conf/email.py:62
 msgid "Enable instant email alerts"
-msgstr "啟用電子郵件即刻回復"
+msgstr "啟用即時電子郵件通知"
 
 #: conf/email.py:71
 msgid "Enable welcome email"
@@ -899,7 +899,7 @@ msgstr "啟用歡迎電子郵件"
 
 #: conf/email.py:80
 msgid "Enable rejected post alert"
-msgstr "啟用駁回張貼警示"
+msgstr "啟用駁回張貼通知"
 
 #: conf/email.py:81 conf/email.py:91
 msgid "Also, premoderation mode must be enabled"
@@ -907,19 +907,19 @@ msgstr "另外，預審模式必須啟用"
 
 #: conf/email.py:90
 msgid "Enable approved post alert"
-msgstr "啟用核准貼文警示"
+msgstr "啟用核准貼文通知"
 
 #: conf/email.py:100
 msgid "Enable batch email alert"
-msgstr "啟用批次郵件警示"
+msgstr "啟用批次郵件通知"
 
 #: conf/email.py:109
 msgid "Enable private messaging alerts"
-msgstr "啟用私訊警示"
+msgstr "啟用私訊通知"
 
 #: conf/email.py:118
 msgid "Enable moderation queue alerts"
-msgstr "啟用審核貯列警示"
+msgstr "啟用審核列表通知"
 
 #: conf/email.py:128
 msgid "Enable HTML-formatted email"
@@ -931,7 +931,7 @@ msgstr "可能不支持某些電子郵件軟體"
 
 #: conf/email.py:138
 msgid "Maximum number of news entries in an email alert"
-msgstr "郵件提醒的最大新問題數"
+msgstr "郵件通知的最大新問題數"
 
 #: conf/email.py:148
 msgid "Default notification frequency all questions"
@@ -949,7 +949,7 @@ msgstr "使用者提問預設通知頻率"
 msgid ""
 "Option to define frequency of emailed updates for: Question asked by the "
 "user."
-msgstr "本選項可定義發送更新郵件的頻率：用戶提問。"
+msgstr "本選項可定義發送更新郵件的頻率：使用者提問。"
 
 #: conf/email.py:176
 msgid "Default notification frequency questions answered by the user"
@@ -1052,7 +1052,7 @@ msgstr "允許空白郵件"
 
 #: conf/email.py:334
 msgid "DANGER: makes impossible account recovery by email."
-msgstr "危險： 以郵件恢復不可能的帳號"
+msgstr "危險： 以郵件恢復不可能的帳號。"
 
 #: conf/email.py:337 conf/login_providers.py:273
 msgid "Must be not be required"
@@ -1090,13 +1090,13 @@ msgstr "通過電子郵件貼文：何時通知作者發布動態"
 
 #: conf/email.py:410
 msgid "Reply by email hostname"
-msgstr "通過電子郵件的主機名回復"
+msgstr "通過電子郵件的主機名回覆"
 
 #: conf/email.py:421
 msgid ""
 "Email replies having fewer words than this number will be posted as comments"
 " instead of answers"
-msgstr "如果電子郵件的回復字數少於該數字，將以評論形式發布，而非答案形式。"
+msgstr "如果電子郵件的回覆字數少於該數字，將以評論形式發布，而非答案形式"
 
 #: conf/email_text.py:8
 msgid "Email template phrases"
@@ -1104,7 +1104,7 @@ msgstr "電子郵件模板用詞"
 
 #: conf/email_text.py:16
 msgid "Short welcome message, for subject line"
-msgstr "簡短的歡迎詞，供主題列使用"
+msgstr "簡短的歡迎訊息，供主題列使用"
 
 #: conf/email_text.py:17
 msgid "Welcome to {{ SITE_NAME }}!"
@@ -1118,7 +1118,7 @@ msgstr "<b>提示： 郵件中所有文本設置區域都允許代替文字： {
 
 #: conf/email_text.py:28
 msgid "Longer welcome message, for email body"
-msgstr "更長的歡迎消息，用在郵件內容中"
+msgstr "更長的歡迎訊息，用在郵件正文中"
 
 #: conf/email_text.py:29
 msgid ""
@@ -1136,7 +1136,7 @@ msgstr "<p>謹此。<br>{{ SITE_NAME }} 管理員</p>"
 
 #: conf/email_text.py:46
 msgid "Header for the batch email alerts"
-msgstr "群發郵件通知標題"
+msgstr "批次郵件通知標題"
 
 #: conf/email_text.py:47
 msgid ""
@@ -1188,7 +1188,7 @@ msgid ""
 "Recaptcha is a tool that helps distinguish real people from annoying spam "
 "robots. Please get this and a public key at the <a "
 "href=\"%(url)s\">%(url)s</a>"
-msgstr "Recaptcha這個工具幫助我們辨別出垃圾郵件中的真實用戶,\n請從這裡獲取公鑰 <a href=\"%(url)s\">%(url)s</a>"
+msgstr "Recaptcha 這個工具能幫助我們辨別真實使用者和惱人的垃圾信機器人。請從這裡獲取公鑰：<a href=\"%(url)s\">%(url)s</a>"
 
 #: conf/external_keys.py:82
 msgid "Google+ public API key"
@@ -1208,11 +1208,11 @@ msgid ""
 "Facebook API key and Facebook secret allow to use Facebook Connect login "
 "method at your site. Please obtain these keys at <a "
 "href=\"%(url)s\">facebook create app</a> site"
-msgstr "Facebook API key 和 Facebook secret 允許使用者通過Facebook Connect方法在您網站上登錄\n獲取這些,通過<a href=\"%(url)s\">facebook create app</a> 網站"
+msgstr "Facebook API 金鑰和 Facebook 密鑰允許使用者通過 Facebook Connect 登入方式在您網站上登入。請前往 <a href=\"%(url)s\">facebook create app</a> 網站取得這些金鑰"
 
 #: conf/external_keys.py:115
 msgid "Facebook secret key"
-msgstr "Facebook 私鑰"
+msgstr "Facebook 密鑰"
 
 #: conf/external_keys.py:123
 msgid "Twitter consumer key"
@@ -1223,7 +1223,7 @@ msgstr "Twitter consumer 金鑰"
 msgid ""
 "Please register your forum at <a href=\"%(url)s\">twitter applications "
 "site</a>"
-msgstr "請在這裡註冊您的網站 <a href=\"%(url)s\">twitter applications site</a>"
+msgstr "請在這裡註冊您的網站：<a href=\"%(url)s\">twitter 應用程式網站</a>"
 
 #: conf/external_keys.py:136
 msgid "Twitter consumer secret"
@@ -1239,7 +1239,7 @@ msgid ""
 "Please register your forum at %(mw_page)s page of your Wiki. Your wiki must "
 "have <a href=\"%(url)s\">OAuth extension</a> installed "
 "installationSpecial:OAuthConsumerRegistration/propose <a href=\"%(url)s\">"
-msgstr "請到您 Wiki 的 %(mw_page)s 頁面註冊您的論壇，您的 wiki 必須安裝<a href=\"%(url)s\">OAuth extension</a>  installationSpecial:OAuthConsumerRegistration/propose <a href=\"%(url)s\">"
+msgstr "請到您 Wiki 的 %(mw_page)s 頁面註冊您的論壇，您的 wiki 必須安裝<a href=\"%(url)s\">OAuth 擴充套件</a>  installationSpecial:OAuthConsumerRegistration/propose <a href=\"%(url)s\">"
 
 #: conf/external_keys.py:164
 msgid "MediaWiki consumer secret"
@@ -1311,7 +1311,7 @@ msgstr "意見回饋頁面的訊息"
 msgid ""
 "**Dear {{ USER_NAME }}**, we look forward to hearing your feedback. Please "
 "type and send us your message below."
-msgstr "**親愛的 {{ USER_NAME }}**, 我們希望知道您的回饋意見。請輸入並傳送以下訊息。"
+msgstr "**親愛的 {{ USER_NAME }}**，我們期望聽見您的回饋意見。請在下方輸入並傳送訊息。"
 
 #: conf/feedback.py:55 conf/flatpages.py:95
 msgid ""
@@ -1340,7 +1340,7 @@ msgstr "訊息和頁面 - 關於、隱私政策…等。"
 
 #: conf/flatpages.py:20
 msgid "Text of the Q&amp;A forum About page (html format)"
-msgstr "問答論壇的「關於」頁面文字 (html格式)"
+msgstr "問答論壇的「關於」頁面文字 (html 格式)"
 
 #: conf/flatpages.py:24
 msgid ""
@@ -1439,7 +1439,7 @@ msgstr "允許已登入使用者匿名提問"
 msgid ""
 "Users do not accrue reputation for anonymous questions and their identity is"
 " not revealed until they change their mind"
-msgstr "匿名提問不會積累積分，用戶身份不會公開"
+msgstr "匿名提問不會積累積分，使用者身份不會公開"
 
 #: conf/forum_data_rules.py:101
 msgid "Allow asking without registration"
@@ -1459,7 +1459,7 @@ msgid ""
 "logging in. Enabling this may require adjustments in the user login system "
 "to check for pending posts every time the user logs in. The builtin Askbot "
 "login system supports this feature."
-msgstr "如果希望允許用戶登入前就可以提問和回答，請勾選此項。啟用後需要在用戶每次登錄時檢查是否有未發布的貼文。Askbot 內建的登入系統支持此功能。"
+msgstr "如果希望允許使用者登入前就可以提問和回答，請勾選此項。啟用後需要在使用者每次登入時檢查是否有未發布的貼文。Askbot 內建的登入系統支持此功能。"
 
 #: conf/forum_data_rules.py:128
 msgid "Auto-follow questions by the Author"
@@ -1509,7 +1509,7 @@ msgstr "評論最小長度 (字元數)"
 
 #: conf/forum_data_rules.py:220
 msgid "Limit one answer per question per user"
-msgstr "每個用戶只允許回答一次"
+msgstr "每個使用者只允許回答一次"
 
 #: conf/forum_data_rules.py:230
 msgid "Allow commenting in closed questions"
@@ -1533,7 +1533,7 @@ msgstr "標籤是必要的嗎？"
 
 #: conf/forum_data_rules.py:272
 msgid "category tree"
-msgstr "分類樹"
+msgstr "類別樹"
 
 #: conf/forum_data_rules.py:273
 msgid "user input"
@@ -1551,7 +1551,7 @@ msgstr "必要標籤"
 msgid ""
 "At least one of these tags will be required for any new or newly edited "
 "question. A mandatory tag may be wildcard, if the wildcard tags are active."
-msgstr "新建或新修的問題都必須使用至少一個以下的標籤。如果啟用萬用字元作為標籤，可以指定必選標籤為萬用字元"
+msgstr "新建或新修的問題都必須使用至少一個以下的標籤。如果啟用萬用字元作為標籤，可以指定必選標籤為萬用字元。"
 
 #: conf/forum_data_rules.py:306
 msgid "Force lowercase the tags"
@@ -1592,7 +1592,7 @@ msgstr "使用額外的訂閱標籤"
 msgid ""
 "If enabled, users will have a third set of tag selections - \"subscribed\" "
 "(by email) in addition to \"interesting\" and \"ignored\""
-msgstr "啟用時，用戶除了「有興趣的」和「忽略的」標籤外，可以有第三個選項「(電子郵件)訂閱的」標籤"
+msgstr "啟用時，使用者除了「有興趣」和「忽略」標籤外，可以有第三個選項「有訂閱」（透過電子郵件）標籤"
 
 #: conf/forum_data_rules.py:360
 msgid "Always, for all users"
@@ -1663,13 +1663,13 @@ msgstr "要啟用本設定，請勾選前項"
 
 #: conf/forum_data_rules.py:475
 msgid "Save comment by pressing &lt;Enter&gt; key"
-msgstr "按“Enter”鍵保存評論"
+msgstr "按「Enter」鍵保存評論"
 
 #: conf/forum_data_rules.py:477
 msgid ""
 "This may be useful when only one-line comments are desired. Will not work "
 "with TinyMCE editor."
-msgstr "當評論內容只有一行的時候這也許會有用，但當使用TinyMCE編輯器時不起作用。"
+msgstr "當評論內容只有一行的時候這也許會有用，但當使用 TinyMCE 編輯器時不起作用。"
 
 #: conf/forum_data_rules.py:488
 msgid "Limit time to edit answers"
@@ -1704,7 +1704,7 @@ msgid ""
 "Check to disable the \"sticky\" behavior of the search query. This may be "
 "useful if you want to move the search bar away from the default position or "
 "do not like the default sticky behavior of the text search query."
-msgstr ""
+msgstr "勾選以停用搜尋查詢的「黏住」行為。若您希望將搜尋列移開預設位置，或是不喜歡文字搜尋查詢處的預設黏住行為時可能會有用。"
 
 #: conf/forum_data_rules.py:553
 msgid "Maximum number of tags per question"
@@ -1786,7 +1786,7 @@ msgstr "為使用密碼登入的使用者進行 LDAP 驗證"
 
 #: conf/ldap.py:26
 msgid "Automatically create user accounts when possible"
-msgstr "可以的話自動建立使用者帳戶"
+msgstr "可以的話自動建立使用者帳號"
 
 #: conf/ldap.py:29
 msgid ""
@@ -1811,7 +1811,7 @@ msgstr "LDAP 協議版本"
 msgid ""
 "Note that Version 2 protocol is not secure!!! Do not use it on unprotected "
 "network."
-msgstr "注意第 2 版的協議不安全！！！千萬不要在無防護的網絡環境下使用。"
+msgstr "注意第 2 版的協議不安全！！！千萬不要在無防護的網路環境下使用。"
 
 #: conf/ldap.py:59
 msgid "LDAP URL"
@@ -1825,7 +1825,7 @@ msgstr "LDAP 編碼"
 msgid ""
 "This value in almost all cases is \"utf-8\". Change it if yours is "
 "different. This field is required"
-msgstr "在絕大多數情況下都是「utf-8」，可視需要修改，本欄位為必填。"
+msgstr "在絕大多數情況下都是「utf-8」。可視需要修改，本欄位必填"
 
 #: conf/ldap.py:82
 msgid "Base DN (distinguished name)"
@@ -1848,7 +1848,7 @@ msgid ""
 "should be left in the intact format. First placeholder will be used for the "
 "user id field name, and the second - for the user id value. The template can"
 " be extended to match schema of your LDAP directory."
-msgstr ""
+msgstr "Python 字串格式模板，必須有兩個字串佔位子，應該留以完整格式。第一個佔位子用作使用者 ID 欄位名稱，而第二個佔位子 - 則是使用者 id 值。模板可以擴展以比對您 LDAP 目錄的 schema。"
 
 #: conf/ldap.py:113
 msgid "UserID/login field"
@@ -1872,11 +1872,11 @@ msgstr "通用名稱是一個人的正式或非正式名稱，可以留空。僅
 
 #: conf/ldap.py:139
 msgid "First name, Last name"
-msgstr "名, 姓"
+msgstr "名字, 姓氏"
 
 #: conf/ldap.py:140
 msgid "Last name, First name"
-msgstr "姓, 名"
+msgstr "姓氏, 名字"
 
 #: conf/ldap.py:147
 msgid "\"Common Name\" field format"
@@ -1888,7 +1888,7 @@ msgstr "僅在使用「通用名稱」時才使用它。"
 
 #: conf/ldap.py:158
 msgid "Given (First) name"
-msgstr "名"
+msgstr "名字"
 
 #: conf/ldap.py:160 conf/ldap.py:170
 msgid "This field can be blank"
@@ -1896,7 +1896,7 @@ msgstr "此欄位可以留空"
 
 #: conf/ldap.py:168
 msgid "Surname (last) name"
-msgstr "姓"
+msgstr "姓氏"
 
 #: conf/ldap.py:178
 msgid "LDAP Server EMAIL field name"
@@ -1923,7 +1923,7 @@ msgid ""
 "Use this area to enter content at the LEFT sidebarin HTML format.  When "
 "using this option, please use the HTML validation service to make sure that "
 "your input is valid and works well in all browsers."
-msgstr ""
+msgstr "使用此區域在側邊欄中的 LEFT 處以 HTML 格式輸入內容。當使用此選項時，請使用 HTML 驗證服務以確保您輸入的內容有效，並且可以在所有瀏覽器中運作良好。"
 
 #: conf/license.py:13
 msgid "Content License"
@@ -1959,11 +1959,11 @@ msgstr "授權條款官方頁面 URL"
 
 #: conf/license.py:69
 msgid "Use license logo"
-msgstr "使用授權 logo"
+msgstr "使用授權條款 Logo"
 
 #: conf/license.py:78
 msgid "License logo image"
-msgstr "授權 logo 圖像"
+msgstr "授權條款 Logo 影像"
 
 #: conf/login_providers.py:15
 msgid "Login provider settings"
@@ -1981,7 +1981,7 @@ msgstr "啟動以允許使用自主架設的 Wordpress 網站登入"
 msgid ""
 "to activate this feature you must fill out the wordpress xml-rpc setting "
 "bellow"
-msgstr "為啟用以下功能您必須填入以下wordpress xml-rpc設定"
+msgstr "為啟用以下功能您必須填入以下 wordpress xml-rpc 設定"
 
 #: conf/login_providers.py:44
 msgid ""
@@ -1993,7 +1993,7 @@ msgstr "填寫 wordpress xml-rpc 功能的 url，通常為 http://mysite.com/xml
 msgid ""
 "To enable, go to Settings->Writing->Remote Publishing and check the box for "
 "XML-RPC"
-msgstr "要啟用，請轉到 設定->撰寫->遠程發布並勾選 XML-RPC選項"
+msgstr "若要啟用，請前往 [設定]-> [撰寫]-> [遠端發布] 並勾選 XML-RPC 選項"
 
 #: conf/login_providers.py:54
 msgid "WordPress login button image"
@@ -2123,11 +2123,11 @@ msgstr "Mathjax 支持（LaTex 算繪）"
 msgid ""
 "If you enable this feature, <a href=\"%(url)s\">mathjax</a> must be "
 "installed on your server in its own directory."
-msgstr "要啟用此功能, <a href=\"%(url)s\">mathjax</a> 必須安裝到單獨目錄"
+msgstr "若要啟用此功能，必須將 <a href=\"%(url)s\">mathjax</a> 安裝到伺服器上的單獨目錄中。"
 
 #: conf/markup.py:74
 msgid "Base url of MathJax deployment"
-msgstr "MathJax 佈署的基礎 url"
+msgstr "MathJax 佈署的基礎 URL"
 
 #: conf/markup.py:76
 msgid ""
@@ -2157,7 +2157,7 @@ msgid ""
 "The numbers captured by the pattern in the parentheses will be transferred "
 "to the link url template. Please look up more information about regular "
 "expressions elsewhere. Invalid expressions will not be accepted."
-msgstr ""
+msgstr "輸入胚騰樣式的有效正則表述式，一列一式。舉例，想要偵測像是 #bug123 這樣的胚騰，請使用下列 regex：#bug(\\d+)。胚騰捕捉到的括號中數字會傳給連結 URL 模板。請在他處查詢更多正則表述式的相關資訊，這裡不接受無效的表述式。"
 
 #: conf/markup.py:128
 msgid "URLs for autolinking"
@@ -2171,7 +2171,7 @@ msgid ""
 " https://bugzilla.redhat.com/show_bug.cgi?id=\\1 together with the pattern "
 "shown above and the entry in the post #123 will produce link to the bug 123 "
 "in the redhat bug tracker."
-msgstr ""
+msgstr "這裡，請輸入先前設定中輸入的胚騰 URL 模板，同樣一列一式。<strong>請確認此設定的列數與先前設定相同。</strong>範本：https://bugzilla.redhat.com/show_bug.cgi?id=\\1 搭配前述胚騰及貼文 #123 中的條目可產出連向 Red Hat 臭蟲追蹤器中 bug 123 的連結。"
 
 #: conf/minimum_reputation.py:12
 msgid "Karma thresholds"
@@ -2227,7 +2227,7 @@ msgstr "上傳檔案"
 
 #: conf/minimum_reputation.py:134
 msgid "Insert clickable links"
-msgstr "插入可點擊的連結"
+msgstr "插入可點按的連結"
 
 #: conf/minimum_reputation.py:143
 msgid "Insert link suggestions as plain text"
@@ -2237,7 +2237,7 @@ msgstr "插入純文字的連結建議"
 msgid ""
 "This value should be smaller than that for \"insert clickable links\". This "
 "setting should stop link-spamming by newly registered users."
-msgstr "此值應該小於「插入可點擊的連結數」。此設定應可阻止新註冊使用者濫加連結。"
+msgstr "此值應該小於「插入可點按的連結數」。此設定應可阻止新註冊使用者濫加連結。"
 
 #: conf/minimum_reputation.py:156
 msgid "Retag questions posted by other people"
@@ -2279,11 +2279,11 @@ msgstr "觸發郵件通知"
 
 #: conf/minimum_reputation.py:225
 msgid "Users with smaller reputation will not be generating email alerts"
-msgstr ""
+msgstr "名聲較差的使用者不會產出電子郵件通知"
 
 #: conf/minimum_reputation.py:234
 msgid "Trigger tweets on others accounts"
-msgstr "用其它帳戶發布 Tweet"
+msgstr "用其它帳號發布 Tweet"
 
 #: conf/minimum_reputation.py:235
 msgid "Reduces spam"
@@ -2307,7 +2307,7 @@ msgstr "預先審查監看的使用者與稽核標記的貼文"
 
 #: conf/moderation.py:30
 msgid "Content moderation method"
-msgstr "內容管理方法"
+msgstr "內容審核方法"
 
 #: conf/moderation.py:31
 msgid ""
@@ -2323,7 +2323,7 @@ msgstr "拒絕包含這些字詞的文章"
 msgid ""
 "Enter one phrase per line (case-insensitive). Posts with these phrases will "
 "be rejected without moderation."
-msgstr "每行輸入一個詞(不區分大小寫)。包含這些用詞的文章將不經審核直接拒絕"
+msgstr "每行輸入一個詞 (不區分大小寫)。包含這些用詞的文章將不經審核直接拒絕。"
 
 #: conf/moderation.py:53
 msgid "Enable image moderation"
@@ -2349,7 +2349,7 @@ msgstr "問題列表"
 
 #: conf/question_lists.py:20
 msgid "Enable \"All Questions\" selector"
-msgstr "啟用“全部問題”篩選"
+msgstr "啟用「全部問題」篩選"
 
 #: conf/question_lists.py:21 conf/question_lists.py:31
 #: conf/question_lists.py:41
@@ -2358,11 +2358,11 @@ msgstr "至少啟用一種篩選方式"
 
 #: conf/question_lists.py:30
 msgid "Enable \"Unanswered Questions\" selector"
-msgstr "啟用“未回答問題”篩選"
+msgstr "啟用「未回答問題」篩選"
 
 #: conf/question_lists.py:40
 msgid "Enable \"Followed Questions\" selector"
-msgstr "啟用“已關注問題”篩選"
+msgstr "啟用「已關注問題」篩選"
 
 #: conf/question_lists.py:53 conf/question_lists.py:70
 msgid "All Questions"
@@ -2422,7 +2422,7 @@ msgstr "同一篇文章修訂被舉報 3 次的作者積分會減少"
 
 #: conf/reputation_changes.py:99
 msgid "Loss for owner of post that was flagged 5 times per same revision"
-msgstr "同一篇文章被舉報 5 次的作者積分會減少"
+msgstr "同一篇文章修訂被舉報 5 次的作者積分會減少"
 
 #: conf/settings_wrapper.py:166
 #, python-format
@@ -2455,13 +2455,13 @@ msgid ""
 "When using this option (as well as the sidebar footer), please use the HTML "
 "validation service to make sure that your input is valid and works well in "
 "all browsers."
-msgstr ""
+msgstr "使用此區域在側邊欄中的 TOP 處以 HTML 格式輸入內容。當使用此選項時（以及側邊欄 footer），請使用 HTML 驗證服務以確保您輸入的內容有效，並且可以在所有瀏覽器中運作良好。"
 
 #: conf/sidebar_main.py:37 conf/sidebar_main.py:113 conf/sidebar_profile.py:38
 #: conf/sidebar_question.py:35 conf/sidebar_question.py:60
 #: conf/sidebar_question.py:96 conf/sidebar_question.py:162
 msgid "Show the text entered above only to anonymous users"
-msgstr ""
+msgstr "僅對匿名使用者顯示上方輸入的文字"
 
 #: conf/sidebar_main.py:46
 msgid "Show avatar block in sidebar"
@@ -2483,7 +2483,7 @@ msgstr "在側邊欄顯示標籤選擇器"
 msgid ""
 "Uncheck this if you want to hide the options for choosing interesting and "
 "ignored tags "
-msgstr ""
+msgstr "若您想要隱藏有趣標籤和忽略的標籤的選項時，請取消勾選此項"
 
 #: conf/sidebar_main.py:82
 msgid "Show tag list/cloud in sidebar"
@@ -2492,7 +2492,7 @@ msgstr "在側邊欄顯示標籤列表/標籤雲"
 #: conf/sidebar_main.py:84
 msgid ""
 "Uncheck this if you want to hide the tag cloud or tag list from the sidebar "
-msgstr ""
+msgstr "若您希望從側邊欄中隱藏標籤雲或標籤列表時請取消勾選此項"
 
 #: conf/sidebar_main.py:95 conf/sidebar_question.py:144
 msgid "Custom sidebar footer"
@@ -2504,11 +2504,11 @@ msgid ""
 "   When using this option (as well as the sidebar header), please use the "
 "HTML validation service to make sure that your input is valid and works well"
 " in all browsers."
-msgstr ""
+msgstr "請使用此區域在側邊欄中的 BOTTOM 處以 HTML 格式輸入內容。當使用此選項時（以及側邊欄 header），請使用 HTML 驗證服務以確保您輸入的內容有效，並且可在所有瀏覽器中運作良好。"
 
 #: conf/sidebar_profile.py:12
 msgid "User profile sidebar"
-msgstr "使用者個人資料側邊欄"
+msgstr "使用者個人檔案側邊欄"
 
 #: conf/sidebar_profile.py:20
 msgid "Custom sidebar"
@@ -2557,7 +2557,7 @@ msgstr "側邊欄顯示標籤列表"
 
 #: conf/sidebar_question.py:106
 msgid "Uncheck this if you want to hide the tag list from the sidebar "
-msgstr ""
+msgstr "若您希望隱藏側邊欄的標籤列表請取消勾選"
 
 #: conf/sidebar_question.py:117
 msgid "Show meta information in sidebar"
@@ -2567,7 +2567,7 @@ msgstr "側邊欄顯示顯示資訊描述資料"
 msgid ""
 "Uncheck this if you want to hide the meta information about the question "
 "(post date, views, last updated). "
-msgstr ""
+msgstr "若您希望隱藏問題的相關中介資訊請取消勾選（如文章日期、閱讀次數、上次更新時間等）。"
 
 #: conf/sidebar_question.py:131
 msgid "Show related questions in sidebar"
@@ -2575,7 +2575,7 @@ msgstr "在側邊欄顯示相關問題"
 
 #: conf/sidebar_question.py:133
 msgid "Uncheck this if you want to hide the list of related questions. "
-msgstr ""
+msgstr "若您希望隱藏相關問題列表時請取消勾選。"
 
 #: conf/site_modes.py:62
 msgid "Bootstrap mode"
@@ -2583,7 +2583,7 @@ msgstr "Bootstrap 模式"
 
 #: conf/site_modes.py:72
 msgid "Activate a \"Large site\" mode"
-msgstr "啟用“大網站”模式"
+msgstr "啟用「大網站」模式"
 
 #: conf/site_modes.py:74
 msgid ""
@@ -2591,7 +2591,7 @@ msgid ""
 "values, more suitable for the larger communities, <strong>WARNING:</strong> "
 "your current values for Minimum reputation, Badge Settings and Vote Rules "
 "will be changed after you modify this setting."
-msgstr "“大網站模式”會增加聲譽和徽章的界限值，更適合大社區。<strong>警告：</strong>修改此設定後，當前的聲譽要求和徽章設定、投票規則都會發生變化。"
+msgstr "「大網站模式」會增加聲譽和徽章的界限值，更適合大社群。<strong>警告：</strong>修改此設定後，當前的聲譽要求和徽章設定、投票規則都會發生變化。"
 
 #: conf/site_settings.py:17
 msgid "URLS, keywords & greetings"
@@ -2611,7 +2611,7 @@ msgstr "以逗號分隔的網站關鍵字列表"
 
 #: conf/site_settings.py:44
 msgid "Copyright message to show in the footer"
-msgstr "顯示在頁腳的版權訊息"
+msgstr "顯示在頁腳的著作權訊息"
 
 #: conf/site_settings.py:54
 msgid "Site description for the search engines"
@@ -2631,7 +2631,7 @@ msgstr "URL 必須以 http 或 https 開頭"
 
 #: conf/site_settings.py:95
 msgid "Base URL for your Q&A forum, must start with http or https"
-msgstr "您的問答論壇基礎網址 URL，必須以 http 或 https 開頭。"
+msgstr "您的問答論壇基礎網址 URL，必須以 http 或 https 開頭"
 
 #: conf/site_settings.py:107
 msgid "Check to enable greeting for anonymous user"
@@ -2639,7 +2639,7 @@ msgstr "勾選以啟用問候匿名使用者"
 
 #: conf/site_settings.py:115
 msgid "First time here? Check out the FAQ!"
-msgstr "首次訪問？先看看FAQ吧！"
+msgstr "首次訪問？先看看常用問答集 FAQ 吧！"
 
 #: conf/site_settings.py:119
 msgid "Text shown in the greeting message shown to the anonymous user"
@@ -2655,15 +2655,15 @@ msgstr "主題外觀、徽章和 HTML 設定"
 
 #: conf/skin_general_settings.py:35
 msgid "Please enter a valid url"
-msgstr "請輸入一個有效的url"
+msgstr "請輸入有效的 URL"
 
 #: conf/skin_general_settings.py:42
 msgid "Custom destination URL for the logo"
-msgstr "自訂LOGO的url"
+msgstr "自訂 Logo 的 URL"
 
 #: conf/skin_general_settings.py:52
 msgid "Q&amp;A site logo"
-msgstr "問答網logo"
+msgstr "問答網站 Logo"
 
 #: conf/skin_general_settings.py:54
 msgid "To change the logo, select new file, then submit this whole form."
@@ -2675,7 +2675,7 @@ msgstr "選擇語言"
 
 #: conf/skin_general_settings.py:83
 msgid "Show logo"
-msgstr "顯示 logo"
+msgstr "顯示 Logo"
 
 #: conf/skin_general_settings.py:85
 msgid ""
@@ -2685,7 +2685,7 @@ msgstr "選中此項將在論壇開頭顯示徽標，如果不希望顯示預設
 
 #: conf/skin_general_settings.py:97
 msgid "Site favicon"
-msgstr "網站favicon"
+msgstr "網站 favicon"
 
 #: conf/skin_general_settings.py:99
 #, python-format
@@ -2693,7 +2693,7 @@ msgid ""
 "A small 16x16 or 32x32 pixel icon image used to distinguish your site in the"
 " browser user interface. Please find more information about favicon at <a "
 "href=\"%(favicon_info_url)s\">this page</a>."
-msgstr "一個 16x16 或 32x32 像素的 icon 圖片，在瀏覽器界面中區分處您的網站。favicon的更多訊息訊息位於<a href=\"%(favicon_info_url)s\">此頁</a>."
+msgstr "一個 16x16 或 32x32 像素的圖示影像，用來瀏覽器介面中區分出您的網站。您可以前往<a href=\"%(favicon_info_url)s\">此頁</a>瞭解更多 favicon 的資訊。"
 
 #: conf/skin_general_settings.py:115
 msgid "Password login button"
@@ -2703,7 +2703,7 @@ msgstr "密碼登入按鈕"
 msgid ""
 "An 88x38 pixel image that is used on the login screen for the password login"
 " button."
-msgstr "88x38 像素的圖片，用作登入界面的密碼登入按鈕"
+msgstr "88x38 像素的圖片，用作登入界面的密碼登入按鈕。"
 
 #: conf/skin_general_settings.py:130
 msgid "Show all UI functions to all users"
@@ -2714,7 +2714,7 @@ msgid ""
 "If checked, all forum functions will be shown to users, regardless of their "
 "reputation. However to use those functions, moderation rules, reputation and"
 " other limits will still apply."
-msgstr "勾選後,將顯示所有的網站功能，無論積分。但是如果要使用這些功能，依然需要滿足審核規則、積分和其他限制。"
+msgstr "勾選後將顯示所有的網站功能，無論積分。但是如果要使用這些功能，依然需要滿足審核規則、積分和其他限制。"
 
 #: conf/skin_general_settings.py:147
 msgid "Select skin"
@@ -2738,7 +2738,7 @@ msgid ""
 "of the pages. Instead, it will be more efficient to place links to the "
 "javascript files into the footer. <strong>Note:</strong> if you do use this "
 "setting, please test the site with the W3C HTML validator service."
-msgstr ""
+msgstr "<strong>若要使用此選項</strong>，請勾選上方的「自訂 HTML &lt;HEAD&gt;」。此方塊中的內容會插到 HTML 輸出中的 &lt;HEAD&gt; 部分，也就是 &lt;script&gt;, &lt;link&gt;, &lt;meta&gt; 這類元素加入之處。也請留意到我們不建議將外部 Javascript 加到 &lt;HEAD&gt; 中，因為這會拖慢網頁的載入速度。反之，若接 Javascript 檔案的連結放到 footer 中會更有效率。<strong>備註：</strong>若您確實有運用此設定，請利用 W3C HTML 驗證器服務測試網站。"
 
 #: conf/skin_general_settings.py:191
 msgid "Custom header additions"
@@ -2751,7 +2751,7 @@ msgid ""
 "headerin the HTML format.   When customizing the site header (as well as "
 "footer and the HTML &lt;HEAD&gt;), use the HTML validation service to make "
 "sure that your input is valid and works well in all browsers."
-msgstr ""
+msgstr "Header 是內容的頂端列，包含使用者資訊與網站連結，通常所有網頁皆可利用。請使用此區域以 HTML 格式輸入 header 的內容。當自訂網站 header（以及 footer 和 HTML &lt;HEAD&gt; 等）時，請利用 HTML 驗證服務以確保您的輸入有效，並且能在所有瀏覽器中運作。"
 
 #: conf/skin_general_settings.py:208
 msgid "Site footer mode"
@@ -2797,7 +2797,7 @@ msgid ""
 "default style sheet rules. The custom style sheet will be served dynamically"
 " at url \"&lt;forum url&gt;/custom.css\", where the \"&lt;forum url&gt; part"
 " depends (default is empty string) on the url configuration in your urls.py."
-msgstr ""
+msgstr "<strong>若要使用此功能</strong>，請勾選上方的「套用自訂樣式表」選項。加到此視窗中的 CSS 規則會在預設樣式表規則之後套用。自訂樣式表從 \"&lt;forum url&gt;/custom.css\" 這個 URL 位置動態提供服務，而 \"&lt;forum url&gt; 的部分取決於您 urls.py 中的 URL 組態（預設為空字串）。"
 
 #: conf/skin_general_settings.py:276
 msgid "Add custom javascript"
@@ -2805,7 +2805,7 @@ msgstr "加入自訂 JavaScript"
 
 #: conf/skin_general_settings.py:279
 msgid "Check to enable javascript that you can enter in the next field"
-msgstr "點擊可啟用可在下一欄位輸入的 javascript"
+msgstr "點按可啟用可在下一欄位輸入的 javascript"
 
 #: conf/skin_general_settings.py:289
 msgid "Custom javascript"
@@ -2820,19 +2820,19 @@ msgid ""
 "that the behavior may not be consistent across different browsers "
 "(<strong>to enable your custom code</strong>, check \"Add custom "
 "javascript\" option above)."
-msgstr ""
+msgstr "請輸入或貼上您希望在您網站上執行的純 Javascript 程式碼。指令稿的連結會插到 HTML 輸出的底部，從 &lt;forum url&gt;/custom.js\" 這個 URL 處提供服務。請記住，您的 Javascript 程式碼可能會打破網站的其他功能，致使功能行為可能在不同的瀏覽器中不一致（<strong>若要啟用您的自訂程式碼</strong>，請勾選上方的「加入自訂 Javascript」選項）。"
 
 #: conf/skin_general_settings.py:309
 msgid "Skin media revision number"
-msgstr "主題版號"
+msgstr "外觀媒體修訂版號"
 
 #: conf/skin_general_settings.py:311
 msgid "Will be set automatically but you can modify it if necessary."
-msgstr "將自動設定，但仍可視需要修改"
+msgstr "將自動設定，但仍可視需要修改。"
 
 #: conf/skin_general_settings.py:322
 msgid "Hash to update the media revision number automatically."
-msgstr "自動更新媒體版本號所用 hash。"
+msgstr "自動更新媒體修訂編號的 Hash。"
 
 #: conf/skin_general_settings.py:326
 msgid "Will be set automatically, it is not necesary to modify manually."
@@ -2848,7 +2848,7 @@ msgstr "勾選以啟用 RSS 消息饋流"
 
 #: conf/social_sharing.py:29
 msgid "Hashtag or suffix to sharing messages"
-msgstr "用於分享訊息的標籤或字尾"
+msgstr "用於分享訊息的 Hash 標籤或字尾"
 
 #: conf/social_sharing.py:38
 msgid "Check to enable sharing of questions on Twitter"
@@ -2879,7 +2879,7 @@ msgstr "啟用問題分享: Google+"
 
 #: conf/spam_and_moderation.py:10
 msgid "Akismet spam protection"
-msgstr "Akismet 垃圾保護"
+msgstr "Akismet 垃圾信保護"
 
 #: conf/spam_and_moderation.py:18
 msgid "Enable Akismet spam detection(keys below are required)"
@@ -2888,11 +2888,11 @@ msgstr "啟用 Akismet 垃圾信偵測 (需要在下面輸入金鑰)"
 #: conf/spam_and_moderation.py:21
 #, python-format
 msgid "To get an Akismet key please visit <a href=\"%(url)s\">Akismet site</a>"
-msgstr "請訪問 <a href=\"%(url)s\">Akismet 網站</a> 獲取 Akismet key"
+msgstr "請訪問 <a href=\"%(url)s\">Akismet 網站</a> 獲取 Akismet 金鑰"
 
 #: conf/spam_and_moderation.py:31
 msgid "Akismet key for spam detection"
-msgstr "垃圾偵測所需的 Akismet金鑰"
+msgstr "垃圾偵測所需的 Akismet 金鑰"
 
 #: conf/static_settings.py:21
 msgctxt "urls"
@@ -2914,7 +2914,7 @@ msgstr "靜態內容、URL 及 UI"
 
 #: conf/super_groups.py:7
 msgid "Data rules & Formatting"
-msgstr "數據規則 & 格式"
+msgstr "日期規則和格式設定"
 
 #: conf/super_groups.py:8
 msgid "External Services"
@@ -2922,7 +2922,7 @@ msgstr "外部服務"
 
 #: conf/super_groups.py:9
 msgid "Login, Users & Communication"
-msgstr "登入、使用者與交流"
+msgstr "登入、使用者與溝通"
 
 #: conf/user_settings.py:15
 msgid "User settings"
@@ -2938,7 +2938,7 @@ msgstr "顯示給新使用者的歡迎訊息"
 
 #: conf/user_settings.py:33
 msgid "Allow editing user screen name"
-msgstr "允許修改使用者暱稱"
+msgstr "允許修改使用者顯示稱呼"
 
 #: conf/user_settings.py:42
 msgid "Show email addresses to moderators"
@@ -2950,7 +2950,7 @@ msgstr "註冊時自動填寫使用者名稱和電子郵件等"
 
 #: conf/user_settings.py:52
 msgid "Implemented only for LDAP logins at this point"
-msgstr "當前僅實現LDAP登入"
+msgstr "當前僅實現 LDAP 登入"
 
 #: conf/user_settings.py:61
 msgid "Allow users change own email addresses"
@@ -2962,7 +2962,7 @@ msgstr "允許用電子郵件做使用者名稱"
 
 #: conf/user_settings.py:79
 msgid "Allow account recovery by email"
-msgstr "允許以郵件恢復帳戶"
+msgstr "允許以郵件恢復帳號"
 
 #: conf/user_settings.py:88
 msgid "Allow adding and removing login methods"
@@ -2970,7 +2970,7 @@ msgstr "允許添加與移除登入方式"
 
 #: conf/user_settings.py:98
 msgid "Minimum allowed length for screen name"
-msgstr "使用者暱稱允許的最小長度"
+msgstr "使用者顯示稱呼所允許的最小長度"
 
 #: conf/user_settings.py:115
 msgid "Avatar type for new users"
@@ -2987,7 +2987,7 @@ msgstr "要改變頭像，請選擇新檔案，然後提交整張表單。"
 
 #: conf/user_settings.py:146
 msgid "Base URL for the gravatar service"
-msgstr "頭像服務供應商的根URL"
+msgstr "頭像服務供應商的根 URL"
 
 #: conf/user_settings.py:158
 msgid "Use automatic avatars from gravatar service"
@@ -3053,7 +3053,7 @@ msgstr "自動刪除文章的被舉報次數"
 msgid ""
 "Minimum days to accept an answer, if it has not been accepted by the "
 "question poster"
-msgstr "接受一個答案的最少天數，如果它沒有被問題發起者接受。"
+msgstr "接受一個答案的最少天數，如果它沒有被問題發起者接受"
 
 #: conf/words.py:14
 msgid "Site terms vocabulary"
@@ -3106,7 +3106,7 @@ msgid ""
 "This space is reserved only for answers. If you would like to engage in a "
 "discussion, please instead post a comment under the question or an answer "
 "that you would like to discuss"
-msgstr ""
+msgstr "本空間僅保留給答覆使用。若您希望參與討論，請改為在問題或您希望討論的答案下方張貼評論"
 
 #: conf/words.py:101
 msgid "Instruction to give answers"
@@ -3116,7 +3116,7 @@ msgstr "提供答案的方法"
 msgid ""
 "Categorize your question using this tag selector or entering text in tag "
 "box."
-msgstr "請替您的問題做分類，您可以使用這個標籤選擇器，或直接在標籤欄裡輸入文字。"
+msgstr "請替您的問題做類別，您可以使用這個標籤選擇器，或直接在標籤欄裡輸入文字。"
 
 #: conf/words.py:115
 msgid "Instruction for the category selector"
@@ -3140,11 +3140,11 @@ msgstr "發表答案"
 
 #: conf/words.py:162 conf/words.py:163
 msgid "Merge duplicate questions"
-msgstr "合併重復問題"
+msgstr "合併重複問題"
 
 #: conf/words.py:172 conf/words.py:173
 msgid "Enter duplicate question ID"
-msgstr "輸入重復問題的ID"
+msgstr "輸入重複問題的ID"
 
 #: conf/words.py:182 conf/words.py:183
 msgid "asked"
@@ -3190,21 +3190,21 @@ msgstr "問題\n問題"
 
 #: conf/words.py:274
 msgid "Countable plural forms for \"question\""
-msgstr "\"問題\"的復數形式"
+msgstr "「問題」的可數複數形式"
 
 #: conf/words.py:275 conf/words.py:286
 msgid "Enter one form per line, pay attention"
-msgstr "每行輸入一種形式， 注意"
+msgstr "每列只能輸入一種形式，請注意"
 
 #: conf/words.py:284
 msgid ""
 "answer\n"
 "answers"
-msgstr "答案\n答案(複數形式)"
+msgstr "答案\n答案們"
 
 #: conf/words.py:285
 msgid "Countable plural forms for \"answer\""
-msgstr "答案的可數形式"
+msgstr "「答案」的可數複數形式"
 
 #: conf/words.py:295
 msgid "question"
@@ -3212,7 +3212,7 @@ msgstr "問題"
 
 #: conf/words.py:296
 msgid "question (noun, singular)"
-msgstr "問題(名詞，單數)"
+msgstr "問題 (名詞，單數)"
 
 #: conf/words.py:305
 msgid "unanswered question"
@@ -3228,7 +3228,7 @@ msgstr "未回答問題"
 
 #: conf/words.py:316
 msgid "unanswered questions (plural)"
-msgstr "未回答問題(名詞，複數)"
+msgstr "未回答問題 (名詞，複數)"
 
 #: conf/words.py:325
 msgid "answer"
@@ -3236,15 +3236,15 @@ msgstr "回答"
 
 #: conf/words.py:326
 msgid "answer (noun, singular)"
-msgstr "問題 (名詞, 單數)"
+msgstr "問題 (名詞，單數)"
 
 #: conf/words.py:335 conf/words.py:336
 msgid "Question voted up"
-msgstr "被贊的提問"
+msgstr "被贊同的提問"
 
 #: conf/words.py:345 conf/words.py:346
 msgid "Answer voted up"
-msgstr "被贊的回答"
+msgstr "被贊同的回答"
 
 #: conf/words.py:357 conf/words.py:368 conf/words.py:379 conf/words.py:390
 #: conf/words.py:401 conf/words.py:412 conf/words.py:423 conf/words.py:434
@@ -3282,7 +3282,7 @@ msgstr "每個使用者只允許回答一次"
 
 #: conf/words.py:536 conf/words.py:537
 msgid "Accept the best answers for your questions"
-msgstr "請接受此問題的最佳答案:"
+msgstr "請接受此問題的最佳答案"
 
 #: conf/words.py:546 conf/words.py:547
 msgid "author of the question"
@@ -3338,7 +3338,7 @@ msgstr "已關注問題"
 
 #: conf/words.py:668
 msgid "Verb in the infinitive form"
-msgstr ""
+msgstr "動詞，不定詞"
 
 #: conf/words.py:677 conf/words.py:678
 msgid "followed questions"
@@ -3354,7 +3354,7 @@ msgstr "問題列表"
 
 #: conf/words.py:707 conf/words.py:708
 msgid "Community gives you awards for your questions, answers and votes"
-msgstr "因為您的提問、答覆和投票，社群要給予您獎勵。"
+msgstr "因為您的提問、答覆和投票，社群會給予您獎勵"
 
 #: conf/words.py:717 conf/words.py:718
 msgid "Close question"
@@ -3406,11 +3406,11 @@ msgstr "開始回答"
 
 #: conf/words.py:837 conf/words.py:838
 msgid "give an answer interesting to this community"
-msgstr "試著回答一個有趣的答案。"
+msgstr "請試著回答大家會有興趣的答案"
 
 #: conf/words.py:847 conf/words.py:848
 msgid "try to give an answer, rather than engage into a discussion"
-msgstr "盡量答覆問題，而非討論。"
+msgstr "盡量答覆問題，而非討論"
 
 #: conf/words.py:857 conf/words.py:858
 msgid "show only selected answers to enquirers"
@@ -3656,15 +3656,15 @@ msgstr "更新標籤"
 
 #: const/__init__.py:235
 msgid "selected favorite"
-msgstr "收藏"
+msgstr "選取收藏"
 
 #: const/__init__.py:236
 msgid "completed user profile"
-msgstr "完成個人所有資料"
+msgstr "已完成使用者個人檔案"
 
 #: const/__init__.py:237
 msgid "email update sent to user"
-msgstr "Email 更改已通知"
+msgstr "電子郵件通知已寄送給使用者"
 
 #: const/__init__.py:238
 msgid "a post was shared"
@@ -3741,7 +3741,7 @@ msgstr "感興趣的標籤"
 
 #: const/__init__.py:440 const/__init__.py:451 const/__init__.py:458
 msgid "only subscribed tags"
-msgstr "只要訂閱標籤"
+msgstr "只要有訂閱的標籤"
 
 #: const/__init__.py:443 const/__init__.py:449 const/__init__.py:455
 msgid "subscribe to all tags"
@@ -3813,11 +3813,11 @@ msgstr "銅牌"
 
 #: const/__init__.py:546
 msgid "date descendant"
-msgstr "日期減少"
+msgstr "日期遞減"
 
 #: const/__init__.py:547
 msgid "date ascendant"
-msgstr "日期增加"
+msgstr "日期遞增"
 
 #: const/__init__.py:548
 msgid "most recently active"
@@ -3849,11 +3849,11 @@ msgstr "最相關問題"
 
 #: const/message_keys.py:16
 msgid "click to see most relevant questions"
-msgstr "點擊查看最相關問題"
+msgstr "點按查看最相關問題"
 
 #: const/message_keys.py:17
 msgid "by relevance"
-msgstr "相關性"
+msgstr "依相關程度"
 
 #: const/message_keys.py:18
 msgid "click to see the oldest questions"
@@ -3861,7 +3861,7 @@ msgstr "點選觀看最早問題"
 
 #: const/message_keys.py:19
 msgid "by date"
-msgstr "日期"
+msgstr "依日期"
 
 #: const/message_keys.py:20
 msgid "click to see the newest questions"
@@ -3873,7 +3873,7 @@ msgstr "點選觀看最近最少被更新的問題"
 
 #: const/message_keys.py:22
 msgid "by activity"
-msgstr "活躍度"
+msgstr "依活躍度"
 
 #: const/message_keys.py:23
 msgid "click to see the most recently updated questions"
@@ -3881,15 +3881,15 @@ msgstr "點選觀看最近最常被更新的問題"
 
 #: const/message_keys.py:24
 msgid "click to see the least answered questions"
-msgstr "點擊查看回答數最少的問題"
+msgstr "點按查看回答數最少的問題"
 
 #: const/message_keys.py:25
 msgid "by answers"
-msgstr "答案"
+msgstr "依答案"
 
 #: const/message_keys.py:26
 msgid "click to see the most answered questions"
-msgstr "點擊查看回答數最多的問題"
+msgstr "點按查看回答數最多的問題"
 
 #: const/message_keys.py:27
 msgid "click to see least voted questions"
@@ -3897,7 +3897,7 @@ msgstr "投票次數最多的問題"
 
 #: const/message_keys.py:28
 msgid "by votes"
-msgstr "票"
+msgstr "依票數"
 
 #: const/message_keys.py:29
 msgid "click to see most voted questions"
@@ -3913,11 +3913,11 @@ msgstr "忽略"
 
 #: const/message_keys.py:32 models/tag.py:305
 msgid "subscribed"
-msgstr "已訂閱"
+msgstr "有訂閱"
 
 #: const/message_keys.py:33 templates/question_retag.html:62
 msgid "tags are required"
-msgstr " 標籤不能為空。"
+msgstr "標籤不能空白。"
 
 #: const/message_keys.py:35
 msgid "please use letters, numbers and characters \"-+.#\""
@@ -3953,13 +3953,13 @@ msgstr "抱歉，只有版主或 %(post_author)s %(perform_action)s"
 msgid ""
 "Your account might be blocked in error - please contact the site "
 "administrators, if you think so."
-msgstr "如果您覺得您的帳號誤被停權，請聯繫站長，謝謝"
+msgstr "如果您覺得您的帳號誤被停權，請聯繫站長，謝謝。"
 
 #: deps/django_authopenid/backends.py:147
 msgid ""
 "Welcome! Please set email address (important!) in your profile and adjust "
 "screen name, if necessary."
-msgstr "歡迎！請在資料中設定電子郵件地址 (重要!)，如有必要，並修改顯示名稱。"
+msgstr "歡迎！請在個人檔案中設定電子郵件地址（重要！），如有必要，並修改顯示稱呼。"
 
 #: deps/django_authopenid/forms.py:62
 msgid "I have read and agree with the terms of service"
@@ -3971,7 +3971,7 @@ msgstr "要想成功註冊您必須接受服務條款"
 
 #: deps/django_authopenid/forms.py:102 deps/django_authopenid/views.py:211
 msgid "i-names are not supported"
-msgstr "不支援 i-name "
+msgstr "不支援 i-names"
 
 #: deps/django_authopenid/forms.py:226
 #, python-format
@@ -4100,7 +4100,7 @@ msgstr "使用 Yahoo 帳號登入"
 
 #: deps/django_authopenid/util.py:595
 msgid "AOL screen name"
-msgstr "AOL顯示名稱"
+msgstr "AOL 顯示稱呼"
 
 #: deps/django_authopenid/util.py:604
 msgid "Sign in with LaunchPad"
@@ -4112,11 +4112,11 @@ msgstr "OpenID網址"
 
 #: deps/django_authopenid/util.py:649
 msgid "Flickr user name"
-msgstr "Flickr 用戶名"
+msgstr "Flickr 使用者名"
 
 #: deps/django_authopenid/util.py:657
 msgid "Technorati user name"
-msgstr "Technorati 用戶名"
+msgstr "Technorati 使用者名"
 
 #: deps/django_authopenid/util.py:665
 msgid "WordPress blog name"
@@ -4150,7 +4150,7 @@ msgstr "修改%(provider)s密碼"
 #: deps/django_authopenid/util.py:763
 #, python-format
 msgid "Click to see if your %(provider)s signin still works for %(site_name)s"
-msgstr "點擊查看%(site_name)s是否仍支持以您的 %(provider)s登入"
+msgstr "點按查看%(site_name)s是否仍支持以您的 %(provider)s登入"
 
 #: deps/django_authopenid/util.py:772
 #, python-format
@@ -4160,7 +4160,7 @@ msgstr "為%(provider)s創建密碼"
 #: deps/django_authopenid/util.py:776
 #, python-format
 msgid "Connect your %(provider)s account to %(site_name)s"
-msgstr "將您的%(provider)s帳戶連結到%(site_name)s"
+msgstr "將您的%(provider)s帳號連結到%(site_name)s"
 
 #: deps/django_authopenid/util.py:785
 #, python-format
@@ -4190,11 +4190,11 @@ msgstr "登入密碼組合不正確"
 
 #: deps/django_authopenid/views.py:811
 msgid "Please click any of the icons below to sign in"
-msgstr "請點擊下面任何一個圖標登入"
+msgstr "請點按下面任何一個圖標登入"
 
 #: deps/django_authopenid/views.py:813
 msgid "Account recovery email sent"
-msgstr "發送帳戶恢復郵件"
+msgstr "發送帳號恢復郵件"
 
 #: deps/django_authopenid/views.py:816 deps/django_authopenid/views.py:821
 msgid "Add at least one login method"
@@ -4206,7 +4206,7 @@ msgstr "您可以添加，刪除或重新驗證您的登入方式"
 
 #: deps/django_authopenid/views.py:823
 msgid "Please wait a second! Your account is recovered, but ..."
-msgstr "請稍等，您的帳戶正在恢復..."
+msgstr "請稍等，您的帳號正在恢復..."
 
 #: deps/django_authopenid/views.py:907
 #, python-format
@@ -4240,7 +4240,7 @@ msgstr "請檢查您的電子郵件並訪問其內包連結。"
 
 #: deps/django_authopenid/views.py:1493
 msgid "Sorry, this account recovery key has expired or is invalid"
-msgstr "對不起，這個帳戶恢復已過期或不正確"
+msgstr "對不起，這個帳號恢復已過期或不正確"
 
 #: deps/group_messaging/models.py:372
 msgid "Re: "
@@ -4392,7 +4392,7 @@ msgstr "要產生預覽至少需要一位在網站上的使用者"
 
 #: mail/messages.py:483
 msgid "Request to reply to get a sample of email the signature"
-msgstr "請求回覆以取得電子郵件簽名檔範本"
+msgstr "請求回覆以取得電子郵件簽名檔模板"
 
 #: mail/messages.py:485
 msgid ""
@@ -4401,11 +4401,11 @@ msgstr "當系統沒有這個使用者的電子郵件簽名檔紀錄時寄送"
 
 #: mail/messages.py:511
 msgid "Insufficient karma to post by email"
-msgstr "積分不足，無法以電子郵件發帖"
+msgstr "積分不足，無法以電子郵件發文"
 
 #: mail/messages.py:513
 msgid "Sent when user does not have enough karma upon posting by email"
-msgstr "當使用者積分不足，無法以電子郵件發帖時發出信件"
+msgstr "當使用者積分不足，無法以電子郵件發文時發出信件"
 
 #: mail/messages.py:542
 msgid "Post was rejected"
@@ -4417,7 +4417,7 @@ msgstr "發文被版主拒絕後，如果版主有說明原因，會寄發信件
 
 #: mail/messages.py:562
 msgid "Moderation queue has items"
-msgstr "有文章待審"
+msgstr "審核列表中還有項目"
 
 #: mail/messages.py:564
 msgid "Sent to moderators when the moderation queue is not empty"
@@ -4425,7 +4425,7 @@ msgstr "當有事情待審核時會寄信給版主"
 
 #: mail/messages.py:588
 msgid "Batch email alert"
-msgstr "批次郵件警示"
+msgstr "批次郵件通知"
 
 #: mail/messages.py:589
 msgid "Contains daily of weekly batches of email updates"
@@ -4554,11 +4554,11 @@ msgstr "您的帳號已停用"
 
 #: models/__init__.py:766 models/__init__.py:837
 msgid "your account is blocked"
-msgstr "您的帳戶已被凍結"
+msgstr "您的帳號已被凍結"
 
 #: models/__init__.py:774 models/__init__.py:782 models/__init__.py:833
 msgid "your account is suspended"
-msgstr "您的帳戶已被暫停使用"
+msgstr "您的帳號已被暫停使用"
 
 #: models/__init__.py:803
 #, python-format
@@ -4679,7 +4679,7 @@ msgid ""
 msgid_plural ""
 "Sorry, cannot delete this since it has some upvoted responses posted by "
 "someone else"
-msgstr[0] ""
+msgstr[0] "抱歉，無法刪除。因為已經有一些其他人張貼的回應有被贊同"
 
 #: models/__init__.py:1274
 msgid "delete posts"
@@ -4736,12 +4736,12 @@ msgstr[0] "對不起，留言（除了最新的之外）只在發布後 %(minute
 
 #: models/__init__.py:1455
 msgid "sorry, but older votes cannot be revoked"
-msgstr "這個投票已經過期，不能撤銷。"
+msgstr "抱歉，但是舊的投票不能撤銷"
 
 #: models/__init__.py:2365 utils/functions.py:136
 #, python-format
 msgid "on %(date)s"
-msgstr "於%(date)s"
+msgstr "在%(date)s"
 
 #: models/__init__.py:2367
 msgid "in two days"
@@ -4755,13 +4755,13 @@ msgstr "明天"
 #, python-format
 msgid "in %(hr)d hour"
 msgid_plural "in %(hr)d hours"
-msgstr[0] "於 %(hr)d 小時前"
+msgstr[0] "在 %(hr)d 小時內"
 
 #: models/__init__.py:2373
 #, python-format
 msgid "in %(min)d min"
 msgid_plural "in %(min)d mins"
-msgstr[0] "於 %(min)d 分鐘前"
+msgstr[0] "在 %(min)d 分鐘內"
 
 #: models/__init__.py:2374
 #, python-format
@@ -4774,11 +4774,11 @@ msgstr[0] "%(days)d 天"
 msgid ""
 "New users must wait %(days)s to %(answer_own_questions)s.  You can post an "
 "answer %(left)s"
-msgstr "新使用者必須等 %(days)s 才能 %(answer_own_questions)s.  您 %(left)s 可以回答問題。"
+msgstr "新使用者必須等 %(days)s 才能 %(answer_own_questions)s。您%(left)s可以張貼答覆"
 
 #: models/__init__.py:2662
 msgid "Registered User"
-msgstr "註冊使用者"
+msgstr "已註冊使用者"
 
 #: models/__init__.py:2664
 msgid "Administrator"
@@ -4790,11 +4790,11 @@ msgstr "版主"
 
 #: models/__init__.py:2668
 msgid "Suspended User"
-msgstr "暫停帳戶"
+msgstr "暫停帳號"
 
 #: models/__init__.py:2670
 msgid "Blocked User"
-msgstr "凍結帳戶"
+msgstr "凍結帳號"
 
 #: models/__init__.py:2672
 msgid "New User"
@@ -4844,7 +4844,7 @@ msgstr[0] "必須至少有 %d 點積分才能貼連結"
 msgid ""
 "Congratulations, you have received a badge '%(badge_name)s'. Check out <a "
 "href=\"%(user_profile)s\">your profile</a>."
-msgstr "恭喜，您獲得一塊'%(badge_name)s'徽章,查看<a\n href=\"%(user_profile)s\">您的資料</a>."
+msgstr "恭喜，您獲得一枚「%(badge_name)s」徽章，查看<a\n href=\"%(user_profile)s\">您的個人檔案</a>。"
 
 #: models/__init__.py:4029 views/commands.py:494
 msgid "Your tag subscription was saved, thanks!"
@@ -4868,7 +4868,7 @@ msgstr "同儕壓力"
 #, python-format
 msgid ""
 "Gave an %(answer_voted_up)s at least %(votes)s times for the first time"
-msgstr "第一次投至少 %(votes)s 的 %(answer_voted_up)s "
+msgstr "第一次投至少 %(votes)s 的 %(answer_voted_up)s"
 
 #: models/badges.py:234
 msgid "First upvote"
@@ -4961,7 +4961,7 @@ msgstr "首次重設標籤"
 
 #: models/badges.py:735
 msgid "Completed all user profile fields"
-msgstr "完成個人所有資料"
+msgstr "已完成所有使用者個人檔案欄位"
 
 #: models/badges.py:754
 #, python-format
@@ -5019,7 +5019,7 @@ msgstr "對不起，此評論不再可用"
 
 #: models/post.py:1873
 msgid "This post is temporarily not available"
-msgstr "此帖暫時不可用"
+msgstr "此貼文暫時不可用"
 
 #: models/post.py:2304
 msgid "Suggested edit"
@@ -5046,11 +5046,11 @@ msgstr "您的文章待版主審核同意後就會發布。"
 #: models/question.py:155
 #, python-format
 msgid "\" and \"%s\""
-msgstr "\" 和 \"%s\""
+msgstr "\" 和「%s」"
 
 #: models/question.py:158
 msgid "\" and more"
-msgstr "\"查看更多"
+msgstr "\" 和其他"
 
 #: models/question.py:1679
 #, python-format
@@ -5073,27 +5073,27 @@ msgstr "通過電子郵件編輯"
 #: models/repute.py:220
 #, python-format
 msgid "<em>Changed by moderator. Reason:</em> %(reason)s"
-msgstr "<em>被版主修改. 原因:</em> %(reason)s"
+msgstr "<em>被版主修改。原因：</em> %(reason)s"
 
 #: models/user.py:335
 msgid "Entire forum"
-msgstr "這論壇"
+msgstr "整個論壇"
 
 #: models/user.py:336
 msgid "Questions that I asked"
-msgstr "我問的問題"
+msgstr "我提問的問題"
 
 #: models/user.py:337
 msgid "Questions that I answered"
-msgstr "我答的問題"
+msgstr "我回答的問題"
 
 #: models/user.py:338
 msgid "Individually selected questions"
-msgstr "我選擇的問題"
+msgstr "個人選擇的問題"
 
 #: models/user.py:339
 msgid "Mentions and comment responses"
-msgstr "提醒及留言回復"
+msgstr "提及和評論回應"
 
 #: models/user.py:342
 msgid "Instantly"
@@ -5105,7 +5105,7 @@ msgstr "每日"
 
 #: models/user.py:344
 msgid "Weekly"
-msgstr "每周"
+msgstr "每週"
 
 #: models/user.py:345
 msgid "No email"
@@ -5133,7 +5133,7 @@ msgstr "請給有效的電子郵件域名清單。"
 
 #: models/widgets.py:34
 msgid "css for the widget"
-msgstr "小工具的CSS"
+msgstr "小工具的 CSS"
 
 #: setup_templates/settings.py:208
 msgid "account/"
@@ -5149,7 +5149,7 @@ msgstr "無法找到頁面"
 
 #: templates/404.html:7
 msgid "Sorry, could not find the page you requested."
-msgstr "對不起，沒有找到您要的頁面！"
+msgstr "對不起，沒有找到您要的頁面。"
 
 #: templates/404.html:8
 msgid "This might have happened for the following reasons:"
@@ -5187,7 +5187,7 @@ msgstr "服務器內部錯誤"
 
 #: templates/500.html:7
 msgid "system error log is recorded, error will be fixed as soon as possible"
-msgstr "系統已記錄錯誤, 並將盡快處理"
+msgstr "系統已記錄錯誤，並將盡快處理"
 
 #: templates/500.html:8
 msgid "please report the error to the site administrators"
@@ -5270,22 +5270,22 @@ msgstr "社群徽章"
 
 #: templates/badges.html:32
 msgid "gold badge: the highest honor and is very rare"
-msgstr "金牌:十分罕見之最高榮耀"
+msgstr "金牌：十分罕見之最高榮耀"
 
 #: templates/badges.html:35
 msgid ""
 "Gold badge is the highest award in this community. To obtain it you have to show \n"
 "profound knowledge and ability in addition to your active participation."
-msgstr "金牌是社群中最高的獎勵。如要獲得金牌，除了積極參與外，還要顯示出您富有知識和能力。"
+msgstr "金牌是社群中最高的獎勵。如要獲得金牌，除了積極參與外，\n還要顯示出您富有知識和能力。"
 
 #: templates/badges.html:41 templates/badges.html.py:45
 msgid ""
 "silver badge: occasionally awarded for the very high quality contributions"
-msgstr "銀牌:偶爾頒發之優質獎章"
+msgstr "銀牌：偶爾頒發給卓越貢獻之獎章"
 
 #: templates/badges.html:48 templates/badges.html.py:52
 msgid "bronze badge: often given as a special honor"
-msgstr "第三名獎勵:授予之特殊榮譽"
+msgstr "銅牌：常授予以作特殊榮耀"
 
 #: templates/close.html:12
 msgid "Reasons"
@@ -5293,16 +5293,16 @@ msgstr "原因"
 
 #: templates/close.html:16
 msgid "OK to close"
-msgstr "確定關閉"
+msgstr "按確定可關閉"
 
 #: templates/faq_static.html:3 templates/faq_static.html.py:5
 #: views/meta.py:112
 msgid "FAQ"
-msgstr "常見問題"
+msgstr "FAQ"
 
 #: templates/faq_static.html:5
 msgid "Frequently Asked Questions "
-msgstr "常見問題"
+msgstr "常見問題集"
 
 #: templates/faq_static.html:6
 msgid "What kinds of questions can I ask here?"
@@ -5352,13 +5352,13 @@ msgstr "答案是：<strong>您</strong>。"
 
 #: templates/faq_static.html:17
 msgid "This website is moderated by the users."
-msgstr "社群沒有嚴格意義上的管理員身份，每個人皆可為管理員"
+msgstr "社群沒有嚴格意義上的管理員身份，每個人皆可為管理員。"
 
 #: templates/faq_static.html:18
 msgid ""
 "Karma system allows users to earn rights to perform a variety of moderation "
 "tasks"
-msgstr "當積分值達到某個程度，使用者的權限就會增加。"
+msgstr "當積分值達到某個程度，使用者的權限就會增加"
 
 #: templates/faq_static.html:20
 msgid "How does karma system work?"
@@ -5370,7 +5370,7 @@ msgid ""
 "some points, which are called \"karma points\". These points serve as a "
 "rough measure of the community trust to him/her. Various moderation tasks "
 "are gradually assigned to the users based on those points."
-msgstr "當問題或答案獲得贊成票時，原發文的使用者會獲得一些分數，稱為 \"積分值\"。積分的意義大約就是代表社群對他的信任。隨著積分的提升，將被授予不同的仲裁工作。"
+msgstr "當問題或答案獲得贊成票時，原發文的使用者會獲得一些分數，稱為「積分值」。積分的意義大約就是代表社群對他的信任。隨著積分的提升，將被授予不同的仲裁工作。"
 
 #: templates/faq_static.html:22
 #, python-format
@@ -5412,7 +5412,7 @@ msgstr "刪除任何評論"
 
 #: templates/faq_static.html:68
 msgid "How to change my picture (gravatar) and what is gravatar?"
-msgstr "如何改變我的頭像(gravatar)，什麼是gravatar？"
+msgstr "如何改變我的頭像 (gravatar)？什麼是 gravatar？"
 
 #: templates/faq_static.html:69
 msgid ""
@@ -5430,21 +5430,21 @@ msgid ""
 "href='http://gravatar.com'><strong>gravatar.com</strong></a> (just please be"
 " sure to use the same email address that you used to register with us). "
 "Default image that looks like a kitchen tile is generated automatically.</p>"
-msgstr "頭像出現在使用者設定頁面，Gravatartitle是Globally Recognized Avatar的縮寫，是<a href='http://baike.baidu.com/view/675247.htm'><strong>gravatar</strong></a>推出的一項服務，意為“全球通用頭像”。"
+msgstr "<p>出現在使用者個人檔案中的圖片，稱之為 <strong>gravatar</strong>（是 <strong>g</strong>lobally <strong>r</strong>ecognized <strong>avatar</strong> 的縮寫）。</p><p>這裡有如何運作的解說：根據您的電子郵件計算出來的<strong>密碼學金鑰</strong>（無法破解的密碼）。您可將您的圖片（或是您喜愛的自我替代影像）上傳到<a href='http://gravatar.com'><strong>gravatar.com</strong></a>網站，我們後續就會從這裡以該金鑰擷取您的影像。</p><p>這樣一來，所有您信任的網站都能在您的貼文旁邊顯示您的影像，卻不會透露您的電子郵件位址。</p><p>請利用影像<strong>個人化您的帳號</strong> - 只要前往 <a href='http://gravatar.com'><strong>gravatar.com</strong></a> 註冊即可（請要確認您使用相同的點子郵件註冊本站和該網站）。預設影像看起來像是廚房瓷磚，是自動生成的樣式。</p>"
 
 #: templates/faq_static.html:70
 msgid "To register, do I need to create new password?"
-msgstr "注冊需要一個新密碼嗎？"
+msgstr "註冊需要創立新密碼嗎？"
 
 #: templates/faq_static.html:71
 msgid ""
 "No, you don't have to. You can login through any service that supports "
 "OpenID, e.g. Google, Yahoo, AOL, etc."
-msgstr "不必，您可以通過任何支持OpenID的網站登入，例如：Google、Yahoo、AOL等。"
+msgstr "不必，您可以通過任何支持 OpenID 的網站登入，例如：Google、Yahoo、AOL 等。"
 
 #: templates/faq_static.html:72
 msgid "\"Login now!\""
-msgstr "“馬上登入！”"
+msgstr "「馬上登入！」"
 
 #: templates/faq_static.html:74
 msgid "Why other people can edit my questions/answers?"
@@ -5452,7 +5452,7 @@ msgstr "為什麼其他人可以修改我的問題/回答？"
 
 #: templates/faq_static.html:75
 msgid "Goal of this site is..."
-msgstr "此網站的目的為 ... "
+msgstr "此網站的目的為 ..."
 
 #: templates/faq_static.html:75
 msgid ""
@@ -5474,7 +5474,7 @@ msgstr "還有其他問題？"
 msgid ""
 "Please <a href='%(ask_question_url)s'>ask</a> your question, help make our "
 "community better!"
-msgstr "歡迎您來<a href='%(ask_question_url)s'>提問</a>，共建美好社區。"
+msgstr "歡迎您來<a href='%(ask_question_url)s'>提問</a>，共建美好社群！"
 
 #: templates/feedback.html:4
 msgid "Feedback"
@@ -5486,11 +5486,11 @@ msgstr "給我們意見回饋！"
 
 #: templates/feedback.html:19
 msgid "(to hear from us please enter a valid email or check the box below)"
-msgstr "(要獲得動態請輸入有效的電子郵件地址或選中下面的復選框)"
+msgstr "(要獲得消息動態，請輸入有效的電子郵件地址或勾選下面的方框)"
 
 #: templates/feedback.html:26 templates/feedback.html.py:35
 msgid "(this field is required)"
-msgstr " (此欄不能為空白)"
+msgstr "(此欄不能空白)"
 
 #: templates/feedback.html:48
 msgid "Send Feedback"
@@ -5522,7 +5522,7 @@ msgstr "我的群組"
 msgid ""
 "Tip: to create a new group - please go to some user profile and add the new "
 "group there. That user will be the first member of the group"
-msgstr "提示：若要建立新群組 - 請先前往某個人檔案，並在該處加入新群組。該使用者將成為群組的第一位成員。"
+msgstr "提示：若要建立新群組 - 請先前往某使用者的個人檔案，並在該處加入新群組。該使用者將成為群組的第一位成員"
 
 #: templates/groups.html:30
 msgid "Group"
@@ -5549,11 +5549,11 @@ msgstr "歡迎，"
 #: templates/help_static.html:13
 #, python-format
 msgid "Thank you for using %(app_name)s, here is how it works."
-msgstr "謝謝您使用本社區-- %(app_name)s。"
+msgstr "感謝您使用 %(app_name)s，這裡會解說它如何運作。"
 
 #: templates/help_static.html:16
 msgid "How questions, answers and comments work"
-msgstr "如何提問，回答和評論。"
+msgstr "如何提問、回答和評論"
 
 #: templates/help_static.html:18
 msgid ""
@@ -5575,13 +5575,13 @@ msgstr "此外，每個問題和答案都可以增加評論，可以有限度的
 
 #: templates/help_static.html:26
 msgid "Please search before asking your questions"
-msgstr "在您提問之前，請先搜索一下。"
+msgstr "在您提問之前，請先搜索一下"
 
 #: templates/help_static.html:27
 msgid ""
 "Type your question in the search bar and see whether a similar question has "
 "been asked before"
-msgstr "在搜索框中輸入您的問題，看是否有類似的問題已經問過。"
+msgstr "在搜索框中輸入您的問題，看是否有類似的問題已經問過"
 
 #: templates/help_static.html:29
 msgid "Search has advanced capabilities:"
@@ -5603,13 +5603,13 @@ msgstr "只搜索使用者 - 輸入 [user: somename] 或 @somename 或 @\"some n
 msgid ""
 "In addition, it is possible to click on tags to add them to the search "
 "query."
-msgstr "此外，可以點擊相應的標籤用於搜索。"
+msgstr "此外，可以點按相應的標籤用於搜索。"
 
 #: templates/help_static.html:37
 msgid ""
 "Finally, a separate tag search box is available in the side bar of the main "
 "page, where the search tags can be entered as well"
-msgstr "最後，主頁的右側欄還有獨立的標籤搜索框。"
+msgstr "最後，主頁的右側欄還有獨立的標籤搜索框"
 
 #: templates/help_static.html:40
 msgid ""
@@ -5626,14 +5626,14 @@ msgstr "投票"
 msgid ""
 "Voting in %(app_name)s helps to select best answers and thank most helpful "
 "users."
-msgstr "在社群--%(app_name)s中，投票可以選出最好的答案並鼓勵使用者回答。"
+msgstr "在 %(app_name)s 中投票可以選出最好的答案並鼓勵使用者回答。"
 
 #: templates/help_static.html:47
 #, python-format
 msgid ""
 "Please vote when you find helpful information,\n"
 "    it really helps the %(app_name)s community."
-msgstr "當您發現有用的內容時，請投票給他，這樣子可以幫助整個 %(app_name)s社群。"
+msgstr "當您發現有用的內容時，請投票給他，\n    這樣就能幫助整個 %(app_name)s 社群。"
 
 #: templates/help_static.html:51
 msgid "Other topics"
@@ -5643,7 +5643,7 @@ msgstr "其它提示"
 msgid ""
 "You can @mention users anywhere in the text to point their attention,\n"
 "    follow users and conversations and report inappropriate content by flagging it."
-msgstr "您可以在文中@提及其他使用者以提起注意，關注使用者或對話，並以標記的方式回報不宜的內容"
+msgstr "您可以在文中以 @someone 提及其他使用者以引起注意，\n    關注使用者或對話，並以舉報的方式提交不妥的內容。"
 
 #: templates/help_static.html:56
 msgid "Enjoy."
@@ -5665,7 +5665,7 @@ msgid ""
 "        the data import completes. This process may take several minutes.\n"
 "        Please note that feedback will be printed in plain text.\n"
 "        "
-msgstr "上傳您的 stackexchange 傾印用 .zip 檔，接著等候\n資料匯入完成。此過程將耗費數分鐘。\n請注意，所有的意見回饋將以純文字方式列出。"
+msgstr "上傳您的 stackexchange 傾印用 .zip 檔，接著等候\n                資料匯入完成。此過程將耗費數分鐘。\n                請注意，所有的意見回饋將以純文字方式列出。\n        "
 
 #: templates/import_data.html:25
 msgid "Import data"
@@ -5790,7 +5790,7 @@ msgstr "刪除這個留言"
 #: templates/macros.html:379 templates/question/answer_card.html:25
 #: templates/question/question_card.html:34
 msgid "This post is awaiting moderation"
-msgstr "該文章正在審核中"
+msgstr "該文章正在等候審核"
 
 #: templates/macros.html:395 templates/revisions.html:38
 #: templates/revisions.html.py:41 templates/question/answer_controls.html:2
@@ -5816,7 +5816,7 @@ msgstr "%(username)s 大頭貼"
 #: templates/macros.html:593
 #, python-format
 msgid "%(username)s's website is %(url)s"
-msgstr "%(username)s的網站是 \"%(url)s\""
+msgstr "%(username)s的網站是「%(url)s」"
 
 #: templates/macros.html:614 templates/macros.html.py:615
 #: templates/macros.html:676 templates/macros.html.py:677
@@ -5865,12 +5865,12 @@ msgstr "%(new)s 新標記的發布訊息"
 #: templates/macros.html:736 templates/macros.html.py:737
 #, python-format
 msgid "%(seen)s flagged posts"
-msgstr "\"%(seen)s 已標記的發布訊息"
+msgstr "%(seen)s 已標記的發布訊息"
 
 #: templates/macros.html:753
 #, python-format
 msgid "%(action_performed)s %(when)s"
-msgstr ""
+msgstr "%(action_performed)s %(when)s"
 
 #: templates/main_page.html:15
 msgid "Questions"
@@ -5898,18 +5898,18 @@ msgstr "標籤協助改善內容組織及搜尋"
 
 #: templates/question_retag.html:32
 msgid "tag editors receive special awards from the community"
-msgstr "將授予修改標籤的用戶特殊的社區獎勵"
+msgstr "將授予修改標籤的使用者特殊的社群獎勵"
 
 #: templates/question_retag.html:63
 msgid "up to 5 tags, less than 20 characters each"
-msgstr "最多 5 個標籤，每個標籤長度小於 20 個字元。"
+msgstr "最多 5 個標籤，每個標籤長度小於 20 個字元"
 
 #: templates/reopen.html:12
 #, python-format
 msgid ""
 "Closed by: \n"
 "    <a href=\"%(closed_by_profile_url)s\">%(username)s</a>\n"
-msgstr "由 <a href=\"%(closed_by_profile_url)s\">%(username)s</a>\n關閉\n"
+msgstr "關閉者：\n    <a href=\"%(closed_by_profile_url)s\">%(username)s</a>\n"
 
 #: templates/reopen.html:17
 msgid "Close reason:"
@@ -5917,20 +5917,20 @@ msgstr "關閉原因:"
 
 #: templates/reopen.html:20
 msgid "When:"
-msgstr "當:"
+msgstr "時間："
 
 #: templates/revisions.html:4 templates/revisions.html.py:7
 msgid "Revision history"
-msgstr "版本歷史"
+msgstr "修訂歷史"
 
 #: templates/revisions.html:23
 msgid "click to hide/show revision"
-msgstr "點擊隱藏或顯示版本"
+msgstr "點按隱藏或顯示修訂版本"
 
 #: templates/revisions.html:29
 #, python-format
 msgid "revision %(number)s"
-msgstr "版本%(number)s"
+msgstr "修訂版本 %(number)s"
 
 #: templates/subscribe_for_tags.html:3 templates/subscribe_for_tags.html:5
 msgid "Subscribe for tags"
@@ -5938,7 +5938,7 @@ msgstr "訂閱標籤"
 
 #: templates/subscribe_for_tags.html:6
 msgid "Please, subscribe for the following tags:"
-msgstr "請訂閱下述標籤:"
+msgstr "請訂閱下述標籤："
 
 #: templates/subscribe_for_tags.html:11
 msgid "Subscribe"
@@ -5989,7 +5989,7 @@ msgstr "符合 %(search_query)s 的使用者："
 
 #: templates/users.html:69
 msgid "No users found."
-msgstr "找不到使用者"
+msgstr "找不到使用者。"
 
 #: templates/authopenid/account_recovery_form.html:2
 #: templates/authopenid/signin.html:181
@@ -6012,7 +6012,7 @@ msgstr "回復帳號"
 
 #: templates/authopenid/authopenid_macros.html:60
 msgid "Please enter your <span>user name</span>, then sign in"
-msgstr "請輸入您的使用者名,然後登入"
+msgstr "請輸入您的<span>使用者名稱</span>，然後登入"
 
 #: templates/authopenid/authopenid_macros.html:61
 #: templates/authopenid/widget_signin.html:72
@@ -6037,7 +6037,7 @@ msgstr "停用新使用者註冊"
 #: templates/authopenid/complete.html:60
 #: templates/authopenid/signup_with_password.html:30 utils/forms.py:95
 msgid "Choose a screen name"
-msgstr "暱稱"
+msgstr "請決定顯示稱呼"
 
 #: templates/authopenid/complete.html:72
 #: templates/authopenid/signup_with_password.html:40
@@ -6069,11 +6069,11 @@ msgstr "返回註冊。"
 
 #: templates/authopenid/confirm_email.txt:1
 msgid "Thank you for registering at our Q&A forum!"
-msgstr "感謝您註冊我們的問答論壇"
+msgstr "感謝您註冊我們的問答論壇！"
 
 #: templates/authopenid/confirm_email.txt:3
 msgid "Your account details are:"
-msgstr "您的帳戶詳情："
+msgstr "您的帳號詳情："
 
 #: templates/authopenid/confirm_email.txt:5
 msgid "Username:"
@@ -6106,7 +6106,7 @@ msgstr "您已成功登出"
 msgid ""
 "However, you still may be logged in to your OpenID provider. Please logout "
 "of your provider if you wish to do so."
-msgstr "然而您仍可使用OpenID帳號登入。請先登出現有的服務。"
+msgstr "然而您仍可使用 OpenID 帳號登入。請先登出現有的服務。"
 
 #: templates/authopenid/signin.html:5
 #: templates/authopenid/widget_signin.html:5
@@ -6119,35 +6119,35 @@ msgid ""
 "It's a good idea to make sure that your existing login methods still work, "
 "or add a new one. Please click any of the icons below to check/change or add"
 " new login methods."
-msgstr "最好確認既有的登入方式仍然可使用，或新增登入方式。請點擊下方圖示檢查(改變)或新增登入方式。"
+msgstr "最好確認既有的登入方式仍然可使用，或新增登入方式。請點按下方圖示檢查(改變)或新增登入方式。"
 
 #: templates/authopenid/signin.html:19
 #: templates/authopenid/widget_signin.html:24
 msgid ""
 "Please add a more permanent login method by clicking one of the icons below,"
 " to avoid logging in via email each time."
-msgstr "請點擊以下圖示增加更多永久登入方式，避免每次都透過email登入。"
+msgstr "請點按以下圖示增加更多永久登入方式，避免每次都透過電子郵件登入。"
 
 #: templates/authopenid/signin.html:23
 #: templates/authopenid/widget_signin.html:28
 msgid ""
 "Click on one of the icons below to add a new login method or re-validate an "
 "existing one."
-msgstr "點擊以下圖示新增登入方式或重新驗證既有登入方式。"
+msgstr "點按以下圖示新增登入方式或重新驗證既有登入方式。"
 
 #: templates/authopenid/signin.html:25
 #: templates/authopenid/widget_signin.html:30
 msgid ""
 "You don't have a method to log in right now, please add one or more by "
 "clicking any of the icons below."
-msgstr "您目前還沒有登入方式，請點擊以下圖示新增一或多個登入方式"
+msgstr "您目前還沒有登入方式，請點按以下圖示新增一或多個登入方式。"
 
 #: templates/authopenid/signin.html:28
 #: templates/authopenid/widget_signin.html:33
 msgid ""
 "Please check your email and visit the enclosed link to re-connect to your "
 "account"
-msgstr "請檢查您的郵件並訪問以下連結以重新連接帳戶"
+msgstr "請檢查您的郵件並訪問以下連結以重新連接帳號"
 
 #: templates/authopenid/signin.html:64
 msgid "or enter your <span>user name and password</span>"
@@ -6273,11 +6273,11 @@ msgid ""
 "Choose your favorite service below to sign in using secure OpenID or similar"
 " technology. Your external service password always stays confidential and "
 "you don't have to rememeber or create another one."
-msgstr "請在下方選擇您最喜愛的服務來使用安全的 OpenID 或類似的技術登入。您外部服務的密碼會一樣維持機密，而且您也無須記憶或重設新密碼。"
+msgstr "請在下方選擇您喜愛的服務來使用安全的 OpenID 或類似的技術登入。您外部服務的密碼會一樣維持機密，而且您也無須記憶或重設新密碼。"
 
 #: templates/authopenid/widget_signin.html:64
 msgid "or enter your <span>user name and password</span>, then sign in"
-msgstr "或者輸入您的<span>使用者名稱和密碼</span>, 然後登入"
+msgstr "或者輸入您的<span>使用者名稱和密碼</span>，然後登入"
 
 #: templates/authopenid/email_validation/body.html:2
 #: templates/authopenid/email_validation/body.html:3
@@ -6288,12 +6288,12 @@ msgstr "來自 %(site_name)s 的問候"
 #: templates/authopenid/email_validation/body.html:7
 #: templates/authopenid/email_validation/body.txt:3
 msgid "To make use of the Forum, please follow the link below:"
-msgstr "請以以下連結使用論壇: "
+msgstr "請以以下連結使用論壇："
 
 #: templates/authopenid/email_validation/body.html:11
 #: templates/authopenid/email_validation/body.txt:7
 msgid "Following the link above will help us verify your email address."
-msgstr "請以上方連結認證電子郵件地址"
+msgstr "請以上方連結認證電子郵件地址。"
 
 #: templates/authopenid/email_validation/body.html:13
 #: templates/authopenid/email_validation/body.txt:9
@@ -6388,14 +6388,14 @@ msgstr "切換為 Markdown 編輯器的即時預覽"
 msgid ""
 "To change frequency, language and content of these alerts, please visit <a "
 "href=\"%(url)s\">your user profile</a>."
-msgstr "欲改變這些警示的頻率、語言或是內容，請前往<a href=\"%(url)s\">您的使用者個人檔案</a>。"
+msgstr "欲改變這些通知的頻率、語言或是內容，請前往<a href=\"%(url)s\">您的使用者個人檔案</a>。"
 
 #: templates/email/change_settings_info.html:6
 #, python-format
 msgid ""
 "To change frequency and content of these alerts, please visit <a "
 "href=\"%(url)s\">your user profile</a>."
-msgstr "欲改變這些警示的頻率或內容，請前往<a href=\"%(url)s\">您的使用者個人檔案</a>。"
+msgstr "欲改變這些通知的頻率或內容，請前往<a href=\"%(url)s\">您的使用者個人檔案</a>。"
 
 #: templates/email/change_settings_info.html:10
 #: templates/email/unsubscribe_link/body.html:5
@@ -6409,7 +6409,7 @@ msgid ""
 "If you believe that this message was sent in an error, please email about it"
 " the forum administrator at <a "
 "href=\"mailto:%(admin_email)s\">%(admin_email)s</a>."
-msgstr "如果您認為我們發錯了訊息，請寄 email 給論壇管理員 <a href=\"mailto:%(admin_email)s\">%(admin_email)s</a>。"
+msgstr "如果您認為我們發錯了訊息，請寄電子郵件給論壇管理員 <a href=\"mailto:%(admin_email)s\">%(admin_email)s</a>。"
 
 #: templates/email/list_emails.html:2
 msgid "Preview of emails"
@@ -6422,12 +6422,12 @@ msgstr "由 Askbot 寄送的電子郵件列表"
 #: templates/email/macros.html:34 templates/email/macros.html.py:66
 #, python-format
 msgid "In reply to %(author)s's %(post_type)s"
-msgstr ""
+msgstr "回覆 %(author)s 的 %(post_type)s"
 
 #: templates/email/macros.html:37 templates/email/macros.html.py:68
 #, python-format
 msgid "%(author)s %(performed_action)s"
-msgstr ""
+msgstr "%(author)s %(performed_action)s"
 
 #: templates/email/macros.html:52
 msgid "Tags:"
@@ -6448,7 +6448,7 @@ msgstr[0] "\n                %(count)s 則評註：\n            "
 #: templates/email/preview_email.html:2 templates/email/preview_email.html:8
 #, python-format
 msgid "Preview of email \"%(title)s\""
-msgstr "預覽郵件\"%(title)s\""
+msgstr "預覽郵件「%(title)s」"
 
 #: templates/email/preview_email.html:5
 msgid "Askbot emails"
@@ -6486,7 +6486,7 @@ msgstr "您在 %(site_name)s 的文章已經發布"
 #: templates/email/ask_for_signature/body.html:4
 #, python-format
 msgid "%(user)s, please reply to this message."
-msgstr "%(user)s，請回復此訊息。"
+msgstr "%(user)s，請回覆此訊息。"
 
 #: templates/email/ask_for_signature/body.html:9
 msgid ""
@@ -6525,7 +6525,7 @@ msgid_plural ""
 "\n"
 "        %(question_count)s updates about %(topics)s\n"
 "    "
-msgstr[0] "\n此 %(topics)s 有 %(question_count)s 次更新"
+msgstr[0] "\n        此 %(topics)s 有 %(question_count)s 次更新\n    "
 
 #: templates/email/batch_email_alert/subject.txt:8
 #, python-format
@@ -6588,12 +6588,12 @@ msgid ""
 "\n"
 "        There are new items in the %(site)s moderation queue, <a href=\"%(mod_url)s\">please have a look</a>\n"
 "    "
-msgstr "\n        在 %(site)s 有新的待審項目,<a href=\"%(mod_url)s\">請查看<a>\n    "
+msgstr "\n        在 %(site)s 有新的待審項目，<a href=\"%(mod_url)s\">請查看<a>\n    "
 
 #: templates/email/moderation_queue_notification/subject.txt:1
 #, python-format
 msgid "%(site)s moderation alert"
-msgstr "%(site)s 審核警示"
+msgstr "%(site)s 審核通知"
 
 #: templates/email/re_welcome/body.html:2
 #: templates/email/re_welcome/body.html:3
@@ -6612,7 +6612,7 @@ msgstr "當您收到更新通知時可以前往回應，也可以透過電子郵
 msgid ""
 "Of course, you can always visit the %(site_name)s at <a "
 "href=\"%(site_url)s\">%(site_url)s</a>."
-msgstr "當然，您隨時都可以前往位於 <a href=\"%(site_url)s\">%(site_url)s</a> 的 %(site_name)s"
+msgstr "當然，您隨時都可以前往位於 <a href=\"%(site_url)s\">%(site_url)s</a> 的 %(site_name)s。"
 
 #: templates/email/re_welcome/body.html:11
 #, python-format
@@ -6637,7 +6637,7 @@ msgstr "您的貼文（複製在最後面）基於下列原因被拒絕："
 
 #: templates/email/rejected_post/body.html:7
 msgid "Here is your original post"
-msgstr "這是您的原帖"
+msgstr "這是您的原始貼文"
 
 #: templates/email/rejected_post/subject.txt:1
 msgid "your post was not accepted"
@@ -6686,7 +6686,7 @@ msgstr "重要：<em>請直接回覆</em>此訊息而不要編輯內容。我們
 msgid ""
 "Until we receive the response from you, you will not be able to post content"
 " on %(site_name)s by email."
-msgstr "在我們收到您的回應之前，您將無法用透過電子郵件張貼內容到 %(site_name)s"
+msgstr "在我們收到您的回應之前，您將無法用透過電子郵件張貼內容到 %(site_name)s。"
 
 #: templates/embed/list_widgets.html:5
 #, python-format
@@ -6826,7 +6826,7 @@ msgstr "設定"
 #: templates/livesettings/site_settings.html:51
 msgid "Please correct the error below."
 msgid_plural "Please correct the errors below."
-msgstr[0] "請改正下面的錯誤"
+msgstr[0] "請改正下面的錯誤。"
 
 #: templates/livesettings/group_settings.html:16
 #, python-format
@@ -6836,7 +6836,7 @@ msgstr "設定包含於%(name)s."
 #: templates/livesettings/group_settings.html:50
 #: templates/livesettings/site_settings.html:98
 msgid "You don't have permission to edit values."
-msgstr "您沒有權限修改這些值"
+msgstr "您沒有權限修改這些值。"
 
 #: templates/livesettings/site_settings.html:24
 msgid "Documentation"
@@ -6856,7 +6856,7 @@ msgstr "編輯網站設定"
 
 #: templates/livesettings/site_settings.html:44
 msgid "Livesettings are disabled for this site."
-msgstr "本暫停用Livesettings"
+msgstr "本暫停用 Livesettings。"
 
 #: templates/livesettings/site_settings.html:45
 msgid "All configuration options must be edited in the site settings.py file"
@@ -6885,7 +6885,7 @@ msgstr "已加標籤"
 
 #: templates/main_page/headline.html:22
 msgid "Search tips:"
-msgstr "搜尋技巧: "
+msgstr "搜尋技巧："
 
 #: templates/main_page/headline.html:25
 msgid "reset author"
@@ -6907,11 +6907,11 @@ msgstr "重新開始"
 
 #: templates/main_page/headline.html:36
 msgid " - to expand, or dig in by adding more tags and revising the query."
-msgstr " - 使用更多的標籤更改查詢找資料"
+msgstr " - 使用更多的標籤更改查詢找資料。"
 
 #: templates/main_page/headline.html:39
 msgid "Search tip:"
-msgstr "查詢技巧: "
+msgstr "搜尋技巧："
 
 #: templates/main_page/headline.html:39
 msgid "add tags and a query to focus your search"
@@ -6940,7 +6940,7 @@ msgstr "重新開始"
 
 #: templates/main_page/questions_loop.html:9
 msgid "Did not find what you were looking for?"
-msgstr "找不到結果? "
+msgstr "找不到結果？"
 
 #: templates/main_page/tab_bar.html:6
 msgid "subscribe to the feed"
@@ -6982,7 +6982,7 @@ msgstr[0] "最多只能有%(tag_count)s個標籤"
 #, python-format
 msgid ""
 "please use up to %(tag_count)s tags, less than %(max_chars)s characters each"
-msgstr "最多%(tag_count)s個標籤，每個標籤長度小於%(max_chars)s個字符。"
+msgstr "最多%(tag_count)s個標籤，每個標籤長度小於%(max_chars)s個字符"
 
 #: templates/moderation/manage_reject_reasons_dialog.html:4
 msgid "Manage post flag/reject reasons"
@@ -7014,7 +7014,7 @@ msgstr "添加一個新的理由"
 
 #: templates/moderation/queue.html:4 templates/moderation/queue.html.py:7
 msgid "Moderation queue"
-msgstr "待審列表"
+msgstr "審核列表"
 
 #: templates/moderation/queue.html:10
 msgid "Select:"
@@ -7105,7 +7105,7 @@ msgstr "排序方式 »"
 
 #: templates/question/answer_vote_buttons.html:10
 msgid "(click again to undo)"
-msgstr "(再次點擊回復)"
+msgstr "（再次點按回復）"
 
 #: templates/question/closed_question_info.html:2
 msgid "Closed for the following reason"
@@ -7118,7 +7118,7 @@ msgstr "由"
 #: templates/question/closed_question_info.html:5
 #, python-format
 msgid "close date %(closed_at)s"
-msgstr "關閉日期 %(closed_at)s "
+msgstr "關閉日期 %(closed_at)s"
 
 #: templates/question/content.html:19
 msgid "See the accepted answer"
@@ -7209,7 +7209,7 @@ msgstr "和"
 #: templates/question/sidebar.html:121
 #, python-format
 msgid "%(more_count)s more"
-msgstr "還有 %(more_count)s "
+msgstr "還有 %(more_count)s"
 
 #: templates/question/sidebar.html:127
 msgid "Public thread"
@@ -7332,12 +7332,12 @@ msgstr "標記為已讀"
 
 #: templates/user_inbox/responses.html:11
 msgid "select:"
-msgstr "選擇:"
+msgstr "選擇："
 
 #: templates/user_profile/twitter_sharing_controls.html:8
 #, python-format
 msgid "Auto-tweeting to @%(handle)s"
-msgstr "自動向 @%(handle)s 發送推"
+msgstr "自動推文到 @%(handle)s"
 
 #: templates/user_profile/twitter_sharing_controls.html:19
 msgid "stop tweeting"
@@ -7349,11 +7349,11 @@ msgstr "自動發送推文未啟用"
 
 #: templates/user_profile/twitter_sharing_controls.html:26
 msgid "Select twitter account"
-msgstr "選擇推特帳戶"
+msgstr "選擇推特帳號"
 
 #: templates/user_profile/twitter_sharing_controls.html:28
 msgid "use another account"
-msgstr "切換帳戶"
+msgstr "切換帳號"
 
 #: templates/user_profile/twitter_sharing_controls.html:32
 msgid "Auto-tweeting is off"
@@ -7410,15 +7410,15 @@ msgstr "抱歉，發生預期外的錯誤。"
 #: templates/user_profile/user.html:13
 #, python-format
 msgid "%(username)s's profile"
-msgstr "%(username)s個人資料"
+msgstr "%(username)s 的個人檔案"
 
 #: templates/user_profile/user_edit.html:4
 msgid "Edit user profile"
-msgstr "修改個人資料"
+msgstr "修改使用者個人檔案"
 
 #: templates/user_profile/user_edit.html:7
 msgid "edit profile"
-msgstr "修改個人資料"
+msgstr "修改個人檔案"
 
 #: templates/user_profile/user_edit.html:18
 #: templates/user_profile/user_info.html:19
@@ -7427,7 +7427,7 @@ msgstr "更換照片"
 
 #: templates/user_profile/user_edit.html:24
 msgid "Screen Name"
-msgstr "暱稱"
+msgstr "顯示稱呼"
 
 #: templates/user_profile/user_edit.html:44
 msgid "(cannot be changed)"
@@ -7448,7 +7448,7 @@ msgid ""
 "updates on interesting content by email. If you do not wish to receive "
 "emails - select 'no email' on all items below.<br/>Updates are only sent "
 "when there is any new activity on selected items."
-msgstr ""
+msgstr "<span class='big strong'>調整電子郵件新消息通知頻率。</span>以電子郵件接收有興趣內容的後續新消息。若您不希望接收電子郵件 - 請選取在下方所有項目選擇「沒有電子郵件」。<br/>新消息通知僅在所選項目有任何新活動時才會發送。"
 
 #: templates/user_profile/user_email_subscriptions.html:11
 msgid "Note: language settings also apply to the email subscriptions"
@@ -7485,7 +7485,7 @@ msgstr "關注中"
 
 #: templates/user_profile/user_info.html:57
 msgid "update profile"
-msgstr "更新我的資料"
+msgstr "更新個人檔案"
 
 #: templates/user_profile/user_info.html:61
 msgid "manage login methods"
@@ -7555,12 +7555,12 @@ msgstr "我的主要語言是"
 #: templates/user_profile/user_moderate.html:4
 #: templates/user_profile/user_tabs.html:48
 msgid "moderation"
-msgstr "審閱"
+msgstr "審核"
 
 #: templates/user_profile/user_moderate.html:8
 #, python-format
 msgid "%(username)s's current status is \"%(status)s\""
-msgstr "%(username)s當前的狀態是 \"%(status)s\""
+msgstr "%(username)s 當前的狀態是「%(status)s」"
 
 #: templates/user_profile/user_moderate.html:20
 msgid "Change status"
@@ -7573,7 +7573,7 @@ msgstr "凍結該使用者併刪除其所有相關數據"
 #: templates/user_profile/user_moderate.html:29
 #, python-format
 msgid "Your current reputation is %(reputation)s points"
-msgstr "您當前的積分是 %(reputation)s "
+msgstr "您當前的積分是 %(reputation)s 點"
 
 #: templates/user_profile/user_moderate.html:31
 #, python-format
@@ -7601,7 +7601,7 @@ msgstr "發送訊息給%(username)s"
 msgid ""
 "An email will be sent to the user with 'reply-to' field set to your email "
 "address. Please make sure that your address is entered correctly."
-msgstr "發送的郵件將使用您的電子郵件地址作為回覆地址，請確保您輸入的郵件地址是正確的"
+msgstr "發送的郵件將使用您的電子郵件地址作為回覆地址，請確保您輸入的郵件地址是正確的。"
 
 #: templates/user_profile/user_moderate.html:50
 msgid "Message sent"
@@ -7636,7 +7636,7 @@ msgstr "遭到停權的使用者只能編輯或刪除自己的貼文。"
 msgid ""
 "Blocked users can only login and send feedback to the site administrators, "
 "their url and profile will also be hidden."
-msgstr "被封鎖的用戶只能登入並向網站管理員發送意見回饋，其網址與個人檔案也將被隱藏。"
+msgstr "被封鎖的使用者只能登入並向網站管理員發送意見回饋，其網址與個人檔案也將被隱藏。"
 
 #: templates/user_profile/user_network.html:5
 #: templates/user_profile/user_tabs.html:27
@@ -7659,7 +7659,7 @@ msgstr[0] "關注 %(count)s 名使用者"
 msgid ""
 "Your network is empty. Would you like to follow someone? - Just visit their "
 "profiles and click \"follow\""
-msgstr "朋友圈為空。是否希望關注一些使用者? - 只需訪問其個人檔案並點擊“關注”"
+msgstr "朋友圈為空。是否希望關注一些使用者？ - 只需訪問其個人檔案並點按「關注」"
 
 #: templates/user_profile/user_network.html:21
 #, python-format
@@ -7669,7 +7669,7 @@ msgstr "%(username)s的交友圈空白"
 #: templates/user_profile/user_recent.html:5
 #: templates/user_profile/user_tabs.html:39
 msgid "activity"
-msgstr "活動紀錄"
+msgstr "活動"
 
 #: templates/user_profile/user_recent.html:25
 #: templates/user_profile/user_recent.html:30
@@ -7678,7 +7678,7 @@ msgstr "來源"
 
 #: templates/user_profile/user_reputation.html:10
 msgid "Your karma change log."
-msgstr "積分更動日誌"
+msgstr "您的積分更動日誌。"
 
 #: templates/user_profile/user_reputation.html:12
 #, python-format
@@ -7714,7 +7714,7 @@ msgstr "回答:"
 
 #: templates/user_profile/user_tabs.html:22
 msgid "email alerts"
-msgstr "電子郵件警告"
+msgstr "電子郵件通知"
 
 #: templates/user_profile/user_tabs.html:43
 #: templates/user_profile/user_votes.html:5
@@ -7854,7 +7854,7 @@ msgstr "*斜體* 或 _斜體_"
 
 #: templates/widgets/markdown_help.html:16
 msgid "**bold** or __bold__"
-msgstr "**加粗** 或者 __加粗__ "
+msgstr "**加粗** 或者 __加粗__"
 
 #: templates/widgets/markdown_help.html:20
 #: templates/widgets/markdown_help.html:24
@@ -7884,7 +7884,7 @@ msgstr "二"
 
 #: templates/widgets/markdown_help.html:33
 msgid "basic HTML tags are also supported"
-msgstr "支援基本的HTML標籤"
+msgstr "支援基本的 HTML 標籤"
 
 #: templates/widgets/markdown_help.html:38
 msgid "learn more about Markdown"
@@ -7924,7 +7924,7 @@ msgstr "使用者名稱"
 msgid ""
 "since you are not logged in right now, you will be asked to sign in or "
 "register after making your post"
-msgstr "因為您尚未登入，須登入或註冊後才能貼文。"
+msgstr "因為您尚未登入，須登入或註冊後才能貼文"
 
 #: templates/widgets/question_summary.html:12
 msgid "view"
@@ -7962,7 +7962,7 @@ msgstr "訂閱的標籤"
 
 #: templates/widgets/tag_selector.html:70
 msgid "Send me email alerts for"
-msgstr "發送郵件警告的情況"
+msgstr "發送電子郵件通知的情況"
 
 #: templates/widgets/tag_selector.html:86
 msgid "Change frequency of emails"
@@ -8070,15 +8070,15 @@ msgstr "該功能僅限管理員使用"
 
 #: utils/forms.py:68
 msgid "this field is required"
-msgstr " 標籤不能為空白。"
+msgstr "此欄位不能空白"
 
 #: utils/forms.py:105
 msgid "user name is required"
-msgstr " 標籤不能為空白。"
+msgstr "使用者名稱不能空白"
 
 #: utils/forms.py:106
 msgid "sorry, this name is taken, please choose another"
-msgstr "對不起，該用戶名已註冊，請換一個試試"
+msgstr "對不起，該使用者名已註冊，請換一個試試"
 
 #: utils/forms.py:107
 msgid "sorry, this name is not allowed, please choose another"
@@ -8086,15 +8086,15 @@ msgstr "對不起，您不能註冊該使用者名稱，請換一個試試"
 
 #: utils/forms.py:108
 msgid "sorry, there is no user with this name"
-msgstr "對不起，沒有此用戶"
+msgstr "對不起，沒有此使用者"
 
 #: utils/forms.py:109
 msgid "sorry, we have a serious error - user name is taken by several users"
-msgstr "對不起，許多人使用該用戶, 造成錯誤"
+msgstr "對不起，我們這裡有個重大錯誤 - 使用者名稱被多位使用者取用"
 
 #: utils/forms.py:110
 msgid "user name can only consist of letters, empty space and underscore"
-msgstr "用戶名字須由字元, 空白, 下標字組成"
+msgstr "使用者名字只能由英文字母、空白、底線_組成"
 
 #: utils/forms.py:111
 msgid "please use at least some alphabetic characters in the user name"
@@ -8114,7 +8114,7 @@ msgstr "您的電子郵件 <i>（永不公開）</i>"
 
 #: utils/forms.py:247
 msgid "email address is required"
-msgstr " 電子郵件地址不能為空白"
+msgstr "電子郵件地址不能空白"
 
 #: utils/forms.py:248
 msgid "please enter a valid email address"
@@ -8122,7 +8122,7 @@ msgstr "請輸入有效的電子郵件地址"
 
 #: utils/forms.py:249
 msgid "this email is already used by someone else, please choose another"
-msgstr "該電子郵件已被註冊，請選擇另一個再試。"
+msgstr "該電子郵件已被註冊，請選擇另一個再試"
 
 #: utils/forms.py:294
 msgid "please, retype your password"
@@ -8175,11 +8175,11 @@ msgstr "您今天還可以投%(votes_left)s次票"
 
 #: views/commands.py:156
 msgid "Sorry, something is not right here..."
-msgstr "對不起，這裡出了些問題"
+msgstr "對不起，這裡出了些問題..."
 
 #: views/commands.py:160
 msgid "Sorry, but anonymous users cannot perform this action."
-msgstr "抱歉，匿名者不能進行此動作"
+msgstr "抱歉，匿名者不能進行此動作。"
 
 #: views/commands.py:167 views/commands.py:178
 msgid "Request mode is not supported. Please try again."
@@ -8233,7 +8233,7 @@ msgstr "對不起，分享請求無效"
 #: views/commands.py:1351
 #, python-format
 msgid "%(user)s, welcome to group %(group)s!"
-msgstr "%(user)s，歡迎加入 %(group)s 群組"
+msgstr "%(user)s，歡迎加入 %(group)s 群組！"
 
 #: views/commands.py:1408 views/commands.py:1438
 msgid "Sorry, only thread moderators can use this function"
@@ -8345,39 +8345,39 @@ msgstr "管理使用者"
 
 #: views/users.py:601
 msgid "user profile overview"
-msgstr "用戶概覽"
+msgstr "使用者個人檔案概覽"
 
 #: views/users.py:789
 msgid "profile - recent activity"
-msgstr "最近活動"
+msgstr "個人檔案 - 最近活動"
 
 #: views/users.py:820
 msgid "profile - moderation"
-msgstr "使用者資料  - 管理"
+msgstr "個人檔案 - 審核"
 
 #: views/users.py:871
 msgid "profile - messages"
-msgstr "使用者資料 - 消息"
+msgstr "個人檔案 - 訊息"
 
 #: views/users.py:966
 msgid "profile - responses"
-msgstr "使用者資料 - 回應 "
+msgstr "個人檔案 - 回應"
 
 #: views/users.py:979
 msgid "profile - network"
-msgstr "使用者資料 - 社交網"
+msgstr "個人檔案 - 朋友圈"
 
 #: views/users.py:1008
 msgid "profile - votes"
-msgstr "使用者資料 - 投票"
+msgstr "個人檔案 - 投票"
 
 #: views/users.py:1049
 msgid "Profile - User's Karma"
-msgstr "使用者資料 - 積分"
+msgstr "個人檔案 - 使用者積分"
 
 #: views/users.py:1086
 msgid "profile - favorites"
-msgstr "使用者資料 - 收藏"
+msgstr "個人檔案 - 收藏"
 
 #: views/users.py:1217 views/users.py:1221
 msgid "changes saved"
@@ -8389,12 +8389,12 @@ msgstr "取消電子郵件更新"
 
 #: views/users.py:1245
 msgid "profile - email subscriptions"
-msgstr "使用者配置 - 郵件訂閱"
+msgstr "個人設定 - 郵件訂閱"
 
 #: views/users.py:1268
 #, python-format
 msgid "profile - %(section)s"
-msgstr "使用者配置 - %(section)s"
+msgstr "個人檔案 - %(section)s"
 
 #: views/writers.py:65
 msgid "Sorry, anonymous users cannot upload files"
@@ -8403,21 +8403,21 @@ msgstr "抱歉，匿名使用者不能上傳檔案"
 #: views/writers.py:83
 #, python-format
 msgid "allowed file types are '%(file_types)s'"
-msgstr "只允許上傳 '%(file_types)s' 類型的文件！"
+msgstr "只允許上傳「%(file_types)s」類型的文件"
 
 #: views/writers.py:96
 #, python-format
 msgid "maximum upload file size is %(file_size)sK"
-msgstr "只允許上傳不超過%(file_size)sK大小的檔案！"
+msgstr "只允許上傳不超過 %(file_size)sK 大小的檔案"
 
 #: views/writers.py:104
 msgid ""
 "Error uploading file. Please contact the site administrator. Thank you."
-msgstr "在檔案上傳過程中產生了錯誤，請聯系管理員，謝謝^_^"
+msgstr "在檔案上傳過程中發生錯誤。請聯繫網站管理員，謝謝。"
 
 #: views/writers.py:199 views/writers.py:605
 msgid "Please log in to make posts"
-msgstr "請登入後發帖"
+msgstr "請登入再發文"
 
 #: views/writers.py:751
 msgid "This content is forbidden"
@@ -8432,7 +8432,7 @@ msgstr "未找到文章"
 msgid ""
 "Sorry, you appear to be logged out and cannot post comments. Please <a "
 "href=\"%(sign_in_url)s\">sign in</a>."
-msgstr "對不起，您已經退出，無法發表評論，請<a href=\"%(sign_in_url)s\">登入</a>."
+msgstr "對不起，您已經退出，無法發表評論，請<a href=\"%(sign_in_url)s\">登入</a>。"
 
 #: views/writers.py:798
 msgid "Sorry, anonymous users cannot edit comments"
@@ -8443,11 +8443,11 @@ msgstr "匿名使用者不能編輯評論"
 msgid ""
 "Sorry, you appear to be logged out and cannot delete comments. Please <a "
 "href=\"%(sign_in_url)s\">sign in</a>."
-msgstr "對不起，看來您已經登出，無法刪除該評論，請<a href=\"%(sign_in_url)s\">登入</a>."
+msgstr "對不起，看來您已經登出，無法刪除該評論，請<a href=\"%(sign_in_url)s\">登入</a>。"
 
 #: views/writers.py:892
 msgid "sorry, we seem to have some technical difficulties"
-msgstr "對不起，好像有一些技術上的錯誤。"
+msgstr "對不起，好像有一些技術問題"
 
 #: views/writers.py:905
 #, python-format
@@ -8465,7 +8465,7 @@ msgstr "對不起，只有登入後才能將答案轉換為評論，請先<a hre
 
 #: views/writers.py:961
 msgid "Error - could not find the destination post"
-msgstr "錯誤 - 無法找到目標帖"
+msgstr "錯誤 - 無法找到目標貼文"
 
 #: views/writers.py:985
 #, python-format

@@ -52,7 +52,7 @@ def application_settings(request):
         tinymce_plugins = settings.TINYMCE_DEFAULT_CONFIG.get('plugins', '').split(',')
         my_settings['TINYMCE_PLUGINS'] = map(lambda v: v.strip(), tinymce_plugins)
         my_settings['TINYMCE_EDITOR_DESELECTOR'] = settings.TINYMCE_DEFAULT_CONFIG['editor_deselector']
-        my_settings['TINYMCE_CONFIG_JSON'] = json.dumps(settings.TINYMCE_DEFAULT_CONFIG)
+        my_settings['TINYMCE_CONFIG_JSON'] = simplejson.dumps(settings.TINYMCE_DEFAULT_CONFIG)
     else:
         my_settings['TINYMCE_PLUGINS'] = []
         my_settings['TINYMCE_EDITOR_DESELECTOR'] = ''

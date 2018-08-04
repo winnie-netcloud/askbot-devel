@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# leonfeng <chaofeng111@gmail.com>, 2014
+# leonfeng <chaofeng111@qq.com>, 2014
 # flluo <fonglong.luo@gmail.com>, 2015
 # Haitao Jiang <jianghaitao@gmail.com>, 2013
 # Hans Chen <haihan@gmail.com>, 2014
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-03-03 16:06+0000\n"
+"PO-Revision-Date: 2017-09-19 10:50+0000\n"
 "Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/askbot/askbot/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"

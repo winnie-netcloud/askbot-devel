@@ -1,20 +1,19 @@
-from django.conf import settings as django_settings
+"""Management commands alerting of content on the moderation queue"""
 from django.core.management.base import NoArgsCommand
-from django.template.loader import get_template
-from django.utils.translation import ugettext as _
+from django.conf import settings as django_settings
 from django.utils import translation
-from askbot.conf import settings as askbot_settings
 from askbot import const
-from askbot import mail
 from askbot.mail.messages import ModerationQueueNotification
 from askbot.models import Activity
 from askbot.models import User
 from askbot.models.user import get_invited_moderators
 
 def get_moderators():
+    """Returns query set of admins and moderators"""
     return User.objects.filter(askbot_profile__status__in=('d', 'm'))
 
 def get_last_mod_alert_activity():
+    """return latest moderation alert activity"""
     atype = const.TYPE_ACTIVITY_MODERATION_ALERT_SENT
     acts = Activity.objects.filter(activity_type=atype).order_by('-id')
     count = len(acts)
@@ -31,6 +30,7 @@ def get_last_mod_alert_activity():
 
 
 def get_last_notified_user():
+    """Get user that was modified last about the queue"""
     last_act = get_last_mod_alert_activity()
     if last_act:
         return last_act.content_object
@@ -38,6 +38,8 @@ def get_last_notified_user():
 
 
 def select_moderators_to_notify(candidates, num_needed):
+    """Selects some nomber of moderators to send the message,
+    in order to avoid spamming many people"""
     candidates_count = candidates.count()
 
     #special case - if we need to notify the same number of
@@ -55,20 +57,22 @@ def select_moderators_to_notify(candidates, num_needed):
     num_mods = len(mods)
     if num_mods >= num_needed:
         return mods[:num_needed]
-    else:
-        #wrap around the end to the beginning
-        num_missing = num_needed - num_mods
-        more_mods = get_moderators().order_by('id')
-        more_mods = more_mods[:num_missing]
-        mods.extend(list(more_mods))
-        return mods
+
+    #wrap around the end to the beginning
+    num_missing = num_needed - num_mods
+    more_mods = get_moderators().order_by('id')
+    more_mods = more_mods[:num_missing]
+    mods.extend(list(more_mods))
+    return mods
 
 
 def select_last_moderator(mods):
+    """Returns object with the largest .id value."""
     return max(mods, key=lambda item: item.id)
 
 
 def remember_last_moderator(user):
+    """Save the the `user` as the one that was notified last"""
     act = get_last_mod_alert_activity()
     if act:
         act.content_object = user
@@ -83,9 +87,11 @@ def remember_last_moderator(user):
 
 
 class Command(NoArgsCommand):
-    def handle_noargs(self, *args, **kwargs):
-        translation.activate(django_settings.LANGUAGE_CODE)
+    """The management command class"""
+    def handle_noargs(self, **options): #pylint: disable=unused-argument
+        """Function that does the job of the management command"""
         #get size of moderation queue
+        translation.activate(django_settings.LANGUAGE_CODE)
         act_types = const.MODERATED_ACTIVITY_TYPES
         queue = Activity.objects.filter(activity_type__in=act_types)
 
@@ -98,14 +104,14 @@ class Command(NoArgsCommand):
         mods = set(mods)
         all_mods = mods | get_invited_moderators()
 
-        if len(all_mods) == 0:
+        if not all_mods:
             return
 
         for mod in all_mods:
             email = ModerationQueueNotification({'user': mod})
             email.send([mod,])
 
-        if len(mods) == 0:
+        if not mods:
             return
 
         last_mod = select_last_moderator(mods)

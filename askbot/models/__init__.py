@@ -20,9 +20,9 @@ from django.db.models import signals as django_signals
 from django.template import Context
 from django.template.loader import get_template
 from django.utils import timezone
-from django.utils.translation import string_concat
+from django.utils import translation
 from django.utils.translation import ugettext as _
-from django.utils.translation import ungettext, override
+from django.utils.translation import string_concat, override, ungettext
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from django.db import models
@@ -240,19 +240,28 @@ def user_get_avatar_url(self, size=48):
 
 
 #todo: find where this is used and replace with get_absolute_url
-def user_get_profile_url(self, profile_section=None):
+def user_get_profile_url(self, profile_section=None, language_code=None):
     """Returns the URL for this User's profile."""
+    cur_lang = get_language()
+
+    if language_code and cur_lang != language_code:
+        translation.activate(language_code)
+
     url = reverse(
             'user_profile',
             kwargs={'id': self.id, 'slug': slugify(self.username)}
         )
+
+    if language_code and cur_lang != language_code:
+        translation.activate(cur_lang)
+
     if profile_section:
         url += "?sort=" + profile_section
     return url
 
 
-def user_get_absolute_url(self):
-    return self.get_profile_url()
+def user_get_absolute_url(self, language_code=None):
+    return self.get_profile_url(language_code=language_code)
 
 
 def user_get_unsubscribe_url(self):
@@ -1955,7 +1964,7 @@ def user_post_question(
                     self,
                     title=None,
                     body_text='',
-                    tags=None,
+                    tags=None, # string of space-separated tags
                     wiki=False,
                     is_anonymous=False,
                     is_private=False,

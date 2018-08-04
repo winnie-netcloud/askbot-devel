@@ -11,7 +11,7 @@ class AskbotStaticSettings(AppConf):
     CAS_GET_USERNAME = None # python path to function
     CAS_GET_EMAIL = None # python path to function
     CUSTOM_BADGES = None # python path to module with badges
-    CUSTOM_USER_PROFILE_TAB = None # dict(NAME, SLUG, CONTENT_GENERATOR
+    CUSTOM_USER_PROFILE_TAB = None # dict(NAME, SLUG, CONTEXT_GENERATOR
                                    # the latter is path to func with 
                                    # variables (request, user)
     DEBUG_INCOMING_EMAIL = False

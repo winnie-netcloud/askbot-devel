@@ -7,6 +7,11 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{ "/style/openid.css"|media }}"/>
 {% endblock %}
 {% block content %}
+{% if settings.AUTHENTICATION_PAGE_MESSAGE %}
+    <div class="instructions-message">
+        {{ settings.AUTHENTICATION_PAGE_MESSAGE|convert_markdown }}
+    </div>
+{% endif %}
 {% if have_buttons or view_subtype == 'email_sent' %}
     <h1 class="section-title">{{ page_title }}</h1>
 {% endif %}

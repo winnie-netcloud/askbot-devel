@@ -3,8 +3,9 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# leonfeng <chaofeng111@gmail.com>, 2014
+# leonfeng <chaofeng111@qq.com>, 2014
 # Ying Chun Guo <daisy.ycguo@gmail.com>, 2013
+# David Jiang <jxmlx@sina.com>, 2017
 # evgeny <evgeny.fadeev@gmail.com>, 2009
 # evgeny <evgeny.fadeev@gmail.com>, 2009
 # flluo <fonglong.luo@gmail.com>, 2015
@@ -13,10 +14,10 @@
 # jurik <codeyu@gmail.com>, 2015
 # Kevin Suo <suokunlong@126.com>, 2016-2017
 # Kun Huang <gareth@unitedstack.com>, 2013
-# leonfeng <chaofeng111@gmail.com>, 2014
+# leonfeng <chaofeng111@qq.com>, 2014
 # litimetal <litimetal@gmail.com>, 2016
-# Tom Fifield <tom@openstack.org>, 2013
-# Tom Fifield <tom@openstack.org>, 2013
+# Tom Fifield <tom@tomfifield.net>, 2013
+# Tom Fifield <tom@tomfifield.net>, 2013
 # Ying Chun Guo <daisy.ycguo@gmail.com>, 2013
 # Zhe Li <linuxcity.jn@gmail.com>, 2015
 msgid ""
@@ -24,8 +25,8 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-03-29 07:04+0000\n"
-"Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
+"PO-Revision-Date: 2017-10-07 09:42+0000\n"
+"Last-Translator: David Jiang <jxmlx@sina.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/askbot/askbot/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3130,7 +3131,7 @@ msgstr "提问"
 
 #: conf/words.py:152 conf/words.py:153
 msgid "post answers"
-msgstr ""
+msgstr "提交答案"
 
 #: conf/words.py:162 conf/words.py:163
 msgid "Merge duplicate questions"
@@ -7768,15 +7769,15 @@ msgstr ""
 
 #: templates/widgets/group_info.html:30
 msgid "change logo"
-msgstr ""
+msgstr "修改徽标"
 
 #: templates/widgets/group_info.html:32
 msgid "delete logo"
-msgstr ""
+msgstr "删除徽标"
 
 #: templates/widgets/group_info.html:36
 msgid "add logo"
-msgstr ""
+msgstr "添加徽标"
 
 #: templates/widgets/group_info.html:46
 msgid "moderate emailed content"
@@ -7784,7 +7785,7 @@ msgstr ""
 
 #: templates/widgets/group_info.html:63
 msgid "How users join this group?"
-msgstr ""
+msgstr "用户如何加入这个群？"
 
 #: templates/widgets/group_info.html:85
 msgid "Can moderate site"
@@ -7792,7 +7793,7 @@ msgstr ""
 
 #: templates/widgets/group_info.html:95
 msgid "Allow only read access"
-msgstr ""
+msgstr "只允许读访问"
 
 #: templates/widgets/group_info.html:104
 msgid "List of preapproved email addresses"
@@ -7823,12 +7824,12 @@ msgstr ""
 
 #: templates/widgets/login_link.html:20
 msgid "Hi there! Please sign in"
-msgstr ""
+msgstr "你好！请登录"
 
 #: templates/widgets/logo.html:6
 #, python-format
 msgid "%(site)s logo"
-msgstr ""
+msgstr "%(site)s徽标"
 
 #: templates/widgets/markdown_help.html:2
 msgid "Markdown basics"
@@ -7836,11 +7837,11 @@ msgstr ""
 
 #: templates/widgets/markdown_help.html:6
 msgid "*italic*"
-msgstr ""
+msgstr "*斜体*"
 
 #: templates/widgets/markdown_help.html:9
 msgid "**bold**"
-msgstr ""
+msgstr "*粗体*"
 
 #: templates/widgets/markdown_help.html:13
 msgid "*italic* or _italic_"
@@ -7853,7 +7854,7 @@ msgstr ""
 #: templates/widgets/markdown_help.html:20
 #: templates/widgets/markdown_help.html:24
 msgid "text"
-msgstr ""
+msgstr "文字"
 
 #: templates/widgets/markdown_help.html:20
 #: templates/widgets/markdown_help.html:24
@@ -7862,7 +7863,7 @@ msgstr "标题"
 
 #: templates/widgets/markdown_help.html:24
 msgid "image"
-msgstr ""
+msgstr "图像"
 
 #: templates/widgets/markdown_help.html:28
 msgid "numbered list:"
@@ -7870,11 +7871,11 @@ msgstr ""
 
 #: templates/widgets/markdown_help.html:29
 msgid "One"
-msgstr ""
+msgstr "一"
 
 #: templates/widgets/markdown_help.html:30
 msgid "Two"
-msgstr ""
+msgstr "二"
 
 #: templates/widgets/markdown_help.html:33
 msgid "basic HTML tags are also supported"
@@ -7890,7 +7891,7 @@ msgstr ""
 
 #: templates/widgets/meta_nav.html:21
 msgid "users"
-msgstr ""
+msgstr "用户们"
 
 #: templates/widgets/meta_nav.html:28
 msgid "badges"
@@ -7912,7 +7913,7 @@ msgstr ""
 
 #: templates/widgets/proxy_author_fields.html:14
 msgid "User name"
-msgstr ""
+msgstr "用户名"
 
 #: templates/widgets/question_edit_tips.html:7
 msgid ""
@@ -7932,7 +7933,7 @@ msgstr[0] ""
 
 #: templates/widgets/scope_nav.html:10
 msgid "ALL"
-msgstr ""
+msgstr "全部"
 
 #: templates/widgets/scope_nav.html:20
 msgid "FOLLOWED"
@@ -7944,15 +7945,15 @@ msgstr ""
 
 #: templates/widgets/tag_selector.html:4
 msgid "Interesting tags"
-msgstr ""
+msgstr "有趣的标签"
 
 #: templates/widgets/tag_selector.html:22
 msgid "Ignored tags"
-msgstr ""
+msgstr "忽略的标签"
 
 #: templates/widgets/tag_selector.html:40
 msgid "Subscribed tags"
-msgstr ""
+msgstr "订阅的标签"
 
 #: templates/widgets/tag_selector.html:70
 msgid "Send me email alerts for"
@@ -7995,11 +7996,11 @@ msgstr ""
 
 #: templates/widgets/user_navigation.html:11
 msgid "sign out"
-msgstr ""
+msgstr "登出"
 
 #: templates/widgets/user_navigation.html:17
 msgid "settings"
-msgstr ""
+msgstr "设置"
 
 #: templates/widgets/user_navigation.html:18
 msgid "widgets"
@@ -8027,7 +8028,7 @@ msgstr ""
 
 #: templates/widgets/user_perms.html:19
 msgid "Currently, you can:"
-msgstr ""
+msgstr "现在，你可以："
 
 #: templates/widgets/user_perms.html:21
 msgid "Make new posts"
@@ -8039,7 +8040,7 @@ msgstr "无"
 
 #: templatetags/extra_filters_jinja.py:403
 msgid "Visitor"
-msgstr ""
+msgstr "访客"
 
 #: utils/decorators.py:104
 msgid "Oops, apologies - there was some error"
@@ -8060,7 +8061,7 @@ msgstr "该功能仅限于版主和管理员"
 
 #: utils/decorators.py:243
 msgid "This function is limited to administrators"
-msgstr ""
+msgstr "这个功能仅限于管理员"
 
 #: utils/forms.py:68
 msgid "this field is required"

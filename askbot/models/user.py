@@ -2,6 +2,7 @@ import datetime
 import logging
 import re
 from django.db import models
+from django.db.models import Q
 from django.db.backends.dummy.base import IntegrityError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -52,20 +53,29 @@ class InvitedModerator(object):
 
         return cls(name, email)
 
+def get_moderator_emails():
+    """Returns a set of email addresses of all site
+    moderators and administrators"""
+    mods = User.objects.filter(Q(askbot_profile__status='m') | Q(is_superuser=True))
+    active_mods = mods.filter(is_active = True)
+    emails = active_mods.values_list('email', flat=True)
+    return set(emails)
+
 def get_invited_moderators(include_registered=False):
     """Returns list of InvitedModerator instances
     corresponding to values of askbot_settings.INVITED_MODERATORS"""
     values = askbot_settings.INVITED_MODERATORS.strip()
-    moderators = list()
+    moderators = set()
     for user_line in values.split('\n'):
         mod = InvitedModerator.make_from_setting(user_line)
-        if mod: moderators.append(mod)
+        if mod:
+            moderators.add(mod)
 
     # exclude existing users
     clean_emails = set([mod.email for mod in moderators])
 
     if include_registered == True:
-        return moderators
+        return set(moderators)
 
     existing_users = User.objects.filter(email__in=clean_emails)
     existing_emails = set(existing_users.values_list('email', flat=True))

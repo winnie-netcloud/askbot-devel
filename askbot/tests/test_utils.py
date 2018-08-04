@@ -1,3 +1,4 @@
+import os
 import markdown2
 from django.conf import settings as django_settings
 from django.test import TestCase
@@ -9,7 +10,22 @@ from askbot.utils.html import get_text_from_html
 from askbot.utils.html import sanitize_html
 from askbot.utils import html as html_utils
 from askbot.utils.markup import get_parser
+from askbot.utils.functions import list_directory_files
 from askbot.conf import settings as askbot_settings
+import askbot
+
+class FunctionTests(TestCase):
+    def test_list_directory_files(self):
+        root_dir = askbot.get_install_directory()
+        dir_path = os.path.join(root_dir, 'locale')
+        file_list = list_directory_files(dir_path)
+        file1 = os.path.join(root_dir, 'locale', 'en',
+                             'LC_MESSAGES', 'django.po')
+        file2 = os.path.join(root_dir, 'locale', 'en',
+                             'LC_MESSAGES', 'djangojs.po')
+        self.assertTrue(file1 in file_list)
+        self.assertTrue(file2 in file_list)
+
 
 
 class UrlUtilsTests(TestCase):

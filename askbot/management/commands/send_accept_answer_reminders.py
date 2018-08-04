@@ -8,6 +8,7 @@ from askbot import const
 from askbot.conf import settings as askbot_settings
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
+from django.utils import translation
 from askbot.mail.messages import AcceptAnswersReminder
 from askbot.utils.classes import ReminderSchedule
 from askbot.utils.html import site_url
@@ -17,6 +18,7 @@ DEBUG_THIS_COMMAND = False
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
+        translation.activate(django_settings.LANGUAGE_CODE)
         if askbot_settings.ENABLE_EMAIL_ALERTS == False:
             return
         if askbot_settings.ENABLE_ACCEPT_ANSWER_REMINDERS == False:

@@ -128,14 +128,8 @@ def mail_moderators(
     """sends email to forum moderators and admins
     """
     body_text = absolutize_urls(body_text)
-    from django.db.models import Q
-    from askbot.models import User
-    recipient_list = User.objects.filter(
-                    Q(askbot_profile__status='m') | Q(is_superuser=True)
-                ).filter(
-                    is_active = True
-                ).values_list('email', flat=True)
-    recipient_list = set(recipient_list)
+    from askbot.models.user import get_moderator_emails
+    recipient_list = get_moderator_emails()
 
     send_mail(
         subject_line=subject_line,
@@ -427,7 +421,7 @@ def process_emailed_question(
                 group_id=group_id
             )
         else:
-            raise ValidationError()
+            raise ValidationError('unable to post question by email')
 
     except User.DoesNotExist:
         bounce_email(email_address, subject, reason = 'unknown_user')

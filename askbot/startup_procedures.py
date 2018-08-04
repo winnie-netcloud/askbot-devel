@@ -696,7 +696,7 @@ def test_custom_user_profile_tab():
 
         name = tab_settings.get('NAME', None)
         slug = tab_settings.get('SLUG', None)
-        func_name = tab_settings.get('CONTENT_GENERATOR', None)
+        func_name = tab_settings.get('CONTEXT_GENERATOR', None)
 
         errors = list()
         if (name is None) or (not(isinstance(name, basestring))):

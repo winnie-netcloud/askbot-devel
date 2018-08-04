@@ -71,7 +71,7 @@ def tweet_new_post_task(post_id):
 
     is_mod = post.author.is_administrator_or_moderator()
     if is_mod or post.author.reputation > askbot_settings.MIN_REP_TO_TWEET_ON_OTHERS_ACCOUNTS:
-        tweeters = User.objects.filter(social_sharing_mode=const.SHARE_EVERYTHING)
+        tweeters = User.objects.filter(askbot_profile__social_sharing_mode=const.SHARE_EVERYTHING)
         tweeters = tweeters.exclude(id=post.author.id)
         access_tokens = tweeters.values_list('twitter_access_token', flat=True)
     else:
@@ -236,8 +236,9 @@ def send_instant_notifications_about_activity_in_post(
         activity_id=None, post_id=None, recipients=None):
 
     if recipients is None:
-        recipients = list()
+        recipients = set()
 
+    recipients = set(recipients)
     recipients.update(get_invited_moderators())
 
     if len(recipients) == 0:

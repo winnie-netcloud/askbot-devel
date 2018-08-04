@@ -111,6 +111,8 @@ replace that example.com
 <code>http://example.com</code>
 </p>
 <pre>http://example.com</pre>
+
+https://example.com/some_page.html#anchor
 """
         """
         this is messed up by markdown2
@@ -124,6 +126,7 @@ replace that <a href="http://example.com">example.com</a>
 <code>http://example.com</code>
 </p>
 <pre>http://example.com</pre>
+<p><a href="https://example.com/some_page.html#anchor">https://example.com/some_page.html#an...</a></p>
 """
         """<a href="http://example.com"><div>http://example.com</div></a>
         """

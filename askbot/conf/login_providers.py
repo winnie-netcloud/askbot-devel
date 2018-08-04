@@ -123,23 +123,24 @@ if module_exists('cas'):
         )
     )
 
-# settings.register(
-#     livesettings.BooleanValue(
-#         LOGIN_PROVIDERS,
-#         'CAS_ONE_CLICK_REGISTRATION_ENABLED',
-#         default=False,
-#         description=_('CAS - enable one click registration'),
-#         help_text=string_concat(
-#             _('Allows skipping the registration page after the CAS '
-#               'authentication.'),
-#             ' ',
-#             settings.get_related_settings_info(
-#                 ('EMAIL', 'BLANK_EMAIL_ALLOWED', True, _('Must be enabled')),
-#                 ('ACCESS_CONTROL', 'REQUIRE_VALID_EMAIL_FOR', True, _('Must be not be required')),
-#             )
-#         ),
-#     )
-# )
+"""
+    settings.register(
+        livesettings.BooleanValue(
+            LOGIN_PROVIDERS,
+            'CAS_ONE_CLICK_REGISTRATION_ENABLED',
+            default=False,
+            description=_('CAS - enable one click registration'),
+            help_text=string_concat(
+                _('Allows skipping the registration page after the CAS authentication.'),
+                ' ',
+                settings.get_related_settings_info(
+                    ('EMAIL', 'BLANK_EMAIL_ALLOWED', True, _('Must be enabled')),
+                    ('ACCESS_CONTROL', 'REQUIRE_VALID_EMAIL_FOR', True, _('Must be optional')),
+                )
+            ),
+        )
+    )
+"""
 
 settings.register(
     livesettings.StringValue(
