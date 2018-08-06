@@ -9,6 +9,7 @@ db
 rebuild-locales.pl
 /src
 /static
+/user_data
 cache/??
 run
 *.wsgi

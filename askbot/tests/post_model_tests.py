@@ -149,6 +149,7 @@ class PostModelTests(AskbotTestCase):
         self.assertTrue(p._thread_cache is th)
         self.assertEqual(expected_url, p.get_absolute_url(thread=th))
 
+    @skipIf(True, 'for now post admins are decoupled from the groups feature')
     @with_settings(GROUPS_ENABLED=True)
     def test_get_moderators_with_groups(self):
         #create group

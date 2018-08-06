@@ -13,6 +13,7 @@ import datetime
 import functools
 import logging
 import math
+import os
 import operator
 import urllib
 
@@ -27,7 +28,9 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseForbidden
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
+from django.http import StreamingHttpResponse
+from django.utils.translation import get_language
 from django.utils.translation import string_concat
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
@@ -38,10 +41,12 @@ from django.views.decorators import csrf
 
 from askbot.utils.slug import slugify
 from askbot.utils.html import sanitize_html
+from askbot.utils.transaction import defer_celery_task
 from askbot.mail import send_mail
 from askbot.utils.translation import get_language
 from askbot.mail.messages import (AccountManagementRequest,
                                   UnsubscribeLink)
+from askbot.utils.file_utils import read_file_chunkwise
 from askbot.utils.http import get_request_info
 from askbot.utils import decorators
 from askbot.utils import functions
@@ -55,7 +60,6 @@ from askbot import exceptions
 from askbot.models.badges import award_badges_signal
 from askbot.models.tag import format_personal_group_name
 from askbot.models.post import PostRevision
-from askbot.models.user import get_moderator_emails
 from askbot.search.state_manager import SearchState
 from askbot.utils import url_utils
 from askbot.utils.loading import load_module
@@ -264,35 +268,90 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
 def manage_account(request, subject, context):
     """Allows requesting a data export, termination of account,
     anonymization of data and termination of the account."""
-    if request.user != subject:
+    if request.user.is_anonymous():
+        return HttpResponseForbidden()
+
+    if not request.user.can_manage_account(subject):
         msg = _('Sorry, something is not right here...')
         request.user.message_set.create(message=msg)
         return HttpResponseRedirect(subject.get_absolute_url())
 
-    page_url = subject.get_profile_url(profile_section='manage-account')
+    exporting = False
+    has_todays_backup = bool(subject.get_todays_backup_file_name())
     if request.method == 'POST':
         if 'terminate_account' in request.POST:
-            admin_msg = _('User %(username)s, id=%(id)s, %(email)s '
-                          'asked to terminate the account.')
+            if request.user.can_terminate_account(subject):
+                try:
+                    subject.delete()
+                except:
+                    pass
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                subject.request_account_termination()
+                user_msg = _('Thank you, you will soon hear from the site administrator.')
+                request.user.message_set.create(message=user_msg)
+
         elif 'export_data' in request.POST:
-            admin_msg = _('User %(username)s, id=%(id)s, %(email)s '
-                          'asked to export personal data.')
-        else:
-            return HttpResponseRedirect(page_url)
+            from askbot.tasks import export_user_data
+            if has_todays_backup:
+                user_msg = _('Only one data backup is allowed per day, please try tomorrow.')
+                request.user.message_set.create(message=user_msg)
+            else:
+                defer_celery_task(export_user_data, args=(subject.pk,))
+                if not django_settings.CELERY_ALWAYS_EAGER:
+                    exporting = True
 
-        admin_msg = admin_msg % {'username': subject.username,
-                                 'id': subject.pk,
-                                 'email': subject.email}
-
-        email = AccountManagementRequest({'message': admin_msg,
-                                          'username': subject.username})
-        mod_emails = get_moderator_emails()
-        email.send(mod_emails)
-
-        user_msg = _('Thank you, you will soon hear from the site administrator.')
-        request.user.message_set.create(message=user_msg)
-
+    #todo: get backup download link -> context
+    context['can_terminate_account'] = request.user.can_terminate_account(subject)
+    context['has_todays_backup'] = has_todays_backup
+    context['backup_file_names'] = subject.get_backup_file_names()
+    context['exporting'] = exporting
     return render(request, 'user_profile/user_manage_account.html', context)
+
+@decorators.ajax_only
+@decorators.get_only
+def get_todays_backup_file_name(request, id):
+    if request.user.is_anonymous():
+        return {'error': 'permission denied'}
+
+    try:
+        subject = models.User.objects.get(pk=id)
+    except models.User.DoesNotExist:
+        return {'error': 'user not found'}
+
+    if request.user.can_manage_account(subject):
+        return {'file_name': subject.get_todays_backup_file_name()}
+
+    return {'error': 'permission denied'}
+
+
+def download_user_data(request, id, file_name):
+    """allows authorized user to download a given file"""
+    if request.user.is_anonymous():
+        return HttpResponseForbidden()
+
+    if os.path.sep in file_name:
+        raise django_exceptions.PermissionDenied()
+
+    try:
+        subject = models.User.objects.get(pk=id)
+    except models.User.DoesNotExist:
+        return Http404
+
+    if not request.user.can_manage_account(subject):
+        raise django_exceptions.PermissionDenied()
+
+    directory = subject.get_data_export_dir()
+    file_path = os.path.join(directory, file_name)
+    if not os.path.isfile(os.path.join(directory, file_path)):
+        return Http404
+
+    response = StreamingHttpResponse(mimetype='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename=%s' % file_name
+    file_obj = open(os.path.join(directory, file_name))
+    response.streaming_content = read_file_chunkwise(file_obj)
+    return response
+
 
 @csrf.csrf_protect
 def user_moderate(request, subject, context):

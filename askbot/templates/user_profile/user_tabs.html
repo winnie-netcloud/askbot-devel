@@ -52,7 +52,7 @@
             href="{% url user_profile view_user.id, view_user.username|slugify %}?sort={{ custom_tab_slug }}"
         ><span>{{ custom_tab_name }}</span></a>
         {% endif %}
-        {% if request.user == view_user %}
+        {% if request.user.pk == view_user.pk or (request.user.is_authenticated() and request.user.is_administrator()) %}
         <a id="delete-account" {% if tab_name=="manage_account" %}class="on"{% endif %}
            href="{% url user_profile view_user.id, view_user.username|slugify %}?sort=manage-account"
            ><span>{% trans %}account{% endtrans %}</span></a>
