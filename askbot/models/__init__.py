@@ -8,6 +8,7 @@ import collections
 import datetime
 import hashlib
 import logging
+import os
 import re
 import urllib
 from functools import partial
@@ -38,7 +39,9 @@ from askbot.const import message_keys
 from askbot.conf import settings as askbot_settings
 from askbot.models.question import Thread
 from askbot.skins import utils as skin_utils
-from askbot.mail.messages import WelcomeEmail, WelcomeEmailRespondable
+from askbot.mail.messages import (WelcomeEmail,
+                                  WelcomeEmailRespondable,
+                                  AccountManagementRequest)
 from askbot.models.question import QuestionView, AnonymousQuestion
 from askbot.models.question import DraftQuestion
 from askbot.models.question import FavoriteQuestion
@@ -49,6 +52,7 @@ from askbot.models.user import EmailFeedSetting, ActivityAuditStatus, Activity
 from askbot.models.user import GroupMembership
 from askbot.models.user import Group
 from askbot.models.user import BulkTagSubscription
+from askbot.models.user import get_moderator_emails
 from askbot.models.post import Post, PostRevision
 from askbot.models.post import PostFlagReason, AnonymousAnswer
 from askbot.models.post import PostToGroup
@@ -69,7 +73,7 @@ from askbot.utils.functions import generate_random_key
 from askbot.utils.decorators import auto_now_timestamp
 from askbot.utils.decorators import reject_forbidden_phrases
 from askbot.utils.markup import URL_RE
-from askbot.utils.slug import slugify
+from askbot.utils.slug import slugify, ascii_slugify
 from askbot.utils.transaction import defer_celery_task
 from askbot.utils.translation import get_language
 from askbot.utils.html import replace_links_with_text
@@ -500,10 +504,28 @@ def user_can_create_tags(self):
     else:
         return True
 
+
+def user_can_terminate_account(self, user):
+    """True, if `self` can terminate account of `user`"""
+    perm = askbot_settings.WHO_CAN_TERMINATE_ACCOUNTS
+    is_admin = self.is_administrator()
+    if self.pk == user.pk:
+        if is_admin: #admin can't remove own account, as as safeguard
+            return False
+        return perm == 'users'
+    return is_admin
+
+
+def user_can_manage_account(self, user):
+    """True, if `self` can see the "manage account" page of `user`"""
+    return self.pk == user.pk or self.is_administrator()
+
+
 def user_can_have_strong_url(self):
     """True if user's homepage url can be
     followed by the search engine crawlers"""
     return (self.reputation >= askbot_settings.MIN_REP_TO_HAVE_STRONG_URL)
+
 
 def user_can_post_by_email(self):
     """True, if reply by email is enabled
@@ -2819,6 +2841,71 @@ def user_can_make_group_private_posts(self):
     """simplest implementation: user belongs to at least one group"""
     return (self.get_primary_group() != None)
 
+
+def user_request_account_termination(self):
+    """Notifies admins about user account termination"""
+    msg_template = _('User %(username)s, id=%(id)s, %(email)s '
+                  'asked to terminate the account.')
+    admin_msg = msg_template % {'username': self.username,
+                             'id': self.pk,
+                             'email': self.email}
+    email = AccountManagementRequest({'message': admin_msg,
+                                      'username': self.username})
+    mod_emails = get_moderator_emails()
+    email.send(mod_emails)
+
+
+def user_get_data_export_dir(self):
+    """Returns directory path where exported data is to be held"""
+    return os.path.join(django_settings.ASKBOT_USER_DATA_EXPORT_DIR, str(self.pk))
+
+
+def user_get_backup_file_names(self):
+    """Returns list of user data backup file names"""
+    backup_dir = self.get_data_export_dir()
+    if os.path.exists(backup_dir):
+        return os.listdir(backup_dir)
+    return []
+
+
+def user_get_todays_backup_file_name(self):
+    """Returns todays backup file name or `None`"""
+    backup_dir = self.get_data_export_dir()
+    if not os.path.exists(backup_dir):
+        return None
+
+    today = datetime.date.today()
+    for name in self.get_backup_file_names():
+        if name.endswith('.zip'):
+            path = os.path.join(backup_dir, name)
+            file_mtime = os.path.getmtime(path)
+            file_date = datetime.date.fromtimestamp(file_mtime)
+            if file_date == today:
+                return name
+    return None
+
+
+def user_delete_exported_data(self):
+    """Deletes .zip files in the data export directory"""
+    data_dir = os.path.join(self.get_data_export_dir())
+    if not os.path.exists(data_dir):
+        return
+
+    for item in self.get_backup_file_names():
+        if item.endswith('.zip'):
+            os.remove(os.path.join(data_dir, item))
+
+
+def user_suggest_backup_file_path(self):
+    """Returns full path to the up-to date data export file"""
+    date_token = datetime.date.today().strftime('%d-%m-%Y')
+    file_slug = ascii_slugify(date_token + '-' + 
+                              self.username + '-' +
+                              askbot_settings.APP_SHORT_NAME)
+    file_name = file_slug + '.zip'
+    return os.path.join(self.get_data_export_dir(), file_name)
+
+
 def user_get_group_membership(self, group):
     """returns a group membership object or None
     if it is not there
@@ -3389,6 +3476,8 @@ User.add_to_class(
 User.add_to_class('get_absolute_url', user_get_absolute_url)
 User.add_to_class('get_avatar_type', user_get_avatar_type)
 User.add_to_class('get_avatar_url', user_get_avatar_url)
+User.add_to_class('can_terminate_account', user_can_terminate_account)
+User.add_to_class('can_manage_account', user_can_manage_account)
 User.add_to_class('calculate_avatar_url', user_calculate_avatar_url)
 User.add_to_class('clear_avatar_urls', user_clear_avatar_urls)
 User.add_to_class('init_avatar_urls', user_init_avatar_urls)
@@ -3513,6 +3602,12 @@ User.add_to_class('approve_post_revision', user_approve_post_revision)
 User.add_to_class('needs_moderation', user_needs_moderation)
 User.add_to_class('notify_users', user_notify_users)
 User.add_to_class('is_read_only', user_is_read_only)
+User.add_to_class('get_data_export_dir', user_get_data_export_dir)
+User.add_to_class('delete_exported_data', user_delete_exported_data)
+User.add_to_class('suggest_backup_file_path', user_suggest_backup_file_path)
+User.add_to_class('get_backup_file_names', user_get_backup_file_names)
+User.add_to_class('get_todays_backup_file_name', user_get_todays_backup_file_name)
+User.add_to_class('request_account_termination', user_request_account_termination)
 
 #assertions
 User.add_to_class('assert_can_vote_for_post', user_assert_can_vote_for_post)

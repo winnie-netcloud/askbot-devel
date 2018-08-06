@@ -5,7 +5,15 @@ For reasons that models, views can't have unicode
 text in this project, all unicode text go here.
 """
 from django.utils.translation import ugettext_lazy as _
+import os
 import re
+from askbot import get_install_directory
+
+DEFAULT_USER_DATA_EXPORT_DIR = os.path.abspath(
+                                    os.path.join(get_install_directory(),
+                                                 '..',
+                                                 'user_data')
+                                              )
 
 #todo: customize words
 CLOSE_REASONS = (

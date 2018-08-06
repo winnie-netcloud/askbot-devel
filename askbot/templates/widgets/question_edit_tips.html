@@ -1,5 +1,5 @@
 <!-- question_edit_tips.html -->
-{% if settings.QUESTION_INSTRUCTIONS %}
+{% if settings.QUESTION_INSTRUCTIONS|trim %}
     {{ settings.QUESTION_INSTRUCTIONS|safe }}
 {% else %}
     <ul>

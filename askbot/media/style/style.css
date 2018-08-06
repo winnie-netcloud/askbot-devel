@@ -146,7 +146,7 @@ iframe {
   border: none;
 }
 p {
-  font-size: 14px;
+  font-size: 14px !important;
   line-height: 140%;
   margin-bottom: 6px;
 }
@@ -1203,15 +1203,13 @@ body.anon.ask-page .search-drop-menu {
 .instructions-message {
   background: #e9e9e1;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  padding: 7px 10px 9px 0;
+  padding: 7px 10px 9px 10px;
   margin-bottom: 10px;
   width: 100%;
 }
 .question-instructions ul,
 .instructions-message ul {
-  margin: 0 0 0 27px;
+  margin: 0 0 0 17px;
 }
 .openid-signin .instructions-message {
   margin: 10px 0;
