@@ -81,6 +81,17 @@ settings.register(
 )
 
 settings.register(
+    livesettings.StringValue(
+        USER_SETTINGS,
+        'WHO_CAN_TERMINATE_ACCOUNTS',
+        choices=(('admins', _('administrators')),
+                 ('users', _('account owners and administrators'))),
+        default='admins',
+        description=_('Who can terminate user accounts')
+    ) 
+)
+
+settings.register(
     livesettings.BooleanValue(
         USER_SETTINGS,
         'ALLOW_ADD_REMOVE_LOGIN_METHODS',

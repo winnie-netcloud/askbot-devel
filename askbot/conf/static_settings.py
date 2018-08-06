@@ -2,6 +2,7 @@ from django.conf import settings
 from django.utils.translation import pgettext
 from appconf import AppConf
 import os
+from askbot import const
 
 class AskbotStaticSettings(AppConf):
     ALLOWED_UPLOAD_FILE_TYPES = ('.jpg', '.jpeg', '.gif',
@@ -31,6 +32,7 @@ class AskbotStaticSettings(AppConf):
     SERVICE_URL_PREFIX = 's/' # prefix for non-UI urls
     SELF_TEST = True # if true - run startup self-test
     TRANSLATE_URL = True # set true to localize urls
+    USER_DATA_EXPORT_DIR = const.DEFAULT_USER_DATA_EXPORT_DIR
     WHITELISTED_IPS = tuple() # a tuple of whitelisted ips for moderation
 
     class Meta:

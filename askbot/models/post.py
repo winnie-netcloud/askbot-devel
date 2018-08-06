@@ -716,8 +716,8 @@ class Post(models.Model):
         """returns query set of users who are site administrators
         and moderators"""
         user_filter = models.Q(is_superuser=True) | models.Q(status='m')
-        if askbot_settings.GROUPS_ENABLED:
-            user_filter = user_filter & models.Q(groups__in=self.groups.all())
+        #if askbot_settings.GROUPS_ENABLED:
+        #    user_filter = user_filter & models.Q(groups__in=self.groups.all())
         return User.objects.filter(user_filter).distinct()
 
     def get_previous_answer(self, user=None):
