@@ -1,9 +1,9 @@
-import askbot
-from askbot.tests.utils import AskbotTestCase
-from askbot.conf import settings as askbot_settings
 from django.conf import settings as django_settings
 from django.utils import translation
-
+from askbot.tests.utils import AskbotTestCase
+from askbot.conf import settings as askbot_settings
+import askbot
+ 
 class SettingsTests(AskbotTestCase):
     def setUp(self):
         self.conf = {
