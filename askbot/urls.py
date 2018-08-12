@@ -81,7 +81,17 @@ urlpatterns = patterns(
         views.users.edit_user,
         name='edit_user'
     ),
-    service_url(  # ajax post only
+    service_url(
+        r'^%s(?P<id>\d+)/%s(?P<file_name>.+)/$' % (pgettext('urls', 'users/'), pgettext('urls', 'download-data/')),
+        views.users.download_user_data,
+        name='download_user_data'
+    ),
+    service_url(#ajax get only
+        r'^%s(?P<id>\d+)/%s$' % (pgettext('urls', 'users/'), pgettext('urls', 'get-todays-backup-file-name/')),
+        views.users.get_todays_backup_file_name,
+        name='get_todays_backup_file_name'
+    ),
+    service_url(#ajax post only
         r'^users/set-primary-language$',
         views.users.user_set_primary_language,
         name='user_set_primary_language'

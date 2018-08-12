@@ -4,13 +4,34 @@
     {% trans %}manage account{% endtrans %}
 {% endblock %}
 {% block usercontent %}
-<big>{% trans %}If you would like to delete your account or obtain your data,
-use one of the options below{% endtrans %}</big>
-<form style="margin-top: 10px" method="post">{% csrf_token %}
+<div style="margin-top: 1em">
+    <p>{% trans %}To delete this account or obtain its data, please
+    use one of the options below{% endtrans %}</p>
+</div>
+<div id="data-backups-container" style="margin-top: 1em;{% if not backup_file_names %} display: none;{% endif %}">
+    <p>{% trans %}Download backup files:{% endtrans %}</p>
+    <ul id="data-backups" style="list-style: none; margin-left: 0">
+        {% for file_name in backup_file_names %} 
+        <li><a href="{% url download_user_data id=view_user.pk, file_name=file_name %}">{{ file_name }}</a></li>
+    {% endfor %}
+    </ul>      
+</div>
+<form style="margin-top: 1em" method="post">{% csrf_token %}
     <input type="hidden" name="sort" value="manage-account"/>
-    <input type="submit" name="terminate_account"
-                         value="{% trans %}Ask to remove your account{% endtrans %}" />
-    <input type="submit" name="export_data"
-                         value="{% trans %}Request your data{% endtrans %}" />
+    <input type="submit"
+	name="terminate_account"
+	{% if can_terminate_account %}
+            value="{% trans %}Remove account{% endtrans %}"
+	{% else %}
+            value="{% trans %}Ask to remove account{% endtrans %}"
+	{% endif %}
+    />
+    {% if exporting %}
+    	<span id="exporting">{% trans %}Exporting{% endtrans %}&hellip;</span>
+    {% else %}
+        <input type="submit"
+            name="export_data"
+            value="{% trans %}Export data{% endtrans %}" />
+    {% endif %}
 </form>
 {% endblock %}

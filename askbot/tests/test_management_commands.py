@@ -6,18 +6,36 @@ import shutil
 import unittest
 import zipfile
 import askbot
-from askbot.utils.html import site_url
 from django.core import management, mail
 from django.conf import settings as django_settings
 from django.contrib import auth
+from django.contrib.auth.models import User
+from askbot.utils.html import site_url
+from askbot.utils.url_utils import reload_urlconf
 from askbot.tests.utils import AskbotTestCase
 from askbot.tests.utils import with_settings
 from askbot import (const, models)
 from askbot import models
 from askbot.models import LocalizedUserProfile, UserProfile
-from django.contrib.auth.models import User
 
 class ExportUserDataTests(AskbotTestCase):
+
+    def setUp(self):
+        self.prev_lang = django_settings.LANGUAGE_CODE
+        self.prev_lang_mode = django_settings.ASKBOT_LANGUAGE_MODE
+        self.prev_langs = django_settings.LANGUAGES
+        django_settings.LANGUAGE_CODE = 'en'
+        django_settings.ASKBOT_LANGUAGE_MODE = 'url-lang'
+        django_settings.LANGUAGES = (('en', 'English'), ('es', 'Spanish'))
+        reload_urlconf()
+
+    def tearDown(self):
+        #translation.activate(self.prev_lang)
+        django_settings.LANGUAGE_CODE = self.prev_lang
+        django_settings.LANGUAGES = self.prev_langs
+        django_settings.ASKBOT_LANGUAGE_MODE = self.prev_lang_mode
+        reload_urlconf()
+
     @classmethod
     def put_upfile(cls, file_name):
         """Creates a test upfile with contents
@@ -61,14 +79,7 @@ class ExportUserDataTests(AskbotTestCase):
         self.assertEqual(is_on_disk, True)
         os.remove(path)
 
-    unittest.skip('somehow interferes with other tests, but passes alone')
     def test_command(self):
-        prev_lang = django_settings.LANGUAGE_CODE
-        prev_lang_mode = django_settings.ASKBOT_LANGUAGE_MODE
-        prev_langs = django_settings.LANGUAGES
-        django_settings.LANGUAGE_CODE = 'en'
-        django_settings.ASKBOT_LANGUAGE_MODE = 'url-lang'
-        django_settings.LANGUAGES = (('en', 'English'), ('es', 'Spanish'))
         # create user
         today = date.today()
         # create user & fill out profile
@@ -174,9 +185,6 @@ class ExportUserDataTests(AskbotTestCase):
             self.assertTrue(os.path.isfile(extracted_path))
 
         shutil.rmtree(test_dir)
-        django_settings.LANGUAGE_CODE = prev_lang
-        django_settings.LANGUAGES = prev_langs
-        django_settings.ASKBOT_LANGUAGE_MODE = prev_lang_mode
 
 class ManagementCommandTests(AskbotTestCase):
     def test_askbot_add_user(self):

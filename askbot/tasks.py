@@ -18,11 +18,13 @@ That is the reason for having two types of methods here:
   objects and call the base methods
 """
 import logging
+import os
 import sys
 import traceback
 import uuid
 
 from django.contrib.contenttypes.models import ContentType
+from django.core.management import call_command
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
@@ -86,6 +88,23 @@ def tweet_new_post_task(post_id):
     if post.author.social_sharing_mode != const.SHARE_NOTHING:
         token = simplejson.loads(post.author.twitter_access_token)
         twitter.tweet(tweet_text, access_token=token)
+
+
+@task(ignore_result=True)
+def export_user_data(user_id):
+    """Exports user data by ID"""
+    try:
+        user = User.objects.get(pk=user_id)
+        #1) delete older data exports
+        user.delete_exported_data()
+        #2) export new data
+        file_path = user.suggest_backup_file_path()
+        data_dir = os.path.dirname(file_path)
+        if not os.path.exists(data_dir):
+            os.makedirs(data_dir, 0700)
+        call_command('askbot_export_user_data', user_id=user_id, file_name=file_path)
+    except User.DoesNotExist:
+        return
 
 
 @task(ignore_result=True)

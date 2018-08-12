@@ -17,6 +17,10 @@ from django.utils.encoding import smart_unicode
 # Extra characters outside of alphanumerics that we'll allow.
 SLUG_OK = '-_~'
 
+def ascii_slugify(input_text):
+    """Returns ascii slug of input text"""
+    return defaultfilters.slugify(unidecode(input_text))
+
 def slugify_camelcase(camel):
     """Converts CamelCase to camel-case"""
     def subf(match):

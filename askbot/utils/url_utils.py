@@ -1,22 +1,28 @@
-import os
+"""utilities to work with the urls"""
+import sys
 import urlparse
 from django.core.urlresolvers import reverse
-from django.conf import settings
+from django.conf import settings as django_settings
+from django.core.urlresolvers import clear_url_caches
 try:
     from django.conf.urls import url
 except ImportError:
     from django.conf.urls.defaults import url
 from django.utils import translation
 
+def reload_urlconf():
+    """Reloads the urlconf file and clears the url caches"""
+    clear_url_caches()
+    reload(sys.modules[django_settings.ROOT_URLCONF])
+
 def reverse_i18n(lang, *args, **kwargs):
     """reverses url in requested language"""
-    assert(lang != None)
+    assert lang != None
     current_lang = translation.get_language()
     translation.activate(lang)
-    url = reverse(*args, **kwargs)
+    i18n_url = reverse(*args, **kwargs)
     translation.activate(current_lang)
-    return url
-
+    return i18n_url
 
 def service_url(*args, **kwargs):
     """adds the service prefix to the url"""
@@ -24,15 +30,15 @@ def service_url(*args, **kwargs):
     if pattern[0] == '^':
         pattern = pattern[1:]
 
-    prefix = settings.ASKBOT_SERVICE_URL_PREFIX
+    prefix = django_settings.ASKBOT_SERVICE_URL_PREFIX
     pattern = '^' + prefix + pattern
     new_args = list(args)
     new_args[0] = pattern
     return url(*new_args, **kwargs)
 
-def strip_path(url):
+def strip_path(input_url):
     """srips path, params and hash fragments of the url"""
-    purl = urlparse.urlparse(url)
+    purl = urlparse.urlparse(input_url)
     return urlparse.urlunparse(
         urlparse.ParseResult(
             purl.scheme,
@@ -78,27 +84,24 @@ def get_login_url():
     django_authopenid is used, or
     the corresponding django setting
     """
-    if 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS:
+    if 'askbot.deps.django_authopenid' in django_settings.INSTALLED_APPS:
         return reverse('user_signin')
-    else:
-        return settings.LOGIN_URL
+    return django_settings.LOGIN_URL
 
 def get_logout_url():
     """returns internal logout url
     if django_authopenid is used or
     the django setting"""
-    if 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS:
+    if 'askbot.deps.django_authopenid' in django_settings.INSTALLED_APPS:
         return reverse('user_signout')
-    else:
-        return settings.LOGOUT_URL
+    return django_settings.LOGOUT_URL
 
 def get_logout_redirect_url():
     """returns internal logout redirect url,
-    or settings.LOGOUT_REDIRECT_URL if it exists
+    or django_settings.LOGOUT_REDIRECT_URL if it exists
     or url to the main page"""
-    if 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS:
+    if 'askbot.deps.django_authopenid' in django_settings.INSTALLED_APPS:
         return reverse('logout')
-    elif hasattr(settings, 'LOGOUT_REDIRECT_URL'):
-        return settings.LOGOUT_REDIRECT_URL
-    else:
-        return reverse('index')
+    elif hasattr(django_settings, 'LOGOUT_REDIRECT_URL'):
+        return django_settings.LOGOUT_REDIRECT_URL
+    return reverse('index')

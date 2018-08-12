@@ -14,6 +14,16 @@ def make_file_name(ext, prefix=''):
         )
     return prefix + name + ext
 
+
+def read_file_chunkwise(file_obj, chunk_size=32768):
+    """Iterates over the file and yields chunks of contents"""
+    while True:
+        data = file_obj.read(chunk_size)
+        if not data:
+            break
+        yield data
+
+
 def store_file(file_object, file_name_prefix = ''):
     """Creates an instance of django's file storage
     object based on the file-like object,
