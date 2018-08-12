@@ -7,6 +7,7 @@ import tempfile
 from optparse import make_option
 from django.conf import settings as django_settings
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import translation
 from askbot.models import User
 from askbot.utils.html import site_url
 from askbot.utils.functions import list_directory_files, zipzip
@@ -28,13 +29,14 @@ class Command(BaseCommand):
                     default=None,
                     help='Path to the output file, absolute or relative to CWD'))
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options): # pylint: disable=too-many-locals
         """Does the job of the command"""
+        translation.activate(django_settings.LANGUAGE_CODE)
         uid, file_name = self.get_params(options)
 
         try:
             user = User.objects.get(pk=uid)
-        except User.DoesNotExist: #pylint: disable=no-member
+        except User.DoesNotExist: # pylint: disable=no-member
             raise CommandError('User with id {} does not exist'.format(uid))
 
         lang_data = dict()
@@ -109,7 +111,7 @@ class Command(BaseCommand):
         zipzip(zip_path, *file_paths, ignore_subpath=temp_dir)
 
     @classmethod
-    def backup_upfiles_and_avatar(cls, upfiles, user, temp_dir):
+    def backup_upfiles_and_avatar(cls, upfiles, user, temp_dir): # pylint: disable=unused-argument
         """Copies the uploaded files and the avatar to the
         temporary directory"""
         updir = os.path.join(temp_dir, 'upfiles')
