@@ -60,7 +60,7 @@
 
 {%- macro post_contributor_avatar_and_credentials(revision) -%}
     {% if revision.is_anonymous %}
-        <img alt="{% trans %}anonymous user{% endtrans %}" src="{{ '/images/anon.png'|media }} " class="gravatar" width="32" height="32" />
+        {{ anonymous_avatar() }}
         <p>{{ revision.author.get_anonymous_name() }}</p>
     {% else %}
         {{ user_card(revision.author) }}
@@ -604,6 +604,13 @@ for the purposes of the AJAX comment editor #}
 {% endspaceless %}
 {%- endmacro -%}
 
+{%- macro anonymous_avatar(size=32) -%}
+<img alt="{% trans %}anonymous user{% endtrans %}"
+    src="{{ '/images/anon.png'|media }} "
+    class="gravatar" width="{{ size }}" height="{{ size }}"
+/>
+{%- endmacro -%}
+
 {%- macro user_website_link(user, max_display_length=25, force_show=False) -%}
     {% if user.website and (force_show or (not (user.is_blocked() or user.is_watched()))) %}
         <a
@@ -820,7 +827,7 @@ for the purposes of the AJAX comment editor #}
 {%- macro thread_author_avatar(thread, size=32) -%}
     {% set question_post = thread._question_post() %}
     {% if question_post.is_anonymous %}
-        {{ gravatar(question_post.author, size, anonymous=True) }}
+        {{ anonymous_avatar(size) }}
     {% else %}
         {{ gravatar(question_post.author, size) }}
     {% endif %}
