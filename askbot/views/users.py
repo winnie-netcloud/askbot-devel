@@ -346,7 +346,7 @@ def download_user_data(request, id, file_name):
     if not os.path.isfile(os.path.join(directory, file_path)):
         return Http404
 
-    response = StreamingHttpResponse(mimetype='application/force-download')
+    response = StreamingHttpResponse(content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename=%s' % file_name
     file_obj = open(os.path.join(directory, file_name))
     response.streaming_content = read_file_chunkwise(file_obj)
