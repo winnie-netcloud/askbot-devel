@@ -3,12 +3,12 @@
     var askbot = {};
     askbot['data'] = {};
     askbot['data']['userIsAuthenticated'] = {{ request.user.is_authenticated()|as_js_bool }};
-    askbot['data']['languageCode'] = '{{ current_language_code }}';
+    askbot['data']['languageCode'] = '{{ current_language_code|escapejs }}';
     {% if request.user.is_authenticated() %}
         askbot['data']['userId'] = {{ request.user.id }};
-        askbot['data']['userName'] = '{{ request.user.username|escape }}';
-        askbot['data']['userEmail'] = '{{ request.user.email|escape }}';
-        askbot['data']['userProfileUrl'] = '{{ request.user.get_profile_url() }}';
+        askbot['data']['userName'] = '{{ request.user.username|escapejs }}';
+        askbot['data']['userEmail'] = '{{ request.user.email|escapejs }}';
+        askbot['data']['userProfileUrl'] = '{{ request.user.get_profile_url()|escapejs }}';
         askbot['data']['userIsAdminOrMod'] = {{ request.user.is_administrator_or_moderator()|as_js_bool }};
         askbot['data']['userIsAdmin'] = {{ request.user.is_administrator()|as_js_bool }};
         askbot['data']['userReputation'] = {{ request.user.reputation }};

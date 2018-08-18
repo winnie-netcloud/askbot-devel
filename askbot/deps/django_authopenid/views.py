@@ -42,7 +42,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.core.urlresolvers import reverse
-from django.forms.util import ErrorList
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.views.decorators import csrf
@@ -1077,7 +1076,7 @@ def finalize_generic_signin(
 
 @not_authenticated
 @csrf.csrf_protect
-def register(request, login_provider_name=None, 
+def register(request, login_provider_name=None,
     user_identifier=None, redirect_url=None):
     """
     this function is used via it's own url with request.method=POST
