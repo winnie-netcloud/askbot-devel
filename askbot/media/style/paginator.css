@@ -172,3 +172,25 @@ h2 {
 .wmd-container img {
   max-width: 100%;
 }
+
+/* line 3, paginator.scss */
+.page-link {
+  padding: 0.25rem 0.5rem;
+  color: #8ebcc7;
+}
+/* line 6, paginator.scss */
+.page-link .fa {
+  font-weight: bold;
+}
+
+/* line 13, paginator.scss */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+  border-radius: 0;
+}
+
+/* line 18, paginator.scss */
+.page-item.active .page-link {
+  border-color: #8ebcc7;
+  background-color: #8ebcc7;
+}
