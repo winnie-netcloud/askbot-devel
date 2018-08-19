@@ -25,100 +25,91 @@
 
 /* line 29, nav.scss */
 nav.question {
-  height: 55px;
+  height: 54px;
   background: #e9e9e1;
   border-bottom: #d3d3c2 1px solid;
   border-top: #fcfcfc 1px solid;
-  margin-bottom: 10px;
-  font-family: "Open Sans Condensed", Arial, sans-serif;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+  font-size: 16px;
 }
-/* line 39, nav.scss */
+/* line 36, nav.scss */
 nav.question .inner-q {
   display: table;
   width: 100%;
 }
-/* line 42, nav.scss */
+/* line 39, nav.scss */
 nav.question .inner-q > div {
   display: table-cell;
 }
-/* line 45, nav.scss */
+/* line 42, nav.scss */
 nav.question .inner-q .home-btn,
 nav.question .inner-q .scope-nav {
-  width: 10px;
-  white-space: nowrap;
-  font-size: 20px;
   padding-right: 16px;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 10px;
 }
-/* line 51, nav.scss */
+/* line 48, nav.scss */
 nav.question .inner-q .home-btn a,
 nav.question .inner-q .scope-nav a {
   color: #7a7a6b;
   margin-left: 16px;
 }
-/* line 54, nav.scss */
+/* line 51, nav.scss */
 nav.question .inner-q .home-btn a:first-of-type,
 nav.question .inner-q .scope-nav a:first-of-type {
   margin-left: 0;
 }
-/* line 59, nav.scss */
+/* line 56, nav.scss */
 nav.question .inner-q .home-btn a:hover,
 nav.question .inner-q .scope-nav a:hover {
   color: #5a5a5a;
 }
-/* line 63, nav.scss */
+/* line 60, nav.scss */
 nav.question .inner-q .scope-nav {
   padding-left: 15px;
 }
-/* line 66, nav.scss */
+/* line 63, nav.scss */
 nav.question .inner-q .home-btn {
   border-right: #afaf9e 1px solid;
   padding-right: 15px;
 }
-/* line 70, nav.scss */
+/* line 67, nav.scss */
 nav.question .inner-q .scope-selector {
   display: inline-block;
-  font-size: 20px;
   line-height: 53px;
 }
-/* line 75, nav.scss */
+/* line 70, nav.scss */
 nav.question .inner-q .scope-selector.on {
   background: url(../images/scopearrow.png) no-repeat bottom center;
 }
-/* line 80, nav.scss */
+/* line 75, nav.scss */
 nav.question .ask-question {
   margin-top: 7px;
 }
-/* line 83, nav.scss */
+/* line 78, nav.scss */
 nav.question .ask-question a.btn {
   text-transform: uppercase;
 }
-/* line 87, nav.scss */
+/* line 82, nav.scss */
 nav.question .cancelSearchBtn {
   position: absolute;
-  right: 50px;
+  right: 44px;
   border: none;
   background-color: transparent;
-  font-size: 26px;
+  font-size: 16px;
   color: #aaa;
-  line-height: 34px;
+  line-height: 37px;
   cursor: pointer;
   z-index: 10001;
 }
 
-/* line 100, nav.scss */
+/* line 95, nav.scss */
 .search-bar {
-  top: -3px;
-}
-/* line 102, nav.scss */
-.search-bar span.input-group-btn button.btn {
-  border-bottom-right-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+  top: 7px;
 }
 
-/* line 108, nav.scss */
+/* line 99, nav.scss */
 .search-drop-menu {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -133,7 +124,7 @@ nav.question .cancelSearchBtn {
   position: absolute;
   z-index: 10000;
 }
-/* line 121, nav.scss */
+/* line 112, nav.scss */
 .search-drop-menu ul {
   list-style: none;
   overflow: auto;
@@ -142,82 +133,82 @@ nav.question .cancelSearchBtn {
   position: relative;
   width: 100%;
 }
-/* line 128, nav.scss */
+/* line 119, nav.scss */
 .search-drop-menu ul li {
   padding: 5px 10px;
   position: relative;
 }
-/* line 132, nav.scss */
+/* line 123, nav.scss */
 .search-drop-menu ul li a {
   text-decoration: none;
 }
-/* line 136, nav.scss */
+/* line 127, nav.scss */
 .search-drop-menu ul li.selected {
   background: #08c;
 }
-/* line 139, nav.scss */
+/* line 130, nav.scss */
 .search-drop-menu ul li.selected a {
   color: whitesmoke;
 }
-/* line 144, nav.scss */
+/* line 135, nav.scss */
 .search-drop-menu .footer {
   text-align: center;
   margin: 0 0 1px 0;
   padding: 4px 0 10px 0;
 }
-/* line 149, nav.scss */
+/* line 140, nav.scss */
 .search-drop-menu.empty .footer {
   padding-top: 9px;
 }
 
-/* line 155, nav.scss */
+/* line 146, nav.scss */
 .search-drop-menu.empty ul {
   padding: 1px;
   margin: 0;
 }
 
-/* line 161, nav.scss */
+/* line 152, nav.scss */
 .notify .alert.alert-warning {
   height: 3.4em;
 }
 
-/* line 165, nav.scss */
+/* line 156, nav.scss */
 #homeButton i {
   color: #7a7a7b;
   font-size: 26px;
   line-height: 53px;
 }
-/* line 169, nav.scss */
+/* line 160, nav.scss */
 #homeButton i:hover {
   color: #5a5a5a;
 }
 
 @media screen and (max-width: 991px) {
-  /* line 177, nav.scss */
+  /* line 168, nav.scss */
   nav.question .inner-q .scope-nav {
     display: none;
   }
-  /* line 181, nav.scss */
+  /* line 172, nav.scss */
   nav.question .inner-q .search-bar-wrap {
     padding-left: 15px;
   }
-  /* line 185, nav.scss */
+  /* line 176, nav.scss */
   nav.question .inner-q .home-btn a {
     margin-left: 0;
   }
 }
 @media screen and (min-width: 768px) and (max-width: 991px) {
-  /* line 193, nav.scss */
+  /* line 184, nav.scss */
   .container {
     max-width: 96%;
   }
 
-  /* line 199, nav.scss */
+  /* line 190, nav.scss */
   .navbar .navbar-nav .nav-link {
     padding-right: .25rem;
     padding-left: .25rem;
   }
-  /* line 203, nav.scss */
+  /* line 194, nav.scss */
   .navbar .navbar-nav .link-hidden {
     display: none;
   }

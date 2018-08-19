@@ -1,0 +1,18 @@
+{% if all_super_groups %}
+    <div class="settings-nav">
+    {% for super_group in all_super_groups %}
+        <h2>{{ super_group.name }}</h2>
+        <ul>
+        {% for g in super_group.groups %}
+            {% if g.keys %}
+                {% if g.key == settings_group.key %}
+                    <li class="on">{{g.name}}</li>
+                {% else %}
+                    <li><a href="{% url "group_settings" g.key %}">{{g.name}}</a></li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endfor %}
+    </div>
+{% endif %}

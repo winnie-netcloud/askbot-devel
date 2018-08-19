@@ -6,7 +6,7 @@ body {
   font-size: 14px;
   margin: 0;
   padding: 0;
-  font-family: Arial;
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 /* line 56, basic.scss */
 body.user-messages {
@@ -27,16 +27,18 @@ a:hover {
 
 /* line 69, basic.scss */
 h1 {
-  font-size: 30px;
+  font-size: 24px;
+  line-height: 36px;
 }
 
-/* line 73, basic.scss */
+/* line 74, basic.scss */
 h2 {
-  font-size: 24px;
+  font-size: 20px;
+  line-height: 24px;
 }
 
 /* ----- Red Popup notification ----- */
-/* line 79, basic.scss */
+/* line 81, basic.scss */
 .vote-notification {
   z-index: 1;
   cursor: pointer;
@@ -45,25 +47,25 @@ h2 {
   position: absolute;
   text-align: center;
 }
-/* line 86, basic.scss */
+/* line 88, basic.scss */
 .vote-notification h3 {
   font-size: 14px;
   margin-bottom: 5px;
   line-height: 20px;
   font-weight: normal;
 }
-/* line 92, basic.scss */
+/* line 94, basic.scss */
 .vote-notification a {
   text-decoration: underline;
   font-weight: bold;
 }
 
-/* line 99, basic.scss */
+/* line 101, basic.scss */
 .content-wrapper {
   min-height: 70vh;
 }
 
-/* line 102, basic.scss */
+/* line 104, basic.scss */
 .section-title {
   color: #7ea9b3;
   float: left;
@@ -72,90 +74,90 @@ h2 {
   font-size: 24px;
 }
 
-/* line 110, basic.scss */
+/* line 112, basic.scss */
 .ground {
   padding: 16px 0;
   background: #343a40;
   font-size: .95rem;
 }
-/* line 115, basic.scss */
+/* line 117, basic.scss */
 .ground a:hover {
   color: #ebff88;
 }
-/* line 119, basic.scss */
+/* line 121, basic.scss */
 .ground p {
   margin-bottom: 0;
 }
 
-/* line 124, basic.scss */
+/* line 126, basic.scss */
 .footer-links {
   color: #EEE;
   text-align: left;
 }
-/* line 128, basic.scss */
+/* line 130, basic.scss */
 .footer-links a {
   color: #e7e8a8;
 }
 
-/* line 133, basic.scss */
+/* line 135, basic.scss */
 .powered-link {
   text-align: left;
 }
-/* line 136, basic.scss */
+/* line 138, basic.scss */
 .powered-link a {
   color: #8ebcc7;
 }
 
-/* line 141, basic.scss */
+/* line 143, basic.scss */
 .copyright {
   color: #616161;
 }
-/* line 144, basic.scss */
+/* line 146, basic.scss */
 .copyright a {
   color: #8ebcc7;
 }
-/* line 148, basic.scss */
+/* line 150, basic.scss */
 .copyright img.license-logo {
   margin-left: 10px;
   float: right;
 }
 
-/* line 154, basic.scss */
+/* line 156, basic.scss */
 .hilite {
   background-color: #ff0;
 }
 
-/* line 158, basic.scss */
+/* line 160, basic.scss */
 .hilite1 {
   background-color: #ff0;
 }
 
-/* line 162, basic.scss */
+/* line 164, basic.scss */
 .hilite2 {
   background-color: #f0f;
 }
 
-/* line 166, basic.scss */
+/* line 168, basic.scss */
 .hilite3 {
   background-color: #0ff;
 }
 
-/* line 170, basic.scss */
+/* line 172, basic.scss */
 .gold, .badge1 {
   color: #FFCC00;
 }
 
-/* line 174, basic.scss */
+/* line 176, basic.scss */
 .silver, .badge2 {
   color: #CCCCCC;
 }
 
-/* line 178, basic.scss */
+/* line 180, basic.scss */
 .bronze, .badge3 {
   color: #CC9933;
 }
 
-/* line 182, basic.scss */
+/* line 184, basic.scss */
 .invisible {
   margin: -1px 0 0 -1px;
   height: 1px;
@@ -163,12 +165,12 @@ h2 {
   width: 1px;
 }
 
-/* line 190, basic.scss */
+/* line 192, basic.scss */
 .wmd-container textarea {
   width: 100% !important;
   box-sizing: border-box;
 }
-/* line 194, basic.scss */
+/* line 196, basic.scss */
 .wmd-container img {
   max-width: 100%;
 }

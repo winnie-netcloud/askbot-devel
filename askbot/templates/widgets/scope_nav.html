@@ -1,4 +1,3 @@
-<div id="scopeNav">
 {% if need_scope_links %}
     {% if active_tab != "ask" %}
         {% if not search_state %}  {#  get empty SearchState() if there's none #}
@@ -23,4 +22,3 @@
     <div class="scope-selector ask-message">{{ settings.WORDS_PLEASE_ASK_YOUR_QUESTION_HERE|escape }}</div>
     {% endif %}
 {% endif %}
-</div>

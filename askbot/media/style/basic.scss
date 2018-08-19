@@ -18,7 +18,7 @@ $color-control-button-light: #aaa;
 $color-link-gray: #4b4b4b;
 $color-answer-bg: rgba(255, 243, 205, 0.8);
 /* Variables for fonts */
-$body-font: Arial;
+$body-font: "Helvetica Neue", Arial, sans-serif;
 //$sort-font: Georgia, serif;
 $sort-font: "Helvetica Neue",Arial,sans-serif;
 $main-font: "Helvetica Neue",Arial,sans-serif;
@@ -66,12 +66,14 @@ a:hover {
     @include transition-duration(0.5s);
 }
 
-h1{
-    font-size: 30px;
+h1 {
+  font-size: 24px;
+  line-height: 36px;
 }
 
-h2{
-    font-size: 24px;
+h2 {
+  font-size: 20px;
+  line-height: 24px;
 }
 
 /* ----- Red Popup notification ----- */

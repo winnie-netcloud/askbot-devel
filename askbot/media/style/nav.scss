@@ -27,15 +27,12 @@
 }
 
 nav.question {
-    height: 55px;
+    height: 54px;
     background: #e9e9e1;
     border-bottom: #d3d3c2 1px solid;
     border-top: #fcfcfc 1px solid;
-    margin-bottom: 10px;
-    font-family: "Open Sans Condensed", Arial, sans-serif;
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+    font-size: 16px;
     .inner-q {
         display: table;
         width: 100%;
@@ -44,10 +41,10 @@ nav.question {
         }
         .home-btn,
         .scope-nav {
-            width: 10px;
-            white-space: nowrap;
-            font-size: 20px;
             padding-right: 16px;
+            vertical-align: middle;
+            white-space: nowrap;
+            width: 10px;
             a {
                 color: #7a7a6b;
                 margin-left: 16px;
@@ -69,9 +66,7 @@ nav.question {
         }
         .scope-selector {
             display: inline-block;
-            font-size: 20px;
             line-height: 53px;
-
             &.on {
                 background: url(../images/scopearrow.png) no-repeat bottom center;
             }
@@ -86,23 +81,19 @@ nav.question {
     }
     .cancelSearchBtn {
         position: absolute;
-        right: 50px;
+        right: 44px;
         border: none;
         background-color: transparent;
-        font-size: 26px;
+        font-size: 16px;
         color: #aaa;
-        line-height: 34px;
+        line-height: 37px;
         cursor: pointer;
         z-index: 10001;
     }
 }
 
 .search-bar {
-    top: -3px;
-    span.input-group-btn button.btn {
-        border-bottom-right-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-    }
+  top: 7px;
 }
 
 .search-drop-menu {

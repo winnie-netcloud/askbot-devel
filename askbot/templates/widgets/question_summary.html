@@ -1,9 +1,6 @@
 {% from "macros.html" import user_country_flag, thread_author_avatar, tag_list_widget, timeago, user_primary_group %}
 <div class="short-summary{% if extra_class %} {{extra_class}}{% endif %}" id="question-{{question.id}}">
-
-
-    <div class="float-left">{{ thread_author_avatar(thread, size=42) }}
-    </div>
+  {# <div class="float-left">{{ thread_author_avatar(thread, size=42) }}</div> #}
     <div class="question-info">
         <div class="counts">
             <div class="views

@@ -2,6 +2,34 @@
 @import "nav";
 @import "paginator";
 
+.mt-2 {
+  margin-top: 0 !important;
+}
+
+//no rounded corners
+.input-group-addon,
+.btn,
+.card,
+.card-header:first-child,
+.form-control-sm,
+.input-group-sm>.form-control,
+.input-group-sm>.input-group-addon,
+.input-group-sm>.input-group-btn>.btn,
+.form-control {
+  border-radius: 0;
+}
+
+.main-col {
+  padding-left: 7px !important;
+  padding-top: 12px;
+}
+.side-col {
+  padding-top: 12px;
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+  }
+}
+
 .alert {
     p:last-child {
         margin-bottom: 0;
@@ -12,7 +40,8 @@
     float: right;
     font-size: 16px;
     .input-group-addon{
-        padding: .3rem .5rem;
+      padding: .3rem .5rem;
+      font-size: 16px;
     }
     span.input-group-addon{
         color: grey;
@@ -39,17 +68,17 @@
 }
 
 #questionCount {
-    font-size: 22px;
-    color: $section-title;
+  font-size: 20px;
+  color: $section-title;
+  margin-bottom: 0 !important;
 
-    .count {
-        font-weight: bold;
-        font-size: 20px;
-        color: $section-title;
-        margin-bottom: 0;
-        padding-top: 0;
-        font-family: $main-font;
-    }
+  .count {
+    font-size: 20px;
+    color: $section-title;
+    margin-bottom: 0;
+    padding-top: 0;
+    font-family: $main-font;
+  }
 }
 
 /* ----- Question list , check main_page/content.html and macros/macros.html----- */
@@ -70,7 +99,7 @@
     h2 {
         font-size: 20px;
         font-weight: normal;
-        line-height: 26px;
+        line-height: 24px;
         padding-left: 0;
         margin-bottom: 7px;
         display: block;
@@ -85,17 +114,15 @@
         text-align: right;
         line-height: 16px;
         font-family: $body-font;
-        padding-right: 4px;
 
         a {
-            font-weight: bold;
-            font-size: 11px;
+            font-size: 12px;
         }
     }
 
     .userinfo .timeago,
     span.anonymous {
-        font-size: 11px;
+        font-size: 12px;
         clear: both;
         font-weight: normal;
         color: #555;
@@ -107,21 +134,21 @@
         font-family: $main-font;
 
         .item-count {
-            padding: 0 5px;
-            font-size: 25px;
-            font-family: $main-font;
+          padding: 0 5px;
+          font-size: 20px;
+          font-family: $main-font;
         }
 
         .votes,
         .views,
         .answers,
         .favorites {
-            div {
-                margin-top: -5px;
-                font-size: 13px;
-                line-height: 14px;
-                color: #646464;
-            }
+          div {
+            margin-top: -5px;
+            font-size: 12px;
+            line-height: 14px;
+            color: #646464;
+          }
         }
     }
 
@@ -133,9 +160,9 @@
         text-align: center;
         margin: 0 3px;
         padding: 2px 2px 0 2px;
-        width: 55px;
+        width: 48px;
         float: right;
-        height: 54px;
+        height: 48px;
         border: #dbdbd4 1px solid;
     }
 
@@ -169,6 +196,10 @@
 
     .no-views .item-count {
         color: #b1b5b6;
+    }
+
+    .views {
+      margin-right: 0;
     }
 
     .some-views .item-count {
@@ -284,7 +315,9 @@ ul.tags li {
 }
 
 .question-info {
+  .with-avatar {
     margin-left: 50px;
+  }
 }
 
 .ask-page {
@@ -384,86 +417,88 @@ ul.tags li {
 
 //Question page
 .post {
-    .social-share {
-        margin-top: 8px;
-        a.facebook-share.icon,
-        a.twitter-share.icon,
-        a.linkedin-share.icon,
-        a.identica-share.icon {
-            display: inline-block;
-            font-size: 36px;
-            line-height: 0.9em;
-            margin-bottom: 4px;
-            &:hover {
-                opacity: 0.8;
-            }
-            cursor: pointer;
-        }
+  padding: 10px 0 0 8px;
+  .social-share {
+      margin-top: 1rem;
+      .fa {
+        font-size: 1.625rem;
+        font-weight: normal !important;
+      }
 
-        a.facebook-share.icon {
-            color: #536cac;
-            &:hover {
-                color: #536cac;
-            }
-        }
-        //a.identica-share.icon {
-        //    background: url(../images/socialsprite.png) no-repeat;
-        //    background-position: -78px 0px;
-        //    zoom:1.5;
-        //
-        //}
-        a.twitter-share.icon {
-            color: #6ba3eb;
-            &:hover {
-                color: #6ba3eb;
-            }
+      a.facebook-share.icon,
+      a.twitter-share.icon,
+      a.linkedin-share.icon,
+      a.identica-share.icon {
+          display: inline-block;
+          line-height: 1.5rem;
+          margin-bottom: 0.25rem;
+          opacity: 0.6;
+          &:hover {
+              opacity: 1; 
+          }
+          cursor: pointer;
+      }
 
-        }
-        a.linkedin-share.icon {
-            color: #4d79af;
-            &:hover {
-                color: #4d79af;
-            }
+      a.facebook-share.icon {
+          color: #536cac;
+          &:hover {
+              color: #536cac;
+          }
+      }
+      //a.identica-share.icon {
+      //    background: url(../images/socialsprite.png) no-repeat;
+      //    background-position: -78px 0px;
+      //    zoom:1.5;
+      //
+      //}
+      a.twitter-share.icon {
+          color: #6ba3eb;
+          &:hover {
+              color: #6ba3eb;
+          }
 
-        }
-    }
+      }
+      a.linkedin-share.icon {
+          color: #4d79af;
+          &:hover {
+              color: #4d79af;
+          }
 
-    .vote-buttons {
-        color: $color-control-button;
-        float: left;
-        width: 35px;
-        margin-left: -6px;
-        .fa {
-            display: inherit;
-            line-height: 20px;
-        }
-    }
-    .vote-number {
-        font-family: $main-font;
-        font-size: 23px;
+      }
+  }
+
+  .vote-buttons {
+      color: $color-control-button;
+      float: left;
+      width: 35px;
+      margin-left: -6px;
+      .fa {
+        display: inherit;
+        font-size: 1.825rem;
         font-weight: bold;
-        display: inline-block;
-        margin-top: 10px;
-        line-height: 15px;
-    }
-
-}
-.question-img-upvote,
-.question-img-downvote,
-.answer-img-upvote,
-.answer-img-downvote {
-    font-size: 26px;
-    line-height: 100%;
-    cursor: pointer;
-    &:hover{
+        line-height: 1rem;
+        cursor: pointer;
+      }
+      .fa.fa-check-circle {
+        font-size: 1.5rem;
+      }
+      .fa.upvote:hover {
         color: $color-success;
-    }
-}
-.question-img-downvote,
-.answer-img-downvote {
-    &:hover {
+      }
+      .fa.downvote:hover {
         color: $color-danger;
-    }
+      }
+  }
+
+  .vote-number {
+      font-family: $main-font;
+      font-size: 23px;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 10px;
+      line-height: 15px;
+  }
+
 }
 
 .question-page {
@@ -542,11 +577,11 @@ ul.tags li {
     }
 
     .post-content {
-        margin-left: 60px;
+      margin-left: 40px;
     }
 
     .js-question .post-content {
-        margin-bottom:10px;
+      margin-bottom: 10px;
     }
 
     .answer .post-content {
@@ -959,7 +994,6 @@ ul.tags li {
 
     .accepted-answer {
         background-color: $color-answer-bg;
-        padding: 10px;
     }
 
 
@@ -974,18 +1008,6 @@ ul.tags li {
 
         strong {
             color: #E1E818;
-        }
-    }
-
-    .answered-by-owner {
-        background: #F1F1FF;
-
-        .comments {
-            background-color: #E6ECFF;
-            .js-load-comments-btn,
-            .js-open-editor-btn {
-                background-color: #E6ECFF;
-            }
         }
     }
 
@@ -1021,12 +1043,14 @@ ul.tags li {
     }
 
 }
+
 .vote-buttons{
     text-align: center;
     .js-question-follower-count{
         font-weight: bold;
     }
 }
+
 .notify-sidebar{
     .rss{
         float: none;
