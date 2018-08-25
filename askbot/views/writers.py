@@ -338,10 +338,8 @@ def retag_question(request, id):
             if form.is_valid():
                 if form.has_changed():
                     if akismet_check_spam(form.cleaned_data['tags'], request):
-                        raise exceptions.PermissionDenied(_(
-                            'Spam was detected on your post, sorry '
-                            'for if this is a mistake'
-                        ))
+                        raise exceptions.PermissionDenied(_('Spam was detected in your post'))
+
                     request.user.retag_question(question=question, tags=form.cleaned_data['tags'])
                 if request.is_ajax():
                     response_data = {
@@ -805,10 +803,7 @@ def edit_comment(request):
         raise exceptions.PermissionDenied('This content is forbidden')
 
     if akismet_check_spam(form.cleaned_data['comment'], request):
-        raise exceptions.PermissionDenied(_(
-            'Spam was detected on your post, sorry '
-            'for if this is a mistake'
-        ))
+        raise exceptions.PermissionDenied(_('Spam was detected in your post'))
 
     comment_post = models.Post.objects.get(
                     post_type='comment',
