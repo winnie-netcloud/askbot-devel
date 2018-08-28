@@ -1813,7 +1813,10 @@ def user_delete_question(
             )
 
 
-def user_delete_all_content_authored_by_user(self, author, timestamp=None):
+def user_delete_all_content_authored_by_user(self,
+                                             author,
+                                             timestamp=None,
+                                             submit_spam=False):
     """Deletes all questions, answers and comments made by the user"""
     count = 0
 
@@ -1821,12 +1824,14 @@ def user_delete_all_content_authored_by_user(self, author, timestamp=None):
     answers = Post.objects.get_answers().filter(author=author, deleted=False)
     timestamp = timestamp or timezone.now()
     count += answers.update(deleted_at=timestamp, deleted_by=self, deleted=True)
+    post_ids = list(answers.values_list('pk', flat=True))
 
     #delete questions
     questions = Post.objects.get_questions().filter(author=author, deleted=False)
     count += questions.count()
     for question in questions:
         self.delete_question(question=question, timestamp=timestamp)
+        post_ids.append(question.pk)
 
     threads = Thread.objects.filter(last_activity_by=author)
     for thread in threads:
@@ -1840,10 +1845,15 @@ def user_delete_all_content_authored_by_user(self, author, timestamp=None):
     for thread in threads:
         thread.reset_cached_data()
 
-    #delete comments
+    # delete comments
+    # todo: switch to marking comments as deleted
     comments = Post.objects.get_comments().filter(author=author)
     count += comments.count()
     comments.delete()
+
+    if submit_spam:
+        from askbot.tasks import submit_spam_posts
+        defer_celery_task(submit_spam_posts, args=(post_ids,))
 
     #delete all unused tags created by this user
     #tags = author.created_tags.all()
