@@ -1,11 +1,14 @@
 from askbot.tests.utils import AskbotTestCase, with_settings
 from askbot.utils.akismet_utils import akismet_check_spam
+#from askbot.tasks import submit_spam_posts
+#from askbot.utils.transaction import defer_celery_task
 import responses
 from urlparse import parse_qsl
 
 TEXT = 'hello foobar'
 API_KEY = 'foobar'
 CHECK_SPAM_URL = 'https://{}.rest.akismet.com/1.1/comment-check'.format(API_KEY)
+SUBMIT_SPAM_URL = 'https://{}.rest.akismet.com/1.1/submit-spam'.format(API_KEY)
 VERIFY_KEY_URL = 'https://rest.akismet.com/1.1/verify-key'
 USER_AGENT = 'user_agent_string'
 USER_IP = '0.0.0.0'
@@ -57,7 +60,7 @@ def get_request_params(idx):
     """
     return dict(parse_qsl(responses.calls[idx].request.body))
 
-class AkismetApiRequestTests(AskbotTestCase):
+class AkismetApiTests(AskbotTestCase):
 
     @responses.activate
     @with_settings(USE_AKISMET=True, AKISMET_API_KEY=API_KEY, APP_URL='http://askbot.com/')
@@ -78,7 +81,7 @@ class AkismetApiRequestTests(AskbotTestCase):
     def test_anon_user_with_author(self):
         mock_akismet()
         request = AuthRequest(anon=True)
-        akismet_check_spam(TEXT, request, User())
+        akismet_check_spam(TEXT, request, author=User())
         params = get_request_params(1)
         self.assertEqual(params['comment_content'], TEXT)
         self.assertEqual(params['user_ip'], USER_IP)
@@ -107,7 +110,7 @@ class AkismetApiRequestTests(AskbotTestCase):
         mock_akismet()
         request = AuthRequest(username='Request User', email='request@example.com')
         user = User()
-        akismet_check_spam(TEXT, request, user)
+        akismet_check_spam(TEXT, request, author=user)
         params = get_request_params(1)
         self.assertEqual(params['comment_content'], TEXT)
         self.assertEqual(params['user_ip'], USER_IP)
@@ -115,3 +118,19 @@ class AkismetApiRequestTests(AskbotTestCase):
         self.assertEqual(params['blog'], 'http://askbot.com/questions/')
         self.assertEqual(params['comment_author'], user.username)
         self.assertEqual(params['comment_author_email'], user.email)
+
+    @responses.activate
+    @with_settings(USE_AKISMET=True, AKISMET_API_KEY=API_KEY, APP_URL='http://askbot.com/')
+    def test_submit_spam_on_delete_spammer_content(self):
+        mock_akismet()
+        user = self.create_user()
+        question = user.post_question(title='question title', body_text='body text', tags='tag1 tag2')
+        #defer_celery_task(submit_spam_posts, args=([question.pk],))
+        user.delete_all_content_authored_by_user(user, submit_spam=True)
+        params = get_request_params(1)
+        self.assertEqual(params['comment_content'], question.get_text_content())
+        self.assertEqual(params['user_ip'], question.revisions.all()[0].ip_addr)
+        self.assertEqual(params['blog'], 'http://askbot.com/questions/')
+        self.assertEqual(params['comment_author'], user.username)
+        self.assertEqual(params['comment_author_email'], user.email)
+        self.assertEqual(responses.calls[1].request.url, SUBMIT_SPAM_URL)

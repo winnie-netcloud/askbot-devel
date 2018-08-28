@@ -54,6 +54,7 @@ from askbot.models.user import get_invited_moderators
 from askbot.models.badges import award_badges_signal
 from askbot import exceptions as askbot_exceptions
 from askbot.utils.twitter import Twitter
+from askbot.utils.akismet_utils import akismet_submit_spam
 
 
 logger = get_task_logger(__name__)
@@ -88,6 +89,21 @@ def tweet_new_post_task(post_id):
     if post.author.social_sharing_mode != const.SHARE_NOTHING:
         token = simplejson.loads(post.author.twitter_access_token)
         twitter.tweet(tweet_text, access_token=token)
+
+
+@task(ignore_result=True)
+def submit_spam_posts(post_ids):
+    posts = Post.objects.filter(pk__in=post_ids)
+    # todo: save user agent in the revisions, using a fixed record
+    # here because there is nothing better at the moment
+    user_agent = 'Mozilla/5.0 (Windows NT 6.0; Win64; x64)'
+    for post in posts:
+        text = post.get_text_content()
+        ip_addr = post.revisions.all()[0].ip_addr
+        akismet_submit_spam(text,
+                            ip_addr=ip_addr,
+                            user_agent=user_agent,
+                            author=post.author)
 
 
 @task(ignore_result=True)
