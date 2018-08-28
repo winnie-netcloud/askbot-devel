@@ -761,13 +761,14 @@ def set_user_description(request):
     user_id = form.cleaned_data['user_id']
     description = form.cleaned_data['description']
 
-    user = models.User.objects.filter(pk=user_id)
+    user = get_object_or_404(models.User, pk=user_id)
     if akismet_check_spam(description, request, user):
         message = _('Spam was detected on your post, sorry if it was a mistake')
         raise django_exceptions.PermissionDenied(message)
 
     if user_id == request.user.pk or request.user.is_admin_or_mod():
-        user.update(about=description)
+        user.about = description
+        user.save()
         return {'description_html': convert_text(description)}
 
     raise django_exceptions.PermissionDenied
