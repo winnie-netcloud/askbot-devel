@@ -2030,28 +2030,24 @@ def user_edit_comment(
     return revision
 
 def user_edit_post(self,
-                post=None,
-                body_text=None,
-                revision_comment=None,
-                timestamp=None,
-                by_email=False,
-                is_private=False,
-                suppress_email=False,
-                ip_addr=None
-            ):
-    """a simple method that edits post body
-    todo: unify it in the style of just a generic post
+                   post=None,
+                   body_text=None,
+                   revision_comment=None,
+                   timestamp=None,
+                   by_email=False,
+                   is_private=False,
+                   suppress_email=False,
+                   ip_addr=None):
+    """Edits post body.
+    Todo: unify it in the style of just a generic post
     this requires refactoring of underlying functions
-    because we cannot bypass the permissions checks set within
-    """
+    because we cannot bypass the permissions checks set within."""
     if post.post_type == 'comment':
-        return self.edit_comment(
-                comment_post=post,
-                body_text=body_text,
-                by_email=by_email,
-                suppress_email=suppress_email,
-                ip_addr=ip_addr
-            )
+        return self.edit_comment(comment_post=post,
+							body_text=body_text,
+							by_email=by_email,
+							suppress_email=suppress_email,
+							ip_addr=ip_addr)
     elif post.post_type == 'answer':
         return self.edit_answer(
             answer=post,
@@ -2095,7 +2091,7 @@ def user_edit_question(
                 title=None,
                 body_text=None,
                 revision_comment=None,
-                tags=None,
+                tags=None, # string of space-separated tags
                 wiki=False,
                 edit_anonymously=False,
                 is_private=False,
@@ -2127,11 +2123,9 @@ def user_edit_question(
     revision = question.apply_edit(
         edited_at=timestamp,
         edited_by=self,
-        title=title,
         text=body_text,
         #todo: summary name clash in question and question revision
         comment=revision_comment,
-        tags=tags,
         wiki=wiki,
         edit_anonymously=edit_anonymously,
         is_private=is_private,
@@ -2178,20 +2172,25 @@ def user_edit_answer(
                     suppress_email=False,
                     ip_addr=None,
                 ):
+
     if force == False:
         self.assert_can_edit_answer(answer)
 
-    revision = answer.apply_edit(
-        edited_at=timestamp,
-        edited_by=self,
-        text=body_text,
-        comment=revision_comment,
-        wiki=wiki,
-        is_private=is_private,
-        by_email=by_email,
-        suppress_email=suppress_email,
-        ip_addr=ip_addr,
-    )
+    if answer.is_private() != is_private:
+        if is_private:
+            answer.make_private(answer.author)
+        else:
+            answer.make_public()
+
+    revision = answer.apply_edit(edited_at=timestamp,
+                                 edited_by=self,
+                                 text=body_text,
+                                 comment=revision_comment,
+                                 wiki=wiki,
+                                 is_private=is_private,
+                                 by_email=by_email,
+                                 suppress_email=suppress_email,
+                                 ip_addr=ip_addr)
 
     answer.thread.set_last_activity_info(
         last_activity_at=timestamp,
@@ -2239,29 +2238,24 @@ def user_create_post_reject_reason(
     return reason
 
 @auto_now_timestamp
-def user_edit_post_reject_reason(
-    self, reason, title = None, details = None, timestamp = None
-):
+def user_edit_post_reject_reason(self, reason, title=None,
+                                 details=None, timestamp=None):
     reason.title = title
     reason.save()
-    return reason.details.apply_edit(
-        edited_by = self,
-        edited_at = timestamp,
-        text = details
-    )
+    return reason.details.apply_edit(edited_by=self,
+                                     edited_at=timestamp,
+                                     text=details)
 
 @reject_forbidden_phrases
-def user_post_answer(
-                    self,
-                    question=None,
-                    body_text=None,
-                    follow=False,
-                    wiki=False,
-                    is_private=False,
-                    timestamp=None,
-                    by_email=False,
-                    ip_addr=None,
-                ):
+def user_post_answer(self,
+                     question=None,
+                     body_text=None,
+                     follow=False,
+                     wiki=False,
+                     is_private=False,
+                     timestamp=None,
+                     by_email=False,
+                     ip_addr=None):
 
     #todo: move this to assertion - user_assert_can_post_answer
     if self.pk == question.author_id and not self.is_administrator():
@@ -2313,34 +2307,24 @@ def user_post_answer(
         raise ValueError('Body text is required to post answer')
     if timestamp is None:
         timestamp = timezone.now()
-#    answer = Answer.objects.create_new(
-#        thread = question.thread,
-#        author = self,
-#        text = body_text,
-#        added_at = timestamp,
-#        email_notify = follow,
-#        wiki = wiki
-#    )
-    answer_post = Post.objects.create_new_answer(
-        thread=question.thread,
-        author=self,
-        text=body_text,
-        added_at=timestamp,
-        email_notify=follow,
-        wiki=wiki,
-        is_private=is_private,
-        by_email=by_email,
-        ip_addr=ip_addr,
-    )
+
+    answer_post = Post.objects.create_new_answer(thread=question.thread,
+                                                 author=self,
+                                                 text=body_text,
+                                                 added_at=timestamp,
+                                                 email_notify=follow,
+                                                 wiki=wiki,
+                                                 is_private=is_private,
+                                                 by_email=by_email,
+                                                 ip_addr=ip_addr)
     #add to the answerer's group
     answer_post.add_to_groups([self.get_personal_group()])
 
     answer_post.thread.reset_cached_data()
     award_badges_signal.send(None,
-        event = 'post_answer',
-        actor = self,
-        context_object = answer_post
-    )
+                             event='post_answer',
+                             actor=self,
+                             context_object=answer_post)
     return answer_post
 
 def user_visit_question(self, question = None, timestamp = None):

@@ -634,13 +634,11 @@ def set_question_title(request):
         raise exceptions.PermissionDenied(message)
 
     question_id = request.POST['question_id']
-    title = request.POST['title']
-    if akismet_check_spam(title, request):
-        raise exceptions.PermissionDenied(_(
-            'Spam was detected on your post, sorry '
-            'for if this is a mistake'
-        ))
     question = get_object_or_404(models.Post, pk=question_id)
+    title = request.POST['title']
+
+    if akismet_check_spam(question.get_text_content(title=title), request):
+        raise exceptions.PermissionDenied(_('Spam was detected in your post'))
     user = request.user
     user.edit_question(question, title=title)
     return {'title': title}
@@ -670,10 +668,7 @@ def set_post_body(request):
     body_text = request.POST['body_text']
 
     if akismet_check_spam(body_text, request):
-        raise exceptions.PermissionDenied(_(
-            'Spam was detected on your post, sorry '
-            'for if this is a mistake'
-        ))
+        raise exceptions.PermissionDenied(_('Spam was detected in your post'))
 
     post = get_object_or_404(models.Post, pk=post_id)
 
