@@ -1,3 +1,4 @@
+from askbot.tests.akismet import *
 from askbot.tests.cache_tests import *
 from askbot.tests.email_alert_tests import *
 from askbot.tests.on_screen_notification_tests import *
