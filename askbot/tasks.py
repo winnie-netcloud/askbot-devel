@@ -259,12 +259,12 @@ def record_question_visit(
         # get response notifications
         user.visit_question(question_post)
 
-    # 3) send award badges signal for any badges
-    # that are awarded for question views
-    award_badges_signal.send(
-        None, event='view_question', actor=user,
-        context_object=question_post)
-
+    #3) send award badges signal for any badges
+    #that are awarded for question views
+    award_badges_signal.send(None,
+                             event='view_question',
+                             actor=user,
+                             context_object=question_post)
 
 @task()
 def send_instant_notifications_about_activity_in_post(

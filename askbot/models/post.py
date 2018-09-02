@@ -1,5 +1,4 @@
 from collections import defaultdict
-import datetime
 import operator
 import logging
 
@@ -877,7 +876,7 @@ class Post(models.Model):
             # for each revision of other post Ri
             # append content of Ri to R1 and use author
             new_text = orig_text + '\n\n' + rev.text
-            self.apply_edit(edited_at=datetime.datetime.now(),
+            self.apply_edit(edited_at=timezone.now(),
                             edited_by=user,
                             text=new_text,
                             comment=_('merged revision'),
