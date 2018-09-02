@@ -1424,13 +1424,11 @@ def user_post_comment(
     comment.add_to_groups([self.get_personal_group()])
 
     parent_post.thread.reset_cached_data()
-    award_badges_signal.send(
-        None,
-        event = 'post_comment',
-        actor = self,
-        context_object = comment,
-        timestamp = timestamp
-    )
+    award_badges_signal.send(None,
+                             event='post_comment',
+                             actor=self,
+                             context_object=comment,
+                             timestamp=timestamp)
     return comment
 
 def user_post_object_description(
@@ -1641,11 +1639,10 @@ def user_retag_question(
     )
     question.thread.reset_cached_data()
     award_badges_signal.send(None,
-        event = 'retag_question',
-        actor = self,
-        context_object = question,
-        timestamp = timestamp
-    )
+                             event='retag_question',
+                             actor=self,
+                             context_object=question,
+                             timestamp=timestamp)
 
 
 def user_repost_comment_as_answer(self, comment):
@@ -1704,11 +1701,10 @@ def user_accept_best_answer(
 
     auth.onAnswerAccept(answer, self, timestamp=timestamp)
     award_badges_signal.send(None,
-        event = 'accept_best_answer',
-        actor = self,
-        context_object = answer,
-        timestamp = timestamp
-    )
+                             event='accept_best_answer',
+                             actor=self,
+                             context_object=answer,
+                             timestamp=timestamp)
 
 @auto_now_timestamp
 def user_unaccept_best_answer(
@@ -1767,11 +1763,10 @@ def user_delete_answer(
         deleted_by=self
     )
     award_badges_signal.send(None,
-                event='delete_post',
-                actor=self,
-                context_object=answer,
-                timestamp=timestamp
-            )
+                             event='delete_post',
+                             actor=self,
+                             context_object=answer,
+                             timestamp=timestamp)
 
 
 @auto_now_timestamp
@@ -1806,11 +1801,10 @@ def user_delete_question(
         deleted_by = self
     )
     award_badges_signal.send(None,
-                event = 'delete_post',
-                actor = self,
-                context_object = question,
-                timestamp = timestamp
-            )
+                             event='delete_post',
+                             actor=self,
+                             context_object=question,
+                             timestamp=timestamp)
 
 
 def user_delete_all_content_authored_by_user(self,
@@ -2003,11 +1997,10 @@ def user_post_question(
         self.toggle_favorite_question(question)
 
     award_badges_signal.send(None,
-        event='post_question',
-        actor=self,
-        context_object=question,
-        timestamp=timestamp
-    )
+                             event='post_question',
+                             actor=self,
+                             context_object=question,
+                             timestamp=timestamp)
 
     return question
 
@@ -2160,11 +2153,10 @@ def user_edit_question(
     question.thread.reset_cached_data()
 
     award_badges_signal.send(None,
-        event='edit_question',
-        actor=self,
-        context_object=question,
-        timestamp=timestamp
-    )
+                             event='edit_question',
+                             actor=self,
+                             context_object=question,
+                             timestamp=timestamp)
     return revision
 
 @auto_now_timestamp
@@ -2210,11 +2202,10 @@ def user_edit_answer(
     answer.thread.reset_cached_data()
 
     award_badges_signal.send(None,
-        event='edit_answer',
-        actor=self,
-        context_object=answer,
-        timestamp=timestamp
-    )
+                             event='edit_answer',
+                             actor=self,
+                             context_object=answer,
+                             timestamp=timestamp)
     return revision
 
 @auto_now_timestamp
@@ -2334,7 +2325,8 @@ def user_post_answer(self,
     award_badges_signal.send(None,
                              event='post_answer',
                              actor=self,
-                             context_object=answer_post)
+                             context_object=answer_post,
+                             timestamp=timestamp)
     return answer_post
 
 def user_visit_question(self, question = None, timestamp = None):
@@ -2972,11 +2964,10 @@ def user_toggle_favorite_question(
         result = True
         question.thread.update_favorite_count()
         award_badges_signal.send(None,
-            event = 'select_favorite_question',
-            actor = self,
-            context_object = question,
-            timestamp = timestamp
-        )
+                                 event='select_favorite_question',
+                                 actor=self,
+                                 context_object=question,
+                                 timestamp=timestamp)
     return result
 
 VOTES_TO_EVENTS = {
@@ -3046,11 +3037,10 @@ def _process_vote(user, post, timestamp=None, cancel=False, vote_type=None):
     event = VOTES_TO_EVENTS.get((vote_type, post.post_type), None)
     if event:
         award_badges_signal.send(None,
-                    event = event,
-                    actor = user,
-                    context_object = post,
-                    timestamp = timestamp
-                )
+                                 event=event,
+                                 actor=user,
+                                 context_object=post,
+                                 timestamp=timestamp)
     return vote
 
 def user_fix_html_links(self, text):
@@ -3193,18 +3183,17 @@ def flag_post(
             user.assert_can_flag_offensive(post=post)
         auth.onFlaggedItem(post, user, timestamp=timestamp)
         award_badges_signal.send(None,
-            event = 'flag_post',
-            actor = user,
-            context_object = post,
-            timestamp = timestamp
-        )
+                                 event='flag_post',
+                                 actor=user,
+                                 context_object=post,
+                                 timestamp=timestamp)
 
 def user_get_flags(self):
     """return flag Activity query set
     for all flags set by te user"""
     return Activity.objects.filter(
-                        user = self,
-                        activity_type = const.TYPE_ACTIVITY_MARK_OFFENSIVE
+                        user=self,
+                        activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE
                     )
 
 def user_get_flag_count_posted_today(self):
@@ -3767,11 +3756,10 @@ def record_user_visit(user, timestamp, **kwargs):
         user.consecutive_days_visit_count += 1
         consecutive_days = user.consecutive_days_visit_count
         award_badges_signal.send(None,
-            event = 'site_visit',
-            actor = user,
-            context_object = user,
-            timestamp = timestamp
-        )
+                                 event='site_visit',
+                                 actor=user,
+                                 context_object=user,
+                                 timestamp=timestamp)
     #somehow it saves on the query as compared to user.save()
     update_data = {
         'last_seen': timestamp,
@@ -3921,11 +3909,10 @@ def record_update_tags(thread, tags, user, timestamp, **kwargs):
     """
     for tag in tags:
         award_badges_signal.send(None,
-            event = 'update_tag',
-            actor = user,
-            context_object = tag,
-            timestamp = timestamp
-        )
+                                 event='update_tag',
+                                 actor=user,
+                                 context_object=tag,
+                                 timestamp=timestamp)
 
     question = thread._question_post()
 

@@ -505,10 +505,10 @@ def edit_user(request, id):
             user.save()
             # send user updated signal if full fields have been updated
             award_badges_signal.send(None,
-                            event = 'update_user_profile',
-                            actor = user,
-                            context_object = user
-                        )
+                                     event='update_user_profile',
+                                     actor=user,
+                                     context_object=user)
+
             return HttpResponseRedirect(user.get_profile_url())
     else:
         form = forms.EditUserForm(user)
