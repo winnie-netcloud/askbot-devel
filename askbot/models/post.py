@@ -877,15 +877,15 @@ class Post(models.Model):
             # for each revision of other post Ri
             # append content of Ri to R1 and use author
             new_text = orig_text + '\n\n' + rev.text
-            self.apply_edit(
-                edited_by=user,
-                text=new_text,
-                comment=_('merged revision'),
-                by_email=False,
-                edit_anonymously=rev.is_anonymous,
-                suppress_email=True,
-                ip_addr=rev.ip_addr
-            )
+            self.apply_edit(edited_at=datetime.datetime.now(),
+                            edited_by=user,
+                            text=new_text,
+                            comment=_('merged revision'),
+                            by_email=False,
+                            edit_anonymously=rev.is_anonymous,
+                            suppress_email=True,
+                            ip_addr=rev.ip_addr)
+
         if post.is_question() or post.is_answer():
             comments = Post.objects.get_comments().filter(parent=post)
             comments.update(parent=self)
@@ -1051,6 +1051,17 @@ class Post(models.Model):
             raise NotImplementedError
         return slugify(self.thread.title)
     slug = property(_get_slug)
+
+    def get_text_content(self, title=None, body_text=None, tags=None):
+        """Returns text content of the post.
+        Parts can be overrridden by the optional parameters.
+        This method was created for purposes of the spam classification"""
+        if self.is_question():
+            title = title or self.thread.title
+            tags = tags or self.thread.tagnames
+            body_text = body_text or self.text
+            return '{}\n\n{}\n\n{}'.format(title, tags, body_text)
+        return body_text or self.text
 
     def get_snippet(self, max_length=None):
         """returns an abbreviated HTML snippet of the content
@@ -1784,11 +1795,19 @@ class Post(models.Model):
     def get_tag_names(self):
         return self.thread.get_tag_names()
 
-    def __apply_edit(self, edited_at=None, edited_by=None, text=None,
-                     comment=None, wiki=False, edit_anonymously=False,
-                     is_private=False, by_email=False, suppress_email=False,
-                     ip_addr=None):
-
+    def apply_edit(
+                    self,
+                    edited_at=None,
+                    edited_by=None,
+                    text=None,
+                    comment=None,
+                    wiki=False,
+                    edit_anonymously=False,
+                    is_private=False,
+                    by_email=False,
+                    suppress_email=False,
+                    ip_addr=None,
+                ):
         latest_rev = self.get_latest_revision()
 
         if text is None:
@@ -1855,71 +1874,17 @@ class Post(models.Model):
 
         return latest_rev
 
-    def _answer__apply_edit(self, edited_at=None, edited_by=None, text=None,
-                            comment=None, wiki=False, is_private=False,
-                            edit_anonymously=False, by_email=False,
-                            suppress_email=False, ip_addr=None):
-
-        # it is important to do this before __apply_edit b/c of signals!!!
-        if self.is_private() != is_private:
-            if is_private:
-                self.make_private(self.author)
-            else:
-                self.make_public()
-
-        if edited_at is None:
-            edited_at = timezone.now()
-
-        revision = self.__apply_edit(
-            edited_at=edited_at,
-            edited_by=edited_by,
-            text=text,
-            comment=comment,
-            wiki=wiki,
-            by_email=by_email,
-            is_private=is_private,
-            suppress_email=suppress_email,
-            ip_addr=ip_addr,
-        )
-        return revision
-
-    def _question__apply_edit(self, edited_at=None, edited_by=None, title=None,
-                              text=None, comment=None, tags=None, wiki=False,
-                              edit_anonymously=False, is_private=False,
-                              by_email=False, suppress_email=False,
-                              ip_addr=None):
-
-        revision = self.__apply_edit(
-            edited_at=edited_at,
-            edited_by=edited_by,
-            text=text,
-            comment=comment,
-            wiki=wiki,
-            edit_anonymously=edit_anonymously,
-            is_private=is_private,
-            by_email=by_email,
-            suppress_email=suppress_email,
-            ip_addr=ip_addr
-        )
-        return revision
-
-    def apply_edit(self, *args, **kwargs):
-        # TODO: unify this, here we have unnecessary indirection
-        # the question__apply_edit function is backwards:
-        # the title edit and tag edit should apply to thread
-        # not the question post
-        if self.is_answer():
-            return self._answer__apply_edit(*args, **kwargs)
-        elif self.is_question():
-            return self._question__apply_edit(*args, **kwargs)
-        elif self.is_tag_wiki() or self.is_comment() or self.is_reject_reason():
-            return self.__apply_edit(*args, **kwargs)
-        raise NotImplementedError
-
-    def __add_revision(self, author=None, revised_at=None, text=None,
-                       comment=None, by_email=False, ip_addr=None,
-                       is_anonymous=False):
-        # TODO: this may be identical to Question.add_revision
+    def __add_revision(
+                    self,
+                    author=None,
+                    revised_at=None,
+                    text=None,
+                    comment=None,
+                    by_email=False,
+                    ip_addr=None,
+                    is_anonymous=False
+                ):
+        #todo: this may be identical to Question.add_revision
         if None in (author, revised_at, text):
             raise Exception('arguments author, revised_at and text are required')
         return PostRevision.objects.create(

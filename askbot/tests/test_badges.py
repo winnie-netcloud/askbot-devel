@@ -532,12 +532,12 @@ class BadgeTests(AskbotTestCase):
     def test_rapidresponder_badge_expire(self):
         """test case where bage should be expired"""
         answer_time = timezone.now() - datetime.timedelta(settings.RAPID_RESPONDER_BADGE_EXPIRES + 1)
-        question_time = answer_time - datetime.timedelta(hours = settings.RAPID_RESPONDER_BADGE_MAX_DELAY - 1)
-        question = self.post_question(user = self.u1, timestamp = question_time)
-        self.post_answer(user = self.u2, question = question, timestamp = answer_time)
-        self.assert_have_badge(badges.RapidResponder.key, self.u2, expected_count = 1)
-        award = models.Award.objects.get(badge__slug = badges.RapidResponder.key, user = self.u2)
+        question_time = answer_time - datetime.timedelta(hours=settings.RAPID_RESPONDER_BADGE_MAX_DELAY - 1)
+        question = self.post_question(user = self.u1, timestamp=question_time)
+        self.post_answer(user = self.u2, question = question, timestamp=answer_time)
+        self.assert_have_badge(badges.RapidResponder.key, self.u2, expected_count=1)
+        award = models.Award.objects.get(badge__slug = badges.RapidResponder.key, user=self.u2)
         #badge should be expired
         expired = badges.RapidResponder.expire(award)
         self.assertTrue(expired)
-        self.assert_have_badge(badges.RapidResponder.key, self.u2, expected_count = 0)
+        self.assert_have_badge(badges.RapidResponder.key, self.u2, expected_count=0)

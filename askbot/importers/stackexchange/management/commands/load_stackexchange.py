@@ -536,23 +536,17 @@ it may be helpful to split this procedure in two:\n
         if post is None:
             return
         if post_type == 'Question':
-            edited_by.edit_question(
-                            question = post,
-                            title = title,
-                            body_text = text,
-                            tags = tags,
-                            revision_comment = comment,
-                            timestamp = edited_at,
-                            force = True #avoid insufficient rep issue on imports
-                        )
+            edited_by.edit_question(question=post,
+                                    title=title,
+                                    body_text=text,
+                                    tags=tags,
+                                    revision_comment=comment,
+                                    timestamp=edited_at,
+                                    force=True) #avoid insufficient rep issue on imports
         elif post_type == 'Answer':
-            #todo: why here use "apply_edit" and not "edit answer"?
-            post.apply_edit(
-                edited_at = edited_at,
-                edited_by = edited_by,
-                text = text,
-                comment = comment,
-            )
+            edited_by.edit_answer(timestamp=edited_at,
+                                  body_text=text,
+                                  revision_comment=comment)
 
     def _make_post_wiki(self, rev_group):
         #todo: untested
