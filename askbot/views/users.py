@@ -518,10 +518,10 @@ def edit_user(request, id):
             user.update_localized_profile(about=sanitize_html(form.cleaned_data['about']))
             # send user updated signal if full fields have been updated
             award_badges_signal.send(None,
-                            event='update_user_profile',
-                            actor=user,
-                            context_object=user
-                        )
+                                     event='update_user_profile',
+                                     actor=user,
+                                     context_object=user)
+
             return HttpResponseRedirect(user.get_profile_url())
     else:
         form = forms.EditUserForm(user)
