@@ -22,7 +22,7 @@
                     <p><strong>{% trans %}This response is published{% endtrans %}</strong></p>
                 {% endif %}
                 {% if answer.needs_moderation() %}
-                    <p class="moderated">{% trans %}This post is awaiting moderation{% endtrans %}</p>
+                    <p class="moderated">{% trans %}This post is awaiting moderation, please do not repost the same content!{% endtrans %}</p>
                 {% endif %}
             </div>
             <div class="js-editable"
