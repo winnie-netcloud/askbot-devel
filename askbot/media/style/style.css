@@ -2302,10 +2302,9 @@ tr.mceLast {
 .js-question .moderated {
   font-weight: bold;
   background: url(../images/dialog-warning.png) 2px 0 no-repeat;
-  text-decoration: underline;
   line-height: 16px !important;
-  margin-bottom: -2px !important;
   padding-left: 24px !important;
+  margin-bottom: 1rem !important;
 }
 .answer .comment .moderated,
 .js-question .comment .moderated {

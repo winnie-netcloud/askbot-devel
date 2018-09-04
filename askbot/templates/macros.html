@@ -376,7 +376,7 @@ for the purposes of the AJAX comment editor #}
                 <span class="js-delete-icon" title="{% trans %}delete this comment{% endtrans %}"></span>
             </div>
             {% if comment.needs_moderation() %}
-                <p class="moderated">{% trans %}This post is awaiting moderation{% endtrans %}</p>
+                <p class="moderated">{% trans %}This post is awaiting moderation, please do not repost the same content!{% endtrans %}</p>
             {% endif %}
             <div class="comment-body">
                 {{ comment.summary }}
