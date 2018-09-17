@@ -231,14 +231,31 @@ def unparse_requirement(req):
 
 
 def test_specs(req):
+    """Check if the dependency described by `req` value
+    is satisfied by the current python environment"""
+
+    def map_int(data_list):
+        """Returns list where strings are replaced
+        with integers, where possible and where it is
+        not possible to convert string into integer,
+        the original string is kept."""
+        result = list()
+        for item in data_list:
+            try:
+                int_item = int(item)
+                result.append(int_item)
+            except:
+                result.append(item)
+        return result
+
     if not req.specs:
         return
     mod_ver = pkg_resources.get_distribution(req.name).version
-    mod_ver = mod_ver.split('.')
+    mod_ver = map_int(mod_ver.split('.'))
     try:
         for spec in req.specs:
             op = spec[0]
-            spec_ver = spec[1].split('.')
+            spec_ver = map_int(spec[1].split('.'))
             if op == '==':
                 assert mod_ver == spec_ver
             elif op == '>':
