@@ -15,7 +15,7 @@ default_app_config = 'askbot.apps.AskbotConfig'
 #values - the package qualifier to use for pip
 REQUIREMENTS = {
     'appconf': 'django-appconf',
-    'akismet': 'akismet<=0.2.0',
+    'akismet': 'akismet==1.0.1',
     'avatar': 'django-avatar==2.2.1',
     'bs4': 'beautifulsoup4<=4.4.1',
     'coffin': 'Coffin>=0.3,<=0.3.8',
@@ -32,7 +32,7 @@ REQUIREMENTS = {
     'jwt': 'pyjwt<=1.4.0',
     'keyedcache': 'django-keyedcache<=1.5.1',
     'markdown2': 'markdown2<=2.3.1',
-    'mock': 'mock>=1.0.1',
+    'mock': 'mock==2.0.0',
     'oauth2': 'oauth2<=1.9.0.post1',
     'openid': 'python-openid<=2.2.5',
     'picklefield': 'django-picklefield==0.3.0',
@@ -40,6 +40,7 @@ REQUIREMENTS = {
     'pytz': 'pytz<=2016.4',
     'captcha': 'django-recaptcha>=1.0.3,<=1.0.5',
     'cas': 'python-cas==1.1.0',
+    'responses': 'responses>=0.9.0',
     'requirements': 'requirements-parser==0.1.0',
     'robots': 'django-robots==1.1',
     'regex': 'regex',

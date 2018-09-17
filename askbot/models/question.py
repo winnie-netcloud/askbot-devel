@@ -6,7 +6,7 @@ import regex as re
 from copy import copy
 from django.conf import settings as django_settings
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Q
 from django.contrib.auth.models import User
 from django.core import cache  # import cache, not from cache import cache, to be able to monkey-patch cache.cache in test cases
 from django.core import exceptions as django_exceptions
@@ -297,7 +297,10 @@ class ThreadManager(BaseQuerySetManager):
         qs = self.filter(**primary_filter)
 
         if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
-            qs = qs.filter(approved=True)
+            if request_user.is_authenticated():
+                qs = qs.filter(Q(approved=True) | Q(posts__author_id=request_user.pk))
+            else:
+                qs = qs.filter(approved=True)
 
         # if groups feature is enabled, filter out threads
         # that are private in groups to which current user does not belong

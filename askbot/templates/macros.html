@@ -394,7 +394,7 @@ for the purposes of the AJAX comment editor #}
                 ><i class="fa fa-times" aria-hidden="true"></i></span>
             </div>
             {% if comment.needs_moderation() %}
-                <p class="moderated">{% trans %}This post is awaiting moderation{% endtrans %}</p>
+                <p class="moderated">{% trans %}This post is awaiting moderation, please do not repost the same content!{% endtrans %}</p>
             {% endif %}
             <div class="comment-body">
                 {{ comment.summary }}

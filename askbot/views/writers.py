@@ -197,7 +197,6 @@ def import_data(request):
 
 @csrf.csrf_protect
 @decorators.check_authorization_to_post(ugettext_lazy('Please log in to make posts'))
-@decorators.check_spam('text')
 def ask(request):#view used to ask a new question
     """a view to ask a new question
     gives space for q title, body, tags and checkbox for to post as wiki
@@ -226,6 +225,11 @@ def ask(request):#view used to ask a new question
             post_privately = form.cleaned_data['post_privately']
             group_id = form.cleaned_data.get('group_id', None)
             language = form.cleaned_data.get('language', None)
+
+            content = '{}\n\n{}\n\n{}'.format(title, tagnames, text)
+            if akismet_check_spam(content, request):
+                message = _('Spam was detected on your post, sorry if it was a mistake')
+                raise exceptions.PermissionDenied(message)
 
             if request.user.is_authenticated():
                 drafts = models.DraftQuestion.objects.filter(author=request.user)
@@ -342,11 +346,11 @@ def retag_question(request, id):
 
             if form.is_valid():
                 if form.has_changed():
-                    if akismet_check_spam(form.cleaned_data['tags'], request):
-                        raise exceptions.PermissionDenied(_(
-                            'Spam was detected on your post, sorry '
-                            'for if this is a mistake'
-                        ))
+                    text = question.get_text_content(tags=form.cleaned_data['tags'])
+                    if akismet_check_spam(text, request):
+                        message = _('Spam was detected on your post, sorry if it was a mistake')
+                        raise exceptions.PermissionDenied(message)
+
                     request.user.retag_question(question=question, tags=form.cleaned_data['tags'])
                 if request.is_ajax():
                     response_data = {
@@ -393,7 +397,6 @@ def retag_question(request, id):
 
 @login_required
 @csrf.csrf_protect
-@decorators.check_spam('text')
 def edit_question(request, id):
     """edit question view
     """
@@ -457,6 +460,13 @@ def edit_question(request, id):
 
                         user = form.get_post_user(request.user)
 
+                        content = question.get_text_content(title=form.cleaned_data['title'],
+                                                            body_text=form.cleaned_data['text'],
+                                                            tags=form.cleaned_data['tags'])
+                        if akismet_check_spam(content, request):
+                            message = _('Spam was detected on your post, sorry if it was a mistake')
+                            raise exceptions.PermissionDenied(message)
+
                         user.edit_question(
                             question=question,
                             title=form.cleaned_data['title'],
@@ -509,7 +519,6 @@ def edit_question(request, id):
 
 @login_required
 @csrf.csrf_protect
-@decorators.check_spam('text')
 def edit_answer(request, id):
     answer = get_object_or_404(models.Post, id=id)
 
@@ -562,9 +571,15 @@ def edit_answer(request, id):
                         user = form.get_post_user(request.user)
                         suppress_email = form.cleaned_data['suppress_email']
                         is_private = form.cleaned_data.get('post_privately', False)
+
+                        text = form.cleaned_data['text']
+                        if akismet_check_spam(text, request):
+                            message = _('Spam was detected on your post, sorry if it was a mistake')
+                            raise exceptions.PermissionDenied(message)
+
                         user.edit_answer(
                             answer=answer,
-                            body_text=form.cleaned_data['text'],
+                            body_text=text,
                             revision_comment=form.cleaned_data['summary'],
                             wiki=form.cleaned_data.get('wiki', answer.wiki),
                             is_private=is_private,
@@ -608,7 +623,6 @@ def edit_answer(request, id):
 
 #todo: rename this function to post_new_answer
 @decorators.check_authorization_to_post(ugettext_lazy('Please log in to make posts'))
-@decorators.check_spam('text')
 def answer(request, id, form_class=forms.AnswerForm):#process a new answer
     """view that posts new answer
 
@@ -647,6 +661,11 @@ def answer(request, id, form_class=forms.AnswerForm):#process a new answer
                 drafts.delete()
                 user = form.get_post_user(request.user)
                 try:
+                    text = form.cleaned_data['text']
+                    if akismet_check_spam(text, request):
+                        message = _('Spam was detected on your post, sorry if it was a mistake')
+                        raise exceptions.PermissionDenied(message)
+
                     answer = form.save(
                                     question,
                                     user,
@@ -732,7 +751,6 @@ def __generate_comments_json(obj, user, avatar_size):
     return HttpResponse(data, content_type="application/json")
 
 @csrf.csrf_protect
-@decorators.check_spam('comment')
 def post_comments(request):#generic ajax handler to load comments to an object
     """todo: fixme: post_comments is ambigous:
     means either get comments for post or
@@ -786,9 +804,14 @@ def post_comments(request):#generic ajax handler to load comments to an object
             if askbot_settings.READ_ONLY_MODE_ENABLED:
                 raise exceptions.PermissionDenied(askbot_settings.READ_ONLY_MESSAGE)
 
+            text = form.cleaned_data['comment']
+            if akismet_check_spam(text, request):
+                message = _('Spam was detected on your post, sorry if it was a mistake')
+                raise exceptions.PermissionDenied(message)
+
             comment = user.post_comment(
                 parent_post=post,
-                body_text=form.cleaned_data['comment'],
+                body_text=text,
                 ip_addr=request.META.get('REMOTE_ADDR')
             )
             signals.new_comment_posted.send(None,
@@ -816,10 +839,8 @@ def edit_comment(request):
         raise exceptions.PermissionDenied('This content is forbidden')
 
     if akismet_check_spam(form.cleaned_data['comment'], request):
-        raise exceptions.PermissionDenied(_(
-            'Spam was detected on your post, sorry '
-            'for if this is a mistake'
-        ))
+        message = _('Spam was detected on your post, sorry if it was a mistake')
+        raise exceptions.PermissionDenied(message)
 
     comment_post = models.Post.objects.get(
                     post_type='comment',

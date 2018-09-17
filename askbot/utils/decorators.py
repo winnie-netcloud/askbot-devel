@@ -17,7 +17,6 @@ from askbot import exceptions as askbot_exceptions
 from askbot.conf import settings as askbot_settings
 from askbot.utils import url_utils
 from askbot.utils.html import site_url
-from askbot.utils.akismet_utils import akismet_check_spam
 
 
 def auto_now_timestamp(func):
@@ -182,43 +181,6 @@ def profile(log_file):
         return _inner
     return _outer
 
-def check_spam(field):
-    '''Decorator to check if there is spam in the form'''
-    # TODO: remove use of this decorator in favor of explicit calls
-    # from within view functions
-
-    def decorator(view_func):
-        @functools.wraps(view_func)
-        def wrapper(request, *args, **kwargs):
-
-            if askbot_settings.USE_AKISMET and request.method == "POST":
-                if field not in request.POST:
-                    raise Http404
-
-                comment = smart_str(request.POST[field])
-                if akismet_check_spam(comment, request):
-                    logging.debug(
-                        'Spam detected in %s post at: %s',
-                        request.user.username,
-                        timezone.now()
-                    )
-                    spam_message = _(
-                        'Spam was detected on your post, sorry '
-                        'for if this is a mistake'
-                    )
-                    if request.is_ajax():
-                        return HttpResponseForbidden(
-                                spam_message,
-                                content_type="application/json"
-                            )
-                    else:
-                        request.user.message_set.create(message=spam_message)
-                        return HttpResponseRedirect(reverse('index'))
-
-            return view_func(request, *args, **kwargs)
-        return wrapper
-
-    return decorator
 
 def moderators_only(view_func):
     @functools.wraps(view_func)

@@ -12,8 +12,8 @@ class Command(NoArgsCommand):
         message = 'Building post snippets'
         for post in ProgressBar(posts.iterator(), count, message):
             if hasattr(post, 'summary'):
-                post.summary = post.get_snippet()
                 post.html = post.parse_post_text()['html']
+                post.summary = post.get_snippet()
                 post.save()
                 transaction.commit()
                 if post.thread:
