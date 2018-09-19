@@ -13,7 +13,16 @@ DeclineAndExplainMenu.prototype.setupDeclinePostHandler = function (button) {
     var reasonId = button.data('reasonId');
     var controls = this.getControls();
     var handler = controls.getModHandler('decline-with-reason', ['posts'], reasonId);
-    setupButtonEventHandlers(button, handler);
+    setupButtonEventHandlers(button, function() {
+      handler();
+      me.closeDropdown();
+    });
+};
+
+DeclineAndExplainMenu.prototype.closeDropdown = function () {
+  /* todo: remove this, b/c boostrap should take care
+   * of it by itself */
+  $('.dropdown-menu.show').removeClass('show');
 };
 
 DeclineAndExplainMenu.prototype.addReason = function (id, title) {

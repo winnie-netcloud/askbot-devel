@@ -61,9 +61,8 @@
 </script>
 {# everything below until the custom js and google analytics is compressable #}
 {% compress js %}
-    <script type="text/javascript" src="{{ '/jslib/jquery-1.12.4.min.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/jslib/popper.min.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/bootstrap/js/bootstrap.js'|media }}"></script>
+    {% include "meta/jquery.html" %}
+    {% include "meta/bootstrap_js.html" %}
     <script type='text/javascript' src="{{ '/jslib/timeago.js'|media }}"></script>
     <!-- History.js -->
     <script type='text/javascript' src="{{ '/jslib/jquery.history.js'|media }}"></script>
