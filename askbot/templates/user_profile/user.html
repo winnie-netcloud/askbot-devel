@@ -23,7 +23,7 @@
     <script type="text/javascript">
         askbot['data']['viewUserName'] = '{{ view_user.username|escape }}';
         askbot['data']['viewUserId'] = {{ view_user.id }};
-        askbot['data']['isExportingData'] = {{ is_exporting_data|as_js_bool }};
+        askbot['data']['isExportingData'] = {{ exporting|as_js_bool }};
         askbot['urls']['edit_group_membership'] = '{% url edit_group_membership %}';
         askbot['urls']['getGroupsList'] = '{% url get_groups_list %}';
         askbot['urls']['getTopAnswers'] = '{% url get_top_answers %}';
