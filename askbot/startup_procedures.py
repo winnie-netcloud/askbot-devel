@@ -272,7 +272,7 @@ def test_specs(req):
         data = {
             'name': req.name,
             'need_spec': unparse_requirement(req),
-            'mod_ver': '.'.join(mod_ver)
+            'mod_ver': '.'.join(map(lambda v: str(v), mod_ver))
         }
         message = """Unsupported version of module {name},
 found version {mod_ver}, {need_spec} required.
