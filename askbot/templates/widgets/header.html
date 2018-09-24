@@ -1,43 +1,45 @@
 <!-- template header.html -->
 {% import "macros.html" as macros %}
-
-<nav id="header"
-     class="navbar navbar-expand-md navbar-dark bg-dark {% if settings.SHOW_LOGO %}with-logo{% else %}without-logo{% endif %}">
-    <div class="container">
-        {% if settings.SHOW_LOGO %}
-            {% include "widgets/logo.html" %}
-        {% else %}
-            <a class="navbar-brand"
-               href="{% if settings.LOGO_DESTINATION_URL %}{{ settings.LOGO_DESTINATION_URL }}{% else %}{% url questions %}{% endif %}"
-            >{{ settings.APP_SHORT_NAME }}</a>
-        {% endif %}
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-top"
-                aria-controls="navbar-top" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbar-top">
-
-            <div id="userToolsNav">
-                <ul class="navbar-nav mr-auto">
-                    {% include "widgets/user_navigation.html" %}
-
-                    {% if settings.MULTILINGUAL %}
-                        {% include "widgets/language_nav.html" %}
-                    {% endif %}
-                </ul>
-            </div>
-
-            {% include "widgets/meta_nav.html" %}
-
-            {% if settings.READ_ONLY_MODE_ENABLED %}
-                <div class="content-wrapper system-messages">
-                    {{ settings.READ_ONLY_MESSAGE }}
-                </div>
-            {% endif %}
-        </div>
+{% if settings.READ_ONLY_MODE_ENABLED %}
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <p>{{ settings.READ_ONLY_MESSAGE }}</p>
+      </div>
     </div>
-</nav>
+  </div>
+{% endif %}
+<nav id="header" role="navigation"
+  class="navbar navbar-expand-md navbar-dark bg-dark {% if settings.SHOW_LOGO %}with-logo{% else %}without-logo{% endif %}">
+  <div class="container">
+    {% if settings.SHOW_LOGO %}
+      {% include "widgets/logo.html" %}
+    {% else %}
+      <a class="navbar-brand"
+         href="{% if settings.LOGO_DESTINATION_URL %}{{ settings.LOGO_DESTINATION_URL }}{% else %}{% url questions %}{% endif %}"
+      >{{ settings.APP_SHORT_NAME }}</a>
+    {% endif %}
 
+    <button class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbar-top"
+      aria-controls="navbar-top"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbar-top">
+      <ul class="navbar-nav mr-auto">
+        {% include "widgets/user_navigation.html" %}
+        {% if settings.MULTILINGUAL %}
+            {% include "widgets/language_nav.html" %}
+        {% endif %}
+      </ul>
+      {% include "widgets/meta_nav.html" %}
+    </div>
+  </div>
+</nav>
 <!-- end template header.html -->
