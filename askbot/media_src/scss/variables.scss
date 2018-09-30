@@ -1,0 +1,36 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+//bs4 vars
+$link-color: #464646;
+
+
+//
+// Color system
+//
+$header-color: #343a40;
+$link: #1b79bd;
+$question-link: #464646;
+$button-label: #4a757f;
+$section-title: #7ea9b3;
+$info-text: #707070;
+$info-text-dark: #525252;
+
+$color-success: #28a745;
+$color-paginator: #8ebcc7;
+$color-danger: #dc3545;
+$color-hover: black;
+$color-control-button: #888;
+$color-control-button-light: #aaa;
+$color-link-gray: #4b4b4b;
+$color-answer-bg: rgba(255, 243, 205, .8);
+
+/* Variables for fonts */
+$body-font: "Helvetica Neue", Arial, sans-serif;
+//$sort-font: Georgia, serif;
+$sort-font: "Helvetica Neue",Arial,sans-serif;
+$main-font: "Helvetica Neue",Arial,sans-serif;
+//$main-font: "Open Sans Condensed", Arial, sans-serif;
+//$secondary-font: Arial;

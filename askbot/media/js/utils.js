@@ -386,9 +386,9 @@ var notify = (function () {
                 $('body').addClass('user-messages');
                 var par = $('<p class="notification"></p>');
                 par.html(html);
-                $('.notify').prepend(par);
+                $('#notifications').prepend(par);
             }
-            $('.notify').fadeIn('slow');
+            $('#notifications').fadeIn('slow');
             visible = true;
             if (autohide) {
                 setTimeout(
@@ -401,7 +401,7 @@ var notify = (function () {
             }
         },
         clear: function () {
-            $('.notify').empty();
+            $('#notifications').empty();
         },
         close: function (doPostback) {
             if (doPostback) {
@@ -410,7 +410,7 @@ var notify = (function () {
                     { formdata: 'required' }
                 );
             }
-            $('.notify').fadeOut('fast');
+            $('#notifications').fadeOut('fast');
             $('body').removeClass('user-messages');
             visible = false;
         },

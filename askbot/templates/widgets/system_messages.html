@@ -1,15 +1,25 @@
-<div class="notify" style="display:none">
-    <div class="alert alert-warning alert-dismissible fade show text-center mb-0 font-weight-bold fixed-top" role="alert">
-        <div class="container">
-            <button type="button" class="close" data-dismiss="alert" id="closeNotify" onclick="notify.close(true)"
-                    aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {% if user_messages %}
+<div id="notifications"
+  class="fixed-top"
+  role="alert"
+  style="display:none">
+    <div class="container">
+      <div class="row no-gutters">
+        <div class="col">
+          <ul>
             {% for message in user_messages %}
-            {% if message %}<p class="notification">{{ message }}</p>{% endif %}
+              <li class="alert">{{ message|escape }}</li>
             {% endfor %}
-            {% endif %}
+          </ul>
         </div>
+        <div class="col-auto">
+          <button id="closeNotify" type="button" class="close" data-dismiss="alert"
+            onclick="notify.close(true)"
+            aria-label="Close"
+          >
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

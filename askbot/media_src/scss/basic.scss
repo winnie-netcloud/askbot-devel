@@ -1,0 +1,160 @@
+//Variables for Colors
+@import "../node_modules/compass-mixins/lib/compass/css3";
+@import "variables";
+
+
+@mixin sprites($hor, $vert, $back: url(../images/sprites.png)) {
+  background: $hor $vert $back no-repeat;
+}
+
+@mixin box-shadow($hor: 0, $vert: 0, $blur: 5px, $shadow: #929292) {
+  -webkit-box-shadow: $hor $vert $blur $shadow;
+  -moz-box-shadow: $hor $vert $blur $shadow;
+  box-shadow: $hor $vert $blur $shadow;
+}
+
+@mixin rounded-corners-top($radio: 5 px) {
+  border-top-left-radius: $radio;
+  border-top-right-radius: $radio;
+}
+
+@mixin rounded-corners-right($radio: 5 px) {
+  border-top-right-radius: $radio;
+  border-bottom-right-radius: $radio;
+}
+
+a:hover {
+  color: black;
+  @include transition-duration(.5s);
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 36px;
+}
+
+h2 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* ----- Red Popup notification ----- */
+
+.vote-notification {
+  position: absolute;
+  z-index: 1;
+  display: none;
+  padding-bottom: 10px;
+  text-align: center;
+  cursor: pointer;
+  h3 {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 20px;
+  }
+  a {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+}
+
+.content-wrapper{
+  min-height: 70vh;
+}
+.section-title {
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  color: #7ea9b3;
+}
+
+.ground {
+  padding: 16px 0;
+  font-size: .95rem;
+  background: $header-color;
+
+  a:hover {
+    color: #ebff88;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.footer-links {
+  color: #eee;
+  text-align: left;
+
+  a {
+    color: #e7e8a8;
+  }
+}
+
+.powered-link {
+  text-align: left;
+
+  a {
+    color: #8ebcc7;
+  }
+}
+
+.copyright {
+  color: #616161;
+
+  a {
+    color: #8ebcc7;
+  }
+
+  img.license-logo {
+    float: right;
+    margin-left: 10px;
+  }
+}
+
+.hilite {
+  background-color: #ff0;
+}
+
+.hilite1 {
+  background-color: #ff0;
+}
+
+.hilite2 {
+  background-color: #f0f;
+}
+
+.hilite3 {
+  background-color: #0ff;
+}
+
+.gold, .badge1 {
+  color: #fc0;
+}
+
+.silver, .badge2 {
+  color: #ccc;
+}
+
+.bronze, .badge3 {
+  color: #c93;
+}
+
+.invisible {
+  width: 1px;
+  height: 1px;
+  margin: -1px 0 0 -1px;
+  overflow: hidden;
+}
+
+.wmd-container {
+  textarea {
+    box-sizing: border-box;
+    width: 100% !important;
+  }
+  img {
+    max-width: 100%;
+  }
+}
