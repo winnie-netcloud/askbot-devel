@@ -96,15 +96,18 @@ nav.question {
   top: 7px;
 }
 
+.wait-icon-box {
+  text-align: center;
+  margin-bottom: .375rem;
+}
+
 .search-drop-menu {
   position: absolute;
   top: 38px;
   right: 0;
-  left: 0;
+  left: 1px;
   z-index: 10000;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   margin: 0;
   background: whitesmoke;
   border-top: none;
@@ -146,6 +149,16 @@ nav.question {
   ul {
     padding: 1px;
     margin: 0;
+  }
+}
+
+#searchBar {
+  .searchInput {
+    padding-right: 70px;
+  }
+  .input-group-btn {
+    margin-left: -41px;
+    z-index: 1000;
   }
 }
 
