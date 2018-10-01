@@ -1,4 +1,8 @@
-body, td, pre {color:#000; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px; margin:8px;}
+body, td, pre {
+  color:#000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size:10px; margin:8px;
+}
 body {background:#FFF;}
 body.mceForceColors {background:#FFF; color:#000;}
 body.mceBrowserDefaults {background:transparent; color:inherit; font-size:inherit; font-family:inherit;}
@@ -106,7 +110,7 @@ body.mceContentBody ol {
 }
 
 body.mceContentBody pre {
-    font-family: Consolas, Monaco, Liberation Mono, Lucida Console, Monospace;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 100%;
     margin-bottom: 10px;
     background-color: #F5F5F5;
@@ -116,7 +120,7 @@ body.mceContentBody pre {
 }
 
 body.mceContentBody code {
-    font-family: Consolas, Monaco, Liberation Mono, Lucida Console, Monospace;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 100%;
 }
 
