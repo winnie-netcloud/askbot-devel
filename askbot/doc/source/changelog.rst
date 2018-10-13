@@ -3,6 +3,8 @@ Changes in Askbot
 
 Develpment version
 ------------------
+* Remember scroll position for the browser navigation
+* GDPR compliance (export data, cancel/request to cancel account)
 * Updated Facebook login Api to v2.8
 * Implemented "Invited Moderators" feature available
   via settings -> moderation -> invited moderators
