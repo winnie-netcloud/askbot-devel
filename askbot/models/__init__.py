@@ -17,6 +17,7 @@ from celery import states
 from celery.task import task
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.core.paginator import Paginator
+from django.db import IntegrityError
 from django.db.models import signals as django_signals
 from django.template import Context
 from django.template.loader import get_template
@@ -52,7 +53,6 @@ from askbot.models.user import EmailFeedSetting, ActivityAuditStatus, Activity
 from askbot.models.user import GroupMembership
 from askbot.models.user import Group
 from askbot.models.user import BulkTagSubscription
-from askbot.models.user import get_moderator_emails
 from askbot.models.post import Post, PostRevision
 from askbot.models.post import PostFlagReason, AnonymousAnswer
 from askbot.models.post import PostToGroup
@@ -68,6 +68,7 @@ from askbot.models.badges import award_badges_signal, get_badge
 from askbot.models.repute import Award, Repute, Vote, BadgeData
 from askbot.models.widgets import AskWidget, QuestionWidget
 from askbot.models.meta import ImportRun, ImportedObjectInfo
+from askbot.models.role import Role, get_role_set
 from askbot import auth
 from askbot.utils.functions import generate_random_key
 from askbot.utils.decorators import auto_now_timestamp
@@ -118,6 +119,13 @@ def get_moderators():
         ).filter(
             is_active = True
         )
+
+
+def get_users_by_role(role_name):
+    """Returns query set of users matching
+    the given role name"""
+    return User.objects.filter(askbot_roles__role=role_name, is_active=True)
+
 
 def get_users_by_text_query(search_query, users_query_set = None):
     """Runs text search in user names and profile.
@@ -508,7 +516,7 @@ def user_can_create_tags(self):
 def user_can_terminate_account(self, user):
     """True, if `self` can terminate account of `user`"""
     perm = askbot_settings.WHO_CAN_TERMINATE_ACCOUNTS
-    is_admin = self.is_administrator()
+    is_admin = self.has_role('terminate_accounts')
     if self.pk == user.pk:
         if is_admin: #admin can't remove own account, as as safeguard
             return False
@@ -518,7 +526,19 @@ def user_can_terminate_account(self, user):
 
 def user_can_manage_account(self, user):
     """True, if `self` can see the "manage account" page of `user`"""
-    return self.pk == user.pk or self.is_administrator()
+    return self.pk == user.pk or \
+           self.has_role('terminate_accounts') or \
+           self.has_role('download_user_data')
+
+
+def user_has_role(self, role_name):
+    """True, if `self` has `role_name` Role in their role set"""
+    return self.is_active and self.askbot_roles.filter(role=role_name).exists()
+
+
+def user_get_roles(self):
+    """Returns set of user role names"""
+    return set(self.askbot_roles.values_list('role', flat=True))
 
 
 def user_can_have_strong_url(self):
@@ -2520,6 +2540,25 @@ def user_get_anonymous_name(self):
     """
     return get_name_of_anonymous_user()
 
+def user_assign_role_set(self, status):
+    """Assigns roles specific to user `status`.
+    Currently supported status values are: 'administrator' and 'moderator'.
+    """
+    current_roles = self.get_roles()
+    desired_roles = get_role_set(status)
+    for role in desired_roles - current_roles:
+        try:
+            Role.objects.create(user=self, role=role)
+        except IntegrityError:
+            # have an unlikely accident
+            pass
+
+def user_remove_role_set(self, status):
+    """Symmetric method to `user_assign_role_set`"""
+    role_names = get_role_set(status)
+    roles = Role.objects.filter(user=self, role__in=role_names)
+    roles.delete()
+
 def user_set_status(self, new_status):
     """sets new status to user
 
@@ -2543,12 +2582,17 @@ def user_set_status(self, new_status):
     if new_status == self.status:
         return
 
+    if self.status == 'm':
+        self.remove_role_set('moderator')
+    elif self.status == 'd':
+        self.remove_role_set('administrator')
+
     #clear admin status if user was an administrator
     #because this function is not dealing with the site admins
-
     if new_status == 'd':
         #create a new admin
         self.set_admin_status()
+        self.assign_role_set('administrator')
     else:
         #This was the old method, kept in the else clause when changing
         #to admin, so if you change the status to another thing that
@@ -2566,6 +2610,8 @@ def user_set_status(self, new_status):
             thread.invalidate_cached_post_data()
 
     self.status = new_status
+    if new_status == 'm':
+        self.assign_role_set('moderator')
     self.save()
 
 @auto_now_timestamp
@@ -2839,8 +2885,8 @@ def user_request_account_termination(self):
                              'email': self.email}
     email = AccountManagementRequest({'message': admin_msg,
                                       'username': self.username})
-    mod_emails = get_moderator_emails()
-    email.send(mod_emails)
+    mods = get_users_by_role('terminate_accounts')
+    email.send(mods)
 
 
 def user_get_data_export_dir(self):
@@ -3555,6 +3601,10 @@ User.add_to_class('is_blocked', user_is_blocked)
 User.add_to_class('is_owner_of', user_is_owner_of)
 User.add_to_class('has_interesting_wildcard_tags', user_has_interesting_wildcard_tags)
 User.add_to_class('has_ignored_wildcard_tags', user_has_ignored_wildcard_tags)
+User.add_to_class('assign_role_set', user_assign_role_set)
+User.add_to_class('remove_role_set', user_remove_role_set)
+User.add_to_class('has_role', user_has_role)
+User.add_to_class('get_roles', user_get_roles)
 User.add_to_class('can_moderate_user', user_can_moderate_user)
 User.add_to_class('can_see_karma', user_can_see_karma)
 User.add_to_class('has_affinity_to_question', user_has_affinity_to_question)

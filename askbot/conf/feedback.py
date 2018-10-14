@@ -58,31 +58,3 @@ settings.register(
         )
     )
 )
-
-
-# TODO: Remove old_value
-def feedback_emails_callback(old_value, new_value):
-    """validates the fedback emails list"""
-    emails = []
-    for value in re.split(r'\s*,\s*', new_value):
-        if not value:
-            continue
-        try:
-            validate_email(value)
-            emails.append(value)
-        except ValidationError:
-            raise ValueError(
-                _("'%(value)s' is not a valid email") % {'value': value})
-    return ", ".join(emails)
-
-settings.register(
-    livesettings.StringValue(
-        FEEDBACK,
-        'FEEDBACK_EMAILS',
-        description=_('Internal feedback form email recipients'),
-        help_text=_(
-            'Comma separated list of email addresses. If left empty, '
-            'feedback mails are sent to admins and moderators.'),
-        update_callback=feedback_emails_callback
-    )
-)

@@ -44,14 +44,12 @@ def with_settings(**settings_dict):
 
 
 
-def create_user(
-            username = None,
-            email = None,
-            notification_schedule = None,
-            date_joined = None,
-            status = None,
-            reputation = 1
-        ):
+def create_user(username=None,
+                email=None,
+                notification_schedule=None,
+                date_joined=None,
+                status=None,
+                reputation=1):
     """Creates a user and sets default update subscription
     settings
 

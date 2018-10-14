@@ -53,14 +53,6 @@ class InvitedModerator(object):
 
         return cls(name, email)
 
-def get_moderator_emails():
-    """Returns a set of email addresses of all site
-    moderators and administrators"""
-    mods = User.objects.filter(Q(askbot_profile__status='m') | Q(is_superuser=True))
-    active_mods = mods.filter(is_active = True)
-    emails = active_mods.values_list('email', flat=True)
-    return set(emails)
-
 def get_invited_moderators(include_registered=False):
     """Returns list of InvitedModerator instances
     corresponding to values of askbot_settings.INVITED_MODERATORS"""

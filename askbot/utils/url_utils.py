@@ -13,7 +13,9 @@ from django.utils import translation
 def reload_urlconf():
     """Reloads the urlconf file and clears the url caches"""
     clear_url_caches()
-    reload(sys.modules[django_settings.ROOT_URLCONF])
+    urlconf = django_settings.ROOT_URLCONF
+    if urlconf in sys.modules:
+        reload(sys.modules[urlconf])
 
 def reverse_i18n(lang, *args, **kwargs):
     """reverses url in requested language"""

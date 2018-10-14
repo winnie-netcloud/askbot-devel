@@ -5,12 +5,8 @@ from django.utils import translation
 from askbot import const
 from askbot.mail.messages import ModerationQueueNotification
 from askbot.models import Activity
-from askbot.models import User
+from askbot.models import User, get_users_by_role
 from askbot.models.user import get_invited_moderators
-
-def get_moderators():
-    """Returns query set of admins and moderators"""
-    return User.objects.filter(askbot_profile__status__in=('d', 'm'))
 
 def get_last_mod_alert_activity():
     """return latest moderation alert activity"""
@@ -60,7 +56,7 @@ def select_moderators_to_notify(candidates, num_needed):
 
     #wrap around the end to the beginning
     num_missing = num_needed - num_mods
-    more_mods = get_moderators().order_by('id')
+    more_mods = get_users_by_role('recv_mod_alerts').order_by('id')
     more_mods = more_mods[:num_missing]
     mods.extend(list(more_mods))
     return mods
@@ -99,8 +95,8 @@ class Command(NoArgsCommand):
             return
 
         #get moderators
-        mods = get_moderators().order_by('id')
-        mods = select_moderators_to_notify(mods, 3)
+        mods = get_users_by_role('recv_mod_alerts').order_by('id')
+        mods = select_moderators_to_notify(mods, 3) #todo: add setting
         mods = set(mods)
         all_mods = mods | get_invited_moderators()
 

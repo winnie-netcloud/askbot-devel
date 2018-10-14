@@ -119,28 +119,6 @@ def send_mail(
         if raise_on_failure == True:
             raise exceptions.EmailNotSent(unicode(error))
 
-def mail_moderators(
-            subject_line = '',
-            body_text = '',
-            raise_on_failure = False,
-            headers = None
-        ):
-    """sends email to forum moderators and admins
-    """
-    body_text = absolutize_urls(body_text)
-    from askbot.models.user import get_moderator_emails
-    recipient_list = get_moderator_emails()
-
-    send_mail(
-        subject_line=subject_line,
-        body_text=body_text,
-        from_email=django_settings.DEFAULT_FROM_EMAIL,
-        recipient_list=recipient_list,
-        raise_on_failure=raise_on_failure,
-        headers=headers
-    )
-
-
 INSTRUCTIONS_PREAMBLE = ugettext_lazy('<p>To post by email, please:</p>')
 QUESTION_TITLE_INSTRUCTION = ugettext_lazy(
     '<li>Type title in the subject line</li>'

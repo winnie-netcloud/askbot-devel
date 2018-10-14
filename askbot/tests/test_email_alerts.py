@@ -740,35 +740,25 @@ class DelayedAlertSubjectLineTests(TestCase):
 
 class FeedbackTests(utils.AskbotTestCase):
     def setUp(self):
-        self.create_user(username = 'user1', status='m')
-        self.create_user(username = 'user2', status='m')
-        u3 = self.create_user(username = 'user3')
-        u3.is_superuser = True
-        u3.save()
-
-    def assert_feedback_works(self):
-        outbox = django.core.mail.outbox
-        self.assertEqual(len(outbox), 1)
-        #todo: change groups to django groups
-        #then replace to 4 back to 3 in the line below
-        self.assertEqual(len(outbox[0].recipients()), 3)
+        u1 = self.create_user(username='user1', status='m')
+        u2 = self.create_user(username='user2', status='m')
+        u3 = self.create_user(username='user3', status='d')
 
     def test_feedback_post_form(self):
         client = Client()
         data = {
             'email': 'evgeny.fadeev@gmail.com',
-            'text': 'hi this is a test case',
+            'message': 'hi this is a test case',
             'subject': 'subject line'
         }
         response = client.post(reverse('feedback'), data)
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.templates[0].name, 'feedback.html')
+        template_names = set([t.name for t in response.templates])
+        expected = set(('email/feedback/subject.txt', 'email/feedback/body.html'))
+        self.assertEquals(template_names, expected)
 
-    def test_mail_moderators(self):
-        """tests askbot.mail_moderators()
-        """
-        mail.mail_moderators('subject', 'text')
-        self.assert_feedback_works()
+        outbox = django.core.mail.outbox
+        self.assertEqual(len(outbox), 1)
+        self.assertEqual(len(outbox[0].recipients()), 3)
 
 
 class TagFollowedInstantWholeForumEmailAlertTests(utils.AskbotTestCase):
