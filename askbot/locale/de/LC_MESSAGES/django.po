@@ -15,10 +15,11 @@
 # Patrick Marzian <Eidexe@justnetwork.eu>, 2012
 # hering <inactive+Hering@transifex.com>, 2015
 # jukey <jukey@ju-key.de>, 2016
-# Marco Held <marco.held@virtualfortknox.de>, 2017
+# Marco Held <marco.held@virtualfortknox.de>, 2017-2018
 # yeto01 <mathias.ullrich@hotmail.de>, 2012
 # michas2 <michael.schnupp@gmail.com>, 2014
 # Monique King <monique.king@vfk-ag.de>, 2017
+# sugarblue1 <monique@so36.de>, 2018
 # Nino, 2013
 # MarcJose <s9majose@stud.uni-saarland.de>, 2016
 msgid ""
@@ -26,7 +27,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-09-28 12:31+0000\n"
+"PO-Revision-Date: 2018-03-27 07:59+0000\n"
 "Last-Translator: Marco Held <marco.held@virtualfortknox.de>\n"
 "Language-Team: German (http://www.transifex.com/askbot/askbot/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -764,7 +765,7 @@ msgstr "Favoritenfrage"
 
 #: conf/badges.py:117 conf/badges.py:228
 msgid "minimum followers"
-msgstr "Mindestanzahl Follower"
+msgstr "Mindestanzahl Beobachter"
 
 #: conf/badges.py:123 conf/words.py:377 conf/words.py:378
 msgid "Good Answer"
@@ -872,7 +873,7 @@ msgstr "Lehrer"
 
 #: conf/email.py:16
 msgid "Email and email alert settings"
-msgstr "E-Mail- und Benachrichtigungseinstellungen"
+msgstr "E-Mail- und Benachrichtigungs- \nEinstellungen"
 
 #: conf/email.py:25
 msgid "Prefix for the email subject line"
@@ -4980,7 +4981,7 @@ msgstr "Benutzerprofil komplettiert"
 #: models/badges.py:754
 #, python-format
 msgid "%(asked_a_question)s with %(num)s followers"
-msgstr "%(asked_a_question)s mit %(num)s Followern"
+msgstr "%(asked_a_question)s mit %(num)s Beobachtern"
 
 #: models/badges.py:812
 #, python-format

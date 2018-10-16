@@ -6,15 +6,15 @@
 # Ben Langfeld <ben@langfeld.me>, 2017
 # Bruno Guimarães <brunobastosg@gmail.com>, 2015
 # Olivier Hallot, 2012-2013
-# Olivier Hallot <olivier.hallot@libreoffice.org>, 2013-2014,2016-2017
+# Olivier Hallot <olivier.hallot@libreoffice.org>, 2013-2014,2016-2018
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-09-19 10:36+0000\n"
-"Last-Translator: Ben Langfeld <ben@langfeld.me>\n"
+"PO-Revision-Date: 2018-08-17 09:30+0000\n"
+"Last-Translator: Olivier Hallot <olivier.hallot@libreoffice.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/askbot/askbot/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -176,15 +176,15 @@ msgstr "Remover sinalizador"
 
 #: media/js/post.js:1135 media/js/post.js.c:1166
 msgid "flag offensive"
-msgstr "Tem certeza que este post é ofensivo, contém spam, publicidade, comentários maldosos, etc..?"
+msgstr "Marcar como ofensivo"
 
 #: media/js/post.js:1191 media/js/post.js.c:1687
 msgid "undelete"
-msgstr "Tem certeza que deseja recuperar este?"
+msgstr "Desfazer exclusão"
 
 #: media/js/post.js:1195 media/js/post.js.c:1691
 msgid "delete"
-msgstr "Sua postagem foi excluída"
+msgstr "excluir"
 
 #: media/js/post.js:1397 media/js/post.js.c:1635
 msgid "sorry, something is not right here"
@@ -244,7 +244,7 @@ msgstr "Agora mesmo"
 
 #: media/js/post.js:2620
 msgid "delete this comment"
-msgstr "Clique para editar este comentário"
+msgstr "Excluir este comentário"
 
 #: media/js/post.js:2918
 msgid "confirm delete comment"
@@ -613,7 +613,7 @@ msgstr "Inserir arquivo"
 
 #: media/tinymce/plugins/askbot_imageuploader/editor_plugin.js:70
 msgid "Insert image"
-msgstr "Insira a URL da  imagem, p.ex. http://www.exemplo.com/imagem.jpg, ou grave uma arquivo de imagem"
+msgstr "Inserir imagem"
 
 #: media/wmd/wmd.js:31
 msgid "bold"
