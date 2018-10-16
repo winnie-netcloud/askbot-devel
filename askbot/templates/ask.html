@@ -44,7 +44,7 @@
     {% endif %}
     <script type='text/javascript'>
         askbot['urls']['saveDraftQuestion'] = '{% url save_draft_question %}';
-        askbot['messages']['userNamePrompt'] = '{% trans %}User name:{% endtrans %}';
+        askbot['messages']['userNamePrompt'] = '{{ gettext('User name:')|escapejs }}';
         (function() {
             var form = $('.js-ask-form');
             if (form.length == 1) {
