@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Alexander Lieder <enormitas@gmail.com>, 2013
-# kakulukia <andy@freilandkiwis.de>, 2017
+# kakulukia <andy@freilandkiwis.de>, 2017-2018
 # dennisroczek <dennisroczek@libreoffice.org>, 2014
 # Edur <edur@justnetwork.eu>, 2012
 # Edur <edur@justnetwork.eu>, 2012
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-09-23 18:06+0000\n"
+"PO-Revision-Date: 2018-04-09 08:54+0000\n"
 "Last-Translator: kakulukia <andy@freilandkiwis.de>\n"
 "Language-Team: German (http://www.transifex.com/askbot/askbot/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -182,7 +182,7 @@ msgstr "Bist du dir sicher, dass dieser Beitrag Spam, unerwünschte Werbung, Bel
 
 #: media/js/post.js:1191 media/js/post.js.c:1687
 msgid "undelete"
-msgstr "Löschen bestätigen"
+msgstr "wiederherstellen"
 
 #: media/js/post.js:1195 media/js/post.js.c:1691
 msgid "delete"

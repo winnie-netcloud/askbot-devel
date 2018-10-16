@@ -9,7 +9,7 @@
 # cagriemer <cagriemer@yahoo.com>, 2013
 # Caner Başaran <basaran.caner@protonmail.com>, 2015
 # Emre AYTAÇ <eaytac@gmail.com>, 2014
-# Gökhan Gurbetoğlu <ggurbet@gmail.com>, 2016-2017
+# Gökhan Gurbetoğlu <ggurbet@gmail.com>, 2016-2018
 # İbrahim Çelik <ibrahimcelik89@gmail.com>, 2014-2015
 # kayhantolga <kayhantolga@letscoding.com>, 2011
 # kayhantolga <kayhantolga@letscoding.com>, 2011
@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-12-27 12:36+0000\n"
-"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
+"PO-Revision-Date: 2018-03-10 14:51+0000\n"
+"Last-Translator: Gökhan Gurbetoğlu <ggurbet@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/askbot/askbot/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,19 +100,19 @@ msgstr[1] "noktalama işareti olmayan karakterler %d adetten fazla olmalı"
 #: forms.py:341
 #, python-format
 msgid "The input is too long, maximum %(length)d characters is allowed"
-msgstr ""
+msgstr "Girdi uzunluğu çok uzun, en fazla %(length)d karaktere izin veriliyor."
 
 #: forms.py:346
 #, python-format
 msgid "The input is too long, maximum %(length)d bytes is allowed"
-msgstr ""
+msgstr "Girdi çok uzun, en fazla %(length)d bayta izin veriliyor."
 
 #: forms.py:386
 #, python-format
 msgid "enter > %(length)d character"
 msgid_plural "enter > %(length)d characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(length)d karakterden fazla girin"
+msgstr[1] "%(length)d karakterden fazla girin"
 
 #: forms.py:433
 #, python-format
@@ -267,7 +267,7 @@ msgstr "Misafir"
 #: forms.py:902
 msgid ""
 "Either provide email address or mark \"I don't want to give my email\" below"
-msgstr ""
+msgstr "E-posta adresi girin ya da aşağıdan \"E-posta adresimi vermek istemiyorum\"u işaretleyin"
 
 #: forms.py:935
 msgid "keep private within your groups"
@@ -879,7 +879,7 @@ msgstr "E-posta konu satırı için ön ek"
 msgid ""
 "This setting takes default from the django settingEMAIL_SUBJECT_PREFIX. A "
 "value entered here will overridethe default."
-msgstr ""
+msgstr "Bu ayar, öntanımlı değerini EMAIL_SUBJECT_PREFIX adlı django ayarından alır. Buraya girilen değer öntanımlı değerin yerine geçer."
 
 #: conf/email.py:45
 msgid "Site administrator email address"
@@ -1425,7 +1425,7 @@ msgstr "Video gömmeyi etkinleştir."
 #: conf/forum_data_rules.py:68
 #, python-format
 msgid "<em>Note: please <a href=\"%(url)s\">read this</a> first.</em>"
-msgstr ""
+msgstr "<em>Not: lütfen önce <a href=\"%(url)s\">bunu okuyun</a>.</em>"
 
 #: conf/forum_data_rules.py:78
 msgid "Check to enable community wiki feature"
@@ -1750,7 +1750,7 @@ msgstr "Tüm kullanıcılar otomatik olarak bu gruba dahil edilecektir"
 
 #: conf/group_settings.py:55
 msgid "Enable group email addresses"
-msgstr ""
+msgstr "Grup e-posta adreslerini etkinleştir"
 
 #: conf/group_settings.py:57
 msgid "If selected, users can post to groups by email \"group-name@domain.com\""
@@ -1923,7 +1923,7 @@ msgid ""
 "Use this area to enter content at the LEFT sidebarin HTML format.  When "
 "using this option, please use the HTML validation service to make sure that "
 "your input is valid and works well in all browsers."
-msgstr ""
+msgstr "SOL kenar çubuğuna HTML biçiminde içerik girmek için bu alanı kullanın. Bu seçeneği kullanırken girdinizin geçerli ve tüm tarayıcılarda iyi çalıştığından emin olmak için lütfen HTML geçerlilik hizmetini kullanın."
 
 #: conf/license.py:13
 msgid "Content License"
@@ -2157,7 +2157,7 @@ msgid ""
 "The numbers captured by the pattern in the parentheses will be transferred "
 "to the link url template. Please look up more information about regular "
 "expressions elsewhere. Invalid expressions will not be accepted."
-msgstr ""
+msgstr "Kalıp için geçerli düzenli ifadelerin her birini ayrı satırlara girin. Örnek olarak, #hata123 gibi bir hata kalıbı algılamak için #hata(\\d+) kurallı ifadesini kullanın. Kalıp tarafından parantezlerde tespit edilen sayılar url şablonuna aktarılacaktır. Daha fazla bilgi için düzenli ifadeler konusuna bakabilirsiniz. Geçersiz ifadeler kabul edilmeyecektir."
 
 #: conf/markup.py:128
 msgid "URLs for autolinking"
@@ -2179,7 +2179,7 @@ msgstr "Karma eşikleri"
 
 #: conf/minimum_reputation.py:22
 msgid "To become an automatically approved user"
-msgstr ""
+msgstr "Otomatik olarak onaylanan bir kullanıcı olmak için"
 
 #: conf/minimum_reputation.py:23
 msgid "Approved users bypass moderation and skip recaptcha"
@@ -2279,7 +2279,7 @@ msgstr "E-posta bildirimlerini tetikle"
 
 #: conf/minimum_reputation.py:225
 msgid "Users with smaller reputation will not be generating email alerts"
-msgstr ""
+msgstr "Daha küçük saygınlığa sahip kullanıcılar e-posta uyarısı oluşturmayacaktır"
 
 #: conf/minimum_reputation.py:234
 msgid "Trigger tweets on others accounts"
@@ -2455,13 +2455,13 @@ msgid ""
 "When using this option (as well as the sidebar footer), please use the HTML "
 "validation service to make sure that your input is valid and works well in "
 "all browsers."
-msgstr ""
+msgstr "Bu alanı panelin üstüne eklemek istediğiniz içeriği HTML biçiminde eklemek için kullanın. Bu seçeneği kullanırken (kenar dip notu da dahil) girdinizin tüm tarayıcılar için geçerli ve çalışır olduğunu doğrulamak için HTML doğrulama servisini kullanın."
 
 #: conf/sidebar_main.py:37 conf/sidebar_main.py:113 conf/sidebar_profile.py:38
 #: conf/sidebar_question.py:35 conf/sidebar_question.py:60
 #: conf/sidebar_question.py:96 conf/sidebar_question.py:162
 msgid "Show the text entered above only to anonymous users"
-msgstr ""
+msgstr "Üstte girilen metni sadece anonim kullanıcılara göster"
 
 #: conf/sidebar_main.py:46
 msgid "Show avatar block in sidebar"
@@ -2483,7 +2483,7 @@ msgstr "Etiket seçiciyi yan çubukta göster."
 msgid ""
 "Uncheck this if you want to hide the options for choosing interesting and "
 "ignored tags "
-msgstr ""
+msgstr "Seçtiğiniz ve görmezden geldiğiniz etiketleri gizlemek istiyorsanız bu seçimi kaldırınız"
 
 #: conf/sidebar_main.py:82
 msgid "Show tag list/cloud in sidebar"
@@ -2492,7 +2492,7 @@ msgstr "Etiket listesini/bulutunu yan çubukta göster."
 #: conf/sidebar_main.py:84
 msgid ""
 "Uncheck this if you want to hide the tag cloud or tag list from the sidebar "
-msgstr ""
+msgstr "Etiket listesini veya etiket bulutunu yan çubuktan gizlemek istiyorsanız bu seçimi kaldırın"
 
 #: conf/sidebar_main.py:95 conf/sidebar_question.py:144
 msgid "Custom sidebar footer"
@@ -2504,7 +2504,7 @@ msgid ""
 "   When using this option (as well as the sidebar header), please use the "
 "HTML validation service to make sure that your input is valid and works well"
 " in all browsers."
-msgstr ""
+msgstr "Bu alanı panelin altına eklemek istediğiniz içeriği HTML biçiminde eklemek için kullanın. Bu seçeneği kullanırken (araç çubuğu üst bilgisiyle birlikte) girdinizin tüm tarayıcılar için geçerli ve çalışır olduğunu doğrulamak için HTML doğrulama servisini kullanın."
 
 #: conf/sidebar_profile.py:12
 msgid "User profile sidebar"
@@ -2557,7 +2557,7 @@ msgstr "Etiket listesini yan çubukta göster"
 
 #: conf/sidebar_question.py:106
 msgid "Uncheck this if you want to hide the tag list from the sidebar "
-msgstr ""
+msgstr "Etiket listesini yan çubuktan gizlemek istiyorsanız bu seçimi kaldırın"
 
 #: conf/sidebar_question.py:117
 msgid "Show meta information in sidebar"
@@ -2567,7 +2567,7 @@ msgstr "Meta bilgilerini yan çubukta göster"
 msgid ""
 "Uncheck this if you want to hide the meta information about the question "
 "(post date, views, last updated). "
-msgstr ""
+msgstr "Soruya ait başlık bilgilerini gizlemek için bu seçimi kaldırın (mesaj tarihi, gösterim, son güncelleme)."
 
 #: conf/sidebar_question.py:131
 msgid "Show related questions in sidebar"
@@ -2575,7 +2575,7 @@ msgstr "İlgili soruları yan çubukta göster"
 
 #: conf/sidebar_question.py:133
 msgid "Uncheck this if you want to hide the list of related questions. "
-msgstr ""
+msgstr "Benzer sorular listesini gizlemek istiyorsanız bunun işaretini kaldırın."
 
 #: conf/site_modes.py:62
 msgid "Bootstrap mode"
@@ -2751,7 +2751,7 @@ msgid ""
 "headerin the HTML format.   When customizing the site header (as well as "
 "footer and the HTML &lt;HEAD&gt;), use the HTML validation service to make "
 "sure that your input is valid and works well in all browsers."
-msgstr ""
+msgstr "Üst bilgi, kullanıcı bilgisi ve site bağlantılarını barındıran içeriğin en üstünde bulunan çubuktur ve bütün sayfalarda görüntülenir. Bu alanı HTML biçiminde üst bilgiye dair içerikler girmek için kullanın. Site üst bilgisini kullanırken (alt bilgi ve HTML &lt;HEAD&gt; yanı sıra), girdilerinizin geçerli olduğunu ve tüm tarayıcılarla çalıştığını denetlemek için HTML servisini kullanın."
 
 #: conf/skin_general_settings.py:208
 msgid "Site footer mode"
@@ -3106,7 +3106,7 @@ msgid ""
 "This space is reserved only for answers. If you would like to engage in a "
 "discussion, please instead post a comment under the question or an answer "
 "that you would like to discuss"
-msgstr ""
+msgstr "Bu alan sadece cevaplar içindir. Eğer bir tartışmaya katılmak isterseniz, burası yerine lütfen tartışmak istediğiniz sorunun ya da cevabın altına bir yorum gönderin."
 
 #: conf/words.py:101
 msgid "Instruction to give answers"
@@ -3236,7 +3236,7 @@ msgstr "cevap"
 
 #: conf/words.py:326
 msgid "answer (noun, singular)"
-msgstr ""
+msgstr "cevap (isim, tekil)"
 
 #: conf/words.py:335 conf/words.py:336
 msgid "Question voted up"
@@ -3338,7 +3338,7 @@ msgstr "soruları takip et"
 
 #: conf/words.py:668
 msgid "Verb in the infinitive form"
-msgstr ""
+msgstr "Belirsiz biçimdeki fiil"
 
 #: conf/words.py:677 conf/words.py:678
 msgid "followed questions"
@@ -3853,7 +3853,7 @@ msgstr "en ilgili soruları görmek için tıklayın"
 
 #: const/message_keys.py:17
 msgid "by relevance"
-msgstr ""
+msgstr "ilgi"
 
 #: const/message_keys.py:18
 msgid "click to see the oldest questions"
@@ -4681,8 +4681,8 @@ msgid ""
 msgid_plural ""
 "Sorry, cannot delete this since it has some upvoted responses posted by "
 "someone else"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Üzgünüm, başkaları tarafından artı puan verilmiş bir yanıt olduğu için bunu silemiyorum"
+msgstr[1] "Üzgünüm, başkaları tarafından artı puan verilmiş başka yanıtlar olduğu için bunu silemiyorum"
 
 #: models/__init__.py:1274
 msgid "delete posts"
@@ -5884,7 +5884,7 @@ msgstr "%(seen)s işaretlenmiş gönderi"
 #: templates/macros.html:753
 #, python-format
 msgid "%(action_performed)s %(when)s"
-msgstr ""
+msgstr "%(when)s %(action_performed)s"
 
 #: templates/main_page.html:15
 msgid "Questions"
@@ -6436,12 +6436,12 @@ msgstr "Askbot tarafından gönderilmiş e-postaların listesi"
 #: templates/email/macros.html:34 templates/email/macros.html.py:66
 #, python-format
 msgid "In reply to %(author)s's %(post_type)s"
-msgstr ""
+msgstr "%(author)s kullanıcısının %(post_type)s cevaben"
 
 #: templates/email/macros.html:37 templates/email/macros.html.py:68
 #, python-format
 msgid "%(author)s %(performed_action)s"
-msgstr ""
+msgstr "%(author)s %(performed_action)s"
 
 #: templates/email/macros.html:52
 msgid "Tags:"
@@ -6472,7 +6472,7 @@ msgstr "Askbot e-postaları"
 #: templates/email/preview_email.html:13
 #, python-format
 msgid "Example %(num)s"
-msgstr ""
+msgstr "Örnek %(num)s"
 
 #: templates/email/preview_email.html:19
 msgid "Subject"
@@ -6576,7 +6576,7 @@ msgid ""
 "Note: to reply with a comment, please use \n"
 "                <a href=\"mailto:%(addr)s?subject=%(subject)s\">this link</a>\n"
 "            "
-msgstr ""
+msgstr "Not: bir yorumla yanıt vermek için lütfen\n<a href=\"mailto:%(addr)ss?subject=%(subject)s\">bu bağlantıyı</a> kullanın"
 
 #: templates/email/instant_notification/body.html:23
 #, python-format
@@ -6895,7 +6895,7 @@ msgstr "Hepsini genişlet"
 #: templates/user_profile/user_stats.html:24
 #, python-format
 msgid "<span class=\"count\">%(item_count)s</span> %(pluralized_item_term)s"
-msgstr ""
+msgstr "<span class=\"count\">%(item_count)s</span> %(pluralized_item_term)s"
 
 #: templates/main_page/headline.html:10
 msgid "Tagged"
@@ -6937,7 +6937,7 @@ msgstr "aramanızı daraltmak için etiketler ve bir sorgu girin"
 
 #: templates/main_page/nothing_found.html:3
 msgid "Oops, looks like there is nothing here yet!"
-msgstr ""
+msgstr "Olamaz, burada henüz bir şey yokmuş gibi görünüyor!"
 
 #: templates/main_page/nothing_found.html:7
 msgid "You can expand your search by "
@@ -7290,15 +7290,15 @@ msgstr "abonelikleri yönet"
 
 #: templates/tags/list_bulk_tag_subscription.html:4
 msgid "Manage tag subscriptions"
-msgstr ""
+msgstr "Etiket aboneliklerini yönet"
 
 #: templates/tags/list_bulk_tag_subscription.html:7
 msgid "Manage tag subscription"
-msgstr ""
+msgstr "Etiket aboneliğini yönet"
 
 #: templates/tags/list_bulk_tag_subscription.html:8
 msgid "Create new"
-msgstr ""
+msgstr "Yeni oluştur"
 
 #: templates/tags/list_bulk_tag_subscription.html:11
 msgid "Date"
@@ -7546,7 +7546,7 @@ msgstr "konum"
 
 #: templates/user_profile/user_info.html:138
 msgid "age, years"
-msgstr ""
+msgstr "yaş, yıl"
 
 #: templates/user_profile/user_info.html:144
 msgid "todays unused votes"
@@ -8042,7 +8042,7 @@ msgstr "gereçler"
 #: templates/widgets/user_perms.html:1
 #, python-format
 msgid "Your karma is %(karma)s"
-msgstr ""
+msgstr "Karmanız %(karma)s"
 
 #: templates/widgets/user_perms.html:4
 msgid "Karma reflects the value of your contribution to this community."
