@@ -4,7 +4,7 @@
 # 
 # Translators:
 # cor nouws <nouwsc@xs4all.nl>, 2016-2017
-# kees kriek <kees538@gmail.com>, 2016-2017
+# kees kriek <kees538@gmail.com>, 2016-2018
 # Maurice <m-ou.se@m-ou.se>, 2013
 # Rob Westein <robwestein@gmail.com>, 2016-2017
 msgid ""
@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-09-19 18:52+0000\n"
-"Last-Translator: cor nouws <nouwsc@xs4all.nl>\n"
+"PO-Revision-Date: 2018-10-02 11:23+0000\n"
+"Last-Translator: kees kriek <kees538@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/askbot/askbot/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -89,7 +89,7 @@ msgstr[1] ""
 #: forms.py:341
 #, python-format
 msgid "The input is too long, maximum %(length)d characters is allowed"
-msgstr ""
+msgstr "De invoer is te lang, maximaal %(length)d tekens toegestaan"
 
 #: forms.py:346
 #, python-format
@@ -256,7 +256,7 @@ msgstr "Anoniem"
 #: forms.py:902
 msgid ""
 "Either provide email address or mark \"I don't want to give my email\" below"
-msgstr ""
+msgstr "Geef een e-mailadres op of markeer 'Ik wil mijn e-mail niet geven' hieronder"
 
 #: forms.py:935
 msgid "keep private within your groups"
@@ -1739,7 +1739,7 @@ msgstr "Alle gebruikers behoren automatisch tot deze groep"
 
 #: conf/group_settings.py:55
 msgid "Enable group email addresses"
-msgstr ""
+msgstr "E-mailgroepen toestaan"
 
 #: conf/group_settings.py:57
 msgid "If selected, users can post to groups by email \"group-name@domain.com\""
@@ -3024,7 +3024,7 @@ msgstr "Drempel voor waarschuwingen openstaande dagelijkse stemmen"
 
 #: conf/vote_rules.py:51
 msgid "Number of days to allow canceling votes (-1 for no limit)"
-msgstr ""
+msgstr "Aantal dagen waarop stemmen ingetrokken kunnen worden (-1 voor ongelimiteerd)"
 
 #: conf/vote_rules.py:61
 msgid "Number of days required before answering own question"
@@ -3842,7 +3842,7 @@ msgstr "klik om de meest relevante vragen te zien"
 
 #: const/message_keys.py:17
 msgid "by relevance"
-msgstr ""
+msgstr "relevantie"
 
 #: const/message_keys.py:18
 msgid "click to see the oldest questions"
@@ -3850,7 +3850,7 @@ msgstr "klik om de oudste vragen te zien"
 
 #: const/message_keys.py:19
 msgid "by date"
-msgstr ""
+msgstr "datum"
 
 #: const/message_keys.py:20
 msgid "click to see the newest questions"
@@ -3862,7 +3862,7 @@ msgstr "klik om de minst recent gewijzigde vragen te zien"
 
 #: const/message_keys.py:22
 msgid "by activity"
-msgstr ""
+msgstr "activiteit"
 
 #: const/message_keys.py:23
 msgid "click to see the most recently updated questions"
@@ -3874,7 +3874,7 @@ msgstr "klik om de minst beantwoordde vragen te zien"
 
 #: const/message_keys.py:25
 msgid "by answers"
-msgstr ""
+msgstr "antwoord"
 
 #: const/message_keys.py:26
 msgid "click to see the most answered questions"
@@ -3886,7 +3886,7 @@ msgstr "klik om de vragen met de minste stemmen te zien"
 
 #: const/message_keys.py:28
 msgid "by votes"
-msgstr ""
+msgstr "stemmen"
 
 #: const/message_keys.py:29
 msgid "click to see most voted questions"
@@ -5685,7 +5685,7 @@ msgstr "Label"
 
 #: templates/list_suggested_tags.html:12
 msgid "Suggested by"
-msgstr ""
+msgstr "Voorgesteld door"
 
 #: templates/list_suggested_tags.html:13
 msgid "Your decision"
@@ -5728,7 +5728,7 @@ msgstr ""
 
 #: templates/macros.html:48
 msgid "current number of votes"
-msgstr ""
+msgstr "huidig aantal stemmen"
 
 #: templates/macros.html:61
 msgid "anonymous user"
@@ -5959,7 +5959,7 @@ msgstr ""
 
 #: templates/users.html:24
 msgid "Select/Sort by &raquo;"
-msgstr ""
+msgstr "Selecteer/Sorteer op &raquo;"
 
 #: templates/users.html:29
 #, python-format
@@ -5969,7 +5969,7 @@ msgstr ""
 #: templates/users.html:33 templates/main_page/tab_bar.html:12
 #: templates/tags/header.html:14
 msgid "Sort by &raquo;"
-msgstr ""
+msgstr "Sorteer op &raquo;"
 
 #: templates/users.html:41 templates/user_profile/user_info.html:24
 #: templates/user_profile/user_reputation.html:4
