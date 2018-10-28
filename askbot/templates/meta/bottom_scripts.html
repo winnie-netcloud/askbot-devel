@@ -60,6 +60,7 @@
     {% endif %}
 </script>
 {# everything below until the custom js and google analytics is compressable #}
+<form name="scroll-pos-form"><input id="scroll-mem" type="text" style="display: none;"/></form>
 {% compress js %}
     <script type="text/javascript" src="{{ '/jslib/jquery-1.7.2.min.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/bootstrap/js/bootstrap.js'|media }}"></script>
@@ -68,7 +69,6 @@
     <script type='text/javascript' src="{{ '/jslib/jquery.history.js'|media }}"></script>
     <!-- Utils.js -->
     <script type='text/javascript' src="{{ '/js/utils.js'|media }}"></script>
-    <form name="scroll-pos-form"><input id="scroll-mem" type="text" style="display: none;"/></form>
     <script type='text/javascript' src="{{ '/js/scroll_memory.js'|media }}"></script>
     <script type='text/javascript' src="{{ '/js/utils/q_sutils.js'|media }}"></script>
     <script type='text/javascript' src="{{ '/js/utils/wrapped_element.js'|media }}"></script>

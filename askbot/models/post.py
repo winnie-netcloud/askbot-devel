@@ -1059,7 +1059,7 @@ class Post(models.Model):
             title = title or self.thread.title
             tags = tags or self.thread.tagnames
             body_text = body_text or self.text
-            return '{}\n\n{}\n\n{}'.format(title, tags, body_text)
+            return u'{}\n\n{}\n\n{}'.format(title, tags, body_text)
         return body_text or self.text
 
     def get_snippet(self, max_length=None):
