@@ -226,7 +226,7 @@ def ask(request):#view used to ask a new question
             group_id = form.cleaned_data.get('group_id', None)
             language = form.cleaned_data.get('language', None)
 
-            content = '{}\n\n{}\n\n{}'.format(title, tagnames, text)
+            content = u'{}\n\n{}\n\n{}'.format(title, tagnames, text)
             if akismet_check_spam(content, request):
                 message = _('Spam was detected on your post, sorry if it was a mistake')
                 raise exceptions.PermissionDenied(message)
