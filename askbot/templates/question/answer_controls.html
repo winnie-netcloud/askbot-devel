@@ -1,30 +1,10 @@
 <span class="action-link">
     <a id="js-edit-btn-post-body-{{ answer.pk }}" class="question-edit js-edit" href="{% url edit_answer answer.id %}">{% trans %}edit{% endtrans %}</a>
 </span>
-{% if answer.offensive_flag_count > 0 %}
-<span 
-    id="answer-offensive-remove-flag-{{ answer.id }}"
-    class="action-link offensive-flag"
-    title="{% trans %}remove offensive flag{% endtrans %}"
->
-    <a class="question-flag">{% trans %}remove flag{% endtrans %}</a>
+<span class="js-post-flags" data-post-id="{{ answer.pk }}">
+  {% trans %}report{% endtrans %}
+  {% if answer.offensive_flag_count %}({{ answer.offensive_flag_count }}){% endif %}
 </span>
-<span 
-    id="answer-offensive-flag-{{ answer.id }}"
-    class="action-link offensive-flag"
-    title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
->
-    <a class="question-flag">{% trans %}flag offensive{% endtrans %} ({{ answer.offensive_flag_count }})</a>
-</span>
-{% else %}
-<span 
-    id="answer-offensive-flag-{{ answer.id }}"
-    class="action-link offensive-flag"
-    title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
->
-    <a class="question-flag">{% trans %}flag offensive{% endtrans %}</a>
-</span>
-{% endif %}
 <span id='post-{{answer.id}}-delete' class="action-link delete-post">
     <a class="question-delete"
     >{% if answer.deleted %}{% trans %}undelete{% endtrans %}{% else %}{% trans %}delete{% endtrans %}{% endif %}</a>

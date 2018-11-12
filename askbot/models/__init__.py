@@ -47,13 +47,14 @@ from askbot.models.question import QuestionView, AnonymousQuestion
 from askbot.models.question import DraftQuestion
 from askbot.models.question import FavoriteQuestion
 from askbot.models.message import Message
+from askbot.models.moderation import ModerationReason, ModerationQueueItem
 from askbot.models.tag import Tag, MarkedTag, TagSynonym
 from askbot.models.tag import format_personal_group_name
 from askbot.models.user import EmailFeedSetting, ActivityAuditStatus, Activity
 from askbot.models.user import GroupMembership
 from askbot.models.user import Group
 from askbot.models.user import BulkTagSubscription
-from askbot.models.post import Post, PostRevision
+from askbot.models.post import Post, PostRevision, PostFlag, PostFlagReason
 from askbot.models.post import PostFlagReason, AnonymousAnswer
 from askbot.models.post import PostToGroup
 from askbot.models.post import DraftAnswer
@@ -73,7 +74,7 @@ from askbot import auth
 from askbot.utils.functions import generate_random_key
 from askbot.utils.decorators import auto_now_timestamp
 from askbot.utils.decorators import reject_forbidden_phrases
-from askbot.utils.markup import URL_RE
+from askbot.utils.markup import URL_RE, convert_text
 from askbot.utils.slug import slugify, ascii_slugify
 from askbot.utils.transaction import defer_celery_task
 from askbot.utils.translation import get_language
@@ -1346,11 +1347,7 @@ def user_assert_can_remove_all_flags_offensive(self, post = None):
     non_existing_flagging_error_message = _('no flags for this entry')
 
     # Check if the post is flagged by anyone
-    post_content_type = ContentType.objects.get_for_model(post)
-    all_flags = Activity.objects.filter(
-                        activity_type = const.TYPE_ACTIVITY_MARK_OFFENSIVE,
-                        content_type = post_content_type, object_id=post.id
-                    )
+    all_flags = PostFlag.objects.filter(reason__title='Offensive', post=post)
     if all_flags.count() < 1:
         raise django_exceptions.PermissionDenied(non_existing_flagging_error_message)
     #one extra assertion
@@ -2276,34 +2273,15 @@ def user_edit_answer(
     return revision
 
 @auto_now_timestamp
-def user_create_post_reject_reason(
-    self, title = None, details = None, timestamp = None
-):
+def user_create_post_reject_reason(self, title=None, description=None, timestamp=None):
     """creates and returs the post reject reason"""
-    reason = PostFlagReason(
-        title = title,
-        added_at = timestamp,
-        author = self
+    return PostFlagReason.objects.create(
+        title=title,
+        added_at=timestamp,
+        author=self,
+        description_text=description,
+        description_html=convert_text(description)
     )
-
-    #todo - need post_object.create_new() method
-    details = Post(
-        post_type = 'reject_reason',
-        author = self,
-        added_at = timestamp,
-        text = details
-    )
-    details.parse_and_save(author=self)
-    details.add_revision(
-        author = self,
-        revised_at = timestamp,
-        text = details,
-        comment = unicode(const.POST_STATUS['default_version'])
-    )
-
-    reason.details = details
-    reason.save()
-    return reason
 
 @auto_now_timestamp
 def user_edit_post_reject_reason(self, reason, title=None,
@@ -2440,15 +2418,6 @@ def user_visit_question(self, question = None, timestamp = None):
                             )
     if cleared_record_count > 0:
         self.update_response_counts()
-
-    #finally, mark admin memo objects if applicable
-    #the admin response counts are not denormalized b/c they are easy to obtain
-    if self.is_moderator() or self.is_administrator():
-        audit_records.filter(
-                activity__activity_type = const.TYPE_ACTIVITY_MARK_OFFENSIVE
-        ).update(
-            status=ActivityAuditStatus.STATUS_SEEN
-        )
 
 
 def user_is_administrator(self):
@@ -3276,17 +3245,16 @@ def flag_post(
         if force == False:
             user.assert_can_remove_all_flags_offensive(post=post)
         post_content_type = ContentType.objects.get_for_model(post)
-        all_flags = Activity.objects.filter(
-                        activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE,
-                        content_type=post_content_type,
-                        object_id=post.id
+        all_flags = PostFlag.objects.filter(
+                        reason__title='Offensive',
+                        post=post
                     )
         for flag in all_flags:
             auth.onUnFlaggedItem(post, flag.user, timestamp=timestamp)
 
     elif cancel:#todo: can't unflag?
         if force == False:
-            user.assert_can_remove_flag_offensive(post = post)
+            user.assert_can_remove_flag_offensive(post=post)
         auth.onUnFlaggedItem(post, user, timestamp=timestamp)
 
     else:
@@ -3300,12 +3268,9 @@ def flag_post(
                                  timestamp=timestamp)
 
 def user_get_flags(self):
-    """return flag Activity query set
+    """return flag set
     for all flags set by te user"""
-    return Activity.objects.filter(
-                        user=self,
-                        activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE
-                    )
+    return PostFlag.objects.filter(user=self)
 
 def user_get_flag_count_posted_today(self):
     """return number of flags the user has posted
@@ -4004,32 +3969,25 @@ def record_delete_post(instance, deleted_by, **kwargs):
 
 def record_flag_offensive(instance, mark_by, **kwargs):
     """places flagged post on the moderation queue"""
-    activity = Activity(
-                    user=mark_by,
-                    active_at=timezone.now(),
-                    content_object=instance,
-                    activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE,
-                    question=instance.get_origin_post()
-                )
-    activity.save()
-#   todo: report authors that their post is flagged offensive
-#    recipients = instance.get_author_list(
-#                                        exclude_list = [mark_by]
-#                                    )
-    activity.add_recipients(instance.get_moderators())
+    reason_flag_offensive = PostFlagReason(title='Offensive')
+    PostFlag.objects.create(
+        user=mark_by,
+        added_at=timezone.now(),
+        post=instance,
+        reason=reason_flag_offensive
+    )
+    #todo: report authors that their post is flagged offensive
+    #recipients = instance.get_author_list(
+    #                                        exclude_list = [mark_by]
+    #                                    )
+    #todo: maybe use specific moderation queues depending on
+    #the post/language, etc.
+    #activity.add_recipients(instance.get_moderators())
 
 def remove_flag_offensive(instance, mark_by, **kwargs):
-    "Remove flagging activity"
-    content_type = ContentType.objects.get_for_model(instance)
-
-    activity = Activity.objects.filter(
-                    user=mark_by,
-                    content_type = content_type,
-                    object_id = instance.id,
-                    activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE,
-                    question=instance.get_origin_post()
-                )
-    activity.delete()
+    """Remove all user post flags"""
+    flags = PostFlag.objects.filter(user=mark_by, post=instance)
+    flags.delete()
 
 
 def record_update_tags(thread, tags, user, timestamp, **kwargs):

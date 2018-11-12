@@ -2312,16 +2312,30 @@ class PostRevision(models.Model):
 
 
 class PostFlagReason(models.Model):
+    """Title of the post flag reason.
+    Linked to the instance of Post model
+    containing the post flag description.
+    """
     added_at = models.DateTimeField()
-    author = models.ForeignKey('auth.User')
+    author = models.ForeignKey('auth.User')#, null=True)
     title = models.CharField(max_length=128)
-    details = models.ForeignKey(Post, related_name='post_reject_reasons')
+    details = models.ForeignKey(Post, related_name='post_reject_reasons')#, null=True)
+    #description_html = models.TextField(null=True)  # html rendition of the input source
+    #description_text = models.TextField(null=True)  # could be markdown input source
+    #read_only = models.BooleanField(default=False)  # read only fields
 
     class Meta:
         app_label = 'askbot'
         verbose_name = _("post flag reason")
         verbose_name_plural = _("post flag reasons")
 
+
+class PostFlag(object):
+    #post = models.ForeignKey('askbot.Post')
+    #user = models.ForeignKey('auth.User')
+    #reason = models.ForeignKey(PostFlagReason, related_name='flags')
+    #added_at = models.DateTimeField(auto_now_add=True)
+    pass
 
 class DraftAnswer(DraftContent):
     """Provides space for draft answers,

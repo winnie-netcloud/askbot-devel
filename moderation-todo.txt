@@ -1,0 +1,8 @@
+Copy post reject reasons from from post into ModerationReasons
+Assign post reject reasons in the moderation queue when posts are deleted
+pust ModerationQueueItem instead of Activity in the software
+Allow creating && editing of the post reject and flag reasons
+Delete activity records with type 14, 24, 25
+Delete post reject reason posts
+Delete PostRejectReasons table
+Handle question closure via the ModerationReasons to allow creating custom close reasons

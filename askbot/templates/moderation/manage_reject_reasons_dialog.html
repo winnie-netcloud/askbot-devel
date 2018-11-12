@@ -23,7 +23,7 @@
     <div id="reject-edit-modal-select">{# select one of existing reasons #}
         <div class="modal-body">
             <ul class="select-box">
-                {% for reason in post_reject_reasons %}
+                {% for reason in post_flag_reasons %}
                 <li 
                     class="select-box-item"
                     data-original-title="{{reason.details.text|escape}}"

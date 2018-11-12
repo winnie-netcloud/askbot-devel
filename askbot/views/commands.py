@@ -1077,13 +1077,13 @@ def save_post_reject_reason(request):
     if reason_id is not given in the input - a new reason is created,
     otherwise a reason with the given id is edited and saved
     """
-    form = forms.EditRejectReasonForm(request.POST)
+    form = forms.PostFlagReasonForm(request.POST)
     if form.is_valid():
         title = form.cleaned_data['title']
-        details = form.cleaned_data['details']
+        description = form.cleaned_data['description']
         if form.cleaned_data['reason_id'] is None:
             reason = request.user.create_post_reject_reason(
-                title = title, details = details
+                title=title, description=description
             )
         else:
             reason_id = form.cleaned_data['reason_id']

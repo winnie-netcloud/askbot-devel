@@ -200,11 +200,10 @@ def moderation_queue(request):
         queue.append(item)
 
     queue.sort(lambda x,y: cmp(y['timestamp'], x['timestamp']))
-    reject_reasons = models.PostFlagReason.objects.all().order_by('title')
     data = {
         'active_tab': 'users',
         'page_class': 'moderation-queue-page',
-        'post_reject_reasons': reject_reasons,
+        'post_flag_reasons': models.PostFlagReason.objects.all().order_by('title'),
         'messages' : queue,
     }
     template = 'moderation/queue.html'
@@ -283,7 +282,7 @@ def moderate_post_edits(request):
             from askbot.mail.messages import RejectedPost
             email = RejectedPost({
                         'post': post.html,
-                        'reject_reason': reject_reason.details.html
+                        'reject_reason': reject_reason.description_html
                     })
             email.send([post.author.email,])
             num_posts += 1

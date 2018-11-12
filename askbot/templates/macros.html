@@ -393,6 +393,10 @@ for the purposes of the AJAX comment editor #}
                     id="post-{{ comment.id }}-edit"
                     class="js-edit"
                 >{% trans %}edit{% endtrans %}</a>
+                <span class="js-post-flags" data-post-id="{{ comment.id }}">
+                  {%- trans %}report{% endtrans -%}
+                  {%- if comment.offensive_flag_count %} ({{ comment.offensive_flag_count }}){% endif -%}
+                </span>
                 <form 
                     action="{% url comment_to_answer %}"
                     method="POST"
@@ -718,25 +722,15 @@ for the purposes of the AJAX comment editor #}
     {% endif %}
 {%- endmacro -%}
 
-{%- macro moderation_items_link(user, moderation_items) -%}
-    {% if moderation_items %}
+{%- macro moderation_items_link(moderation_items_count) -%}
+    {% if moderation_items_count %}
         <a id="ab-responses" href="{% url moderation_queue %}">
-        {% if moderation_items['new_count'] > 0 %}
             <img src="{{'/images/dialog-warning.png'|media}}"
-            {% if moderation_items['seen_count'] > 0 %}
-                alt="{% trans new=moderation_items['new_count'], seen=moderation_items['seen_count']%}{{new}} new flagged posts and {{seen}} previous{% endtrans %}"
-                title="{% trans new=moderation_items['new_count'], seen=moderation_items['seen_count']%}{{new}} new flagged posts and {{seen}} previous{% endtrans %}"
-            {% else %}
-                alt="{% trans new=moderation_items['new_count'] %}{{new}} new flagged posts{% endtrans %}"
-                title="{% trans new=moderation_items['new_count'] %}{{new}} new flagged posts{% endtrans %}"
-            {% endif %}
+                alt="{% trans %}alert sign{% endtrans %}"
+                title="{% trans count=moderation_items_count 
+                        %}{{ count }} item on the moderation queue{% pluralize 
+                        %}{{ count }} items on the moderation queue{% endtrans %}"
             />
-        {% elif moderation_items['seen_count'] > 0 %}
-            <img src={{'/images/dialog-warning-off.png'|media}} 
-                alt="{% trans seen=moderation_items['seen_count'] %}{{seen}} flagged posts{% endtrans %}" 
-                title="{% trans seen=moderation_items['seen_count'] %}{{seen}} flagged posts{% endtrans %}" 
-            />
-        {% endif %}
         </a>
     {% endif %}
 {%- endmacro -%}

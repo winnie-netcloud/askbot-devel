@@ -30,13 +30,6 @@ def get_for_inbox(user):
     if user.is_anonymous():
         return None
 
-    #get flags count
-    flag_activity_types = (
-        const.TYPE_ACTIVITY_MARK_OFFENSIVE,
-        const.TYPE_ACTIVITY_MODERATED_NEW_POST,
-        const.TYPE_ACTIVITY_MODERATED_POST_EDIT
-    )
-
     #get group_join_requests_count
     group_join_requests_count = 0
     if user.is_administrator_or_moderator():

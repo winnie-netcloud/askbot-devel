@@ -1,11 +1,11 @@
 from django.core.management.base import NoArgsCommand
 from askbot import const
 from askbot.models import Activity
+from askbot.models import PostFlag
 
 ACTIVITY_TYPES = (
     const.TYPE_ACTIVITY_MODERATED_NEW_POST,
-    const.TYPE_ACTIVITY_MODERATED_POST_EDIT,
-    const.TYPE_ACTIVITY_MARK_OFFENSIVE
+    const.TYPE_ACTIVITY_MODERATED_POST_EDIT
 )
 
 class Command(NoArgsCommand):
@@ -13,3 +13,4 @@ class Command(NoArgsCommand):
     def handle_noargs(self, *args, **kwargs):
         acts = Activity.objects.filter(activity_type__in=ACTIVITY_TYPES)
         acts.delete()
+        PostFlag.objects.all().delete()

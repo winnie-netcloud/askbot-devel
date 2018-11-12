@@ -1654,10 +1654,10 @@ class EditGroupMembershipForm(forms.Form):
         return action
 
 
-class EditRejectReasonForm(forms.Form):
+class PostFlagReasonForm(forms.Form):
     reason_id = forms.IntegerField(required=False)
-    title = CountedWordsField(min_words=1, max_words=4, field_name=_('Title'))
-    details = CountedWordsField(min_words=6, field_name=_('Description'))
+    title = forms.CharField()
+    description = forms.CharField()
 
 
 class ModerateTagForm(forms.Form):

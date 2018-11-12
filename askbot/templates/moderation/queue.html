@@ -19,7 +19,7 @@
                 <span class="caret"></span>
             </span>
             <ul class="dropdown-menu">
-                {% for reason in post_reject_reasons %}
+                {% for reason in post_flag_reasons %}
                 <li>
                     <a class="decline-with-reason" data-reason-id="{{ reason.id }}">{{ reason.title|escape }}</a>
                 </li>
@@ -70,20 +70,5 @@
     <script type="text/javascript" src="{{ '/js/user/user_answer_paginator.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/user.js'|media }}"></script>
     {% endcompress %}
-    <script type="text/javascript">
-        (function() {
-            askbot['urls']['save_post_reject_reason'] = '{% url save_post_reject_reason %}';
-            askbot['urls']['delete_post_reject_reason'] = '{% url delete_post_reject_reason %}';
-            {% if request.user.is_administrator_or_moderator() %}
-                askbot['data']['postRejectReasons'] = [
-                    {% for reason in post_reject_reasons %}
-                    {'id': {{reason.id}}, 'title': '{{reason.title|escapejs}}'},
-                    {% endfor %}
-                ];
-            {% endif %}
-            askbot['urls']['moderatePostEdits'] = '{% url moderate_post_edits %}';
-            var modControls = new PostModerationControls();
-            modControls.decorate($('body'));
-        })();
-    </script>
+    {% include "moderation/post_moderation_controls_init.html" %}
 {% endblock %}

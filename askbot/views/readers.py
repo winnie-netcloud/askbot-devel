@@ -56,7 +56,7 @@ import askbot
 
 # used in index page
 #todo: - take these out of const or settings
-from askbot.models import Post, Vote
+from askbot.models import Post, Vote, PostFlagReason
 
 #refactor? - we have these
 #views that generate a listing of questions in one way or another:
@@ -662,6 +662,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
         'user_votes': user_votes,
         'user_post_id_list': user_post_id_list,
         'user_can_post_comment': user_can_post_comment,#in general
+        'post_flag_reasons': PostFlagReason.objects.all().order_by('title')
     }
     #shared with ...
     if askbot_settings.GROUPS_ENABLED:
