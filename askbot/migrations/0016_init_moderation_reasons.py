@@ -16,7 +16,7 @@ def create_moderation_reasons(apps, schema_editor):
         is_predefined=True
     )
 
-    description_text =_('Assigned when someone creates a new post')
+    description_text =_('May be assigned automatically when someone creates a new post')
     ModerationReason.objects.create(
         title=_('New post'),
         description_text=description_text,
@@ -24,7 +24,7 @@ def create_moderation_reasons(apps, schema_editor):
         is_predefined=True
     )
 
-    description_text =_('Assigned when someone edits a post')
+    description_text =_('Maybe be assigned automatically when someone edits a post')
     ModerationReason.objects.create(
         title=_('Post edit'),
         description_text=description_text,
