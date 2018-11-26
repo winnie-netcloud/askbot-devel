@@ -59,7 +59,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         data['select_revision'] = 'false'
         data['text'] = 'edited question text'
         response1 = self.client.post(
-            reverse('edit_question', kwargs={'id':question.id}),
+            reverse('edit_question', kwargs={'question_id': question.id}),
             data=data
         )
         response2 = self.client.get(question.get_absolute_url())
@@ -81,7 +81,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         data['post_privately'] = 'checked'
         data['select_revision'] = 'false'
         response1 = self.client.post(
-            reverse('edit_question', kwargs={'id':question.id}),
+            reverse('edit_question', kwargs={'question_id': question.id}),
             data=data
         )
         response2 = self.client.get(question.get_absolute_url())
@@ -93,7 +93,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
     def test_private_checkbox_is_on_when_editing_private_question(self):
         question = self.post_question(user=self.user, is_private=True)
         response = self.client.get(
-            reverse('edit_question', kwargs={'id':question.id})
+            reverse('edit_question', kwargs={'question_id': question.id})
         )
         dom = BeautifulSoup(response.content, 'html5lib')
         checkbox = dom.find(
@@ -104,7 +104,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
     def test_private_checkbox_is_off_when_editing_public_question(self):
         question = self.post_question(user=self.user)
         response = self.client.get(
-            reverse('edit_question', kwargs={'id':question.id})
+            reverse('edit_question', kwargs={'question_id': question.id})
         )
         dom = BeautifulSoup(response.content, 'html5lib')
         checkbox = dom.find(
@@ -131,7 +131,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
 
     def test_post_private_answer(self):
         response1 = self.client.post(
-            reverse('answer', kwargs={'id': self.question.id}),
+            reverse('answer', kwargs={'question_id': self.question.id}),
             data={'text': 'some answer text', 'post_privately': 'checked'}
         )
         answer = self.question.thread.get_answers(user=self.user)[0]
@@ -152,7 +152,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
             question=self.question, user=self.user, is_private=True
         )
         response = self.client.get(
-            reverse('edit_answer', kwargs={'id': answer.id})
+            reverse('edit_answer', kwargs={'answer_id': answer.id})
         )
         dom = BeautifulSoup(response.content, 'html5lib')
         checkbox = dom.find(
@@ -163,7 +163,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
     def test_privaet_checkbox_is_off_when_editing_public_answer(self):
         answer = self.post_answer(question=self.question, user=self.user)
         response = self.client.get(
-            reverse('edit_answer', kwargs={'id': answer.id})
+            reverse('edit_answer', kwargs={'answer_id': answer.id})
         )
         dom = BeautifulSoup(response.content, 'html5lib')
         checkbox = dom.find(
@@ -176,7 +176,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
             question=self.question, user=self.user, is_private=True
         )
         self.client.post(
-            reverse('edit_answer', kwargs={'id': answer.id}),
+            reverse('edit_answer', kwargs={'answer_id': answer.id}),
             data={'text': 'edited answer text', 'select_revision': 'false'}
         )
         answer = self.reload_object(answer)
@@ -189,7 +189,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
     def test_privatize_public_answer(self):
         answer = self.post_answer(question=self.question, user=self.user)
         self.client.post(
-            reverse('edit_answer', kwargs={'id': answer.id}),
+            reverse('edit_answer', kwargs={'answer_id': answer.id}),
             data={
                 'text': 'edited answer text',
                 'post_privately': 'checked',

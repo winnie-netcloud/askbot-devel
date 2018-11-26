@@ -26,7 +26,7 @@
                 {% for reason in post_flag_reasons %}
                 <li 
                     class="select-box-item"
-                    data-original-title="{{reason.details.text|escape}}"
+                    data-original-title="{{reason.description_text|escape}}"
                     data-item-id="{{reason.id}}"
                 >{{reason.title|escape}}</li>
                 {% endfor %}

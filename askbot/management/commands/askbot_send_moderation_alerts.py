@@ -4,7 +4,7 @@ from django.conf import settings as django_settings
 from django.utils import translation
 from askbot import const
 from askbot.mail.messages import ModerationQueueNotification
-from askbot.models import Activity
+from askbot.models import Activity, ModerationQueueItem
 from askbot.models import User, get_users_by_role
 from askbot.models.user import get_invited_moderators
 
@@ -88,8 +88,7 @@ class Command(NoArgsCommand):
         """Function that does the job of the management command"""
         #get size of moderation queue
         translation.activate(django_settings.LANGUAGE_CODE)
-        act_types = const.MODERATED_ACTIVITY_TYPES
-        queue = Activity.objects.filter(activity_type__in=act_types)
+        queue = ModerationQueueItem.objects.filter(reason__reason_type='post_moderation')
 
         if queue.count() == 0:
             return

@@ -20,7 +20,10 @@ def get_contenttype(apps, model):
     """Returns ContentType instance for the Askbot by
     it's lowercased model name (e.g. 'postrevision' for 'PostRevision')"""
     ContentType = apps.get_model('contenttypes', 'ContentType')
-    return ContentType.objects.get(app_label='askbot', model=model.lower())
+    try:
+        return ContentType.objects.get(app_label='askbot', model=model.lower())
+    except ContentType.DoesNotExist:
+        return None
 
 
 def get_content_object(apps, obj, content_type_id_field='content_type_id', object_id_field='object_id'):
@@ -72,6 +75,9 @@ def move_mod_queue_items(apps, schema_editor):
     #3) move offensive flag activities
     # TYPE_ACTIVITY_MARK_OFFENSIVE = 14
     revision_content_type = get_contenttype(apps, 'postrevision')
+    if not revision_content_type: # content type might be missing for this model
+        return
+
     reason = ModerationReason.objects.get(title='Offensive')
     acts = Activity.objects.filter(activity_type=14)
     message = 'Copying "offensive" flags Activity items to ModerationQueueItem'

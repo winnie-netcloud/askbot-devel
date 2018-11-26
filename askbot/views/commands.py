@@ -759,11 +759,11 @@ def set_tag_filter_strategy(request):
 
 @login_required
 @csrf.csrf_protect
-def close(request, id):#close question
+def close(request, question_id):#close question
     """view to initiate and process
     question close
     """
-    question = get_object_or_404(models.Post, post_type='question', id=id)
+    question = get_object_or_404(models.Post, post_type='question', pk=question_id)
     try:
         if request.method == 'POST':
             form = forms.CloseForm(request.POST)
@@ -783,20 +783,20 @@ def close(request, id):#close question
                 'form': form,
             }
             return render(request, 'close.html', data)
-    except exceptions.PermissionDenied as e:
-        request.user.message_set.create(message = unicode(e))
+    except exceptions.PermissionDenied as error:
+        request.user.message_set.create(message=unicode(error))
         return HttpResponseRedirect(question.get_absolute_url())
 
 @login_required
 @csrf.csrf_protect
-def reopen(request, id):#re-open question
+def reopen(request, question_id):#re-open question
     """view to initiate and process
     question close
 
     this is not an ajax view
     """
 
-    question = get_object_or_404(models.Post, post_type='question', id=id)
+    question = get_object_or_404(models.Post, post_type='question', pk=question_id)
     # open question
     try:
         if request.method == 'POST' :
@@ -813,8 +813,8 @@ def reopen(request, id):#re-open question
             }
             return render(request, 'reopen.html', data)
 
-    except exceptions.PermissionDenied as e:
-        request.user.message_set.create(message = unicode(e))
+    except exceptions.PermissionDenied as error:
+        request.user.message_set.create(message = unicode(error))
         return HttpResponseRedirect(question.get_absolute_url())
 
 
@@ -828,7 +828,7 @@ def upvote_comment(request):
     if form.is_valid():
         comment_id = form.cleaned_data['post_id']
         cancel_vote = form.cleaned_data['cancel_vote']
-        comment = get_object_or_404(models.Post, post_type='comment', id=comment_id)
+        comment = get_object_or_404(models.Post, post_type='comment', pk=comment_id)
         process_vote(
             post=comment,
             vote_direction='up',
@@ -974,7 +974,7 @@ def delete_group_logo(request):
 @decorators.moderators_only
 def delete_post_reject_reason(request):
     reason_id = IntegerField().clean(int(request.POST['reason_id']))
-    reason = models.PostFlagReason.objects.get(id = reason_id)
+    reason = models.ModerationReason.objects.get(pk=reason_id)
     reason.delete()
 
 
@@ -1087,9 +1087,9 @@ def save_post_reject_reason(request):
             )
         else:
             reason_id = form.cleaned_data['reason_id']
-            reason = models.PostFlagReason.objects.get(id = reason_id)
+            reason = models.ModerationReason.objects.get(pk=reason_id)
             request.user.edit_post_reject_reason(
-                reason, title = title, details = details
+                reason, title=title, details=details
             )
         return {
             'reason_id': reason.id,

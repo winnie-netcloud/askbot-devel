@@ -205,7 +205,7 @@ class Command(NoArgsCommand):
         Q_set_B = seen_before_last_mod_qs
 
         if askbot.is_multilingual():
-            languages = user.languages.split()
+            languages = user.get_languages()
         else:
             languages = None
 

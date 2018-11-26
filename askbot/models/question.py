@@ -33,6 +33,7 @@ from askbot import signals
 from askbot import const
 from askbot.utils.lists import LazyList
 from askbot.utils.loading import load_plugin
+from askbot.utils.forms import split_tag_names
 from askbot.search import mysql
 from askbot.utils.slug import slugify
 from askbot.utils import translation as translation_utils
@@ -945,10 +946,7 @@ class Thread(models.Model):
 
     def get_tag_names(self):
         "Creates a list of Tag names from the ``tagnames`` attribute."
-        if self.tagnames.strip() == '':
-            return list()
-        else:
-            return self.tagnames.split(u' ')
+        return split_tag_names(self.tagnames)
 
     def get_title(self):
         title_renderer = load_plugin(

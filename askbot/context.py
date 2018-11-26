@@ -80,7 +80,7 @@ def application_settings(request):
         'min_search_word_length': min_search_word_length,
         'current_language_code': current_language,
         'settings': my_settings,
-        'moderation_items_count': api.get_moderation_items_count(user),
+        'moderation_items_count': api.get_moderation_items_count(request.user),
         'need_scope_links': need_scope_links,
         'noscript_url': const.DEPENDENCY_URLS['noscript'],
     }

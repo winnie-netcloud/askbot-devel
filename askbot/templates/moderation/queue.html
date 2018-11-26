@@ -19,7 +19,7 @@
                 <span class="caret"></span>
             </span>
             <ul class="dropdown-menu">
-                {% for reason in post_flag_reasons %}
+                {% for reason in moderation_reasons %}
                 <li>
                     <a class="decline-with-reason" data-reason-id="{{ reason.id }}">{{ reason.title|escape }}</a>
                 </li>
@@ -44,12 +44,9 @@
     {% include "moderation/manage_reject_reasons_dialog.html" %}
     <div class="action-status"><span></span></div>
     <div class="messages">
-    {% for message in messages %}
-        <div
-            class="message{% if message.is_new %} highlight new{% else %} seen{% endif %}"
-            data-message-id="{{ message.id }}"
-        >
-            {{ macros.moderation_queue_message(message) }}
+    {% for item in items %}
+        <div class="message" data-message-id="{{ item.id }}">
+            {{ macros.moderation_queue_message(item) }}
         </div>
     {% endfor %}
     </div>

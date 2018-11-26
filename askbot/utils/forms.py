@@ -32,6 +32,14 @@ def get_error_list(form_instance):
 def get_next_url(request, default=None):
     return clean_next(request.REQUEST.get('next'), default)
 
+
+def split_tag_names(tagnames):
+    """Splits the tagnames field into list of tag names"""
+    if tagnames.strip() == '':
+        return list()
+    return tagnames.split(u' ')
+
+
 def get_db_object_or_404(params):
     """a utility function that returns an object
     in return to the model_name and object_id
@@ -269,10 +277,10 @@ class UserEmailField(forms.EmailField):
             user = User.objects.get(email__iexact=email)
             logging.debug('email taken')
             raise forms.ValidationError(self.error_messages['taken'])
-        except User.DoesNotExist:
+        except User.DoesNotExist: #pylint: disable=no-member
             logging.debug('email valid')
             return email
-        except User.MultipleObjectsReturned:
+        except User.MultipleObjectsReturned: #pylint: disable=no-member
             logging.critical('email taken many times over')
             raise forms.ValidationError(self.error_messages['taken'])
 

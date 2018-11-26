@@ -6,8 +6,6 @@ so that other implementations of the data storage could be possible
 """
 from django.db.models import Q
 from askbot import models
-from askbot import const
-
 
 def get_moderation_items_count(user):
     """returns count of items on the mod queue"""
@@ -16,14 +14,9 @@ def get_moderation_items_count(user):
     if not(user.is_moderator() or user.is_administrator()):
         return None
 
-    content_types = (
-        const.TYPE_ACTIVITY_MODERATED_NEW_POST,
-        const.TYPE_ACTIVITY_MODERATED_POST_EDIT,
-    )
-
-    activity_messages = models.Activity.objects.filter(activity_type__in=content_types)
-    flags_count = models.PostFlag.objects.count()
-    return activity_messages.count() + flags_count
+    items = models.ModerationQueueItem.objects.filter(#pylint: disable=no-member
+        reason__reason_type='post_moderation')
+    return items.count()
 
 
 def get_admin(seed_user_id=None):
@@ -48,7 +41,7 @@ def get_admin(seed_user_id=None):
             Q(is_superuser=True) | Q(askbot_profile__status__in=('m', 'd'))
         ).order_by('id')[0]
     except IndexError:
-        raise models.User.DoesNotExist(
-                """Please add a moderator or an administrator to the forum first
-                there don't seem to be any"""
-            )
+        raise models.User.DoesNotExist( # pylint: disable=no-member
+            """Please add a moderator or an administrator to the forum first
+            there don't seem to be any"""
+        )

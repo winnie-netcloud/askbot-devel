@@ -1,16 +1,12 @@
+"""Deletes all items from the post moderation queue"""
 from django.core.management.base import NoArgsCommand
-from askbot import const
-from askbot.models import Activity
-from askbot.models import PostFlag
-
-ACTIVITY_TYPES = (
-    const.TYPE_ACTIVITY_MODERATED_NEW_POST,
-    const.TYPE_ACTIVITY_MODERATED_POST_EDIT
-)
+from askbot.models import ModerationQueueItem
 
 class Command(NoArgsCommand):
-    help = 'deletes all items from the moderation queue'
-    def handle_noargs(self, *args, **kwargs):
-        acts = Activity.objects.filter(activity_type__in=ACTIVITY_TYPES)
-        acts.delete()
-        PostFlag.objects.all().delete()
+    #pylint: disable=missing-docstring
+    help = 'deletes all items from the post moderation queue'
+    def handle_noargs(self, *args, **kwargs): #pylint: disable=unused-argument, arguments-differ
+        items = ModerationQueueItem.objects.filter( #pylint: disable=no-member
+            reason__reason_type='post_moderation'
+        )
+        items.delete()

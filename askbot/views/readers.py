@@ -56,7 +56,7 @@ import askbot
 
 # used in index page
 #todo: - take these out of const or settings
-from askbot.models import Post, Vote, PostFlagReason
+from askbot.models import Post, Vote, ModerationReason
 
 #refactor? - we have these
 #views that generate a listing of questions in one way or another:
@@ -381,7 +381,7 @@ def tags(request):#view showing a listing of available tags - plain list
         return render(request, 'tags.html', data)
 
 @csrf.csrf_protect
-def question(request, id):#refactor - long subroutine. display question body, answers and comments
+def question(request, question_id):#refactor - long subroutine. display question body, answers and comments
     """view that displays body of the question and
     all answers to it
 
@@ -402,15 +402,15 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #and and if it is not found again - then give up
     try:
         question_post = models.Post.objects.filter(
-                                post_type = 'question',
-                                id = id
+                                post_type='question',
+                                pk=question_id
                             ).select_related('thread')[0]
     except IndexError:
     # Handle URL mapping - from old Q/A/C/ URLs to the new one
         try:
             question_post = models.Post.objects.filter(
                                     post_type='question',
-                                    old_question_id = id
+                                    old_question_id=question_id
                                 ).select_related('thread')[0]
         except IndexError:
             raise Http404
@@ -484,7 +484,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
             request.user.message_set.create(message = error_message)
             return HttpResponseRedirect(question_post.thread.get_absolute_url())
 
-        if str(show_comment.thread._question_post().id) != str(id):
+        if str(show_comment.thread._question_post().id) != str(question_id):
             return HttpResponseRedirect(show_comment.get_absolute_url())
         show_post = show_comment.parent
 
@@ -493,7 +493,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
         except exceptions.AnswerHidden as error:
             request.user.message_set.create(message = unicode(error))
             #use reverse function here because question is not yet loaded
-            return HttpResponseRedirect(reverse('question', kwargs = {'id': id}))
+            return HttpResponseRedirect(reverse('question', kwargs = {'question_id': question_id}))
         except exceptions.QuestionHidden as error:
             request.user.message_set.create(message = unicode(error))
             return HttpResponseRedirect(reverse('index'))
@@ -503,15 +503,15 @@ def question(request, id):#refactor - long subroutine. display question body, an
         #question - we must check whether the question exists
         #whether answer is actually corresponding to the current question
         #and that the visitor is allowed to see it
-        show_post = get_object_or_404(models.Post, post_type='answer', id=show_answer)
-        if str(show_post.thread._question_post().id) != str(id):
+        show_post = get_object_or_404(models.Post, post_type='answer', pk=show_answer)
+        if str(show_post.thread._question_post().id) != str(question_id):
             return HttpResponseRedirect(show_post.get_absolute_url())
 
         try:
             show_post.assert_is_visible_to(request.user)
         except django_exceptions.PermissionDenied as error:
             request.user.message_set.create(message = unicode(error))
-            return HttpResponseRedirect(reverse('question', kwargs = {'id': id}))
+            return HttpResponseRedirect(reverse('question', kwargs = {'question_id': question_id}))
 
     thread = question_post.thread
 
@@ -632,6 +632,11 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #answer posting is impossible
     request.session['askbot_write_intent'] = True
 
+    mod_reasons = ModerationReason.objects.filter(
+        reason_type='post_moderation',
+        is_manually_assignable=True
+    ).order_by('title')
+
     data = {
         'active_tab': 'questions',
         'answer' : answer_form,
@@ -662,7 +667,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
         'user_votes': user_votes,
         'user_post_id_list': user_post_id_list,
         'user_can_post_comment': user_can_post_comment,#in general
-        'post_flag_reasons': PostFlagReason.objects.all().order_by('title')
+        'post_flag_reasons': mod_reasons
     }
     #shared with ...
     if askbot_settings.GROUPS_ENABLED:
@@ -677,9 +682,10 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #print 'generated in ', timezone.now() - before
     #return res
 
-def revisions(request, id, post_type = None):
+def revisions(request, post_id, post_type=None):
+    """Renders revision page for questions and answers"""
     assert post_type in ('question', 'answer')
-    post = get_object_or_404(models.Post, post_type=post_type, id=id)
+    post = get_object_or_404(models.Post, post_type=post_type, pk=post_id)
 
     if post.deleted:
         if request.user.is_anonymous() \
@@ -714,8 +720,8 @@ def get_comment(request):
     via ajax response requires request method get
     and request must be ajax
     """
-    id = int(request.GET['id'])
-    comment = models.Post.objects.get(post_type='comment', id=id)
+    pk = int(request.GET['id'])
+    comment = models.Post.objects.get(post_type='comment', pk=pk)
     request.user.assert_can_edit_comment(comment)
 
     try:

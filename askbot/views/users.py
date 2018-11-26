@@ -6,16 +6,17 @@ and other views showing profile-related information.
 
 Also this module includes the view listing all forum users.
 """
-import askbot
+#pylint: disable=too-many-lines
 import calendar
 import collections
 import datetime
 import functools
 import logging
 import math
-import os
 import operator
+import os
 import urllib
+import simplejson
 
 from django.db.models import Count
 from django.db.models import Q
@@ -27,25 +28,23 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseForbidden
-from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
+from django.http import HttpResponseForbidden
+from django.http import HttpResponseRedirect, Http404
 from django.http import StreamingHttpResponse
-from django.utils.translation import get_language
 from django.utils.translation import string_concat
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
-import simplejson
 from django.utils import timezone
 from django.utils.html import strip_tags as strip_all_tags
 from django.views.decorators import csrf
 
+import askbot
 from askbot.utils.slug import slugify
 from askbot.utils.html import sanitize_html
 from askbot.utils.transaction import defer_celery_task
 from askbot.mail import send_mail
 from askbot.utils.translation import get_language
-from askbot.mail.messages import (AccountManagementRequest,
-                                  UnsubscribeLink)
+from askbot.mail.messages import UnsubscribeLink
 from askbot.utils.file_utils import read_file_chunkwise
 from askbot.utils.http import get_request_info
 from askbot.utils import decorators
@@ -59,15 +58,14 @@ from askbot import models
 from askbot import exceptions
 from askbot.models.badges import award_badges_signal
 from askbot.models.tag import format_personal_group_name
-from askbot.models.post import PostRevision
 from askbot.search.state_manager import SearchState
 from askbot.utils import url_utils
 from askbot.utils.loading import load_module
 from askbot.utils.akismet_utils import akismet_check_spam
 
-def owner_or_moderator_required(f):
-    @functools.wraps(f)
-    def wrapped_func(request, profile_owner, context):
+def owner_or_moderator_required(func): #pylint: disable=missing-docstring
+    @functools.wraps(func)
+    def wrapped_func(request, profile_owner, context): #pylint: disable=missing-docstring
         if profile_owner == request.user:
             pass
         elif request.user.is_authenticated():
@@ -81,7 +79,7 @@ def owner_or_moderator_required(f):
             next_url = request.path + '?' + urllib.urlencode(request.REQUEST)
             params = '?next=%s' % urllib.quote(next_url)
             return HttpResponseRedirect(url_utils.get_login_url() + params)
-        return f(request, profile_owner, context)
+        return func(request, profile_owner, context)
     return wrapped_func
 
 @decorators.ajax_only
@@ -96,18 +94,19 @@ def clear_new_notifications(request):
         const.TYPE_ACTIVITY_MENTION,
     )
     post_data = simplejson.loads(request.body)
-    memo_set = models.ActivityAuditStatus.objects.filter(
+    memo_set = models.ActivityAuditStatus.objects.filter(#pylint: disable=no-member
         id__in=post_data['memo_ids'],
         activity__activity_type__in=activity_types,
         user=user,
     )
-    memo_set.update(status = models.ActivityAuditStatus.STATUS_SEEN)
+    memo_set.update(status=models.ActivityAuditStatus.STATUS_SEEN)
     user.update_response_counts()
 
 @decorators.ajax_only
 def delete_notifications(request):
+    """Deletes user's inbox notifications"""
     post_data = simplejson.loads(request.body)
-    memo_set = models.ActivityAuditStatus.objects.filter(
+    memo_set = models.ActivityAuditStatus.objects.filter(#pylint: disable=no-member
         id__in=post_data['memo_ids'],
         user=request.user
     )
@@ -120,51 +119,46 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
         default_group = models.Group.objects.get_global_group()
         group_slug = slugify(default_group.name)
         new_url = reverse('users_by_group',
-                kwargs={'group_id': default_group.id,
-                        'group_slug': group_slug})
+                          kwargs={'group_id': default_group.id,
+                                  'group_slug': group_slug})
         return HttpResponseRedirect(new_url)
 
     users = models.User.objects.exclude(
-                                    askbot_profile__status='b'
-                                ).exclude(
-                                    is_active=False
-                                ).select_related('askbot_profile')
+        askbot_profile__status='b'
+    ).exclude(
+        is_active=False
+    ).select_related('askbot_profile')
 
     if askbot.is_multilingual():
-        users = users.filter(
-                    localized_askbot_profiles__language_code=get_language(),
-                    localized_askbot_profiles__is_claimed=True
-                )
+        users = users.filter(localized_askbot_profiles__language_code=get_language(),
+                             localized_askbot_profiles__is_claimed=True)
 
     group = None
     group_email_moderation_enabled = False
     user_acceptance_level = 'closed'
     user_membership_level = 'none'
-    if by_group == True:
-        if askbot_settings.GROUPS_ENABLED == False:
+    if by_group:
+        if not askbot_settings.GROUPS_ENABLED:
             raise Http404
         if group_id:
-            if all((group_id, group_slug)) == False:
+            if not all((group_id, group_slug)):
                 return HttpResponseRedirect('groups')
             else:
                 try:
-                    group = models.Group.objects.get(id = group_id)
+                    group = models.Group.objects.get(id=group_id)
                     group_email_moderation_enabled = (
                         askbot_settings.GROUP_EMAIL_ADDRESSES_ENABLED \
                         and askbot_settings.CONTENT_MODERATION_MODE == 'premoderation'
                     )
-                    user_acceptance_level = group.get_openness_level_for_user(
-                                                                    request.user
-                                                                )
-                except models.Group.DoesNotExist:
+                    user_acceptance_level = group.get_openness_level_for_user(request.user)
+                except models.Group.DoesNotExist: #pylint: disable=no-member
                     raise Http404
                 if group_slug == slugify(group.name):
                     #filter users by full group memberships
                     #todo: refactor as Group.get_full_members()
                     full_level = models.GroupMembership.FULL
-                    memberships = models.GroupMembership.objects.filter(
-                                                    group=group, level=full_level
-                                                )
+                    memberships = models.GroupMembership.objects.filter(group=group, #pylint: disable=no-member
+                                                                        level=full_level)
                     user_ids = memberships.values_list('user__id', flat=True)
                     users = users.filter(id__in=user_ids)
                     if request.user.is_authenticated():
@@ -173,13 +167,9 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
                             user_membership_level = membership.get_level_display()
 
                 else:
-                    group_page_url = reverse(
-                                        'users_by_group',
-                                        kwargs = {
-                                            'group_id': group.id,
-                                            'group_slug': slugify(group.name)
-                                        }
-                                    )
+                    group_page_url = reverse('users_by_group',
+                                             kwargs={'group_id': group.id,
+                                                     'group_slug': slugify(group.name)})
                     return HttpResponseRedirect(group_page_url)
 
     is_paginated = True
@@ -205,20 +195,15 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
                 order_by_parameter = '-askbot_profile__reputation'
 
 
-        objects_list = Paginator(
-                            users.order_by(order_by_parameter),
-                            askbot_settings.USERS_PAGE_SIZE
-                        )
+        objects_list = Paginator(users.order_by(order_by_parameter),
+                                 askbot_settings.USERS_PAGE_SIZE)
         base_url = request.path + '?sort=%s&' % sort_method
     else:
         sort_method = 'reputation'
         matching_users = models.get_users_by_text_query(search_query, users)
-        objects_list = Paginator(
-                            matching_users.order_by('-askbot_profile__reputation'),
-                            askbot_settings.USERS_PAGE_SIZE
-                        )
+        objects_list = Paginator(matching_users.order_by('-askbot_profile__reputation'),
+                                 askbot_settings.USERS_PAGE_SIZE)
         base_url = request.path + '?name=%s&sort=%s&' % (search_query, sort_method)
-
     try:
         users_page = objects_list.page(page)
     except (EmptyPage, InvalidPage):
@@ -239,7 +224,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
         #todo: cleanup this branched code after groups are migrated to auth_group
         user_groups = models.Group.objects.exclude_personal()
         if len(user_groups) <= 1:
-            assert(user_groups[0].name == askbot_settings.GLOBAL_GROUP_NAME)
+            assert user_groups[0].name == askbot_settings.GLOBAL_GROUP_NAME
             user_groups = None
         group_openness_choices = models.Group().get_openness_choices()
     else:
@@ -283,8 +268,8 @@ def manage_account(request, subject, context):
             if request.user.can_terminate_account(subject):
                 try:
                     subject.delete()
-                except:
-                    pass
+                except Exception as error:
+                    logging.critical(unicode(error).encode('utf-8'))
                 return HttpResponseRedirect(reverse('index'))
             else:
                 subject.request_account_termination()
@@ -310,13 +295,14 @@ def manage_account(request, subject, context):
 
 @decorators.ajax_only
 @decorators.get_only
-def get_todays_backup_file_name(request, id):
+def get_todays_backup_file_name(request, user_id):
+    """Returns file name of the today's data backup"""
     if request.user.is_anonymous():
         return {'error': 'permission denied'}
 
     try:
-        subject = models.User.objects.get(pk=id)
-    except models.User.DoesNotExist:
+        subject = models.User.objects.get(pk=user_id)
+    except models.User.DoesNotExist: #pylint: disable=no-member
         return {'error': 'user not found'}
 
     if request.user.can_manage_account(subject):
@@ -325,7 +311,7 @@ def get_todays_backup_file_name(request, id):
     return {'error': 'permission denied'}
 
 
-def download_user_data(request, id, file_name):
+def download_user_data(request, user_id, file_name):
     """allows authorized user to download a given file"""
     if request.user.is_anonymous():
         return HttpResponseForbidden()
@@ -334,8 +320,8 @@ def download_user_data(request, id, file_name):
         raise django_exceptions.PermissionDenied()
 
     try:
-        subject = models.User.objects.get(pk=id)
-    except models.User.DoesNotExist:
+        subject = models.User.objects.get(pk=user_id)
+    except models.User.DoesNotExist: #pylint: disable=no-member
         return Http404
 
     if not request.user.can_manage_account(subject):
@@ -371,18 +357,19 @@ def user_moderate(request, subject, context):
     send_message_form = forms.SendMessageForm()
     if request.method == 'POST':
         if 'change_status' in request.POST or 'hard_block' in request.POST:
-            user_status_form = forms.ChangeUserStatusForm(
-                                                    request.POST,
-                                                    moderator = moderator,
-                                                    subject = subject
-                                                )
+            user_status_form = forms.ChangeUserStatusForm(request.POST,
+                                                          moderator=moderator,
+                                                          subject=subject)
             if user_status_form.is_valid():
-                subject.set_status( user_status_form.cleaned_data['user_status'] )
-                if user_status_form.cleaned_data['delete_content'] == True:
+                subject.set_status(user_status_form.cleaned_data['user_status'])
+                if user_status_form.cleaned_data['delete_content']:
                     num_deleted = request.user.delete_all_content_authored_by_user(subject)
                     if num_deleted:
-                        num_deleted_message = ungettext('%d post deleted', '%d posts deleted', num_deleted) % num_deleted
-                        user_status_changed_message = string_concat(user_status_changed_message, ', ', num_deleted_message)
+                        num_deleted_message = ungettext('%d post deleted',
+                                                        '%d posts deleted',
+                                                        num_deleted) % num_deleted
+                        user_status_changed_message = string_concat(user_status_changed_message,
+                                                                    ', ', num_deleted_message)
             user_status_changed = True
         elif 'send_message' in request.POST:
             send_message_form = forms.SendMessageForm(request.POST)
@@ -391,19 +378,16 @@ def user_moderate(request, subject, context):
                 body_text = send_message_form.cleaned_data['body_text']
 
                 try:
-                    send_mail(
-                            subject_line = subject_line,
-                            body_text = body_text,
-                            recipient_list = [subject.email],
-                            headers={'Reply-to':moderator.email},
-                            raise_on_failure = True
-                        )
+                    send_mail(subject_line=subject_line,
+                              body_text=body_text,
+                              recipient_list=[subject.email],
+                              headers={'Reply-to':moderator.email},
+                              raise_on_failure=True)
                     message_sent = True
-                except exceptions.EmailNotSent as e:
-                    email_error_message = unicode(e)
+                except exceptions.EmailNotSent as error:
+                    email_error_message = unicode(error)
                 send_message_form = forms.SendMessageForm()
         else:
-            reputation_change_type = None
             if 'subtract_reputation' in request.POST:
                 rep_change_type = 'subtract'
             elif 'add_reputation' in request.POST:
@@ -419,22 +403,18 @@ def user_moderate(request, subject, context):
                 if rep_change_type == 'subtract':
                     rep_delta = -1 * rep_delta
 
-                moderator.moderate_user_reputation(
-                                    user=subject,
-                                    reputation_change=rep_delta,
-                                    comment=comment,
-                                    timestamp=timezone.now(),
-                                )
+                moderator.moderate_user_reputation(user=subject,
+                                                   reputation_change=rep_delta,
+                                                   comment=comment,
+                                                   timestamp=timezone.now())
                 #reset form to preclude accidentally repeating submission
                 user_rep_form = forms.ChangeUserReputationForm()
                 user_rep_changed = True
 
     #need to re-initialize the form even if it was posted, because
     #initial values will most likely be different from the previous
-    user_status_form = forms.ChangeUserStatusForm(
-                                        moderator = moderator,
-                                        subject = subject
-                                    )
+    user_status_form = forms.ChangeUserStatusForm(moderator=moderator,
+                                                  subject=subject)
     data = {
         'active_tab': 'users',
         'page_class': 'user-profile-page',
@@ -453,7 +433,7 @@ def user_moderate(request, subject, context):
     return render(request, 'user_profile/user_moderate.html', context)
 
 #non-view function
-def set_new_email(user, new_email, nomessage=False):
+def set_new_email(user, new_email): #pylint: disable=missing-docstring
     if new_email != user.email:
         user.email = new_email
         user.email_isvalid = False
@@ -465,16 +445,16 @@ def need_to_invalidate_post_caches(user, form):
     new_country = (form.cleaned_data.get('country') != user.country)
     new_show_country = (form.cleaned_data.get('show_country') != user.show_country)
     new_username = (form.cleaned_data.get('username') != user.username)
-    return (new_country or new_show_country or new_username)
+    return new_country or new_show_country or new_username
 
 
 @login_required
 @csrf.csrf_protect
-def edit_user(request, id):
+def edit_user(request, user_id):
     """View that allows to edit user profile.
     This view is accessible to profile owners or site administrators
     """
-    user = get_object_or_404(models.User, id=id)
+    user = get_object_or_404(models.User, pk=user_id)
     if not(request.user.pk == user.pk or request.user.is_superuser):
         raise Http404
     if request.method == "POST":
@@ -484,7 +464,6 @@ def edit_user(request, id):
                 new_email = sanitize_html(form.cleaned_data['email'])
                 set_new_email(user, new_email)
 
-            prev_username = user.username
             if askbot_settings.EDITABLE_SCREEN_NAME:
                 new_username = strip_all_tags(form.cleaned_data['username'])
                 if user.username != new_username:
@@ -498,10 +477,11 @@ def edit_user(request, id):
             if need_to_invalidate_post_caches(user, form):
                 #get threads where users participated
                 thread_ids = models.Post.objects.filter(
-                                    Q(author=user) | Q(last_edited_by=user)
-                                ).values_list(
-                                    'thread__id', flat=True
-                                ).distinct()
+                    Q(author=user) | Q(last_edited_by=user)
+                ).values_list(
+                    'thread__id', flat=True
+                ).distinct()
+
                 threads = models.Thread.objects.filter(id__in=thread_ids)
                 for thread in threads:
                     #for each thread invalidate cache keys for posts, etc
@@ -537,6 +517,7 @@ def edit_user(request, id):
     return render(request, 'user_profile/user_edit.html', data)
 
 def user_stats(request, user, context):
+    """Public page of user's questions, answers, votes, tags and badges"""
     question_filter = {}
     if request.user != user:
         question_filter['is_anonymous'] = False
@@ -548,26 +529,24 @@ def user_stats(request, user, context):
     # Questions
     #
     questions_qs = user.posts.get_questions(
-                    user=request.user
-                ).filter(
-                    **question_filter
-                ).order_by(
-                    '-points'#, '-thread__last_activity_at' to match sorting with ajax loads
-                ).select_related(
-                    'thread', 'thread__last_activity_by'
-                )
+        user=request.user
+    ).filter(
+        **question_filter
+    ).order_by(
+        '-points'#, '-thread__last_activity_at' to match sorting with ajax loads
+    ).select_related('thread', 'thread__last_activity_by')
 
     q_paginator = Paginator(questions_qs, const.USER_POSTS_PAGE_SIZE)
     questions = q_paginator.page(1).object_list
     question_count = q_paginator.count
 
     q_paginator_context = functions.setup_paginator({
-                    'is_paginated' : (question_count > const.USER_POSTS_PAGE_SIZE),
-                    'pages': q_paginator.num_pages,
-                    'current_page_number': 1,
-                    'page_object': q_paginator.page(1),
-                    'base_url' : '?' #this paginator will be ajax
-                })
+        'is_paginated' : (question_count > const.USER_POSTS_PAGE_SIZE),
+        'pages': q_paginator.num_pages,
+        'current_page_number': 1,
+        'page_object': q_paginator.page(1),
+        'base_url' : '?' #this paginator will be ajax
+    })
     #
     # Top answers
     #
@@ -576,12 +555,12 @@ def user_stats(request, user, context):
     top_answer_count = a_paginator.count
 
     a_paginator_context = functions.setup_paginator({
-                    'is_paginated' : (top_answer_count > const.USER_POSTS_PAGE_SIZE),
-                    'pages': a_paginator.num_pages,
-                    'current_page_number': 1,
-                    'page_object': a_paginator.page(1),
-                    'base_url' : '?' #this paginator will be ajax
-                })
+        'is_paginated' : (top_answer_count > const.USER_POSTS_PAGE_SIZE),
+        'pages': a_paginator.num_pages,
+        'current_page_number': 1,
+        'page_object': a_paginator.page(1),
+        'base_url' : '?' #this paginator will be ajax
+    })
     #
     # Votes
     #
@@ -593,20 +572,20 @@ def user_stats(request, user, context):
     #
     # Tags
     #
-    # INFO: There's bug in Django that makes the following query kind of broken (GROUP BY clause is problematic):
-    #       http://stackoverflow.com/questions/7973461/django-aggregation-does-excessive-group-by-clauses
-    #       Fortunately it looks like it returns correct results for the test data
+    # INFO: There's bug in Django that makes the following query
+    # kind of broken (GROUP BY clause is problematic):
+    # http://stackoverflow.com/questions/7973461
+    # Fortunately it looks like it returns correct results for the test data
     user_tags = models.Tag.objects.filter(
-                                    threads__posts__author=user,
-                                    language_code=get_language()
-                                ).distinct().\
-                    annotate(user_tag_usage_count=Count('threads')).\
-                    order_by('-user_tag_usage_count')[:const.USER_VIEW_DATA_SIZE]
+        threads__posts__author=user,
+        language_code=get_language()
+    ).distinct().\
+    annotate(user_tag_usage_count=Count('threads')).\
+    order_by('-user_tag_usage_count')[:const.USER_VIEW_DATA_SIZE]
     user_tags = list(user_tags) # evaluate
 
     when = askbot_settings.MARKED_TAGS_ARE_PUBLIC_WHEN
-    if when == 'always' or \
-        (when == 'when-user-wants' and user.show_marked_tags == True):
+    if when == 'always' or (when == 'when-user-wants' and user.show_marked_tags):
         #refactor into: user.get_marked_tag_names('good'/'bad'/'subscribed')
         interesting_tag_names = user.get_marked_tag_names('good')
         ignored_tag_names = user.get_marked_tag_names('bad')
@@ -629,19 +608,18 @@ def user_stats(request, user, context):
 #    import ipdb; ipdb.set_trace()
 
     #
-    # Badges/Awards (TODO: refactor into Managers/QuerySets when a pattern emerges; Simplify when we get rid of Question&Answer models)
-    #
     post_type = ContentType.objects.get_for_model(models.Post)
 
-    user_awards = models.Award.objects.filter(user=user).select_related('badge')
+    user_awards = models.Award.objects.filter(user=user).select_related('badge')# pylint: disable=no-member
 
     awarded_post_ids = []
     for award in user_awards:
         if award.content_type_id == post_type.id:
             awarded_post_ids.append(award.object_id)
 
+    # select related to avoid additional queries in Post.get_absolute_url()
     awarded_posts = models.Post.objects.filter(id__in=awarded_post_ids)\
-                    .select_related('thread') # select related to avoid additional queries in Post.get_absolute_url()
+    .select_related('thread')
 
     awarded_posts_map = {}
     for post in awarded_posts:
@@ -650,7 +628,7 @@ def user_stats(request, user, context):
     badges_dict = collections.defaultdict(list)
 
     for award in user_awards:
-        if award.badge.is_enabled() == False:
+        if not award.badge.is_enabled():
             continue
 
         # Fetch content object
@@ -659,7 +637,7 @@ def user_stats(request, user, context):
             #losing the content objects when the content
             #objects are deleted for some reason
             awarded_post = awarded_posts_map.get(award.object_id, None)
-            if awarded_post is not None:
+            if awarded_post:
                 #protect from awards that are associated with deleted posts
                 award.content_object = awarded_post
                 award.content_object_is_post = True
@@ -674,7 +652,7 @@ def user_stats(request, user, context):
     badges = badges_dict.items()
     badges.sort(key=operator.itemgetter(1), reverse=True)
 
-    user_groups = models.Group.objects.get_for_user(user = user)
+    user_groups = models.Group.objects.get_for_user(user=user)
     user_groups = user_groups.exclude_personal()
     global_group = models.Group.objects.get_global_group()
     user_groups = user_groups.exclude(name=global_group.name)
@@ -684,18 +662,19 @@ def user_stats(request, user, context):
     else:
         groups_membership_info = collections.defaultdict()
 
-    show_moderation_warning = (request.user.is_authenticated()
-                                and request.user.pk == user.pk
-                                and (user.is_watched() or user.is_blocked())
-                                and (user.get_localized_profile().about or user.website)
-                              )
-    show_profile_info = ((not (user.is_watched() or user.is_blocked()))
-                          or (request.user.is_authenticated()
-                              and (request.user.is_administrator_or_moderator()
-                                   or user.pk == request.user.pk
-                                  )
-                             )
-                        )
+    show_moderation_warning = (
+        request.user.is_authenticated()
+        and request.user.pk == user.pk
+        and (user.is_watched() or user.is_blocked())
+        and (user.get_localized_profile().about or user.website)
+    )
+    show_profile_info = (
+        (not (user.is_watched() or user.is_blocked()))
+        or (request.user.is_authenticated()
+            and (request.user.is_administrator_or_moderator()
+                 or user.pk == request.user.pk)
+           )
+    )
 
     data = {
         'active_tab':'users',
@@ -727,15 +706,15 @@ def user_stats(request, user, context):
         'ignored_tag_names': ignored_tag_names,
         'subscribed_tag_names': subscribed_tag_names,
         'badges': badges,
-        'total_badges' : len(badges),
+        'total_badges': len(badges),
     }
     context.update(data)
 
     extra_context = view_context.get_extra(
-                                'ASKBOT_USER_PROFILE_PAGE_EXTRA_CONTEXT',
-                                request,
-                                context
-                            )
+        'ASKBOT_USER_PROFILE_PAGE_EXTRA_CONTEXT',
+        request,
+        context
+    )
     context.update(extra_context)
 
     return render(request, 'user_profile/user_stats.html', context)
@@ -743,6 +722,7 @@ def user_stats(request, user, context):
 
 @decorators.ajax_only
 def get_user_description(request):
+    """Retrieves the user's "about" info on the user profile"""
     if request.user.is_anonymous():
         if askbot_settings.CLOSED_FORUM_MODE:
             raise django_exceptions.PermissionDenied
@@ -760,6 +740,7 @@ def get_user_description(request):
 @decorators.ajax_only
 @decorators.post_only
 def set_user_description(request):
+    """Saves data entered in the user's 'about' field"""
     if request.user.is_anonymous():
         raise django_exceptions.PermissionDenied
 
@@ -785,34 +766,35 @@ def set_user_description(request):
 
     raise django_exceptions.PermissionDenied
 
-
 def user_recent(request, user, context):
+    """View of the most recent user activity list"""
 
-    def get_type_name(type_id):
+    def get_type_name(type_id): #pylint: disable=missing-docstring
         for item in const.TYPE_ACTIVITY:
             if type_id in item:
                 return item[1]
+        return None
 
-    class Event(object):
+    class Event(object): #pylint: disable=missing-docstring
         is_badge = False
-        def __init__(self, time, type, title, summary, url):
+        def __init__(self, time, activity_type, title, summary, url):
             self.time = time
-            self.type = get_type_name(type)
-            self.type_id = type
+            self.type = get_type_name(activity_type)
+            self.type_id = activity_type
             self.title = title
             self.summary = summary
-            slug_title = slugify(title)
             self.title_link = url
 
-    class AwardEvent(object):
+    class AwardEvent(object): #pylint: disable=missing-docstring
         is_badge = True
-        def __init__(self, time, type, content_object, badge):
+        def __init__(self, time, activity_type, content_object, badge):
             self.time = time
-            self.type = get_type_name(type)
+            self.type = get_type_name(activity_type)
             self.content_object = content_object
             self.badge = badge
 
-    # TODO: Don't process all activities here for the user, only a subset ([:const.USER_VIEW_DATA_SIZE])
+    # TODO: Don't process all activities here for the user,
+    # only a subset ([:const.USER_VIEW_DATA_SIZE])
     activity_types = (
         const.TYPE_ACTIVITY_ASK_QUESTION,
         const.TYPE_ACTIVITY_ANSWER,
@@ -826,11 +808,11 @@ def user_recent(request, user, context):
 
     #1) get source of information about activities
     activity_objects = models.Activity.objects.filter(
-                                        user=user,
-                                        activity_type__in=activity_types
-                                    ).order_by(
-                                        '-active_at'
-                                    )[:const.USER_VIEW_DATA_SIZE]
+        user=user,
+        activity_type__in=activity_types
+    ).order_by(
+        '-active_at'
+    )[:const.USER_VIEW_DATA_SIZE]
 
     #2) load content objects ("c.objects) for each activity
     # the return value is dictionary where activity id's are keys
@@ -849,12 +831,10 @@ def user_recent(request, user, context):
             continue
 
         if activity.activity_type == const.TYPE_ACTIVITY_PRIZE:
-            event = AwardEvent(
-                time=content.awarded_at,
-                type=activity.activity_type,
-                content_object=content.content_object,
-                badge=content.badge,
-            )
+            event = AwardEvent(content.awarded_at,
+                               activity.activity_type,
+                               content.content_object,
+                               content.badge)
         else:
             if hasattr(content, 'thread'):
                 # this is the old way, where events
@@ -873,14 +853,12 @@ def user_recent(request, user, context):
                 # don't know what to do here...
                 event_title = ''
                 event_summary = ''
-                
-            event = Event(
-                time=activity.active_at,
-                type=activity.activity_type,
-                title=event_title,
-                summary=event_summary,
-                url=content.get_absolute_url()
-            )
+
+            event = Event(activity.active_at,
+                          activity.activity_type,
+                          event_title,
+                          event_summary,
+                          content.get_absolute_url())
 
         activities.append(event)
 
@@ -898,7 +876,7 @@ def user_recent(request, user, context):
 
 #not a view - no direct url route here, called by `user_responses`
 @csrf.csrf_protect
-def show_group_join_requests(request, user, context):
+def show_group_join_requests(request, context):
     """show group join requests to admins who belong to the group"""
     if request.user.is_administrator_or_moderator() is False:
         raise Http404
@@ -912,10 +890,10 @@ def show_group_join_requests(request, user, context):
     #get join requests for those groups
     group_content_type = ContentType.objects.get_for_model(models.Group)
     join_requests = models.Activity.objects.filter(
-                        activity_type=const.TYPE_ACTIVITY_ASK_TO_JOIN_GROUP,
-                        content_type=group_content_type,
-                        object_id__in=groups_dict.keys()
-                    ).order_by('-active_at')
+        activity_type=const.TYPE_ACTIVITY_ASK_TO_JOIN_GROUP,
+        content_type=group_content_type,
+        object_id__in=groups_dict.keys()
+    ).order_by('-active_at')
     data = {
         'active_tab':'users',
         'inbox_section': 'group-join-requests',
@@ -954,11 +932,11 @@ def user_responses(request, user, context):
         activity_types = const.RESPONSE_ACTIVITY_TYPES_FOR_DISPLAY
         activity_types += (const.TYPE_ACTIVITY_MENTION,)
     elif section == 'join_requests':
-        return show_group_join_requests(request, user, context)
+        return show_group_join_requests(request, context)
     elif section == 'messages':
         #this is for the private messaging feature
         if request.user != user:
-            if askbot_settings.ADMIN_INBOX_ACCESS_ENABLED == False:
+            if not askbot_settings.ADMIN_INBOX_ACCESS_ENABLED:
                 raise Http404
             elif not(request.user.is_moderator() or request.user.is_administrator()):
                 raise Http404
@@ -983,7 +961,7 @@ def user_responses(request, user, context):
                 context.update(ThreadDetails().get_context(request, thread_id))
                 context['group_messaging_template_name'] = \
                     'group_messaging/home_thread_details.html'
-            except Message.DoesNotExist:
+            except Message.DoesNotExist: #pylint: disable=no-member
                 raise Http404
         else:
             context['group_messaging_template_name'] = 'group_messaging/home.html'
@@ -1000,14 +978,14 @@ def user_responses(request, user, context):
     #todo: insert pagination code here
     memo_set = request.user.get_notifications(activity_types)
     memo_set = memo_set.select_related(
-                    'activity',
-                    'activity__content_type',
-                    'activity__question__thread',
-                    'activity__user',
-                    'activity__user__askbot_profile__gravatar',
-                ).order_by(
-                    '-activity__active_at'
-                )[:const.USER_VIEW_DATA_SIZE]
+        'activity',
+        'activity__content_type',
+        'activity__question__thread',
+        'activity__user',
+        'activity__user__askbot_profile__gravatar',
+    ).order_by(
+        '-activity__active_at'
+    )[:const.USER_VIEW_DATA_SIZE]
 
     #3) "package" data for the output
     response_list = list()
@@ -1022,7 +1000,7 @@ def user_responses(request, user, context):
         act_message = act.get_activity_type_display()
         act_type = 'edit'
 
-        if isinstance(obj, PostRevision):
+        if isinstance(obj, models.PostRevision):
             url = obj.post.get_absolute_url()
         else:
             url = obj.get_absolute_url()
@@ -1044,7 +1022,7 @@ def user_responses(request, user, context):
         response_list.append(response)
 
     #4) sort by response id
-    response_list.sort(lambda x,y: cmp(y['question_id'], x['question_id']))
+    response_list.sort(lambda x, y: cmp(y['question_id'], x['question_id']))
 
     #5) group responses by thread (response_id is really the question post id)
     last_question_id = None #flag to know if the question id is different
@@ -1060,27 +1038,28 @@ def user_responses(request, user, context):
             last_question_id = message['question_id']
 
     #6) sort responses by time
-    filtered_message_list.sort(lambda x,y: cmp(y['timestamp'], x['timestamp']))
+    filtered_message_list.sort(lambda x, y: cmp(y['timestamp'], x['timestamp']))
 
     data = {
         'active_tab':'users',
         'page_class': 'user-profile-page',
-        'tab_name' : 'inbox',
+        'tab_name': 'inbox',
         'inbox_section': section,
-        'page_title' : _('profile - responses'),
-        'messages' : filtered_message_list,
+        'page_title': _('profile - responses'),
+        'messages': filtered_message_list,
     }
     context.update(data)
     template = 'user_inbox/responses.html'
     return render(request, template, context)
 
 def user_network(request, user, context):
+    """User network view"""
     if 'followit' not in django_settings.INSTALLED_APPS:
         raise Http404
     data = {
         'followed_users': user.get_followed_users(),
         'followers': user.get_followers(),
-        'page_title' : _('profile - network'),
+        'page_title': _('profile - network'),
         'tab_name': 'network',
     }
     context.update(data)
@@ -1088,6 +1067,7 @@ def user_network(request, user, context):
 
 @owner_or_moderator_required
 def user_votes(request, user, context):
+    """User votes view"""
     all_votes = list(models.Vote.objects.filter(user=user))
     votes = []
     for vote in all_votes:
@@ -1108,36 +1088,49 @@ def user_votes(request, user, context):
     data = {
         'active_tab':'users',
         'page_class': 'user-profile-page',
-        'tab_name' : 'votes',
-        'page_title' : _('profile - votes'),
-        'votes' : votes[:const.USER_VIEW_DATA_SIZE]
+        'tab_name': 'votes',
+        'page_title': _('profile - votes'),
+        'votes': votes[:const.USER_VIEW_DATA_SIZE]
     }
     context.update(data)
     return render(request, 'user_profile/user_votes.html', context)
 
 
 def user_reputation(request, user, context):
+    """User reputation view"""
     reputes = models.Repute.objects.filter(
-                                        user=user,
-                                        language_code=get_language()
-                                    ).order_by(
-                                        '-reputed_at'
-                                    ).select_related(
-                                        'question',
-                                        'question__thread',
-                                        'user'
-                                    )
-                                    
+        user=user,
+        language_code=get_language()
+    ).order_by(
+        '-reputed_at'
+    ).select_related(
+        'question',
+        'question__thread',
+        'user'
+    )
 
     def format_graph_data(raw_data, user):
+        # pylint: disable=missing-docstring
         # prepare data for the graph - last values go in first
         final_rep = user.get_localized_profile().reputation + const.MIN_REPUTATION
-        rep_list = ['[%s,%s]' % (calendar.timegm(datetime.datetime.now().timetuple()) * 1000, final_rep)]
+        rep_list = ['[%s,%s]' % (
+            calendar.timegm(datetime.datetime.now().timetuple()) * 1000, final_rep
+        )]
         for rep in raw_data:
-            rep_list.append('[%s,%s]' % (calendar.timegm(rep.reputed_at.timetuple()) * 1000, rep.reputation))
+            rep_list.append(
+                '[{},{}]'.format(
+                    calendar.timegm(rep.reputed_at.timetuple()) * 1000,
+                    rep.reputation
+                )
+            )
 
         #add initial rep point
-        rep_list.append('[%s,%s]' % (calendar.timegm(user.date_joined.timetuple()) * 1000, const.MIN_REPUTATION))
+        rep_list.append(
+            '[{},{}]'.format(
+                calendar.timegm(user.date_joined.timetuple()) * 1000,
+                const.MIN_REPUTATION
+            )
+        )
         reps = ','.join(rep_list)
         return '[%s]' % reps
 
@@ -1172,15 +1165,16 @@ def user_reputation(request, user, context):
 
 
 def user_favorites(request, user, context):
+    """View of user's favorite questions"""
     favorite_threads = user.user_favorite_questions.values_list('thread', flat=True)
     questions_qs = models.Post.objects.filter(
-                                post_type='question',
-                                thread__in=favorite_threads
-                            ).select_related(
-                                'thread', 'thread__last_activity_by'
-                            ).order_by(
-                                '-points', '-thread__last_activity_at'
-                            )[:const.USER_VIEW_DATA_SIZE]
+        post_type='question',
+        thread__in=favorite_threads
+    ).select_related(
+        'thread', 'thread__last_activity_by'
+    ).order_by(
+        '-points', '-thread__last_activity_at'
+    )[:const.USER_VIEW_DATA_SIZE]
 
     q_paginator = Paginator(questions_qs, const.USER_POSTS_PAGE_SIZE)
 
@@ -1189,19 +1183,19 @@ def user_favorites(request, user, context):
     question_count = q_paginator.count
 
     q_paginator_context = functions.setup_paginator({
-                    'is_paginated' : (question_count > const.USER_POSTS_PAGE_SIZE),
-                    'pages': q_paginator.num_pages,
-                    'current_page_number': page,
-                    'page_object': q_paginator.page(page),
-                    'base_url' : request.path + '?sort=favorites&' #this paginator will be ajax
-                })
+        'is_paginated' : (question_count > const.USER_POSTS_PAGE_SIZE),
+        'pages': q_paginator.num_pages,
+        'current_page_number': page,
+        'page_object': q_paginator.page(page),
+        'base_url': request.path + '?sort=favorites&' #this paginator will be ajax
+    })
 
     data = {
         'active_tab':'users',
         'page_class': 'user-profile-page',
-        'tab_name' : 'favorites',
-        'page_title' : _('profile - favorites'),
-        'questions' : questions,
+        'tab_name': 'favorites',
+        'page_title': _('profile - favorites'),
+        'questions': questions,
         'q_paginator_context': q_paginator_context,
         'question_count': question_count,
         'page_size': const.USER_POSTS_PAGE_SIZE
@@ -1214,6 +1208,7 @@ def user_favorites(request, user, context):
 @decorators.ajax_only
 @decorators.post_only
 def user_set_primary_language(request):
+    """Allows user to set the primary language"""
     if request.user.is_anonymous():
         raise django_exceptions.PermissionDenied
 
@@ -1225,12 +1220,12 @@ def user_set_primary_language(request):
 
 
 @csrf.csrf_protect
-def user_select_languages(request, id=None, slug=None):
+def user_select_languages(request, user_id=None):
+    """Allows user to mark his/her understood languages"""
     if request.user.is_anonymous():
         raise django_exceptions.PermissionDenied
 
-    user = get_object_or_404(models.User, id=id)
-
+    user = get_object_or_404(models.User, id=user_id)
 
     if not askbot.is_multilingual() or \
         not(request.user.id == user.id or request.user.is_administrator()):
@@ -1246,19 +1241,14 @@ def user_select_languages(request, id=None, slug=None):
             profile.primary_language = form.cleaned_data['primary_language']
             profile.save()
 
-            redirect_url = reverse(
-                'user_select_languages',
-                kwargs={
-                    'id': user.id,
-                    'slug': slugify(user.username)
-                }
-            )
+            redirect_url = reverse('user_select_languages',
+                                   kwargs={'id': user.id,
+                                           'slug': slugify(user.username)})
         return HttpResponseRedirect(redirect_url)
     else:
-        languages = user.languages.split()
-        initial={
-            'languages': languages,
-            'primary_language': languages[0]
+        initial = {
+            'languages': user.get_languages(),
+            'primary_language': user.primary_language
         }
         form = forms.LanguagePrefsForm(initial=initial)
         data = {
@@ -1272,21 +1262,22 @@ def user_select_languages(request, id=None, slug=None):
 
 @csrf.csrf_protect
 def user_unsubscribe(request):
+    """View handling the unsubscribe link"""
     form = forms.UnsubscribeForm(request.REQUEST)
     verified_email = ''
-    if form.is_valid() == False:
+    if not form.is_valid():
         result = 'bad_input'
     else:
         key = form.cleaned_data['key']
         email = form.cleaned_data['email']
         try:
             #we use email too, in case the key changed
-            user = models.User.objects.get(email=email)
-        except models.User.DoesNotExist:
-            user = models.User.objects.get(askbot_profile__email_key=key)
-        except models.User.DoesNotExist:
+            user = models.User.objects.get(email=email) #pylint: disable=no-member
+        except models.User.DoesNotExist: #pylint: disable=no-member
+            user = models.User.objects.get(askbot_profile__email_key=key) #pylint: disable=no-member
+        except models.User.DoesNotExist: #pylint: disable=no-member
             result = 'bad_input'
-        except models.User.MultipleObjectsReturned:
+        except models.User.MultipleObjectsReturned: #pylint: disable=no-member
             result = 'error'
             logging.critical(u'unexpected error with data %s', unicode(form.cleaned_data))
         else:
@@ -1295,7 +1286,7 @@ def user_unsubscribe(request):
                 #make sure that all subscriptions are created
                 if request.method == 'POST':
                     user.add_missing_askbot_subscriptions()
-                    subs = models.EmailFeedSetting.objects.filter(subscriber=user)
+                    subs = models.EmailFeedSetting.objects.filter(subscriber=user) #pylint: disable=no-member
                     subs.update(frequency='n') #set frequency to "never"
                     result = 'success'
                 else:
@@ -1323,7 +1314,7 @@ def user_unsubscribe(request):
 @owner_or_moderator_required
 @csrf.csrf_protect
 def user_email_subscriptions(request, user, context):
-
+    """Handles the email subscriptions settings"""
     logging.debug(get_request_info(request))
     action_status = None
 
@@ -1366,7 +1357,7 @@ def user_email_subscriptions(request, user, context):
         'email_feeds_form': email_feeds_form,
         'tag_filter_selection_form': tag_filter_form,
         'action_status': action_status,
-        'user_languages': user.languages.split()
+        'user_languages': user.get_languages()
     }
     context.update(data)
     #todo: really need only if subscribed tags are enabled
@@ -1414,7 +1405,7 @@ if CUSTOM_TAB:
     USER_VIEW_CALL_TABLE[CUSTOM_SLUG] = user_custom_tab
 
 #todo: rename this function - variable named user is everywhere
-def user(request, id, slug=None, tab_name=None):
+def user_profile(request, user_id, slug=None, tab_name=None):
     """Main user view function that works as a switchboard
 
     id - id of the profile owner
@@ -1422,7 +1413,7 @@ def user(request, id, slug=None, tab_name=None):
     todo: decide what to do with slug - it is not used
     in the code in any way
     """
-    profile_owner = get_object_or_404(models.User, id = id)
+    profile_owner = get_object_or_404(models.User, pk=user_id)
 
     if profile_owner.is_blocked():
         if request.user.is_anonymous() \
@@ -1438,7 +1429,7 @@ def user(request, id, slug=None, tab_name=None):
         tab_name = request.GET.get('sort', 'stats')
 
     can_show_karma = models.user_can_see_karma(request.user, profile_owner)
-    if can_show_karma == False and tab_name == 'reputation':
+    if not can_show_karma and tab_name == 'reputation':
         raise Http404
 
     user_view_func = USER_VIEW_CALL_TABLE.get(tab_name, user_stats)
@@ -1465,10 +1456,10 @@ def user(request, id, slug=None, tab_name=None):
         context['custom_tab_slug'] = CUSTOM_TAB['SLUG']
     return user_view_func(request, profile_owner, context)
 
-def groups(request, id = None, slug = None):
-    """output groups page
+def show_groups(request):
+    """output the groups page
     """
-    if askbot_settings.GROUPS_ENABLED == False:
+    if not askbot_settings.GROUPS_ENABLED:
         raise Http404
 
     #6 lines of input cleaning code
@@ -1482,9 +1473,7 @@ def groups(request, id = None, slug = None):
     if scope == 'all-groups':
         groups = models.Group.objects.all()
     else:
-        groups = models.Group.objects.get_for_user(
-                                        user=request.user
-                                    )
+        groups = models.Group.objects.get_for_user(user=request.user)
 
     groups = groups.exclude_personal()
     groups = groups.annotate(users_count=Count('user_membership'))

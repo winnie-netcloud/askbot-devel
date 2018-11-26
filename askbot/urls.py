@@ -52,7 +52,7 @@ urlpatterns = patterns(
         name='questions'
     ),
     url(
-        r'^%s(?P<id>\d+)/' % QUESTION_PAGE_BASE_URL,
+        r'^%s(?P<question_id>\d+)/' % QUESTION_PAGE_BASE_URL,
         views.readers.question,
         name='question'
     ),
@@ -77,17 +77,17 @@ urlpatterns = patterns(
     ),
     # TODO: rename as user_edit, b/c that's how template is named
     url(
-        r'^%s(?P<id>\d+)/%s$' % (pgettext('urls', 'users/'), pgettext('urls', 'edit/')),
+        r'^%s(?P<user_id>\d+)/%s$' % (pgettext('urls', 'users/'), pgettext('urls', 'edit/')),
         views.users.edit_user,
         name='edit_user'
     ),
     service_url(
-        r'^%s(?P<id>\d+)/%s(?P<file_name>.+)/$' % (pgettext('urls', 'users/'), pgettext('urls', 'download-data/')),
+        r'^%s(?P<user_id>\d+)/%s(?P<file_name>.+)/$' % (pgettext('urls', 'users/'), pgettext('urls', 'download-data/')),
         views.users.download_user_data,
         name='download_user_data'
     ),
     service_url(#ajax get only
-        r'^%s(?P<id>\d+)/%s$' % (pgettext('urls', 'users/'), pgettext('urls', 'get-todays-backup-file-name/')),
+        r'^%s(?P<user_id>\d+)/%s$' % (pgettext('urls', 'users/'), pgettext('urls', 'get-todays-backup-file-name/')),
         views.users.get_todays_backup_file_name,
         name='get_todays_backup_file_name'
     ),
@@ -107,11 +107,11 @@ urlpatterns = patterns(
         name='set_user_description',
     ),
     url(
-        r'^%s(?P<id>\d+)/(?P<slug>.+)/%s$' % (
+        r'^%s(?P<user_id>\d+)/(?P<slug>.+)/%s$' % (
             pgettext('urls', 'users/'),
             pgettext('urls', 'subscriptions/'),
         ),
-        views.users.user,
+        views.users.user_profile,
         kwargs={'tab_name': 'email_subscriptions'},
         name='user_subscriptions'
     ),
@@ -124,7 +124,7 @@ urlpatterns = patterns(
         name='user_unsubscribe'
     ),
     url(
-        r'^%s(?P<id>\d+)/(?P<slug>.+)/%s$' % (
+        r'^%s(?P<user_id>\d+)/(?P<slug>.+)/%s$' % (
             pgettext('urls', 'users/'),
             pgettext('urls', 'select_languages/'),
         ),
@@ -132,13 +132,13 @@ urlpatterns = patterns(
         name='user_select_languages'
     ),
     url(
-        r'^%s(?P<id>\d+)/(?P<slug>.+)/$' % pgettext('urls', 'users/'),
-        views.users.user,
+        r'^%s(?P<user_id>\d+)/(?P<slug>.+)/$' % pgettext('urls', 'users/'),
+        views.users.user_profile,
         name='user_profile'
     ),
     url(
         r'^%s$' % pgettext('urls', 'groups/'),
-        views.users.groups,
+        views.users.show_groups,
         name='groups'
     ),
     url(
@@ -147,7 +147,7 @@ urlpatterns = patterns(
         name='badges'
     ),
     url(
-        r'^%s(?P<id>\d+)//*' % pgettext('urls', 'badges/'),
+        r'^%s(?P<badge_id>\d+)//*' % pgettext('urls', 'badges/'),
         views.meta.badge,
         name='badge'
     ),
@@ -193,12 +193,12 @@ urlpatterns = patterns(
     ),
     url(r'^%s$' % pgettext('urls', 'help/'), views.meta.help, name='help'),
     service_url(
-        r'^%s(?P<id>\d+)/%s$' % (pgettext('urls', 'answers/'), pgettext('urls', 'edit/')),
+        r'^%s(?P<answer_id>\d+)/%s$' % (pgettext('urls', 'answers/'), pgettext('urls', 'edit/')),
         views.writers.edit_answer,
         name='edit_answer'
     ),
     url(
-        r'^%s(?P<id>\d+)/%s$' % (pgettext('urls', 'answers/'), pgettext('urls', 'revisions/')),
+        r'^%s(?P<post_id>\d+)/%s$' % (pgettext('urls', 'answers/'), pgettext('urls', 'revisions/')),
         views.readers.revisions,
         kwargs={'post_type': 'answer'},
         name='answer_revisions'
@@ -235,9 +235,9 @@ urlpatterns = patterns(
         name='moderation_queue'
     ),
     service_url(
-        r'^moderate-post-edits/',
-        views.moderation.moderate_post_edits,
-        name='moderate_post_edits'
+        r'^moderation-queue/moderate/',
+        views.moderation.moderate_items,
+        name='moderate_items'
     ),
     service_url(
         r'^set-question-title/',
@@ -300,27 +300,27 @@ urlpatterns = patterns(
         name='ask'
     ),
     url(
-        r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'edit/')),
+        r'^%s(?P<question_id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'edit/')),
         views.writers.edit_question,
         name='edit_question'
     ),
     service_url(  # this url is both regular and ajax
-        r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'retag/')),
+        r'^%s(?P<question_id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'retag/')),
         views.writers.retag_question,
         name='retag_question'
     ),
     url(
-        r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'close/')),
+        r'^%s(?P<question_id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'close/')),
         views.commands.close,
         name='close'
     ),
     url(
-        r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'reopen/')),
+        r'^%s(?P<question_id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'reopen/')),
         views.commands.reopen,
         name='reopen'
     ),
     service_url(
-        r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'answer/')),
+        r'^%s(?P<question_id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'answer/')),
         views.writers.answer,
         name='answer'
     ),
@@ -335,7 +335,7 @@ urlpatterns = patterns(
         name='vote'
     ),
     url(
-        r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'revisions/')),
+        r'^%s(?P<post_id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'revisions/')),
         views.readers.revisions,
         kwargs={'post_type': 'question'},
         name='question_revisions'

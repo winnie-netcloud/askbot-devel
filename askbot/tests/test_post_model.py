@@ -133,7 +133,7 @@ class PostModelTests(AskbotTestCase):
         th.title = 'lala-x-lala'
         p = Post(id=3, post_type='question')
         p._thread_cache = th  # cannot assign non-Thread instance directly
-        expected_url = urlresolvers.reverse('question', kwargs={'id': 3}) \
+        expected_url = urlresolvers.reverse('question', kwargs={'question_id': 3}) \
                                                                 + th.title + '/'
         self.assertEqual(expected_url, p.get_absolute_url(thread=th))
         self.assertTrue(p._thread_cache is th)
@@ -143,7 +143,7 @@ class PostModelTests(AskbotTestCase):
         p = Post(id=3, post_type='question')
         th = lambda:1
         th.title = 'lala-x-lala'
-        expected_url = urlresolvers.reverse('question', kwargs={'id': 3}) \
+        expected_url = urlresolvers.reverse('question', kwargs={'question_id': 3}) \
                                                                 + th.title + '/'
         self.assertEqual(expected_url, p.get_absolute_url(thread=th))
         self.assertTrue(p._thread_cache is th)
@@ -495,7 +495,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
         time.sleep(1.5) # compensate for 1-sec time resolution in some databases
 
         response = self.client.post(
-            urlresolvers.reverse('edit_question', kwargs={'id': question.id}),
+            urlresolvers.reverse('edit_question', kwargs={'question_id': question.id}),
             data={
                 'title': 'edited title',
                 'text': 'edited body text',
@@ -524,7 +524,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
     def test_retag_question(self):
         self.assertEqual(0, Post.objects.count())
         question = self.post_question()
-        response = self.client.post(urlresolvers.reverse('retag_question', kwargs={'id': question.id}), data={
+        response = self.client.post(urlresolvers.reverse('retag_question', kwargs={'question_id': question.id}), data={
             'tags': 'tag1 tag2',
         })
         self.assertEqual(1, Post.objects.count())
@@ -553,9 +553,10 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
         self.client.logout()
         self.client.login(username='user2', password='pswd')
         time.sleep(1.5) # compensate for 1-sec time resolution in some databases
-        response = self.client.post(urlresolvers.reverse('answer', kwargs={'id': question.id}), data={
-            'text': 'answer longer than 10 chars',
-        })
+        response = self.client.post(
+            urlresolvers.reverse('answer', kwargs={'question_id': question.id}),
+            data={'text': 'answer longer than 10 chars'}
+        )
         self.assertEqual(2, Post.objects.count())
         answer = Post.objects.get_answers()[0]
         expected_url=answer.get_absolute_url()
@@ -592,7 +593,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
         response = self.client.post(
             urlresolvers.reverse(
                 'edit_answer',
-                kwargs={'id': answer.id}
+                kwargs={'answer_id': answer.id}
             ),
             data={
                 'text': 'edited body text',
@@ -622,7 +623,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
 
         # INFO: We need to pass some headers to make question() view believe we're not a robot
         self.client.get(
-            urlresolvers.reverse('question', kwargs={'id': question.id}),
+            urlresolvers.reverse('question', kwargs={'question_id': question.id}),
             {},
             follow=True, # the first view redirects to the full question url (with slug in it), so we have to follow that redirect
             HTTP_ACCEPT_LANGUAGE='en',

@@ -33,7 +33,7 @@ def gravatar(user, size):
     slug = slugify(user.username)
     user_profile_url = reverse(
                         'user_profile',
-                        kwargs={'id':user_id, 'slug':slug}
+                        kwargs={'user_id': user_id, 'slug': slug}
                     )
     #safe_username = template.defaultfilters.urlencode(username)
     return mark_safe(GRAVATAR_TEMPLATE % {

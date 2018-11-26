@@ -24,8 +24,8 @@ class ModerationReason(models.Model):
     added_by = models.ForeignKey('auth.User', null=True, blank=True)
     title = models.CharField(max_length=128)
     reason_type = models.CharField(max_length=32, choices=MODERATION_REASON_TYPES)
-    description_html = models.TextField(null=True)  # html rendition of the input source
-    description_text = models.TextField(null=True)  # could be markdown input source
+    description_html = models.TextField(null=True) # html rendition of the input source
+    description_text = models.TextField(null=True) # could be markdown input source
     # is_predefined = True items are reserved for the pre-defined moderation reasons
     is_predefined = models.BooleanField(default=False)
     is_manually_assignable = models.BooleanField(default=True,
@@ -58,6 +58,13 @@ class ModerationQueueItem(models.Model):
     # resolution status, timestamp and the user link provide some
     # audit trail to the moderation items and allow implementation
     # of undoing of the moderation decisions
+    #
+    # For the queue items of reason "New post", "Post edit":
+    # * if the post or edit are accepted - the queue item is marked
+    #   with resolution_status = 'dismissed' and the post/revision is published
+    # * if the post/edit are rejected - resolution status is set to 'followup'
+    # and a new Moderation queue item is created with any of the manually assignable
+    # reasons and that queue item is immediately resolved by the same moderator.
     resolution_status = models.CharField(max_length=16,
                                          choices=RESOLUTION_CHOICES,
                                          default='waiting')
@@ -72,3 +79,43 @@ class ModerationQueueItem(models.Model):
         app_label = 'askbot'
         verbose_name = 'moderation queue item'
         verbose_name_plural = 'moderation queue items'
+
+    def get_reason_title(self):
+        """Returns title of the moderation reason"""
+        #todo: cache the reasons
+        return self.reason.title #pylint: disable=no-member
+
+    def get_item_object_type(self):
+        """Returns type of the object"""
+        from askbot.models import PostRevision
+        if self.item.__class__ == PostRevision:
+            return self.item.post_type
+        raise NotImplementedError
+
+    def get_item_author(self):
+        """Returns the User instance of the item author"""
+        from askbot.models import PostRevision
+        if self.item.__class__ == PostRevision:
+            return self.item.author
+        raise NotImplementedError
+
+    def get_item_ip_address(self):
+        """Returns ip address from where the item was posted"""
+        from askbot.models import PostRevision
+        if self.item.__class__ == PostRevision:
+            return self.item.ip_addr
+        raise NotImplementedError
+
+    def get_item_timestamp(self):
+        """Returns the DateTime objects of the item creation"""
+        from askbot.models import PostRevision
+        if self.item.__class__ == PostRevision:
+            return self.item.revised_at
+        raise NotImplementedError
+
+    def get_item_snippet(self):
+        """Returns cleaned html snippet of the item"""
+        from askbot.models import PostRevision
+        if self.item.__class__ == PostRevision:
+            return self.item.get_full_snippet()
+        raise NotImplementedError

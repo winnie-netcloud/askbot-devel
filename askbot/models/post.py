@@ -26,6 +26,7 @@ import askbot
 from askbot import signals
 from askbot.utils.loading import load_module, load_plugin
 from askbot.utils.slug import slugify
+from askbot.utils.forms import split_tag_names
 from askbot import const
 from askbot.models.tag import Tag, MarkedTag
 from askbot.models.tag import tags_match_some_wildcard
@@ -36,6 +37,7 @@ from askbot.utils import markup
 from askbot.utils.html import (get_word_count, has_moderated_tags,
                                moderate_tags, sanitize_html, strip_tags,
                                site_url)
+from askbot.utils.html import get_snippet as get_html_snippet_util
 from askbot.utils.transaction import defer_celery_task
 from askbot.models.base import (AnonymousContent, BaseQuerySetManager,
                                 DraftContent)
@@ -44,6 +46,21 @@ from askbot.models.base import (AnonymousContent, BaseQuerySetManager,
 from askbot.utils.diff import textDiff as htmldiff
 from askbot.search import mysql
 
+def estimate_max_words_to_wrap_snippet(max_length, is_comment):
+    """Returns approximate number of words we permit in a
+    snippet, depending on the post type, given the
+    `max_length` parameter, which is the maximum character length"""
+    if max_length is None:
+        if is_comment == 'comment':
+            return askbot_settings.MIN_WORDS_TO_WRAP_COMMENTS
+        return askbot_settings.MIN_WORDS_TO_WRAP_POSTS
+    return int(max_length/5)
+
+def get_title_and_tags_snippet(title, tag_names):
+    """Returns a sanitized html snippet with the title and tags"""
+    title = '<h2>{}</h2>\n'.format(title)
+    tags = '<div class="tags">' + _('Tags') + ': ' + ', '.join(tag_names) + '</div>\n'
+    return sanitize_html(title + tags)
 
 def default_html_moderator(post):
     """Moderates inline HTML items: images and/or links
@@ -1067,34 +1084,20 @@ class Post(models.Model):
         or full content, depending on how long it is
         todo: remove the max_length parameter
         """
-        if max_length is None:
-            if self.post_type == 'comment':
-                max_words = askbot_settings.MIN_WORDS_TO_WRAP_COMMENTS
-            else:
-                max_words = askbot_settings.MIN_WORDS_TO_WRAP_POSTS
-        else:
-            max_words = int(max_length/5)
+        max_words = estimate_max_words_to_wrap_snippet(max_length, self.is_comment())
+        return get_html_snippet_util(self.html, max_words)
 
-        # TODO: truncate so that we have max number of lines
-        # the issue is that code blocks have few words
-        # but very tall, while paragraphs can be dense on words
-        # and fit into fewer lines
-        truncated = Truncator(self.html).words(max_words, truncate=' ...', html=True)
-        new_count = get_word_count(truncated)
-        orig_count = get_word_count(self.html)
-        if new_count + 1 < orig_count:
-            expander = '<span class="expander"> <a>(' + _('more') + ')</a></span>'
-            if truncated.endswith('</p>'):
-                # better put expander inside the paragraph
-                snippet = truncated[:-4] + expander + '</p>'
-            else:
-                snippet = truncated + expander
-            # it is important to have div here, so that we can make
-            # the expander work
-            from askbot.utils.html import sanitize_html
-            return sanitize_html('<div class="snippet">' + snippet + '</div>')
-        else:
-            return self.html
+    def get_full_snippet(self, max_length=None):
+        """Same as .get_snippet(), but in the case of post_type == 'question'
+        also prepends title and the tags.
+        `max_length` applies only to the main part of the snippet, not the title."""
+        snippet = self.get_snippet(max_length)
+        if self.is_question():
+            thread = self.thread
+            prefix = get_title_and_tags_snippet(thread.title, thread.get_tag_names())
+            # prepend the title and tags
+            snippet = '<div>' + prefix + snippet + '</div>'
+        return snippet
 
     def filter_authorized_users(self, candidates):
         """returns list of users who are allowed to see this post"""
@@ -2183,29 +2186,16 @@ class PostRevision(models.Model):
                 # call below hides post from the display to the
                 # general public
                 self.post.set_is_approved(False)
-            activity_type = const.TYPE_ACTIVITY_MODERATED_NEW_POST
+            reason_title = 'New post'
         else:
-            activity_type = const.TYPE_ACTIVITY_MODERATED_POST_EDIT
+            reason_title = 'Post edit'
 
-        # Activity instance is the actual queue item
-        from askbot.models import Activity
-        content_type = ContentType.objects.get_for_model(self)
-        try:
-            activity = Activity.objects.get(
-                                        activity_type=activity_type,
-                                        object_id=self.id,
-                                        content_type=content_type
-                                    )
-        except Activity.DoesNotExist:
-            activity = Activity(
-                            user=self.author,
-                            content_object=self,
-                            activity_type=activity_type,
-                            question=self.get_origin_post()
-                        )
-            activity.save()
-
-        activity.add_recipients(self.post.get_moderators())
+        from askbot.models import ModerationReason, ModerationQueueItem
+        reason = ModerationReason.objects.get(title=reason_title)
+        ModerationQueueItem.objects.create(item=self,
+                                           reason=reason,
+                                           added_by=self.author, 
+                                           language_code=self.post.language_code)
 
         # give message to the poster
         # TODO: move this out as signal handler
@@ -2275,7 +2265,7 @@ class PostRevision(models.Model):
         if self.post.is_question():
             url = reverse('question_revisions', args=(self.post.id,))
         elif self.post.is_answer():
-            url = reverse('answer_revisions', kwargs={'id': self.post.id})
+            url = reverse('answer_revisions', kwargs={'post_id': self.post.id})
         else:
             url = self.post.get_absolute_url()
 
@@ -2306,9 +2296,26 @@ class PostRevision(models.Model):
         else:
             return sanitized_html
 
-    def get_snippet(self, max_length=120):
-        """a little simpler than as Post.get_snippet"""
-        return '<p>' + html_utils.strip_tags(self.html)[:max_length] + '</p>'
+    def get_snippet(self, max_length=None):
+        """returns an abbreviated HTML snippet of the content
+        or full content, depending on how long it is
+        todo: remove the max_length parameter
+        """
+        is_comment = self.post.is_comment()
+        max_words = estimate_max_words_to_wrap_snippet(max_length, is_comment)
+        return get_html_snippet_util(self.html, max_words)
+
+    def get_full_snippet(self, max_length=None):
+        """Same as .get_snippet(), but in the case of post_type == 'question'
+        also prepends title and the tags.
+        `max_length` applies only to the main part of the snippet, not the title."""
+        snippet = self.get_snippet(max_length)
+        if self.post.is_question():
+            prefix = get_title_and_tags_snippet(self.title, split_tag_names(self.tagnames))
+            # prepend the title and tags
+            snippet = '<div>' + prefix + snippet + '</div>'
+        return snippet
+
 
 
 class PostFlagReason(models.Model):

@@ -255,7 +255,7 @@ class PageLoadTestCase(AskbotTestCase):
                 'answer_revisions',
                 status_code=status_code,
                 template='revisions.html',
-                kwargs={'id': models.Post.objects.get_answers().order_by('id')[0].id}
+                kwargs={'post_id': models.Post.objects.get_answers().order_by('id')[0].id}
             )
         #todo: test different sort methods and scopes
         self.try_url(
@@ -337,28 +337,28 @@ class PageLoadTestCase(AskbotTestCase):
         self.try_url(
                 'question',
                 status_code=status_code,
-                kwargs={'id':1},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+                kwargs={'question_id':1},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
                 follow=True,
                 template='question.html'
             )
         self.try_url(
                 'question',
                 status_code=status_code,
-                kwargs={'id':2},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+                kwargs={'question_id':2},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
                 follow=True,
                 template='question.html'
             )
         self.try_url(
                 'question',
                 status_code=status_code,
-                kwargs={'id':3},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+                kwargs={'question_id':3},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
                 follow=True,
                 template='question.html'
             )
         self.try_url(
                 'question_revisions',
                 status_code=status_code,
-                kwargs={'id':40},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+                kwargs={'post_id':40},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
                 template='revisions.html'
             )
         self.try_url('users',
@@ -471,21 +471,21 @@ class PageLoadTestCase(AskbotTestCase):
         name_slug = slugify(user.username)
         self.try_url(
             'user_profile',
-            kwargs={'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs={'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             status_code=status_code,
             data={'sort':'stats'},
             template='user_profile/user_stats.html'
         )
         self.try_url(
             'user_profile',
-            kwargs={'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs={'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             status_code=status_code,
             data={'sort':'recent'},
             template='user_profile/user_recent.html'
         )
         self.try_url(
             'user_profile',
-            kwargs={'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs={'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             status_code=status_code,
             data={'sort':'inbox'},
             template='authopenid/signin.html',
@@ -493,14 +493,14 @@ class PageLoadTestCase(AskbotTestCase):
         )
         self.try_url(
             'user_profile',
-            kwargs={'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs={'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             status_code=status_code,
             data={'sort':'reputation'},
             template='user_profile/user_reputation.html'
         )
         self.try_url(
             'user_profile',
-            kwargs={'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs={'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             status_code=status_code,
             data={'sort':'votes'},
             template='authopenid/signin.html',
@@ -508,14 +508,14 @@ class PageLoadTestCase(AskbotTestCase):
         )
         self.try_url(
             'user_profile',
-            kwargs={'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs={'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             status_code=status_code,
             data={'sort':'favorites'},
             template='user_profile/user_favorites.html'
         )
         self.try_url(
             'user_profile',
-            kwargs={'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs={'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             status_code=status_code,
             data={'sort':'email_subscriptions'},
             template='authopenid/signin.html',
@@ -539,12 +539,12 @@ class PageLoadTestCase(AskbotTestCase):
         self.client.login(method = 'force', user_id = 2)   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
         self.try_url(
             'user_subscriptions',
-            kwargs = {'id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs = {'user_id': 2, 'slug': name_slug},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             template = 'user_profile/user_email_subscriptions.html'
         )
         self.try_url(
             'edit_user',
-            kwargs = {'id': 2},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
+            kwargs = {'user_id': 2},   # INFO: Hardcoded ID, might fail if DB allocates IDs in some non-continuous way
             template = 'user_profile/user_edit.html'
         )
         self.client.logout()
@@ -564,7 +564,7 @@ class PageLoadTestCase(AskbotTestCase):
         self.client.login(method = 'force', user_id = asker.id)
         self.try_url(
             'user_profile',
-            kwargs={'id': asker.id, 'slug': slugify(asker.username)},
+            kwargs={'user_id': asker.id, 'slug': slugify(asker.username)},
             data={'sort':'inbox'},
             template='user_inbox/responses.html',
         )
@@ -620,19 +620,19 @@ class QuestionPageRedirectTests(AskbotTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertEqual(self.q, resp.context['question'])
 
-        url = reverse('question', kwargs={'id': self.q.id})
+        url = reverse('question', kwargs={'question_id': self.q.id})
         resp = self.client.get(url)
         self.assertRedirects(
             resp,
             expected_url=self.q.get_absolute_url()
         )
 
-        url = reverse('question', kwargs={'id': 101})
+        url = reverse('question', kwargs={'question_id': 101})
         resp = self.client.get(url)
-        url = reverse('question', kwargs={'id': self.q.id}) + self.q.slug + '/'# redirect uses the new question.id !
+        url = reverse('question', kwargs={'question_id': self.q.id}) + self.q.slug + '/'# redirect uses the new question.id !
         self.assertRedirects(resp, expected_url=url)
 
-        url = reverse('question', kwargs={'id': 101}) + self.q.slug + '/'
+        url = reverse('question', kwargs={'question_id': 101}) + self.q.slug + '/'
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(self.q, resp.context['question'])
@@ -643,7 +643,7 @@ class QuestionPageRedirectTests(AskbotTestCase):
         self.assertEqual(self.q, resp.context['question'])
         self.assertEqual(self.a, resp.context['show_post'])
 
-        url = reverse('question', kwargs={'id': self.q.id})
+        url = reverse('question', kwargs={'question_id': self.q.id})
         resp = self.client.get(url, data={'answer': self.a.id})
         url = self.q.get_absolute_url()
         self.assertRedirects(resp, expected_url=url + '?answer=%d' % self.a.id)
@@ -654,7 +654,7 @@ class QuestionPageRedirectTests(AskbotTestCase):
         self.assertEqual(self.a, resp.context['show_post'])
 
         #test redirect from old question
-        url = reverse('question', kwargs={'id': 101}) + self.q.slug + '/'
+        url = reverse('question', kwargs={'question_id': 101}) + self.q.slug + '/'
         resp = self.client.get(url, data={'answer': 201})
         self.assertRedirects(resp, expected_url=self.a.get_absolute_url())
 
@@ -780,7 +780,7 @@ class UserProfilePageTests(AskbotTestCase):
         self.client.login(user_id=self.user.id, method='force')
         email_before = self.user.email
         response = self.client.post(
-            reverse('edit_user', kwargs={'id': self.user.id}),
+            reverse('edit_user', kwargs={'user_id': self.user.id}),
             data={
                 'username': 'edited',
                 'email': 'fake@example.com',
@@ -797,7 +797,7 @@ class UserProfilePageTests(AskbotTestCase):
         self.client.login(user_id=self.user.id, method='force')
         email_before = self.user.email
         response = self.client.post(
-            reverse('edit_user', kwargs={'id': self.user.id}),
+            reverse('edit_user', kwargs={'user_id': self.user.id}),
             data={
                 'username': 'edited',
                 'email': 'new@example.com',
@@ -814,7 +814,7 @@ class UserProfilePageTests(AskbotTestCase):
         user2.follow_user(self.user)
         self.user.follow_user(user2)
         name_slug = slugify(self.user.username)
-        kwargs={'id': self.user.id, 'slug': name_slug}
+        kwargs={'user_id': self.user.id, 'slug': name_slug}
         url = reverse('user_profile', kwargs=kwargs)
         response = self.client.get(url, data={'sort':'network'})
         self.assertEqual(response.status_code, 200)

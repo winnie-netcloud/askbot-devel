@@ -22,19 +22,43 @@
     <a href="mailto:{{ email }}">{{ email }}</a>
 {%- endmacro -%}
 
-{%- macro moderation_queue_message(message) -%}
-<div class="message-details" data-message-id="{{ message.id }}">
-    <input type="checkbox" />
-    {{ gravatar(message.user, 16) }}
-    <a class="username" href="{{ message.user.get_absolute_url() }}">{{ message.user.username|escape }}</a> |
-    {% if message['memo_type'] == 'edit' %}
-        {{ mailto_link(message.user.email) }} |
-        ip=<span class="ip-addr">{{ message.ip_addr }}</span> |
+{% macro moderation_queue_item_user_info(user) %}
+    {{ gravatar(user, 16) }}
+    <a class="username" href="{{ user.get_absolute_url() }}">{{ user.username|escape }}</a>
+    {{ mailto_link(user.email) }}
+{% endmacro %}
+
+{%- macro moderation_queue_item(queue_item) -%}
+<div class="message-details" data-message-id="{{ queue_item.id }}">
+    <div>
+        <input type="checkbox" />
+        {% if queue_item.reason.is_manually_assignable %}
+            {% set reason_title=queue_item.get_reason_title()|lower|escape %}
+            {% trans %}Flagged "{{ reason_title }}"{% endtrans %} 
+        {% else %}
+            {{ queue_item.reason.title|escape }}
+        {% endif %} |
+        <a href={{ queue_item.item.get_absolute_url() }}>
+            {% trans object_type=queue_item.get_item_object_type() %}{{ object_type }} by{% endtrans %}
+        </a>
+        {% set item_author=queue_item.get_item_author() %}
+        {{ moderation_queue_item_user_info(item_author) }}
+        {% set ip_addr=queue_item.get_item_ip_address() %}
+        {% if ip_addr %}
+            ip=<span class="ip-addr">{{ ip_addr }}</span>
+        {% endif %}
+        ({{ timeago(queue_item.get_item_timestamp()) }})
+    </div>
+    {% if queue_item.reason.is_manually_assignable %}
+    <div>
+        {% set user_info %}
+            {{ moderation_queue_item_user_info(queue_item.added_by) }}
+        {% endset %}
+        {% trans %}Reported by {{ user_info }}{% endtrans %}
+        ({{ timeago(queue_item.added_at) }})
+    </div>
     {% endif %}
-    <a class="forum-post-link" href="{{ message.url }}">{{ message.message_type }}</a>
-    ({{ timeago(message.timestamp) }})
-    {#<div class="snippet">{{ message.snippet }}</div>#}
-    <div class="post-content">{{ message.content }}</div>
+    <div class="item-snippet">{{ queue_item.get_item_snippet() }}</div>
 </div>
 {%- endmacro -%}
 

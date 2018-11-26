@@ -4,7 +4,6 @@ from django.http import HttpResponse, Http404
 from django.contrib.auth.models import User
 import simplejson
 from django.db.models import Q
-from django.core.urlresolvers import reverse
 from askbot import models
 from askbot.conf import settings as askbot_settings
 from askbot.search.state_manager import SearchState

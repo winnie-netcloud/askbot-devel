@@ -201,9 +201,9 @@ def badges(request):#user status/reputation system
     }
     return render(request, 'badges.html', data)
 
-def badge(request, id):
+def badge(request, badge_id):
     #todo: supplement database data with the stuff from badges.py
-    badge = get_object_or_404(BadgeData, id=id)
+    badge = get_object_or_404(BadgeData, pk=badge_id)
 
     badge_recipients = User.objects.filter(
                             award_user__badge = badge

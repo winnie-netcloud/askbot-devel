@@ -15,6 +15,7 @@ from django.template.loader import get_template
 from django.utils.html import strip_tags as strip_all_tags
 from django.utils.html import urlize
 from django.utils.translation import ugettext as _
+from django.utils.text import Truncator
 
 
 ALLOWED_HTML_ELEMENTS = ('a', 'abbr', 'acronym', 'address', 'b', 'big',
@@ -321,6 +322,32 @@ def get_login_link(text=None):
     from askbot.utils.url_utils import get_login_url
     text = text or _('please login')
     return '<a href="%s">%s</a>' % (get_login_url(), text)
+
+
+def get_snippet(html, max_words, add_expander=False):
+    # TODO: truncate so that we have max number of lines
+    # the issue is that code blocks have few words
+    # but very tall, while paragraphs can be dense on words
+    # and fit into fewer lines
+    truncated = Truncator(html).words(max_words, truncate=' ...', html=True)
+    new_count = get_word_count(truncated)
+    orig_count = get_word_count(html)
+
+    if new_count + 1 >= orig_count:
+        return html
+
+    if add_expander:
+        expander = '<span class="expander"> <a>(' + _('more') + ')</a></span>'
+        # it's better to put expander inside of the last block level tag
+        if truncated.endswith('</p>'):
+            snippet = truncated[:-4] + expander + '</p>'
+        elif truncated.endswith('</div>'):
+            snippet = truncated[:-6] + expander + '</div>'
+        else:
+            snippet = truncated + expander
+    # it is important to have div here, so that we can make
+    # the expander work
+    return sanitize_html('<div class="snippet">' + snippet + '</div>')
 
 
 def get_visible_text(html):
