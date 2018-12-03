@@ -44,9 +44,9 @@
     {% include "moderation/manage_reject_reasons_dialog.html" %}
     <div class="action-status"><span></span></div>
     <div class="messages">
-    {% for item in items %}
+    {% for item in queue_items %}
         <div class="message" data-message-id="{{ item.id }}">
-            {{ macros.moderation_queue_message(item) }}
+            {{ macros.moderation_queue_item(item) }}
         </div>
     {% endfor %}
     </div>

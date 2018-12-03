@@ -336,8 +336,9 @@ def get_snippet(html, max_words, add_expander=False):
     if new_count + 1 >= orig_count:
         return html
 
+    snippet = truncated 
     if add_expander:
-        expander = '<span class="expander"> <a>(' + _('more') + ')</a></span>'
+        expander = u'<span class="expander"> <a>(' + _('more') + ')</a></span>'
         # it's better to put expander inside of the last block level tag
         if truncated.endswith('</p>'):
             snippet = truncated[:-4] + expander + '</p>'

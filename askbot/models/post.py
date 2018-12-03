@@ -58,8 +58,8 @@ def estimate_max_words_to_wrap_snippet(max_length, is_comment):
 
 def get_title_and_tags_snippet(title, tag_names):
     """Returns a sanitized html snippet with the title and tags"""
-    title = '<h2>{}</h2>\n'.format(title)
-    tags = '<div class="tags">' + _('Tags') + ': ' + ', '.join(tag_names) + '</div>\n'
+    title = u'<h2 class="title">{}</h2>\n'.format(title)
+    tags = u'<div class="tags">' + _('Tags') + ': ' + u', '.join(tag_names) + '</div>\n'
     return sanitize_html(title + tags)
 
 def default_html_moderator(post):
@@ -2137,11 +2137,6 @@ class PostRevisionManager(models.Manager):
 
 
 class PostRevision(models.Model):
-    QUESTION_REVISION_TEMPLATE_NO_TAGS = (
-        '<h3>%(title)s</h3>\n'
-        '<div class="text">%(html)s</div>\n'
-    )
-
     post = models.ForeignKey('askbot.Post', related_name='revisions',
                              null=True, blank=True)
     revision = models.PositiveIntegerField()
@@ -2286,15 +2281,7 @@ class PostRevision(models.Model):
     @property
     def html(self, **kwargs):
         markdowner = markup.get_parser()
-        sanitized_html = sanitize_html(markdowner.convert(self.text))
-
-        if self.post.is_question():
-            return sanitize_html(self.QUESTION_REVISION_TEMPLATE_NO_TAGS % {
-                'title': self.title,
-                'html': sanitized_html
-            })
-        else:
-            return sanitized_html
+        return sanitize_html(markdowner.convert(self.text))
 
     def get_snippet(self, max_length=None):
         """returns an abbreviated HTML snippet of the content

@@ -36,6 +36,13 @@ class ModerationReason(models.Model):
         verbose_name = 'moderation reason'
         verbose_name_plural = 'moderation reasons'
 
+    def __unicode__(self):
+        """Returns string representation of the item"""
+        tpl = u'ModerationReason(title="{}", is_predefined={}, is_manually_assignable={})'
+        return tpl.format(self.title,
+                          self.is_predefined,
+                          self.is_manually_assignable)
+
 
 RESOLUTION_CHOICES = (
     ('waiting', _('Awaiting moderation')),
@@ -89,7 +96,7 @@ class ModerationQueueItem(models.Model):
         """Returns type of the object"""
         from askbot.models import PostRevision
         if self.item.__class__ == PostRevision:
-            return self.item.post_type
+            return self.item.post.post_type
         raise NotImplementedError
 
     def get_item_author(self):
@@ -111,6 +118,24 @@ class ModerationQueueItem(models.Model):
         from askbot.models import PostRevision
         if self.item.__class__ == PostRevision:
             return self.item.revised_at
+        raise NotImplementedError
+
+    def get_item_headline(self):
+        """Returns display info of the item"""
+        from askbot.models import PostRevision
+        if self.item.__class__ == PostRevision:
+            title = self.reason.title.lower()
+            params = {
+                'post_type': self.get_item_object_type(),
+                'flag_type': title
+            }
+            if self.reason.is_manually_assignable:
+                return _('%(post_type)s flagged "%(flag_type)s"') % params
+            if title == 'new post':
+                return _('new %(post_type)s') % params
+            elif title == 'post edit':
+                return _('%(post_type)s edit') % params
+
         raise NotImplementedError
 
     def get_item_snippet(self):

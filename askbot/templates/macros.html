@@ -32,32 +32,22 @@
 <div class="message-details" data-message-id="{{ queue_item.id }}">
     <div>
         <input type="checkbox" />
-        {% if queue_item.reason.is_manually_assignable %}
-            {% set reason_title=queue_item.get_reason_title()|lower|escape %}
-            {% trans %}Flagged "{{ reason_title }}"{% endtrans %} 
-        {% else %}
-            {{ queue_item.reason.title|escape }}
-        {% endif %} |
-        <a href={{ queue_item.item.get_absolute_url() }}>
-            {% trans object_type=queue_item.get_item_object_type() %}{{ object_type }} by{% endtrans %}
-        </a>
-        {% set item_author=queue_item.get_item_author() %}
-        {{ moderation_queue_item_user_info(item_author) }}
-        {% set ip_addr=queue_item.get_item_ip_address() %}
-        {% if ip_addr %}
-            ip=<span class="ip-addr">{{ ip_addr }}</span>
-        {% endif %}
-        ({{ timeago(queue_item.get_item_timestamp()) }})
+            <a href="{{ queue_item.item.get_absolute_url() }}">{{ queue_item.get_item_headline() }}</a>
+            |
+            {% if queue_item.reason.is_manually_assignable %}
+                {{ moderation_queue_item_user_info(queue_item.added_by) }}
+                ({{ timeago(queue_item.added_at) }})
+            {% else %}
+                {% set item_author=queue_item.get_item_author() %}
+                {{ moderation_queue_item_user_info(item_author) }}
+                {% set ip_addr=queue_item.get_item_ip_address() %}
+                {% if ip_addr %}
+                    ip=<span class="ip-addr">{{ ip_addr }}</span>
+                {% endif %}
+                ({{ timeago(queue_item.get_item_timestamp()) }})
+            {% endif %}
+        </a> 
     </div>
-    {% if queue_item.reason.is_manually_assignable %}
-    <div>
-        {% set user_info %}
-            {{ moderation_queue_item_user_info(queue_item.added_by) }}
-        {% endset %}
-        {% trans %}Reported by {{ user_info }}{% endtrans %}
-        ({{ timeago(queue_item.added_at) }})
-    </div>
-    {% endif %}
     <div class="item-snippet">{{ queue_item.get_item_snippet() }}</div>
 </div>
 {%- endmacro -%}

@@ -37,7 +37,7 @@ def get_queue_items_for_user(user):
     the user's languages"""
     return models.ModerationQueueItem.objects.filter(
         language_code__in=user.get_languages(),
-        resolution_status='wating'
+        resolution_status='waiting'
     )
 
 
@@ -84,7 +84,7 @@ def get_memos_by_revisions(revs, user):
     rev_ids = revs.values_list('id', flat=True)
     return models.ModerationQueueItem.objects.filter(
         language_code__in=user.get_languages(),
-        resolution_status='wating',
+        resolution_status='waiting',
         item_content_type=rev_ct,
         item_id__in=rev_ids
     )
@@ -152,7 +152,7 @@ def moderation_queue(request):
 
         queue.append(queue_item)
 
-    manually_assignable_mod_reasons = models.ModerationReasons.objects.filter(
+    manually_assignable_mod_reasons = models.ModerationReason.objects.filter(
         reason_type='post_moderation',
         is_manually_assignable=True
     ) 
