@@ -373,7 +373,11 @@ for the purposes of the AJAX comment editor #}
 {%- macro comment_widget(comment, csrf_token=None) -%}
     {# Warning! Any changes to the comment markup must be duplicated in post.js
        for the purposes of the AJAX comment editor #}
-    <div id="post-id-{{ comment.id }}" class="comment js-comment" data-post-id="{{ comment.id }}">
+    <div id="post-id-{{ comment.id }}"
+        class="comment js-comment"
+        data-post-id="{{ comment.id }}"
+        data-revision-id="{{ comment.current_revision_id }}"
+    >
         <div class="comment-votes">
             <div 
                 id="comment-img-upvote-{{ comment.id }}" 

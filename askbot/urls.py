@@ -290,9 +290,9 @@ urlpatterns = patterns(
         name='get_editor'
     ),
     service_url(
-        r'^get-post-html/',
-        views.readers.get_post_html,
-        name='get_post_html'
+        r'^get-post-revision-html/',
+        views.readers.get_post_revision_html,
+        name='get_post_revision_html'
     ),
     url(
         r'^%s%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'ask/')),

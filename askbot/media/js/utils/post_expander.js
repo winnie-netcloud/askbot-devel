@@ -7,12 +7,12 @@ var PostExpander = function () {
 };
 inherits(PostExpander, SimpleControl);
 
-PostExpander.prototype.setPostId = function (postId) {
-    this._postId = postId;
+PostExpander.prototype.setRevisionId = function (revId) {
+    this._revId = revId;
 };
 
-PostExpander.prototype.getPostId = function () {
-    return this._postId;
+PostExpander.prototype.getRevisionId = function () {
+    return this._revId;
 };
 
 PostExpander.prototype.showWaitIcon = function () {
@@ -65,12 +65,12 @@ PostExpander.prototype.getExpandHandler = function () {
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            data: {'post_id': me.getPostId()},
-            url: askbot.urls.getPostHtml,
+            data: {'revision_id': me.getRevisionId()},
+            url: askbot.urls.getPostRevisionHtml,
             success: function (data) {
-                if (data.post_html) {
+                if (data.revision_html) {
                     snippet.hide();
-                    snippet.html(data.post_html);
+                    snippet.html(data.revision_html);
                     snippet.fadeIn();
                     if (askbot.settings.mathjaxEnabled === true) {
                         runMathJax();

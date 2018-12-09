@@ -324,7 +324,13 @@ def get_login_link(text=None):
     return '<a href="%s">%s</a>' % (get_login_url(), text)
 
 
-def get_snippet(html, max_words, add_expander=False):
+def get_snippet(html, max_words, item_id=None):
+    """If `item_id` is not None, the expander link
+    is added, and the item_id is passed via the
+    `data-item-id` parameter on the expander span element.
+    How to interprete the item id is up to the user
+    of the link.
+    """
     # TODO: truncate so that we have max number of lines
     # the issue is that code blocks have few words
     # but very tall, while paragraphs can be dense on words
@@ -336,19 +342,20 @@ def get_snippet(html, max_words, add_expander=False):
     if new_count + 1 >= orig_count:
         return html
 
-    snippet = truncated 
-    if add_expander:
-        expander = u'<span class="expander"> <a>(' + _('more') + ')</a></span>'
+    snippet = sanitize_html(truncated)
+    if item_id:
+        expander = u'<span class="expander" data-item-id="{}"> <a>('.format(item_id) \
+                   + _('more') + ')</a></span>'
         # it's better to put expander inside of the last block level tag
-        if truncated.endswith('</p>'):
-            snippet = truncated[:-4] + expander + '</p>'
-        elif truncated.endswith('</div>'):
-            snippet = truncated[:-6] + expander + '</div>'
+        if snippet.endswith('</p>'):
+            snippet = snippet[:-4] + expander + '</p>'
+        elif snippet.endswith('</div>'):
+            snippet = snippet[:-6] + expander + '</div>'
         else:
-            snippet = truncated + expander
+            snippet += expander
     # it is important to have div here, so that we can make
     # the expander work
-    return sanitize_html('<div class="snippet">' + snippet + '</div>')
+    return '<div class="snippet">' + snippet + '</div>'
 
 
 def get_visible_text(html):

@@ -38,7 +38,7 @@
 {% endcompress %}
 <script type="text/javascript">
     // define reputation needs for comments
-    askbot['urls']['getPostHtml'] = '{% url get_post_html %}';
+    askbot['urls']['getPostRevisionHtml'] = '{% url get_post_revision_html %}';
     askbot['urls']['retag'] = "{% url retag_question question.id %}";
 
     {# IMPORTANT !!! the same number for avatar size as in below two lines 
@@ -91,12 +91,9 @@
         var expanders = $('.expander');
         expanders.each(function(idx, item) {
             var expanderElement = $(item);
-            var post = expanderElement.closest('.post,.comment');
-            if (post.length === 1) {
-                var expander = new PostExpander();
-                expander.setPostId(post.data('postId'));
-                expander.decorate(expanderElement);
-            }
+            var expander = new PostExpander();
+            expander.setRevisionId(expanderElement.data('itemId'));
+            expander.decorate(expanderElement);
         });
 
         var followBtn = $('.js-follow-question');

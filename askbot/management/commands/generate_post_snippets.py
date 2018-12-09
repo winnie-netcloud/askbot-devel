@@ -13,7 +13,7 @@ class Command(NoArgsCommand):
         for post in ProgressBar(posts.iterator(), count, message):
             if hasattr(post, 'summary'):
                 post.html = post.parse_post_text()['html']
-                post.summary = post.get_snippet()
+                post.summary = post.get_snippet(add_expander=True)
                 post.save()
                 transaction.commit()
                 if post.thread:

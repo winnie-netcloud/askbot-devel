@@ -587,7 +587,7 @@ class Post(models.Model):
 
         # a hack allowing to save denormalized .summary field for questions
         if hasattr(self, 'summary'):
-            self.summary = self.get_snippet()
+            self.summary = self.get_snippet(add_expander=True)
 
         newly_mentioned_users = set(data['newly_mentioned_users']) - set([author])
         removed_mentions = data['removed_mentions']
@@ -928,7 +928,7 @@ class Post(models.Model):
         after = moderate(self)
         if after != before:
             self.html = after
-            self.summary = self.get_snippet()
+            self.summary = self.get_snippet(add_expander=True)
             self.save()
 
     def is_private(self):
@@ -1079,19 +1079,22 @@ class Post(models.Model):
             return u'{}\n\n{}\n\n{}'.format(title, tags, body_text)
         return body_text or self.text
 
-    def get_snippet(self, max_length=None):
+    def get_snippet(self, max_length=None, add_expander=False):
         """returns an abbreviated HTML snippet of the content
         or full content, depending on how long it is
         todo: remove the max_length parameter
         """
         max_words = estimate_max_words_to_wrap_snippet(max_length, self.is_comment())
-        return get_html_snippet_util(self.html, max_words)
+        rev_id = None
+        if add_expander:
+            rev_id = self.current_revision_id
+        return get_html_snippet_util(self.html, max_words, item_id=rev_id)
 
-    def get_full_snippet(self, max_length=None):
+    def get_full_snippet(self, max_length=None, add_expander=False):
         """Same as .get_snippet(), but in the case of post_type == 'question'
         also prepends title and the tags.
         `max_length` applies only to the main part of the snippet, not the title."""
-        snippet = self.get_snippet(max_length)
+        snippet = self.get_snippet(max_length, add_expander)
         if self.is_question():
             thread = self.thread
             prefix = get_title_and_tags_snippet(thread.title, thread.get_tag_names())
@@ -2283,20 +2286,23 @@ class PostRevision(models.Model):
         markdowner = markup.get_parser()
         return sanitize_html(markdowner.convert(self.text))
 
-    def get_snippet(self, max_length=None):
+    def get_snippet(self, max_length=None, add_expander=False):
         """returns an abbreviated HTML snippet of the content
         or full content, depending on how long it is
         todo: remove the max_length parameter
         """
         is_comment = self.post.is_comment()
         max_words = estimate_max_words_to_wrap_snippet(max_length, is_comment)
-        return get_html_snippet_util(self.html, max_words)
+        item_id = None
+        if add_expander:
+            item_id = self.id
+        return get_html_snippet_util(self.html, max_words, item_id=item_id)
 
-    def get_full_snippet(self, max_length=None):
+    def get_full_snippet(self, max_length=None, add_expander=False):
         """Same as .get_snippet(), but in the case of post_type == 'question'
         also prepends title and the tags.
         `max_length` applies only to the main part of the snippet, not the title."""
-        snippet = self.get_snippet(max_length)
+        snippet = self.get_snippet(max_length, add_expander)
         if self.post.is_question():
             prefix = get_title_and_tags_snippet(self.title, split_tag_names(self.tagnames))
             # prepend the title and tags

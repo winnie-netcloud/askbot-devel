@@ -142,5 +142,5 @@ class ModerationQueueItem(models.Model):
         """Returns cleaned html snippet of the item"""
         from askbot.models import PostRevision
         if self.item.__class__ == PostRevision:
-            return self.item.get_full_snippet()
+            return self.item.get_full_snippet(max_length=500, add_expander=True)
         raise NotImplementedError

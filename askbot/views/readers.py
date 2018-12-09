@@ -792,7 +792,7 @@ def get_perms_data(request):
 
 @ajax_only
 @get_only
-def get_post_html(request):
-    post = models.Post.objects.get(id=request.GET['post_id'])
-    post.assert_is_visible_to(request.user)
-    return {'post_html': post.html}
+def get_post_revision_html(request):
+    revision = models.PostRevision.objects.get(pk=request.GET['revision_id'])
+    revision.post.assert_is_visible_to(request.user)
+    return {'revision_html': revision.html}

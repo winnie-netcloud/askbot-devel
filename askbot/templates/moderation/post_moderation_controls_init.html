@@ -3,6 +3,7 @@
     askbot['urls']['save_post_reject_reason'] = '{% url save_post_reject_reason %}';
     askbot['urls']['delete_post_reject_reason'] = '{% url delete_post_reject_reason %}';
     askbot['urls']['moderatePostEdits'] = '{% url moderate_items %}';
+    askbot['urls']['getPostRevisionHtml'] = '{% url get_post_revision_html %}';
     askbot['data']['postRejectReasons'] = [
       {% for reason in post_flag_reasons %}
         {'id': {{reason.id}}, 'title': '{{reason.title|escapejs}}'},
