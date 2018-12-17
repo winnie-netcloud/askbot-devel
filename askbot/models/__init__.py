@@ -1877,7 +1877,7 @@ def user_delete_question(
                              timestamp=timestamp)
 
 
-def user_delete_all_content_authored_by_user(self,
+def user_delete_users_content(self,
                                              author,
                                              timestamp=None,
                                              submit_spam=False):
@@ -2292,12 +2292,10 @@ def user_create_post_reject_reason(self, title=None, description=None, timestamp
 
 @auto_now_timestamp
 def user_edit_post_reject_reason(self, reason, title=None,
-                                 details=None, timestamp=None):
+                                 description=None, timestamp=None):
     reason.title = title
+    reason.description = description
     reason.save()
-    return reason.details.apply_edit(edited_by=self,
-                                     edited_at=timestamp,
-                                     text=details)
 
 @reject_forbidden_phrases
 def user_post_answer(self,
@@ -3181,7 +3179,7 @@ def downvote(self, post, timestamp=None, cancel=False, force=False):
     )
 
 @auto_now_timestamp
-def user_approve_post_revision(user, post_revision, timestamp = None):
+def user_approve_post_revision(user, post_revision, timestamp=None):
     """approves the post revision and, if necessary,
     the parent post and threads"""
     user.assert_can_approve_post_revision()
@@ -3599,8 +3597,8 @@ User.add_to_class('delete_comment', user_delete_comment)
 User.add_to_class('delete_question', user_delete_question)
 User.add_to_class('delete_answer', user_delete_answer)
 User.add_to_class(
-    'delete_all_content_authored_by_user',
-    user_delete_all_content_authored_by_user
+    'delete_users_content',
+    user_delete_users_content
 )
 User.add_to_class('restore_post', user_restore_post)
 User.add_to_class('close_question', user_close_question)

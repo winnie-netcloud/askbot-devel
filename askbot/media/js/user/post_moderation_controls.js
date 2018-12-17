@@ -48,7 +48,7 @@ PostModerationControls.prototype.getCheckBoxes = function () {
   return this._element.find('.messages input[type="checkbox"]');
 };
 
-PostModerationControls.prototype.getSelectedEditIds = function () {
+PostModerationControls.prototype.getSelectedModerationItemIds = function () {
   var checkBoxes = this.getCheckBoxes();
   var num = checkBoxes.length;
   var idList = [];
@@ -72,14 +72,14 @@ PostModerationControls.prototype.getSelectedEditIds = function () {
 PostModerationControls.prototype.getModHandler = function (action, items, optReason) {
   var me = this;
   return function () {
-    var selectedEditIds = me.getSelectedEditIds();
-    if (selectedEditIds.length === 0) {
+    var selectedModerationItemIds = me.getSelectedModerationItemIds();
+    if (selectedModerationItemIds.length === 0) {
       me.showMessage(gettext('Please select at least one item'));
       return;
     }
     //@todo: implement undo
     var postData = {
-      'edit_ids': selectedEditIds,//revision ids
+      'item_ids': selectedModerationItemIds,//revision ids
       'action': action,
       'items': items,//affected items - users, posts, ips
       'reason': optReason || 'none'
@@ -92,12 +92,12 @@ PostModerationControls.prototype.getModHandler = function (action, items, optRea
       url: askbot.urls.moderatePostEdits,
       success: function (response_data) {
         if (response_data.success) {
-          me.removeEntries(response_data.memo_ids);
-          me.setEntryCount(response_data.memo_count);
+          me.removeEntries(response_data.item_ids);
+          me.setEntryCount(response_data.item_count);
         }
 
         var message = response_data.message || '';
-        if (me.getEntryCount() < 10 && response_data.memo_count > 9) {
+        if (me.getEntryCount() < 10 && response_data.item_count > 9) {
           if (message) {
             message += '. ';
           }
@@ -169,7 +169,7 @@ PostModerationControls.prototype.decorate = function (element) {
   messages.each(function(idx, item) {
     var checkBox = $(item).find('input[type="checkbox"]');
     $(item).click(function(evt) { 
-      if (evt.target.tagName !== 'A') {
+      if (evt.target.tagName !== 'A' && !isCheckBox(evt.target)) {
         var state = checkBox.prop('checked');
         console.log('checkbox state is ' + state);
         checkBox.prop('checked', !state);

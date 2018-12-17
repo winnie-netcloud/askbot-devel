@@ -1089,12 +1089,12 @@ def save_post_reject_reason(request):
             reason_id = form.cleaned_data['reason_id']
             reason = models.ModerationReason.objects.get(pk=reason_id)
             request.user.edit_post_reject_reason(
-                reason, title=title, details=details
+                reason, title=title, description=description
             )
         return {
             'reason_id': reason.id,
             'title': title,
-            'details': details
+            'description': description
         }
     else:
         raise Exception(forms.format_form_errors(form))

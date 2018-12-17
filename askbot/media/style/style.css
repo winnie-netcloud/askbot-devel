@@ -4592,6 +4592,9 @@ textarea.tipped-input {
 .tipped-input.blank {
   color: #707070;
 }
+.select-box-item {
+  cursor: pointer;
+}
 .select-box {
   margin: 0;
 }
@@ -4741,6 +4744,7 @@ textarea.tipped-input {
 }
 .modal h3 {
   padding: 0;
+  margin-bottom: .125rem;
 }
 .modal p {
   font-size: 14px;
@@ -4770,8 +4774,15 @@ textarea.tipped-input {
   width: 515px;
   font-style: normal;
 }
+.alert {
+  padding: .75rem !important;
+}
+.alert ul {
+  margin-bottom: 0;
+}
 .alert .close {
-  right: -38px;
+  right: 0 !important;
+  margin: 0;
 }
 .flip-content,
 .flip-tab {

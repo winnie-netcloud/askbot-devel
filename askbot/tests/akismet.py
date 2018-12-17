@@ -126,7 +126,7 @@ class AkismetApiTests(AskbotTestCase):
         user = self.create_user()
         question = user.post_question(title='question title', body_text='body text', tags='tag1 tag2')
         #defer_celery_task(submit_spam_posts, args=([question.pk],))
-        user.delete_all_content_authored_by_user(user, submit_spam=True)
+        user.delete_users_content(user, submit_spam=True)
         params = get_request_params(1)
         self.assertEqual(params['comment_content'], question.get_text_content())
         self.assertEqual(params['user_ip'], question.revisions.all()[0].ip_addr)

@@ -20,9 +20,11 @@
             </span>
             <ul class="dropdown-menu">
                 {% for reason in moderation_reasons %}
-                <li>
-                    <a class="decline-with-reason" data-reason-id="{{ reason.id }}">{{ reason.title|escape }}</a>
-                </li>
+                    <li>
+                        <a class="decline-with-reason" data-reason-id="{{ reason.id }}">
+                            {{ reason.title|escape }}{% if reason.is_predefined %}*{% endif %}
+                        </a>
+                    </li>
                 {% endfor %}
                 <li>
                     <a class="manage-reasons">{% trans %}add/manage reject reasons{% endtrans %}</a>

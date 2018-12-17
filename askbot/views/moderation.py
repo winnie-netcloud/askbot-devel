@@ -5,7 +5,6 @@ from askbot import const
 from askbot.conf import settings as askbot_settings
 from askbot import models
 from askbot import mail
-from datetime import datetime
 from django.http import Http404
 from django.utils.translation import string_concat
 from django.utils.translation import ungettext
@@ -20,17 +19,16 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.views.decorators import csrf
 from django.utils.encoding import force_text
+from django.utils import timezone
 from django.core import exceptions
 import simplejson
 
 #some utility functions
-def get_object(memo):
-    content_object = memo.activity.content_object
-    if isinstance(content_object, models.PostRevision):
-        return content_object.post
-    else:
-        return content_object
-
+def get_object(mod_item):
+    item = mode_item.item
+    if isinstance(item, models.PostRevision):
+        return item.post
+    return item
 
 def get_queue_items_for_user(user):
     """Returns moderation queue items matching
@@ -41,11 +39,11 @@ def get_queue_items_for_user(user):
     )
 
 
-def get_revision_set(memo_set):
-    """returns revisions given the memo_set"""
+def get_revision_set(item_set):
+    """returns revisions given the item_set"""
     rev_ids = set()
-    for memo in memo_set:
-        obj = memo.activity.content_object
+    for item in item_set:
+        obj = item.item
         if isinstance(obj, models.PostRevision):
             rev_ids.add(obj.id)
     return models.PostRevision.objects.filter(id__in=rev_ids)
@@ -55,9 +53,9 @@ def expand_revision_set(revs):
     """returns lists of ips and users,
     seeded by given revisions"""
     #1) get post edits and ips from them
-    ips, users = get_revision_ips_and_authors(revs)
+    ips, user_ids = get_revision_ips_and_author_ids(revs)
     #2) get revs by those ips and users
-    revs_filter = Q(ip_addr__in=ips) | Q(author__in=users)
+    revs_filter = Q(ip_addr__in=ips) | Q(author_id__in=user_ids)
     more_revs = models.PostRevision.objects.filter(revs_filter)
 
     #return ips and users when number of revisions loaded by
@@ -70,16 +68,13 @@ def expand_revision_set(revs):
     else:
         raise ValueError('expanded revisions set smaller then the original')
 
-
-def get_revision_ips_and_authors(revs):
+def get_revision_ips_and_author_ids(revs):
     """returns sets of ips and users from revisions"""
     ips = set(revs.values_list('ip_addr', flat=True))
-    user_ids = set(revs.values_list('author', flat=True))
-    users = models.User.objects.filter(id__in=user_ids)
-    return ips, users
+    user_ids = set(revs.values_list('author_id', flat=True))
+    return ips, user_ids 
 
-
-def get_memos_by_revisions(revs, user):
+def get_queue_items_for_revisions(revs, user):
     rev_ct = ContentType.objects.get_for_model(models.PostRevision)
     rev_ids = revs.values_list('id', flat=True)
     return models.ModerationQueueItem.objects.filter(
@@ -89,41 +84,24 @@ def get_memos_by_revisions(revs, user):
         item_id__in=rev_ids
     )
 
+MOD_IDS = set()
+def get_mod_ids():
+    """Returns user ids of moderators
+    and administrators"""
+    mods = models.UserProfile.objects.filter(status__in=('d', 'm'))
+    return set(mods.values_list('pk', flat=True))
 
-def get_editors(memo_set):
-    """returns editors corresponding to the memo set
-    some memos won't yeild editors - if the related object
-    is post and it has > 1 editor (in which case we don't know
-    who was the editor that we want to block!!!
-    this applies to flagged posts.
+def exclude_admins(user_ids):
+    """Returns set of user ids excluding ids
+    of admins or moderators"""
+    global MOD_IDS
+    if not MOD_IDS:
+        MOD_IDS = get_mod_ids()
+    return set(user_ids) - MOD_IDS
 
-    todo: an inconvenience is that "offensive flags" are stored
-    differently in the Activity vs. "new moderated posts" or "post edits"
-    """
-    editors = set()
-    for memo in memo_set:
-        obj = memo.activity.content_object
-        if isinstance(obj, models.PostRevision):
-            editors.add(obj.author)
-        elif isinstance(obj, models.Post):
-            rev_authors = set()
-            for rev in obj.revisions.all():
-                rev_authors.add(rev.author)
-
-            #if we have > 1 author we skip, b/c don't know
-            #which user we want to block
-            if len(rev_authors) == 1:
-                editors.update(rev_authors)
-    return editors
-
-
-def exclude_admins(users):
-    filtered = set()
-    for user in users:
-        if not user.is_administrator_or_moderator():
-            filtered.add(user)
-    return filtered
-
+def get_author_ids(items):
+    """Returns user ids of the item authors"""
+    return items.values_list('item_author_id', flat=True)
 
 def concat_messages(message1, message2):
     if message1:
@@ -132,6 +110,68 @@ def concat_messages(message1, message2):
     else:
         return message2
 
+def approve_posts(mod, mod_items):
+    """mod approves revisions in mod_items
+    and returns number of approved posts.
+    At the same time removes all other flags on the post.
+    """
+    num_posts = 0
+    for item in mod_items:
+        if not isinstance(item.item, models.PostRevision):
+            continue
+        mod.approve_post_revision(item.item)
+        mod.flag_post(revision.post, cancel_all=True, force=True)
+        num_posts += 1
+
+    return num_posts
+
+def decline_posts(mod, mod_items, reason):
+    """Deletes posts and assigns the reason why it was deleted.
+    Returns number of declined posts.
+    """
+    # get unique posts from the mod queue items
+    posts = set([get_object(item) for item in mod_items])
+
+    from askbot.mail.messages import RejectedPost
+    num_posts = 0
+    for post in posts:
+        mod.delete_post(post)
+        email = RejectedPost({
+                    'post': post.html,
+                    'reject_reason': reject_reason.description_html
+                })
+        email.send([post.author.email,])
+        num_posts += 1
+
+    for item in mod_items:
+        item.resolve_with_followup_items(mod, reason)
+
+    return num_posts
+
+def block_ips(ips, current_ip):
+    #to make sure to not block the admin and
+    #in case REMOTE_ADDR is a proxy server - not
+    #block access to the site
+    good_ips = set(django_settings.ASKBOT_WHITELISTED_IPS)
+    good_ips.add(current_ip)
+    ips = ips - good_ips
+
+    #block IPs
+    from stopforumspam.models import Cache
+    already_blocked = Cache.objects.filter(ip__in=ips)
+    already_blocked.update(permanent=True)
+    already_blocked_ips = already_blocked.values_list('ip', flat=True)
+    ips = ips - set(already_blocked_ips)
+    for ip in ips:
+        cache = Cache(ip=ip, permanent=True)
+        cache.save()
+
+    return len(ips)
+
+def set_users_statuses(mod, mod_items, status):
+    user_ids = exclude_admins(get_author_ids(item_set))
+    user_ids -= set([mod.pk])
+    return models.UserProfile.objects.filter(pk=user_ids).update(status=status)
 
 @login_required
 def moderation_queue(request):
@@ -152,15 +192,16 @@ def moderation_queue(request):
 
         queue.append(queue_item)
 
-    manually_assignable_mod_reasons = models.ModerationReason.objects.filter(
+    moderation_reasons = models.ModerationReason.objects.filter_as_dicts(
         reason_type='post_moderation',
-        is_manually_assignable=True
-    ) 
+        is_manually_assignable=True,
+        order_by='title'
+    )
 
     data = {
         'active_tab': 'users',
         'page_class': 'moderation-queue-page',
-        'moderation_reasons': manually_assignable_mod_reasons,
+        'moderation_reasons': list(moderation_reasons),
         'queue_items' : queue,
     }
     return render(request, 'moderation/queue.html', data)
@@ -177,76 +218,51 @@ def moderate_items(request):
 
     post_data = decode_and_loads(request.body)
     #{'action': 'decline-with-reason', 'items': ['posts'], 'reason': 1, 'edit_ids': [827]}
+    import pdb
+    pdb.set_trace()
 
-    memo_set = models.ActivityAuditStatus.objects.filter(id__in=post_data['edit_ids'])
+    item_set = models.ModerationQueueItem.objects.filter(id__in=post_data['item_ids'])
     result = {
         'message': '',
-        'memo_ids': set()
+        'item_ids': set()
     }
 
-    #if we are approving or declining users we need to expand the memo_set
-    #to all of their edits of those users
-    if post_data['action'] in ('block', 'approve') and 'users' in post_data['items']:
-        editors = exclude_admins(get_editors(memo_set))
-        items = models.Activity.objects.filter(
-                                activity_type__in=const.MODERATED_EDIT_ACTIVITY_TYPES,
-                                user__in=editors
-                            )
-        memo_filter = Q(user=request.user, activity__in=items)
-        memo_set |= models.ActivityAuditStatus.objects.filter(memo_filter)
+    result = {'approved_posts': 0,
+              'approved_users': 0}
 
-    memo_set.select_related('activity')
+    # if we are approving or declining users we need to expand the item_set
+    # to all of their content
+    if post_data['action'] in ('block', 'approve') and 'users' in post_data['items']:
+        author_ids = exclude_admins(get_author_ids(item_set))
+        # get moderation queue items corresponding to
+        # the authors of the ModerationQueueItem.item
+        items_filter = {'item_author_id__in': author_ids, 'resolution_status': 'waiting'}
+        item_set |= models.ModerationQueueItem.objects.filter(**items_filter)
 
     if post_data['action'] == 'approve':
         num_posts = 0
-        if 'posts' in post_data['items']:
-            for memo in memo_set:
-                if memo.activity.activity_type == const.TYPE_ACTIVITY_MARK_OFFENSIVE:
-                    #unflag the post
-                    content_object = memo.activity.content_object
-                    request.user.flag_post(content_object, cancel_all=True, force=True)
-                    num_posts += 1
-                else:
-                    revision = memo.activity.content_object
-                    if isinstance(revision, models.PostRevision):
-                        request.user.approve_post_revision(revision)
-                        num_posts += 1
 
-            if num_posts > 0:
-                posts_message = ungettext('%d post approved', '%d posts approved', num_posts) % num_posts
-                result['message'] = concat_messages(result['message'], posts_message)
+        if 'posts' in post_data['items']:
+            # approve all unapproved posts
+            result['approved_posts'] = approve_posts(request.user, item_set)
 
         if 'users' in post_data['items']:
-            editors = exclude_admins(get_editors(memo_set))
-            assert(request.user not in editors)
-            for editor in editors:
-                editor.set_status('a')
+            result['approved_users'] = set_users_statuses(request.user, item_set, 'a')
+                
+        # manually assigned items are marked as dismissed
+        manually_assigned_items = item_set.filter(reason__is_manually_assignable=True)
+        manually_assigned_items.update(resolution_status='dismissed',
+                                       resolved_by=request.user,
+                                       resolved_at=timezone.now())
 
-            num_users = len(editors)
-            if num_users:
-                users_message = ungettext('%d user approved', '%d users approved', num_users) % num_users
-                result['message'] = concat_messages(result['message'], users_message)
+        # delete system assigned items like new post/revisions
+        system_assigned_items = item_set.filter(reason__is_manually_assignable=False)
+        system_assigned_items.delete()
 
     elif post_data['action'] == 'decline-with-reason':
         #todo: bunch notifications - one per recipient
-        num_posts = 0
-        for memo in memo_set:
-            post = get_object(memo)
-            request.user.delete_post(post)
-            reject_reason = models.ModerationReason.objects.get(pk=post_data['reason'])
-
-            from askbot.mail.messages import RejectedPost
-            email = RejectedPost({
-                        'post': post.html,
-                        'reject_reason': reject_reason.description_html
-                    })
-            email.send([post.author.email,])
-            num_posts += 1
-
-        #message to moderator
-        if num_posts:
-            posts_message = ungettext('%d post deleted', '%d posts deleted', num_posts) % num_posts
-            result['message'] = concat_messages(result['message'], posts_message)
+        reason = models.ModerationReason.objects.get(pk=post_data['reason'])
+        result['declined_posts'] = decline_posts(request.user, item_set, reason)
 
     elif post_data['action'] == 'block':
 
@@ -263,56 +279,48 @@ def moderate_items(request):
             assert('posts' in post_data['items'])
             assert(len(post_data['items']) == 3)
 
-            revs = get_revision_set(memo_set)
+            revs = get_revision_set(item_set)
+            # expand set of revisions via the set of the ip addresses
             revs = expand_revision_set(revs)
-            ips, users = get_revision_ips_and_authors(revs)
-            #important: evaluate the query here b/c some memos related to
-            #comments will be lost when blocking users
-            memo_set = set(get_memos_by_revisions(revs, request.user))
 
-            #to make sure to not block the admin and
-            #in case REMOTE_ADDR is a proxy server - not
-            #block access to the site
-            good_ips = set(django_settings.ASKBOT_WHITELISTED_IPS)
-            good_ips.add(request.META['REMOTE_ADDR'])
-            ips = ips - good_ips
+            ips, user_ids = get_revision_ips_and_author_ids(revs)
 
-            #block IPs
-            from stopforumspam.models import Cache
-            already_blocked = Cache.objects.filter(ip__in=ips)
-            already_blocked.update(permanent=True)
-            already_blocked_ips = already_blocked.values_list('ip', flat=True)
-            ips = ips - set(already_blocked_ips)
-            for ip in ips:
-                cache = Cache(ip=ip, permanent=True)
-                cache.save()
+            result['blocked_ips'] = block_ips(ips, request.META['REMOTE_ADDR'])
 
             #block users and all their content
-            users = exclude_admins(users)
-            num_users = 0
-            for user in users:
-                if user.status != 'b':
-                    user.set_status('b')
-                    num_users += 1
-                #delete all content by the user
-                num_posts += request.user.delete_all_content_authored_by_user(
-                                                            user, submit_spam=True)
+            user_ids = exclude_admins(user_ids)
+            # get all moderation items corresponding to the expander revision set
+            item_set = set(get_queue_items_for_revisions(revs, moderator))
+            result['blocked_users'] = set_users_statuses(request.user, item_set, 'b'):
 
-            num_ips = len(ips)
+            for user in [item.item_author for item in item_set]:
+                #delete all content by the user
+                count = moderator.delete_users_content(user, submit_spam=True)
+                result['deleted_posts'] += count
 
         elif 'users' in post_data['items']:
-            memo_set = set(memo_set)#evaluate memo_set before deleting content
-            editors = exclude_admins(get_editors(memo_set))
-            assert(request.user not in editors)
+            item_set = set(item_set)#evaluate item_set before deleting content
+            author_ids = exclude_admins(get_author_ids(item_set))
+            assert(request.user.pk not in author_ids)
+            num_users = models.UserProfile.objects.filter(pk__in=author_ids).update(status='b')
             num_users = 0
-            for editor in editors:
-                #block user
-                if editor.status != 'b':
-                    editor.set_status('b')
-                    num_users += 1
+            for user in models.User.objects.filter(pk__in=author_ids):
                 #delete all content by the user
-                num_posts += request.user.delete_all_content_authored_by_user(
-                                                            editor, submit_spam=True)
+                num_posts += request.user.delete_users_content(editor, submit_spam=True)
+
+
+        #message to moderator
+        if declined_posts:
+            posts_message = ungettext('%d post deleted', '%d posts deleted', num_posts) % num_posts
+            result['message'] = concat_messages(result['message'], posts_message)
+
+        if approved_posts:
+            posts_message = ungettext('%d post approved', '%d posts approved', num_posts) % num_posts
+            result['message'] = concat_messages(result['message'], posts_message)
+        if approved_users:
+            users_message = ungettext('%d user approved', '%d users approved', num_users) % num_users
+            result['message'] = concat_messages(result['message'], users_message)
+                                                                              submit_spam=True)
 
         if num_ips:
             ips_message = ungettext('%d ip blocked', '%d ips blocked', num_ips) % num_ips
@@ -326,18 +334,10 @@ def moderate_items(request):
             posts_message = ungettext('%d post deleted', '%d posts deleted', num_posts) % num_posts
             result['message'] = concat_messages(result['message'], posts_message)
 
-    result['memo_ids'] = [memo.id for memo in memo_set]
+    result['item_ids'] = item_set.values_list('pk', flat=True)
     result['message'] = force_text(result['message'])
 
     #delete items from the moderation queue
-    act_ids = [memo.activity_id for memo in memo_set]
-    acts = models.Activity.objects.filter(id__in=act_ids)
-
-    memos = models.ActivityAuditStatus.objects.filter(activity__id__in=act_ids)
-    memos.delete()
-
-    acts.delete()
-
     request.user.update_response_counts()
-    result['memo_count'] = request.user.get_notifications(const.MODERATED_ACTIVITY_TYPES).count()
+    result['item_count'] = request.user.get_notifications(const.MODERATED_ACTIVITY_TYPES).count()
     return result

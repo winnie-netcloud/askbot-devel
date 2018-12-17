@@ -94,6 +94,19 @@ $.ajaxSetup({
     }
 });
 
+/**
+ * `true` if element is input type checkbox
+ */
+var isCheckBox = function(elem) {
+  var elem = $(elem);
+  if (elem.length) {
+    var isInput = elem[0].tagName === 'INPUT';
+    var isCb = elem[0].type === 'checkbox';
+    return isInput && isCb;
+  }
+  return false;
+};
+
 
 /**
  * Selects template by class

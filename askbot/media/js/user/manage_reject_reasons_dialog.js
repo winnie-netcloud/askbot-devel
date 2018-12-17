@@ -134,13 +134,23 @@ ManageRejectReasonsDialog.prototype.setErrors = function (errors) {
         .prepend(alert_box.getElement());
 };
 
+ManageRejectReasonsDialog.prototype.getModerationReason = function (reasonId) {
+  for (var idx=0; idx < askbot.data.moderationReasons.length; idx++) {
+    var reason = askbot.data.moderationReasons[idx];
+    if (reason.id === reasonId) {
+      return reason;
+    }
+  }
+  return null;
+};
+
 ManageRejectReasonsDialog.prototype.addSelectableReason = function (data) {
     var id = data.reason_id;
     var title = data.title;
     var details = data.details;
     this._select_box.addItem(id, title, details);
 
-    askbot.data.postRejectReasons.push(
+    askbot.data.moderationReasons.push(
         {id: data.reason_id, title: data.title}
     );
     $.each(this._postModerationControls, function (idx, control) {
@@ -168,7 +178,7 @@ ManageRejectReasonsDialog.prototype.startSavingReason = function (callback) {
 
     var data = {
         title: title_input.getVal(),
-        details: details_input.getVal()
+        description: details_input.getVal()
     };
     var reasonIsNew = true;
     if (this._selected_reason_id) {
@@ -206,9 +216,9 @@ ManageRejectReasonsDialog.prototype.startSavingReason = function (callback) {
 ManageRejectReasonsDialog.prototype.startEditingReason = function () {
     var data = this._select_box.getSelectedItemData();
     var title = $(data.title).text();
-    var details = data.details;
+    var description = data.details;
     this._title_input.setVal(title);
-    this._details_input.setVal(details);
+    this._details_input.setVal(description);
     this._selected_reason_id = data.id;
     this.setState('add-new');
 };
@@ -291,16 +301,17 @@ ManageRejectReasonsDialog.prototype.decorate = function (element) {
     this._details_input = details_input;
 
     var me = this;
-    setupButtonEventHandlers(
-        element.find('.cancel, .modal-header .close'),
-        function () {
+    var closeMenuHandler = function () {
             me.hide();
             me.clearErrors();
             me.resetInputs();
             me.resetSelectedReasonId();
             me.setState('select');
             me.hideEditButtons();
-        }
+    };
+    setupButtonEventHandlers(
+        element.find('.cancel, .modal-header .close'),
+        closeMenuHandler
     );
 
     setupButtonEventHandlers(
