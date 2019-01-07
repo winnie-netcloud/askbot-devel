@@ -695,7 +695,7 @@ class FlagOffensivePermissionAssertionTests(PermissionAssertionTestCase):
     def extraSetUp(self):
         self.min_rep = askbot_settings.MIN_REP_TO_FLAG_OFFENSIVE
         self.question = self.post_question()
-        self.answer = self.post_answer(question = self.question)
+        self.answer = self.post_answer(question=self.question)
 
     def assert_user_cannot_flag(self):
         self.assertRaises(
@@ -806,11 +806,11 @@ class FlagOffensivePermissionAssertionTests(PermissionAssertionTestCase):
     def test_superuser_cannot_flag_question_twice(self):
         self.user.set_admin_status()
         self.user.save()
-        self.user.flag_post(post = self.question)
+        self.user.flag_post(post=self.question)
         self.assertRaises(
             exceptions.PermissionDenied,
             self.user.flag_post,
-            post = self.question
+            post=self.question
         )
         #here is a deviation - the link will still be shown
         #in templates

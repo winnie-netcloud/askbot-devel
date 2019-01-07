@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.exceptions import PermissionDenied
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from askbot.models.fields import LanguageCodeField
 
@@ -15,6 +16,50 @@ MODERATION_REASON_TYPES = (
 MANUALLY_ASSIGNABLE_HELP_TEXT = """Reasons that are not manually assignable
 can be assigned only by the system. Users should never assign them
 via the user interface"""
+
+def init_reason(**kwargs):
+    if ModerationReason.objects.filter(title=kwargs['title']).exists():
+        # todo: maybe update values
+        return
+    kwargs['description_html'] = u'<p>{}</p>'.format(kwargs['description_text'])
+    ModerationReason.objects.create(**kwargs)
+
+def init_reasons():
+    """This method is used only by the testing module.
+    These same moderation reasons are set up with migrations
+    for the purposes of normal runs.
+    """
+    init_reason(
+        title='Offensive',
+        description_text='Post contains offensive language or sentiment',
+        reason_type='post_moderation',
+        is_predefined=True,
+        is_manually_assignable=True
+    )
+
+    init_reason(
+        title='New post',
+        description_text='May be assigned automatically when someone creates a new post',
+        reason_type='post_moderation',
+        is_predefined=True,
+        is_manually_assignable=False
+    )
+
+    init_reason(
+        title='Post edit',
+        description_text='Maybe be assigned automatically when someone edits a post',
+        reason_type='post_moderation',
+        is_predefined=True,
+        is_manually_assignable=False
+    )
+
+    init_reason(
+        title='Spam',
+        description_text ='Post contains irrelevant or unsolicited content',
+        reason_type='post_moderation',
+        is_predefined=True,
+        is_manually_assignable=True
+    )
 
 class ModerationReasonManager(models.Manager):
     def filter_as_dicts(self, order_by=None, **params):
@@ -75,6 +120,7 @@ RESOLUTION_CHOICES = (
     ('waiting', _('Awaiting moderation')),
     ('upheld', _('Decision was upheld and the appropriate action was taken')),
     ('dismissed', _('Moderation memo was dismissed, no changes to the content')),
+    #('outdated', _('Moderation memo was dismissed because the content was changed thereafter')),
     ('followup', _('Moderation memo was accepted, but the final resolution '
                    'is made with a different reason'))
 )
@@ -115,33 +161,23 @@ class ModerationQueueItem(models.Model):
         verbose_name = 'moderation queue item'
         verbose_name_plural = 'moderation queue items'
 
-    def resolve_with_followup_item(self, moderator, followup_reason):
-        """Creates a followup item with the provided reason.
-        Followup item is resolved with status "upheld".
-        Current item, if manually assigned changed to status followup.
-        If system assigned, current item is deleted.
+    def create_resolved_item(self, moderator, reason):
+        """Returns an newly created item for the same content as the `self`
+        with the provided reason. The status is set to 'upheld',
+        the resolved_by - set to the value of `moderator`
+        and the timestamp is set to current time value.
         """
-        timestamp = timezone.now()
-
         new_item = ModerationQueueItem()
         new_item.item = self.item
-        new_item.author_id = self.author_id
-        new_item.reason = followup_reason
+        new_item.item_author_id = self.item_author_id
+        new_item.reason = reason
         new_item.added_by = moderator
         new_item.resolution_status = 'upheld'
-        new_item.resolved_at = timestamp
+        new_item.resolved_at = timezone.now()
         new_item.resolved_by = moderator
         new_item.language_code = self.language_code
         new_item.save()
-
-        if not self.reason.is_manually_assignable:
-            self.delete()
-            return
-
-        self.status = 'followup'
-        self.resolved_at = timestamp
-        self.resolved_by = moderator
-        self.save()
+        return new_item
 
     def get_reason_title(self):
         """Returns title of the moderation reason"""

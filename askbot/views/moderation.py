@@ -25,7 +25,7 @@ import simplejson
 
 #some utility functions
 def get_object(mod_item):
-    item = mode_item.item
+    item = mod_item.item
     if isinstance(item, models.PostRevision):
         return item.post
     return item
@@ -50,8 +50,9 @@ def get_revision_set(item_set):
 
 
 def expand_revision_set(revs):
-    """returns lists of ips and users,
-    seeded by given revisions"""
+    """returns expanded set of post revisions,
+    seeded by the list of ips and user ids
+    received from the `revs` revision set"""
     #1) get post edits and ips from them
     ips, user_ids = get_revision_ips_and_author_ids(revs)
     #2) get revs by those ips and users
@@ -68,21 +69,25 @@ def expand_revision_set(revs):
     else:
         raise ValueError('expanded revisions set smaller then the original')
 
+
 def get_revision_ips_and_author_ids(revs):
     """returns sets of ips and users from revisions"""
     ips = set(revs.values_list('ip_addr', flat=True))
     user_ids = set(revs.values_list('author_id', flat=True))
     return ips, user_ids 
 
-def get_queue_items_for_revisions(revs, user):
+
+def get_queue_item_ids_for_revisions(revs, user):
     rev_ct = ContentType.objects.get_for_model(models.PostRevision)
     rev_ids = revs.values_list('id', flat=True)
-    return models.ModerationQueueItem.objects.filter(
+    mod_items = models.ModerationQueueItem.objects.filter(
         language_code__in=user.get_languages(),
         resolution_status='waiting',
         item_content_type=rev_ct,
         item_id__in=rev_ids
     )
+    return list(mod_items.values_list('pk', flat=True))
+
 
 MOD_IDS = set()
 def get_mod_ids():
@@ -90,6 +95,7 @@ def get_mod_ids():
     and administrators"""
     mods = models.UserProfile.objects.filter(status__in=('d', 'm'))
     return set(mods.values_list('pk', flat=True))
+
 
 def exclude_admins(user_ids):
     """Returns set of user ids excluding ids
@@ -99,9 +105,11 @@ def exclude_admins(user_ids):
         MOD_IDS = get_mod_ids()
     return set(user_ids) - MOD_IDS
 
+
 def get_author_ids(items):
     """Returns user ids of the item authors"""
     return items.values_list('item_author_id', flat=True)
+
 
 def concat_messages(message1, message2):
     if message1:
@@ -110,7 +118,8 @@ def concat_messages(message1, message2):
     else:
         return message2
 
-def approve_posts(mod, mod_items):
+
+def approve_posts(admin, mod_items):
     """mod approves revisions in mod_items
     and returns number of approved posts.
     At the same time removes all other flags on the post.
@@ -119,34 +128,102 @@ def approve_posts(mod, mod_items):
     for item in mod_items:
         if not isinstance(item.item, models.PostRevision):
             continue
-        mod.approve_post_revision(item.item)
-        mod.flag_post(revision.post, cancel_all=True, force=True)
+        admin.approve_post_revision(item.item)
+        admin.flag_post(item.item.post, cancel_all=True, force=True)
         num_posts += 1
 
     return num_posts
 
-def decline_posts(mod, mod_items, reason):
-    """Deletes posts and assigns the reason why it was deleted.
-    Returns number of declined posts.
-    """
-    # get unique posts from the mod queue items
-    posts = set([get_object(item) for item in mod_items])
 
+def handle_decline_action(admin, item_set, reason_id):
+    """Declines posts with a reason"""
+    reason = models.ModerationReason.objects.get(pk=reason_id)
+    # get unique posts from the mod queue items
+    posts = set([get_object(item) for item in item_set])
     from askbot.mail.messages import RejectedPost
-    num_posts = 0
+    result = {'declined_posts': 0,
+              'item_ids': list()}
     for post in posts:
-        mod.delete_post(post)
+        admin.delete_post(post)
+        #todo: bunch notifications - one per recipient
         email = RejectedPost({
                     'post': post.html,
-                    'reject_reason': reject_reason.description_html
+                    'reject_reason': reason.description_html
                 })
         email.send([post.author.email,])
-        num_posts += 1
+        result['declined_posts'] += 1
 
-    for item in mod_items:
-        item.resolve_with_followup_items(mod, reason)
+    for item in item_set:
+        result['item_ids'].append(item.pk)
+        followup_item = item.create_resolved_item(admin, reason)
+        if item.reason.is_manually_assignable:
+            item.resolution_status = 'followup'
+            item.resolved_at = timezone.now()
+            item.resolved_by = admin
+            item.followup_item = followup_item
+            item.save()
+        else:
+            # system-assigned original items are deleted
+            item.delete()
 
-    return num_posts
+    return result
+
+
+def handle_block_ips_action(admin, item_set, remote_addr):
+    """Blocks the ip addresses"""
+    revs = get_revision_set(item_set)
+    # expand set of revisions via the set of the ip addresses
+    revs = expand_revision_set(revs)
+
+    ips, user_ids = get_revision_ips_and_author_ids(revs)
+
+    result = dict()
+    result['blocked_ips'] = block_ips(ips, remote_addr)
+    result['item_ids'] = get_queue_item_ids_for_revisions(revs, admin)
+
+    user_ids -= set([admin.pk])
+    result['blocked_users'] = models.UserProfile.objects.filter(pk__in=user_ids).update(status='b')
+
+    post_count = 0
+    for user in models.User.objects.filter(pk__in=user_ids):
+        #delete all content by the user
+        post_count += admin.delete_users_content(user, mark_spam=True)
+
+    result['deleted_posts'] = post_count
+    return result
+
+
+def handle_block_users_action(admin, item_set):
+    result = {'blocked_users': 0,
+              'deleted_posts': 0,
+              'item_ids': list(item_set.values_list('pk', flat=True))}
+    set_users_statuses(admin, item_set, 'b')
+    author_ids = exclude_admins(get_author_ids(item_set))
+    for user in models.User.objects.filter(pk__in=author_ids):
+        #delete all content by the user
+        result['deleted_posts'] += admin.delete_users_content(user, mark_spam=True)
+        result['blocked_users'] += 1
+
+    #todo: create blocked user moderation items
+    return result
+
+
+def handle_block_action(admin, item_set, item_types, remote_addr):
+    moderate_ips = django_settings.ASKBOT_IP_MODERATION_ENABLED
+    # If we block by IPs we always block users and posts
+    # so we use a "spider" algorithm to find posts, users and IPs to block.
+    # once we find users, posts and IPs, we block all of them summarily.
+    if moderate_ips and 'ips' in item_types:
+        assert('users' in item_types)
+        assert('posts' in item_types)
+        assert(len(item_types) == 3)
+        return handle_block_ips_action(admin, item_set, remote_addr)
+
+    if 'users' in item_types:
+        return handle_block_users_action(admin, item_set)
+
+    raise ValueError('unexpected item types {}'.format(str(item_set)))
+
 
 def block_ips(ips, current_ip):
     #to make sure to not block the admin and
@@ -168,10 +245,12 @@ def block_ips(ips, current_ip):
 
     return len(ips)
 
-def set_users_statuses(mod, mod_items, status):
+
+def set_users_statuses(admin, item_set, status):
     user_ids = exclude_admins(get_author_ids(item_set))
-    user_ids -= set([mod.pk])
-    return models.UserProfile.objects.filter(pk=user_ids).update(status=status)
+    user_ids -= set([admin.pk])
+    return models.UserProfile.objects.filter(pk__in=user_ids).update(status=status)
+
 
 @login_required
 def moderation_queue(request):
@@ -207,135 +286,106 @@ def moderation_queue(request):
     return render(request, 'moderation/queue.html', data)
 
 
-@csrf.csrf_protect
-@decorators.post_only
-@decorators.ajax_only
-def moderate_items(request):
+def check_permissions(request):
     if request.user.is_anonymous():
         raise exceptions.PermissionDenied()
     if not request.user.is_administrator_or_moderator():
         raise exceptions.PermissionDenied()
 
-    post_data = decode_and_loads(request.body)
+
+def expand_item_set(item_set):
+    author_ids = exclude_admins(get_author_ids(item_set))
+    # get moderation queue items corresponding to
+    # the authors of the ModerationQueueItem.item
+    items_filter = {'item_author_id__in': author_ids, 'resolution_status': 'waiting'}
+    return item_set | models.ModerationQueueItem.objects.filter(**items_filter)
+
+
+# not a view function
+def handle_approve_action(admin, item_set, item_types):
+    """Approves posts or users"""
+    result = dict()
+    if 'posts' in item_types:
+        # approve all unapproved posts
+        result['approved_posts'] = approve_posts(admin, item_set)
+
+    if 'users' in item_types:
+        result['approved_users'] = set_users_statuses(admin, item_set, 'a')
+
+    result['item_ids'] = list(item_set.values_list('pk', flat=True))
+            
+    # manually assigned items are marked as dismissed
+    manually_assigned_items = item_set.filter(reason__is_manually_assignable=True)
+    manually_assigned_items.update(resolution_status='dismissed',
+                                   resolved_by=admin,
+                                   resolved_at=timezone.now())
+
+    # delete system assigned items like new post/revisions
+    system_assigned_items = item_set.filter(reason__is_manually_assignable=False)
+    system_assigned_items.delete()
+    return result
+
+
+def format_message(result):
+    """Returns message to be displayed to the moderator"""
+    message = ''
+    deleted_posts = result.get('deleted_posts', 0)
+    if deleted_posts:
+        message = ungettext('%d post deleted', '%d posts deleted', deleted_posts) % deleted_posts 
+
+    approved_posts = result.get('approved_posts', 0)
+    if approved_posts:
+        msg = ungettext('%d post approved', '%d posts approved', approved_posts) % approved_posts 
+        message = concat_messages(message, msg)
+
+    approved_users = result.get('approved_users', 0)
+    if approved_users:
+        msg = ungettext('%d user approved', '%d users approved', approved_users) % approved_users
+        message = concat_messages(message, msg)
+
+    blocked_ips = result.get('blocked_ips', 0)
+    if blocked_ips:
+        msg = ungettext('%d ip blocked', '%d ips blocked', blocked_ips) % blocked_ips
+        message = concat_messages(message, msg)
+
+    blocked_users = result.get('blocked_users', 0)
+    if blocked_users:
+        msg = ungettext('%d user blocked', '%d users blocked', blocked_users) % blocked_users
+        message = concat_messages(message, msg)
+
+    return force_text(message)
+
+
+@csrf.csrf_protect
+@decorators.post_only
+@decorators.ajax_only
+def moderate_items(request):
+    check_permissions(request)
+
     #{'action': 'decline-with-reason', 'items': ['posts'], 'reason': 1, 'edit_ids': [827]}
-    import pdb
-    pdb.set_trace()
-
+    post_data = decode_and_loads(request.body)
     item_set = models.ModerationQueueItem.objects.filter(id__in=post_data['item_ids'])
-    result = {
-        'message': '',
-        'item_ids': set()
-    }
 
-    result = {'approved_posts': 0,
-              'approved_users': 0}
-
-    # if we are approving or declining users we need to expand the item_set
-    # to all of their content
     if post_data['action'] in ('block', 'approve') and 'users' in post_data['items']:
-        author_ids = exclude_admins(get_author_ids(item_set))
-        # get moderation queue items corresponding to
-        # the authors of the ModerationQueueItem.item
-        items_filter = {'item_author_id__in': author_ids, 'resolution_status': 'waiting'}
-        item_set |= models.ModerationQueueItem.objects.filter(**items_filter)
+        # if we are approving or declining users we need to expand the item_set
+        # to all of their content
+        item_set = expand_item_set(item_set)
 
-    if post_data['action'] == 'approve':
-        num_posts = 0
+    action = post_data['action']
+    if action == 'approve':
+        result = handle_approve_action(request.user, item_set, post_data['items'])
 
-        if 'posts' in post_data['items']:
-            # approve all unapproved posts
-            result['approved_posts'] = approve_posts(request.user, item_set)
+    elif action == 'decline-with-reason':
+        result = handle_decline_action(request.user, item_set, post_data['reason'])
 
-        if 'users' in post_data['items']:
-            result['approved_users'] = set_users_statuses(request.user, item_set, 'a')
-                
-        # manually assigned items are marked as dismissed
-        manually_assigned_items = item_set.filter(reason__is_manually_assignable=True)
-        manually_assigned_items.update(resolution_status='dismissed',
-                                       resolved_by=request.user,
-                                       resolved_at=timezone.now())
+    elif action == 'block':
+        remote_addr = request.META['REMOTE_ADDR']
+        result = handle_block_action(request.user, item_set, post_data['items'], remote_addr)
 
-        # delete system assigned items like new post/revisions
-        system_assigned_items = item_set.filter(reason__is_manually_assignable=False)
-        system_assigned_items.delete()
+    else:
+        raise ValueError('unexpected action {}'.format(action))
 
-    elif post_data['action'] == 'decline-with-reason':
-        #todo: bunch notifications - one per recipient
-        reason = models.ModerationReason.objects.get(pk=post_data['reason'])
-        result['declined_posts'] = decline_posts(request.user, item_set, reason)
-
-    elif post_data['action'] == 'block':
-
-        num_users = 0
-        num_posts = 0
-        num_ips = 0
-
-        moderate_ips = django_settings.ASKBOT_IP_MODERATION_ENABLED
-        # If we block by IPs we always block users and posts
-        # so we use a "spider" algorithm to find posts, users and IPs to block.
-        # once we find users, posts and IPs, we block all of them summarily.
-        if moderate_ips and 'ips' in post_data['items']:
-            assert('users' in post_data['items'])
-            assert('posts' in post_data['items'])
-            assert(len(post_data['items']) == 3)
-
-            revs = get_revision_set(item_set)
-            # expand set of revisions via the set of the ip addresses
-            revs = expand_revision_set(revs)
-
-            ips, user_ids = get_revision_ips_and_author_ids(revs)
-
-            result['blocked_ips'] = block_ips(ips, request.META['REMOTE_ADDR'])
-
-            #block users and all their content
-            user_ids = exclude_admins(user_ids)
-            # get all moderation items corresponding to the expander revision set
-            item_set = set(get_queue_items_for_revisions(revs, moderator))
-            result['blocked_users'] = set_users_statuses(request.user, item_set, 'b'):
-
-            for user in [item.item_author for item in item_set]:
-                #delete all content by the user
-                count = moderator.delete_users_content(user, submit_spam=True)
-                result['deleted_posts'] += count
-
-        elif 'users' in post_data['items']:
-            item_set = set(item_set)#evaluate item_set before deleting content
-            author_ids = exclude_admins(get_author_ids(item_set))
-            assert(request.user.pk not in author_ids)
-            num_users = models.UserProfile.objects.filter(pk__in=author_ids).update(status='b')
-            num_users = 0
-            for user in models.User.objects.filter(pk__in=author_ids):
-                #delete all content by the user
-                num_posts += request.user.delete_users_content(editor, submit_spam=True)
-
-
-        #message to moderator
-        if declined_posts:
-            posts_message = ungettext('%d post deleted', '%d posts deleted', num_posts) % num_posts
-            result['message'] = concat_messages(result['message'], posts_message)
-
-        if approved_posts:
-            posts_message = ungettext('%d post approved', '%d posts approved', num_posts) % num_posts
-            result['message'] = concat_messages(result['message'], posts_message)
-        if approved_users:
-            users_message = ungettext('%d user approved', '%d users approved', num_users) % num_users
-            result['message'] = concat_messages(result['message'], users_message)
-                                                                              submit_spam=True)
-
-        if num_ips:
-            ips_message = ungettext('%d ip blocked', '%d ips blocked', num_ips) % num_ips
-            result['message'] = concat_messages(result['message'], ips_message)
-
-        if num_users:
-            users_message = ungettext('%d user blocked', '%d users blocked', num_users) % num_users
-            result['message'] = concat_messages(result['message'], users_message)
-
-        if num_posts:
-            posts_message = ungettext('%d post deleted', '%d posts deleted', num_posts) % num_posts
-            result['message'] = concat_messages(result['message'], posts_message)
-
-    result['item_ids'] = item_set.values_list('pk', flat=True)
-    result['message'] = force_text(result['message'])
+    result['message'] = format_message(result)
 
     #delete items from the moderation queue
     request.user.update_response_counts()

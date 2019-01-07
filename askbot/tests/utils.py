@@ -10,6 +10,7 @@ from django.core.cache import cache
 from django.db.models.signals import post_migrate
 from django.test import TestCase
 from askbot import models
+from askbot.models.moderation import init_reasons as init_moderation_reasons
 from askbot import signals
 
 def with_settings(**settings_dict):
@@ -110,6 +111,7 @@ class AskbotTestCase(TestCase):
             update_contenttypes(app_config)
             create_permissions(app_config)
             create_default_site(app_config)
+        init_moderation_reasons()
 
     def _fixture_teardown(self):
         post_migrate.disconnect(create_default_site, sender=apps.get_app_config('sites'))
@@ -196,6 +198,7 @@ class AskbotTestCase(TestCase):
                     group_id=None,
                     follow=False,
                     timestamp=None,
+                    ip_addr=None
                 ):
         """posts and returns question on behalf
         of user. If user is not given, it will be self.user
@@ -217,7 +220,8 @@ class AskbotTestCase(TestCase):
                             is_anonymous=is_anonymous,
                             is_private=is_private,
                             group_id=group_id,
-                            timestamp=timestamp
+                            timestamp=timestamp,
+                            ip_addr=ip_addr
                         )
 
         if follow:

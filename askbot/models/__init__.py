@@ -1282,7 +1282,7 @@ def user_assert_can_flag_offensive(self, post=None):
         'cannot do it more than once'
     )
 
-    if self.get_flags_for_post(post).count() > 0:
+    if self.get_flags_for_post(post, only_latest_revision=True).count() > 0:
         raise askbot_exceptions.DuplicateCommand(double_flagging_error_message)
 
     min_rep_setting = askbot_settings.MIN_REP_TO_FLAG_OFFENSIVE
@@ -1877,10 +1877,7 @@ def user_delete_question(
                              timestamp=timestamp)
 
 
-def user_delete_users_content(self,
-                                             author,
-                                             timestamp=None,
-                                             submit_spam=False):
+def user_delete_users_content(self, author, timestamp=None, mark_spam=False):
     """Deletes all questions, answers and comments made by the user"""
     count = 0
 
@@ -1915,7 +1912,7 @@ def user_delete_users_content(self,
     count += comments.count()
     comments.delete()
 
-    if submit_spam:
+    if mark_spam and askbot_settings.USE_AKISMET:
         from askbot.tasks import submit_spam_posts
         defer_celery_task(submit_spam_posts, args=(post_ids,))
 
@@ -3250,13 +3247,17 @@ def flag_post(
         if force == False:
             user.assert_can_remove_all_flags_offensive(post=post)
         rev_ct = ContentType.objects.get_for_model(PostRevision)
-        rev_id = post.revisions.values_list('pk', flat=True)
+        rev_ids = post.revisions.values_list('pk', flat=True)
         all_flags = ModerationQueueItem.objects.filter(
                         item_content_type=rev_ct,
                         item_id__in=rev_ids,
                         reason__is_manually_assignable=True,
                         reason__reason_type='post_moderation'
                     )
+        all_flags.update(resolution_status='dismissed',
+                         resolved_by=user,
+                         resolved_at=timezone.now())
+
         for flag in all_flags:
             auth.onUnFlaggedItem(post, flag.added_by, timestamp=timestamp)
 
@@ -3290,13 +3291,16 @@ def user_get_flag_count_posted_today(self):
     flags = self.get_flags()
     return flags.filter(added_at__range=time_frame).count()
 
-def user_get_flags_for_post(self, post):
+def user_get_flags_for_post(self, post, only_latest_revision=False):
     """return query set for flag Activity items
     posted by users for a given post obeject
     """
     flags = self.get_flags()
     rev_ct = ContentType.objects.get_for_model(PostRevision)
-    rev_ids = post.revisions.values_list('pk', flat=True)
+    if only_latest_revision:
+        rev_ids = [post.current_revision_id]
+    else:
+        rev_ids = post.revisions.values_list('pk', flat=True)
     return flags.filter(item_content_type=rev_ct, item_id__in=rev_ids)
 
 def user_create_email_key(self):
@@ -3980,26 +3984,15 @@ def record_delete_post(instance, deleted_by, **kwargs):
 
 def record_flag_offensive(instance, mark_by, **kwargs):
     """places flagged post on the moderation queue"""
+    revision = instance.get_latest_revision()
     ModerationQueueItem.objects.create(
         added_by=mark_by,
         added_at=timezone.now(),
-        item=instance.get_latest_revision(),
+        item=revision,
+        item_author=revision.author,
         reason=ModerationReason.objects.get(title='Offensive')
     )
     #todo: report authors that their post is flagged offensive
-
-def remove_flag_offensive(instance, mark_by, **kwargs):
-    """Remove all user post flags"""
-    rev_ct = ContentType.objects.get_for_model(PostRevision)
-    rev_ids = instance.revisions.values_list('pk', flat=True)
-    flags = ModerationQueueItem.objects.filter(added_by=mark_by,
-                                               item_content_type=rev_ct,
-                                               item_id__in=rev_ids,
-                                               reason__reason_type='post_moderation',
-                                               reason__is_manually_assignable=True
-                                               )
-    flags.delete()
-
 
 def record_update_tags(thread, tags, user, timestamp, **kwargs):
     """
@@ -4414,11 +4407,6 @@ signals.flag_offensive.connect(
     record_flag_offensive,
     sender=Post,
     dispatch_uid='record_flag_offensive_on_post_flag'
-)
-signals.remove_flag_offensive.connect(
-    remove_flag_offensive,
-    sender=Post,
-    dispatch_uid='remove_flag_offensive_on_post_unflag'
 )
 signals.tags_updated.connect(
     record_update_tags,

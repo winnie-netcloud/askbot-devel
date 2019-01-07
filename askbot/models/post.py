@@ -1841,6 +1841,7 @@ class Post(models.Model):
             # latest revision data
             latest_rev.text = text
             latest_rev.revised_at = edited_at
+            latest_rev.author = edited_by
             latest_rev.save()
         else:
             # otherwise we create a new revision
@@ -2191,6 +2192,7 @@ class PostRevision(models.Model):
         from askbot.models import ModerationReason, ModerationQueueItem
         reason = ModerationReason.objects.get(title=reason_title)
         ModerationQueueItem.objects.create(item=self,
+                                           item_author=self.author,
                                            reason=reason,
                                            added_by=self.author, 
                                            language_code=self.post.language_code)

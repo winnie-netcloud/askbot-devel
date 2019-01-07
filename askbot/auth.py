@@ -122,9 +122,6 @@ def onUnFlaggedItem(post, user, timestamp=None):
         reputation=flagged_user.reputation)
     reputation.save()
 
-    signals.remove_flag_offensive.send(sender=post.__class__, instance=post,
-                                       mark_by=user)
-
     if post.post_type == 'comment':
         # do not hide or delete comments automatically yet,
         # because there is no .deleted field in the comment model

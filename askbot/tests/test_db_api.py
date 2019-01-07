@@ -70,10 +70,7 @@ class DBApiTests(AskbotTestCase):
         self.post_answer()
         self.user.set_status('m')
         self.user.flag_post(self.answer)
-        self.assertEquals(
-            self.user.get_flags().count(),
-            1
-        )
+        self.assertEquals(self.user.get_flags().count(), 1)
 
     def ask_anonymous_question(self):
         q = self.user.post_question(
