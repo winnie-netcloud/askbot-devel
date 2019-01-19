@@ -66,8 +66,7 @@ def expand_revision_set(revs):
         return revs
     elif diff_count > 0:
         return expand_revision_set(more_revs)
-    else:
-        raise ValueError('expanded revisions set smaller then the original')
+    raise ValueError('expanded revisions set smaller then the original')
 
 
 def get_revision_ips_and_author_ids(revs):
@@ -135,26 +134,12 @@ def approve_posts(admin, mod_items):
     return num_posts
 
 
-def handle_decline_action(admin, item_set, reason_id):
-    """Declines posts with a reason"""
-    reason = models.ModerationReason.objects.get(pk=reason_id)
-    # get unique posts from the mod queue items
-    posts = set([get_object(item) for item in item_set])
-    from askbot.mail.messages import RejectedPost
-    result = {'declined_posts': 0,
-              'item_ids': list()}
-    for post in posts:
-        admin.delete_post(post)
-        #todo: bunch notifications - one per recipient
-        email = RejectedPost({
-                    'post': post.html,
-                    'reject_reason': reason.description_html
-                })
-        email.send([post.author.email,])
-        result['declined_posts'] += 1
-
+def resolve_items(admin, item_set, reason):
+    """For each moderation item create a resolved followup item.
+    Delete system-assigned items. Mark the manually assigned items
+    with status 'followup' and set link to the followup item.
+    """
     for item in item_set:
-        result['item_ids'].append(item.pk)
         followup_item = item.create_resolved_item(admin, reason)
         if item.reason.is_manually_assignable:
             item.resolution_status = 'followup'
@@ -166,6 +151,27 @@ def handle_decline_action(admin, item_set, reason_id):
             # system-assigned original items are deleted
             item.delete()
 
+
+def handle_decline_action(admin, item_set, reason_id):
+    """Declines posts with a reason"""
+    reason = models.ModerationReason.objects.get(pk=reason_id)
+    # get unique posts from the mod queue items
+    posts = set([get_object(item) for item in item_set])
+    from askbot.mail.messages import RejectedPost
+    result = {'declined_posts': 0}
+    for post in posts:
+        admin.delete_post(post)
+        #todo: bunch notifications - one per recipient
+        email = RejectedPost({
+                    'post': post.html,
+                    'reject_reason': reason.description_html
+                })
+        email.send([post.author.email,])
+        result['declined_posts'] += 1
+
+    result['item_ids'] = [item.pk for item in item_set]
+
+    resolve_items(admin, item_set, reason)
     return result
 
 
@@ -181,11 +187,10 @@ def handle_block_ips_action(admin, item_set, remote_addr):
     result['blocked_ips'] = block_ips(ips, remote_addr)
     result['item_ids'] = get_queue_item_ids_for_revisions(revs, admin)
 
-    user_ids -= set([admin.pk])
-    result['blocked_users'] = models.UserProfile.objects.filter(pk__in=user_ids).update(status='b')
+    result['blocked_users'] = set_users_statuses(admin, user_ids, 'b')
 
     post_count = 0
-    for user in models.User.objects.filter(pk__in=user_ids):
+    for user in models.User.objects.filter(pk__in=exclude_admins(user_ids)):
         #delete all content by the user
         post_count += admin.delete_users_content(user, mark_spam=True)
 
@@ -197,12 +202,11 @@ def handle_block_users_action(admin, item_set):
     result = {'blocked_users': 0,
               'deleted_posts': 0,
               'item_ids': list(item_set.values_list('pk', flat=True))}
-    set_users_statuses(admin, item_set, 'b')
-    author_ids = exclude_admins(get_author_ids(item_set))
-    for user in models.User.objects.filter(pk__in=author_ids):
+    user_ids = get_author_ids(item_set)
+    result['blocked_users'] = set_users_statuses(admin, user_ids, 'b')
+    for user in models.User.objects.filter(pk__in=user_ids):
         #delete all content by the user
         result['deleted_posts'] += admin.delete_users_content(user, mark_spam=True)
-        result['blocked_users'] += 1
 
     #todo: create blocked user moderation items
     return result
@@ -217,12 +221,19 @@ def handle_block_action(admin, item_set, item_types, remote_addr):
         assert('users' in item_types)
         assert('posts' in item_types)
         assert(len(item_types) == 3)
-        return handle_block_ips_action(admin, item_set, remote_addr)
+        result = handle_block_ips_action(admin, item_set, remote_addr)
+    elif 'users' in item_types:
+        result = handle_block_users_action(admin, item_set)
+    else:
+        raise ValueError('unexpected item types {}'.format(str(item_set)))
 
-    if 'users' in item_types:
-        return handle_block_users_action(admin, item_set)
+    item_ids = result['item_ids']
+    items = models.ModerationQueueItem.objects.filter(pk__in=item_ids,
+                                                      resolution_status='waiting')
 
-    raise ValueError('unexpected item types {}'.format(str(item_set)))
+    spam = models.ModerationReason.objects.get(title='Spam')
+    resolve_items(admin, items, spam)
+    return result
 
 
 def block_ips(ips, current_ip):
@@ -246,8 +257,9 @@ def block_ips(ips, current_ip):
     return len(ips)
 
 
-def set_users_statuses(admin, item_set, status):
-    user_ids = exclude_admins(get_author_ids(item_set))
+def set_users_statuses(admin, user_ids, status):
+    """Changes statuses of all users, excluding the admins"""
+    user_ids = exclude_admins(user_ids)
     user_ids -= set([admin.pk])
     return models.UserProfile.objects.filter(pk__in=user_ids).update(status=status)
 
@@ -310,7 +322,8 @@ def handle_approve_action(admin, item_set, item_types):
         result['approved_posts'] = approve_posts(admin, item_set)
 
     if 'users' in item_types:
-        result['approved_users'] = set_users_statuses(admin, item_set, 'a')
+        user_ids = get_author_ids(item_set)
+        result['approved_users'] = set_users_statuses(admin, user_ids, 'a')
 
     result['item_ids'] = list(item_set.values_list('pk', flat=True))
             
