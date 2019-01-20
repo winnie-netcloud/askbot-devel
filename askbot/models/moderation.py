@@ -151,6 +151,9 @@ class ModerationQueueItem(models.Model):
                                          default='waiting')
     resolved_at = models.DateTimeField(null=True, blank=True)
     resolved_by = models.ForeignKey('auth.User', null=True, blank=True)
+    origin_item = models.ForeignKey('self', related_name='followup_items',
+                                    null=True, blank=True,
+                                    help_text='Used for the followup items')
     followup_item = models.ForeignKey('self', related_name='origin_items',
                                       null=True, blank=True,
                                       help_text='Used if resolution_status is "followup"')
@@ -161,13 +164,16 @@ class ModerationQueueItem(models.Model):
         verbose_name = 'moderation queue item'
         verbose_name_plural = 'moderation queue items'
 
-    def create_resolved_item(self, moderator, reason):
+    def create_followup_item(self, moderator, reason):
         """Returns an newly created item for the same content as the `self`
         with the provided reason. The status is set to 'upheld',
         the resolved_by - set to the value of `moderator`
         and the timestamp is set to current time value.
         """
         new_item = ModerationQueueItem()
+        # system assigned items are deleted on moderation followup
+        if self.reason.is_manually_assignable:
+            new_item.origin_item = self
         new_item.item = self.item
         new_item.item_author_id = self.item_author_id
         new_item.reason = reason

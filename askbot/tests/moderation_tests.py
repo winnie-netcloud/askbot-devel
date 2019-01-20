@@ -215,6 +215,7 @@ class ModerationTests(AskbotTestCase):
             item_id=latest_rev.id,
             resolution_status='waiting'
         )
+        self.assertEqual(mod_item.reason.title, 'Post edit')
 
         #4) block latest answer edit as spam
         data = {'action': 'decline-with-reason',
@@ -233,9 +234,12 @@ class ModerationTests(AskbotTestCase):
         self.assertEqual(answer.revisions.count(), 2)
         latest_rev = answer.revisions.order_by('-id')[0]
         self.assertEqual(latest_rev.revision, 0)
-        mod_item = ModerationQueueItem.objects.get(
+
+        mod_items = ModerationQueueItem.objects.filter(
             item_content_type=ct,
             item_id=latest_rev.id
         )
-        self.assertEqual(mod_item.resolution_status, 'upheld')
-        self.assertEqual(mod_item.reason.title, 'Spam')
+        self.assertEqual(mod_items.count(), 1)
+
+        self.assertEqual(mod_items[0].resolution_status, 'upheld')
+        self.assertEqual(mod_items[0].reason.title, 'Spam')
