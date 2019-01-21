@@ -84,6 +84,7 @@ PostModerationControls.prototype.getModHandler = function (action, items, optRea
       'items': items,//affected items - users, posts, ips
       'reason': optReason || 'none'
     };
+    me.showMessage('Working...');
     $.ajax({
       type: 'POST',
       cache: false,

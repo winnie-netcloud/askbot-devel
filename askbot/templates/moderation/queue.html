@@ -44,7 +44,7 @@
         {% endif %}
     </ul>
     {% include "moderation/manage_reject_reasons_dialog.html" %}
-    <div class="action-status"><span></span></div>
+    <div class="action-status" style="height: 1.5rem"><span></span></div>
     <div class="messages">
     {% for item in queue_items %}
         <div class="message" data-message-id="{{ item.id }}">

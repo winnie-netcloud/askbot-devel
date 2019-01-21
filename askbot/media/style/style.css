@@ -1797,6 +1797,9 @@ ul.js-related-tags li {
   display: inline-block;
   margin: 0;
 }
+.snippet img {
+  max-width: 100%;
+}
 .snippet:hover .expander a {
   text-decoration: underline;
 }

@@ -132,6 +132,11 @@ def resolve_items(item_set, admin, reason=None):
     if reason:
         resolution_status = 'followup'
         for item in item_set:
+            #TODO: implement soft deletion of comments
+            if item.item == None:
+                item.delete()
+                continue
+
             item.create_followup_item(admin, reason)
 
     manually_assigned = item_set.filter(reason__is_manually_assignable=True)
@@ -150,14 +155,14 @@ def handle_decline_action(admin, item_set, reason_id):
     # get unique posts from the mod queue items
     posts = set([item.item.post for item in item_set])
     from askbot.mail.messages import RejectedPost
-    result = {'declined_posts': 0}
+    result = {'deleted_posts': 0}
     for post in posts:
         admin.delete_post(post)
         #todo: bunch notifications - one per recipient
         email = RejectedPost({'post': post.html,
                               'reject_reason': reason.description_html})
         email.send([post.author.email,])
-        result['declined_posts'] += 1
+        result['deleted_posts'] += 1
 
     result['item_ids'] = [item.pk for item in item_set]
 

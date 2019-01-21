@@ -1765,6 +1765,8 @@ class Post(models.Model):
                 raise exception(message)
 
     def assert_is_visible_to(self, user):
+        if user.is_administrator_or_moderator():
+            return
         if self.is_comment() == False and askbot_settings.GROUPS_ENABLED:
             self.assert_is_visible_to_user_groups(user)
         if self.is_question():
