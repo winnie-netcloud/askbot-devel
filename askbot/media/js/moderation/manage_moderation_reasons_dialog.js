@@ -3,7 +3,7 @@
  * manages post/edit reject reasons
  * in the post moderation view
  */
-var ManageRejectReasonsDialog = function () {
+var ManageModerationReasonsDialog = function () {
     WrappedElement.call(this);
     this._selected_edit_ids = null;
     this._selected_reason_id = null;
@@ -11,35 +11,35 @@ var ManageRejectReasonsDialog = function () {
     this._postModerationControls = [];
     this._selectedEditDataReader = undefined;
 };
-inherits(ManageRejectReasonsDialog, WrappedElement);
+inherits(ManageModerationReasonsDialog, WrappedElement);
 
-ManageRejectReasonsDialog.prototype.setMenu = function (menu) {
+ManageModerationReasonsDialog.prototype.setMenu = function (menu) {
     this._reasonsMenu = menu;
 };
 
-ManageRejectReasonsDialog.prototype.getMenu = function () {
+ManageModerationReasonsDialog.prototype.getMenu = function () {
     return this._reasonsMenu;
 };
 
-ManageRejectReasonsDialog.prototype.setSelectedEditDataReader = function (func) {
+ManageModerationReasonsDialog.prototype.setSelectedEditDataReader = function (func) {
     this._selectedEditDataReader = func;
 };
 
-ManageRejectReasonsDialog.prototype.readSelectedEditData = function () {
+ManageModerationReasonsDialog.prototype.readSelectedEditData = function () {
     var data = this._selectedEditDataReader();
     this.setSelectedEditData(data);
     return data.id_list.length > 0;
 };
 
-ManageRejectReasonsDialog.prototype.setSelectedEditData = function (data) {
+ManageModerationReasonsDialog.prototype.setSelectedEditData = function (data) {
     this._selected_edit_data = data;
 };
 
-ManageRejectReasonsDialog.prototype.addPostModerationControl = function (control) {
+ManageModerationReasonsDialog.prototype.addPostModerationControl = function (control) {
     this._postModerationControls.push(control);
 };
 
-ManageRejectReasonsDialog.prototype.setState = function (state) {
+ManageModerationReasonsDialog.prototype.setState = function (state) {
     this._state = state;
     this.clearErrors();
     if (this._element) {
@@ -53,15 +53,15 @@ ManageRejectReasonsDialog.prototype.setState = function (state) {
     }
 };
 
-ManageRejectReasonsDialog.prototype.show = function () {
+ManageModerationReasonsDialog.prototype.show = function () {
     $(this._element).modal('show');
 };
 
-ManageRejectReasonsDialog.prototype.hide = function () {
+ManageModerationReasonsDialog.prototype.hide = function () {
     $(this._element).modal('hide');
 };
 
-ManageRejectReasonsDialog.prototype.resetInputs = function () {
+ManageModerationReasonsDialog.prototype.resetInputs = function () {
     if (this._title_input) {
         this._title_input.reset();
     }
@@ -72,12 +72,12 @@ ManageRejectReasonsDialog.prototype.resetInputs = function () {
     selected.removeClass('selected');
 };
 
-ManageRejectReasonsDialog.prototype.clearErrors = function () {
+ManageModerationReasonsDialog.prototype.clearErrors = function () {
     var error = this._element.find('.alert');
     error.remove();
 };
 
-ManageRejectReasonsDialog.prototype.makeAlertBox = function (errors) {
+ManageModerationReasonsDialog.prototype.makeAlertBox = function (errors) {
     //construct the alert box
     var alert_box = new AlertBox();
     alert_box.setClass('alert-error');
@@ -108,7 +108,7 @@ ManageRejectReasonsDialog.prototype.makeAlertBox = function (errors) {
     return alert_box;
 };
 
-ManageRejectReasonsDialog.prototype.setAdderErrors = function (errors) {
+ManageModerationReasonsDialog.prototype.setAdderErrors = function (errors) {
     //clear previous errors
     this.clearErrors();
     var alert_box = this.makeAlertBox(errors);
@@ -117,7 +117,7 @@ ManageRejectReasonsDialog.prototype.setAdderErrors = function (errors) {
         .prepend(alert_box.getElement());
 };
 
-ManageRejectReasonsDialog.prototype.setSelectorErrors = function (errors) {
+ManageModerationReasonsDialog.prototype.setSelectorErrors = function (errors) {
     this.clearErrors();
     var alert_box = this.makeAlertBox(errors);
     this._element
@@ -125,7 +125,7 @@ ManageRejectReasonsDialog.prototype.setSelectorErrors = function (errors) {
         .prepend(alert_box.getElement());
 };
 
-ManageRejectReasonsDialog.prototype.setErrors = function (errors) {
+ManageModerationReasonsDialog.prototype.setErrors = function (errors) {
     this.clearErrors();
     var alert_box = this.makeAlertBox(errors);
     var current_state = this._state;
@@ -134,7 +134,7 @@ ManageRejectReasonsDialog.prototype.setErrors = function (errors) {
         .prepend(alert_box.getElement());
 };
 
-ManageRejectReasonsDialog.prototype.getModerationReason = function (reasonId) {
+ManageModerationReasonsDialog.prototype.getModerationReason = function (reasonId) {
   for (var idx=0; idx < askbot.data.moderationReasons.length; idx++) {
     var reason = askbot.data.moderationReasons[idx];
     if (reason.id === reasonId) {
@@ -144,7 +144,7 @@ ManageRejectReasonsDialog.prototype.getModerationReason = function (reasonId) {
   return null;
 };
 
-ManageRejectReasonsDialog.prototype.addSelectableReason = function (data) {
+ManageModerationReasonsDialog.prototype.addSelectableReason = function (data) {
     var id = data.reason_id;
     var title = data.title;
     var details = data.details;
@@ -158,7 +158,7 @@ ManageRejectReasonsDialog.prototype.addSelectableReason = function (data) {
     });
 };
 
-ManageRejectReasonsDialog.prototype.startSavingReason = function (callback) {
+ManageModerationReasonsDialog.prototype.startSavingReason = function (callback) {
 
     var title_input = this._title_input;
     var details_input = this._details_input;
@@ -213,7 +213,7 @@ ManageRejectReasonsDialog.prototype.startSavingReason = function (callback) {
     });
 };
 
-ManageRejectReasonsDialog.prototype.startEditingReason = function () {
+ManageModerationReasonsDialog.prototype.startEditingReason = function () {
     var data = this._select_box.getSelectedItemData();
     var title = $(data.title).text();
     var description = data.details;
@@ -223,15 +223,15 @@ ManageRejectReasonsDialog.prototype.startEditingReason = function () {
     this.setState('add-new');
 };
 
-ManageRejectReasonsDialog.prototype.resetSelectedReasonId = function () {
+ManageModerationReasonsDialog.prototype.resetSelectedReasonId = function () {
     this._selected_reason_id = null;
 };
 
-ManageRejectReasonsDialog.prototype.getSelectedReasonId = function () {
+ManageModerationReasonsDialog.prototype.getSelectedReasonId = function () {
     return this._selected_reason_id;
 };
 
-ManageRejectReasonsDialog.prototype.startDeletingReason = function () {
+ManageModerationReasonsDialog.prototype.startDeletingReason = function () {
     var select_box = this._select_box;
     var data = select_box.getSelectedItemData();
     var reason_id = data.id;
@@ -260,17 +260,17 @@ ManageRejectReasonsDialog.prototype.startDeletingReason = function () {
     }
 };
 
-ManageRejectReasonsDialog.prototype.hideEditButtons = function () {
+ManageModerationReasonsDialog.prototype.hideEditButtons = function () {
     this._editButton.hide();
     this._deleteButton.hide();
 };
 
-ManageRejectReasonsDialog.prototype.showEditButtons = function () {
+ManageModerationReasonsDialog.prototype.showEditButtons = function () {
     this._editButton.show();
     this._deleteButton.show();
 };
 
-ManageRejectReasonsDialog.prototype.decorate = function (element) {
+ManageModerationReasonsDialog.prototype.decorate = function (element) {
     this._element = element;
     //set default state according to the # of available reasons
     this._selector = $(element).find('#reject-edit-modal-select');
