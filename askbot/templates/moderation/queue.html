@@ -56,9 +56,9 @@
 {% block endjs %}
     {# todo: factor out moderation.js file #}
     {% compress js %}
-    <script type="text/javascript" src="{{ '/js/user/decline_and_explain_menu.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/post_moderation_controls.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/manage_reject_reasons_dialog.js'|media }}"></script>
+    <script type="text/javascript" src="{{ '/js/moderation/decline_and_explain_menu.js'|media }}"></script>
+    <script type="text/javascript" src="{{ '/js/moderation/moderation_queue_controls.js'|media }}"></script>
+    <script type="text/javascript" src="{{ '/js/moderation/manage_reject_reasons_dialog.js'|media }}"></script>
     {% endcompress %}
     {% include "moderation/post_moderation_controls_init.html" %}
 {% endblock %}
