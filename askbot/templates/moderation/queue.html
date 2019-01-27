@@ -19,18 +19,7 @@
                 <span>{% trans %}decline and explain why{% endtrans %}</span>
                 <span class="caret"></span>
             </span>
-            <ul class="dropdown-menu">
-                {% for reason in moderation_reasons %}
-                    <li>
-                        <a class="decline-with-reason" data-reason-id="{{ reason.id }}">
-                            {{ reason.title|escape }}{% if reason.is_predefined %}*{% endif %}
-                        </a>
-                    </li>
-                {% endfor %}
-                <li>
-                    <a class="manage-reasons">{% trans %}add/manage reject reasons{% endtrans %}</a>
-                </li>
-            </ul>
+            {{ moderation_macros.select_reason_menu(moderation_reasons, 'post_moderation') }}
         </div>
         <a class="btn btn-danger decline-block-users">{% trans %}block spammers{% endtrans %}</a>
         {% if settings.IP_MODERATION_ENABLED %}
