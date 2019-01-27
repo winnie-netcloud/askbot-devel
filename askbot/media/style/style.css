@@ -3299,8 +3299,8 @@ tr.mceLast {
 .user-profile-page.inbox-forum .js-delete {
   margin-right: 12px;
 }
-.reject-reason-title {
-  margin-bottom: 12px;
+.moderation-reason-title {
+  margin-bottom: .625rem;
 }
 .moderation-queue-page .re {
   width: 810px;
@@ -4584,8 +4584,8 @@ img.group-logo {
 .groups-page #groups-list td:nth-child(2) {
   text-align: center;
 }
-#reject-edit-modal input,
-#reject-edit-modal textarea {
+#moderation-reasons-edit-modal input,
+#moderation-reasons-edit-modal textarea {
   width: 514px;
 }
 input.tipped-input,

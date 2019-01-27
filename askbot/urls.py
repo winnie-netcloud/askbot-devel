@@ -570,14 +570,14 @@ urlpatterns = patterns(
         name='delete_notifications'
     ),
     service_url(  # ajax only
-        r'^save-post-reject-reason/$',
-        views.commands.save_post_reject_reason,
-        name='save_post_reject_reason'
+        r'^save-moderation-reason/$',
+        views.commands.save_moderation_reason,
+        name='save_moderation_reason'
     ),
     service_url(  # ajax only
-        r'^delete-post-reject-reason/$',
-        views.commands.delete_post_reject_reason,
-        name='delete_post_reject_reason'
+        r'^delete-moderation-reason/$',
+        views.commands.delete_moderation_reason,
+        name='delete_moderation_reason'
     ),
     service_url(  # ajax only
         r'^edit-group-membership/$',

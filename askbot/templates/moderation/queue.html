@@ -1,5 +1,6 @@
 {% extends "one_column_body.html" %}
 {% import "macros.html" as macros %}
+{% import "moderation/macros.html" as moderation_macros %}
 {% block title %}
     {% trans %}Moderation queue{% endtrans %}
 {% endblock %}
@@ -43,7 +44,6 @@
         <li>Blocking IPs denies access by IP address and blocks all accounts using those IPs (and mass deletes content as above).</li>
         {% endif %}
     </ul>
-    {% include "moderation/manage_reject_reasons_dialog.html" %}
     <div class="action-status" style="height: 1.5rem"><span></span></div>
     <div class="messages">
     {% for item in queue_items %}
@@ -60,5 +60,6 @@
     <script type="text/javascript" src="{{ '/js/moderation/moderation_queue_controls.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/moderation/manage_moderation_reasons_dialog.js'|media }}"></script>
     {% endcompress %}
+    {{ moderation_macros.manage_reasons_dialog(moderation_reasons, 'post_moderation') }}
     {% include "moderation/post_moderation_controls_init.html" %}
 {% endblock %}

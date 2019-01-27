@@ -1,13 +1,14 @@
 /**
  * @constructor
- * manages post/edit reject reasons
+ * manages post/edit moderation reasons
  * in the post moderation view
  */
-var ManageModerationReasonsDialog = function () {
+var ManageModerationReasonsDialog = function (reasonType) {
     WrappedElement.call(this);
+    this.reasonType = reasonType
     this._selected_edit_ids = null;
     this._selected_reason_id = null;
-    this._state = null;//'select', 'add-new'
+    this._state = 'select';//'select', 'add-new'
     this._postModerationControls = [];
     this._selectedEditDataReader = undefined;
 };
@@ -113,7 +114,7 @@ ManageModerationReasonsDialog.prototype.setAdderErrors = function (errors) {
     this.clearErrors();
     var alert_box = this.makeAlertBox(errors);
     this._element
-        .find('#reject-edit-modal-add-new .modal-body')
+        .find('.add-reason-dialog .modal-body')
         .prepend(alert_box.getElement());
 };
 
@@ -121,16 +122,7 @@ ManageModerationReasonsDialog.prototype.setSelectorErrors = function (errors) {
     this.clearErrors();
     var alert_box = this.makeAlertBox(errors);
     this._element
-        .find('#reject-edit-modal-select .modal-body')
-        .prepend(alert_box.getElement());
-};
-
-ManageModerationReasonsDialog.prototype.setErrors = function (errors) {
-    this.clearErrors();
-    var alert_box = this.makeAlertBox(errors);
-    var current_state = this._state;
-    this._element
-        .find('#reject-edit-modal-' + current_state + ' .modal-body')
+        .find('.select-reason-dialog .modal-body')
         .prepend(alert_box.getElement());
 };
 
@@ -178,8 +170,10 @@ ManageModerationReasonsDialog.prototype.startSavingReason = function (callback) 
 
     var data = {
         title: title_input.getVal(),
-        description: details_input.getVal()
+        description: details_input.getVal(),
+        reason_type: this.reasonType
     };
+
     var reasonIsNew = true;
     if (this._selected_reason_id) {
         data.reason_id = this._selected_reason_id;
@@ -192,7 +186,7 @@ ManageModerationReasonsDialog.prototype.startSavingReason = function (callback) 
         type: 'POST',
         dataType: 'json',
         cache: false,
-        url: askbot.urls.save_post_reject_reason,
+        url: askbot.urls.saveModerationReason,
         data: data,
         success: function (data) {
             if (data.success) {
@@ -241,7 +235,7 @@ ManageModerationReasonsDialog.prototype.startDeletingReason = function () {
             type: 'POST',
             dataType: 'json',
             cache: false,
-            url: askbot.urls.delete_post_reject_reason,
+            url: askbot.urls.deleteModerationReason,
             data: {reason_id: reason_id},
             success: function (data) {
                 if (data.success) {
@@ -273,8 +267,8 @@ ManageModerationReasonsDialog.prototype.showEditButtons = function () {
 ManageModerationReasonsDialog.prototype.decorate = function (element) {
     this._element = element;
     //set default state according to the # of available reasons
-    this._selector = $(element).find('#reject-edit-modal-select');
-    this._adder = $(element).find('#reject-edit-modal-add-new');
+    this._selector = $(element).find('.select-reason-dialog');
+    this._adder = $(element).find('.add-reason-dialog');
     if (this._selector.find('li').length > 0) {
         this.setState('select');
         this.resetInputs();
@@ -289,30 +283,34 @@ ManageModerationReasonsDialog.prototype.decorate = function (element) {
     this._select_box = select_box;
 
     //setup tipped-inputs
-    var reject_title_input = $(this._element).find('input');
+    var moderation_title_input = $(this._element).find('input');
     var title_input = new TippedInput();
-    title_input.decorate($(reject_title_input));
+    title_input.decorate($(moderation_title_input));
     this._title_input = title_input;
 
-    var reject_details_input = $(this._element).find('textarea.reject-reason-details');
+    var moderation_details_input = $(this._element).find('textarea.moderation-reason-details');
 
     var details_input = new TippedInput();
-    details_input.decorate($(reject_details_input));
+    details_input.decorate($(moderation_details_input));
     this._details_input = details_input;
 
     var me = this;
-    var closeMenuHandler = function () {
-            me.hide();
-            me.clearErrors();
-            me.resetInputs();
-            me.resetSelectedReasonId();
-            me.setState('select');
-            me.hideEditButtons();
+    var resetMenuHandler = function () {
+        me.clearErrors();
+        me.resetInputs();
+        me.resetSelectedReasonId();
+        me.setState('select');
+        me.hideEditButtons();
     };
     setupButtonEventHandlers(
-        element.find('.cancel, .modal-header .close'),
-        closeMenuHandler
+        element.find('.select-reason-dialog .cancel, .modal-header .close'),
+        function () {
+          me.hide();
+          resetMenuHandler();
+        }
     );
+
+    setupButtonEventHandlers(element.find('.add-reason-dialog .cancel'), resetMenuHandler);
 
     setupButtonEventHandlers(
         $(this._element).find('.save-reason'),

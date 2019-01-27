@@ -381,7 +381,8 @@
     {% else %}
         {% include "question/content.html" %}
     {% endif %}
-    {% include "moderation/manage_reject_reasons_dialog.html" %}
+    {% import "moderation/macros.html" as moderation_macros %}
+    {{ moderation_macros.manage_reasons_dialog(moderation_reasons, 'post_moderation') }}
 {% endblock %}
 {% block sidebar %}
     {% include "question/sidebar.html" %}

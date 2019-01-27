@@ -292,7 +292,7 @@ def moderation_queue(request):
         'active_tab': 'users',
         'page_class': 'moderation-queue-page',
         'moderation_reasons': list(moderation_reasons),
-        'queue_items' : queue,
+        'queue_items' : queue
     }
     return render(request, 'moderation/queue.html', data)
 

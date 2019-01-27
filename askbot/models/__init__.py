@@ -2276,7 +2276,7 @@ def user_edit_answer(
     return revision
 
 @auto_now_timestamp
-def user_create_post_reject_reason(self, title=None, description=None, timestamp=None):
+def user_create_moderation_reason(self, title=None, description=None, reason_type=None, timestamp=None):
     """creates and returs the post reject reason"""
     return ModerationReason.objects.create(
         title=title,
@@ -2284,11 +2284,11 @@ def user_create_post_reject_reason(self, title=None, description=None, timestamp
         added_by=self,
         description_text=description,
         description_html=convert_text(description),
-        reason_type='post_moderation'
+        reason_type=reason_type
     )
 
 @auto_now_timestamp
-def user_edit_post_reject_reason(self, reason, title=None,
+def user_edit_moderation_reason(self, reason, title=None,
                                  description=None, timestamp=None):
     reason.title = title
     reason.description = description
@@ -3525,8 +3525,8 @@ User.add_to_class(
 )
 User.add_to_class('post_comment', user_post_comment)
 User.add_to_class('edit_comment', user_edit_comment)
-User.add_to_class('create_post_reject_reason', user_create_post_reject_reason)
-User.add_to_class('edit_post_reject_reason', user_edit_post_reject_reason)
+User.add_to_class('create_moderation_reason', user_create_moderation_reason)
+User.add_to_class('edit_moderation_reason', user_edit_moderation_reason)
 User.add_to_class('delete_post', user_delete_post)
 User.add_to_class('post_object_description', user_post_object_description)
 User.add_to_class('visit_question', user_visit_question)

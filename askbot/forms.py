@@ -1654,10 +1654,22 @@ class EditGroupMembershipForm(forms.Form):
         return action
 
 
-class PostFlagReasonForm(forms.Form):
+class ModerationReasonForm(forms.Form):
     reason_id = forms.IntegerField(required=False)
     title = forms.CharField()
     description = forms.CharField()
+    reason_type = forms.CharField(required=False)
+
+    def clean_reason_type(self):
+        reason_type = self.cleaned_data['reason_type']
+        if reason_type:
+            from askbot.models.moderation import MODERATION_REASON_TYPES
+            allowed_types = dict(MODERATION_REASON_TYPES)
+            if reason_type not in allowed_types:
+                raise forms.ValidationError('invalid reason_type')
+
+        return reason_type
+
 
 
 class ModerateTagForm(forms.Form):

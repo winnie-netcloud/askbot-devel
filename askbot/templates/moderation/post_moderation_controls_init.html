@@ -1,7 +1,7 @@
 <script type="text/javascript">
   (function() {
-    askbot['urls']['save_post_reject_reason'] = '{% url save_post_reject_reason %}';
-    askbot['urls']['delete_post_reject_reason'] = '{% url delete_post_reject_reason %}';
+    askbot['urls']['saveModerationReason'] = '{% url save_moderation_reason %}';
+    askbot['urls']['deleteModerationReason'] = '{% url delete_moderation_reason %}';
     askbot['urls']['moderatePostEdits'] = '{% url moderate_items %}';
     askbot['urls']['getPostRevisionHtml'] = '{% url get_post_revision_html %}';
     askbot['data']['moderationReasons'] = JSON.parse('{{ moderation_reasons|as_json|escapejs }}');

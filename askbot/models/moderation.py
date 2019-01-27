@@ -76,7 +76,8 @@ class ModerationReasonManager(models.Manager):
                 'title': item.title,
                 'description_text': item.description_text,
                 'is_predefined': item.is_predefined,
-                'is_manually_assignable': item.is_manually_assignable
+                'is_manually_assignable': item.is_manually_assignable,
+                'reason_type': item.reason_type
             })
 
         return result

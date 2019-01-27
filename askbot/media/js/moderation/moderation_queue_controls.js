@@ -147,7 +147,7 @@ PostModerationControls.prototype.decorate = function (element) {
 
   //decline and explain why
   var reasonsMenuElem = $('.decline-reasons-menu');
-  var declineAndExplainMenu = new DeclineAndExplainMenu();
+  var declineAndExplainMenu = new DeclineAndExplainMenu('post_moderation');
   declineAndExplainMenu.setControls(this);
   declineAndExplainMenu.decorate(reasonsMenuElem);
 
@@ -166,16 +166,20 @@ PostModerationControls.prototype.decorate = function (element) {
   setupButtonEventHandlers(button, this.getSelectAllHandler(false));
 
   //attach click handler on the message body
-  var messages = element.find('.messages .message')
+  var messages = element.find('.messages .message');
+  var me = this;
   messages.each(function(idx, item) {
     var checkBox = $(item).find('input[type="checkbox"]');
     $(item).click(function(evt) { 
       if (evt.target.tagName !== 'A' && !isCheckBox(evt.target)) {
         var state = checkBox.prop('checked');
-        console.log('checkbox state is ' + state);
         checkBox.prop('checked', !state);
+        me.hideMessage();
       }
     });
+  });
+  $(document).click(function(){
+    me.hideMessage();
   });
 
   var expanders = element.find('.messages .expander');

@@ -972,7 +972,7 @@ def delete_group_logo(request):
 @decorators.ajax_only
 @decorators.post_only
 @decorators.moderators_only
-def delete_post_reject_reason(request):
+def delete_moderation_reason(request):
     reason_id = IntegerField().clean(int(request.POST['reason_id']))
     reason = models.ModerationReason.objects.get(pk=reason_id)
     reason.delete()
@@ -1072,23 +1072,25 @@ def join_or_leave_group(request):
 @decorators.ajax_only
 @decorators.post_only
 @decorators.moderators_only
-def save_post_reject_reason(request):
-    """saves post reject reason and returns the reason id
+def save_moderation_reason(request):
+    """saves moderation reason and returns the reason id
     if reason_id is not given in the input - a new reason is created,
     otherwise a reason with the given id is edited and saved
     """
-    form = forms.PostFlagReasonForm(request.POST)
+    form = forms.ModerationReasonForm(request.POST)
     if form.is_valid():
         title = form.cleaned_data['title']
         description = form.cleaned_data['description']
         if form.cleaned_data['reason_id'] is None:
-            reason = request.user.create_post_reject_reason(
-                title=title, description=description
+            reason = request.user.create_moderation_reason(
+                title=title,
+                description=description,
+                reason_type=form.cleaned_data['reason_type']
             )
         else:
             reason_id = form.cleaned_data['reason_id']
             reason = models.ModerationReason.objects.get(pk=reason_id)
-            request.user.edit_post_reject_reason(
+            request.user.edit_moderation_reason(
                 reason, title=title, description=description
             )
         return {

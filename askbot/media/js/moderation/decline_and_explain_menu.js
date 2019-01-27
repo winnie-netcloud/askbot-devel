@@ -3,7 +3,8 @@
 * to reject posts and a button that starts menu to
 * manage the list of reasons
 */
-var DeclineAndExplainMenu = function () {
+var DeclineAndExplainMenu = function (reasonType) {
+    this.reasonType = reasonType
     WrappedElement.call(this);
 };
 inherits(DeclineAndExplainMenu, WrappedElement);
@@ -57,8 +58,8 @@ DeclineAndExplainMenu.prototype.decorate = function (element) {
     var addReasonBtn = element.find('.manage-reasons');
     this._addReasonBtn = addReasonBtn;
 
-    var manageReasonsDialog = new ManageModerationReasonsDialog();
-    manageReasonsDialog.decorate($('#manage-reject-reasons-modal'));
+    var manageReasonsDialog = new ManageModerationReasonsDialog(this.reasonType);
+    manageReasonsDialog.decorate($('#manage-' + this.reasonType + '-reasons-modal'));
     this._manageReasonsDialog = manageReasonsDialog;
     manageReasonsDialog.setMenu(this);
 
