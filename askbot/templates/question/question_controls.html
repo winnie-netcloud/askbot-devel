@@ -1,9 +1,6 @@
 <a id="js-edit-btn-post-body-{{ question.pk }}" class="question-edit js-edit" href="{% url edit_question question.pk %}">{% trans %}edit{% endtrans %}</a>
 <a id="retag" class="question-retag" href="{% url retag_question question.pk %}">{% trans %}retag{% endtrans %}</a>
-<span class="js-post-flags" data-post-id="{{ question.pk }}">
-  {% trans %}report{% endtrans %}
-  {% if question.offensive_flag_count %}({{ question.offensive_flag_count }}){% endif %}
-</span>
+{{ macros.flag_post_menu(question) }}
 {% if thread.closed %}
     <a class="question-close" href="{% url reopen question.pk %}">{% trans %}reopen{% endtrans %}</a>
 {% else %}

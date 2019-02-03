@@ -22,6 +22,18 @@
     <a href="mailto:{{ email }}">{{ email }}</a>
 {%- endmacro -%}
 
+{% macro flag_post_menu(post) %}
+    <div class="dropdown" style="display: inline-block;">
+        <span class="dropdown-toggle js-post-flags" data-post-id="{{ post.pk }}">
+          <span>
+              {% trans %}report{% endtrans %}
+              {% if post.offensive_flag_count %}({{ post.offensive_flag_count }}){% endif %}
+          </span>
+          <span class="caret"></span>
+        </span>
+    </div>
+{% endmacro %}
+
 {% macro moderation_queue_item_user_info(user) %}
     {{ gravatar(user, 16) }}
     <a class="username" href="{{ user.get_absolute_url() }}">{{ user.username|escape }}</a>

@@ -1,10 +1,7 @@
 <span class="action-link">
     <a id="js-edit-btn-post-body-{{ answer.pk }}" class="question-edit js-edit" href="{% url edit_answer answer.id %}">{% trans %}edit{% endtrans %}</a>
 </span>
-<span class="js-post-flags" data-post-id="{{ answer.pk }}">
-  {% trans %}report{% endtrans %}
-  {% if answer.offensive_flag_count %}({{ answer.offensive_flag_count }}){% endif %}
-</span>
+{{ macros.flag_post_menu(answer) }}
 <span id='post-{{answer.id}}-delete' class="action-link delete-post">
     <a class="question-delete"
     >{% if answer.deleted %}{% trans %}undelete{% endtrans %}{% else %}{% trans %}delete{% endtrans %}{% endif %}</a>

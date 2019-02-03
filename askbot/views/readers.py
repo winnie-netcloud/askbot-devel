@@ -632,10 +632,11 @@ def question(request, question_id):#refactor - long subroutine. display question
     #answer posting is impossible
     request.session['askbot_write_intent'] = True
 
-    moderation_reasons = ModerationReason.objects.filter(
+    moderation_reasons = models.ModerationReason.objects.filter_as_dicts( #pylint: disable=no-member
         reason_type='post_moderation',
-        is_manually_assignable=True
-    ).order_by('title')
+        is_manually_assignable=True,
+        order_by='title'
+    )
     
     data = {
         'active_tab': 'questions',
@@ -667,7 +668,7 @@ def question(request, question_id):#refactor - long subroutine. display question
         'user_votes': user_votes,
         'user_post_id_list': user_post_id_list,
         'user_can_post_comment': user_can_post_comment,#in general
-        'moderation_reasons': list(moderation_reasons)
+        'moderation_reasons': moderation_reasons
     }
     #shared with ...
     if askbot_settings.GROUPS_ENABLED:

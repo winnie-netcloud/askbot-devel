@@ -19,7 +19,6 @@
                 <span>{% trans %}decline and explain why{% endtrans %}</span>
                 <span class="caret"></span>
             </span>
-            {{ moderation_macros.select_reason_menu(moderation_reasons, 'post_moderation') }}
         </div>
         <a class="btn btn-danger decline-block-users">{% trans %}block spammers{% endtrans %}</a>
         {% if settings.IP_MODERATION_ENABLED %}
@@ -45,7 +44,7 @@
 {% block endjs %}
     {# todo: factor out moderation.js file #}
     {% compress js %}
-    <script type="text/javascript" src="{{ '/js/moderation/decline_and_explain_menu.js'|media }}"></script>
+    <script type="text/javascript" src="{{ '/js/moderation/moderate_with_reason_menu.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/moderation/moderation_queue_controls.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/moderation/manage_moderation_reasons_dialog.js'|media }}"></script>
     {% endcompress %}

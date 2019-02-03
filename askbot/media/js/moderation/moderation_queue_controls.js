@@ -90,7 +90,7 @@ PostModerationControls.prototype.getModHandler = function (action, items, optRea
       cache: false,
       dataType: 'json',
       data: JSON.stringify(postData),
-      url: askbot.urls.moderatePostEdits,
+      url: askbot.urls.moderateQueueItems,
       success: function (response_data) {
         if (response_data.success) {
           me.removeEntries(response_data.item_ids);
@@ -146,10 +146,12 @@ PostModerationControls.prototype.decorate = function (element) {
   setupButtonEventHandlers(button, this.getModHandler('approve', ['posts', 'users']));
 
   //decline and explain why
-  var reasonsMenuElem = $('.decline-reasons-menu');
-  var declineAndExplainMenu = new DeclineAndExplainMenu('post_moderation');
-  declineAndExplainMenu.setControls(this);
-  declineAndExplainMenu.decorate(reasonsMenuElem);
+  var me = this;
+  var handlerFactory = function(reasonId) {
+    return me.getModHandler('decline-with-reason', ['posts'], reasonId);
+  }
+  var menu = new ModerateWithReasonMenu('post_moderation', handlerFactory);
+  menu.decorate($('.decline-reasons-menu'));
 
   //delete posts and block users
   button = element.find('.decline-block-users');
@@ -167,7 +169,6 @@ PostModerationControls.prototype.decorate = function (element) {
 
   //attach click handler on the message body
   var messages = element.find('.messages .message');
-  var me = this;
   messages.each(function(idx, item) {
     var checkBox = $(item).find('input[type="checkbox"]');
     $(item).click(function(evt) { 

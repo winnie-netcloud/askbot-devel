@@ -2291,7 +2291,8 @@ def user_create_moderation_reason(self, title=None, description=None, reason_typ
 def user_edit_moderation_reason(self, reason, title=None,
                                  description=None, timestamp=None):
     reason.title = title
-    reason.description = description
+    reason.description_text = description
+    reason.description_html = convert_text(description)
     reason.save()
 
 @reject_forbidden_phrases
