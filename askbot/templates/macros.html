@@ -27,9 +27,8 @@
         <span class="dropdown-toggle js-post-flags" data-post-id="{{ post.pk }}">
           <span>
               {% trans %}report{% endtrans %}
-              {% if post.offensive_flag_count %}({{ post.offensive_flag_count }}){% endif %}
+              <span class="js-post-flag-count">{% if post.offensive_flag_count %}({{ post.offensive_flag_count }}){% endif %}</span>
           </span>
-          <span class="caret"></span>
         </span>
     </div>
 {% endmacro %}

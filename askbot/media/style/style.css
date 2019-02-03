@@ -2510,17 +2510,12 @@ tr.mceLast {
   background-color: #f5f0c9;
 }
 .question-page .post-controls span.dropdown-toggle {
-  background: url(../images/sprites.png) no-repeat -7px -242px;
   border-radius: 3px;
   -ms-border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   -khtml-border-radius: 3px;
   position: relative;
-}
-.question-page .post-controls span.dropdown-toggle:hover {
-  padding-right: 0;
-  background: url(../images/sprites.png) no-repeat -7px -274px;
 }
 .question-page .post-controls span.dropdown-toggle:hover form {
   margin: 0;
@@ -2869,12 +2864,8 @@ tr.mceLast {
   line-height: 15px;
   margin: 0 0 3px 8px;
   vertical-align: middle;
-  -webkit-box-shadow: 0 0 0 #929292;
-  -moz-box-shadow: 0 0 0 #929292;
-  box-shadow: 0 0 0 #929292;
-  text-shadow: 0 0 0 #929292;
-  -moz-text-shadow: 0 0 0 #929292;
-  -webkit-text-shadow: 0 0 0 #929292;
+  box-shadow: none;
+  text-shadow: none;
 }
 .question-page .comments .convert-comment input:hover {
   text-decoration: underline;
