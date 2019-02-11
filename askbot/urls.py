@@ -229,6 +229,11 @@ urlpatterns = patterns(
         views.commands.moderate_group_join_request,
         name='moderate_group_join_request'
     ),
+    service_url(
+        r'^flag-post/',
+        views.commands.flag_post,
+        name='flag_post'
+    ),
     url(
         r'^%s$' % pgettext('urls', 'moderation-queue/'),
         views.moderation.moderation_queue,

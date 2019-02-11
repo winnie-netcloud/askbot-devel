@@ -13,7 +13,7 @@
               moderation_reasons_dialog: value of type is not set
             {% endif %}
           </h3>
-          <p>{% trans %}Note: only custom moderation reasons can be edited here. Predefined reasons are marked with an asterisk* in the main list and are not shown here.{% endtrans %}</p>
+          <p class="info-message"></p>
       </div>
       <div class="add-reason-dialog">{# create new moderation reason #}
           <div class="modal-body">
@@ -36,21 +36,27 @@
           <div class="modal-body">
               <ul class="select-box">
                   {% for reason in reasons %}
-                      {% if not reason.is_predefined and reason.reason_type == type %}
-                          <li class="select-box-item"
+                      {% if reason.reason_type == type %}
+                      <li class="select-box-item{% if reason.is_predefined %} predefined{% endif %}"
                               data-original-title="{{reason.description_text|escape}}"
                               data-item-id="{{reason.id}}"
+                              data-is-predefined="{{reason.is_predefined|as_js_bool}}"
                           >{{reason.title|escape}}</li>
                       {% endif %}
                   {% endfor %}
               </ul>
           </div>
           <div class="modal-footer">
-              <div class="btn-toolbar">
+              <div class="btn-toolbar edit-buttons">
                   <a class="btn edit-this-reason" style="display: none;">{% trans %}Edit this reason{% endtrans %}</a>
                   <a class="btn delete-this-reason" style="display: none;">{% trans %}Delete this reason{% endtrans %}</a>
                   <a class="btn add-new-reason">{% trans %}Add a new reason{% endtrans %}</a>
-                  <a class="btn cancel">{% trans %}Done{% endtrans %}</a>
+                  <a class="btn to-apply-mode">{% trans %}Done editing{% endtrans %}</a>
+                  <a class="btn cancel">{% trans %}Close{% endtrans %}</a>
+              </div>
+              <div class="btn-toolbar moderate-buttons">
+                <a class="btn cancel">{% trans %}Close{% endtrans %}</a>
+                <a class="btn to-edit-mode">{% trans %}Modify reasons{% endtrans %}</a>
               </div>
           </div>
       </div>

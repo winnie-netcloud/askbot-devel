@@ -190,9 +190,6 @@ def vote(request):
 
             if vote_args[0] == 'question':
                 post.thread.update_summary_html()
-        elif vote_type in const.VOTE_TYPES_REPORTING:
-            user.flag_post(post, cancel=vote_args[1], cancel_all=vote_args[2])
-            response_data['count'] = post.offensive_flag_count
         elif vote_type in const.VOTE_TYPES_REMOVAL:
             if post.deleted:
                 user.restore_post(post=post)
@@ -209,6 +206,20 @@ def vote(request):
 
     data = simplejson.dumps(response_data)
     return HttpResponse(data, content_type='application/json')
+
+@csrf.csrf_protect
+@decorators.ajax_only
+@decorators.post_only
+def flag_post(request):
+    post_data = decode_and_loads(request.body)
+    form = forms.ModeratePostForm(post_data)
+    if form.is_valid():
+        post = models.Post.objects.get(pk=form.cleaned_data['post_id'])
+        reason = models.ModerationReason.objects.get(pk=form.cleaned_data['reason_id'])
+        request.user.flag_post(post, reason=reason)
+        flag_count = models.ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
+        return {'flag_count': flag_count}
+    raise ValueError('Invalid data')
 
 #internally grouped views - used by the tagging system
 @csrf.csrf_protect

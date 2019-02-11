@@ -23,9 +23,6 @@ def onFlaggedItem(post, user, timestamp=None):
     if timestamp is None:
         timestamp = timezone.now()
 
-    post.offensive_flag_count = post.offensive_flag_count + 1
-    post.save()
-
     flagged_user = post.author
 
     flagged_user.receive_reputation(
@@ -100,9 +97,6 @@ def onFlaggedItem(post, user, timestamp=None):
 def onUnFlaggedItem(post, user, timestamp=None):
     if timestamp is None:
         timestamp = timezone.now()
-
-    post.offensive_flag_count = post.offensive_flag_count - 1
-    post.save()
 
     flagged_user = post.author
 

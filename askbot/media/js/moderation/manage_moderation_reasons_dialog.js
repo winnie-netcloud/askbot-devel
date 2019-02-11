@@ -9,10 +9,46 @@ var ManageModerationReasonsDialog = function (reasonType) {
   this._selected_edit_ids = null;
   this._selected_reason_id = null;
   this._state = 'select';//'select', 'add-new'
+  this._mode = 'edit'; // moderate | edit
+  this._isBimodal = false;
   this._postModerationControls = [];
   this._selectedEditDataReader = undefined;
+  this._infoMessages = {};
 };
 inherits(ManageModerationReasonsDialog, WrappedElement);
+
+ManageModerationReasonsDialog.prototype.getSelectBox = function () {
+  return this._select_box;
+};
+
+ManageModerationReasonsDialog.prototype.setBimodal = function(value) {
+  this._isBimodal = value;
+}
+
+ManageModerationReasonsDialog.prototype.getMode = function () {
+  return this._mode;
+};
+
+ManageModerationReasonsDialog.prototype.setMode = function (mode) {
+  this._mode = mode;
+  if (this._element) {
+    if (mode === 'edit') {
+      this._infoMessage.html(this._infoMessages[mode]);
+      this._moderateButtons.hide();
+      this._editButtons.show();
+    } else if (mode === 'moderate') {
+      this._infoMessage.html(this._infoMessages[mode]);
+      this._moderateButtons.show();
+      this._editButtons.hide();
+    } else {
+      throw 'Unsupported mode: "' + mode + '"';
+    }
+  }
+}
+
+ManageModerationReasonsDialog.prototype.setInfoMessage = function (mode, message) {
+  this._infoMessages[mode] = message;
+}
 
 ManageModerationReasonsDialog.prototype.setMenu = function (menu) {
   this._reasonsMenu = menu;
@@ -190,7 +226,10 @@ ManageModerationReasonsDialog.prototype.startSavingReason = function (callback) 
         //show current reason data and focus on it
         me.addSelectableReason(data);
         if (reasonIsNew) {
-          me.getMenu().addReason(data.reason_id, data.title);
+          var menu = me.getMenu();
+          if (menu) {
+            menu.addReason(data.reason_id, data.title);
+          }
         }
         if (callback) {
           callback(data);
@@ -204,8 +243,33 @@ ManageModerationReasonsDialog.prototype.startSavingReason = function (callback) 
   });
 };
 
+ManageModerationReasonsDialog.prototype.getReasonData = function (id) {
+  var reasons = askbot['data']['moderationReasons'];
+  for (var idx=0; idx < reasons.length; idx++) {
+    var reason = reasons[idx]
+    if (reason.id === id) {
+      return reason
+    }
+  }
+  return null
+};
+
+ManageModerationReasonsDialog.prototype.isReasonPredefined = function (id) {
+  var data = this.getReasonData(id);
+  if (data) {
+    return data.is_predefined
+  }
+  throw 'Moderation reason with id ' + id + ' not found';
+};
+
 ManageModerationReasonsDialog.prototype.startEditingReason = function () {
   var data = this._select_box.getSelectedItemData();
+  if (this.isReasonPredefined(data.id)) {
+    this.setSelectorErrors(gettext('This reason is predefined and cannot be modified'));
+    return
+  } else {
+    this.clearErrors();
+  }
   var title = $(data.title).text() || data.title; //bug in the underlying element!!!
   var description = data.details;
   this._title_input.setVal(title);
@@ -225,6 +289,12 @@ ManageModerationReasonsDialog.prototype.getSelectedReasonId = function () {
 ManageModerationReasonsDialog.prototype.startDeletingReason = function () {
   var select_box = this._select_box;
   var data = select_box.getSelectedItemData();
+  if (this.isReasonPredefined(data.id)) {
+    this.setSelectorErrors(gettext('This reason is predefined and cannot be deleted'));
+    return
+  } else {
+    this.clearErrors();
+  }
   var reason_id = data.id;
   var me = this;
   if (data.id) {
@@ -238,7 +308,10 @@ ManageModerationReasonsDialog.prototype.startDeletingReason = function () {
         if (data.success) {
           select_box.removeItem(reason_id);
           me.hideEditButtons();
-          me.getMenu().removeReason(reason_id);
+          var menu = me.getMenu();
+          if (menu) {
+            menu.removeReason(reason_id);
+          }
         } else {
           me.setSelectorErrors(data.message);
         }
@@ -259,7 +332,33 @@ ManageModerationReasonsDialog.prototype.showEditButtons = function () {
   this._deleteButton.show();
 };
 
+ManageModerationReasonsDialog.prototype.getSelectItemHandler = function () {
+  var me = this;
+  return function () {
+    var mode = me.getMode();
+    if (mode === 'edit') {
+      me.showEditButtons(); 
+    } else if (mode === 'moderate') {
+      var data = me.getSelectBox().getSelectedItemData();
+      var reasonId = data.id;
+      var handler = me.getModerationHandler();
+      handler(reasonId);
+    } else {
+      throw 'Unexpected mode ' + mode;
+    }
+  };
+};
+
+ManageModerationReasonsDialog.prototype.setModerationHandler = function (handler) {
+  this._moderationHandler = handler;
+};
+
+ManageModerationReasonsDialog.prototype.getModerationHandler = function (handler) {
+  return this._moderationHandler;
+};
+
 ManageModerationReasonsDialog.prototype.decorate = function (element) {
+  var me = this;
   this._element = element;
   //set default state according to the # of available reasons
   this._selector = $(element).find('.select-reason-dialog');
@@ -272,9 +371,26 @@ ManageModerationReasonsDialog.prototype.decorate = function (element) {
     this.resetInputs();
   }
 
+  this._infoMessage = $(element).find('.info-message');
+
+  this._editButtons = $(element).find('.edit-buttons');
+  this._moderateButtons = $(element).find('.moderate-buttons');
+  var toEditModeBtn = $(element).find('.to-edit-mode');
+  setupButtonEventHandlers(toEditModeBtn, function () { me.setMode('edit'); });
+  this.setMode(this._mode);
+
+  var toApplyModeBtn = $(element).find('.to-apply-mode');
+  setupButtonEventHandlers(toApplyModeBtn, function () { me.setMode('moderate'); });
+
+  if (this._isBimodal === false) {
+    $(element).find('.to-apply-mode').hide();
+  } else {
+    this._editButtons.find('.cancel').hide();
+  }
+
   var select_box = new SelectBox();
   select_box.decorate($(this._selector.find('.select-box')));
-  select_box.setSelectHandler(function () { me.showEditButtons(); });
+  select_box.setSelectHandler(this.getSelectItemHandler());
   this._select_box = select_box;
 
   //setup tipped-inputs
@@ -289,7 +405,6 @@ ManageModerationReasonsDialog.prototype.decorate = function (element) {
   details_input.decorate($(moderation_details_input));
   this._details_input = details_input;
 
-  var me = this;
   var resetMenuHandler = function () {
     me.clearErrors();
     me.resetInputs();

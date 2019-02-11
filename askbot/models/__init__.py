@@ -1273,7 +1273,7 @@ def user_assert_can_reopen_question(self, question = None):
     )
 
 
-def user_assert_can_flag_offensive(self, post=None):
+def user_assert_can_flag_offensive(self, post=None, reason=None):
 
     assert(post is not None)
 
@@ -1282,7 +1282,7 @@ def user_assert_can_flag_offensive(self, post=None):
         'cannot do it more than once'
     )
 
-    if self.get_flags_for_post(post, only_latest_revision=True).count() > 0:
+    if self.get_flags_for_post(post, reason=reason, only_latest_revision=True).count() > 0:
         raise askbot_exceptions.DuplicateCommand(double_flagging_error_message)
 
     min_rep_setting = askbot_settings.MIN_REP_TO_FLAG_OFFENSIVE
@@ -1326,7 +1326,7 @@ def user_assert_can_remove_flag_offensive(self, post=None):
 
     non_existing_flagging_error_message = _('cannot remove non-existing flag')
 
-    if self.get_flags_for_post(post).count() < 1:
+    if self.get_flags_for_post(post).count() == 0:
         raise django_exceptions.PermissionDenied(non_existing_flagging_error_message)
 
     min_rep_setting = askbot_settings.MIN_REP_TO_FLAG_OFFENSIVE
@@ -3240,36 +3240,32 @@ def user_approve_post_revision(user, post_revision, timestamp=None):
                                     )
 
 @auto_now_timestamp
-def flag_post(
-    user, post, timestamp=None, cancel=False, cancel_all=False, force=False
-):
-    if cancel_all:
-        # remove all flags
-        if force == False:
-            user.assert_can_remove_all_flags_offensive(post=post)
-        rev_ct = ContentType.objects.get_for_model(PostRevision)
-        rev_ids = post.revisions.values_list('pk', flat=True)
-        all_flags = ModerationQueueItem.objects.filter(
-                        item_content_type=rev_ct,
-                        item_id__in=rev_ids,
-                        reason__is_manually_assignable=True,
-                        reason__reason_type='post_moderation'
-                    )
-        all_flags.update(resolution_status='dismissed',
-                         resolved_by=user,
-                         resolved_at=timezone.now())
-
-        for flag in all_flags:
-            auth.onUnFlaggedItem(post, flag.added_by, timestamp=timestamp)
-
-    elif cancel:#todo: can't unflag?
+def flag_post(user, post, reason=None, timestamp=None, cancel=False, force=False):
+    if cancel:#todo: can't unflag?
         if force == False:
             user.assert_can_remove_flag_offensive(post=post)
+        flag_count = ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
+        models.Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
         auth.onUnFlaggedItem(post, user, timestamp=timestamp)
 
     else:
+        if not reason:
+            reason = ModerationReason.objects.get(title='Offensive')
+
         if force == False:
-            user.assert_can_flag_offensive(post=post)
+            user.assert_can_flag_offensive(post=post, reason=reason)
+
+        revision = post.get_latest_revision(visitor=user)
+        queue_item = ModerationQueueItem()
+        queue_item.item = revision
+        queue_item.item_author = revision.author
+        queue_item.reason = reason
+        queue_item.added_by = user
+        queue_item.language_code = post.language_code
+        queue_item.save()
+        flag_count = ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
+        Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
+
         auth.onFlaggedItem(post, user, timestamp=timestamp)
         award_badges_signal.send(None,
                                  event='flag_post',
@@ -3292,7 +3288,7 @@ def user_get_flag_count_posted_today(self):
     flags = self.get_flags()
     return flags.filter(added_at__range=time_frame).count()
 
-def user_get_flags_for_post(self, post, only_latest_revision=False):
+def user_get_flags_for_post(self, post, reason=None, only_latest_revision=False):
     """return query set for flag Activity items
     posted by users for a given post obeject
     """
@@ -3302,7 +3298,13 @@ def user_get_flags_for_post(self, post, only_latest_revision=False):
         rev_ids = [post.current_revision_id]
     else:
         rev_ids = post.revisions.values_list('pk', flat=True)
-    return flags.filter(item_content_type=rev_ct, item_id__in=rev_ids)
+
+    flags = flags.filter(item_content_type=rev_ct, item_id__in=rev_ids, resolution_status='waiting')
+    if reason:
+        flags = flags.filter(reason_id=reason.pk)
+    import pdb
+    pdb.set_trace()
+    return flags
 
 def user_create_email_key(self):
     email_key = generate_random_key()

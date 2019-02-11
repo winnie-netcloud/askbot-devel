@@ -62,6 +62,7 @@ def init_reasons():
     )
 
 class ModerationReasonManager(models.Manager):
+
     def filter_as_dicts(self, order_by=None, **params):
         """Returns list of dictionaries of the moderation reasons"""
         items = self.get_queryset()
@@ -126,6 +127,18 @@ RESOLUTION_CHOICES = (
                    'is made with a different reason'))
 )
 
+class ModerationQueueItemManager(models.Manager):
+    def get_count_for_post(self, post, reason_type=None):
+        qs = self.get_queryset()
+        rev_ids = post.revisions.all().values_list('pk', flat=True)
+        from askbot.models import PostRevision
+        rev_ct = ContentType.objects.get_for_model(PostRevision)
+        items = qs.filter(reason__reason_type=reason_type,
+                          resolution_status='waiting',
+                          item_id__in=rev_ids,
+                          item_content_type=rev_ct)
+        return items.count()
+
 class ModerationQueueItem(models.Model):
     """Items that are displayed in the moderation queue(s)"""
     #pylint: disable=no-init,too-few-public-methods
@@ -159,6 +172,8 @@ class ModerationQueueItem(models.Model):
                                       null=True, blank=True,
                                       help_text='Used if resolution_status is "followup"')
     language_code = LanguageCodeField()
+
+    objects = ModerationQueueItemManager()
 
     class Meta: #pylint: disable=no-init,old-style-class,missing-docstring
         app_label = 'askbot'

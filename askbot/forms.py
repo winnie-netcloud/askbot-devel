@@ -1,5 +1,5 @@
 """Forms, custom form fields and related utility functions
-used in AskBot"""
+used in Askbot"""
 import regex as re #todo: make explicit import
 import askbot
 import unicodedata
@@ -1670,6 +1670,10 @@ class ModerationReasonForm(forms.Form):
 
         return reason_type
 
+
+class ModeratePostForm(forms.Form):
+    post_id = forms.IntegerField()
+    reason_id = forms.IntegerField()
 
 
 class ModerateTagForm(forms.Form):

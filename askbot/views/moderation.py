@@ -115,7 +115,7 @@ def approve_posts(admin, mod_items):
         if not isinstance(item.item, models.PostRevision):
             continue
         admin.approve_post_revision(item.item)
-        admin.flag_post(item.item.post, cancel_all=True, force=True)
+        admin.flag_post(item.item.post, force=True)
         num_posts += 1
 
     return num_posts

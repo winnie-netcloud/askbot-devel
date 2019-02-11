@@ -59,11 +59,16 @@ ModerateWithReasonMenu.prototype.decorate = function (element) {
   var addReasonBtn = this.makeManageReasonsBtn();
   this._addReasonBtn = addReasonBtn;
   this._reasonList.append(addReasonBtn);
-  var manageReasonsDialog = new ManageModerationReasonsDialog(this.reasonType);
-  manageReasonsDialog.decorate($('#manage-' + this.reasonType + '-reasons-modal'));
-  this._manageReasonsDialog = manageReasonsDialog;
-  manageReasonsDialog.setMenu(this);
-  setupButtonEventHandlers(addReasonBtn, function () { manageReasonsDialog.show(); });
+  var dialog = new ManageModerationReasonsDialog(this.reasonType);
+  dialog.setMode('edit');
+  dialog.setInfoMessage(
+    'edit',
+    gettext('Note: reasons marked with an asterisk* in the main list are predefined and cannot be edited here.')
+  );
+  dialog.decorate($('#manage-' + this.reasonType + '-reasons-modal'));
+  this._dialog = dialog;
+  dialog.setMenu(this);
+  setupButtonEventHandlers(addReasonBtn, function () { dialog.show(); });
 
   for (var idx = 0; idx < askbot.data.moderationReasons.length; idx++) {
     var reason = askbot.data.moderationReasons[idx];

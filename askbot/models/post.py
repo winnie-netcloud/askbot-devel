@@ -1509,7 +1509,12 @@ class Post(models.Model):
     def cache_latest_revision(self, rev):
         setattr(self, '_last_rev_cache', rev)
 
-    def get_latest_revision(self):
+    def get_latest_revision(self, visitor=None):
+        if visitor and visitor.is_administrator_or_moderator():
+            held_revisions = self.revisions.filter(revision=0)
+            if len(held_revisions) > 0:
+                return held_revisions[0]
+            
         if hasattr(self, '_last_rev_cache'):
             return self._last_rev_cache
         rev = self.revisions.order_by('-revision')[0]
