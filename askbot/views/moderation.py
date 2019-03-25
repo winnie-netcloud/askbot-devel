@@ -111,14 +111,16 @@ def approve_posts(admin, mod_items):
     At the same time removes all other flags on the post.
     """
     num_posts = 0
+    item_ids = set()
     for item in mod_items:
         if not isinstance(item.item, models.PostRevision):
             continue
         admin.approve_post_revision(item.item)
-        admin.flag_post(item.item.post, force=True)
+        flag_ids = admin.flag_post(item.item.post, cancel=True, cancel_all=True, force=True)
         num_posts += 1
+        item_ids |= set(flag_ids)
 
-    return num_posts
+    return num_posts, item_ids
 
 
 def resolve_items(item_set, admin, reason=None):
@@ -128,6 +130,11 @@ def resolve_items(item_set, admin, reason=None):
     3) manualy assigned items updated with status "followup" if
        the reason is given, or "dismissed" otherwise
     """
+    post_ids = set()
+    for item in item_set:
+        if isinstance(item.item, models.PostRevision):
+            post_ids.add(item.item.post_id)
+
     resolution_status = 'dismissed'
     if reason:
         resolution_status = 'followup'
@@ -147,6 +154,11 @@ def resolve_items(item_set, admin, reason=None):
     # delete system assigned items like new post/revisions
     system_assigned = item_set.filter(reason__is_manually_assignable=False)
     system_assigned.delete()
+
+    posts = models.Post.objects.filter(pk__in=post_ids)
+    for post in posts:
+        flag_count = models.ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
+        models.Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
 
 
 def handle_decline_action(admin, item_set, reason_id):
@@ -319,15 +331,17 @@ def expand_item_set(item_set):
 def handle_approve_action(admin, item_set, item_types):
     """Approves posts or users"""
     result = dict()
+    item_ids = set()
     if 'posts' in item_types:
         # approve all unapproved posts
-        result['approved_posts'] = approve_posts(admin, item_set)
+        num_posts, item_ids = approve_posts(admin, item_set)
+        result['approved_posts'] = num_posts
 
     if 'users' in item_types:
         user_ids = get_author_ids(item_set)
         result['approved_users'] = set_users_statuses(admin, user_ids, 'a')
 
-    result['item_ids'] = list(item_set.values_list('pk', flat=True))
+    result['item_ids'] = list(item_ids | set(item_set.values_list('pk', flat=True)))
     # manually assigned items are marked as dismissed
     resolve_items(item_set, admin)
     return result

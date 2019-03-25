@@ -2,7 +2,7 @@
 <div class="modal" style="display:none" id="manage-{{ type }}-reasons-modal">
       <div class="modal-header">
           <a class="close" data-dismiss="modal">x</a>
-          <h3>
+          <h3 class="js-modal-title">
             {% if type == 'post_moderation' %}
               {% trans %}Manage post flag/reject reasons{% endtrans %}
             {% elif type == 'question_closure' %}
@@ -38,10 +38,13 @@
                   {% for reason in reasons %}
                       {% if reason.reason_type == type %}
                       <li class="select-box-item{% if reason.is_predefined %} predefined{% endif %}"
-                              data-original-title="{{reason.description_text|escape}}"
-                              data-item-id="{{reason.id}}"
-                              data-is-predefined="{{reason.is_predefined|as_js_bool}}"
-                          >{{reason.title|escape}}</li>
+                            data-original-title="{{reason.description_text|escape}}"
+                            data-item-id="{{reason.id}}"
+                            data-is-predefined="{{reason.is_predefined|as_js_bool}}"
+                            {% if reason.used_count is defined %}
+                              data-used-count="{{reason.used_count|escape}}"
+                            {% endif %}
+                          >{{reason.title|escape}}{% if reason.is_predefined %}*{% endif %}</li>
                       {% endif %}
                   {% endfor %}
               </ul>

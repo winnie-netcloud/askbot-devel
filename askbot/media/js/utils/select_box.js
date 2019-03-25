@@ -7,8 +7,19 @@ var SelectBox = function () {
     this._select_handler = function () {};//empty default
     this._is_editable = false;
     this._item_class = SelectBoxItem;
+    this._mode = undefined;
 };
 inherits(SelectBox, Widget);
+
+SelectBox.prototype.setMode = function (mode) {
+  this._mode = mode
+  var items = this._items
+  $.each(items, function (idx, item) {
+    if (item.setMode) {
+      item.setMode(mode)
+    }
+  })
+}
 
 SelectBox.prototype.setItemClass = function (itemClass) {
     this._item_class = itemClass;
@@ -30,6 +41,17 @@ SelectBox.prototype.detachAllItems = function () {
     this._items = [];
 };
 
+/**
+ * removes all items
+ */
+SelectBox.prototype.empty = function () {
+    var items = this._items;
+    $.each(items, function (idx, item) {
+        item.dispose();
+    });
+    this._items = [];
+};
+
 SelectBox.prototype.getItem = function (id) {
     var items = this._items;
     for (var i = 0; i < items.length; i++) {
@@ -44,15 +66,12 @@ SelectBox.prototype.getItemByIndex = function (idx) {
     return this._items[idx];
 };
 
-/**
- * removes all items
- */
-SelectBox.prototype.empty = function () {
-    var items = this._items;
-    $.each(items, function (idx, item) {
-        item.dispose();
-    });
-    this._items = [];
+SelectBox.prototype.setItemsData = function (data) {
+  for (var idx = 0; idx < data.length; idx++) {
+    var datum = data[idx];
+    var item = this.getItem(datum.id);
+    item.setData(datum);
+  }
 };
 
 /*
@@ -68,6 +87,7 @@ SelectBox.prototype.removeItem = function (id) {
         this._items.splice(idx, 1);
     }
 };
+
 SelectBox.prototype.deleteItem = function (id) {
     var item = this.getItem(id);
     if (item === undefined) {

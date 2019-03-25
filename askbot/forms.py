@@ -1674,7 +1674,11 @@ class ModerationReasonForm(forms.Form):
 class ModeratePostForm(forms.Form):
     post_id = forms.IntegerField()
     reason_id = forms.IntegerField()
+    cancel = forms.BooleanField(required=False)
 
+    def clean_cancel(self):
+        return self.cleaned_data.get('cancel', False)
+ 
 
 class ModerateTagForm(forms.Form):
     tag_id = forms.IntegerField()

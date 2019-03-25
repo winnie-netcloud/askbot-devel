@@ -657,6 +657,42 @@ class Post(models.Model):
     def is_reject_reason(self):
         return self.post_type == 'reject_reason'
 
+    def get_flags_info(self, user=None):
+        """Get info about the post flags, including whether the user
+        applied the specific flags"""
+        from askbot.models import ModerationReason, ModerationQueueItem
+        reasons = ModerationReason.objects.filter(reason_type='post_moderation', is_manually_assignable=True)
+        reasons_info = dict()
+        for reason in reasons:
+            reasons_info[reason.pk] = {'id': reason.pk,
+                                       'flag_count': 0,
+                                       'flagged_by_user': False,
+                                       'post_id': self.pk}
+
+        rev_ids = self.revisions.all().values_list('pk', flat=True)
+        rev_ct = ContentType.objects.get_for_model(PostRevision)
+        items = ModerationQueueItem.objects.filter(
+            reason__reason_type='post_moderation',
+            resolution_status='waiting',
+            item_id__in=rev_ids,
+            item_content_type=rev_ct
+        )
+
+        total_counts = dict()
+        by_user_counts = dict()
+        for item in items:
+            reason_id = item.reason_id
+            total_counts[reason_id] = total_counts.get(reason_id, 0) + 1
+            if user and user.is_authenticated() and user.pk == item.added_by_id:
+                by_user_counts[reason_id] = by_user_counts.get(reason_id, 0) + 1
+
+        for reason_id in total_counts.keys():
+            info = reasons_info[reason_id]
+            info['flag_count'] = total_counts[reason_id]
+            info['flagged_by_user'] = by_user_counts.get(reason_id, 0) > 0
+
+        return reasons_info.values()
+
     def get_last_edited_date(self):
         """returns date of last edit or date of creation
         if there were no edits"""
@@ -1770,7 +1806,7 @@ class Post(models.Model):
                 raise exception(message)
 
     def assert_is_visible_to(self, user):
-        if user.is_administrator_or_moderator():
+        if user.is_authenticated() and user.is_administrator_or_moderator():
             return
         if self.is_comment() == False and askbot_settings.GROUPS_ENABLED:
             self.assert_is_visible_to_user_groups(user)

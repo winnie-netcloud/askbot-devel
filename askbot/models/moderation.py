@@ -18,6 +18,7 @@ can be assigned only by the system. Users should never assign them
 via the user interface"""
 
 def init_reason(**kwargs):
+    """Creates instance of `ModerationReason` object"""
     if ModerationReason.objects.filter(title=kwargs['title']).exists():
         # todo: maybe update values
         return
@@ -55,13 +56,13 @@ def init_reasons():
 
     init_reason(
         title='Spam',
-        description_text ='Post contains irrelevant or unsolicited content',
+        description_text='Post contains irrelevant or unsolicited content',
         reason_type='post_moderation',
         is_predefined=True,
         is_manually_assignable=True
     )
 
-class ModerationReasonManager(models.Manager):
+class ModerationReasonManager(models.Manager): #pylint: disable=missing-docstring,too-few-public-methods
 
     def filter_as_dicts(self, order_by=None, **params):
         """Returns list of dictionaries of the moderation reasons"""
@@ -70,18 +71,19 @@ class ModerationReasonManager(models.Manager):
         if order_by:
             items = items.order_by(order_by)
 
-        result = list()
+        results = list()
         for item in items:
-            result.append({
+            result = {
                 'id': item.id,
                 'title': item.title,
                 'description_text': item.description_text,
                 'is_predefined': item.is_predefined,
                 'is_manually_assignable': item.is_manually_assignable,
                 'reason_type': item.reason_type
-            })
+            }
+            results.append(result)
 
-        return result
+        return results
 
 class ModerationReason(models.Model):
     """Reason why a given item was placed on the queue.
@@ -112,10 +114,11 @@ class ModerationReason(models.Model):
                           self.is_predefined,
                           self.is_manually_assignable)
 
-    def delete(self):
+    def delete(self, *args, **kwargs):
+        # pylint: disable=arguments-differ
         if self.is_predefined:
             raise PermissionDenied('Cannot delete predefined moderation reasons')
-        super(ModerationReason, self).delete()
+        super(ModerationReason, self).delete(*args, **kwargs)
 
 
 RESOLUTION_CHOICES = (
@@ -128,20 +131,21 @@ RESOLUTION_CHOICES = (
 )
 
 class ModerationQueueItemManager(models.Manager):
+    # pylint: disable=too-few-public-methods,missing-docstring
     def get_count_for_post(self, post, reason_type=None):
-        qs = self.get_queryset()
+        """Returns total flags count for a given post"""
         rev_ids = post.revisions.all().values_list('pk', flat=True)
         from askbot.models import PostRevision
         rev_ct = ContentType.objects.get_for_model(PostRevision)
-        items = qs.filter(reason__reason_type=reason_type,
-                          resolution_status='waiting',
-                          item_id__in=rev_ids,
-                          item_content_type=rev_ct)
+        items = self.get_queryset().filter(reason__reason_type=reason_type,
+                                           resolution_status='waiting',
+                                           item_id__in=rev_ids,
+                                           item_content_type=rev_ct)
         return items.count()
 
 class ModerationQueueItem(models.Model):
     """Items that are displayed in the moderation queue(s)"""
-    #pylint: disable=no-init,too-few-public-methods
+    #pylint: disable=no-init,too-few-public-methods,too-many-instance-attributes
     item_content_type = models.ForeignKey(ContentType)
     item_id = models.PositiveIntegerField()
     item = GenericForeignKey('item_content_type', 'item_id')
@@ -191,7 +195,7 @@ class ModerationQueueItem(models.Model):
         if self.reason.is_manually_assignable:
             new_item.origin_item = self
         new_item.item = self.item
-        new_item.item_author_id = self.item_author_id
+        new_item.item_author_id = self.item_author_id # pylint: disable=attribute-defined-outside-init
         new_item.reason = reason
         new_item.added_by = moderator
         new_item.resolution_status = 'upheld'

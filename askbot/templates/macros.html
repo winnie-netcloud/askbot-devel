@@ -23,14 +23,12 @@
 {%- endmacro -%}
 
 {% macro flag_post_menu(post) %}
-    <div class="dropdown" style="display: inline-block;">
-        <span class="dropdown-toggle js-post-flags" data-post-id="{{ post.pk }}">
+        <span class="js-post-flags" data-post-id="{{ post.pk }}">
           <span>
               {% trans %}report{% endtrans %}
               <span class="js-post-flag-count">{% if post.offensive_flag_count %}({{ post.offensive_flag_count }}){% endif %}</span>
           </span>
         </span>
-    </div>
 {% endmacro %}
 
 {% macro moderation_queue_item_user_info(user) %}
@@ -422,10 +420,7 @@ for the purposes of the AJAX comment editor #}
                     id="post-{{ comment.id }}-edit"
                     class="js-edit"
                 >{% trans %}edit{% endtrans %}</a>
-                <span class="js-post-flags" data-post-id="{{ comment.id }}">
-                  {%- trans %}report{% endtrans -%}
-                  {%- if comment.offensive_flag_count %} ({{ comment.offensive_flag_count }}){% endif -%}
-                </span>
+                {{ flag_post_menu(comment) }}
                 <form 
                     action="{% url comment_to_answer %}"
                     method="POST"

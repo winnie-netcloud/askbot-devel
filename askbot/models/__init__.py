@@ -3240,13 +3240,33 @@ def user_approve_post_revision(user, post_revision, timestamp=None):
                                     )
 
 @auto_now_timestamp
-def flag_post(user, post, reason=None, timestamp=None, cancel=False, force=False):
+def flag_post(user, post, reason=None, timestamp=None, cancel=False, cancel_all=False, force=False):
     if cancel:#todo: can't unflag?
         if force == False:
             user.assert_can_remove_flag_offensive(post=post)
+
+        filters = {'resolution_status': 'waiting'}
+        if reason:
+            filters['reason'] = reason
+        if not cancel_all:
+            filters['added_by'] = user
+
+        filters['item_content_type'] = ContentType.objects.get_for_model(PostRevision)
+        filters['item_id__in'] = PostRevision.objects.filter(post=post).values_list('pk', flat=True)
+
+        moderation_items = ModerationQueueItem.objects.filter(**filters)
+        item_ids = list(moderation_items.values_list('pk', flat=True))
+        moderation_items.delete()
+
         flag_count = ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
-        models.Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
+        print 'new flag count is {}'.format(flag_count)
+        Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
+        print 'updated flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
         auth.onUnFlaggedItem(post, user, timestamp=timestamp)
+        print 'after auth.onUnFlaggedItem count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
+        post.thread.invalidate_cached_post_data()
+        print 'in the end flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
+        return item_ids
 
     else:
         if not reason:
@@ -3265,13 +3285,18 @@ def flag_post(user, post, reason=None, timestamp=None, cancel=False, force=False
         queue_item.save()
         flag_count = ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
         Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
+        print 'updated flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
 
         auth.onFlaggedItem(post, user, timestamp=timestamp)
+        print 'after auth.onUnFlaggedItem count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
+        post.thread.invalidate_cached_post_data()
         award_badges_signal.send(None,
                                  event='flag_post',
                                  actor=user,
                                  context_object=post,
                                  timestamp=timestamp)
+        print 'in the end flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
+        return [queue_item.pk]
 
 def user_get_flags(self):
     """return flag set
@@ -3302,8 +3327,6 @@ def user_get_flags_for_post(self, post, reason=None, only_latest_revision=False)
     flags = flags.filter(item_content_type=rev_ct, item_id__in=rev_ids, resolution_status='waiting')
     if reason:
         flags = flags.filter(reason_id=reason.pk)
-    import pdb
-    pdb.set_trace()
     return flags
 
 def user_create_email_key(self):
@@ -3985,18 +4008,6 @@ def record_delete_post(instance, deleted_by, **kwargs):
     #keep activity records, but delete notifications
     instance.delete_update_notifications(True)
 
-def record_flag_offensive(instance, mark_by, **kwargs):
-    """places flagged post on the moderation queue"""
-    revision = instance.get_latest_revision()
-    ModerationQueueItem.objects.create(
-        added_by=mark_by,
-        added_at=timezone.now(),
-        item=revision,
-        item_author=revision.author,
-        reason=ModerationReason.objects.get(title='Offensive')
-    )
-    #todo: report authors that their post is flagged offensive
-
 def record_update_tags(thread, tags, user, timestamp, **kwargs):
     """
     This function sends award badges signal on each updated tag
@@ -4405,11 +4416,6 @@ signals.after_post_removed.connect(
     record_delete_post,
     sender=Post,
     dispatch_uid='record_delete_question_on_delete_post'
-)
-signals.flag_offensive.connect(
-    record_flag_offensive,
-    sender=Post,
-    dispatch_uid='record_flag_offensive_on_post_flag'
 )
 signals.tags_updated.connect(
     record_update_tags,

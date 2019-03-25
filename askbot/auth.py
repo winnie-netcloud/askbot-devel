@@ -9,7 +9,7 @@ User.assert_can...
 """
 from django.db import transaction
 from django.utils import timezone
-from askbot.models import Repute
+from askbot.models import Repute, Post
 # from askbot.models import Answer
 from askbot import signals
 from askbot.conf import settings as askbot_settings
@@ -84,10 +84,9 @@ def onFlaggedItem(post, user, timestamp=None):
             reputation=flagged_user.reputation)
         reputation.save()
 
-        post.deleted = True
-        # post.deleted_at = timestamp
-        # post.deleted_by = Admin
-        post.save()
+        Post.objects.filter(pk=post.pk).update(deleted=True,
+                                               deleted_at=timestamp,
+                                               deleted_by=user)
 
         signals.after_post_removed.send(sender=post.__class__, instance=post,
                                         deleted_by=user)
@@ -157,8 +156,7 @@ def onUnFlaggedItem(post, user, timestamp=None):
             reputation=flagged_user.reputation)
         reputation.save()
 
-        post.deleted = False
-        post.save()
+        Post.objects.filter(pk=post.pk).update(deleted=False)
 
         signals.after_post_restored.send(sender=post.__class__, instance=post,
                                          restored_by=user)

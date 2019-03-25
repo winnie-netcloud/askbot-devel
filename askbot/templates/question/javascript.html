@@ -35,13 +35,15 @@
 <script type="text/javascript" src="{{ '/js/editors/folded_editor.js'|media }}"></script>
 <script type="text/javascript" src="{{ '/js/forms/answer_form.js'|media }}"></script>
 <script type="text/javascript" src="{{ '/js/moderation/manage_moderation_reasons_dialog.js'|media }}"></script>
-<script type="text/javascript" src="{{ '/js/post_flags.js'|media }}"></script>
+<script type="text/javascript" src="{{ '/js/moderation/post_flag.js'|media }}"></script>
+<script type="text/javascript" src="{{ '/js/moderation/post_flagger.js'|media }}"></script>
 {% endcompress %}
 <script type="text/javascript">
     // define reputation needs for comments
     askbot['urls']['getPostRevisionHtml'] = '{% url get_post_revision_html %}';
     askbot['urls']['retag'] = '{% url retag_question question.id %}';
     askbot['urls']['flagPost'] = '{% url flag_post %}';
+    askbot['urls']['getPostFlags'] = '{% url get_post_flags %}';
     askbot['urls']['deleteModerationReason'] = '{% url delete_moderation_reason %}';
     askbot['urls']['saveModerationReason'] = '{% url save_moderation_reason %}';
 

@@ -234,6 +234,11 @@ urlpatterns = patterns(
         views.commands.flag_post,
         name='flag_post'
     ),
+    service_url(
+        r'^get-post-flags/',
+        views.commands.get_post_flags,
+        name='get_post_flags'
+    ),
     url(
         r'^%s$' % pgettext('urls', 'moderation-queue/'),
         views.moderation.moderation_queue,

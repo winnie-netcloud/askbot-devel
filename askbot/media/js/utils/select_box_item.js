@@ -49,6 +49,18 @@ SelectBoxItem.prototype.getData = function () {
     };
 };
 
+SelectBoxItem.prototype.setData = function (data) {
+  if (data.id) {
+    this.setId(data.id);
+  }
+  if (data.title) {
+    this.setNitle(data.title);
+  }
+  if (data.description) {
+    this.setDescription(data.description);
+  }
+};
+
 SelectBoxItem.prototype.setSelector = function (sel) {
     this._selector = sel;
 };
@@ -95,18 +107,22 @@ SelectBoxItem.prototype.addCssClass = function (css_class) {
 };
 
 SelectBoxItem.prototype.decorate = function (element) {
-    this._element = element;
-    //set id and description
-    this._id = element.data('itemId');
-    this._description = element.data('originalTitle');
+  this._element = element;
+  //set id and description
+  this._id = element.data('itemId');
+  this._description = element.data('originalTitle');
 
-    //work on setting name
-    var content_source = element.contents().detach();
-    var content = new this._content_class();
-    //assume that we want first node only
-    content.setContent(content_source[0]);
-    this._content = content;
-    this._name = content.getName();//allows to abstract from structure
+  //work on setting name
+  var content_source = element.contents().detach();
+  var content = new this._content_class();
 
-    this._element.append(content.getElement());
+  //assume that we want first node only
+  var node = content_source[0];
+  var nodeContent = node.wholeText !== undefined ? node.wholeText : node
+
+  content.setContent(nodeContent);
+  this._content = content;
+  this._name = content.getName();//allows to abstract from structure
+
+  this._element.append(content.getElement());
 };

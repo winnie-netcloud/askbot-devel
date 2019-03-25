@@ -3473,6 +3473,22 @@ tr.mceLast {
     }
 }
 
+.moderation-post-flag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.moderation-post-flag-count {
+  &.no-flags {
+    display: none;
+  }
+  padding: .125rem .5rem;
+  margin-right: .25rem;
+  border-radius: 1rem;
+  background: #ddd;
+}
+
 .moderation-reason-title {
     margin-bottom: .625rem;
 }
@@ -4888,14 +4904,13 @@ textarea.tipped-input {
     li:hover {
         background-color: #999;
         color: white;
-        -webkit-transition: background ease 0.2s;
-        -moz-transition: background ease 0.2s;
-        -ms-transition: background ease 0.2s;
-        -o-transition: background ease 0.2s;
         transition: background ease 0.2s;
     }
     li:hover a {
         color: white;
+    }
+    .moderation-post-flag-remove {
+	margin: 0 .25rem;
     }
 }
 
@@ -5023,13 +5038,16 @@ textarea.tipped-input {
     text-align: left;
 }
 .modal {
-    h3 {
-        padding: 0;
-	margin-bottom: .125rem;
-    }
-    p {
-        font-size: 14px;
-    }
+  .info-message {
+    margin-top: .5rem;
+  }
+  h3 {
+    padding: 0;
+    margin-bottom: .125rem;
+  }
+  p {
+    font-size: 14px;
+  }
 }
 .modal.merge-questions {
     .modal-body {

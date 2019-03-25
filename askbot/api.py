@@ -15,7 +15,9 @@ def get_moderation_items_count(user):
         return None
 
     items = models.ModerationQueueItem.objects.filter(#pylint: disable=no-member
-        reason__reason_type='post_moderation')
+        reason__reason_type='post_moderation',
+        resolution_status='waiting'
+    )
     return items.count()
 
 

@@ -216,10 +216,24 @@ def flag_post(request):
     if form.is_valid():
         post = models.Post.objects.get(pk=form.cleaned_data['post_id'])
         reason = models.ModerationReason.objects.get(pk=form.cleaned_data['reason_id'])
-        request.user.flag_post(post, reason=reason)
-        flag_count = models.ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
-        return {'flag_count': flag_count}
-    raise ValueError('Invalid data')
+        request.user.flag_post(post, reason=reason, cancel=form.cleaned_data['cancel'])
+        flags_info = post.get_flags_info(request.user)
+        is_deleted = models.Post.objects.get(pk=post.pk).deleted
+        return {'post_flags': flags_info, 'is_post_deleted': is_deleted}
+    raise ValueError('Invalid data ' + str(form.errors))
+
+@csrf.csrf_protect
+@decorators.ajax_only
+@decorators.get_only
+def get_post_flags(request):
+    form = forms.GetDataForPostForm(request.GET)
+    if form.is_valid():
+        post_id = form.cleaned_data['post_id']
+        post = models.Post.objects.get(pk=post_id)
+        flags_info = post.get_flags_info(request.user)
+        is_deleted = models.Post.objects.get(pk=post.pk).deleted
+        return {'post_flags': flags_info, 'is_post_deleted': is_deleted}
+    raise ValueError('Invalid data ' + str(form.errors))
 
 #internally grouped views - used by the tagging system
 @csrf.csrf_protect
@@ -1496,7 +1510,7 @@ def reorder_badges(request):
     """places given badge to desired position"""
     if request.user.is_anonymous() \
         or not request.user.is_administrator_or_moderator():
-        raise exceptions.PermisionDenied()
+        raise exceptions.PermissionDenied()
 
     form = forms.ReorderBadgesForm(request.POST)
     if form.is_valid():

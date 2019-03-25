@@ -637,7 +637,7 @@ def question(request, question_id):#refactor - long subroutine. display question
         is_manually_assignable=True,
         order_by='title'
     )
-    
+
     data = {
         'active_tab': 'questions',
         'answer' : answer_form,

@@ -277,7 +277,7 @@
                 }
 
                 var canFlagPosts = data['userReputation'] >= {{ settings.MIN_REP_TO_FLAG_OFFENSIVE }};
-                var flags = findChildrenByClassName(controls, 'question-flag');
+                var flags = findChildrenByClassName(controls, 'js-post-flags');
                 if (flags.length > 0 && !canFlagPosts) {
                     for (var i = 0; i < flags.length; i++) {
                         removeNode(flags[i]);

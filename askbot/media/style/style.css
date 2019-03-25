@@ -3290,6 +3290,20 @@ tr.mceLast {
 .user-profile-page.inbox-forum .js-delete {
   margin-right: 12px;
 }
+.moderation-post-flag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.moderation-post-flag-count {
+  padding: .125rem .5rem;
+  margin-right: .25rem;
+  border-radius: 1rem;
+  background: #ddd;
+}
+.moderation-post-flag-count.no-flags {
+  display: none;
+}
 .moderation-reason-title {
   margin-bottom: .625rem;
 }
@@ -4611,14 +4625,13 @@ textarea.tipped-input {
 .select-box li:hover {
   background-color: #999;
   color: white;
-  -webkit-transition: background ease 0.2s;
-  -moz-transition: background ease 0.2s;
-  -ms-transition: background ease 0.2s;
-  -o-transition: background ease 0.2s;
   transition: background ease 0.2s;
 }
 .select-box li:hover a {
   color: white;
+}
+.select-box .moderation-post-flag-remove {
+  margin: 0 .25rem;
 }
 /* category selector */
 .category-selector {
@@ -4735,6 +4748,9 @@ textarea.tipped-input {
 }
 .modal-footer {
   text-align: left;
+}
+.modal .info-message {
+  margin-top: .5rem;
 }
 .modal h3 {
   padding: 0;
