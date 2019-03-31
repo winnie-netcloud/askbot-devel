@@ -111,6 +111,24 @@ PostFlag.prototype.getTotalFlagCountFromResponse = function (response) {
   return totalCount
 }
 
+PostFlag.prototype.getErrorContainer = function () {
+  return this._element.closest('.modal').find('.js-alert-box')
+}
+
+PostFlag.prototype.setErrorMessage = function (message) {
+  this.clearErrorMessage()
+  var ctr = this.getErrorContainer()
+  var alertBox = new AlertBox()
+  ctr.append(alertBox.getElement())
+  alertBox.setContent(message)
+  alertBox.setError(true)
+}
+
+PostFlag.prototype.clearErrorMessage = function () {
+  var ctr = this.getErrorContainer()
+  ctr.html('')
+}
+
 PostFlag.prototype.getFlagPostHandler = function () {
   var me = this
   /** ajax flag post with reason
@@ -137,8 +155,9 @@ PostFlag.prototype.getFlagPostHandler = function () {
           var totalFlagCount = me.getTotalFlagCountFromResponse(response)
           me.setTotalFlagCount(totalFlagCount)
           me.setFlaggedByUser(true)
+          me.clearErrorMessage()
         } else {
-          alert(response.message)
+          me.setErrorMessage(response.message)
         }
       }
     })
@@ -169,8 +188,9 @@ PostFlag.prototype.getUnflagPostHandler = function () {
           var totalFlagCount = me.getTotalFlagCountFromResponse(response)
           me.setTotalFlagCount(totalFlagCount)
           me.setFlaggedByUser(false)
+          me.clearErrorMessage()
         } else {
-          alert(response.message)
+          me.setErrorMessage(response.message)
         }
       }
     })

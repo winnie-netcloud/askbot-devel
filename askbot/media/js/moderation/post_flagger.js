@@ -64,6 +64,14 @@
     }
   }
 
+  var getModerateInfoMessage = function () {
+    var message = gettext('Flag the posts by clicking one of the reasons below.')
+    if (askbot.data && askbot.data.userIsAdminOrMod) {
+      message += ' ' + gettext('Reasons with an asterisk* are system-defined.')
+    }
+    return message
+  }
+
   var dialog = new ManageModerationReasonsDialog('post_moderation')
   dialog.setSelectBoxItemClass(PostFlagWrapper)
   dialog.setBimodal(true)
@@ -82,7 +90,7 @@
   );
   dialog.setInfoMessage(
     'moderate',
-    gettext('Flag the posts by selecting one of the reasons below. Reasons with an asterisk* are system-defined.')
+    getModerateInfoMessage()
   )
   dialog.setMode('moderate')
 

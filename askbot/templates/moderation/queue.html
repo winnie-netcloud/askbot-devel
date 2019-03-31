@@ -48,6 +48,6 @@
     <script type="text/javascript" src="{{ '/js/moderation/moderation_queue_controls.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/moderation/manage_moderation_reasons_dialog.js'|media }}"></script>
     {% endcompress %}
-    {{ moderation_macros.manage_reasons_dialog(moderation_reasons, 'post_moderation') }}
+    {{ moderation_macros.manage_reasons_dialog(moderation_reasons, 'post_moderation', request.user) }}
     {% include "moderation/post_moderation_controls_init.html" %}
 {% endblock %}

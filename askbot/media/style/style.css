@@ -4633,6 +4633,15 @@ textarea.tipped-input {
 .select-box .moderation-post-flag-remove {
   margin: 0 .25rem;
 }
+.flag-post-dialog .select-box li.selected {
+  background-color: white;
+  color: #666;
+}
+.flag-post-dialog .select-box li.selected:hover {
+  background-color: #999;
+  color: white;
+  transition: background ease 0.2s;
+}
 /* category selector */
 .category-selector {
   border-spacing: 0;
@@ -4785,13 +4794,15 @@ textarea.tipped-input {
   font-style: normal;
 }
 .alert {
-  padding: .75rem !important;
+  padding: .5rem !important;
+  margin-bottom: 0 !important;
 }
 .alert ul {
   margin-bottom: 0;
 }
 .alert .close {
-  right: 0 !important;
+  top: -5px !important;
+  right: -2px !important;
   margin: 0;
 }
 .flip-content,

@@ -4914,6 +4914,16 @@ textarea.tipped-input {
     }
 }
 
+.flag-post-dialog .select-box li.selected {
+  background-color: white;
+  color: #666;
+  &:hover {
+    background-color: #999;
+    color: white;
+    transition: background ease 0.2s;
+  }
+}
+
 /* category selector */
 .category-selector {
     border-spacing: 0;
@@ -5080,14 +5090,16 @@ textarea.tipped-input {
 }
 
 .alert {
-    padding: .75rem !important;
-    ul {
-	margin-bottom: 0;
-    }
-    .close {
-	right: 0 !important;
-	margin: 0;
-    }
+  padding: .5rem !important;
+  ul {
+    margin-bottom: 0;
+  }
+  .close {
+    top: -5px !important;
+    right: -2px !important;
+    margin: 0;
+  }
+  margin-bottom: 0 !important;
 }
 
 .flip-content,

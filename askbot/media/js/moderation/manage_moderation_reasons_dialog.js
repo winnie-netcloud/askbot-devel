@@ -434,6 +434,11 @@ ManageModerationReasonsDialog.prototype.decorate = function (element) {
     me.setState('select')
     me.hideEditButtons()
   }
+
+  if (askbot.data && !askbot.data.userIsAdminOrMod) {
+    this._element.find('.modal-footer').hide()
+  }
+
   setupButtonEventHandlers(
     element.find('.select-reason-dialog .cancel, .modal-header .close'),
     function () {

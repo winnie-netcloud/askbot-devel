@@ -1,5 +1,5 @@
-{% macro manage_reasons_dialog(reasons, type) %}
-<div class="modal" style="display:none" id="manage-{{ type }}-reasons-modal">
+{% macro manage_reasons_dialog(reasons, type, user, class_name=None) %}
+<div class="modal{% if class_name %} {{ class_name }}{% endif %}" style="display:none" id="manage-{{ type }}-reasons-modal">
       <div class="modal-header">
           <a class="close" data-dismiss="modal">x</a>
           <h3 class="js-modal-title">
@@ -13,6 +13,7 @@
               moderation_reasons_dialog: value of type is not set
             {% endif %}
           </h3>
+          <div class="js-alert-box"></div>
           <p class="info-message"></p>
       </div>
       <div class="add-reason-dialog">{# create new moderation reason #}
@@ -34,6 +35,7 @@
       </div>
       <div class="select-reason-dialog">{# select one of existing reasons #}
           <div class="modal-body">
+            {% set is_mod=(user.is_authenticated() and user.is_administrator_or_moderator()) %}
               <ul class="select-box">
                   {% for reason in reasons %}
                       {% if reason.reason_type == type %}
@@ -44,7 +46,7 @@
                             {% if reason.used_count is defined %}
                               data-used-count="{{reason.used_count|escape}}"
                             {% endif %}
-                          >{{reason.title|escape}}{% if reason.is_predefined %}*{% endif %}</li>
+                          >{{reason.title|escape}}{% if reason.is_predefined and is_mod %}*{% endif %}</li>
                       {% endif %}
                   {% endfor %}
               </ul>
