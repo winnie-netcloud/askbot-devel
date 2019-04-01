@@ -382,7 +382,7 @@
         {% include "question/content.html" %}
     {% endif %}
     {% import "moderation/macros.html" as moderation_macros %}
-    {{ moderation_macros.manage_reasons_dialog(moderation_reasons, 'post_moderation', request.user, 'flag-post-dialog') }}
+    {{ moderation_macros.manage_reasons_dialog(moderation_reasons, 'post_moderation', request.user) }}
 {% endblock %}
 {% block sidebar %}
     {% include "question/sidebar.html" %}

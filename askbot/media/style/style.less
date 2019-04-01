@@ -4878,40 +4878,41 @@ textarea.tipped-input {
 }
 
 .select-box-item {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .select-box {
-
-    margin: 0;
-
-    li {
-        list-style-type: none;        
-        list-style-position: inside;
-        padding-left: 7px;
-        font-size: 14px;
-        line-height: 30px;
-        input {
-            margin: 0 0 2px -5px;
-            font-size: 14px;
-            line-height: 14px;
-            vertical-align: middle;
-            color: @info-text;
-        }
+  margin: 0;
+  li {
+    list-style-type: none;        
+    list-style-position: inside;
+    padding-left: 7px;
+    font-size: 14px;
+    line-height: 30px;
+    input {
+      margin: 0 0 2px -5px;
+      font-size: 14px;
+      line-height: 14px;
+      vertical-align: middle;
+      color: @info-text;
     }
-    li.selected,
-    li.selected:hover,
-    li:hover {
-        background-color: #999;
-        color: white;
-        transition: background ease 0.2s;
-    }
-    li:hover a {
-        color: white;
-    }
-    .moderation-post-flag-remove {
-	margin: 0 .25rem;
-    }
+  }
+  li.selected,
+  li.selected:hover,
+  li:hover {
+    background-color: #999;
+    color: white;
+    transition: background ease 0.2s;
+  }
+  li:hover a {
+    color: white;
+  }
+  .moderation-post-flag-remove {
+    display: inline-block;
+    margin: 0 .25rem;
+    height: 30px;
+    line-height: 30px;
+  }
 }
 
 .flag-post-dialog .select-box li.selected {

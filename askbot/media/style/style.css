@@ -4631,7 +4631,10 @@ textarea.tipped-input {
   color: white;
 }
 .select-box .moderation-post-flag-remove {
+  display: inline-block;
   margin: 0 .25rem;
+  height: 30px;
+  line-height: 30px;
 }
 .flag-post-dialog .select-box li.selected {
   background-color: white;

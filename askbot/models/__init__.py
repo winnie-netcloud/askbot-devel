@@ -1277,10 +1277,7 @@ def user_assert_can_flag_offensive(self, post=None, reason=None):
 
     assert(post is not None)
 
-    double_flagging_error_message = _(
-        'You have flagged this post before and '
-        'cannot do it more than once'
-    )
+    double_flagging_error_message = _('You have already applied this flag and cannot do it again')
 
     if self.get_flags_for_post(post, reason=reason, only_latest_revision=True).count() > 0:
         raise askbot_exceptions.DuplicateCommand(double_flagging_error_message)
@@ -1303,7 +1300,7 @@ def user_assert_can_flag_offensive(self, post=None, reason=None):
         if flag_count_today >= askbot_settings.MAX_FLAGS_PER_USER_PER_DAY:
             flags_exceeded_error_message = _(
                 'Sorry, you have exhausted the maximum number of '
-                '%(max_flags_per_day)s offensive flags per day.'
+                '%(max_flags_per_day)s flags per day.'
             ) % {
                     'max_flags_per_day': \
                     askbot_settings.MAX_FLAGS_PER_USER_PER_DAY

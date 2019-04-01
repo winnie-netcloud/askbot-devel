@@ -55,9 +55,11 @@ ManageModerationReasonsDialog.prototype.setMode = function (mode) {
     if (mode === 'edit') {
       this._moderateButtons.hide()
       this._editButtons.show()
+      this._element.removeClass('flag-post-dialog')
     } else if (mode === 'moderate') {
       this._moderateButtons.show()
       this._editButtons.hide()
+      this._element.addClass('flag-post-dialog')
     } else {
       throw 'Unsupported mode: "' + mode + '"'
     }

@@ -1,5 +1,5 @@
-{% macro manage_reasons_dialog(reasons, type, user, class_name=None) %}
-<div class="modal{% if class_name %} {{ class_name }}{% endif %}" style="display:none" id="manage-{{ type }}-reasons-modal">
+{% macro manage_reasons_dialog(reasons, type, user) %}
+<div class="modal" style="display:none" id="manage-{{ type }}-reasons-modal">
       <div class="modal-header">
           <a class="close" data-dismiss="modal">x</a>
           <h3 class="js-modal-title">
