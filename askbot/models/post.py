@@ -2099,6 +2099,14 @@ class Post(models.Model):
     def hack_template_marker(self, name):
         list(Post.objects.filter(text=name))
 
+    def update_flag_count(self):
+        """Updates in the database the denormalized value of
+        the offensive flag count"""
+        from askbot.models import ModerationQueueItem as MQI
+        count = MQI.objects.get_count_for_post(self, 'post_moderation')
+        Post.objects.filter(pk=self.pk).update(offensive_flag_count=count)
+        self.offensive_flag_count = count
+
 
 class PostRevisionManager(models.Manager):
     def create(self, *args, **kwargs):

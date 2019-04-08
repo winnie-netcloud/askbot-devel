@@ -62,6 +62,7 @@ def init_reasons():
         is_manually_assignable=True
     )
 
+
 class ModerationReasonManager(models.Manager): #pylint: disable=missing-docstring,too-few-public-methods
 
     def filter_as_dicts(self, order_by=None, **params):

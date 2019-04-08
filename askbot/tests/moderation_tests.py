@@ -243,3 +243,32 @@ class ModerationTests(AskbotTestCase):
 
         self.assertEqual(mod_items[0].resolution_status, 'upheld')
         self.assertEqual(mod_items[0].reason.title, 'Spam')
+
+    @with_settings(MIN_REP_TO_FLAG_OFFENSIVE=0)
+    def test_delete_moderation_reason(self):
+        user = self.create_user('user', status='w')
+        question = self.post_question(user=user)
+        admin = self.create_user('admin', status='d')
+
+        reason_params = {'added_by': admin,
+                         'reason_type': 'post_moderation',
+                         'title': 'blablabla',
+                         'description_text': 'blahblah'}
+
+        reason = ModerationReason.objects.create(**reason_params)
+        user.flag_post(post=question, reason=reason)
+        question = self.reload_object(question)
+        self.assertEqual(question.offensive_flag_count, 1)
+
+        self.client.login(method='force', user_id=admin.id)
+        response = self.client.post(
+            reverse('delete_moderation_reason'), 
+            data={'reason_id': reason.pk},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        data = json.loads(response.content)
+        self.assertEqual(data['deleted'], True)
+        question = self.reload_object(question)
+        self.assertEqual(question.offensive_flag_count, 0)
+        reasons = ModerationReason.objects.filter(pk=reason.pk)
+        self.assertEqual(reasons.count(), 0)

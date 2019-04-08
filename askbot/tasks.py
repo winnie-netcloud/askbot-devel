@@ -45,6 +45,7 @@ from askbot.mail.messages import (
 from askbot.models import (
     Activity,
     ActivityAuditStatus,
+    ModerationReason,
     Post,
     PostRevision,
     User,
@@ -104,6 +105,19 @@ def submit_spam_posts(post_ids):
                             ip_addr=ip_addr,
                             user_agent=user_agent,
                             author=post.author)
+
+
+@task(ignore_result=True)
+def delete_moderation_reason(reason_id):
+    """Deletes the moderation reason and updates
+    the flag count on the posts."""
+    reason = ModerationReason.objects.get(pk=reason_id)
+    for mqi in reason.moderation_queue_items.iterator():
+        item = mqi.item
+        mqi.delete()
+        if isinstance(item, PostRevision):
+            item.post.update_flag_count()
+    reason.delete()
 
 
 @task(ignore_result=True)

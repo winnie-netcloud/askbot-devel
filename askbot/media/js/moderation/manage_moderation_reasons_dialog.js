@@ -335,11 +335,15 @@ ManageModerationReasonsDialog.prototype.startDeletingReason = function () {
       data: { reason_id: reason_id },
       success: function (data) {
         if (data.success) {
-          select_box.removeItem(reason_id)
-          me.hideEditButtons()
-          var menu = me.getMenu()
-          if (menu) {
-            menu.removeReason(reason_id)
+          if (data.deleted) {
+            select_box.removeItem(reason_id)
+            me.hideEditButtons()
+            var menu = me.getMenu()
+            if (menu) {
+              menu.removeReason(reason_id)
+            }
+          } else {
+            me.setSelectorErrors(data.message)
           }
         } else {
           me.setSelectorErrors(data.message)

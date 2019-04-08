@@ -157,9 +157,7 @@ def resolve_items(item_set, admin, reason=None):
 
     posts = models.Post.objects.filter(pk__in=post_ids)
     for post in posts:
-        flag_count = models.ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
-        models.Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
-
+        post.update_flag_count()
 
 def handle_decline_action(admin, item_set, reason_id):
     """Declines posts with a reason"""

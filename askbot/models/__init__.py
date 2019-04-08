@@ -3255,14 +3255,9 @@ def flag_post(user, post, reason=None, timestamp=None, cancel=False, cancel_all=
         item_ids = list(moderation_items.values_list('pk', flat=True))
         moderation_items.delete()
 
-        flag_count = ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
-        print 'new flag count is {}'.format(flag_count)
-        Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
-        print 'updated flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
+        post.update_flag_count()
         auth.onUnFlaggedItem(post, user, timestamp=timestamp)
-        print 'after auth.onUnFlaggedItem count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
         post.thread.invalidate_cached_post_data()
-        print 'in the end flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
         return item_ids
 
     else:
@@ -3280,19 +3275,14 @@ def flag_post(user, post, reason=None, timestamp=None, cancel=False, cancel_all=
         queue_item.added_by = user
         queue_item.language_code = post.language_code
         queue_item.save()
-        flag_count = ModerationQueueItem.objects.get_count_for_post(post, 'post_moderation')
-        Post.objects.filter(pk=post.pk).update(offensive_flag_count=flag_count)
-        print 'updated flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
-
+        post.update_flag_count()
         auth.onFlaggedItem(post, user, timestamp=timestamp)
-        print 'after auth.onUnFlaggedItem count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
         post.thread.invalidate_cached_post_data()
         award_badges_signal.send(None,
                                  event='flag_post',
                                  actor=user,
                                  context_object=post,
                                  timestamp=timestamp)
-        print 'in the end flag count is {}'.format(Post.objects.get(pk=post.pk).offensive_flag_count)
         return [queue_item.pk]
 
 def user_get_flags(self):

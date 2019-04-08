@@ -43,6 +43,7 @@ from askbot.utils import url_utils
 from askbot.utils.forms import get_db_object_or_404
 from askbot.utils.functions import decode_and_loads
 from askbot.utils.html import get_login_link
+from askbot.utils.transaction import defer_celery_task
 from askbot.utils.akismet_utils import akismet_check_spam
 from django.template import RequestContext
 from askbot.skins.loaders import render_into_skin_as_string
@@ -999,8 +1000,14 @@ def delete_group_logo(request):
 @decorators.moderators_only
 def delete_moderation_reason(request):
     reason_id = IntegerField().clean(int(request.POST['reason_id']))
-    reason = models.ModerationReason.objects.get(pk=reason_id)
-    reason.delete()
+    from askbot.tasks import delete_moderation_reason as dmrt
+    defer_celery_task(dmrt, args=(reason_id,))
+    if django_settings.CELERY_ALWAYS_EAGER:
+        return {'deleted': True}
+
+    message = _('Deleting the reason... '
+                'Please give it some time and come back later.')
+    return {'deleted': False, 'message': message}
 
 
 @csrf.csrf_protect
