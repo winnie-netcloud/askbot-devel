@@ -1277,10 +1277,17 @@ def user_assert_can_flag_offensive(self, post=None, reason=None):
 
     assert(post is not None)
 
-    double_flagging_error_message = _('You have already applied this flag and cannot do it again')
+    reflagging_error_message = _('You have already applied this flag')
+    reason_flags = self.get_flags_for_post(post, reason=reason,
+                                           only_latest_revision=True)
+    if reason_flags.count() > 0:
+        raise askbot_exceptions.DuplicateCommand(reflagging_error_message)
 
-    if self.get_flags_for_post(post, reason=reason, only_latest_revision=True).count() > 0:
-        raise askbot_exceptions.DuplicateCommand(double_flagging_error_message)
+    if not self.is_administrator_or_moderator():
+        all_flags = self.get_flags_for_post(post)
+        if all_flags.count() > 0:
+            dup_flag_message = _('You have already flagged this post')
+            raise askbot_exceptions.DuplicateCommand(dup_flag_message)
 
     min_rep_setting = askbot_settings.MIN_REP_TO_FLAG_OFFENSIVE
 
@@ -3248,8 +3255,10 @@ def flag_post(user, post, reason=None, timestamp=None, cancel=False, cancel_all=
         if not cancel_all:
             filters['added_by'] = user
 
-        filters['item_content_type'] = ContentType.objects.get_for_model(PostRevision)
-        filters['item_id__in'] = PostRevision.objects.filter(post=post).values_list('pk', flat=True)
+        ctype = ContentType.objects.get_for_model(PostRevision)
+        filters['item_content_type'] = ctype
+        post_revisions = PostRevision.objects.filter(post=post)
+        filters['item_id__in'] = post_revisions.values_list('pk', flat=True)
 
         moderation_items = ModerationQueueItem.objects.filter(**filters)
         item_ids = list(moderation_items.values_list('pk', flat=True))
