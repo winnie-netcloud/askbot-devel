@@ -5,20 +5,20 @@
 # Translators:
 # Hanan Natan, 2012
 # naor zeharya <naorzh@gmail.com>, 2013
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2017
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2017,2019
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-09-19 11:04+0000\n"
+"PO-Revision-Date: 2019-05-12 18:25+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew (Israel) (http://www.transifex.com/askbot/askbot/language/he_IL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: he_IL\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
 
 #: exceptions.py:13
 msgid "Sorry, but anonymous visitors cannot access this function"
@@ -62,6 +62,8 @@ msgid "must be > %d word"
 msgid_plural "must be > %d words"
 msgstr[0] "חייבת להיות > מילה אחת - %d"
 msgstr[1] "חייבות להיות > %d מילים"
+msgstr[2] "חייבות להיות > %d מילים"
+msgstr[3] "חייבות להיות > %d מילים"
 
 #: forms.py:240
 #, python-format
@@ -69,6 +71,8 @@ msgid "must be < %d word"
 msgid_plural "must be < %d words"
 msgstr[0] "חייבת להיות < מילה אחת - %d"
 msgstr[1] "חייבות להיות < %d מילים"
+msgstr[2] "חייבות להיות < %d מילים"
+msgstr[3] "חייבות להיות < %d מילים"
 
 #: forms.py:263 templates/widgets/ask_form.html:67
 msgid "Select language"
@@ -84,6 +88,8 @@ msgid "must have > %d non-punctuation character"
 msgid_plural "must have > %d non-punctuation characters"
 msgstr[0] "חייב להיות > תו אחד - %d - שאינו לצורכי פיסוק"
 msgstr[1] "חייבים להיות > %d תווים שאינם לצורכי פיסוק"
+msgstr[2] "חייבים להיות > %d תווים שאינם לצורכי פיסוק"
+msgstr[3] "חייבים להיות > %d תווים שאינם לצורכי פיסוק"
 
 #: forms.py:341
 #, python-format
@@ -101,6 +107,8 @@ msgid "enter > %(length)d character"
 msgid_plural "enter > %(length)d characters"
 msgstr[0] "נא להקליד > תו אחד - %(length)d"
 msgstr[1] "נא להקליד > %(length)d תווים"
+msgstr[2] "נא להקליד > %(length)d תווים"
+msgstr[3] "נא להקליד > %(length)d תווים"
 
 #: forms.py:433
 #, python-format
@@ -108,6 +116,8 @@ msgid "each tag must be shorter than %(max_chars)d character"
 msgid_plural "each tag must be shorter than %(max_chars)d characters"
 msgstr[0] "כל תגית חייבת להיות מורכבת מפחות מתו אחד - %(max_chars)d"
 msgstr[1] "כל תגית חייבת להיות מורכבת מפחות מ־%(max_chars)d תווים"
+msgstr[2] "כל תגית חייבת להיות מורכבת מפחות מ־%(max_chars)d תווים"
+msgstr[3] "כל תגית חייבת להיות מורכבת מפחות מ־%(max_chars)d תווים"
 
 #: forms.py:480
 msgid ""
@@ -130,6 +140,8 @@ msgid_plural ""
 "be used."
 msgstr[0] "תגיות הן מילות מפתח קצרות ללא רווחים. ניתן להשתמש בכמות של עד תגית אחת - %(max_tags)d."
 msgstr[1] "תגיות הן מילות מפתח קצרות ללא רווחים. ניתן להשתמש בכמות של עד %(max_tags)d תגיות."
+msgstr[2] "תגיות הן מילות מפתח קצרות ללא רווחים. ניתן להשתמש בכמות של עד %(max_tags)d תגיות."
+msgstr[3] "תגיות הן מילות מפתח קצרות ללא רווחים. ניתן להשתמש בכמות של עד %(max_tags)d תגיות."
 
 #: forms.py:511
 #, python-format
@@ -137,6 +149,8 @@ msgid "please use %(tag_count)d tag or less"
 msgid_plural "please use %(tag_count)d tags or less"
 msgstr[0] "נא להוסיף תגית אחת - %(tag_count)d - או פחות"
 msgstr[1] "נא להוסיף %(tag_count)d תגיות או פחות"
+msgstr[2] "נא להוסיף %(tag_count)d תגיות או פחות"
+msgstr[3] "נא להוסיף %(tag_count)d תגיות או פחות"
 
 #: forms.py:519
 #, python-format
@@ -4613,6 +4627,8 @@ msgid_plural ""
 "minutes from posting"
 msgstr[0] "הערות (במיוחד האחרונה) ניתנות לעריכה עד דקה %(minutes)s מרגע הפרסום"
 msgstr[1] "הערות (במיוחד האחרונה) ניתנות לעריכה עד %(minutes)s דקות מרגע הפרסום"
+msgstr[2] "הערות (במיוחד האחרונה) ניתנות לעריכה עד %(minutes)s דקות מרגע הפרסום"
+msgstr[3] "הערות (במיוחד האחרונה) ניתנות לעריכה עד %(minutes)s דקות מרגע הפרסום"
 
 #: models/__init__.py:1046
 msgid "Sorry, but only post owners or moderators can edit comments"
@@ -4656,6 +4672,8 @@ msgid_plural ""
 "posting"
 msgstr[0] "פרסומים כאלה ניתנים לעריכה עד דקה - %(minutes)s - מרגע פרסומם"
 msgstr[1] "פרסומים כאלה ניתנים לעריכה עד %(minutes)s דקות מרגע פרסומם"
+msgstr[2] "פרסומים כאלה ניתנים לעריכה עד %(minutes)s דקות מרגע פרסומם"
+msgstr[3] "פרסומים כאלה ניתנים לעריכה עד %(minutes)s דקות מרגע פרסומם"
 
 #: models/__init__.py:1246
 #, python-format
@@ -4671,6 +4689,8 @@ msgid_plural ""
 "someone else"
 msgstr[0] "אי אפשר למחוק זאת כיוון שכבר התקבלו הצבעות חיוביות על תגובה שפורסמה על ידי מישהו אחר"
 msgstr[1] "אי אפשר למחוק זאת כיוון שכבר התקבלו הצבעות חיוביות על תגובות שפורסמו על ידי מישהו אחר"
+msgstr[2] "אי אפשר למחוק זאת כיוון שכבר התקבלו הצבעות חיוביות על תגובות שפורסמו על ידי מישהו אחר"
+msgstr[3] "אי אפשר למחוק זאת כיוון שכבר התקבלו הצבעות חיוביות על תגובות שפורסמו על ידי מישהו אחר"
 
 #: models/__init__.py:1274
 msgid "delete posts"
@@ -4725,6 +4745,8 @@ msgid_plural ""
 "minutes from posting"
 msgstr[0] "הערות (למעט האחרונה) ניתנות למחיקה עד דקה - %(minutes)s מרגע הפרסום, עמך הסליחה"
 msgstr[1] "הערות (למעט האחרונה) ניתנות למחיקה עד %(minutes)s דקות מרגע הפרסום, עמך הסליחה"
+msgstr[2] "הערות (למעט האחרונה) ניתנות למחיקה עד %(minutes)s דקות מרגע הפרסום, עמך הסליחה"
+msgstr[3] "הערות (למעט האחרונה) ניתנות למחיקה עד %(minutes)s דקות מרגע הפרסום, עמך הסליחה"
 
 #: models/__init__.py:1455
 msgid "sorry, but older votes cannot be revoked"
@@ -4749,6 +4771,8 @@ msgid "in %(hr)d hour"
 msgid_plural "in %(hr)d hours"
 msgstr[0] "בעוד שעה - %(hr)d"
 msgstr[1] "בעוד %(hr)d שעות"
+msgstr[2] "בעוד %(hr)d שעות"
+msgstr[3] "בעוד %(hr)d שעות"
 
 #: models/__init__.py:2373
 #, python-format
@@ -4756,6 +4780,8 @@ msgid "in %(min)d min"
 msgid_plural "in %(min)d mins"
 msgstr[0] "בעוד דקה - %(min)d"
 msgstr[1] "בעוד %(min)d דקות"
+msgstr[2] "בעוד %(min)d דקות"
+msgstr[3] "בעוד %(min)d דקות"
 
 #: models/__init__.py:2374
 #, python-format
@@ -4763,6 +4789,8 @@ msgid "%(days)d day"
 msgid_plural "%(days)d days"
 msgstr[0] "יום אחד - %(days)d"
 msgstr[1] "%(days)d ימים"
+msgstr[2] "%(days)d ימים"
+msgstr[3] "%(days)d ימים"
 
 #: models/__init__.py:2376
 #, python-format
@@ -4806,6 +4834,8 @@ msgid "one gold badge"
 msgid_plural "%(count)d gold badges"
 msgstr[0] "עיטור זהב אחד"
 msgstr[1] "%(count)d עיטורי זהב"
+msgstr[2] "%(count)d עיטורי זהב"
+msgstr[3] "%(count)d עיטורי זהב"
 
 #: models/__init__.py:2918
 #, python-format
@@ -4813,6 +4843,8 @@ msgid "one silver badge"
 msgid_plural "%(count)d silver badges"
 msgstr[0] "עיטור כסף אחד"
 msgstr[1] "%(count)d עיטורי כסף"
+msgstr[2] "%(count)d עיטורי כסף"
+msgstr[3] "%(count)d עיטורי כסף"
 
 #: models/__init__.py:2925
 #, python-format
@@ -4820,6 +4852,8 @@ msgid "one bronze badge"
 msgid_plural "%(count)d bronze badges"
 msgstr[0] "עיטור ארד אחד"
 msgstr[1] "%(count)d עיטורי ארד"
+msgstr[2] "%(count)d עיטורי ארד"
+msgstr[3] "%(count)d עיטורי ארד"
 
 #: models/__init__.py:2936
 #, python-format
@@ -4837,6 +4871,8 @@ msgid "At least %d karma point is required to post links"
 msgid_plural "At least %d karma points is required to post links"
 msgstr[0] "נדרשת רמת קארמה של נקודה אחת - %d - לפחות כדי לפרסם קישורים"
 msgstr[1] "נדרשת רמת קארמה של %d נקודות לפחות כדי לפרסם קישורים"
+msgstr[2] "נדרשת רמת קארמה של %d נקודות לפחות כדי לפרסם קישורים"
+msgstr[3] "נדרשת רמת קארמה של %d נקודות לפחות כדי לפרסם קישורים"
 
 #: models/__init__.py:3733
 #, python-format
@@ -4983,6 +5019,8 @@ msgid "Created a tag used %(num)s time"
 msgid_plural "Created a tag used %(num)s times"
 msgstr[0] "יצירת תגית שהייתה בשימוש פעם אחת - %(num)s"
 msgstr[1] "יצירת תגית שהייתה בשימוש %(num)s פעמים"
+msgstr[2] "יצירת תגית שהייתה בשימוש %(num)s פעמים"
+msgstr[3] "יצירת תגית שהייתה בשימוש %(num)s פעמים"
 
 #: models/badges.py:880
 msgid "Very active in one tag"
@@ -5254,6 +5292,8 @@ msgid "user received this badge:"
 msgid_plural "users received this badge:"
 msgstr[0] "משתמש שקיבל את העיטור הזה:"
 msgstr[1] "משתמשים שקיבלו את העיטור הזה:"
+msgstr[2] "משתמשים שקיבלו את העיטור הזה:"
+msgstr[3] "משתמשים שקיבלו את העיטור הזה:"
 
 #: templates/badges.html:3 templates/badges.html.py:5
 msgid "Badges"
@@ -5853,6 +5893,8 @@ msgid "you have %(response_count)s new response"
 msgid_plural "you have %(response_count)s new responses"
 msgstr[0] "יש לך תגובה חדשה אחת - %(response_count)s"
 msgstr[1] "יש לך %(response_count)s תגובות חדשות"
+msgstr[2] "יש לך %(response_count)s תגובות חדשות"
+msgstr[3] "יש לך %(response_count)s תגובות חדשות"
 
 #: templates/macros.html:727 templates/macros.html.py:728
 #, python-format
@@ -6429,7 +6471,7 @@ msgstr "בתגובה ל%(post_type)s של %(author)s"
 #: templates/email/macros.html:37 templates/email/macros.html.py:68
 #, python-format
 msgid "%(author)s %(performed_action)s"
-msgstr ""
+msgstr "%(author)s %(performed_action)s"
 
 #: templates/email/macros.html:52
 msgid "Tags:"
@@ -6447,6 +6489,8 @@ msgid_plural ""
 "            "
 msgstr[0] "\n                הערה אחת - %(count)s:\n            "
 msgstr[1] "\n                %(count)s הערות:\n            "
+msgstr[2] "\n                %(count)s הערות:\n            "
+msgstr[3] "\n                %(count)s הערות:\n            "
 
 #: templates/email/preview_email.html:2 templates/email/preview_email.html:8
 #, python-format
@@ -6530,6 +6574,8 @@ msgid_plural ""
 "    "
 msgstr[0] "\n        עדכון אחד - %(question_count)s - על %(topics)s\n    "
 msgstr[1] "\n        %(question_count)s עדכונים על %(topics)s\n    "
+msgstr[2] "\n        %(question_count)s עדכונים על %(topics)s\n    "
+msgstr[3] "\n        %(question_count)s עדכונים על %(topics)s\n    "
 
 #: templates/email/batch_email_alert/subject.txt:8
 #, python-format
@@ -6543,6 +6589,8 @@ msgid_plural ""
 "    "
 msgstr[0] "\n        עדכון אחד - %(question_count)s\n    "
 msgstr[1] "\n        %(question_count)s עדכונים\n    "
+msgstr[2] "\n        %(question_count)s עדכונים\n    "
+msgstr[3] "\n        %(question_count)s עדכונים\n    "
 
 #: templates/email/feedback/body.html:6 templates/email/feedback/body.html:7
 #, python-format
@@ -6833,6 +6881,8 @@ msgid "Please correct the error below."
 msgid_plural "Please correct the errors below."
 msgstr[0] "נא לתקן את השגיאה הבאה:"
 msgstr[1] "נא לתקן את השגיאות שלהלן."
+msgstr[2] "נא לתקן את השגיאות שלהלן."
+msgstr[3] "נא לתקן את השגיאות שלהלן."
 
 #: templates/livesettings/group_settings.html:16
 #, python-format
@@ -6978,6 +7028,8 @@ msgid "each tag must be shorter that %(max_chars)s character"
 msgid_plural "each tag must be shorter than %(max_chars)s characters"
 msgstr[0] "כל תגית חייבת להיות קצרה מתו אחד - %(max_chars)s"
 msgstr[1] "כל תגית חייבת להיות קצרה מ־%(max_chars)s תווים"
+msgstr[2] "כל תגית חייבת להיות קצרה מ־%(max_chars)s תווים"
+msgstr[3] "כל תגית חייבת להיות קצרה מ־%(max_chars)s תווים"
 
 #: templates/meta/editor_data.html:7
 #, python-format
@@ -6985,6 +7037,8 @@ msgid "please use %(tag_count)s tag"
 msgid_plural "please use %(tag_count)s tags or less"
 msgstr[0] "נא להשתמש בתגית אחת - %(tag_count)s"
 msgstr[1] "נא להשתמש ב־%(tag_count)s תגיות לכל היותר"
+msgstr[2] "נא להשתמש ב־%(tag_count)s תגיות לכל היותר"
+msgstr[3] "נא להשתמש ב־%(tag_count)s תגיות לכל היותר"
 
 #: templates/meta/editor_data.html:8
 #, python-format
@@ -7174,6 +7228,8 @@ msgid "%(count)s follower"
 msgid_plural "%(count)s followers"
 msgstr[0] "%(count)s במעקב אחריך"
 msgstr[1] "%(count)s עוקבים"
+msgstr[2] "%(count)s עוקבים"
+msgstr[3] "%(count)s עוקבים"
 
 #: templates/question/sidebar.html:35
 msgid "subscribe to the rss feed"
@@ -7658,6 +7714,8 @@ msgid "Followed by %(count)s person"
 msgid_plural "Followed by %(count)s people"
 msgstr[0] "ברשימת המעקב של משתמש אחד - %(count)s"
 msgstr[1] "ברשימת המעקב של %(count)s משתמשים"
+msgstr[2] "ברשימת המעקב של %(count)s משתמשים"
+msgstr[3] "ברשימת המעקב של %(count)s משתמשים"
 
 #: templates/user_profile/user_network.html:14
 #, python-format
@@ -7665,6 +7723,8 @@ msgid "Following %(count)s person"
 msgid_plural "Following %(count)s people"
 msgstr[0] "במעקב אחר משתמש אחד - %(count)s"
 msgstr[1] "במעקב אחר %(count)s משתמשים"
+msgstr[2] "במעקב אחר %(count)s משתמשים"
+msgstr[3] "במעקב אחר %(count)s משתמשים"
 
 #: templates/user_profile/user_network.html:19
 msgid ""
@@ -7707,6 +7767,8 @@ msgid "<span class=\"count\">%(cnt)s</span> Vote"
 msgid_plural "<span class=\"count\">%(cnt)s</span> Votes "
 msgstr[0] "הצבעה <span class=\"count\">אחת</span> - %(cnt)s"
 msgstr[1] "<span class=\"count\">%(cnt)s</span> הצבעות "
+msgstr[2] "<span class=\"count\">%(cnt)s</span> הצבעות "
+msgstr[3] "<span class=\"count\">%(cnt)s</span> הצבעות "
 
 #: templates/user_profile/user_stats.html:38
 #, python-format
@@ -7714,6 +7776,8 @@ msgid "<span class=\"count\">%(counter)s</span> Tag"
 msgid_plural "<span class=\"count\">%(counter)s</span> Tags"
 msgstr[0] "תגית <span class=\"count\">אחת</span> - %(counter)s"
 msgstr[1] "<span class=\"count\">%(counter)s</span> תגיות"
+msgstr[2] "<span class=\"count\">%(counter)s</span> תגיות"
+msgstr[3] "<span class=\"count\">%(counter)s</span> תגיות"
 
 #: templates/user_profile/user_stats.html:71
 #, python-format
@@ -7721,6 +7785,8 @@ msgid "<span class=\"count\">%(counter)s</span> Badge"
 msgid_plural "<span class=\"count\">%(counter)s</span> Badges"
 msgstr[0] "עיטור <span class=\"count\">אחד</span> - %(counter)s"
 msgstr[1] "<span class=\"count\">%(counter)s</span> עיטורים"
+msgstr[2] "<span class=\"count\">%(counter)s</span> עיטורים"
+msgstr[3] "<span class=\"count\">%(counter)s</span> עיטורים"
 
 #: templates/user_profile/user_stats.html:90
 msgid "Answer to:"
@@ -7945,12 +8011,16 @@ msgid "view"
 msgid_plural "views"
 msgstr[0] "צפייה"
 msgstr[1] "צפיות"
+msgstr[2] "צפיות"
+msgstr[3] "צפיות"
 
 #: templates/widgets/question_summary.html:41
 msgid "vote"
 msgid_plural "votes"
 msgstr[0] "הצבעה"
 msgstr[1] "הצבעות"
+msgstr[2] "הצבעות"
+msgstr[3] "הצבעות"
 
 #: templates/widgets/scope_nav.html:10
 msgid "ALL"
@@ -8158,6 +8228,8 @@ msgid "%(hr)d hour ago"
 msgid_plural "%(hr)d hours ago"
 msgstr[0] "לפני שעה - %(hr)d"
 msgstr[1] "לפני %(hr)d שעות"
+msgstr[2] "לפני %(hr)d שעות"
+msgstr[3] "לפני %(hr)d שעות"
 
 #: utils/functions.py:151
 #, python-format
@@ -8165,6 +8237,8 @@ msgid "%(min)d min ago"
 msgid_plural "%(min)d mins ago"
 msgstr[0] "לפני דקה - %(min)d"
 msgstr[1] "לפני %(min)d דקות"
+msgstr[2] "לפני %(min)d דקות"
+msgstr[3] "לפני %(min)d דקות"
 
 #: utils/html.py:303
 msgid "please login"
@@ -8310,6 +8384,8 @@ msgid "%d post approved"
 msgid_plural "%d posts approved"
 msgstr[0] "פרסום אחד - %d - אושר"
 msgstr[1] "%d פרסומים אושרו"
+msgstr[2] "%d פרסומים אושרו"
+msgstr[3] "%d פרסומים אושרו"
 
 #: views/moderation.py:272
 #, python-format
@@ -8317,6 +8393,8 @@ msgid "%d user approved"
 msgid_plural "%d users approved"
 msgstr[0] "משתמש אחד - %d - אושר"
 msgstr[1] "%d משתמשים אושרו"
+msgstr[2] "%d משתמשים אושרו"
+msgstr[3] "%d משתמשים אושרו"
 
 #: views/moderation.py:293 views/moderation.py:369 views/users.py:278
 #, python-format
@@ -8324,6 +8402,8 @@ msgid "%d post deleted"
 msgid_plural "%d posts deleted"
 msgstr[0] "פרסום אחד - %d - נמחק"
 msgstr[1] "%d פרסומים נמחקו"
+msgstr[2] "%d פרסומים נמחקו"
+msgstr[3] "%d פרסומים נמחקו"
 
 #: views/moderation.py:361
 #, python-format
@@ -8331,6 +8411,8 @@ msgid "%d ip blocked"
 msgid_plural "%d ips blocked"
 msgstr[0] "כתובת ip אחת - %d - נחסמה"
 msgstr[1] "%d כתובות ip נחסמו"
+msgstr[2] "%d כתובות ip נחסמו"
+msgstr[3] "%d כתובות ip נחסמו"
 
 #: views/moderation.py:365
 #, python-format
@@ -8338,6 +8420,8 @@ msgid "%d user blocked"
 msgid_plural "%d users blocked"
 msgstr[0] "משתמש אחד - %d - נחסם"
 msgstr[1] "%d משתמשים נחסמו"
+msgstr[2] "%d משתמשים נחסמו"
+msgstr[3] "%d משתמשים נחסמו"
 
 #: views/readers.py:150
 #, python-format
@@ -8345,6 +8429,8 @@ msgid "%(q_num)s question"
 msgid_plural "%(q_num)s questions"
 msgstr[0] "שאלה %(q_num)s"
 msgstr[1] "%(q_num)s שאלות"
+msgstr[2] "%(q_num)s שאלות"
+msgstr[3] "%(q_num)s שאלות"
 
 #: views/readers.py:279
 #, python-format
