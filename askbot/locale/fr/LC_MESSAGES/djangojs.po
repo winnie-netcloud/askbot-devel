@@ -4,8 +4,8 @@
 # 
 # Translators:
 # Anthony Monthe <anthony.monthe@gmail.com>, 2016
-# Benjamin Abel <bbig26@gmail.com>, 2014
-# Benjamin Abel <bbig26@gmail.com>, 2014
+# Benjamin Abel <inactive+bigben@transifex.com>, 2014
+# Benjamin Abel <inactive+bigben@transifex.com>, 2014
 # Camille Baldock <mademoisellegeek42@gmail.com>, 2011
 # ProfGra <christophegragnic@gmail.com>, 2014
 # Christophe CHAUVET <christophe.chauvet@gmail.com>, 2011-2013
@@ -15,13 +15,14 @@
 # Camille Baldock <mademoisellegeek42@gmail.com>, 2011
 # Ogre Sympathique, 2016
 # R Kaupp <RemiKaupp@wateraid.org>, 2014
+# Sophie Gautier <gautier.sophie@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-09-19 10:43+0000\n"
-"Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
+"PO-Revision-Date: 2018-10-23 16:51+0000\n"
+"Last-Translator: Sophie Gautier <gautier.sophie@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/askbot/askbot/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +32,7 @@ msgstr ""
 
 #: media/js/group_messaging.js:132
 msgid "Type a message"
-msgstr "Écrire un message"
+msgstr "Saisir un message"
 
 #: media/js/group_messaging.js:141
 msgid "Add a recipient"
@@ -63,7 +64,7 @@ msgstr "Pour voir le résultat de la recherche, 2 caractères ou plus sont requi
 
 #: media/js/live_search.js:220
 msgid "Ask Your Question"
-msgstr "Poser votre question"
+msgstr "Posez votre question"
 
 #: media/js/live_search.js:301
 msgid "Sorry, this tag does not exist"
@@ -73,7 +74,7 @@ msgstr[1] "Désolé, ces mots-clés n'existent pas."
 
 #: media/js/live_search.js:315
 msgid "Search or ask your question"
-msgstr ""
+msgstr "Recherchez ou posez une question"
 
 #: media/js/post.js:28
 msgid "loading..."
@@ -83,8 +84,8 @@ msgstr "chargement..."
 #: media/js/post.js:253
 msgid "enter > %(length)s character"
 msgid_plural "enter > %(length)s characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "saisissez plus de %(length)s caractères"
+msgstr[1] "saisissez plus de %(length)s caractères"
 
 #: media/js/post.js:155 media/js/post.js.c:218
 #, c-format
@@ -95,7 +96,7 @@ msgstr[1] "veuillez saisir au moins plus de %s caractères"
 
 #: media/js/post.js:209 media/js/post.js.c:1457
 msgid "tags cannot be empty"
-msgstr "merci de saisir au moins un mot clé"
+msgstr "veuillez saisir au moins un mot-clé"
 
 #: media/js/post.js:215
 msgid "details are required"
@@ -103,7 +104,7 @@ msgstr "les détails sont requis"
 
 #: media/js/post.js:226
 msgid "enter your question"
-msgstr "saisisser votre question"
+msgstr "saisissez votre question"
 
 #: media/js/post.js:250
 msgid "content cannot be empty"
@@ -159,7 +160,7 @@ msgstr "les utilisateurs anonymes ne peuvent pas signaler les messages offensant
 
 #: media/js/post.js:828
 msgid "confirm delete"
-msgstr "êtes-vous de vouloir supprimer ceci?"
+msgstr "êtes-vous sûr de vouloir supprimer ceci?"
 
 #: media/js/post.js:829
 msgid "anonymous users cannot delete/undelete"
@@ -167,7 +168,7 @@ msgstr "désolé, les utilisateurs anonymes ne peuvent pas supprimer ou annuler 
 
 #: media/js/post.js:830
 msgid "post recovered"
-msgstr "votre message a été restauré!"
+msgstr "votre message a été restauré !"
 
 #: media/js/post.js:831
 msgid "post deleted"
@@ -179,7 +180,7 @@ msgstr "désolé, vous ne pouvez pas accepter %(accept_own_answer)s"
 
 #: media/js/post.js:1101
 msgid "remove flag"
-msgstr "supprimer le drapeau"
+msgstr "supprimer le mot-clé"
 
 #: media/js/post.js:1135 media/js/post.js.c:1166
 msgid "flag offensive"
@@ -199,7 +200,7 @@ msgstr "désolé, quelque chose ne semble pas correct ici"
 
 #: media/js/post.js:1865
 msgid "Preview: (hide)"
-msgstr "Aperçu: (cacher)"
+msgstr "Aperçu: (masquer)"
 
 #: media/js/post.js:1866
 msgid "Show preview"
@@ -239,7 +240,7 @@ msgstr "annuler"
 
 #: media/js/post.js:2466
 msgid "minor edit (don't send alerts)"
-msgstr "edition mineure (ne pas envoyer d'alertes)"
+msgstr "édition mineure (ne pas envoyer d'alertes)"
 
 #: media/js/post.js:2498
 msgid "Are you sure you don't want to post this comment?"
@@ -264,7 +265,7 @@ msgstr "veuillez vous identifier ou vous enregistrez pour poster un commentaire"
 #: media/js/post.js:3364 media/js/post.js.c:4185 media/js/post.js.c:4378
 #: media/js/utils/editable.js:314
 msgid "save"
-msgstr "sauvegarder"
+msgstr "enregistrer"
 
 #: media/js/post.js:3489
 msgid "Enter the logo url or upload an image"
@@ -276,7 +277,7 @@ msgstr "Voulez vous réellement supprimer cette image ?"
 
 #: media/js/post.js:3631
 msgid "change logo"
-msgstr "changer le logo"
+msgstr "modifier le logo"
 
 #: media/js/post.js:3632
 msgid "add logo"
@@ -285,7 +286,7 @@ msgstr "ajouter un logo"
 #: media/js/post.js:3736
 #, c-format
 msgid "tag \"%s\" was already added, no need to repeat (press \"escape\" to delete)"
-msgstr "le mot-clé \"%s\" a déjà été ajouté, pas besoin de répéter l'opération (appuyer sur \"echap\" pour supprimer)"
+msgstr "le mot-clé \"%s\" a déjà été ajouté, inutile de répéter l'opération (appuyez sur \"echap\" pour supprimer)"
 
 #: media/js/post.js:3745
 #, c-format
@@ -300,7 +301,7 @@ msgstr "Supprimer la catégorie?"
 
 #: media/js/post.js:4204 media/js/utils/edit_link.js:15
 msgid "edit"
-msgstr "modifier"
+msgstr "éditer"
 
 #: media/js/post.js:4291
 msgid "category name cannot be empty"
@@ -316,7 +317,7 @@ msgstr "ajouter une catégorie"
 
 #: media/js/post.js:4917
 msgid "save tags"
-msgstr "sauvegarder les mots-clés"
+msgstr "enregistrer les mots-clés"
 
 #: media/js/post.js:4949 media/js/editors/folded_editor.js:38
 msgid "Sorry, you have only read access"
@@ -324,7 +325,7 @@ msgstr "Désolé, vous avez accès seulement en lecture"
 
 #: media/js/post.js:5022
 msgid "Group name:"
-msgstr "Nom du groupe:"
+msgstr "Nom du groupe :"
 
 #: media/js/post.js:5048
 msgid "Shared with the following users:"
@@ -341,7 +342,7 @@ msgstr "Le mot-clé \"<span></span>\" doit correspondre:"
 #: media/js/tag_selector.js:91
 #, c-format
 msgid "and %s more, not shown..."
-msgstr "et %s plus, non montré"
+msgstr "et %s plus, non affiché..."
 
 #: media/js/user.js:50
 msgid "Please <a href=\"%(signin_url)s\">signin</a> to follow %(username)s"
@@ -359,7 +360,7 @@ msgstr "et"
 
 #: media/js/utils.js:292
 msgid "click to close"
-msgstr "cliquer pour fermer"
+msgstr "cliquez pour fermer"
 
 #: media/js/jquery-openid/jquery.authenticator.js:73
 #, c-format
@@ -449,7 +450,7 @@ msgstr "Veuillez fournir des détails."
 
 #: media/js/user/manage_reject_reasons_dialog.js:248
 msgid "A reason must be selected to delete one."
-msgstr "une raison doit être choisi pour en supprimer une."
+msgstr "une raison doit être choisie pour en supprimer une."
 
 #: media/js/user/post_moderation_controls.js:77
 #: media/js/user/response_notifs.js:30 media/js/user/response_notifs.js.c:107
@@ -479,11 +480,11 @@ msgstr "Choisir un fichier différent"
 
 #: media/js/utils/file_upload_dialog.js:154
 msgid "Choose a different image"
-msgstr "Choisir une image diffénrente"
+msgstr "Choisir une image différente"
 
 #: media/js/utils/file_upload_dialog.js:168
 msgid "Oops, looks like we had an error. Sorry."
-msgstr "Oups, il semblerais que nous ayons une erreur. Désolé."
+msgstr "Oups, il semblerait qu'une erreur se soit produite. Désolé."
 
 #: media/js/utils/file_upload_dialog.js:228
 msgid "Choose a file to insert"
@@ -495,7 +496,7 @@ msgstr "Choisir une image à insérée"
 
 #: media/js/utils/file_upload_dialog.js:243
 msgid "Allowed file types are:"
-msgstr "Les types de fichier autorisés sont:"
+msgstr "Les types de fichier autorisés sont :"
 
 #: media/js/utils/file_upload_dialog.js:249
 #: media/tinymce/plugins/askbot_attachment/editor_plugin.js:35
@@ -620,7 +621,7 @@ msgstr "insérer un fichier"
 
 #: media/tinymce/plugins/askbot_imageuploader/editor_plugin.js:70
 msgid "Insert image"
-msgstr "entrer l'URL de l'image, ex. http://www.example.com/image.jpg ou transférer le fichier de l'image"
+msgstr "Insérer une image"
 
 #: media/wmd/wmd.js:31
 msgid "bold"
@@ -684,7 +685,7 @@ msgstr "saisir une adresse web, par example http://www.example.com \"titre de la
 
 #: media/wmd/wmd.js:56
 msgid "upload file attachment"
-msgstr "Merci de choisir un fichier et de le télécharger vers le serveur:"
+msgstr "Veuillez choisir un fichier et le téléverser :"
 
 #: media/wmd/wmd.js:1686
 msgid "strong text"
@@ -708,11 +709,11 @@ msgstr "texte du lien"
 
 #: media/wmd/wmd.js:2284 media/wmd/wmd.js.c:2304
 msgid "enter code here"
-msgstr "Entrez le code ici"
+msgstr "Saisissez le code ici"
 
 #: media/wmd/wmd.js:2398
 msgid "List item"
-msgstr "Lister les items"
+msgstr "Lister les éléments"
 
 #: media/wmd/wmd.js:2430
 msgid "Heading"
