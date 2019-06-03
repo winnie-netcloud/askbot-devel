@@ -180,24 +180,27 @@ The commands from this section will help fix those issues.
  the project policy is addressed on the day of reporting. If you discover such issue - please
  report it at the forum or by email at `admin@askbot.org`
 
-+--------------------------------+-------------------------------------------------------------+
-| command                        | purpose                                                     |
-+================================+=============================================================+
-| `add_missing_subscriptions`    | adds default values of email subscription settings to users |
-|                                | that lack them                                              |
-+--------------------------------+-------------------------------------------------------------+
-| `fix_answer_counts`            | recalculates answer counts for all questions                |
-+--------------------------------+-------------------------------------------------------------+
-| `fix_inbox_counts`             | recalculates response counts in the user inboxes            |
-+--------------------------------+-------------------------------------------------------------+
-| `fix_revisionless_posts`       | adds a revision record to posts that lack them              |
-+--------------------------------+-------------------------------------------------------------+
-| `fix_question_tags`            | takes tag names from the record on the question table       |
-|                                | and stores them in the tag table. This defect may show when |
-|                                | the server process is interrupted after the question was    |
-|                                | saved, but tags were not updated, and the symptom is that   |
-|                                | the question cannot be found via the tag search.            |
-+--------------------------------+-------------------------------------------------------------+
++------------------------------------------+-------------------------------------------------------------+
+| command                                  | purpose                                                     |
++==========================================+=============================================================+
+| `add_missing_subscriptions`              | adds default values of email subscription settings to users |
+|                                          | that lack them                                              |
++------------------------------------------+-------------------------------------------------------------+
+| `askbot_delete_orphan_group_memberships` | deletes group membeshship records that are not linked to    |
+|                                          | any group                                                   |
++------------------------------------------+-------------------------------------------------------------+
+| `fix_answer_counts`                      | recalculates answer counts for all questions                |
++------------------------------------------+-------------------------------------------------------------+
+| `fix_inbox_counts`                       | recalculates response counts in the user inboxes            |
++------------------------------------------+-------------------------------------------------------------+
+| `fix_revisionless_posts`                 | adds a revision record to posts that lack them              |
++------------------------------------------+-------------------------------------------------------------+
+| `fix_question_tags`                      | takes tag names from the record on the question table       |
+|                                          | and stores them in the tag table. This defect may show when |
+|                                          | the server process is interrupted after the question was    |
+|                                          | saved, but tags were not updated, and the symptom is that   |
+|                                          | the question cannot be found via the tag search.            |
++------------------------------------------+-------------------------------------------------------------+
 
 The above commands are safe to run at any time, also they do not require 
 additional parameters. In the future all these will be replaced with just one simple command.

@@ -4,7 +4,7 @@
 # 
 # Translators:
 # cor nouws <nouwsc@xs4all.nl>, 2016-2017
-# kees kriek <kees538@gmail.com>, 2016-2018
+# kees kriek <kees538@gmail.com>, 2016-2019
 # Maurice <m-ou.se@m-ou.se>, 2013
 # Rob Westein <robwestein@gmail.com>, 2016-2017
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2018-10-02 11:23+0000\n"
+"PO-Revision-Date: 2019-04-05 08:05+0000\n"
 "Last-Translator: kees kriek <kees538@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/askbot/askbot/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -446,7 +446,7 @@ msgstr "groepen/"
 #: urls.py:139 urls.py:144
 msgctxt "urls"
 msgid "badges/"
-msgstr "badges/"
+msgstr "insignes/"
 
 #: urls.py:157
 msgctxt "urls"
@@ -834,7 +834,7 @@ msgstr "minimum aantal stemmen voor antwoord"
 
 #: conf/badges.py:226 conf/words.py:454 conf/words.py:455
 msgid "Stellar Question"
-msgstr "Stellar Question"
+msgstr "Vraagsteller"
 
 #: conf/badges.py:232 models/badges.py:426
 msgid "Student"
@@ -1759,11 +1759,11 @@ msgstr "Gebruikers karma kan zichtbaar zijn voor iedereen of alleen zichtbaar vo
 
 #: conf/karma_and_badges_visibility.py:44
 msgid "Visibility of badges"
-msgstr "Zichtbaarheid van badges"
+msgstr "Zichtbaarheid van insignes"
 
 #: conf/karma_and_badges_visibility.py:47
 msgid "Badges can be either publicly shown or completely hidden"
-msgstr "Badges kunnen openbaar zichtbaar zijn of compleet worden verborgen"
+msgstr "Insignes kunnen openbaar zichtbaar zijn of compleet worden verborgen"
 
 #: conf/ldap.py:9
 msgid "LDAP login configuration"
@@ -5264,11 +5264,11 @@ msgstr "Insignes"
 msgid ""
 "Below is the list of available badges and number of times each type of badge"
 " has been awarded."
-msgstr ""
+msgstr "Hieronder staat de lijst met beschikbare insignes en het aantal keren dat elk type insigne is toegekend."
 
 #: templates/badges.html:30
 msgid "Community badges"
-msgstr ""
+msgstr "Type insignes"
 
 #: templates/badges.html:32
 msgid "gold badge: the highest honor and is very rare"
@@ -5278,16 +5278,16 @@ msgstr ""
 msgid ""
 "Gold badge is the highest award in this community. To obtain it you have to show \n"
 "profound knowledge and ability in addition to your active participation."
-msgstr ""
+msgstr "Gouden insigne is de hoogste onderscheiding in deze gemeenschap. Om dit te verkrijgen moet je behalve je actieve deelname ook diepgaande kennis en vaardigheid tonen."
 
 #: templates/badges.html:41 templates/badges.html.py:45
 msgid ""
 "silver badge: occasionally awarded for the very high quality contributions"
-msgstr ""
+msgstr "Zilveren insigne: zo nu en dan uitgereikt voor bijdragen van zeer hoge kwaliteit"
 
 #: templates/badges.html:48 templates/badges.html.py:52
 msgid "bronze badge: often given as a special honor"
-msgstr ""
+msgstr "Bronzen insigne: vaak gegeven als een speciale eer"
 
 #: templates/close.html:12
 msgid "Reasons"
@@ -5555,25 +5555,25 @@ msgstr ""
 
 #: templates/help_static.html:16
 msgid "How questions, answers and comments work"
-msgstr ""
+msgstr "Hoe vragen, antwoorden en opmerkingen werken"
 
 #: templates/help_static.html:18
 msgid ""
 "This site is for asking and answering questions, not for open-ended "
 "discussions."
-msgstr ""
+msgstr "Deze pagina is voor het stellen en beantwoorden van vragen, niet voor open discussies."
 
 #: templates/help_static.html:19
 msgid ""
 "We encourage everyone to use “question” space for asking and “answer” for "
 "answering."
-msgstr ""
+msgstr "We moedigen iedereen aan om de \"vraag\"-ruimte te gebruiken om te vragen en \"antwoord\" voor het beantwoorden."
 
 #: templates/help_static.html:22
 msgid ""
 "Despite that, each question and answer can be commented – \n"
 "    the comments are good for the limited discussions."
-msgstr ""
+msgstr "Desondanks kan elke vraag en elk antwoord worden becommentarieerd - de opmerkingen zijn goed voor de beperkte discussies."
 
 #: templates/help_static.html:26
 msgid "Please search before asking your questions"
@@ -5583,29 +5583,29 @@ msgstr "Zoek eerst voordat u vragen stelt."
 msgid ""
 "Type your question in the search bar and see whether a similar question has "
 "been asked before"
-msgstr ""
+msgstr "Typ uw vraag in de zoekbalk en kijk of er al eerder een soortgelijke vraag is gesteld."
 
 #: templates/help_static.html:29
 msgid "Search has advanced capabilities:"
-msgstr ""
+msgstr "Zoeken heeft uitgebreide mogelijkheden:"
 
 #: templates/help_static.html:31
 msgid "to search in title - enter [title: your text]"
-msgstr ""
+msgstr "om in een titel te zoeken - voer [titel: uw tekst] in"
 
 #: templates/help_static.html:32
 msgid "to search by tags - enter [tag: sometag] or #sometag"
-msgstr ""
+msgstr "om op tags te zoeken - voer [tag: sometag] of #sometag in"
 
 #: templates/help_static.html:33
 msgid "to search by user - enter [user: somename] or @somename or @\"some name\""
-msgstr ""
+msgstr "om te zoeken op gebruiker - voer [gebruiker: naam] of @naam in of @\"naam\" in"
 
 #: templates/help_static.html:35
 msgid ""
 "In addition, it is possible to click on tags to add them to the search "
 "query."
-msgstr ""
+msgstr "Daarnaast is het mogelijk om op tags te klikken om ze aan de zoekopdracht toe te voegen."
 
 #: templates/help_static.html:37
 msgid ""
@@ -5617,25 +5617,25 @@ msgstr ""
 msgid ""
 "<em>Important!!!</em> All search terms are combined with a logical \"AND\" "
 "expression - to narrow the search by adding new terms."
-msgstr ""
+msgstr "Belangrijk!!! Alle zoektermen worden gecombineerd met een logische \"EN\"-uitdrukking - om de zoekopdracht te verfijnen door nieuwe termen toe te voegen."
 
 #: templates/help_static.html:42
 msgid "Voting"
-msgstr ""
+msgstr "Stemming"
 
 #: templates/help_static.html:44
 #, python-format
 msgid ""
 "Voting in %(app_name)s helps to select best answers and thank most helpful "
 "users."
-msgstr ""
+msgstr "Stemmen in %(app_name)s helpt om de beste antwoorden te selecteren en de meest behulzame gebruikers te bedanken."
 
 #: templates/help_static.html:47
 #, python-format
 msgid ""
 "Please vote when you find helpful information,\n"
 "    it really helps the %(app_name)s community."
-msgstr ""
+msgstr "Stem alsjeblieft als je nuttige informatie vindt, het helpt echt de \n %(app_name)s-gemeenschap."
 
 #: templates/help_static.html:51
 msgid "Other topics"
@@ -5645,7 +5645,7 @@ msgstr "Andere onderwerpen"
 msgid ""
 "You can @mention users anywhere in the text to point their attention,\n"
 "    follow users and conversations and report inappropriate content by flagging it."
-msgstr ""
+msgstr "Je kunt overal in de tekst gebruikers @noemen, om de aandacht te vestigen, gebruikers en gesprekken volgen en ongepaste inhoud melden door deze te markeren."
 
 #: templates/help_static.html:56
 msgid "Enjoy."
@@ -7539,7 +7539,7 @@ msgstr ""
 
 #: templates/user_profile/user_info.html:144
 msgid "todays unused votes"
-msgstr "ungebruikte stemmen voor vandaag"
+msgstr "ongebruikte stemmen voor vandaag"
 
 #: templates/user_profile/user_info.html:145
 msgid "votes left"
@@ -7721,7 +7721,7 @@ msgstr[1] "<span class=\"count\">%(counter)s</span> Labels"
 msgid "<span class=\"count\">%(counter)s</span> Badge"
 msgid_plural "<span class=\"count\">%(counter)s</span> Badges"
 msgstr[0] "<span class=\"count\">%(counter)s</span> Badge"
-msgstr[1] "<span class=\"count\">%(counter)s</span> Badges"
+msgstr[1] "<span class=\"count\">%(counter)s</span> Insignes"
 
 #: templates/user_profile/user_stats.html:90
 msgid "Answer to:"
@@ -7915,7 +7915,7 @@ msgstr "gebruikers"
 
 #: templates/widgets/meta_nav.html:28
 msgid "badges"
-msgstr "badges"
+msgstr "insignes"
 
 #: templates/widgets/moderated_image.html:1
 msgid "image awaiting moderation"
@@ -8014,7 +8014,7 @@ msgstr "karma:"
 
 #: templates/widgets/user_long_score_and_badge_summary.html:15
 msgid "badges:"
-msgstr "badges:"
+msgstr "insignes:"
 
 #: templates/widgets/user_navigation.html:11
 msgid "sign out"
