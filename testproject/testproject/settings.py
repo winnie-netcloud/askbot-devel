@@ -24,10 +24,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE = dj_database_url.config(default='sqlite:///db.data')
-DATABASE.update({
-    'TEST_CHARSET': 'utf8',              # Setting the character set and collation to utf-8
-    'TEST_COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
-})
+DATABASE.update({ 'TEST': {
+    'CHARSET': 'utf8',              # Setting the character set and collation to utf-8
+    'COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
+}})
 DATABASES = {'default': DATABASE}
 
 #outgoing mail server settings
