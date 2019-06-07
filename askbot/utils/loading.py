@@ -7,10 +7,8 @@ def load_module(mod_path):
     import module
 
     TODO: is this the same as the following?
-    try:
-        from django.utils.module_loading import import_string
-    except ImportError:
-        from django.utils.module_loading import import_by_path as import_string
+    from importlib import import_module
+    import_module(mod_path)?
     """
     assert(mod_path[0] != '.')
     path_bits = mod_path.split('.')
