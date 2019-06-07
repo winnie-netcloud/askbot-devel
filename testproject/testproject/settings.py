@@ -310,7 +310,7 @@ COMPRESS_PARSER = 'compressor.parser.HtmlParser'
 JINJA2_EXTENSIONS = ('compressor.contrib.jinja2ext.CompressorExtension',)
 JINJA2_TEMPLATES = ('captcha',)
 
-# Use syncdb for tests instead of South migrations. Without this, some tests
+# Use migrate for tests instead of South migrations. Without this, some tests
 # fail spuriously in MySQL.
 SOUTH_TESTS_MIGRATE = False
 

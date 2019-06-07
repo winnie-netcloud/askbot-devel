@@ -23,12 +23,12 @@ With MySQL as your database engine in your settings.py file run the following co
 
 After that change your database engine to Postgresql in settings.py and do::
 
-    python manage.py syncdb --migrate --noinput #create the database structure
+    python manage.py migrate --noinput #create the database structure
     python manage.py loaddata  data.json
 
 
 .. note::
-    This won't work with large datasets because django will load all your 
+    This won't work with large datasets because django will load all your
     data into memory and you might run out of memory if the site data is too large.
 
     This process can produce warnings that can be ignored.
@@ -42,22 +42,22 @@ If the database is large this tool will come handy, to install it run::
     pip install py-mysql2pgsql
 
 Create a configuration file called config.yml with the following contents::
-    
+
     mysql:
       hostname: localhost
       port: 3306
-      username: your_user 
-      password: your_password 
-      database: your_database 
+      username: your_user
+      password: your_password
+      database: your_database
 
     destination:
       file:
       postgres:
         hostname: localhost
         port: 5432
-        username: your_user 
-        password: your_password 
-        database: your_database 
+        username: your_user
+        password: your_password
+        database: your_database
 
 Then run::
 
@@ -70,7 +70,7 @@ After the process is finished there are a couple of things left to do.
 Enable Postgresql full text search
 ----------------------------------
 
-Askbot relies on special postgresql features for better search, in this case the py-mysql2pgsql tool will not 
+Askbot relies on special postgresql features for better search, in this case the py-mysql2pgsql tool will not
 add these features, so it requires to be added manually.
 
 To fix it run the command::
@@ -92,20 +92,20 @@ Test this by running a search query on the askbot site.
 Fixing data types
 -----------------
 
-The py-mysql2pgsql translates datatype a bit different than Django ORM do, to keep the same 
+The py-mysql2pgsql translates datatype a bit different than Django ORM do, to keep the same
 datatypes do the following:
 
 1. Create a new postgresql database and run sync and migrate commands the following way::
 
-    python manage.py syncdb --migrate --noinput --no-initial-data
+    python manage.py migrate --noinput --no-initial-data
 
 2. Dump the converted database data with binary format::
 
-    pg_dump --format=c -a database_name > dump_name 
+    pg_dump --format=c -a database_name > dump_name
 
 3. Restore it into your current Django database::
 
-    pg_restore -a --disable-triggers -d django_database dump_name 
+    pg_restore -a --disable-triggers -d django_database dump_name
 
 
 Links

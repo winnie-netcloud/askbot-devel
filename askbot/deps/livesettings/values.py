@@ -471,7 +471,7 @@ class Value(object):
                 log.error(e)
                 if str(e).find("configuration_setting") > -1:
                     if not _WARN.has_key('configuration_setting'):
-                        log.warn('Error loading setting %s.%s from table, OK if you are in syncdb', self.group.key, key)
+                        log.warn('Error loading setting %s.%s from table, OK if you are in migrate', self.group.key, key)
                         _WARN['configuration_setting'] = True
 
                     if self.use_default:

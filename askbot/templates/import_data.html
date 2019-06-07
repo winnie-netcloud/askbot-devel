@@ -3,10 +3,10 @@
 {% block content %}
     <h1>{% trans %}Import StackExchange data{% endtrans %}</h1>
     {% if need_configuration %}
-        <p><em>Note:</em> to import stackexchange data, first add 
+        <p><em>Note:</em> to import stackexchange data, first add
             <code>'askbot.importers.stackexchange',</code>
             to the <code>INSTALLED_APPS</code> setting in your <code>settings.py</code>
-            file, then run <code>python manage.py syncdb</code>, and restart the application.
+            file, then run <code>python manage.py migrate</code>, and restart the application.
             After that, pleale return to here and try again.
         </p>
     {% else %}

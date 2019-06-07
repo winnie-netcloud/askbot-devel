@@ -14,7 +14,7 @@ StackExchange
 
 Add `askbot.importers.stackexchange` to the list of `INSTALLED_APPS` list in your `settings.py`, then run::
 
-    python manage.py syncdb
+    python manage.py migrate
 
 Then there will be two ways to import your StackExchange dump:
 
@@ -27,7 +27,7 @@ Then there will be two ways to import your StackExchange dump:
 Zendesk
 =======
 Add `askbot.importers.zendesk` to the list of `INSTALLED_APPS` in the `settings.py`,
-run `python manage.py syncdb`.
+run `python manage.py migrate`.
 
 Prepare your zendesk files: put all your .xml files into one directory and tar-zip it::
 

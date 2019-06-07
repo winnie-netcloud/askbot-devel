@@ -5,7 +5,7 @@ from collections import namedtuple
 import django.dispatch
 
 from django.db.models.signals import (pre_save, post_save,
-                                      pre_delete, post_delete, post_syncdb)
+                                      pre_delete, post_delete, post_migrate)
 
 try:
     from django.db.models.signals import m2m_changed
@@ -99,7 +99,7 @@ def pop_all_db_signal_receivers():
         post_save,
         pre_delete,
         post_delete,
-        post_syncdb,
+        post_migrate,
         question_visited,
     )
     if 'm2m_changed' in globals():
