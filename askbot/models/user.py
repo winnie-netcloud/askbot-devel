@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.backends.dummy.base import IntegrityError
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes import fields
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group as AuthGroup
 from django.core import exceptions
@@ -302,7 +302,7 @@ class Activity(models.Model):
     active_at = models.DateTimeField(default=timezone.now)
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField(db_index=True)
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = fields.GenericForeignKey('content_type', 'object_id')
 
     #todo: remove this denorm question field when Post model is set up
     question = models.ForeignKey('Post', null=True)
