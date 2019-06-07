@@ -3,7 +3,7 @@ from askbot.deps.livesettings.overrides import get_overrides
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
-from django.db.models import loading
+from django.apps import apps as app_cache
 from django.utils.translation import ugettext_lazy
 from keyedcache import cache_key, cache_get, cache_set, NotCachedError
 from keyedcache.models import CachedObjectMixin
@@ -43,7 +43,7 @@ def find_setting(group, key, site=None):
         try:
             setting = cache_get(ck)
         except NotCachedError as nce:
-            if loading.app_cache_ready():
+            if app_cache.ready:
                 try:
                     setting = Setting.objects.get(site__id__exact=siteid, key__exact=key, group__exact=group)
 
