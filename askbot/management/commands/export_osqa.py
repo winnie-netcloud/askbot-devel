@@ -16,7 +16,7 @@ class XMLExportSerializer(Serializer):
 
         self.stream = options.pop("stream", StringIO())
         self.selected_fields = options.pop("fields", None)
-        self.use_natural_keys = options.pop("use_natural_keys", False)
+        self.use_natural_foreign_keys = options.pop("use_natural_foreign_keys", False)
 
         self.start_serialization()
         for obj in queryset:
@@ -53,7 +53,7 @@ class Command(BaseCommand):
                 'fixtures into. Defaults to the "default" database.')
         parser.add_argument('-e', '--exclude', dest='exclude',action='append', default=['sessions', 'contenttypes'],
             help='An appname or appname.ModelName to exclude (use multiple --exclude to exclude multiple apps/models).')
-        parser.add_argument('-n', '--natural', action='store_true', dest='use_natural_keys', default=False,
+        parser.add_argument('--natural-foreign', action='store_true', dest='use_natural_foreign_keys', default=False,
             help='Use natural keys if they are available.')
         parser.add_argument('-a', '--all', action='store_true', dest='use_base_manager', default=False,
             help="Use Django's base manager to dump all models stored in the database, including those that would otherwise be filtered or modified by a custom manager.")
@@ -66,7 +66,7 @@ class Command(BaseCommand):
         connection = connections[using]
         excludes = options.get('exclude',[])
         show_traceback = options.get('traceback', False)
-        use_natural_keys = options.get('use_natural_keys', False)
+        use_natural_foreign_keys = options.get('use_natural_foreign_keys', False)
         use_base_manager = options.get('use_base_manager', False)
 
         excluded_apps = set()
@@ -131,7 +131,7 @@ class Command(BaseCommand):
 
         try:
             serializer = XMLExportSerializer()
-            return serializer.serialize(objects, indent=indent, use_natural_keys=use_natural_keys)
+            return serializer.serialize(objects, indent=indent, use_natural_foreign_keys=use_natural_foreign_keys)
         except Exception as e:
             if show_traceback:
                 raise
