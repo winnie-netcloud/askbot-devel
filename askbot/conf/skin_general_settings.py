@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 
 import askbot
 from askbot.conf.settings_wrapper import settings
-from askbot.deps.livesettings import ConfigurationGroup
+from askbot.deps.livesettings.values import ConfigurationGroup
 from askbot.deps.livesettings import values
 from askbot.skins import utils as skin_utils
 from askbot import const

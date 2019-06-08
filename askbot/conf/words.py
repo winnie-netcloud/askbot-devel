@@ -2,7 +2,7 @@
 General skin settings
 """
 from askbot.conf.settings_wrapper import settings
-from askbot.deps.livesettings import ConfigurationGroup
+from askbot.deps.livesettings.values import ConfigurationGroup
 from askbot.deps.livesettings import values
 from django.utils.translation import ugettext_lazy as _
 from askbot.skins import utils as skin_utils
@@ -130,7 +130,7 @@ settings.register(
 )
 
 #action definition (action def)
-#this phrase is used as a parameter within 
+#this phrase is used as a parameter within
 #another phrase like "sorry, you cannot ask questions"
 #hopefully it works, because it is used in indefinite form
 #other similarly used phrases are marked as "action def" below

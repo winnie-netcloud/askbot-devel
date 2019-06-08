@@ -32,7 +32,8 @@ from django.utils.translation import string_concat
 from django.utils.translation import ugettext_lazy as _
 
 import askbot
-from askbot.deps.livesettings import SortedDotDict, config_register
+from askbot.deps.livesettings.values import SortedDotDict
+from askbot.deps.livesettings.functions import config_register
 from askbot.deps.livesettings.functions import config_get
 from askbot.deps.livesettings import signals
 from askbot.utils.functions import format_setting_name
@@ -165,7 +166,7 @@ class ConfigSettings(object):
 
             required_links = map(lambda v: self.get_setting_url(v), required)
             optional_links = map(lambda v: self.get_setting_url(v), optional)
-                
+
             if required_links and optional_links:
                 return _(
                     'There are required related settings: '

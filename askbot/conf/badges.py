@@ -8,9 +8,9 @@ from django.utils.translation import string_concat
 
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import REP_AND_BADGES
-from askbot.deps.livesettings import ConfigurationGroup
-from askbot.deps.livesettings import IntegerValue
-from askbot.deps.livesettings import BooleanValue
+from askbot.deps.livesettings.values import ConfigurationGroup
+from askbot.deps.livesettings.values import IntegerValue
+from askbot.deps.livesettings.values import BooleanValue
 
 BADGES = ConfigurationGroup(
     'BADGES', _('Badge settings'), ordering=2, super_group=REP_AND_BADGES)
