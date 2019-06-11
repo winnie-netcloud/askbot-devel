@@ -49,7 +49,7 @@ REQUIREMENTS = {
     'six': 'six==1.10.0',
     'threaded_multihost': 'django-threaded-multihost<=1.4-1',
     'tinymce': 'django-tinymce==1.5.3',
-    'unidecode': 'unidecode<=0.4.19',
+    'unidecode': 'unidecode<=1.0.23',
     #'stopforumspam': 'stopforumspam'
 }
 
