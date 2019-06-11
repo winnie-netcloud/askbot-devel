@@ -21,7 +21,7 @@ django>=1.8,<1.9
 html5lib==0.9999999
 jsonfield<=1.0.3
 markdown2<=2.3.8
-mock==2.0.0
+mock==3.0.5
 oauth2<=1.9.0.post1
 pyjwt<=1.4.0
 pystache==0.3.1

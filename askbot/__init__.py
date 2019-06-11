@@ -32,7 +32,7 @@ REQUIREMENTS = {
     'jwt': 'pyjwt<=1.4.0',
     'keyedcache': 'django-keyedcache<=1.5.1',
     'markdown2': 'markdown2<=2.3.8',
-    'mock': 'mock==2.0.0',
+    'mock': 'mock==3.0.5',
     'oauth2': 'oauth2<=1.9.0.post1',
     'openid': 'python-openid<=2.2.5',
     'picklefield': 'django-picklefield==0.3.0',
