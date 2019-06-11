@@ -17,7 +17,7 @@ REQUIREMENTS = {
     'appconf': 'django-appconf',
     'akismet': 'akismet==1.0.1',
     'avatar': 'django-avatar==2.2.1',
-    'bs4': 'beautifulsoup4<=4.4.1',
+    'bs4': 'beautifulsoup4<=4.7.1',
     'coffin': 'Coffin>=0.3,<=0.3.8',
     'compressor': 'django-compressor>=1.3,<=1.5',
     'django': 'django>=1.8,<1.9',
