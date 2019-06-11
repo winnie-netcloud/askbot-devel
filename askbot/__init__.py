@@ -39,7 +39,7 @@ REQUIREMENTS = {
     'pystache': 'pystache==0.3.1',
     'pytz': 'pytz<=2019.1',
     'captcha': 'django-recaptcha>=1.0.3,<=1.0.5',
-    'cas': 'python-cas==1.1.0',
+    'cas': 'python-cas==1.4.0',
     'responses': 'responses>=0.9.0',
     'requirements': 'requirements-parser==0.2.0',
     'robots': 'django-robots==1.1',
