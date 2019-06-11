@@ -31,7 +31,7 @@ REQUIREMENTS = {
     'jsonfield': 'jsonfield<=1.0.3',
     'jwt': 'pyjwt<=1.4.0',
     'keyedcache': 'django-keyedcache<=1.5.1',
-    'markdown2': 'markdown2<=2.3.1',
+    'markdown2': 'markdown2<=2.3.8',
     'mock': 'mock==2.0.0',
     'oauth2': 'oauth2<=1.9.0.post1',
     'openid': 'python-openid<=2.2.5',
