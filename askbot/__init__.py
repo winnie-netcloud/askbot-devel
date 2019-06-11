@@ -37,7 +37,7 @@ REQUIREMENTS = {
     'openid': 'python-openid<=2.2.5',
     'picklefield': 'django-picklefield==0.3.0',
     'pystache': 'pystache==0.3.1',
-    'pytz': 'pytz<=2016.4',
+    'pytz': 'pytz<=2019.1',
     'captcha': 'django-recaptcha>=1.0.3,<=1.0.5',
     'cas': 'python-cas==1.1.0',
     'responses': 'responses>=0.9.0',
