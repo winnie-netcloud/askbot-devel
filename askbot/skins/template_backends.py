@@ -1,8 +1,8 @@
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.template.backends.base import BaseEngine
-from askbot.skins.loaders import Loader, get_skin
 from askbot.utils.loading import load_module
+from django_jinja.base import dict_from_context
 
 try:
     import django.template.backends.jinja2 # exists only in Django1.8+
@@ -85,9 +85,15 @@ class Template(object):
     def render(self, context=None, request=None):
         if context is None:
             context = {}
+        else:
+            context = dict_from_context(context)
 
         if request is not None:
             context['request'] = request
+            context['csrf_input'] = csrf_input_lazy(request)
+            context['csrf_token'] = csrf_token_lazy(request)
             context = self.update_context(context, request)
 
         return self.template.render(context)
+
+django.template.backends.jinja2.Template = Template

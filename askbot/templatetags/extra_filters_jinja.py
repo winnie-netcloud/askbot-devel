@@ -219,26 +219,22 @@ slugify = register.filter(slugify)
 
 register.filter(
             name = 'intcomma',
-            filter_func = humanize.intcomma,
-            jinja2_only = True
+            fn = humanize.intcomma
         )
 
 register.filter(
             name = 'urlencode',
-            filter_func = defaultfilters.urlencode,
-            jinja2_only = True
+            fn = defaultfilters.urlencode
         )
 
 register.filter(
             name = 'linebreaks',
-            filter_func = defaultfilters.linebreaks,
-            jinja2_only = True
+            fn = defaultfilters.linebreaks
         )
 
 register.filter(
             name = 'default_if_none',
-            filter_func = defaultfilters.default_if_none,
-            jinja2_only = True
+            fn = defaultfilters.default_if_none
         )
 
 def make_template_filter_from_permission_assertion(
@@ -429,3 +425,36 @@ def convert_markdown(text):
 def convert_text(text):
     """converts text with the currently selected editor"""
     return _convert_text(text)
+
+# escapejs somehow got lost along the way. The following is from
+# https://stackoverflow.com/a/12340004/1129682
+@register.filter
+def escapejs(text):
+    return simplejson.dumps(str(text))
+
+# with coffin we also threw out the url filter. in Coffin-0.3.8 there is this
+# comment on the url filter:
+# > This is an alternative to the {% url %} tag. It comes from a time
+# > before Coffin had a port of the tag.
+# Maybe get rid of the filter as it seems outdated, non-standard and does not
+# yield any benefits?
+# This code was shamelessly copied from Coffin-0.3.8.
+
+@register.filter
+def url(viewname, *args, **kwargs):
+    from django.core.urlresolvers import reverse, NoReverseMatch
+
+    # Try to look up the URL twice: once given the view name,
+    # and again relative to what we guess is the "main" app.
+    url = ''
+    try:
+        url = reverse(viewname, args=args, kwargs=kwargs,
+            current_app=None)
+    except NoReverseMatch:
+        projectname = django_settings.SETTINGS_MODULE.split('.')[0]
+        try:
+            url = reverse(projectname + '.' + viewname,
+                          args=args, kwargs=kwargs)
+        except NoReverseMatch:
+                raise
+    return url

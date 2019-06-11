@@ -30,6 +30,7 @@ from askbot.conf import settings as askbot_settings
 from askbot.tests.utils import skipIf
 from askbot.tests.utils import with_settings
 
+from askbot.skins.template_backends import Template as AskbotTemplate
 
 def patch_jinja2():
     from jinja2 import Template
@@ -132,7 +133,7 @@ class PageLoadTestCase(AskbotTestCase):
 
         if template and status_code != 302:
             if hasattr(r, 'template'):
-                if isinstance(r.template, coffin.template.Template):
+                if isinstance(r.template, AskbotTemplate):
                     self.assertEqual(r.template.name, template)
                     return
 
