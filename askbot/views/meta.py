@@ -31,7 +31,7 @@ from askbot.utils.forms import get_next_url
 from askbot.mail.messages import FeedbackEmail
 from askbot.models import get_users_by_role, BadgeData, Award, User, Tag
 from askbot.models import badges as badge_data
-from askbot.skins.loaders import render_text_into_skin
+from askbot.skins.shortcuts import render_text_into_skin
 from askbot.utils.decorators import moderators_only
 from askbot.utils.forms import get_next_url
 from askbot.utils import functions

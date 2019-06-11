@@ -45,8 +45,8 @@ from askbot.utils.functions import decode_and_loads
 from askbot.utils.html import get_login_link
 from askbot.utils.akismet_utils import akismet_check_spam
 from django.template import RequestContext
-from askbot.skins.loaders import render_into_skin_as_string
-from askbot.skins.loaders import render_text_into_skin
+from askbot.skins.shortcuts import render_into_skin_as_string
+from askbot.skins.shortcuts import render_text_into_skin
 from askbot.models.tag import get_tags_by_names
 
 
