@@ -3,7 +3,14 @@ import pytz
 import re
 import time
 import urllib
-from coffin import template as coffin_template
+try:
+    from coffin import template as coffin_template
+except ImportError:
+    from django_jinja import library as d_j_library
+    class coffin_template:
+        @classmethod
+        def Library(cls):
+            return d_j_library
 from bs4 import BeautifulSoup
 from django.core import exceptions as django_exceptions
 from django.utils.encoding import force_unicode
