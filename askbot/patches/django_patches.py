@@ -281,7 +281,10 @@ def add_import_library_function():
 
     #this definition is copy/pasted from django 1.2 source code
     #it is necessary to make Coffin library happy
-    from django.utils.importlib import import_module
+    try:
+        from importlib import import_module
+    except ImportError:
+        from django.utils.importlib import import_module
     class InvalidTemplateLibrary(Exception):
         pass
 

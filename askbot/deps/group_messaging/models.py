@@ -11,7 +11,10 @@ from django.db.models import signals
 from django.template import Context
 from django.template.loader import get_template
 from django.utils import timezone
-from django.utils.importlib import import_module
+try:
+    from importlib import import_module
+except ImportError:
+    from django.utils.importlib import import_module
 from django.utils.translation import ugettext as _
 from askbot.deps.group_messaging.signals import response_created
 from askbot.deps.group_messaging.signals import thread_created
