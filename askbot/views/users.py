@@ -78,7 +78,7 @@ def owner_or_moderator_required(f):
                 #as this one should be accessible to all
                 return HttpResponseRedirect(request.path)
         else:
-            next_url = request.path + '?' + urllib.urlencode(request.REQUEST)
+            next_url = request.path + '?' + urllib.urlencode(getattr(request,request.method))
             params = '?next=%s' % urllib.quote(next_url)
             return HttpResponseRedirect(url_utils.get_login_url() + params)
         return f(request, profile_owner, context)
@@ -184,7 +184,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
 
     is_paginated = True
 
-    form = forms.ShowUsersForm(request.REQUEST)
+    form = forms.ShowUsersForm(getattr(request,request.method))
     form.full_clean()#always valid
     sort_method = form.cleaned_data['sort']
     page = form.cleaned_data['page']
@@ -873,7 +873,7 @@ def user_recent(request, user, context):
                 # don't know what to do here...
                 event_title = ''
                 event_summary = ''
-                
+
             event = Event(
                 time=activity.active_at,
                 type=activity.activity_type,
@@ -1127,7 +1127,7 @@ def user_reputation(request, user, context):
                                         'question__thread',
                                         'user'
                                     )
-                                    
+
 
     def format_graph_data(raw_data, user):
         # prepare data for the graph - last values go in first
@@ -1272,7 +1272,7 @@ def user_select_languages(request, id=None, slug=None):
 
 @csrf.csrf_protect
 def user_unsubscribe(request):
-    form = forms.UnsubscribeForm(request.REQUEST)
+    form = forms.UnsubscribeForm(getattr(request,request.method))
     verified_email = ''
     if form.is_valid() == False:
         result = 'bad_input'
@@ -1431,7 +1431,7 @@ def user(request, id, slug=None, tab_name=None):
 
     if slugify(profile_owner.username) != slug:
         view_url = profile_owner.get_profile_url() + '?' \
-                                + urllib.urlencode(request.REQUEST)
+                                + urllib.urlencode(getattr(request,request.method))
         return HttpResponseRedirect(view_url)
 
     if not tab_name:

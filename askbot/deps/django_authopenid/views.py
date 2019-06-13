@@ -836,7 +836,7 @@ def show_signin_view(
         'login_form': login_form,
         'use_password_login': util.use_password_login(),
         'account_recovery_form': account_recovery_form,
-        'openid_error_message':  request.REQUEST.get('msg',''),
+        'openid_error_message':  request.GET.get('msg',request.POST.get('msg','')),
         'account_recovery_message': account_recovery_message,
         'use_password_login': util.use_password_login(),
     }
@@ -1266,7 +1266,7 @@ def verify_email_and_register(request):
     for GET - give a field to paste the activation code
     and a button to send another validation email.
     """
-    presented_code = request.REQUEST.get('validation_code', None)
+    presented_code = request.GET.get('validation_code',request.POST.get('validation_code',None))
     if presented_code:
         try:
             #we get here with post if button is pushed

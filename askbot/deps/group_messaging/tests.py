@@ -88,7 +88,10 @@ class ViewsTests(GroupMessagingTests):
         assert(method in ('GET', 'POST'))
         spec.append(method)
         request = Mock(spec=spec)
-        request.REQUEST = data
+        if method == 'GET':
+            request.GET = data
+        else:
+            request.POST = data
         setattr(request, method, data)
         request.user = user
         return view_class().get_context(request)

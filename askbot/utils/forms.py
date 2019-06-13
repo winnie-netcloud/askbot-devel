@@ -30,7 +30,7 @@ def get_error_list(form_instance):
     return errors
 
 def get_next_url(request, default=None):
-    return clean_next(request.REQUEST.get('next'), default)
+    return clean_next(request.GET.get('next',request.POST.get('next', default)))
 
 def get_db_object_or_404(params):
     """a utility function that returns an object

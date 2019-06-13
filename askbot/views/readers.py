@@ -308,7 +308,7 @@ def get_top_answers(request):
 
 def tags(request):#view showing a listing of available tags - plain list
 
-    form = ShowTagsForm(request.REQUEST)
+    form = ShowTagsForm(getattr(request,request.method))
     form.full_clean() #always valid
     page = form.cleaned_data['page']
     sort_method = form.cleaned_data['sort']
@@ -390,7 +390,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #process url parameters
     #todo: fix inheritance of sort method from questions
     #before = timezone.now()
-    form = ShowQuestionForm(request.REQUEST)
+    form = ShowQuestionForm(getattr(request,request.method))
     form.full_clean()#always valid
     show_answer = form.cleaned_data['show_answer']
     show_comment = form.cleaned_data['show_comment']

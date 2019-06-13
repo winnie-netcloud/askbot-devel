@@ -108,7 +108,7 @@ class ThreadsList(PjaxView):
             user = request.user
 
         #get threads and the last visit time
-        sender_id = IntegerField().clean(request.REQUEST.get('sender_id', '-1'))
+        sender_id = IntegerField().clean(request.GET.get('sender_id',request.POST.get('sender_id', '-1')))
 
         if sender_id == -2:
             received = Message.objects.get_threads(recipient=user, deleted=True)
