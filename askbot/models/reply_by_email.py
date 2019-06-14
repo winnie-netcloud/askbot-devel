@@ -62,12 +62,12 @@ class ReplyAddress(models.Model):
     and the user"""
     address = models.CharField(max_length=25, unique=True)
     # the emailed post
-    post = models.ForeignKey(Post, null=True, related_name='reply_addresses')
+    post = models.ForeignKey(Post, null=True, related_name='reply_addresses', on_delete=models.CASCADE)
     reply_action = models.CharField(max_length=32, choices=REPLY_ACTION_CHOICES,
                                     default='auto_answer_or_comment')
-    response_post = models.ForeignKey(Post, null=True,
+    response_post = models.ForeignKey(Post, null=True, on_delete=models.CASCADE,
                                       related_name='edit_addresses')
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     allowed_from_email = models.EmailField(max_length=150)
     used_at = models.DateTimeField(null=True, default=None)
 

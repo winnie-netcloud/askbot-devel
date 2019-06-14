@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                 ('openid_url', models.CharField(max_length=255)),
                 ('provider_name', models.CharField(default=b'unknown', max_length=64)),
                 ('last_used_timestamp', models.DateTimeField(null=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('new_password', models.CharField(max_length=30)),
                 ('confirm_key', models.CharField(max_length=40)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, unique=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, unique=True, on_delete=models.CASCADE)),
             ],
             options={
             },

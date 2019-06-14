@@ -258,7 +258,7 @@ class Tag(models.Model):
     STATUS_ACCEPTED = 1
 
     name = models.CharField(max_length=255)
-    created_by = models.ForeignKey(User, related_name='created_tags')
+    created_by = models.ForeignKey(User, related_name='created_tags', on_delete=models.CASCADE)
     language_code = LanguageCodeField()
     suggested_by = models.ManyToManyField(
         User, related_name='suggested_tags',
@@ -272,12 +272,13 @@ class Tag(models.Model):
 
     deleted     = models.BooleanField(default=False)
     deleted_at  = models.DateTimeField(null=True, blank=True)
-    deleted_by  = models.ForeignKey(User, null=True, blank=True, related_name='deleted_tags')
+    deleted_by  = models.ForeignKey(User, null=True, blank=True, related_name='deleted_tags', on_delete=models.CASCADE)
 
     tag_wiki = models.OneToOneField(
                                 'Post',
                                 null=True,
-                                related_name = 'described_tag'
+                                related_name = 'described_tag',
+                                on_delete=models.CASCADE
                             )
 
     objects = TagManager()
@@ -301,8 +302,8 @@ class MarkedTag(models.Model):
         ('bad', ugettext_lazy('ignored')),
         ('subscribed', ugettext_lazy('subscribed')),
     )
-    tag = models.ForeignKey('Tag', related_name='user_selections')
-    user = models.ForeignKey(User, related_name='tag_selections')
+    tag = models.ForeignKey('Tag', related_name='user_selections', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='tag_selections', on_delete=models.CASCADE)
     reason = models.CharField(max_length=16, choices=TAG_MARK_REASONS)
 
     class Meta:
@@ -314,7 +315,7 @@ class TagSynonym(models.Model):
     source_tag_name = models.CharField(max_length=255, unique=True)
     target_tag_name = models.CharField(max_length=255, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    owned_by = models.ForeignKey(User, related_name='tag_synonyms')
+    owned_by = models.ForeignKey(User, related_name='tag_synonyms', on_delete=models.CASCADE)
     auto_rename_count = models.IntegerField(default=0)
     last_auto_rename_at = models.DateTimeField(auto_now=True)
     language_code = LanguageCodeField()

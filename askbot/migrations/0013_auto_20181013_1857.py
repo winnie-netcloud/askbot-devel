@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('role', models.CharField(max_length=64, choices=[(b'recv_feedback', b"Receive user's feedback email"), (b'recv_mod_alerts', b'Receive moderation alert emails'), (b'terminate_accounts', b'Terminate user accounts'), (b'download_user_data', b'Download user data')])),
-                ('user', models.ForeignKey(related_name='askbot_roles', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='askbot_roles', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'askbot_role',

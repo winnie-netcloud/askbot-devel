@@ -74,8 +74,8 @@ class LastVisitTime(models.Model):
     """just remembers when a user has
     last visited a given thread
     """
-    user = models.ForeignKey(User)
-    message = models.ForeignKey('Message')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.ForeignKey('Message', on_delete=models.CASCADE)
     at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -102,7 +102,7 @@ class SenderList(models.Model):
     sender list is populated automatically
     as new messages are created
     """
-    recipient = models.ForeignKey(Group, unique=True)
+    recipient = models.ForeignKey(Group, unique=True, on_delete=models.CASCADE)
     senders = models.ManyToManyField(User)
     objects = SenderListManager()
 
@@ -128,8 +128,8 @@ class MessageMemo(models.Model):
         (ARCHIVED, 'archived'),
         (DELETED, 'deleted')
     )
-    user = models.ForeignKey(User)
-    message = models.ForeignKey('Message', related_name='memos')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.ForeignKey('Message', related_name='memos', on_delete=models.CASCADE)
     status = models.SmallIntegerField(
             choices=STATUS_CHOICES, default=SEEN
         )
@@ -302,7 +302,7 @@ class Message(models.Model):
         default=STORED,
     )
 
-    sender = models.ForeignKey(User, related_name='group_messaging_sent_messages')
+    sender = models.ForeignKey(User, related_name='group_messaging_sent_messages', on_delete=models.CASCADE)
 
     #comma-separated list of a few names
     senders_info = models.TextField(default='')
@@ -311,12 +311,12 @@ class Message(models.Model):
 
     root = models.ForeignKey(
         'self', null=True,
-        blank=True, related_name='descendants'
+        blank=True, related_name='descendants', on_delete=models.CASCADE
     )
 
     parent = models.ForeignKey(
         'self', null=True,
-        blank=True, related_name='children'
+        blank=True, related_name='children', on_delete=models.CASCADE
     )
 
     headline = models.CharField(max_length=MAX_HEADLINE_LENGTH)
@@ -528,7 +528,7 @@ class UnreadInboxCounter(models.Model):
     user, one has to get all groups user belongs to
     and add up the corresponding counts of unread messages.
     """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
 
     def decrement(self):

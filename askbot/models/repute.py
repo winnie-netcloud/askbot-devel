@@ -43,8 +43,8 @@ class Vote(models.Model):
         (VOTE_UP,   u'Up'),
         (VOTE_DOWN, u'Down'),
     )
-    user = models.ForeignKey('auth.User', related_name='askbot_votes')
-    voted_post = models.ForeignKey('Post', related_name='votes')
+    user = models.ForeignKey('auth.User', related_name='askbot_votes', on_delete=models.CASCADE)
+    voted_post = models.ForeignKey('Post', related_name='votes', on_delete=models.CASCADE)
 
     vote = models.SmallIntegerField(choices=VOTE_CHOICES)
     voted_at = models.DateTimeField(default=timezone.now)
@@ -150,9 +150,9 @@ class BadgeData(models.Model):
 
 class Award(models.Model):
     """The awarding of a Badge to a User."""
-    user = models.ForeignKey(User, related_name='award_user')
-    badge = models.ForeignKey(BadgeData, related_name='award_badge')
-    content_type = models.ForeignKey(ContentType)
+    user = models.ForeignKey(User, related_name='award_user', on_delete=models.CASCADE)
+    badge = models.ForeignKey(BadgeData, related_name='award_badge', on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = fields.GenericForeignKey('content_type', 'object_id')
     awarded_at = models.DateTimeField(default=timezone.now)
@@ -202,11 +202,11 @@ class ReputeManager(models.Manager):
 
 class Repute(models.Model):
     """The reputation histories for user"""
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # TODO: combine positive and negative to one value
     positive = models.SmallIntegerField(default=0)
     negative = models.SmallIntegerField(default=0)
-    question = models.ForeignKey('Post', null=True, blank=True)
+    question = models.ForeignKey('Post', null=True, blank=True, on_delete=models.CASCADE)
     language_code = LanguageCodeField()
     reputed_at = models.DateTimeField(default=timezone.now)
     reputation_type = models.SmallIntegerField(choices=const.TYPE_REPUTATION)

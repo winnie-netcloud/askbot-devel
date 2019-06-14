@@ -25,7 +25,7 @@ class ImportedObjectInfo(models.Model):
                 help_text='dotted python path to model',
                 max_length=255
             )
-    run = models.ForeignKey(ImportRun)
+    run = models.ForeignKey(ImportRun, on_delete=models.CASCADE)
     extra_info = PickledObjectField(help_text='to hold dictionary for various data')
 
     class Meta:

@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('object_id', models.PositiveIntegerField(db_index=True)),
                 ('is_auditted', models.BooleanField(default=False)),
                 ('summary', models.TextField(default=b'')),
-                ('content_type', models.ForeignKey(to='contenttypes.ContentType')),
+                ('content_type', models.ForeignKey(to='contenttypes.ContentType', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'activity',
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('status', models.SmallIntegerField(default=0, choices=[(0, b'new'), (1, b'seen')])),
-                ('activity', models.ForeignKey(to='askbot.Activity')),
+                ('activity', models.ForeignKey(to='askbot.Activity', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'askbot_activityauditstatus',
@@ -177,7 +177,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Group',
             fields=[
-                ('group_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='auth.Group')),
+                ('group_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='auth.Group', on_delete=models.CASCADE)),
                 ('logo_url', models.URLField(null=True)),
                 ('moderate_email', models.BooleanField(default=True)),
                 ('moderate_answers_to_enquirers', models.BooleanField(default=False, help_text=b'If true, answers to outsiders questions will be shown to the enquirers only when selected by the group moderators.')),
@@ -197,7 +197,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('level', models.SmallIntegerField(default=1, choices=[(0, b'pending'), (1, b'full')])),
-                ('group', models.ForeignKey(related_name='user_membership', to='auth.Group')),
+                ('group', models.ForeignKey(related_name='user_membership', to='auth.Group', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -320,8 +320,8 @@ class Migration(migrations.Migration):
             name='PostToGroup',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('group', models.ForeignKey(to='askbot.Group')),
-                ('post', models.ForeignKey(to='askbot.Post')),
+                ('group', models.ForeignKey(to='askbot.Group', on_delete=models.CASCADE)),
+                ('post', models.ForeignKey(to='askbot.Post', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'askbot_post_groups',
@@ -333,7 +333,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('when', models.DateTimeField()),
-                ('question', models.ForeignKey(related_name='viewed', to='askbot.Post')),
+                ('question', models.ForeignKey(related_name='viewed', to='askbot.Post', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -349,7 +349,7 @@ class Migration(migrations.Migration):
                 ('search_query', models.CharField(default=b'', max_length=50, null=True, blank=True)),
                 ('order_by', models.CharField(default=b'-added_at', max_length=18, choices=[(b'-added_at', 'date descendant'), (b'added_at', 'date ascendant'), (b'-last_activity_at', 'most recently active'), (b'last_activity_at', 'least recently active'), (b'-answer_count', 'more responses'), (b'answer_count', 'fewer responses'), (b'-points', 'more votes'), (b'points', 'less votes')])),
                 ('style', models.TextField(default=b"\n@import url('http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300,400,700');\nbody {\n    overflow: hidden;\n}\n\n#container {\n    width: 200px;\n    height: 350px;\n}\nul {\n    list-style: none;\n    padding: 5px;\n    margin: 5px;\n}\nli {\n    border-bottom: #CCC 1px solid;\n    padding-bottom: 5px;\n    padding-top: 5px;\n}\nli:last-child {\n    border: none;\n}\na {\n    text-decoration: none;\n    color: #464646;\n    font-family: 'Yanone Kaffeesatz', sans-serif;\n    font-size: 15px;\n}\n", verbose_name='css for the widget', blank=True)),
-                ('group', models.ForeignKey(blank=True, to='askbot.Group', null=True)),
+                ('group', models.ForeignKey(blank=True, to='askbot.Group', null=True, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -363,8 +363,8 @@ class Migration(migrations.Migration):
                 ('reply_action', models.CharField(default=b'auto_answer_or_comment', max_length=32, choices=[(b'post_answer', b'Post an answer'), (b'post_comment', b'Post a comment'), (b'replace_content', b'Edit post'), (b'append_content', b'Append to post'), (b'auto_answer_or_comment', b'Answer or comment, depending on the size of post'), (b'validate_email', b'Validate email and record signature')])),
                 ('allowed_from_email', models.EmailField(max_length=150)),
                 ('used_at', models.DateTimeField(default=None, null=True)),
-                ('post', models.ForeignKey(related_name='reply_addresses', to='askbot.Post', null=True)),
-                ('response_post', models.ForeignKey(related_name='edit_addresses', to='askbot.Post', null=True)),
+                ('post', models.ForeignKey(related_name='reply_addresses', to='askbot.Post', null=True, on_delete=models.CASCADE)),
+                ('response_post', models.ForeignKey(related_name='edit_addresses', to='askbot.Post', null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'askbot_replyaddress',
@@ -381,7 +381,7 @@ class Migration(migrations.Migration):
                 ('reputation_type', models.SmallIntegerField(choices=[(1, b'gain_by_upvoted'), (2, b'gain_by_answer_accepted'), (3, b'gain_by_accepting_answer'), (4, b'gain_by_downvote_canceled'), (5, b'gain_by_canceling_downvote'), (-1, b'lose_by_canceling_accepted_answer'), (-2, b'lose_by_accepted_answer_cancled'), (-3, b'lose_by_downvoted'), (-4, b'lose_by_flagged'), (-5, b'lose_by_downvoting'), (-6, b'lose_by_flagged_lastrevision_3_times'), (-7, b'lose_by_flagged_lastrevision_5_times'), (-8, b'lose_by_upvote_canceled'), (10, b'assigned_by_moderator')])),
                 ('reputation', models.IntegerField(default=1)),
                 ('comment', models.CharField(max_length=128, null=True)),
-                ('question', models.ForeignKey(blank=True, to='askbot.Post', null=True)),
+                ('question', models.ForeignKey(blank=True, to='askbot.Post', null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'repute',
@@ -438,7 +438,7 @@ class Migration(migrations.Migration):
                 ('approved', models.BooleanField(default=True, db_index=True)),
                 ('added_at', models.DateTimeField(auto_now_add=True)),
                 ('points', models.IntegerField(default=0, db_column=b'score')),
-                ('accepted_answer', models.ForeignKey(related_name='+', blank=True, to='askbot.Post', null=True)),
+                ('accepted_answer', models.ForeignKey(related_name='+', blank=True, to='askbot.Post', null=True, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -449,8 +449,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('visibility', models.SmallIntegerField(default=1, choices=[(0, b'show only published responses'), (1, b'show all responses')])),
-                ('group', models.ForeignKey(to='askbot.Group')),
-                ('thread', models.ForeignKey(to='askbot.Thread')),
+                ('group', models.ForeignKey(to='askbot.Group', on_delete=models.CASCADE)),
+                ('thread', models.ForeignKey(to='askbot.Thread', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'askbot_thread_groups',
@@ -460,7 +460,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserProfile',
             fields=[
-                ('auth_user_ptr', models.OneToOneField(parent_link=True, related_name='askbot_profile', primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('auth_user_ptr', models.OneToOneField(parent_link=True, related_name='askbot_profile', primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
                 ('avatar_urls', jsonfield.fields.JSONField(default={})),
                 ('status', models.CharField(default=b'w', max_length=2, choices=[(b'd', 'administrator'), (b'm', 'moderator'), (b'a', 'approved'), (b'w', 'watched'), (b's', 'suspended'), (b'b', 'blocked')])),
                 ('is_fake', models.BooleanField(default=False)),
@@ -505,8 +505,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('vote', models.SmallIntegerField(choices=[(1, 'Up'), (-1, 'Down')])),
                 ('voted_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('user', models.ForeignKey(related_name='votes', to=settings.AUTH_USER_MODEL)),
-                ('voted_post', models.ForeignKey(related_name='votes', to='askbot.Post')),
+                ('user', models.ForeignKey(related_name='votes', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('voted_post', models.ForeignKey(related_name='votes', to='askbot.Post', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'vote',
@@ -524,7 +524,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='thread',
             name='closed_by',
-            field=models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -548,7 +548,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='thread',
             name='last_activity_by',
-            field=models.ForeignKey(related_name='unused_last_active_in_threads', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='unused_last_active_in_threads', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -560,19 +560,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='tagsynonym',
             name='owned_by',
-            field=models.ForeignKey(related_name='tag_synonyms', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='tag_synonyms', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='tag',
             name='created_by',
-            field=models.ForeignKey(related_name='created_tags', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='created_tags', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='tag',
             name='deleted_by',
-            field=models.ForeignKey(related_name='deleted_tags', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='deleted_tags', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -584,7 +584,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='tag',
             name='tag_wiki',
-            field=models.OneToOneField(related_name='described_tag', null=True, to='askbot.Post'),
+            field=models.OneToOneField(related_name='described_tag', null=True, to='askbot.Post', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -594,19 +594,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='repute',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='replyaddress',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='questionview',
             name='who',
-            field=models.ForeignKey(related_name='question_views', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='question_views', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -616,19 +616,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='postrevision',
             name='approved_by',
-            field=models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='postrevision',
             name='author',
-            field=models.ForeignKey(related_name='postrevisions', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='postrevisions', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='postrevision',
             name='post',
-            field=models.ForeignKey(related_name='revisions', blank=True, to='askbot.Post', null=True),
+            field=models.ForeignKey(related_name='revisions', blank=True, to='askbot.Post', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -638,37 +638,37 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='postflagreason',
             name='author',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='postflagreason',
             name='details',
-            field=models.ForeignKey(related_name='post_reject_reasons', to='askbot.Post'),
+            field=models.ForeignKey(related_name='post_reject_reasons', to='askbot.Post', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='post',
             name='author',
-            field=models.ForeignKey(related_name='posts', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='posts', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='post',
             name='current_revision',
-            field=models.ForeignKey(related_name='rendered_posts', blank=True, to='askbot.PostRevision', null=True),
+            field=models.ForeignKey(related_name='rendered_posts', blank=True, to='askbot.PostRevision', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='post',
             name='deleted_by',
-            field=models.ForeignKey(related_name='deleted_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='deleted_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='post',
             name='endorsed_by',
-            field=models.ForeignKey(related_name='endorsed_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='endorsed_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -680,55 +680,55 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='last_edited_by',
-            field=models.ForeignKey(related_name='last_edited_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='last_edited_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='post',
             name='locked_by',
-            field=models.ForeignKey(related_name='locked_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='locked_posts', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='post',
             name='parent',
-            field=models.ForeignKey(related_name='comments', blank=True, to='askbot.Post', null=True),
+            field=models.ForeignKey(related_name='comments', blank=True, to='askbot.Post', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='post',
             name='thread',
-            field=models.ForeignKey(related_name='posts', default=None, blank=True, to='askbot.Thread', null=True),
+            field=models.ForeignKey(related_name='posts', default=None, blank=True, to='askbot.Thread', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='message',
             name='user',
-            field=models.ForeignKey(related_name='_message_set', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='_message_set', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='markedtag',
             name='tag',
-            field=models.ForeignKey(related_name='user_selections', to='askbot.Tag'),
+            field=models.ForeignKey(related_name='user_selections', to='askbot.Tag', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='markedtag',
             name='user',
-            field=models.ForeignKey(related_name='tag_selections', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='tag_selections', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='importedobjectinfo',
             name='run',
-            field=models.ForeignKey(to='askbot.ImportRun'),
+            field=models.ForeignKey(to='askbot.ImportRun', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='groupmembership',
             name='user',
-            field=models.ForeignKey(related_name='group_membership', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='group_membership', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -738,25 +738,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='group',
             name='description',
-            field=models.OneToOneField(related_name='described_group', null=True, blank=True, to='askbot.Post'),
+            field=models.OneToOneField(related_name='described_group', null=True, blank=True, to='askbot.Post', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='favoritequestion',
             name='thread',
-            field=models.ForeignKey(to='askbot.Thread'),
+            field=models.ForeignKey(to='askbot.Thread', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='favoritequestion',
             name='user',
-            field=models.ForeignKey(related_name='user_favorite_questions', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='user_favorite_questions', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='emailfeedsetting',
             name='subscriber',
-            field=models.ForeignKey(related_name='notification_subscriptions', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='notification_subscriptions', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -766,19 +766,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='draftquestion',
             name='author',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='draftanswer',
             name='author',
-            field=models.ForeignKey(related_name='draft_answers', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='draft_answers', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='draftanswer',
             name='thread',
-            field=models.ForeignKey(related_name='draft_answers', to='askbot.Thread'),
+            field=models.ForeignKey(related_name='draft_answers', to='askbot.Thread', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -808,55 +808,55 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='award',
             name='badge',
-            field=models.ForeignKey(related_name='award_badge', to='askbot.BadgeData'),
+            field=models.ForeignKey(related_name='award_badge', to='askbot.BadgeData', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='award',
             name='content_type',
-            field=models.ForeignKey(to='contenttypes.ContentType'),
+            field=models.ForeignKey(to='contenttypes.ContentType', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='award',
             name='user',
-            field=models.ForeignKey(related_name='award_user', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='award_user', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='askwidget',
             name='group',
-            field=models.ForeignKey(blank=True, to='askbot.Group', null=True),
+            field=models.ForeignKey(blank=True, to='askbot.Group', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='askwidget',
             name='tag',
-            field=models.ForeignKey(blank=True, to='askbot.Tag', null=True),
+            field=models.ForeignKey(blank=True, to='askbot.Tag', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='anonymousquestion',
             name='author',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='anonymousanswer',
             name='author',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='anonymousanswer',
             name='question',
-            field=models.ForeignKey(related_name='anonymous_answers', to='askbot.Post'),
+            field=models.ForeignKey(related_name='anonymous_answers', to='askbot.Post', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='activityauditstatus',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -866,7 +866,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='activity',
             name='question',
-            field=models.ForeignKey(to='askbot.Post', null=True),
+            field=models.ForeignKey(to='askbot.Post', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -878,7 +878,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='activity',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

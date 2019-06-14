@@ -6,8 +6,8 @@ from askbot.const import DEFAULT_QUESTION_WIDGET_STYLE, SEARCH_ORDER_BY
 class AskWidget(models.Model):
     '''stores widgets styles and options'''
     title = models.CharField(max_length=100)
-    group = models.ForeignKey(Group, null=True, blank=True)
-    tag = models.ForeignKey(Tag, null=True, blank=True)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, null=True, blank=True, on_delete=models.CASCADE)
 
     include_text_field = models.BooleanField(default=False, blank=True)
 
@@ -25,7 +25,7 @@ class QuestionWidget(models.Model):
     title = models.CharField(max_length=100)
     question_number = models.PositiveIntegerField(default=7)
     tagnames = models.CharField(ugettext_lazy('tags'), max_length=50)
-    group = models.ForeignKey(Group, null=True, blank=True)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     search_query = models.CharField(
         max_length=50, null=True, blank=True, default=''
     )

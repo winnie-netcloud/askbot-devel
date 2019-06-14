@@ -32,7 +32,7 @@ def get_role_set(status):
 
 class Role(models.Model):
     """Assigns permissions to users."""
-    user = models.ForeignKey(User, related_name='askbot_roles')
+    user = models.ForeignKey(User, related_name='askbot_roles', on_delete=models.CASCADE)
     role = models.CharField(max_length=64, choices=ROLE_CHOICES)
 
     class Meta: #pylint: disable=missing-docstring, old-style-class, no-init, too-few-public-methods

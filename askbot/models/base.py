@@ -49,7 +49,7 @@ class AnonymousContent(models.Model):
     wiki = models.BooleanField(default=False)
     added_at = models.DateTimeField(default=timezone.now)
     ip_addr = models.GenericIPAddressField(max_length=45) #allow high port numbers
-    author = models.ForeignKey(User,null=True)
+    author = models.ForeignKey(User,null=True, on_delete=models.CASCADE)
     text = models.TextField()
 
     class Meta:

@@ -99,7 +99,7 @@ class MockUser(object):
 
     def get_avatar_url(self, size):
         return ''
-    
+
     def get_full_name(self):
         return ''
 
@@ -279,8 +279,8 @@ class ActivityAuditStatus(models.Model):
         (STATUS_NEW, 'new'),
         (STATUS_SEEN, 'seen')
     )
-    user = models.ForeignKey(User)
-    activity = models.ForeignKey('Activity')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_NEW)
 
     class Meta:
@@ -296,16 +296,16 @@ class Activity(models.Model):
     """
     We keep some history data for user activities
     """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipients = models.ManyToManyField(User, through=ActivityAuditStatus, related_name='incoming_activity')
     activity_type = models.SmallIntegerField(choices=const.TYPE_ACTIVITY, db_index=True)
     active_at = models.DateTimeField(default=timezone.now)
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(db_index=True)
     content_object = fields.GenericForeignKey('content_type', 'object_id')
 
     #todo: remove this denorm question field when Post model is set up
-    question = models.ForeignKey('Post', null=True)
+    question = models.ForeignKey('Post', null=True, on_delete=models.CASCADE)
 
     is_auditted = models.BooleanField(default=False)
     #add summary field.
@@ -423,7 +423,7 @@ class EmailFeedSetting(models.Model):
         ('n', ugettext_lazy('No email')),
     )
 
-    subscriber = models.ForeignKey(User, related_name='notification_subscriptions')
+    subscriber = models.ForeignKey(User, related_name='notification_subscriptions', on_delete=models.CASCADE)
     feed_type = models.CharField(max_length=16, choices=FEED_TYPE_CHOICES)
     frequency = models.CharField(
         max_length=8, choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
@@ -490,8 +490,8 @@ class GroupMembership(models.Model):
     )
     ALL_LEVEL_CHOICES = LEVEL_CHOICES + ((NONE, 'none'),)
 
-    group = models.ForeignKey(AuthGroup, related_name='user_membership')
-    user = models.ForeignKey(User, related_name='group_membership')
+    group = models.ForeignKey(AuthGroup, related_name='user_membership', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='group_membership', on_delete=models.CASCADE)
     level = models.SmallIntegerField(
         default=FULL, choices=LEVEL_CHOICES,)
 
@@ -593,7 +593,7 @@ class Group(AuthGroup):
     logo_url = models.URLField(null=True)
     description = models.OneToOneField(
                     'Post', related_name='described_group',
-                    null=True, blank=True
+                    null=True, blank=True, on_delete=models.CASCADE
                 )
     moderate_email = models.BooleanField(default=True)
     moderate_answers_to_enquirers = models.BooleanField(

@@ -45,7 +45,7 @@ class UserAssociation(models.Model):
     #todo: rename this field so that it sounds good for other methods
     #for exaple, for password provider this will hold password
     openid_url = models.CharField(blank=False, max_length=255)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     #in the future this must be turned into an
     #association with a Provider record
     #to hold things like login badge, etc
@@ -86,7 +86,7 @@ class UserPasswordQueue(models.Model):
     """
     model for new password queue.
     """
-    user = models.ForeignKey(User, unique=True)
+    user = models.ForeignKey(User, unique=True, on_delete=models.CASCADE)
     new_password = models.CharField(max_length=30)
     confirm_key = models.CharField(max_length=40)
 

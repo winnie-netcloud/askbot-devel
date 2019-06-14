@@ -573,8 +573,8 @@ class ThreadToGroup(models.Model):
         (SHOW_PUBLISHED_RESPONSES, 'show only published responses'),
         (SHOW_ALL_RESPONSES, 'show all responses')
     )
-    thread = models.ForeignKey('Thread')
-    group = models.ForeignKey(Group)
+    thread = models.ForeignKey('Thread', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     visibility = models.SmallIntegerField(choices=VISIBILITY_CHOICES,
                                           default=SHOW_ALL_RESPONSES)
 
@@ -599,7 +599,7 @@ class Thread(models.Model):
     favourite_count = models.PositiveIntegerField(default=0)
     answer_count = models.PositiveIntegerField(default=0)
     last_activity_at = models.DateTimeField(default=timezone.now)
-    last_activity_by = models.ForeignKey(User, related_name='unused_last_active_in_threads')
+    last_activity_by = models.ForeignKey(User, related_name='unused_last_active_in_threads', on_delete=models.CASCADE)
     language_code = LanguageCodeField()
 
     # TODO: these two are redundant (we used to have a "star" and "subscribe"
@@ -609,7 +609,7 @@ class Thread(models.Model):
                                           related_name='unused_favorite_threads')
 
     closed = models.BooleanField(default=False)
-    closed_by = models.ForeignKey(User, null=True, blank=True)  # , related_name='closed_questions')
+    closed_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)  # , related_name='closed_questions')
     closed_at = models.DateTimeField(null=True, blank=True)
     close_reason = models.SmallIntegerField(choices=const.CLOSE_REASONS,
                                             null=True,
@@ -621,7 +621,7 @@ class Thread(models.Model):
     # approvals - by whom and when
     approved = models.BooleanField(default=True, db_index=True)
 
-    accepted_answer = models.ForeignKey('Post', null=True, blank=True, related_name='+')
+    accepted_answer = models.ForeignKey('Post', null=True, blank=True, related_name='+', on_delete=models.CASCADE)
     added_at = models.DateTimeField(auto_now_add=True)
 
     # db_column will be removed later
@@ -1743,8 +1743,8 @@ class Thread(models.Model):
 
 
 class QuestionView(models.Model):
-    question = models.ForeignKey('Post', related_name='viewed')
-    who = models.ForeignKey(User, related_name='question_views')
+    question = models.ForeignKey('Post', related_name='viewed', on_delete=models.CASCADE)
+    who = models.ForeignKey(User, related_name='question_views', on_delete=models.CASCADE)
     when = models.DateTimeField()
 
     class Meta:
@@ -1753,8 +1753,8 @@ class QuestionView(models.Model):
 
 class FavoriteQuestion(models.Model):
     """A favorite Question of a User."""
-    thread = models.ForeignKey(Thread)
-    user = models.ForeignKey(User, related_name='user_favorite_questions')
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='user_favorite_questions', on_delete=models.CASCADE)
     added_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -1774,7 +1774,7 @@ class DraftQuestion(DraftContent):
     """Provides space to solve unpublished draft
     questions. Contents is used to populate the Ask form.
     """
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=300, null=True)
     tagnames = models.CharField(max_length=125, null=True)
 

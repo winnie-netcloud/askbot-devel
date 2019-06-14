@@ -107,7 +107,8 @@ class UserProfile(models.Model):
                                 User,
                                 parent_link=True,
                                 related_name='askbot_profile',
-                                primary_key=True
+                                primary_key=True,
+                                on_delete=models.CASCADE
                             )
     avatar_urls = JSONField(default={})
     status = models.CharField(
@@ -193,7 +194,7 @@ class UserProfile(models.Model):
 
 
 class LocalizedUserProfile(models.Model):
-    auth_user = models.ForeignKey(User, related_name='localized_askbot_profiles')
+    auth_user = models.ForeignKey(User, related_name='localized_askbot_profiles', on_delete=models.CASCADE)
     about = models.TextField(blank=True)
     language_code = LanguageCodeField(db_index=True)
     reputation = models.PositiveIntegerField(default=0, db_index=True)

@@ -34,10 +34,10 @@ class Migration(migrations.Migration):
                 ('sent_at', models.DateTimeField(auto_now_add=True)),
                 ('last_active_at', models.DateTimeField(auto_now_add=True)),
                 ('active_until', models.DateTimeField(null=True, blank=True)),
-                ('parent', models.ForeignKey(related_name='children', blank=True, to='group_messaging.Message', null=True)),
+                ('parent', models.ForeignKey(related_name='children', blank=True, to='group_messaging.Message', null=True, on_delete=models.CASCADE)),
                 ('recipients', models.ManyToManyField(to='auth.Group')),
-                ('root', models.ForeignKey(related_name='descendants', blank=True, to='group_messaging.Message', null=True)),
-                ('sender', models.ForeignKey(related_name='group_messaging_sent_messages', to=settings.AUTH_USER_MODEL)),
+                ('root', models.ForeignKey(related_name='descendants', blank=True, to='group_messaging.Message', null=True, on_delete=models.CASCADE)),
+                ('sender', models.ForeignKey(related_name='group_messaging_sent_messages', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -48,8 +48,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('status', models.SmallIntegerField(default=0, choices=[(0, b'seen'), (1, b'archived'), (2, b'deleted')])),
-                ('message', models.ForeignKey(related_name='memos', to='group_messaging.Message')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('message', models.ForeignKey(related_name='memos', to='group_messaging.Message', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
             name='SenderList',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('recipient', models.ForeignKey(to='auth.Group', unique=True)),
+                ('recipient', models.ForeignKey(to='auth.Group', unique=True, on_delete=models.CASCADE)),
                 ('senders', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('count', models.PositiveIntegerField(default=0)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -84,13 +84,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='lastvisittime',
             name='message',
-            field=models.ForeignKey(to='group_messaging.Message'),
+            field=models.ForeignKey(to='group_messaging.Message', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='lastvisittime',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(

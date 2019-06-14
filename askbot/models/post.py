@@ -82,8 +82,8 @@ def default_html_moderator(post):
 
 
 class PostToGroup(models.Model):
-    post = models.ForeignKey('Post')
-    group = models.ForeignKey('Group')
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    group = models.ForeignKey('Group', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('post', 'group')
@@ -382,18 +382,21 @@ class Post(models.Model):
 
     # Answer or Question for Comment
     parent = models.ForeignKey('Post', blank=True, null=True,
-                               related_name='comments')
+                               related_name='comments',
+                               on_delete=models.CASCADE)
     thread = models.ForeignKey('Thread', blank=True, null=True, default=None,
-                               related_name='posts')
+                               related_name='posts',
+                               on_delete=models.CASCADE)
     # nullable b/c we have to first save post and then add link to current
     # revision (which has a non-nullable fk to post)
     current_revision = models.ForeignKey('PostRevision', blank=True, null=True,
-                                         related_name='rendered_posts')
+                                         related_name='rendered_posts',
+                                         on_delete=models.CASCADE)
     # used for group-private posts
     groups = models.ManyToManyField('Group', through='PostToGroup',
                                     related_name='group_posts')
 
-    author = models.ForeignKey(User, related_name='posts')
+    author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
     added_at = models.DateTimeField(default=timezone.now)
 
     # endorsed == accepted as best in the case of answer
@@ -402,7 +405,8 @@ class Post(models.Model):
     # note: accepted answer is also denormalized on the Thread model
     endorsed = models.BooleanField(default=False, db_index=True)
     endorsed_by = models.ForeignKey(User, null=True, blank=True,
-                                    related_name='endorsed_posts')
+                                    related_name='endorsed_posts',
+                                    on_delete=models.CASCADE)
     endorsed_at = models.DateTimeField(null=True, blank=True)
 
     # denormalized data: the core approval of the posts is made
@@ -413,14 +417,16 @@ class Post(models.Model):
     deleted = models.BooleanField(default=False, db_index=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     deleted_by = models.ForeignKey(User, null=True, blank=True,
-                                   related_name='deleted_posts')
+                                   related_name='deleted_posts',
+                                   on_delete=models.CASCADE)
 
     wiki = models.BooleanField(default=False)
     wikified_at = models.DateTimeField(null=True, blank=True)
 
     locked = models.BooleanField(default=False)
     locked_by = models.ForeignKey(User, null=True, blank=True,
-                                  related_name='locked_posts')
+                                  related_name='locked_posts',
+                                  on_delete=models.CASCADE)
     locked_at = models.DateTimeField(null=True, blank=True)
 
     points = models.IntegerField(default=0, db_column='score')
@@ -431,7 +437,7 @@ class Post(models.Model):
     offensive_flag_count = models.SmallIntegerField(default=0)
 
     last_edited_at = models.DateTimeField(null=True, blank=True)
-    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='last_edited_posts')
+    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='last_edited_posts', on_delete=models.CASCADE)
 
     html = models.TextField(null=True)  # html rendition of the latest revision
     text = models.TextField(null=True)  # denormalized copy of latest revision
@@ -2140,15 +2146,15 @@ class PostRevision(models.Model):
     )
 
     post = models.ForeignKey('askbot.Post', related_name='revisions',
-                             null=True, blank=True)
+                             null=True, blank=True, on_delete=models.CASCADE)
     revision = models.PositiveIntegerField()
-    author = models.ForeignKey('auth.User', related_name='%(class)ss')
+    author = models.ForeignKey('auth.User', related_name='%(class)ss', on_delete=models.CASCADE)
     revised_at = models.DateTimeField()
     summary = models.CharField(max_length=300, blank=True)
     text = models.TextField(blank=True)
 
     approved = models.BooleanField(default=False, db_index=True)
-    approved_by = models.ForeignKey(User, null=True, blank=True)
+    approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     approved_at = models.DateTimeField(null=True, blank=True)
 
     by_email = models.BooleanField(default=False)  # true, if edited by email
@@ -2313,9 +2319,9 @@ class PostRevision(models.Model):
 
 class PostFlagReason(models.Model):
     added_at = models.DateTimeField()
-    author = models.ForeignKey('auth.User')
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
-    details = models.ForeignKey(Post, related_name='post_reject_reasons')
+    details = models.ForeignKey(Post, related_name='post_reject_reasons', on_delete=models.CASCADE)
 
     class Meta:
         app_label = 'askbot'
@@ -2328,8 +2334,8 @@ class DraftAnswer(DraftContent):
     note that unlike ``AnonymousAnswer`` the foreign key
     is going to ``Thread`` as it should.
     """
-    thread = models.ForeignKey('Thread', related_name='draft_answers')
-    author = models.ForeignKey(User, related_name='draft_answers')
+    thread = models.ForeignKey('Thread', related_name='draft_answers', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='draft_answers', on_delete=models.CASCADE)
 
     class Meta:
         app_label = 'askbot'
@@ -2337,7 +2343,7 @@ class DraftAnswer(DraftContent):
 
 class AnonymousAnswer(AnonymousContent):
     """Todo: re-route the foreign key to ``Thread``"""
-    question = models.ForeignKey(Post, related_name='anonymous_answers')
+    question = models.ForeignKey(Post, related_name='anonymous_answers', on_delete=models.CASCADE)
 
     def publish(self, user):
         added_at = timezone.now()

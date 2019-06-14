@@ -119,7 +119,7 @@ class User(models.Model):
     # can't use foreign keys because Zendesk doesn't necessarily remove
     # the user's organization_id if it's deleted which then causes an
     # integrity error when trying to import here
-    # organization = models.ForeignKey(Organization, to_field='organization_id', null=True)
+    # organization = models.ForeignKey(Organization, to_field='organization_id', null=True, on_delete=models.CASCADE)
 
 class Forum(models.Model):
     description = models.CharField(max_length = 255, null = True)
