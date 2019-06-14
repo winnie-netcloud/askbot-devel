@@ -24,7 +24,7 @@ class XMLExportSerializer(Serializer):
             #the line below is the only one that was changed
             for field in obj._meta.fields:
                 if field.serialize:
-                    if field.rel is None:
+                    if field.remote_field is None:
                         if self.selected_fields is None or field.attname in self.selected_fields:
                             self.handle_field(obj, field)
                     else:
@@ -165,12 +165,12 @@ def sort_dependencies(app_list):
             # Now add a dependency for any FK or M2M relation with
             # a model that defines a natural key
             for field in model._meta.fields:
-                if hasattr(field.rel, 'to'):
-                    rel_model = field.rel.to
+                if hasattr(field.remote_field, 'to'):
+                    rel_model = field.remote_field.to
                     if hasattr(rel_model, 'natural_key'):
                         deps.append(rel_model)
             for field in model._meta.many_to_many:
-                rel_model = field.rel.to
+                rel_model = field.remote_field.to
                 if hasattr(rel_model, 'natural_key'):
                     deps.append(rel_model)
             model_dependencies.append((model, deps))

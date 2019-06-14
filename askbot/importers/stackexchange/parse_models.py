@@ -182,7 +182,7 @@ def parse_value(input, field_object):
             id = int(input)
         except:
             raise Exception('non-numeric foreign key %s' % input)
-        related_model = field_object.rel.to
+        related_model = field_object.remove_field.to
         try:
             return related_model.objects.get(id=id)
         except related_model.DoesNotExist:
