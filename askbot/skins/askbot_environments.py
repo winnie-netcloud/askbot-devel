@@ -13,7 +13,10 @@ from jinja2.exceptions import TemplateNotFound
 
 from django.utils import translation
 from django.conf import settings as django_settings
-from django.template.loader import BaseLoader
+try:
+    from django.template.loaders.base import Loader as BaseLoader
+except ImportError:
+    from django.template.loader import BaseLoader
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateDoesNotExist
 

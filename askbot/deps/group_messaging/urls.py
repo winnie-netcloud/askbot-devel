@@ -1,12 +1,12 @@
 """url configuration for the group_messaging application"""
 try:
-    from django.conf.urls import patterns, url
+    from django.conf.urls import url
 except ImportError:
-    from django.conf.urls.defaults import patterns, url
+    from django.conf.urls.defaults import url
 
 from askbot.deps.group_messaging import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(
         '^threads/$',
         views.ThreadsList().as_view(),
@@ -42,4 +42,4 @@ urlpatterns = patterns('',
         views.PostReply().as_view(),
         name='post_reply'
     )
-)
+]

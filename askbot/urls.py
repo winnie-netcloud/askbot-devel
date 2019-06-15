@@ -5,9 +5,12 @@ import os.path
 from django.conf import settings
 from django.contrib import admin
 try:
-    from django.conf.urls import url, patterns, include
+    from django.conf.urls import url, include
 except ImportError:
-    from django.conf.urls.defaults import url, patterns, include
+    from django.conf.urls.defaults import url, include
+from django.contrib.sitemaps import views as SitemapViews
+from django.views import static as StaticViews
+from django.views import i18n as I18nViews
 
 from askbot import views
 from askbot.feed import RssLastestQuestionsFeed, RssIndividualQuestionFeed
@@ -33,8 +36,7 @@ MAIN_PAGE_BASE_URL = settings.ASKBOT_MAIN_PAGE_BASE_URL
 QUESTION_PAGE_BASE_URL = settings.ASKBOT_QUESTION_PAGE_BASE_URL
 
 APP_PATH = os.path.dirname(__file__)
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', views.readers.index, name='index'),
     # BEGIN Questions (main page) urls. All this urls work both normally and through ajax
     url(
@@ -153,7 +155,7 @@ urlpatterns = patterns(
     ),
     url(
         r'^sitemap.xml$',
-        'django.contrib.sitemaps.views.sitemap',
+        SitemapViews.sitemap,
         {'sitemaps': sitemaps},
         name='sitemap'
     ),
@@ -690,13 +692,13 @@ urlpatterns = patterns(
     ),
     service_url(
         r'^doc/(?P<path>.*)$',
-        'django.views.static.serve',
+        StaticViews.serve,
         {'document_root': os.path.join(APP_PATH, 'doc', 'build', 'html').replace('\\', '/')},
         name='askbot_docs',
     ),
     service_url(
         r'^jsi18n/$',
-        'django.views.i18n.javascript_catalog',
+        I18nViews.javascript_catalog,
         {'domain': 'djangojs', 'packages': ('askbot',)},
         name='askbot_jsi18n'
     ),
@@ -710,18 +712,19 @@ urlpatterns = patterns(
     url('^api/v1/users/(?P<user_id>\d+)/$', views.api_v1.user, name='api_v1_user'),
     url('^api/v1/questions/$', views.api_v1.questions, name='api_v1_questions'),
     url('^api/v1/questions/(?P<question_id>\d+)/$', views.api_v1.question, name='api_v1_question'),
-)
+]
 
 if 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS:
-    urlpatterns += (
+    urlpatterns.append(
         url(
             r'^%s' % pgettext('urls', 'account/'),
             include('askbot.deps.django_authopenid.urls')
-        ),
+        )
     )
 
 if 'avatar' in settings.INSTALLED_APPS:
-    urlpatterns += (
+    from avatar import views as AvatarViews
+    urlpatterns += [
         # avatar views are added here, because some need
         # either dynamic extra context or custom redirect
         # or extra parameter in the urls
@@ -747,7 +750,7 @@ if 'avatar' in settings.INSTALLED_APPS:
         ),
         service_url(  # this url is used without changes as in the avatar app
             '^avatar/render-primary/(?P<user>[\w\d\.\-_]+)/(?P<size>[\d]+)/$',
-            'avatar.views.render_primary',
+            AvatarViews.render_primary,
             name='avatar_render_primary'
         ),
         service_url(
@@ -760,4 +763,4 @@ if 'avatar' in settings.INSTALLED_APPS:
             views.avatar_views.enable_default_avatar,
             name='askbot_avatar_enable_default_avatar'
         )
-    )
+    ]
