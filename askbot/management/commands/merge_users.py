@@ -29,11 +29,21 @@ class MergeUsersBaseCommand(BaseCommand):
         self.parse_arguments(*arguments)
         self.prepare()
 
-        rel_objs = User._meta.get_all_related_objects()
+        #rel_objs = User._meta.get_all_related_objects()
+        # according to https://docs.djangoproject.com/en/1.10/ref/models/meta/ this becomes:
+        rel_objs = [
+            f for f in User._meta.get_fields()
+            if (f.one_to_many or f.one_to_one)
+            and f.auto_created and not f.concrete
+        ]
         for rel in rel_objs:
             self.process_relation(rel)
 
-        rel_m2ms = User._meta.get_all_related_many_to_many_objects()
+        #rel_m2ms = User._meta.get_all_related_many_to_many_objects()
+        rel_m2ms = [
+            f for f in User._meta.get_fields(include_hidden=True)
+            if f.many_to_many and f.auto_created
+        ]
         for rel in rel_m2ms:
             self.process_m2m(rel)
 
