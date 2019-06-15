@@ -140,6 +140,11 @@ def _get_failure_view():
     """
     return get_callable(settings.CSRF_FAILURE_VIEW)
 
+# I am uncertain whether I should be a fan of this DIY CSRF, but lets keep it
+# somewhat compatible for the moment
+def _get_new_csrf_string():
+    return _get_new_csrf_key()
+
 def _get_new_csrf_key():
     return hashlib.md5("%s%s"
                 % (randrange(0, _MAX_CSRF_KEY), settings.SECRET_KEY)).hexdigest()
