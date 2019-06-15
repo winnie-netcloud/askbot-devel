@@ -33,7 +33,7 @@ class NoArgsJob(BaseCommand):
     """
     batches = ()
 
-    def handle_noargs(self, **options): # pylint: disable=unused-argument
+    def handle(self, **options): # pylint: disable=unused-argument
         """handler function that removes all signal listeners
         then runs the job and finally restores the listerers
         """

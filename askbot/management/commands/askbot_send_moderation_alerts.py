@@ -84,7 +84,7 @@ def remember_last_moderator(user):
 
 class Command(BaseCommand):
     """The management command class"""
-    def handle_noargs(self, **options): #pylint: disable=unused-argument
+    def handle(self, **options): #pylint: disable=unused-argument
         """Function that does the job of the management command"""
         #get size of moderation queue
         translation.activate(django_settings.LANGUAGE_CODE)

@@ -6,7 +6,7 @@ from askbot.utils.console import ProgressBar
 class Command(BaseCommand):
     help = 'Generates snippets for all posts'
 
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         posts = Post.objects.all()
         count = posts.count()
         message = 'Building post snippets'

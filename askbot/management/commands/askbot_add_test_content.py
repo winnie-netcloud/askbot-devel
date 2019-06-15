@@ -252,7 +252,7 @@ class Command(BaseCommand):
         return active_question_comment, active_answer_comment
 
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         self.options = options
         self.verbosity = int(options.get("verbosity", 1))
         self.interactive = options.get("interactive")

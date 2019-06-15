@@ -7,7 +7,7 @@ from askbot.models import User
 from askbot import forms
 
 class Command(BaseCommand):
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         translation.activate(django_settings.LANGUAGE_CODE)
         for user in User.objects.all().iterator():
             user.add_missing_askbot_subscriptions()

@@ -25,5 +25,5 @@
         askbot['settings']['tinymceEditorDeselector'] = '{{ settings.TINYMCE_EDITOR_DESELECTOR }}';
     {% endif %}
 </script>
-<script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+<script type="text/javascript" src="{% url askbot_jsi18n %}"></script>
 {# avoid adding javascript here so that pages load faster #}

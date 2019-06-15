@@ -16,7 +16,7 @@ class Command(BaseCommand):
     """management command that sends reminders
     about unanswered questions to all users
     """
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         """The function running the command."""
         translation.activate(django_settings.LANGUAGE_CODE)
         if askbot_settings.ENABLE_EMAIL_ALERTS is False:

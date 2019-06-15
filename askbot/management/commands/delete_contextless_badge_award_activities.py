@@ -5,7 +5,7 @@ from askbot.models import Activity
 from askbot import const
 
 class Command(BaseCommand):
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         act_type = const.TYPE_ACTIVITY_PRIZE
         acts = Activity.objects.filter(activity_type = act_type)
         deleted_count = 0

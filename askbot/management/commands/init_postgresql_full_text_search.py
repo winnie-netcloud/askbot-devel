@@ -5,7 +5,7 @@ from askbot.search.postgresql import setup_full_text_search
 
 class Command(BaseCommand):
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         dir_path = askbot.get_install_directory()
         script_path = os.path.join(
                             dir_path,

@@ -91,7 +91,7 @@ def format_action_count(string, number, output):
 
 
 class Command(BaseCommand):
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         if askbot_settings.ENABLE_EMAIL_ALERTS:
             activate_language(django_settings.LANGUAGE_CODE)
             for user in User.objects.exclude(askbot_profile__status='b').iterator():

@@ -10,7 +10,7 @@ class Command(BaseCommand):
     Fix incorrectly denormalized thread points by copying the value from
     its question.
     """
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         questions = (Post.objects
                      .filter(post_type='question')
                      .exclude(points=F('thread__points'))

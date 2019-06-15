@@ -4,7 +4,7 @@ from django.db import connection
 from askbot.models import EmailFeedSetting, User
 
 class Command(BaseCommand):
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         try:
             try:
                 self.subscribe_everyone()

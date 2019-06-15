@@ -10,7 +10,7 @@ def rebuild_profile_caches(profiles):
 
 
 class Command(BaseCommand):
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         # Make sure all superusers have their status set to 'd'
         profiles = (UserProfile.objects
                  .filter(pk__is_superuser=True)

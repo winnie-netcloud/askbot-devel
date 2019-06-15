@@ -5,7 +5,7 @@ from askbot.deps.group_messaging.models import get_unread_inbox_counter
 
 class Command(BaseCommand):
 
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         users = User.objects.all()
         count = users.count()
         message = 'Fixing inbox counts for the users'

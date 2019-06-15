@@ -12,7 +12,7 @@ from django.core.management import BaseCommand
 from django.utils import timezone
 
 class Command(BaseCommand):
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         now = timezone.now()
         awarded_count = 0
 

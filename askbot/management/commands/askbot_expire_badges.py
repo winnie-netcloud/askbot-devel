@@ -9,7 +9,7 @@ from django.core.management import BaseCommand
 from django.utils import timezone
 
 class Command(BaseCommand):
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         help = 'expires RapidResponder badges'
 
         expire_date = timezone.now() - datetime.timedelta(askbot_settings.RAPID_RESPONDER_BADGE_EXPIRES)

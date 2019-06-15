@@ -5,6 +5,6 @@ import askbot
 DOC_DIR = os.path.join(askbot.get_install_directory(), 'doc')
 
 class Command(BaseCommand):
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         os.chdir(DOC_DIR)
         subprocess.call(['make', 'html'])

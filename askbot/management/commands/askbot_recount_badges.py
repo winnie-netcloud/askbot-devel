@@ -9,7 +9,7 @@ from django.utils import translation
 
 class Command(BaseCommand):
 
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         translation.activate(django_settings.LANGUAGE_CODE)
         users = User.objects.all()
         count = users.count()

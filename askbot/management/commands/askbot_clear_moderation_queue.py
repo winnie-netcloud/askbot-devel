@@ -10,6 +10,6 @@ ACTIVITY_TYPES = (
 
 class Command(BaseCommand):
     help = 'deletes all items from the moderation queue'
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
         acts = Activity.objects.filter(activity_type__in=ACTIVITY_TYPES)
         acts.delete()

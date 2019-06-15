@@ -7,7 +7,7 @@ class Command(BaseCommand):
     help = 'updates data about currently used avatars, ' + \
         'necessary for display of avatars on the front page'
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         users = User.objects.all()
         has_avatar = User.objects.exclude(askbot_profile__avatar_type='n').count()
         total_users = users.count()

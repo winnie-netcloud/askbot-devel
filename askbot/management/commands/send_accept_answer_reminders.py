@@ -17,7 +17,7 @@ from django.template import Context
 DEBUG_THIS_COMMAND = False
 
 class Command(BaseCommand):
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         translation.activate(django_settings.LANGUAGE_CODE)
         if askbot_settings.ENABLE_EMAIL_ALERTS == False:
             return

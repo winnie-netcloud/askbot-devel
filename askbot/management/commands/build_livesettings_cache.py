@@ -7,7 +7,7 @@ class Command(BaseCommand):
     '''Loads livesettings values to cache helping speed up
        initial load time for the users'''
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         translation.activate(django_settings.LANGUAGE_CODE)
         from askbot.conf import settings as askbot_settings
         #Just loads all the settings that way they will be in the cache

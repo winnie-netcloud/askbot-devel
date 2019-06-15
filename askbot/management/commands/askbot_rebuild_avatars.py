@@ -7,7 +7,7 @@ from avatar.models import Avatar
 from django.core.management import BaseCommand
 
 class Command(BaseCommand):
-    def handle_noargs(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):
 
         avatars = Avatar.objects.all()
         count = avatars.count()

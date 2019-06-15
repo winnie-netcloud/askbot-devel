@@ -6,7 +6,7 @@ from askbot.conf import settings as askbot_settings
 import sys
 
 class Command(BaseCommand):
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         tags = models.Tag.objects.all()
         message = 'Searching for unused tags:'
         total = tags.count()

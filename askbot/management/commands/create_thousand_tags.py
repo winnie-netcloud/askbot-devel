@@ -6,7 +6,7 @@ import sys
 
 class Command(BaseCommand):
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         user = models.User.objects.get(id=2)
         for i in xrange(1000):
             name = 'tag' + str(i)

@@ -29,7 +29,7 @@ def get_valid_tag_name(tag):
     return first_char_regex.sub('', name)
 
 class Command(BaseCommand):
-    def handle_noargs(self, *args, **options):
+    def handle(self, *args, **options):
         signal_data = signals.pop_all_db_signal_receivers()
         languages = set(models.Tag.objects.values_list(
                                     'language_code', flat=True
