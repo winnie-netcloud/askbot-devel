@@ -683,7 +683,7 @@ def test_haystack():
                 message += """HAYSTACK_CONNECTIONS = {
                     'default': {
                     'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
-                     
+
                     }"""
                 errors.append(message)
 
@@ -1007,7 +1007,7 @@ def test_versions():
 
     dj_ver = django.VERSION
     upgrade_msg = 'About upgrades, please read http://askbot.org/doc/upgrade.html'
-    if dj_ver < (1, 7) or dj_ver >= (1, 9):
+    if dj_ver < (1, 7) or dj_ver >= (2, 3):
         errors.append('This version of Askbot supports only django 1.7 and 1.8 ' + upgrade_msg)
     elif py_ver[:3] < (2, 7, 0):
         errors.append(

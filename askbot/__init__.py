@@ -20,7 +20,7 @@ REQUIREMENTS = {
     'bs4': 'beautifulsoup4<=4.7.1',
     'coffin': 'Coffin>=2.0',
     'compressor': 'django-compressor>=2.0,<=2.2',
-    'django': 'django>=1.8,<1.9',
+    'django': 'django>=1.9,<1.12',
     'django_countries': 'django-countries>=3.3',
     'django_jinja': 'django-jinja>=2.0',
     'djcelery': 'django-celery>=3.0.11,<=3.3.0',
