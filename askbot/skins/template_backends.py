@@ -1,8 +1,15 @@
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.template.backends.base import BaseEngine
-from askbot.skins.loaders import Loader, get_skin
 from askbot.utils.loading import load_module
+from django_jinja.base import dict_from_context
+
+try:
+    import django.template.backends.jinja2 # exists only in Django1.8+
+    from django.template.backends.utils import csrf_input_lazy, csrf_token_lazy
+except ImportError:
+    pass # b/c we are not using any of this atm
+
 
 class AskbotSkinTemplates(BaseEngine):
 
@@ -40,7 +47,7 @@ class Template(object):
             if config['BACKEND'] == backend:
                 return config
         raise ImproperlyConfigured('template backend %s is required', backend)
-                
+
 
     @classmethod
     def get_extra_context_processor_paths(cls):
@@ -60,7 +67,7 @@ class Template(object):
                 'django.core.context_processors.csrf', #necessary for csrf protection
                 'askbot.deps.group_messaging.context.group_messaging_context',
             )
-            extra_paths = cls.get_extra_context_processor_paths()
+            extra_paths = [] # cls.get_extra_context_processor_paths() # Disabled for now
             for path in extra_paths:
                 if path not in context_processor_paths:
                     context_processor_paths += (path,)
@@ -78,9 +85,15 @@ class Template(object):
     def render(self, context=None, request=None):
         if context is None:
             context = {}
+        else:
+            context = dict_from_context(context)
 
         if request is not None:
             context['request'] = request
+            context['csrf_input'] = csrf_input_lazy(request)
+            context['csrf_token'] = csrf_token_lazy(request)
             context = self.update_context(context, request)
 
         return self.template.render(context)
+
+django.template.backends.jinja2.Template = Template

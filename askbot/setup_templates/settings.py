@@ -75,7 +75,13 @@ SECRET_KEY = 'sdljdfjkldsflsdjkhsjkldgjlsdgfs s '
 # List of callables that know how to import templates from various sources.
 TEMPLATES = (
     {
-        'BACKEND': 'askbot.skins.template_backends.AskbotSkinTemplates',
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'APP_DIRS': True,
+        'DIRS': [], # not sure if I should put templates here. I think it would clash with DjangoTemplates
+        'OPTIONS': {
+            'environment': 'askbot.skins.jinja2_environment.factory',
+            'autoescape': False,
+        },
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -138,6 +144,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.sitemaps',
     'django.contrib.messages',
+    'django_jinja',
     'compressor',
     #'debug_toolbar',
     #'haystack',

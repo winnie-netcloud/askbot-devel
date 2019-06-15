@@ -11,7 +11,14 @@ import simplejson
 from django.utils.translation import activate as activate_language
 
 import coffin
-import coffin.template
+try:
+    # this import is only supposed to work with old versions of Coffin
+    # newer versions do not have a template module
+    import coffin.template
+except ImportError as e:
+    if coffin.__version__[0] < 1:
+        raise e
+
 from bs4 import BeautifulSoup
 
 import askbot
@@ -23,6 +30,7 @@ from askbot.conf import settings as askbot_settings
 from askbot.tests.utils import skipIf
 from askbot.tests.utils import with_settings
 
+from askbot.skins.template_backends import Template as AskbotTemplate
 
 def patch_jinja2():
     from jinja2 import Template
@@ -39,7 +47,7 @@ def patch_jinja2():
     Template.render = instrumented_render
 
 (CMAJOR, CMINOR, CMICRO) = package_utils.get_coffin_version()
-if CMAJOR == 0 and CMINOR == 3 and CMICRO < 4:
+if CMAJOR > 0 or CMINOR == 3 and CMICRO < 4:
     patch_jinja2()
 
 
@@ -125,7 +133,7 @@ class PageLoadTestCase(AskbotTestCase):
 
         if template and status_code != 302:
             if hasattr(r, 'template'):
-                if isinstance(r.template, coffin.template.Template):
+                if isinstance(r.template, AskbotTemplate):
                     self.assertEqual(r.template.name, template)
                     return
 
