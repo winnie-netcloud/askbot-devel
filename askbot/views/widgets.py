@@ -243,7 +243,7 @@ def render_ask_widget_js(request, widget_id):
         'host': request.get_host(),
         'variable_name': variable_name
     }
-    content =  content_tpl.render(RequestContext(request, context_dict))
+    content =  content_tpl.render(context_dict, request)
     return HttpResponse(content, content_type='text/javascript')
 
 def render_ask_widget_css(request, widget_id):
@@ -256,7 +256,7 @@ def render_ask_widget_css(request, widget_id):
         'editor_type': askbot_settings.EDITOR_TYPE,
         'variable_name': variable_name
     }
-    content =  content_tpl.render(RequestContext(request, context_dict))
+    content =  content_tpl.render(context_dict, request)
     return HttpResponse(content, content_type='text/css')
 
 def question_widget(request, widget_id):

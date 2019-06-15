@@ -156,28 +156,26 @@ def questions(request, **kwargs):
         if q_count > search_state.page_size:
             paginator_tpl = get_template('main_page/paginator.html')
             paginator_html = paginator_tpl.render(
-                RequestContext(
-                    request, {
+                    {
                         'context': paginator_context,
                         'questions_count': q_count,
                         'page_size' : search_state.page_size,
                         'search_state': search_state,
-                    }
-                )
+                    },
+                    request
             )
         else:
             paginator_html = ''
 
         questions_tpl = get_template('main_page/questions_loop.html')
         questions_html = questions_tpl.render(
-            RequestContext(
-                request, {
+                {
                     'threads': page,
                     'search_state': search_state,
                     'reset_method_count': reset_method_count,
                     'request': request
-                }
-            )
+                },
+                request
         )
 
         ajax_data = {
@@ -208,8 +206,7 @@ def questions(request, **kwargs):
             related_tags_data['font_size'] = extra_tags.get_tag_font_size(related_tags)
 
         ajax_data['related_tags_html'] = related_tags_tpl.render(
-            RequestContext(request, related_tags_data)
-        )
+            related_tags_data, request)
 
         #here we add and then delete some items
         #to allow extra context processor to work
@@ -373,8 +370,7 @@ def tags(request):#view showing a listing of available tags - plain list
 
     if request.is_ajax():
         template = get_template('tags/content.html')
-        template_context = RequestContext(request, data)
-        json_data = {'success': True, 'html': template.render(template_context)}
+        json_data = {'success': True, 'html': template.render(data,request)}
         json_string = simplejson.dumps(json_data)
         return HttpResponse(json_string, content_type='application/json')
     else:
@@ -519,11 +515,11 @@ def question(request, id):#refactor - long subroutine. display question body, an
         request_lang = translation.get_language()
         if request_lang != thread.language_code:
             template = get_template('question/lang_switch_message.html')
-            message = template.render(Context({
+            message = template.render({
                 'post_lang': get_language_name(thread.language_code),
                 'request_lang': get_language_name(request_lang),
                 'home_url': reverse_i18n(request_lang, 'questions')
-            }))
+            })
             request.user.message_set.create(message=message)
             return HttpResponseRedirect(thread.get_absolute_url())
 

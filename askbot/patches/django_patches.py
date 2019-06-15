@@ -345,6 +345,9 @@ def add_available_attrs_decorator():
     import django.utils.decorators
     django.utils.decorators.available_attrs = available_attrs
 
+# one may think about removing the following "patch"
+# however, this use of render(_to_response) is valid in Django 1.10+
+
 def add_render_shortcut():
     """adds `render` shortcut, introduced with django 1.3"""
     try:
