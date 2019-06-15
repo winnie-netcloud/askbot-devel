@@ -297,20 +297,18 @@ it may be helpful to split this procedure in two:\n
 """
     args = 'se_dump_dir'
 
-    option_list = BaseCommand.option_list + (
-        make_option('-r', '--read-dump',
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '-r', '--read-dump',
             action='store_true',
             dest='read_dump',
             default=False,
-            help='Only read the the dump'
-        ),
-        make_option('-p', '--process-data',
+            help='Only read the the dump')
+        parser.add_argument('-p', '--process-data',
             action='store_true',
             dest='process_data',
             default=False,
-            help='Only process the data, assuming that the dump is loaded'
-        )
-    )
+            help='Only process the data, assuming that the dump is loaded')
 
     def handle(self, *arg, **kwarg):
 

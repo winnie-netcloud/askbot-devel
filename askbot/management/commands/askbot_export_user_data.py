@@ -15,19 +15,19 @@ from askbot.utils.functions import list_directory_files, zipzip
 class Command(BaseCommand):
     """Exports data for a user given his or her ID"""
 
-    option_list = BaseCommand.option_list + (
-        make_option('--user-id',
+    def add_arguments(self, parser):
+        parser.add_argument('--user-id',
                     action='store',
-                    type='int',
+                    type=int,
                     dest='user_id',
                     default=None,
-                    help='ID of the user whose data we will export'),
-        make_option('--file',
+                    help='ID of the user whose data we will export')
+        parser.add_argument('--file',
                     action='store',
                     dest='file_name',
-                    type='str',
+                    type=str,
                     default=None,
-                    help='Path to the output file, absolute or relative to CWD'))
+                    help='Path to the output file, absolute or relative to CWD')
 
     def handle(self, *args, **options): # pylint: disable=too-many-locals
         """Does the job of the command"""

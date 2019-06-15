@@ -25,8 +25,12 @@ class MergeUsersBaseCommand(BaseCommand):
     args = '<from_user_id> <to_user_id>'
     help = 'Merge an account and all information from a <user_id> to a <user_id>, deleting the <from_user>'
 
+    def add_arguments(self, parser):
+        parser.add_argument('from_user_id',type=int,nargs=1)
+        parser.add_argument('to_user_id',type=int,nargs=1)
+
     def handle(self, *arguments, **options):
-        self.parse_arguments(*arguments)
+        self.parse_arguments(options['from_user_id'][0],options['to_user_id'][0])
         self.prepare()
 
         #rel_objs = User._meta.get_all_related_objects()
