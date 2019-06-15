@@ -86,7 +86,10 @@ class AppDirectoryEnvironment(MultilingualEnvironment):
         """returns path to directory `templates` within the app directory
         """
         assert(app_name in django_settings.INSTALLED_APPS)
-        from django.utils.importlib import import_module
+        try:
+            from importlib import import_module
+        except ImportError:
+            from django.utils.importlib import import_module
         try:
             mod = import_module(app_name)
         except ImportError as e:

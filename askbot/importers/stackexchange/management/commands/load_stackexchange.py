@@ -332,7 +332,7 @@ it may be helpful to split this procedure in two:\n
         if not importer_is_ready():
             raise CommandError(
                 "Looks like stackexchange tables are not yet initialized in the database.\n"
-                "Please, run command: \npython manage.py syncdb\n"
+                "Please, run command: \npython manage.py migrate\n"
                 "then import the data."
             )
 

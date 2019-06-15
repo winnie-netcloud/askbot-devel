@@ -6,7 +6,11 @@ Initialization and upgrade of the database for Askbot
 
 When you install Askbot the first time and any time you upgrade the software, run these two commands::
 
-    python manage.py syncdb
+    python manage.py migrate
+
+.. versionchanged:: 0.11.0-timewarp
+    syncdb has been removed from django 1.9. Must be replaced with migrate. `python manage.py syncdb` must now read
+    `python manage.py migrate`
 
 .. versionchanged:: 0.7.21
     When the script asks you if you want to create a superuser, answer yes if you want to create one. By default Askbot sets admin status(superuser) for the first user created automatically but also supports this form.
@@ -33,8 +37,8 @@ Now run the Django development server and check that everything works::
 
 .. note::
 
-    `hostname -i` is a Unix command returning the IP address of your system, you can also type 
-    the IP manually or replace it with word `localhost` if you are installing askbot 
+    `hostname -i` is a Unix command returning the IP address of your system, you can also type
+    the IP manually or replace it with word `localhost` if you are installing askbot
     on a local machine.
 
 Connect to the Django development server with your Web browser. The address is the name
@@ -52,7 +56,7 @@ This will be your administrator account.
 
 Here number 1 is the numeric id of the first user, enter a different number, if it is indeed different.
 
-Your basic installation is now complete. Many settings can be 
+Your basic installation is now complete. Many settings can be
 :ref:`changed at runtime <run-time-configuration>` by following url `/settings`.
 
 If you choose to host a real website, please read

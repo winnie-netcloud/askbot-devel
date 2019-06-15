@@ -11,7 +11,7 @@ To run these commands there is a general pattern::
     cd project_directory
     python manage.py some_command [possible arguments and parameters]
 
-I.e. the commands are generally run from the project directory (the same 
+I.e. the commands are generally run from the project directory (the same
 one that contains your settings.py file) and they may use additional parameters and options.
 
 Data and User administration commands
@@ -117,7 +117,7 @@ These commands import or add data to the Askbot forum.
 |                                 | command on empty database. Also - before running, make sure |
 |                                 | that `askbot.importers.stackexchange` is in the list of     |
 |                                 | installed apps within your settings.py file (it might also  |
-|                                 | be necessary to run `syncdb` command to initiate the        |
+|                                 | be necessary to run `migrate` command to initiate the       |
 |                                 | SE importer tables).                                        |
 +---------------------------------+-------------------------------------------------------------+
 | `askbot_add_xml_content         | Add xml Askbot data dumped with the Django command          |
@@ -169,14 +169,14 @@ Any configurable options, related to these commands are accessible via "Email" s
 Data repair commands
 ====================
 
-Under certain circumstances (especially when using MySQL database with MyISAM 
-storage engine or when venturing to adapt the software to your needs) some 
-records in the database tables may become internally inconsistent. 
+Under certain circumstances (especially when using MySQL database with MyISAM
+storage engine or when venturing to adapt the software to your needs) some
+records in the database tables may become internally inconsistent.
 The commands from this section will help fix those issues.
 
 .. note::
 
- Data inconsistency in the Askbot project is considered as a critical error and as a matter of 
+ Data inconsistency in the Askbot project is considered as a critical error and as a matter of
  the project policy is addressed on the day of reporting. If you discover such issue - please
  report it at the forum or by email at `admin@askbot.org`
 
@@ -202,7 +202,7 @@ The commands from this section will help fix those issues.
 |                                          | the question cannot be found via the tag search.            |
 +------------------------------------------+-------------------------------------------------------------+
 
-The above commands are safe to run at any time, also they do not require 
+The above commands are safe to run at any time, also they do not require
 additional parameters. In the future all these will be replaced with just one simple command.
 
 Developer commands

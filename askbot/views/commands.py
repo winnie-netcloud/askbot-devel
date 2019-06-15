@@ -269,7 +269,7 @@ def mark_tag(request, **kwargs):#tagging system
 def clean_tag_name(request):
     tag_name = forms.clean_tag(request.POST['tag_name'])
     return {'cleaned_tag_name': tag_name}
-    
+
 
 #@decorators.ajax_only
 @decorators.get_only
@@ -324,7 +324,7 @@ def get_thread_shared_groups(request):
 @decorators.ajax_only
 def get_html_template(request):
     """returns rendered template"""
-    template_name = request.REQUEST.get('template_name', None)
+    template_name = getattr(request,request.method).get('template_name', None)
     allowed_templates = (
         'widgets/tag_category_selector.html',
     )
@@ -479,7 +479,7 @@ def get_groups_list(request):
 def subscribe_for_tags(request):
     """process subscription of users by tags"""
     #todo - use special separator to split tags
-    tag_names = request.REQUEST.get('tags','').strip().split()
+    tag_names = getattr(request,request.method).get('tags','').strip().split()
     pure_tag_names, wildcards = forms.clean_marked_tagnames(tag_names)
     if request.user.is_authenticated():
         if request.method == 'POST':
@@ -496,7 +496,7 @@ def subscribe_for_tags(request):
             else:
                 message = _(
                     'Tag subscription was canceled (<a href="%(url)s">undo</a>).'
-                ) % {'url': escape(request.path) + '?tags=' + request.REQUEST['tags']}
+                ) % {'url': escape(request.path) + '?tags=' + getattr(request,request.method)['tags']}
                 request.user.message_set.create(message = message)
             return HttpResponseRedirect(reverse('index'))
         else:
@@ -1015,9 +1015,9 @@ def set_group_openness(request):
 @decorators.ajax_only
 @decorators.moderators_only
 def edit_object_property_text(request):
-    model_name = CharField().clean(request.REQUEST['model_name'])
-    object_id = IntegerField().clean(request.REQUEST['object_id'])
-    property_name = CharField().clean(request.REQUEST['property_name'])
+    model_name = CharField().clean(getattr(request,request.method)['model_name'])
+    object_id = IntegerField().clean(getattr(request,request.method)['object_id'])
+    property_name = CharField().clean(getattr(request,request.method)['property_name'])
 
     accessible_fields = (
         ('Group', 'preapproved_emails'),

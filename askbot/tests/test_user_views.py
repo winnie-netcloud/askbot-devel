@@ -14,9 +14,10 @@ class UserViewsTests(AskbotTestCase):
         def mock_view(request, user, context):
             return None
 
-        request = Mock(spec=('path', 'REQUEST', 'user'))
+        request = Mock(spec=('path', 'POST', 'user', 'method'))
+        request.method = "POST"
         request.user = AnonymousUser()
-        request.REQUEST = {'abra': 'cadabra', 'foo': 'bar'}
+        request.POST = {'abra': 'cadabra', 'foo': 'bar'}
         request.path = '/some/path/'
         user = self.create_user('user')
         response = mock_view(request, user, {})

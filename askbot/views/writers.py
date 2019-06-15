@@ -300,15 +300,15 @@ def ask(request):#view used to ask a new question
             draft_tagnames = draft.tagnames
 
     form.initial = {
-        'ask_anonymously': request.REQUEST.get('ask_anonymously', False),
-        'tags': request.REQUEST.get('tags', draft_tagnames),
-        'text': request.REQUEST.get('text', draft_text),
-        'title': request.REQUEST.get('title', draft_title),
-        'post_privately': request.REQUEST.get('post_privately', False),
+        'ask_anonymously': getattr(request,request.method).get('ask_anonymously', False),
+        'tags': getattr(request,request.method).get('tags', draft_tagnames),
+        'text': getattr(request,request.method).get('text', draft_text),
+        'title': getattr(request,request.method).get('title', draft_title),
+        'post_privately': getattr(request,request.method).get('post_privately', False),
         'language': get_language(),
-        'wiki': request.REQUEST.get('wiki', False),
+        'wiki': getattr(request,request.method).get('wiki', False),
     }
-    if 'group_id' in request.REQUEST:
+    if 'group_id' in getattr(request,request.method):
         try:
             group_id = int(request.GET.get('group_id', None))
             form.initial['group_id'] = group_id
@@ -757,7 +757,7 @@ def post_comments(request):#generic ajax handler to load comments to an object
     add a new comment to post
     """
     # only support get post comments by ajax now
-    post_type = request.REQUEST.get('post_type', '')
+    post_type = getattr(request,request.method).get('post_type', '')
     if not request.is_ajax() or post_type not in ('question', 'answer'):
         raise Http404  # TODO: Shouldn't be 404! More like 400, 403 or sth more specific
 

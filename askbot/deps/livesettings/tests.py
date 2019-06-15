@@ -1,7 +1,10 @@
 from django.conf import settings as djangosettings
 from django.test import TestCase
 import keyedcache
-from askbot.deps.livesettings import *
+from askbot.deps.livesettings.values import ConfigurationGroup, IntegerValue, StringValue, BooleanValue, ModuleValue, \
+                                            MultipleStringValue, LongStringValue
+from askbot.deps.livesettings.functions import config_exists, config_get, config_register, ConfigurationSettings, config_value
+from askbot.deps.livesettings.models import SettingNotSet, LongSetting
 import logging
 log = logging.getLogger('test');
 

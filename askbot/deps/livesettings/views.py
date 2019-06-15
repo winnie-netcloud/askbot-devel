@@ -7,8 +7,8 @@ from django.template import RequestContext
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
 
-from askbot.deps.livesettings import ConfigurationSettings, forms
-from askbot.deps.livesettings import ImageValue
+from askbot.deps.livesettings.functions import ConfigurationSettings
+from askbot.deps.livesettings import forms
 from askbot.deps.livesettings.overrides import get_overrides
 from askbot.utils.decorators import admins_only
 

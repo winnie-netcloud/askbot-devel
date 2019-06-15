@@ -16,7 +16,7 @@ class XMLExportSerializer(Serializer):
 
         self.stream = options.pop("stream", StringIO())
         self.selected_fields = options.pop("fields", None)
-        self.use_natural_keys = options.pop("use_natural_keys", False)
+        self.use_natural_foreign_keys = options.pop("use_natural_foreign_keys", False)
 
         self.start_serialization()
         for obj in queryset:
@@ -53,20 +53,20 @@ class Command(BaseCommand):
                 'fixtures into. Defaults to the "default" database.')
         parser.add_argument('-e', '--exclude', dest='exclude',action='append', default=['sessions', 'contenttypes'],
             help='An appname or appname.ModelName to exclude (use multiple --exclude to exclude multiple apps/models).')
-        parser.add_argument('-n', '--natural', action='store_true', dest='use_natural_keys', default=False,
+        parser.add_argument('--natural-foreign', action='store_true', dest='use_natural_foreign_keys', default=False,
             help='Use natural keys if they are available.')
         parser.add_argument('-a', '--all', action='store_true', dest='use_base_manager', default=False,
             help="Use Django's base manager to dump all models stored in the database, including those that would otherwise be filtered or modified by a custom manager.")
 
     def handle(self, *app_labels, **options):
-        from django.db.models import get_app, get_apps, get_models, get_model
+        from django.apps import apps
 
         indent = options.get('indent', None)
         using = options.get('database', DEFAULT_DB_ALIAS)
         connection = connections[using]
         excludes = options.get('exclude',[])
         show_traceback = options.get('traceback', False)
-        use_natural_keys = options.get('use_natural_keys', False)
+        use_natural_foreign_keys = options.get('use_natural_foreign_keys', False)
         use_base_manager = options.get('use_base_manager', False)
 
         excluded_apps = set()
@@ -74,31 +74,31 @@ class Command(BaseCommand):
         for exclude in excludes:
             if '.' in exclude:
                 app_label, model_name = exclude.split('.', 1)
-                model_obj = get_model(app_label, model_name)
+                model_obj = apps.get_model(app_label, model_name)
                 if not model_obj:
                     raise CommandError('Unknown model in excludes: %s' % exclude)
                 excluded_models.add(model_obj)
             else:
                 try:
-                    app_obj = get_app(exclude)
+                    app_obj = apps.get_app(exclude)
                     excluded_apps.add(app_obj)
                 except ImproperlyConfigured:
                     raise CommandError('Unknown app in excludes: %s' % exclude)
 
         if len(app_labels) == 0:
-            app_list = OrderedDict((app, None) for app in get_apps() if app not in excluded_apps)
+            app_list = OrderedDict((app, None) for app in apps.get_apps() if app not in excluded_apps)
         else:
             app_list = OrderedDict()
             for label in app_labels:
                 try:
                     app_label, model_label = label.split('.')
                     try:
-                        app = get_app(app_label)
+                        app = apps.get_app(app_label)
                     except ImproperlyConfigured:
                         raise CommandError("Unknown application: %s" % app_label)
                     if app in excluded_apps:
                         continue
-                    model = get_model(app_label, model_label)
+                    model = apps.get_model(app_label, model_label)
                     if model is None:
                         raise CommandError("Unknown model: %s.%s" % (app_label, model_label))
 
@@ -111,7 +111,7 @@ class Command(BaseCommand):
                     # This is just an app - no model qualifier
                     app_label = label
                     try:
-                        app = get_app(app_label)
+                        app = apps.get_app(app_label)
                     except ImproperlyConfigured:
                         raise CommandError("Unknown application: %s" % app_label)
                     if app in excluded_apps:
@@ -123,7 +123,7 @@ class Command(BaseCommand):
         for model in sort_dependencies(app_list.items()):
             if model in excluded_models:
                 continue
-            if not model._meta.proxy and router.allow_syncdb(using, model):
+            if not model._meta.proxy and router.allow_migrate(using, model):
                 if use_base_manager:
                     objects.extend(model._base_manager.using(using).all())
                 else:
@@ -131,7 +131,7 @@ class Command(BaseCommand):
 
         try:
             serializer = XMLExportSerializer()
-            return serializer.serialize(objects, indent=indent, use_natural_keys=use_natural_keys)
+            return serializer.serialize(objects, indent=indent, use_natural_foreign_keys=use_natural_foreign_keys)
         except Exception as e:
             if show_traceback:
                 raise
@@ -144,13 +144,13 @@ def sort_dependencies(app_list):
     is serialized before a normal model, and any model with a natural key
     dependency has it's dependencies serialized first.
     """
-    from django.db.models import get_model, get_models
+    from django.apps import apps
     # Process the list of models, and get the list of dependencies
     model_dependencies = []
     models = set()
     for app, model_list in app_list:
         if model_list is None:
-            model_list = get_models(app)
+            model_list = apps.get_models(app)
 
         for model in model_list:
             models.add(model)
@@ -158,7 +158,7 @@ def sort_dependencies(app_list):
             if hasattr(model, 'natural_key'):
                 deps = getattr(model.natural_key, 'dependencies', [])
                 if deps:
-                    deps = [get_model(*d.split('.')) for d in deps]
+                    deps = [apps.get_model(*d.split('.')) for d in deps]
             else:
                 deps = []
 

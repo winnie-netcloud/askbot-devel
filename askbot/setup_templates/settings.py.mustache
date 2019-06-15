@@ -29,8 +29,10 @@ DATABASES = {
         'PASSWORD': '{{database_password}}',                  # Not used with sqlite3.
         'HOST': '{{database_host}}',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '{{database_port}}',                      # Set to empty string for default. Not used with sqlite3.
-        'TEST_CHARSET': 'utf8',              # Setting the character set and collation to utf-8
-        'TEST_COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
+        'TEST': {
+            'CHARSET': 'utf8',              # Setting the character set and collation to utf-8
+            'COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes import fields
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext as _
@@ -154,7 +154,7 @@ class Award(models.Model):
     badge = models.ForeignKey(BadgeData, related_name='award_badge')
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = fields.GenericForeignKey('content_type', 'object_id')
     awarded_at = models.DateTimeField(default=timezone.now)
     notified = models.BooleanField(default=False)
 

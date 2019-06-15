@@ -27,7 +27,6 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import string_concat, override, ungettext
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
-from django.db import models
 from django.db.models import Count, Q
 from django.conf import settings as django_settings
 from django.contrib.contenttypes.models import ContentType

@@ -1,5 +1,6 @@
 import re
 from django import forms
+from django.apps import apps
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -30,7 +31,7 @@ def get_error_list(form_instance):
     return errors
 
 def get_next_url(request, default=None):
-    return clean_next(request.REQUEST.get('next'), default)
+    return clean_next(request.GET.get('next',request.POST.get('next', default)))
 
 def get_db_object_or_404(params):
     """a utility function that returns an object
@@ -42,7 +43,7 @@ def get_db_object_or_404(params):
     try:
         model_name = params['model_name']
         assert(model_name=='Group')
-        model = models.get_model(model_name)
+        model = apps.get_model('askbot', model_name)
         obj_id = forms.IntegerField().clean(params['object_id'])
         return get_object_or_404(model, id=obj_id)
     except Exception:

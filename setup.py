@@ -96,7 +96,7 @@ Create/update database tables
 
 Back up your database if it is not blank, then two commands:
 
-* python manage.py syncdb
+* python manage.py migrate
 * python manage.py migrate
 
 There are two apps to migrate - askbot and django_authopenid (a forked version of the original, included within askbot), so you can as well migrate them separately

@@ -16,15 +16,15 @@ Current process to load SE data into Askbot is:
 
 3) enable 'stackexchange' in the list of installed apps (probably aready in settings.py)
 
-4) (optional - create models.py for SE, which is included anyway) run: 
+4) (optional - create models.py for SE, which is included anyway) run:
 
     #a) run in-place removal of xml namspace prefix to make parsing easier
-    perl -pi -w -e 's/xs://g' $SE_DUMP_PATH/xsd/*.xsd 
+    perl -pi -w -e 's/xs://g' $SE_DUMP_PATH/xsd/*.xsd
     cd stackexchange
     python parse_models.py $SE_DUMP_PATH/xsd/*.xsd > models.py
 
 5) Install stackexchange models (as well as any other missing models)
-    python manage.py syncdb
+    python manage.py migrate
 
 6) make sure that badges are installed
    if not, run (example for mysql):
@@ -45,12 +45,12 @@ Here is the load script that I used for the testing
 it assumes that SE dump has been unzipped inside the tmp directory
 
     #!/bin/sh$
-    python manage.py flush 
+    python manage.py flush
     #delete all data
     mysql -u askbot -p aksbot < sql_scripts/badges.sql
     python manage.py load_stackexchange tmp
 
-Untested parts are tagged with comments starting with 
+Untested parts are tagged with comments starting with
 #todo:
 
 The test set did not have all the usage cases of StackExchange represented so

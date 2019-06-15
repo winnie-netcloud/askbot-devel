@@ -3,9 +3,7 @@ from django.utils.translation import string_concat
 
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import LOGIN_USERS_COMMUNICATION
-from askbot.deps import livesettings
-from askbot.deps.livesettings import BooleanValue
-from askbot.deps.livesettings import StringValue
+from askbot.deps.livesettings import values as livesettings
 
 ACCESS_CONTROL = livesettings.ConfigurationGroup(
                     'ACCESS_CONTROL',
@@ -14,7 +12,7 @@ ACCESS_CONTROL = livesettings.ConfigurationGroup(
                 )
 
 settings.register(
-    BooleanValue(
+    livesettings.BooleanValue(
         ACCESS_CONTROL,
         'READ_ONLY_MODE_ENABLED',
         default=False,
@@ -23,7 +21,7 @@ settings.register(
 )
 
 settings.register(
-    StringValue(
+    livesettings.StringValue(
         ACCESS_CONTROL,
         'READ_ONLY_MESSAGE',
         default=_(

@@ -1,7 +1,7 @@
 import logging
 from django import forms
 from django.conf import settings as django_settings
-from askbot.deps.livesettings import ConfigurationGroup
+from askbot.deps.livesettings.values import ConfigurationGroup
 
 log = logging.getLogger('configuration')
 
