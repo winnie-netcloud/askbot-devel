@@ -3,7 +3,7 @@ that do not have revisions by creating a fake initial revision
 based on the content stored in the post itself
 """
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.db.models import signals, Count
 from askbot import models
 from askbot import const
@@ -25,7 +25,7 @@ def fix_revisionless_posts(post_class):
             post.current_revision = rev
             post.save()
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     """Command class for "fix_answer_counts"
     """
 

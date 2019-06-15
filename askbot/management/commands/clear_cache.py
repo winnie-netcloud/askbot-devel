@@ -1,6 +1,6 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.core.cache import cache
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, *args, **kwargs):
         cache.clear()

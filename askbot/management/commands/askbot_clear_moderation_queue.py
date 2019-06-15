@@ -1,4 +1,4 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from askbot import const
 from askbot.models import Activity
 
@@ -8,7 +8,7 @@ ACTIVITY_TYPES = (
     const.TYPE_ACTIVITY_MARK_OFFENSIVE
 )
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = 'deletes all items from the moderation queue'
     def handle_noargs(self, *args, **kwargs):
         acts = Activity.objects.filter(activity_type__in=ACTIVITY_TYPES)

@@ -4,9 +4,9 @@ from askbot.models import User, UserProfile
 from askbot.utils.console import ProgressBar
 from avatar.conf import settings as avatar_settings
 from avatar.models import Avatar
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, *args, **kwargs):
 
         avatars = Avatar.objects.all()

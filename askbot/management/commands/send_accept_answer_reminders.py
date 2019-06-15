@@ -1,6 +1,6 @@
 from __future__ import print_function
 import datetime
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.conf import settings as django_settings
 from django.template.loader import get_template
 from askbot import models
@@ -16,7 +16,7 @@ from django.template import Context
 
 DEBUG_THIS_COMMAND = False
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, **options):
         translation.activate(django_settings.LANGUAGE_CODE)
         if askbot_settings.ENABLE_EMAIL_ALERTS == False:

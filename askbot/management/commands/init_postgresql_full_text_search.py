@@ -1,9 +1,9 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 import os.path
 import askbot
 from askbot.search.postgresql import setup_full_text_search
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
 
     def handle_noargs(self, **options):
         dir_path = askbot.get_install_directory()

@@ -1,9 +1,9 @@
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.contrib.auth.models import User
 from askbot.utils.console import print_action
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = 'updates data about currently used avatars, ' + \
         'necessary for display of avatars on the front page'
 

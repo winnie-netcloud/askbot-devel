@@ -2,7 +2,7 @@
 from __future__ import print_function
 from django.db.models import Q
 from django.conf import settings as django_settings
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.utils import translation
 from askbot import models
 from askbot import const
@@ -12,7 +12,7 @@ from askbot.utils.classes import ReminderSchedule
 
 DEBUG_THIS_COMMAND = False
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     """management command that sends reminders
     about unanswered questions to all users
     """

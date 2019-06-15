@@ -1,9 +1,9 @@
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.conf import settings as django_settings
 from django.utils import translation
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     '''Loads livesettings values to cache helping speed up
        initial load time for the users'''
 

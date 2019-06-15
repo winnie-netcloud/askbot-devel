@@ -1,10 +1,10 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.conf import settings as django_settings
 from django.db import transaction
 from askbot import models
 import sys
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
 
     def handle_noargs(self, **options):
         user = models.User.objects.get(id=2)

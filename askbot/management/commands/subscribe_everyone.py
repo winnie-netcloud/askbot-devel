@@ -1,9 +1,9 @@
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.db import connection
 from askbot.models import EmailFeedSetting, User
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, **options):
         try:
             try:

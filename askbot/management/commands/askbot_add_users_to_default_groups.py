@@ -1,8 +1,8 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from askbot.models import User
 from askbot.utils.console import ProgressBar
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         users = User.objects.all()
         count = users.count()

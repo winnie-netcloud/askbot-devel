@@ -1,11 +1,11 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.db.models import F
 from django.utils.translation import override
 
 from askbot.models import Post
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     """
     Fix incorrectly denormalized thread points by copying the value from
     its question.

@@ -3,7 +3,7 @@ import sys
 from askbot.conf import settings as askbot_settings
 from askbot.models import User
 from askbot.utils.console import choice_dialog
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.conf import settings as django_settings
 from django.utils import translation
 from askbot.utils.translation import get_language
@@ -50,7 +50,7 @@ ALERT_SETTINGS_KEYS = (
     'DEFAULT_NOTIFICATION_DELIVERY_SCHEDULE_M_AND_C',
 )
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(

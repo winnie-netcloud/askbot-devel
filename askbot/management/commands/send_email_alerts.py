@@ -7,7 +7,7 @@ from collections import OrderedDict
 from django.conf import settings as django_settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.db import connection
 from django.db.models import Q, F
 from django.utils import timezone
@@ -90,7 +90,7 @@ def format_action_count(string, number, output):
         output.append(_(string) % {'num':number})
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, **options):
         if askbot_settings.ENABLE_EMAIL_ALERTS:
             activate_language(django_settings.LANGUAGE_CODE)

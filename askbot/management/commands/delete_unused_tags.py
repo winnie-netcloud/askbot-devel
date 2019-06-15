@@ -1,11 +1,11 @@
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from askbot import models
 from askbot.utils.console import ProgressBar
 from askbot.conf import settings as askbot_settings
 import sys
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, **options):
         tags = models.Tag.objects.all()
         message = 'Searching for unused tags:'

@@ -1,7 +1,7 @@
 from __future__ import print_function
 import re
 import sys
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.conf import settings as django_settings
 from django.db import transaction
 from django.utils import translation
@@ -28,7 +28,7 @@ def get_valid_tag_name(tag):
     first_char_regex = re.compile('^%s+' % const.TAG_FORBIDDEN_FIRST_CHARS)
     return first_char_regex.sub('', name)
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, *args, **options):
         signal_data = signals.pop_all_db_signal_receivers()
         languages = set(models.Tag.objects.values_list(

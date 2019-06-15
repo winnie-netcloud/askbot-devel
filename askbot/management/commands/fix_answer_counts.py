@@ -3,12 +3,12 @@ to run type (on the command line:)
 
 python manage.py fix_answer_counts
 """
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.db.models import signals
 from askbot import models
 from askbot.utils.console import ProgressBar
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     """Command class for "fix_answer_counts"
     """
 

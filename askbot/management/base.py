@@ -1,12 +1,12 @@
 """Base command class, used by some Askbot management commands"""
 from __future__ import print_function
 import sys
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.db import transaction
 from askbot import signals
 from askbot.utils import console
 
-class NoArgsJob(NoArgsCommand):
+class NoArgsJob(BaseCommand):
     """Base class for a job command -
     the one that runs the same operation on
     sets of items - each item operation in its own

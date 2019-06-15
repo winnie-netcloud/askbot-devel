@@ -1,10 +1,10 @@
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
 import sys
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     args = '<user_id>'
 
     def get_user(self, uid_str):

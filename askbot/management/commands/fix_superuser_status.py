@@ -1,4 +1,4 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from askbot.models import UserProfile
 
 
@@ -9,7 +9,7 @@ def rebuild_profile_caches(profiles):
         profile.update_cache()
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, *args, **kwargs):
         # Make sure all superusers have their status set to 'd'
         profiles = (UserProfile.objects

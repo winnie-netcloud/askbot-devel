@@ -1,10 +1,10 @@
 from __future__ import print_function
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from askbot.utils.console import ProgressBar
 from askbot.models import Activity
 from askbot import const
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, **options):
         act_type = const.TYPE_ACTIVITY_PRIZE
         acts = Activity.objects.filter(activity_type = act_type)

@@ -1,5 +1,5 @@
 """Management commands alerting of content on the moderation queue"""
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.conf import settings as django_settings
 from django.utils import translation
 from askbot import const
@@ -82,7 +82,7 @@ def remember_last_moderator(user):
         act.save()
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     """The management command class"""
     def handle_noargs(self, **options): #pylint: disable=unused-argument
         """Function that does the job of the management command"""

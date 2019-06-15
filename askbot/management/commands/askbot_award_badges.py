@@ -8,10 +8,10 @@ from askbot.models import badges
 from askbot.models import User
 from askbot.models import Vote
 from askbot.utils.console import ProgressBar
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.utils import timezone
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     def handle_noargs(self, *args, **kwargs):
         now = timezone.now()
         awarded_count = 0

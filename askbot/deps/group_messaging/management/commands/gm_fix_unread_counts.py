@@ -1,9 +1,9 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from askbot.models import User
 from askbot.utils.console import ProgressBar
 from askbot.deps.group_messaging.models import get_unread_inbox_counter
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
 
     def handle_noargs(self, *args, **kwargs):
         users = User.objects.all()

@@ -1,9 +1,9 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.db import transaction
 from askbot.models import Post
 from askbot.utils.console import ProgressBar
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = 'Generates snippets for all posts'
 
     def handle_noargs(self, *args, **kwargs):
