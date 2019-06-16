@@ -9,6 +9,8 @@ from django.utils import timezone
 from jsonfield import JSONField
 from django_countries.fields import CountryField
 
+# the mere fact that this method's use case is so specific,
+# that the parameter is called "user" ...
 def get_profile_cache_key(user):
     if user.pk:
         return 'askbot-profile-{}'.format(user.pk)
@@ -102,7 +104,7 @@ def add_profile_properties(cls):
 
 
 class UserProfile(models.Model):
-    #text_search_vector           | tsvector                 | 
+    #text_search_vector           | tsvector                 |
     auth_user_ptr = models.OneToOneField(
                                 User,
                                 parent_link=True,
@@ -182,7 +184,12 @@ class UserProfile(models.Model):
         app_label = 'askbot'
 
     def get_cache_key(self):
-        return get_profile_cache_key(self.auth_user_ptr)
+        try:
+            # Django <=1.10
+            return get_profile_cache_key(self.auth_user_ptr)
+        except AttributeError:
+            # Django ==1.11
+            return get_profile_cache_key(self)
 
     def update_cache(self):
         key = self.get_cache_key()
