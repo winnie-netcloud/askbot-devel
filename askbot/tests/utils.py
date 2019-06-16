@@ -5,7 +5,10 @@ from markdown2 import Markdown
 from django.apps import apps
 from django.contrib.auth.management import create_permissions
 from django.contrib.sites.management import create_default_site
-from django.contrib.contenttypes.management import update_contenttypes
+try:
+    from django.contrib.contenttypes.management import create_contenttypes
+except ImportError: # downwards compatible, Django <1.11
+    from django.contrib.contenttypes.management import update_contenttypes as create_contenttypes
 from django.core.cache import cache
 from django.db.models.signals import post_migrate
 from django.test import TestCase
@@ -107,18 +110,18 @@ class AskbotTestCase(TestCase):
     def _fixture_setup(self):
         super(AskbotTestCase, self)._fixture_setup()
         for app_config in apps.get_app_configs():
-            update_contenttypes(app_config)
+            create_contenttypes(app_config)
             create_permissions(app_config)
             create_default_site(app_config)
 
     def _fixture_teardown(self):
         post_migrate.disconnect(create_default_site, sender=apps.get_app_config('sites'))
-        post_migrate.disconnect(update_contenttypes)
+        post_migrate.disconnect(create_contenttypes)
         post_migrate.disconnect(create_permissions, dispatch_uid="django.contrib.auth.management.create_permissions")
 
         super(AskbotTestCase, self)._fixture_teardown()
 
-        post_migrate.connect(update_contenttypes)
+        post_migrate.connect(create_contenttypes)
         post_migrate.connect(create_permissions, dispatch_uid="django.contrib.auth.management.create_permissions")
         post_migrate.connect(create_default_site, sender=apps.get_app_config('sites'))
 
