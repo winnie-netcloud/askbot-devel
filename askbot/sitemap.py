@@ -10,8 +10,10 @@ class QuestionsSitemap(Sitemap):
         questions = Post.objects.get_questions()
         questions = questions.exclude(deleted=True)
         questions = questions.exclude(approved=False)
-        return questions.select_related('thread__title',
-                                        'thread__last_activity_at')
+        # this also references fields of another object, rather than just the
+        # related object. Removing the field references, leaving only object
+        # reference
+        return questions.select_related('thread')
 
     def lastmod(self, obj):
         return obj.thread.last_activity_at

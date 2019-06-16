@@ -999,12 +999,14 @@ def user_responses(request, user, context):
     #2) load the activity notifications according to activity types
     #todo: insert pagination code here
     memo_set = request.user.get_notifications(activity_types)
+    # gravatar is a charfield in UserProfile and, as far as i understand
+    # Django, should be available as soon as we select_related('activity__
+    # user__askbot_profile')
     memo_set = memo_set.select_related(
                     'activity',
                     'activity__content_type',
                     'activity__question__thread',
                     'activity__user',
-                    'activity__user__askbot_profile__gravatar',
                 ).order_by(
                     '-activity__active_at'
                 )[:const.USER_VIEW_DATA_SIZE]
