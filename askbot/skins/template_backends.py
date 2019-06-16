@@ -10,6 +10,12 @@ try:
 except ImportError:
     pass # b/c we are not using any of this atm
 
+try:
+    from django.template.backends.jinja2 import Origin
+
+except ImportError:
+    pass # b/c we only use it with Django 1.11 and then it does exist
+
 
 class AskbotSkinTemplates(BaseEngine):
 
@@ -29,8 +35,14 @@ CONTEXT_PROCESSORS = list()
 
 class Template(object):
 
-    def __init__(self, template):
+    # backend parameter was added with Django 1.11
+    def __init__(self, template, backend=None):
         self.template = template
+        if backend is not None:
+            self.backend = backend
+            self.origin = Origin(
+                name=template.filename, template_name=template.name,
+            )
 
     @classmethod
     def load_context_processors(cls, paths):
