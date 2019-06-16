@@ -3,7 +3,7 @@ import logging
 import re
 from django.db import models
 from django.db.models import Q
-from django.db.backends.dummy.base import IntegrityError
+from django.db.utils import IntegrityError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
 from django.contrib.auth.models import User
