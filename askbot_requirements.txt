@@ -18,7 +18,7 @@ django-robots==3.0
 django-threaded-multihost<=1.4-1
 django-tinymce==2.8.0
 django-transaction-signals==1.0.0
-django>=1.9,<1.10
+django>=1.10,<1.11
 html5lib==0.9999999
 jsonfield>=2.0.0
 markdown2<=2.3.8
