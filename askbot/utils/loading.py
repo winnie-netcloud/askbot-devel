@@ -1,6 +1,12 @@
 """Utilities for loading modules"""
 from django.conf import settings as django_settings
 
+import sys
+if (sys.version_info > (3,0)):
+    ABSOLUTE_AND_RELATIVE = 0
+else:
+    ABSOLUTE_AND_RELATIVE = -1
+
 def load_module(mod_path):
     """an equivalent of:
     from some.where import module
@@ -15,10 +21,10 @@ def load_module(mod_path):
     if len(path_bits) > 1:
         mod_name = path_bits.pop()
         mod_prefix = '.'.join(path_bits)
-        _mod = __import__(mod_prefix, globals(), locals(), [mod_name,], -1)
+        _mod = __import__(mod_prefix, globals(), locals(), [mod_name,], ABSOLUTE_AND_RELATIVE)
         return getattr(_mod, mod_name)
     else:
-        return __import__(mod_path, globals(), locals(), [], -1)
+        return __import__(mod_path, globals(), locals(), [], ABSOLUTE_AND_RELATIVE)
 
 
 def load_plugin(setting_name, default_path):
