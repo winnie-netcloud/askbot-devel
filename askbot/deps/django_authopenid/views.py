@@ -46,7 +46,7 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.views.decorators import csrf
 from django.utils import timezone
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from askbot.utils.functions import generate_random_key
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -924,7 +924,7 @@ def complete_openid_signin(request):
     logging.debug('in askbot.deps.django_authopenid.complete')
     consumer = Consumer(request.session, util.DjangoOpenIDStore())
     # make sure params are encoded in utf8
-    params = dict((k,smart_unicode(v)) for k, v in list(request.GET.items()))
+    params = dict((k,smart_text(v)) for k, v in list(request.GET.items()))
     return_to = get_url_host(request) + reverse('user_complete_openid_signin')
     openid_response = consumer.complete(params, return_to)
 
