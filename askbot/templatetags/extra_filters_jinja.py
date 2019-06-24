@@ -13,7 +13,6 @@ from django.template import defaultfilters
 from django.core.urlresolvers import reverse, resolve
 from django.http import Http404
 import simplejson
-from django import template
 from django.utils import timezone
 from django.utils.text import Truncator
 from askbot import exceptions as askbot_exceptions
@@ -32,6 +31,12 @@ from askbot.utils.pluralization import py_pluralize as _py_pluralize
 
 from django_countries import countries
 from django_countries import settings as countries_settings
+
+from django_jinja import library as d_j_library
+class template:
+    @classmethod
+    def Library(cls):
+        return d_j_library
 
 register = template.Library()
 
