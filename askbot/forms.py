@@ -188,7 +188,7 @@ class CountryField(forms.ChoiceField):
             for key, name in list(data.COUNTRIES.items()):
                 country_choices.append((key, name))
 
-        country_choices = sorted(country_choices, cmp=lambda a, b: cmp(a[1], b[1]))
+        country_choices = sorted(country_choices, key=lambda c: c[1])
 
         country_choices = (('unknown', _('select country')),) + tuple(country_choices)
         kwargs['choices'] = kwargs.pop('choices', country_choices)
