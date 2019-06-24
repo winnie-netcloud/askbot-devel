@@ -34,14 +34,3 @@ def patch_django():
 
     if major == 1 and minor == 8:
         django_patches.patch_django_template()
-
-def patch_coffin():
-    """coffin before version 0.3.4
-    does not have csrf_token template tag.
-    This patch must be applied after the django patches
-    """
-    from askbot.patches import coffin_patches
-
-    (major, minor, micro) = package_utils.get_coffin_version()
-    if major == 0 and minor == 3 and micro < 4:
-        coffin_patches.add_csrf_token_tag()

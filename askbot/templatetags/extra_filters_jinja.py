@@ -3,14 +3,6 @@ import pytz
 import re
 import time
 import urllib.request, urllib.parse, urllib.error
-try:
-    from coffin import template as coffin_template
-except ImportError:
-    from django_jinja import library as d_j_library
-    class coffin_template:
-        @classmethod
-        def Library(cls):
-            return d_j_library
 from bs4 import BeautifulSoup
 from django.core import exceptions as django_exceptions
 from django.utils.encoding import force_text
@@ -21,6 +13,7 @@ from django.template import defaultfilters
 from django.core.urlresolvers import reverse, resolve
 from django.http import Http404
 import simplejson
+from django import template
 from django.utils import timezone
 from django.utils.text import Truncator
 from askbot import exceptions as askbot_exceptions
@@ -40,9 +33,7 @@ from askbot.utils.pluralization import py_pluralize as _py_pluralize
 from django_countries import countries
 from django_countries import settings as countries_settings
 
-register = coffin_template.Library()
-
-absolutize_urls = register.filter(absolutize_urls)
+register = template.Library()
 
 TIMEZONE_STR = pytz.timezone(
                     django_settings.TIME_ZONE

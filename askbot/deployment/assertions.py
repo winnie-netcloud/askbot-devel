@@ -16,11 +16,3 @@ def assert_package_compatibility():
         package_utils.get_django_version()
     if django_major < 1:
         raise DeploymentError('Django version < 1.0 is not supported by askbot')
-
-    coffin_version = package_utils.get_coffin_version()
-    if coffin_version == (0, 3, 0) and django_major == 1 and django_minor > 1:
-        raise DeploymentError(
-            'Coffin package version 0.3 is not compatible '
-            'with the current version of Django, please upgrade '
-            'coffin to at least 0.3.3'
-        )

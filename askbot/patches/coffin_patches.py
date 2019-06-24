@@ -26,9 +26,4 @@ class CsrfTokenExtension(Extension):
         return Markup(CsrfTokenNode().render({'csrf_token': csrf_token}))
 
 def add_csrf_token_tag():
-    """adds csrf token tag to the default library"""
-    import coffin.template.defaulttags
-    coffin.template.defaulttags.CsrfTokenExtension = CsrfTokenExtension
-    csrf_token = CsrfTokenExtension
-    coffin.template.defaulttags.csrf_token = csrf_token
-    coffin.template.defaulttags.register.tag(csrf_token)
+    """TODO: Removed when migrated to Python 3"""

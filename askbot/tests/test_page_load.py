@@ -10,15 +10,6 @@ from django.core import cache
 import simplejson
 from django.utils.translation import activate as activate_language
 
-import coffin
-try:
-    # this import is only supposed to work with old versions of Coffin
-    # newer versions do not have a template module
-    import coffin.template
-except ImportError as e:
-    if coffin.__version__[0] < 1:
-        raise e
-
 from bs4 import BeautifulSoup
 
 import askbot
@@ -46,9 +37,7 @@ def patch_jinja2():
         return ORIG_JINJA2_RENDERER(template_object, *args, **kwargs)
     Template.render = instrumented_render
 
-(CMAJOR, CMINOR, CMICRO) = package_utils.get_coffin_version()
-if CMAJOR > 0 or CMINOR == 3 and CMICRO < 4:
-    patch_jinja2()
+patch_jinja2()
 
 
 class PageLoadTestCase(AskbotTestCase):

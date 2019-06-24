@@ -283,40 +283,7 @@ using the decorator multiple times, is harmless and efficient.
 """
 
 def add_import_library_function():
-
-    #this definition is copy/pasted from django 1.2 source code
-    #it is necessary to make Coffin library happy
-    try:
-        from importlib import import_module
-    except ImportError:
-        from django.utils.importlib import import_module
-    class InvalidTemplateLibrary(Exception):
-        pass
-
-    def import_library(taglib_module):
-        """Load a template tag library module.
-        Verifies that the library contains a 'register' attribute, and
-        returns that attribute as the representation of the library
-        """
-        app_path, taglib = taglib_module.rsplit('.',1)
-        app_module = import_module(app_path)
-        try:
-            mod = import_module(taglib_module)
-        except ImportError as e:
-            # If the ImportError is because the taglib submodule does not exist, that's not
-            # an error that should be raised. If the submodule exists and raised an ImportError
-            # on the attempt to load it, that we want to raise.
-            if not module_has_submodule(app_module, taglib):
-                return None
-            else:
-                raise InvalidTemplateLibrary("ImportError raised loading %s: %s" % (taglib_module, e))
-        try:
-            return mod.register
-        except AttributeError:
-            raise InvalidTemplateLibrary("Template library %s does not have a variable named 'register'" % taglib_module)
-
-    import django.template
-    django.template.import_library = import_library
+    """TODO: Remove"""
 
 def add_csrf_protection():
     """adds csrf_token template tag to django
