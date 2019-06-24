@@ -581,8 +581,9 @@ def question(request, id):#refactor - long subroutine. display question body, an
     is_cacheable = True
     if show_page != 1:
         is_cacheable = False
-    elif show_comment_position > askbot_settings.MAX_COMMENTS_TO_SHOW:
-        is_cacheable = False
+    # temporary, until invalidation fix. Got broken with Python 3
+    # elif show_comment_position > askbot_settings.MAX_COMMENTS_TO_SHOW:
+    #    is_cacheable = False
 
     #maybe load draft
     initial = {}
