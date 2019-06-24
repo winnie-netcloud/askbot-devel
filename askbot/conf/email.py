@@ -13,10 +13,10 @@ from askbot import const
 EMAIL_SUBJECT_PREFIX = getattr(django_settings, 'EMAIL_SUBJECT_PREFIX', '')
 
 EMAIL = livesettings.ConfigurationGroup(
-            'EMAIL',
-            _('Email and email alert settings'),
-            super_group=LOGIN_USERS_COMMUNICATION
-        )
+    'EMAIL',
+    _('Email and email alert settings'),
+    super_group=LOGIN_USERS_COMMUNICATION
+)
 
 settings.register(
     livesettings.StringValue(
@@ -25,10 +25,10 @@ settings.register(
         default=EMAIL_SUBJECT_PREFIX,
         description=_('Prefix for the email subject line'),
         help_text=_(
-                'This setting takes default from the django setting '
-                'EMAIL_SUBJECT_PREFIX. A value entered here will override '
-                'the default.'
-            )
+            'This setting takes default from the django setting '
+            'EMAIL_SUBJECT_PREFIX. A value entered here will override '
+            'the default.'
+        )
     )
 )
 
@@ -36,7 +36,7 @@ settings.register(
 def get_default_admin_email():
     try:
         return django_settings.ADMINS[0][1]
-    except:
+    except (AttributeError, IndexError):
         return ''
 
 settings.register(
@@ -148,8 +148,6 @@ settings.register(
         default='w',
         choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
         description=_('Default notification frequency all questions'),
-        help_text=_('Option to define frequency of emailed updates for: '
-                    'all questions.')
     )
 )
 
@@ -160,9 +158,7 @@ settings.register(
         default='i',
         choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
         description=_('Default notification frequency questions asked by the '
-                      'user'),
-        help_text=_('Option to define frequency of emailed updates for: '
-                    'Question asked by the user.')
+                      'user')
     )
 )
 
@@ -173,9 +169,17 @@ settings.register(
         default='d',
         choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
         description=_('Default notification frequency questions answered by '
-                      'the user'),
-        help_text=_('Option to define frequency of emailed updates for: '
-                    'Question answered by the user.')
+                      'the user')
+    )
+)
+
+settings.register(
+    livesettings.StringValue(
+        EMAIL,
+        'DEFAULT_NOTIFICATION_DELIVERY_SCHEDULE_Q_NOANS',
+        default='n',
+        choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES_Q_NOANS,
+        description=_('Default notification frequency on unanswered questions')
     )
 )
 
@@ -185,10 +189,8 @@ settings.register(
         'DEFAULT_NOTIFICATION_DELIVERY_SCHEDULE_Q_SEL',
         default='i',
         choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
-        description=_('Default notification frequency questions individually \
-                       selected by the user'),
-        help_text=_('Option to define frequency of emailed updates for: '
-                    'Question individually selected by the user.')
+        description=_('Default notification frequency questions individually'
+                      'selected by the user')
     )
 )
 
@@ -198,10 +200,8 @@ settings.register(
         'DEFAULT_NOTIFICATION_DELIVERY_SCHEDULE_M_AND_C',
         default='i',
         choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
-        description=_('Default notification frequency for mentions \
-                       and comments'),
-        help_text=_('Option to define frequency of emailed updates for: '
-                    'Mentions and comments.')
+        description=_('Default notification frequency for mentions'
+                      'and comments')
     )
 )
 
@@ -352,13 +352,10 @@ settings.register(
     livesettings.BooleanValue(
         EMAIL,
         'REPLY_BY_EMAIL',
-        default = False,
+        default=False,
         description=_('Enable posting and replying by email'),
         #TODO give a better explanation depending on lamson startup procedure
-        help_text=_(
-            'To enable this feature make sure lamson is running'
-
-        )
+        help_text=_('To enable this feature make sure lamson is running')
     )
 )
 

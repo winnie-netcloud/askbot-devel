@@ -4,16 +4,15 @@ All constants could be used in other modules
 For reasons that models, views can't have unicode
 text in this project, all unicode text go here.
 """
-from django.utils.translation import ugettext_lazy as _
 import os
 import re
+from django.utils.translation import ugettext_lazy as _
 from askbot import get_install_directory
+#an exception import * because that file has only strings
+from askbot.const.message_keys import * #pylint: disable=wildcard-import
 
 DEFAULT_USER_DATA_EXPORT_DIR = os.path.abspath(
-                                    os.path.join(get_install_directory(),
-                                                 '..',
-                                                 'user_data')
-                                              )
+    os.path.join(get_install_directory(), '..', 'user_data'))
 
 #todo: customize words
 CLOSE_REASONS = (
@@ -116,7 +115,7 @@ REPLY_SEPARATOR_TEMPLATE = '==== %(user_action)s %(instruction)s -=-=='
 REPLY_SEPARATOR_REGEX = re.compile(r'==== .* -=-==', re.MULTILINE|re.DOTALL)
 
 ANSWER_SORT_METHODS = (
-    ('latest' , _('latest first')),
+    ('latest', _('latest first')),
     ('oldest', _('oldest first')),
     ('votes', _('most voted first')),
 )
@@ -313,15 +312,15 @@ RESPONSE_ACTIVITY_TYPES_FOR_DISPLAY = (
     TYPE_ACTIVITY_UPDATE_ANSWER,
     TYPE_ACTIVITY_UPDATE_QUESTION,
     TYPE_ACTIVITY_POST_SHARED,
-#    TYPE_ACTIVITY_PRIZE,
-#    TYPE_ACTIVITY_MARK_ANSWER,
-#    TYPE_ACTIVITY_VOTE_UP,
-#    TYPE_ACTIVITY_VOTE_DOWN,
-#    TYPE_ACTIVITY_CANCEL_VOTE,
-#    TYPE_ACTIVITY_DELETE_QUESTION,
-#    TYPE_ACTIVITY_DELETE_ANSWER,
-#    TYPE_ACTIVITY_MARK_OFFENSIVE,
-#    TYPE_ACTIVITY_FAVORITE,
+    #    TYPE_ACTIVITY_PRIZE,
+    #    TYPE_ACTIVITY_MARK_ANSWER,
+    #    TYPE_ACTIVITY_VOTE_UP,
+    #    TYPE_ACTIVITY_VOTE_DOWN,
+    #    TYPE_ACTIVITY_CANCEL_VOTE,
+    #    TYPE_ACTIVITY_DELETE_QUESTION,
+    #    TYPE_ACTIVITY_DELETE_ANSWER,
+    #    TYPE_ACTIVITY_MARK_OFFENSIVE,
+    #    TYPE_ACTIVITY_FAVORITE,
 )
 
 RESPONSE_ACTIVITY_TYPE_MAP_FOR_TEMPLATES = {
@@ -467,21 +466,25 @@ TAG_EMAIL_FILTER_FULL_STRATEGY_CHOICES = (
 )
 
 NOTIFICATION_DELIVERY_SCHEDULE_CHOICES = (
-                            ('i',_('instantly')),
-                            ('d',_('daily')),
-                            ('w',_('weekly')),
-                            ('n',_('never')),
-                        )
+    ('i', _('instantly')),
+    ('d', _('daily')),
+    ('w', _('weekly')),
+    ('n', _('never')),
+)
+
+NOTIFICATION_DELIVERY_SCHEDULE_CHOICES_Q_NOANS = (
+    ('d', _('daily')),
+    ('w', _('weekly')),
+    ('n', _('never')),
+)
 
 USERNAME_REGEX_STRING = r'^[\w \-.@+\']+$'
 
-GRAVATAR_TYPE_CHOICES = (
-                            ('identicon',_('identicon')),
-                            ('monsterid',_('monsterid')),
-                            ('wavatar',_('wavatar')),
-                            ('retro',_('retro')),
-                            ('mm',_('mystery-man')),
-                        )
+GRAVATAR_TYPE_CHOICES = (('identicon', _('identicon')),
+                         ('monsterid', _('monsterid')),
+                         ('wavatar', _('wavatar')),
+                         ('retro', _('retro')),
+                         ('mm', _('mystery-man')))
 
 AVATAR_TYPE_CHOICES_FOR_NEW_USERS = (
     ('n', _('Default avatar')),
@@ -489,9 +492,9 @@ AVATAR_TYPE_CHOICES_FOR_NEW_USERS = (
 )
 
 AVATAR_TYPE_CHOICES = AVATAR_TYPE_CHOICES_FOR_NEW_USERS + (
-                    #avatar uploaded locally - with django-avatar app
-                    ('a', _('Uploaded Avatar')),
-                )
+    #avatar uploaded locally - with django-avatar app
+    ('a', _('Uploaded Avatar')),
+)
 
 #chars that can go before or after @mention
 TWITTER_STYLE_MENTION_TERMINATION_CHARS = '\n ;:,.!?<>"\''
@@ -500,12 +503,12 @@ COMMENT_HARD_MAX_LENGTH = 2048
 
 #user status ch
 USER_STATUS_CHOICES = (
-        ('d', _('administrator')), #admin = moderator + access to settings
-        ('m', _('moderator')), #user with moderation privilege
-        ('a', _('approved')), #regular user
-        ('w', _('watched')), #regular user placed on the moderation watch
-        ('s', _('suspended')), #suspended user who cannot post new stuff
-        ('b', _('blocked')), #blocked
+    ('d', _('administrator')), #admin = moderator + access to settings
+    ('m', _('moderator')), #user with moderation privilege
+    ('a', _('approved')), #regular user
+    ('w', _('watched')), #regular user placed on the moderation watch
+    ('s', _('suspended')), #suspended user who cannot post new stuff
+    ('b', _('blocked')), #blocked
 )
 DEFAULT_USER_STATUS = 'w'
 
@@ -539,11 +542,10 @@ PASSWORD_MIN_LENGTH = 8
 GOLD_BADGE = 1
 SILVER_BADGE = 2
 BRONZE_BADGE = 3
-BADGE_TYPE_CHOICES = (
-    (GOLD_BADGE,   _('gold')),
-    (SILVER_BADGE, _('silver')),
-    (BRONZE_BADGE, _('bronze')),
-)
+BADGE_TYPE_CHOICES = ((GOLD_BADGE, _('gold')),
+                      (SILVER_BADGE, _('silver')),
+                      (BRONZE_BADGE, _('bronze')))
+
 BADGE_CSS_CLASSES = {
     GOLD_BADGE: 'badge1',
     SILVER_BADGE: 'badge2',
@@ -553,16 +555,14 @@ BADGE_DISPLAY_SYMBOL = '&#9679;'
 
 MIN_REPUTATION = 1
 
-SEARCH_ORDER_BY = (
-                    ('-added_at', _('date descendant')),
-                    ('added_at', _('date ascendant')),
-                    ('-last_activity_at', _('most recently active')),
-                    ('last_activity_at', _('least recently active')),
-                    ('-answer_count', _('more responses')),
-                    ('answer_count', _('fewer responses')),
-                    ('-points', _('more votes')),
-                    ('points', _('less votes')),
-                  )
+SEARCH_ORDER_BY = (('-added_at', _('date descendant')),
+                   ('added_at', _('date ascendant')),
+                   ('-last_activity_at', _('most recently active')),
+                   ('last_activity_at', _('least recently active')),
+                   ('-answer_count', _('more responses')),
+                   ('answer_count', _('fewer responses')),
+                   ('-points', _('more votes')),
+                   ('points', _('less votes')))
 
 DEFAULT_QUESTION_WIDGET_STYLE = """
 @import url('http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300,400,700');
@@ -594,6 +594,3 @@ a {
     font-size: 15px;
 }
 """
-
-#an exception import * because that file has only strings
-from askbot.const.message_keys import *

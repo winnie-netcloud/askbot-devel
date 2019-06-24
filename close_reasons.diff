@@ -1,0 +1,26 @@
+diff --git a/askbot/const/__init__.py b/askbot/const/__init__.py
+index b2f6896..53bf61a 100644
+--- a/askbot/const/__init__.py
++++ b/askbot/const/__init__.py
+@@ -18,14 +18,18 @@ DEFAULT_USER_DATA_EXPORT_DIR = os.path.abspath(
+ #todo: customize words
+ CLOSE_REASONS = (
+     (1, _('duplicate question')),
+-    (2, _('question is off-topic or not relevant')),
+-    (3, _('too subjective and argumentative')),
+-    (4, _('not a real question')),
++    (2, _('question is off-topic or not relevant. Please see <a href="http://wiki.ros.org/Support">http://wiki.ros.org/Support</a> for more details.')),
++    (3, _('too subjective or argumentative')),
++    (4, _('Question does not follow our guidelines for questions. Please see: <a href="http://wiki.ros.org/Support">http://wiki.ros.org/Support</a> for more details.')),
+     (5, _('the question is answered, right answer was accepted')),
+     (6, _('question is not relevant or outdated')),
+     (7, _('question contains offensive or malicious remarks')),
+     (8, _('spam or advertising')),
+     (9, _('too localized')),
++    (10, 'PCL Question: The PCL community prefers to answer questions at <a href="http://www.pcl-users.org/">http://www.pcl-users.org/</a>'),
++    (11, 'OpenCV Question: THe OpenCV community prefers to answer questions at: <a href="http://answers.opencv.org/questions/">http://answers.opencv.org/questions/</a>'),
++#    (12, 'MoveIt Question: The MoveIt! community prefers to answer questions at: <a href="https://groups.google.com/forum/#!forum/moveit-users/join">https://groups.google.com/forum/</a>'),
++    (13, 'Gazebo Question: The Gazebo community prefers to answer questions at: <a href="http://answers.gazebosim.org/questions/">http://answers.gazebosim.org</a>')
+ )
+ 
+ LONG_TIME = 60*60*24*30 #30 days is a lot of time

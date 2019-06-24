@@ -1,0 +1,13 @@
+diff --git a/askbot/forms.py b/askbot/forms.py
+index 6069677..152563c 100644
+--- a/askbot/forms.py
++++ b/askbot/forms.py
+@@ -485,7 +485,7 @@ class TagNamesField(forms.CharField):
+             'Tags are short keywords, with no spaces within. '
+             'Up to %(max_tags)d tag can be used.',
+             'Tags are short keywords, with no spaces within. '
+-            'Up to %(max_tags)d tags can be used.',
++            'Up to %(max_tags)d tags can be used. You must at least tag the rosdistro you are using, such as indigo, kinetic, lunar, melodic, or ardent.',
+             askbot_settings.MAX_TAGS_PER_POST
+         ) % {'max_tags': askbot_settings.MAX_TAGS_PER_POST}
+         self.initial = ''

@@ -61,6 +61,11 @@ class Command(NoArgsCommand):
         #for each user, select a tag filtered subset
         #format the email reminder and send it
         for user in models.User.objects.filter(askbot_profile__status__in=recipient_statuses):
+            user.add_missing_askbot_subscriptions()
+            email_setting = user.notification_subscriptions.filter(feed_type='q_noans')[0]
+            if not email_setting.should_send_now():
+                continue
+
             user_questions = questions.exclude(author=user)
             user_questions = user.get_tag_filtered_questions(user_questions)
 
