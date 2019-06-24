@@ -25,10 +25,7 @@ import logging
 from django.conf import settings as django_settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
-try:
-    from django.utils.encoding import force_unicode as force_text #py2.7
-except ImportError:
-    from django.utils.encoding import force_text #py3.x
+from django.utils.encoding import force_text
 from django.utils.functional import lazy
 from django.utils.translation import get_language
 from django.utils.translation import string_concat

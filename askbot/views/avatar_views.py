@@ -11,10 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-try:
-        from django.utils.encoding import force_unicode as force_text#py2.7
-except ImportError:
-        from django.utils.encoding import force_text #py3.x
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 import functools
 

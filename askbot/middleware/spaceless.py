@@ -5,10 +5,7 @@ http://www.davidcramer.net/code/369/spaceless-html-in-django.html
 """
 import re
 from django.utils.functional import allow_lazy
-try:
-        from django.utils.encoding import force_unicode as force_text #py2.7
-except ImportError:
-        from django.utils.encoding import force_text #py3.x
+from django.utils.encoding import force_text
 
 def reduce_spaces_between_tags(value):
     """Returns the given HTML with all spaces between tags removed.

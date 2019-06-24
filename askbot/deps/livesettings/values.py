@@ -10,10 +10,7 @@ from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.cache import cache
 import simplejson
-try:
-        from django.utils.encoding import force_unicode as force_text #py2.7
-except ImportError:
-        from django.utils.encoding import force_text #py3.x
+from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy

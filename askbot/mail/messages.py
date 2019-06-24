@@ -10,10 +10,7 @@ from django.conf import settings as django_settings
 from django.core.urlresolvers import reverse
 from django.template import Context
 from django.template.loader import get_template
-try:
-        from django.utils.encoding import force_unicode as force_text #py2.7
-except ImportError:
-        from django.utils.encoding import force_text #py3.x
+from django.utils.encoding import force_text
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from askbot import const
@@ -349,7 +346,7 @@ class InstantEmailAlert(BaseEmail):
         update_activity = context.get('update_activity')
         update_type = self.get_update_type(update_activity)
 
-        #unhandled update_type 'post_shared' 
+        #unhandled update_type 'post_shared'
         #user_action = _('%(user)s shared a %(post_link)s.')
 
         origin_post = post.get_origin_post()
