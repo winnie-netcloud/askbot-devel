@@ -167,7 +167,8 @@ INSTALLED_APPS = (
     'askbot',
     'askbot.deps.django_authopenid',
     #'askbot.importers.stackexchange', #se loader
-    'askbot.deps.livesettings',
+    #'askbot.deps.livesettings',
+    'livesettings',
     'keyedcache',
     'robots',
     'django_countries',
