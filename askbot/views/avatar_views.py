@@ -11,7 +11,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.encoding import force_unicode
+try:
+        from django.utils.encoding import force_unicode as force_text#py2.7
+except ImportError:
+        from django.utils.encoding import force_text #py3.x
 from django.utils.translation import ugettext as _
 import functools
 
@@ -178,7 +181,7 @@ def upload(request, user_id=None):
                 message = _('Avatar uploaded and set as primary')
             else:
                 errors = get_error_list(form)
-                message = ', '.join([force_unicode(v) for v in errors])
+                message = ', '.join([force_text(v) for v in errors])
         else:
             message = _('Please choose file to upload')
 

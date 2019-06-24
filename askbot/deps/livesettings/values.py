@@ -10,7 +10,10 @@ from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.cache import cache
 import simplejson
-from django.utils.encoding import force_unicode
+try:
+        from django.utils.encoding import force_unicode as force_text #py2.7
+except ImportError:
+        from django.utils.encoding import force_text #py3.x
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy
@@ -322,16 +325,16 @@ class Value(object):
         return new_value
 
     def _default_text(self):
-        if not self.use_default or force_unicode(self.default) == '':
+        if not self.use_default or force_text(self.default) == '':
             note = ""
         elif self.choices:
             work = []
             for x in self.choices:
                 if x[0] in self.default:
-                    work.append(force_unicode(x[1]))
+                    work.append(force_text(x[1]))
             note = _('Default value: ') + str(", ".join(work))
         else:
-            note = _("Default value: %s") % force_unicode(self.default)
+            note = _("Default value: %s") % force_text(self.default)
 
         return note
 
