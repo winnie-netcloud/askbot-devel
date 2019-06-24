@@ -1046,7 +1046,7 @@ def user_responses(request, user, context):
         response_list.append(response)
 
     #4) sort by response id
-    response_list.sort(lambda x,y: cmp(y['question_id'], x['question_id']))
+    response_list.sort(key=lambda x: x['question_id'], reverse=True)
 
     #5) group responses by thread (response_id is really the question post id)
     last_question_id = None #flag to know if the question id is different
@@ -1062,7 +1062,7 @@ def user_responses(request, user, context):
             last_question_id = message['question_id']
 
     #6) sort responses by time
-    filtered_message_list.sort(lambda x,y: cmp(y['timestamp'], x['timestamp']))
+    filtered_message_list.sort(key=lambda x: x['timestamp'], reverse=True)
 
     data = {
         'active_tab':'users',

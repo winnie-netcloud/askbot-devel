@@ -107,9 +107,7 @@ def application_settings(request):
         groups_data = list(groups.values('id', 'name'))
 
         # sort groups_data alphanumerically, but case-insensitive
-        groups_data = sorted(
-            groups_data,
-            lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+        groups_data = sorted(groups_data, key=lambda x: x['name'].lower())
 
         # insert data for the global group at the first position
         groups_data.insert(0, {'id': global_group.id, 'name': global_group.name})

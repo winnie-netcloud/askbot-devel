@@ -938,7 +938,7 @@ class OAuthConnection(object):
         #convert to tuple
         params = list(params.items())
         #sort lexicographically by key
-        params = sorted(params, cmp=lambda x, y: cmp(x[0], y[0]))
+        params = sorted(params, key=lambda x: x[0])
         #urlencode the tuples
         return urllib.parse.urlencode(params)
 
@@ -1070,7 +1070,7 @@ def get_oauth2_starter_url(provider_name, csrf_token):
         client_id=client_id,
         redirect_uri=redirect_uri
     )
-    
+
     return client.auth_uri(state=csrf_token, **params.get('extra_auth_params', {}))
 
 

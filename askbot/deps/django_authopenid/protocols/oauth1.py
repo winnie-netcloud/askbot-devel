@@ -30,7 +30,7 @@ class OAuth1Provider(BaseProtocol):
         self.callback_is_oob = True
         #skip entry of username and email and get the values
         #from the OAuth1 server
-        self.one_click_registration = False 
+        self.one_click_registration = False
 
     def get_user_id(self):
         """Returns user ID within the OAuth1 provider system,
@@ -43,12 +43,12 @@ class OAuth1Provider(BaseProtocol):
         raise NotImplementedError
 
     def get_user_email(self):
-        """Optionally, override this method to read email 
+        """Optionally, override this method to read email
         from the OAuth1 server"""
         return ''
 
     def get_username(self):
-        """Optionally, override this method to read username 
+        """Optionally, override this method to read username
         from the OAuth1 server"""
         return ''
 
@@ -76,7 +76,7 @@ class OAuth1Provider(BaseProtocol):
         #convert to tuple
         params = list(params.items())
         #sort lexicographically by key
-        params = sorted(params, cmp=lambda x, y: cmp(x[0], y[0]))
+        params = sorted(params, key=lambda x: x[0])
         #urlencode the tuples
         return urllib.parse.urlencode(params)
 

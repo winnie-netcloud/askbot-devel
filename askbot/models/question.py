@@ -1083,12 +1083,6 @@ class Thread(models.Model):
                 return 1
             return 2
 
-        def cmp_post_types(a, b):
-            """need to sort by post type"""
-            at = post_type_ord(a)
-            bt = post_type_ord(b)
-            return cmp(at, bt)
-
         post_data = self.get_cached_post_data(user=user, sort_method=sort_method)
         if user.is_anonymous():
             if askbot_settings.COMMENTS_REVERSED:
@@ -1138,7 +1132,7 @@ class Thread(models.Model):
                     from askbot.models import Post
                     # order by insures that
                     posts = list(Post.objects.filter(id__in=post_id_set))
-                    for post in sorted(posts, cmp=cmp_post_types):
+                    for post in sorted(posts, key=post_type_ord):
                         rev = rev_map[post.id]
                         post.text = rev.text
                         post.html = post.parse_post_text()['html']

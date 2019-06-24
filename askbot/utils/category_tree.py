@@ -52,7 +52,7 @@ def get_subtree(tree, path):
 
 def sort_tree(tree):
     """sorts contents of the nodes alphabetically"""
-    tree = sorted(tree, lambda x,y: cmp(x[0], y[0]))
+    tree = sorted(tree, key=lambda x: x[0])
     for item in tree:
         item[1] = sort_tree(item[1])
     return tree
@@ -93,7 +93,7 @@ def add_category(tree, category_name, path):
     subtree = get_subtree(tree, path)
     children = subtree[1]
     children.append([category_name, []])
-    children = sorted(children, lambda x,y: cmp(x[0], y[0]))
+    children = sorted(children, key=lambda x: x[0])
     subtree[1] = children
     new_path = path[:]
     #todo: reformulate all paths in terms of names?
