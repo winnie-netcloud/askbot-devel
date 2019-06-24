@@ -24,7 +24,7 @@ from django.contrib.contenttypes.models import ContentType
 import askbot
 
 from askbot import signals
-from askbot.utils.loading import load_module, load_plugin
+from askbot.utils.loading import load_plugin, load_function
 from askbot.utils.slug import slugify
 from askbot import const
 from askbot.models.tag import Tag, MarkedTag
@@ -706,7 +706,7 @@ class Post(models.Model):
         except KeyError:
             raise NotImplementedError
 
-        return load_module(renderer_path)
+        return load_function(renderer_path)
 
     def has_group(self, group):
         """true if post belongs to the group"""
@@ -832,7 +832,7 @@ class Post(models.Model):
         child_rev_ids = set(child_revs.values_list('pk', flat=True))
 
         rev_ids = list(self_rev_ids | child_rev_ids)
-        
+
         from askbot.tasks import delete_update_notifications_task
         task_args = (rev_ids, keep_activity)
         defer_celery_task(delete_update_notifications_task, args=task_args)

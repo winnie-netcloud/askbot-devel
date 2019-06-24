@@ -2849,7 +2849,7 @@ def user_get_personal_group(self):
     except Group.DoesNotExist:
         self.join_default_groups()
         return Group.objects.get(name=group_name)
-        
+
 
 def user_get_foreign_groups(self):
     """returns a query set of groups to which user does not belong"""
@@ -2932,7 +2932,7 @@ def user_delete_exported_data(self):
 def user_suggest_backup_file_path(self):
     """Returns full path to the up-to date data export file"""
     date_token = datetime.date.today().strftime('%d-%m-%Y')
-    file_slug = ascii_slugify(date_token + '-' + 
+    file_slug = ascii_slugify(date_token + '-' +
                               self.username + '-' +
                               askbot_settings.APP_SHORT_NAME)
     file_name = file_slug + '.zip'
@@ -3752,7 +3752,7 @@ def calculate_gravatar_hash(instance, **kwargs):
     user = instance
     if kwargs.get('raw', False):
         return
-    clean_email = user.email.strip().lower()
+    clean_email = user.email.strip().lower().encode('utf-8')
     user.gravatar = hashlib.md5(clean_email).hexdigest()
 
 

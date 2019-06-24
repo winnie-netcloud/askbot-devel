@@ -12,6 +12,12 @@ def load_module(mod_path):
     return importlib.import_module(mod_path)
 
 
+def load_function(func_path):
+    mod_path, func = func_path.rsplit('.', 1)
+    mod = load_module(mod_path)
+    return getattr(mod, func)
+
+
 def load_plugin(setting_name, default_path):
     """loads custom module/class/function
     provided with setting with the fallback
@@ -21,7 +27,7 @@ def load_plugin(setting_name, default_path):
                         setting_name,
                         default_path
                     )
-    return load_module(python_path)
+    return load_function(python_path)
 
 
 def module_exists(mod_path):

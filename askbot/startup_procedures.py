@@ -430,7 +430,7 @@ class SettingsTester(object):
         * error_message
         """
         settings_module = os.environ['DJANGO_SETTINGS_MODULE']
-        self.settings = load_module(settings_module.encode('utf-8'))
+        self.settings = load_module(settings_module)
         self.messages = list()
         self.requirements = requirements
 
