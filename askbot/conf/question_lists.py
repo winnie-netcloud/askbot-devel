@@ -4,7 +4,7 @@ Settings responsible for display of questions lists
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import DATA_AND_FORMATTING
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 
 QUESTION_LISTS = livesettings.ConfigurationGroup(
     'QUESTION_LISTS',

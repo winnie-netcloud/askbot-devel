@@ -7,7 +7,7 @@ from django.conf import settings as django_settings
 
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import LOGIN_USERS_COMMUNICATION
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 from askbot import const
 
 EMAIL_SUBJECT_PREFIX = getattr(django_settings, 'EMAIL_SUBJECT_PREFIX', '')

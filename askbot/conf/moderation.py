@@ -3,10 +3,10 @@
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import DATA_AND_FORMATTING
-from askbot.deps.livesettings.values import ConfigurationGroup
-from askbot.deps.livesettings.values import BooleanValue
-from askbot.deps.livesettings.values import LongStringValue
-from askbot.deps.livesettings.values import StringValue
+from livesettings.values import ConfigurationGroup
+from livesettings.values import BooleanValue
+from livesettings.values import LongStringValue
+from livesettings.values import StringValue
 
 MODERATION = ConfigurationGroup(
     'MODERATION',

@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
-from askbot.deps.livesettings.values import SuperGroup
-from askbot.deps.livesettings.functions import config_register_super_group
+from livesettings.values import SuperGroup
+from livesettings.functions import config_register_super_group
 
 REP_AND_BADGES = SuperGroup(_('Reputation, Badges, Votes & Flags'))
 CONTENT_AND_UI = SuperGroup(_('Static Content, URLS & UI'))

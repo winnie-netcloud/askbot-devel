@@ -9,7 +9,7 @@ from django.conf import settings as django_settings
 
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import CONTENT_AND_UI
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 
 
 QA_SITE_SETTINGS = livesettings.ConfigurationGroup(

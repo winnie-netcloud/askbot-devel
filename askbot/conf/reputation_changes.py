@@ -5,7 +5,7 @@ users or others
 """
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf.settings_wrapper import settings
-from askbot.deps.livesettings.values import ConfigurationGroup, IntegerValue
+from livesettings.values import ConfigurationGroup, IntegerValue
 from askbot.conf.super_groups import REP_AND_BADGES
 
 REP_CHANGES = ConfigurationGroup(

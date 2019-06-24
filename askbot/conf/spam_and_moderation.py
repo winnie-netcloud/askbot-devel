@@ -1,7 +1,7 @@
 """Settings for content moderation and spam control"""
 from django.utils.translation import ugettext_lazy as _
 from askbot import const
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import EXTERNAL_SERVICES
 

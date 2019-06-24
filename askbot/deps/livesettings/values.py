@@ -517,7 +517,7 @@ class Value(object):
                     except SettingNotSet:
                         pass
 
-                signals.configuration_value_changed.send(self,
+                signals.configuration_value_changed.send(self.__class__,
                         old_value=current_value,
                         new_value=new_value, setting=self,
                         language_code=language_code)

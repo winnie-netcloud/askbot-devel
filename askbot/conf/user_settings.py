@@ -3,7 +3,7 @@ User policy settings
 """
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import LOGIN_USERS_COMMUNICATION
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 from django.conf import settings as django_settings
 from askbot.skins import utils as skin_utils
 from django.utils.translation import ugettext_lazy as _

@@ -7,8 +7,8 @@ Site modes settings:
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import REP_AND_BADGES
-from askbot.deps.livesettings.values import ConfigurationGroup
-from askbot.deps.livesettings.values import BooleanValue
+from livesettings.values import ConfigurationGroup
+from livesettings.values import BooleanValue
 
 LARGE_SITE_MODE_SETTINGS = {
     # Minimum reputation settins.

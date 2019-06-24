@@ -4,7 +4,7 @@ Q&A forum flatpages (about, etc.)
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import string_concat
 from askbot.conf.settings_wrapper import settings
-from askbot.deps.livesettings.values import ConfigurationGroup, LongStringValue
+from livesettings.values import ConfigurationGroup, LongStringValue
 from askbot.conf.super_groups import CONTENT_AND_UI
 
 FLATPAGES = ConfigurationGroup(

@@ -6,7 +6,7 @@ For example number of times a person can vote each day, etc.
 """
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import REP_AND_BADGES
-from askbot.deps.livesettings.values import ConfigurationGroup, IntegerValue
+from livesettings.values import ConfigurationGroup, IntegerValue
 from django.utils.translation import ugettext_lazy as _
 
 VOTE_RULES = ConfigurationGroup(
