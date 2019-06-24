@@ -49,7 +49,6 @@ REQUIREMENTS = {
     'six': 'six==1.10.0',
     'tinymce': 'django-tinymce>=2.8.0',
     'unidecode': 'unidecode<=1.0.23',
-    #'stopforumspam': 'stopforumspam'
 }
 
 #necessary for interoperability of django and coffin
