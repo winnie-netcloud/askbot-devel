@@ -15,7 +15,7 @@ import logging
 import math
 import os
 import operator
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from django.db.models import Count
 from django.db.models import Q
@@ -78,8 +78,8 @@ def owner_or_moderator_required(f):
                 #as this one should be accessible to all
                 return HttpResponseRedirect(request.path)
         else:
-            next_url = request.path + '?' + urllib.urlencode(getattr(request,request.method))
-            params = '?next=%s' % urllib.quote(next_url)
+            next_url = request.path + '?' + urllib.parse.urlencode(getattr(request,request.method))
+            params = '?next=%s' % urllib.parse.quote(next_url)
             return HttpResponseRedirect(url_utils.get_login_url() + params)
         return f(request, profile_owner, context)
     return wrapped_func
@@ -400,7 +400,7 @@ def user_moderate(request, subject, context):
                         )
                     message_sent = True
                 except exceptions.EmailNotSent as e:
-                    email_error_message = unicode(e)
+                    email_error_message = str(e)
                 send_message_form = forms.SendMessageForm()
         else:
             reputation_change_type = None
@@ -671,7 +671,7 @@ def user_stats(request, user, context):
         # "Assign" to its Badge
         badges_dict[award.badge].append(award)
 
-    badges = badges_dict.items()
+    badges = list(badges_dict.items())
     badges.sort(key=operator.itemgetter(1), reverse=True)
 
     user_groups = models.Group.objects.get_for_user(user = user)
@@ -914,7 +914,7 @@ def show_group_join_requests(request, user, context):
     join_requests = models.Activity.objects.filter(
                         activity_type=const.TYPE_ACTIVITY_ASK_TO_JOIN_GROUP,
                         content_type=group_content_type,
-                        object_id__in=groups_dict.keys()
+                        object_id__in=list(groups_dict.keys())
                     ).order_by('-active_at')
     data = {
         'active_tab':'users',
@@ -1290,7 +1290,7 @@ def user_unsubscribe(request):
             result = 'bad_input'
         except models.User.MultipleObjectsReturned:
             result = 'error'
-            logging.critical(u'unexpected error with data %s', unicode(form.cleaned_data))
+            logging.critical('unexpected error with data %s', str(form.cleaned_data))
         else:
             verified_email = user.email
             if user.email_key == key:#all we need is key
@@ -1433,7 +1433,7 @@ def user(request, id, slug=None, tab_name=None):
 
     if slugify(profile_owner.username) != slug:
         view_url = profile_owner.get_profile_url() + '?' \
-                                + urllib.urlencode(getattr(request,request.method))
+                                + urllib.parse.urlencode(getattr(request,request.method))
         return HttpResponseRedirect(view_url)
 
     if not tab_name:

@@ -67,10 +67,10 @@ class ReplaceLinksWithTextTests(TestCase):
         )
 
     def test_local_image_not_replaced(self):
-        text = u'<img src="/some-image.gif"/>'
+        text = '<img src="/some-image.gif"/>'
         self.assertEqual(
                 replace_links_with_text(text), 
-                u'<img src="/some-image.gif">'
+                '<img src="/some-image.gif">'
             )
 
     def test_local_url_with_hotlinked_image_replaced(self):
@@ -134,7 +134,7 @@ class HTMLUtilsTests(TestCase):
     def test_get_text_from_html(self):
         self.assertEqual(
             get_text_from_html('ataoesa uau <a>link</a>aueaotuosu ao <a href="http://cnn.com">CNN!</a>\nnaouaouuau<img> <img src="http://cnn.com/1.png"/> <img src="http://cnn.com/2.png" alt="sometext">'),
-            u'ataoesa uau linkaueaotuosu ao http://cnn.com (CNN!)\n\nnaouaouuau http://cnn.com/1.png http://cnn.com/2.png (sometext)'
+            'ataoesa uau linkaueaotuosu ao http://cnn.com (CNN!)\n\nnaouaouuau http://cnn.com/1.png http://cnn.com/2.png (sometext)'
         )
 
 

@@ -4,7 +4,7 @@ of email messages for various occasions
 import askbot
 import functools
 import logging
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from copy import copy
 from django.conf import settings as django_settings
 from django.core.urlresolvers import reverse
@@ -127,7 +127,7 @@ class BaseEmail(object):
 
         context = copy(self.get_context(context)) #copy context
         for key in context:
-            if isinstance(context[key], basestring):
+            if isinstance(context[key], str):
                 context[key] = mark_safe(context[key])
 
         return ' '.join(template.render(Context(context)).split())
@@ -355,7 +355,7 @@ class InstantEmailAlert(BaseEmail):
         can_reply = to_user.can_post_by_email()
         from askbot.models import get_reply_to_addresses
         reply_address, alt_reply_address = get_reply_to_addresses(to_user, post)
-        alt_reply_subject = urllib.quote(('Re: ' + post.thread.title).encode('utf-8'))
+        alt_reply_subject = urllib.parse.quote(('Re: ' + post.thread.title).encode('utf-8'))
 
         return {
            'admin_email': askbot_settings.ADMIN_EMAIL,

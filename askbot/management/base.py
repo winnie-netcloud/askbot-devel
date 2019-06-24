@@ -1,5 +1,5 @@
 """Base command class, used by some Askbot management commands"""
-from __future__ import print_function
+
 import sys
 from django.core.management import BaseCommand
 from django.db import transaction

@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from django.core.management import BaseCommand
 from askbot import models
 from askbot.utils.console import ProgressBar

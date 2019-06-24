@@ -28,7 +28,7 @@ def register_badge_settings(badge_slug=None, badge_name=None, params=None):
     if params is None:
         return
 
-    for param_slug, param_data in params.items():
+    for param_slug, param_data in list(params.items()):
         param_description = param_data[0]
         param_default = param_data[1]
         settings.register(

@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from datetime import date
 import json
 import os
@@ -199,13 +199,13 @@ class ManagementCommandTests(AskbotTestCase):
                      )
         #check that we have the user
         users = models.User.objects.filter(username=username)
-        self.assertEquals(users.count(), 1)
+        self.assertEqual(users.count(), 1)
         user = users[0]
         #check thath subscrptions are correct
         subs = models.EmailFeedSetting.objects.filter(
                                                 subscriber = user,
                                             )
-        self.assertEquals(subs.count(), 5)
+        self.assertEqual(subs.count(), 5)
         #try to log in
         user = auth.authenticate(username=username, password=password)
         self.assertTrue(user is not None)

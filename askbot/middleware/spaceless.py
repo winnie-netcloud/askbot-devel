@@ -14,7 +14,7 @@ def reduce_spaces_between_tags(value):
     slight mod of django.utils.html import strip_spaces_between_tags
     """
     return re.sub(r'>\s+<', '> <', force_unicode(value))
-reduce_spaces_between_tags = allow_lazy(reduce_spaces_between_tags, unicode)
+reduce_spaces_between_tags = allow_lazy(reduce_spaces_between_tags, str)
 
 class SpacelessMiddleware(object):
     def process_response(self, request, response):

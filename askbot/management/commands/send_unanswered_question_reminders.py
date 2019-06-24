@@ -1,5 +1,5 @@
 """Command that sends reminders about unanswered questions"""
-from __future__ import print_function
+
 from django.db.models import Q
 from django.conf import settings as django_settings
 from django.core.management import BaseCommand

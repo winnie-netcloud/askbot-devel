@@ -4,7 +4,7 @@ from askbot.utils.html import site_url
 from cas import CASClient
 from django.conf import settings as django_settings
 from django.core.urlresolvers import reverse
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 class CASLoginProvider(BaseProtocol):
 
@@ -34,5 +34,5 @@ class CASLoginProvider(BaseProtocol):
     def get_service_url(cls, success_redirect_url):
         service_url = site_url(reverse('user_complete_cas_signin'))
         if success_redirect_url:
-            service_url += '?' + urllib.urlencode({'next': success_redirect_url})
+            service_url += '?' + urllib.parse.urlencode({'next': success_redirect_url})
         return service_url

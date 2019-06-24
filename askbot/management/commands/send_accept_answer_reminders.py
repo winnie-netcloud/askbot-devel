@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import datetime
 from django.core.management import BaseCommand
 from django.conf import settings as django_settings

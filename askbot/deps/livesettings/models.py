@@ -59,7 +59,7 @@ def find_setting(group, key, site=None):
 
     else:
         grp = overrides.get(group, None)
-        if grp and grp.has_key(key):
+        if grp and key in grp:
             val = grp[key]
             setting = ImmutableSetting(key=key, group=group, value=val)
             log.debug('Returning overridden: %s', setting)
@@ -111,7 +111,7 @@ class Setting(models.Model, CachedObjectMixin):
 
     objects = SettingManager()
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.id is not None
 
     def cache_key(self, *args, **kwargs):
@@ -157,7 +157,7 @@ class LongSetting(models.Model, CachedObjectMixin):
 
     objects = LongSettingManager()
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.id is not None
 
     def cache_key(self, *args, **kwargs):

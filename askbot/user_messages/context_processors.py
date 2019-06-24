@@ -43,14 +43,14 @@ class LazyMessages(object):
     def __len__(self):
         return len(self.messages)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.messages)
 
     def __str__(self):
         return self.__unicode__().encode('utf-8')
 
     def __unicode__(self):
-        return unicode(self.messages)
+        return str(self.messages)
 
     def __getitem__(self, *args, **kwargs):
         return self.messages.__getitem__(*args, **kwargs)

@@ -4,7 +4,7 @@ from askbot.deps.django_authopenid.protocols.base import BaseProtocol
 import cgi
 from django.core.exceptions import ImproperlyConfigured
 import oauth2 as oauth # OAuth1 protocol
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 class OAuth1Provider(BaseProtocol):
     """a simple class wrapping oauth2 library
@@ -61,7 +61,7 @@ class OAuth1Provider(BaseProtocol):
 
         url, params = url.split('?')
         if params:
-            kv = map(lambda v: v.split('='), params.split('&'))
+            kv = [v.split('=') for v in params.split('&')]
             if kv:
                 #kv must be list of two-element arrays
                 params = dict(kv)
@@ -74,11 +74,11 @@ class OAuth1Provider(BaseProtocol):
     @classmethod
     def format_request_params(cls, params):
         #convert to tuple
-        params = params.items()
+        params = list(params.items())
         #sort lexicographically by key
         params = sorted(params, cmp=lambda x, y: cmp(x[0], y[0]))
         #urlencode the tuples
-        return urllib.urlencode(params)
+        return urllib.parse.urlencode(params)
 
     @classmethod
     def normalize_url_and_params(cls, url, params):

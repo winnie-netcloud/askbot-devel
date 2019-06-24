@@ -7,7 +7,7 @@ question: why not run these from askbot/__init__.py?
 
 the main function is run_startup_tests
 """
-from __future__ import print_function
+
 from askbot.conf.static_settings import settings as django_settings
 import askbot
 import django
@@ -15,8 +15,8 @@ import os
 import pkg_resources
 import re
 import sys
-import urllib
-from urlparse import urlparse
+import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urlparse
 from django.db import connection
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
@@ -61,7 +61,7 @@ def domain_is_bad():
 
 def askbot_warning(line):
     """prints a warning with the nice header, but does not quit"""
-    print(unicode(line).encode('utf-8'), file=sys.stderr)
+    print(str(line).encode('utf-8'), file=sys.stderr)
 
 
 def print_errors(error_messages, header=None, footer=None):
@@ -209,7 +209,7 @@ def try_import(module_name, pypi_package_name, show_requirements_message=True,
     try:
         load_module(module_name)
     except ImportError as error:
-        message = 'Error: ' + unicode(error)
+        message = 'Error: ' + str(error)
         message += '\n\nPlease run: >pip install %s' % pypi_package_name
         if show_requirements_message:
             message += '\n\nTo install all the dependencies at once, type:'
@@ -272,7 +272,7 @@ def test_specs(req):
         data = {
             'name': req.name,
             'need_spec': unparse_requirement(req),
-            'mod_ver': '.'.join(map(lambda v: str(v), mod_ver))
+            'mod_ver': '.'.join([str(v) for v in mod_ver])
         }
         message = """Unsupported version of module {name},
 found version {mod_ver}, {need_spec} required.
@@ -290,7 +290,7 @@ def get_req_name_from_spec(spec):
 def find_mod_name(req_name):
     from askbot import REQUIREMENTS
     req2mod = dict([(get_req_name_from_spec(v), k)
-                    for (k, v) in REQUIREMENTS.items()])
+                    for (k, v) in list(REQUIREMENTS.items())])
     return req2mod[req_name]
 
 
@@ -298,7 +298,7 @@ def test_modules():
     """tests presence of required modules"""
     from askbot import REQUIREMENTS
     # flatten requirements into file-like string
-    req_text = '\n'.join(REQUIREMENTS.values())
+    req_text = '\n'.join(list(REQUIREMENTS.values()))
     import requirements
     parsed_requirements = requirements.parse(req_text)
     for req in parsed_requirements:
@@ -716,12 +716,12 @@ def test_custom_user_profile_tab():
         func_name = tab_settings.get('CONTEXT_GENERATOR', None)
 
         errors = list()
-        if (name is None) or (not(isinstance(name, basestring))):
+        if (name is None) or (not(isinstance(name, str))):
             errors.append("%s['NAME'] must be a string" % setting_name)
         if (slug is None) or (not(isinstance(slug, str))):
             errors.append("%s['SLUG'] must be an ASCII string" % setting_name)
 
-        if urllib.quote_plus(slug) != slug:
+        if urllib.parse.quote_plus(slug) != slug:
             errors.append(
                 "%s['SLUG'] must be url safe, make it simple" % setting_name)
 

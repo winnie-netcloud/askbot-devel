@@ -1,6 +1,6 @@
 """Messages used in the procedure of deploying Askbot
 """
-from __future__ import print_function
+
 import os.path
 from askbot.deployment import path_utils
 

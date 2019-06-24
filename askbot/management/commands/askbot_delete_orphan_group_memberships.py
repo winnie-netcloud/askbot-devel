@@ -7,15 +7,15 @@ class Command(BaseCommand):
 
     def handle(self): #pylint: disable=arguments-differ
         #1) select distinct group ids from memberships
-        print 'Getting group ids assigned to Group Memberships'
+        print('Getting group ids assigned to Group Memberships')
         memb_group_ids = GroupMembership.objects.values_list('group_id', flat=True)
         #2) distinct group ids from groups
-        print 'Getting all group ids'
+        print('Getting all group ids')
         group_ids = Group.objects.values_list('pk', flat=True)
         #3) calc the diff
         missing_group_ids = set(memb_group_ids) - set(group_ids)
-        print 'Found {} missing groups'.format(len(missing_group_ids))
+        print('Found {} missing groups'.format(len(missing_group_ids)))
         bad_gms = GroupMembership.objects.filter(group_id__in=missing_group_ids)
-        print 'Deleting bad group memberships'
+        print('Deleting bad group memberships')
         bad_gms.delete()
-        print 'Done'
+        print('Done')

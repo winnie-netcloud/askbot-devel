@@ -7,7 +7,7 @@ some parts and the method are based on the
 python-markdown2 library.
 """
 __version_info__ = (0, 0, 0)
-__version__ = '.'.join(map(lambda v: str(v), __version_info__))
+__version__ = '.'.join([str(v) for v in __version_info__])
 __author__ = "Evgeny Fadeev"
 
 import cgi
@@ -29,7 +29,7 @@ if sys.version_info[:2] < (2,4):
         for i in sequence[::-1]:
             yield i
     def _unicode_decode(s, encoding, errors='xmlcharrefreplace'):
-        return unicode(s, encoding, errors)
+        return str(s, encoding, errors)
 else:
     def _unicode_decode(s, encoding, errors='strict'):
         return s.decode(encoding, errors)
@@ -112,9 +112,9 @@ class JiveConverter(object):
         return '\n\n' + html_hash + '\n\n'
 
     def _normalize(self, text):
-        if not isinstance(text, unicode):
+        if not isinstance(text, str):
             #TODO: perhaps shouldn't presume UTF-8 for string input?
-            text = unicode(text, 'utf-8')
+            text = str(text, 'utf-8')
 
         #escape any html special chars globally as in jive they can be anywhere
         text = cgi.escape(text)
@@ -188,7 +188,7 @@ class JiveConverter(object):
         return False
 
     def _unhash_html_blocks(self, text):
-        for hash, html in self._blocks.items():
+        for hash, html in list(self._blocks.items()):
             text = text.replace(hash, html)
         return text
 

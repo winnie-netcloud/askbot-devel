@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.urlresolvers import resolve
 from askbot.conf import settings as askbot_settings
 from askbot.utils.views import is_askbot_view
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 ALLOWED_VIEWS = (
     'askbot.views.meta.config_variable',
@@ -56,7 +56,7 @@ class ForumModeMiddleware(object):
                 )
                 redirect_url = '%s?next=%s' % (
                     settings.LOGIN_URL,
-                    urllib.quote_plus(request.get_full_path())
+                    urllib.parse.quote_plus(request.get_full_path())
                 )
                 return HttpResponseRedirect(redirect_url)
         return None

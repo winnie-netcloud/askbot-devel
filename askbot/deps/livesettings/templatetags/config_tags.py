@@ -35,7 +35,7 @@ def break_at(value,  chars=40):
     return value
 
     chars = int(chars)
-    value = unicode(value)
+    value = str(value)
     if len(value) < chars:
         return value
     else:

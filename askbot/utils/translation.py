@@ -22,7 +22,7 @@ LANGUAGES_DICT = dict(django_settings.LANGUAGES)
 
 def get_language_codes():
     """returns list of activated language codes"""
-    return LANGUAGES_DICT.keys()
+    return list(LANGUAGES_DICT.keys())
 
 def get_language_name(lang=None):
     lang = lang or get_language()

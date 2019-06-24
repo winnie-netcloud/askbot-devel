@@ -13,21 +13,21 @@ class ConfigurationFunctionTest(TestCase):
     def testSetSingleConfigItem(self):
         value = IntegerValue(BASE_GROUP, 'SingleItem')
         config_register(value)
-        self.assert_(config_exists(BASE_GROUP, 'SingleItem'))
+        self.assertTrue(config_exists(BASE_GROUP, 'SingleItem'))
 
     def testSetTwoConfigItems(self):
         s = [IntegerValue(BASE_GROUP, 'testTwoA'), StringValue(BASE_GROUP, 'testTwoB')]
         config_register_list(*s)
 
-        self.assert_(config_exists(BASE_GROUP, 'testTwoA'))
-        self.assert_(config_exists(BASE_GROUP, 'testTwoB'))
+        self.assertTrue(config_exists(BASE_GROUP, 'testTwoA'))
+        self.assertTrue(config_exists(BASE_GROUP, 'testTwoB'))
 
     def testSetGroup(self):
         g1 = ConfigurationGroup('test1','test1')
         value = IntegerValue(g1, 'SingleGroupedItem')
         config_register(value)
         self.assertFalse(config_exists(BASE_GROUP, 'SingleGroupedItem'))
-        self.assert_(config_exists(g1, 'SingleGroupedItem'))
+        self.assertTrue(config_exists(g1, 'SingleGroupedItem'))
 
 
 class ConfigurationTestSettings(TestCase):
@@ -60,7 +60,7 @@ class ConfigurationTestSettings(TestCase):
         self.assertEqual(c.value, 'test1')
 
         # should be true, since it is an update
-        self.assert_(c.update('test2'))
+        self.assertTrue(c.update('test2'))
         self.assertEqual(c.value, 'test2')
 
     def testTwice(self):
@@ -77,7 +77,7 @@ class ConfigurationTestSettings(TestCase):
         # false because it isn't saving a default value
         self.assertFalse(c.update(10))
 
-        self.assert_(c.update(20))
+        self.assertTrue(c.update(20))
         self.assertEqual(c.value, 20)
         try:
             s = c.setting
@@ -85,7 +85,7 @@ class ConfigurationTestSettings(TestCase):
             self.fail("Should have a setting now")
 
         # now delete and go back to no setting by setting the default
-        self.assert_(c.update(10))
+        self.assertTrue(c.update(10))
         self.assertEqual(c.value, 10)
 
         try:
@@ -107,13 +107,13 @@ class ConfigTestDotAccess(TestCase):
         c2.update(100)
 
     def testDotAccess(self):
-        self.assert_(ConfigurationSettings().test3.s1.value)
+        self.assertTrue(ConfigurationSettings().test3.s1.value)
         self.assertEqual(ConfigurationSettings().test3.s2.value, 100)
 
     def testSettingProperty(self):
         c = config_get('test3','s2')
         s = c.setting
-        self.assert_(s.value, 100)
+        self.assertTrue(s.value, 100)
 
     def testDictValues(self):
         d = self.g.dict_values()
@@ -305,7 +305,7 @@ class ConfigTestRequiresChoices(TestCase):
     def testSimpleRequiresChoices(self):
 
         v = config_value('BASE', 'rc1')
-        self.assertEquals(v, ['c1'])
+        self.assertEqual(v, ['c1'])
 
         g = config_get_group('req2')
         keys = [cfg.key for cfg in g]
@@ -320,7 +320,7 @@ class ConfigTestRequiresChoices(TestCase):
 
     def testRequiresSingleValue(self):
         v = config_value('BASE', 'choices2')
-        self.assertEquals(v, 'c1')
+        self.assertEqual(v, 'c1')
 
         keys = [cfg.key for cfg in self.g2]
         self.assertEqual(keys, ['c1'])
@@ -364,7 +364,7 @@ class ConfigTestRequiresValue(TestCase):
 
     def testRequiresValue(self):
         v = config_value('BASE', 'valchoices')
-        self.assertEquals(v, ['foo'])
+        self.assertEqual(v, ['foo'])
 
         g = config_get_group('reqval')
 
@@ -380,7 +380,7 @@ class ConfigTestRequiresValue(TestCase):
 
     def testRequiresSingleValue(self):
         v = config_value('BASE', 'valchoices2')
-        self.assertEquals(v, 'a')
+        self.assertEqual(v, 'a')
 
         keys = [cfg.key for cfg in self.g2]
         self.assertEqual(keys, ['c1'])
@@ -408,7 +408,7 @@ class ConfigTestGroupRequires(TestCase):
 
     def testRequiresValue(self):
         c = config_get('BASE', 'groupchoice')
-        self.assertEquals(c.value, [])
+        self.assertEqual(c.value, [])
 
         keys = [cfg.key for cfg in self.g1]
         self.assertEqual(keys, [])
@@ -521,7 +521,7 @@ class OverrideTest(TestCase):
     def testOverriddenSetting(self):
         """Accessing an overridden setting should give the override value."""
         c = config_get('overgroup', 's2')
-        self.assertEquals(c.value, 100)
+        self.assertEqual(c.value, 100)
 
     def testCantChangeSetting(self):
         """When overridden, setting a value should not work, should get the overridden value"""
@@ -529,13 +529,13 @@ class OverrideTest(TestCase):
         c.update(1)
 
         c = config_get('overgroup', 's2')
-        self.assertEquals(c.value, 100)
+        self.assertEqual(c.value, 100)
 
     def testNotOverriddenSetting(self):
         """Settings which are not overridden should return their defaults"""
         c = config_get('overgroup', 's3')
 
-        self.assertEquals(c.value, 10)
+        self.assertEqual(c.value, 10)
 
     def testOverriddenListSetting(self):
         """Make sure lists work when overridden"""

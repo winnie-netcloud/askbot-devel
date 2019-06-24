@@ -1,6 +1,6 @@
 """reads pluralization formulae from the .po files
 and prints out list of languages for each formula"""
-from __future__ import print_function
+
 import sys
 import os.path
 import collections
@@ -14,7 +14,7 @@ for filename in sys.argv:
     if not filename.endswith('.po'):
         continue
     lines = open(filename).readlines()
-    formula = filter(find_formula, lines)[0]
+    formula = list(filter(find_formula, lines))[0]
     lang = os.path.dirname(os.path.dirname(filename))
     lang_codes[formula].add(lang.split('/')[-1])
 

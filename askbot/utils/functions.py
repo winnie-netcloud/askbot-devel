@@ -105,7 +105,7 @@ def is_iterable(thing):
     #pylint: disable=missing-docstring
     if hasattr(thing, '__iter__'):
         return True
-    return isinstance(thing, basestring)
+    return isinstance(thing, str)
 
 BOT_REGEX = re.compile(
     r'bot|http|\.com|crawl|spider|python|curl|yandex'
@@ -191,7 +191,7 @@ def setup_paginator(context):
     if context["is_paginated"]:
         # initialize variables
         in_leading_range = in_trailing_range = False
-        pages_outside_leading_range = pages_outside_trailing_range = range(0)
+        pages_outside_leading_range = pages_outside_trailing_range = list(range(0))
 
         if context["pages"] <= LEADING_PAGE_RANGE_DISPLAYED:
             in_leading_range = in_trailing_range = True

@@ -60,7 +60,7 @@ def format_form_errors(form):
     If there are no errors, returns empty string
     """
     if form.errors:
-        errors = form.errors.values()
+        errors = list(form.errors.values())
         if len(errors) == 1:
             return errors[0]
         else:
@@ -185,7 +185,7 @@ class CountryField(forms.ChoiceField):
         except AttributeError:
             from django_countries import data
             country_choices = list()
-            for key, name in data.COUNTRIES.items():
+            for key, name in list(data.COUNTRIES.items()):
                 country_choices.append((key, name))
 
         country_choices = sorted(country_choices, cmp=lambda a, b: cmp(a[1], b[1]))
@@ -388,7 +388,7 @@ class EditorField(forms.CharField):
         try:
             self.user.assert_can_post_text(value)
         except PermissionDenied as err:
-            raise forms.ValidationError(unicode(err))
+            raise forms.ValidationError(str(err))
 
         return value
 
@@ -511,12 +511,12 @@ class TagNamesField(forms.CharField):
             if cleaned_tag not in cleaned_entered_tags:
                 cleaned_entered_tags.append(clean_tag(tag))
 
-        result = u' '.join(cleaned_entered_tags)
+        result = ' '.join(cleaned_entered_tags)
 
         if len(result) > 125:  # magic number!, the same as max_length in db
             raise forms.ValidationError(self.error_messages['max_length'])
 
-        return u' '.join(cleaned_entered_tags)
+        return ' '.join(cleaned_entered_tags)
 
 
 class WikiField(forms.BooleanField):
@@ -558,7 +558,7 @@ class SortField(forms.ChoiceField):
 
     def clean(self, value):
         value = value or self.default
-        if value not in dict(self.choices).keys():
+        if value not in list(dict(self.choices).keys()):
             value = self.default
         return value
 
@@ -635,7 +635,7 @@ class ShowQuestionForm(forms.Form):
         or invalid"""
         if self._errors:
             # since the form is always valid, clear the errors
-            logging.error(unicode(self._errors))
+            logging.error(str(self._errors))
             self._errors = {}
 
         in_data = self.get_pruned_data()
@@ -959,7 +959,7 @@ class PostAsSomeoneForm(forms.Form):
         then we would not have to have two almost identical clean functions?
         """
         username = self.cleaned_data.get('post_author_username', '').strip()
-        initial_username = unicode(self.fields['post_author_username'].initial)
+        initial_username = str(self.fields['post_author_username'].initial)
         if username and username == initial_username:
             self.cleaned_data['post_author_username'] = ''
         return self.cleaned_data['post_author_username']
@@ -968,7 +968,7 @@ class PostAsSomeoneForm(forms.Form):
         """if value is the same as initial, it is reset to
         empty string"""
         email = self.cleaned_data.get('post_author_email', '').strip()
-        initial_email = unicode(self.fields['post_author_email'].initial)
+        initial_email = str(self.fields['post_author_email'].initial)
         if email == initial_email:
             email = ''
         if email != '':
@@ -1267,7 +1267,7 @@ class RevisionForm(forms.Form):
         date_format = '%c'
         rev_choices = list()
         for r in revisions:
-            rev_details = u'%s - %s (%s) %s' % (
+            rev_details = '%s - %s (%s) %s' % (
                 r[0], r[1], r[2].strftime(date_format), r[3])
             rev_choices.append((r[0], rev_details))
 
@@ -1372,7 +1372,7 @@ class EditTagWikiForm(forms.Form):
 
 class EditUserForm(forms.Form):
     email = forms.EmailField(
-        label=u'Email', required=False, max_length=255,
+        label='Email', required=False, max_length=255,
         widget=forms.TextInput(attrs={'size': 35}))
 
     realname = forms.CharField(
@@ -1520,7 +1520,7 @@ class EditUserEmailFeedsForm(forms.Form):
 
     def set_initial_values(self, user=None):
         from askbot import models
-        KEY_MAP = dict([(v, k) for k, v in self.FORM_TO_MODEL_MAP.iteritems()])
+        KEY_MAP = dict([(v, k) for k, v in self.FORM_TO_MODEL_MAP.items()])
         if user is not None:
             settings = models.EmailFeedSetting.objects.filter(subscriber=user)
             initial_values = {}
@@ -1550,7 +1550,7 @@ class EditUserEmailFeedsForm(forms.Form):
         # TODO: refactor this - too hacky
         # should probably use model form instead
 
-        return self.FORM_TO_MODEL_MAP.values()
+        return list(self.FORM_TO_MODEL_MAP.values())
 
     def set_frequency(self, frequency='n'):
         data = {
@@ -1570,7 +1570,7 @@ class EditUserEmailFeedsForm(forms.Form):
         """
         from askbot import models
         changed = False
-        for form_field, feed_type in self.FORM_TO_MODEL_MAP.items():
+        for form_field, feed_type in list(self.FORM_TO_MODEL_MAP.items()):
             s, created = models.EmailFeedSetting.objects.get_or_create(
                     subscriber=user, feed_type=feed_type)
             if save_unbound:

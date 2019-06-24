@@ -285,7 +285,7 @@ class Tag(models.Model):
 
     class Meta:
         app_label = 'askbot'
-        db_table = u'tag'
+        db_table = 'tag'
         ordering = ('-used_count', 'name')
         unique_together = ('name', 'language_code')
 
@@ -324,4 +324,4 @@ class TagSynonym(models.Model):
         app_label = 'askbot'
 
     def __unicode__(self):
-        return u'%s -> %s' % (self.source_tag_name, self.target_tag_name)
+        return '%s -> %s' % (self.source_tag_name, self.target_tag_name)

@@ -115,9 +115,9 @@ def send_mail(
         )
         logging.debug('sent update to %s' % ','.join(recipient_list))
     except Exception as error:
-        sys.stderr.write('\n' + unicode(error).encode('utf-8') + '\n')
+        sys.stderr.write('\n' + str(error).encode('utf-8') + '\n')
         if raise_on_failure == True:
-            raise exceptions.EmailNotSent(unicode(error))
+            raise exceptions.EmailNotSent(str(error))
 
 INSTRUCTIONS_PREAMBLE = ugettext_lazy('<p>To post by email, please:</p>')
 QUESTION_TITLE_INSTRUCTION = ugettext_lazy(
@@ -410,7 +410,7 @@ def process_emailed_question(
             email_address,
             subject,
             reason = 'permission_denied',
-            body_text = unicode(error),
+            body_text = str(error),
             reply_to = reply_to
         )
     except ValidationError:

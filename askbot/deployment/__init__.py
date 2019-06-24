@@ -1,7 +1,7 @@
 """
 module for deploying askbot
 """
-from __future__ import print_function
+
 import os.path
 import sys
 import django
@@ -243,7 +243,7 @@ def collect_missing_options(options_dict):
             ('database_host', False),
             ('database_port', False)
         ])
-        for key, required in db_keys.items():
+        for key, required in list(db_keys.items()):
             if options_dict[key] is None:
                 key_name = key.replace('_', ' ')
                 fmt_string = '\nPlease enter %s'

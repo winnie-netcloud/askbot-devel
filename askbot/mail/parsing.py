@@ -140,7 +140,7 @@ def strip_email_client_quote_separator(text):
         if regex.search(text):
             return regex.sub('', text)
     #did not find a quote separator!!! log it
-    log_message = u'\nno matching quote separator: %s\n' % text
+    log_message = '\nno matching quote separator: %s\n' % text
     sys.stderr.write(log_message.encode('utf-8'))
     text_lines = text.splitlines(False)
     return '\n'.join(text_lines[:-3])#strip 3 lines as a guess
@@ -154,7 +154,7 @@ def extract_reply_contents(text, reply_separator=None):
     ``reply_separator`` is either a string or a regex object
     """
     if reply_separator:
-        if isinstance(reply_separator, basestring):
+        if isinstance(reply_separator, str):
             text = text.split(reply_separator)[0]
         else:
             testre = re.compile('test')

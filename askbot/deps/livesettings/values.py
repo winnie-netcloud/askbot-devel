@@ -24,7 +24,7 @@ from askbot.deps.livesettings.widgets import ImageInput
 from askbot.utils.functions import format_setting_name
 import datetime
 import logging
-import signals
+from . import signals
 import os
 
 __all__ = ['BASE_GROUP', 'BASE_SUPER_GROUP', 'ConfigurationGroup', 'Value', 'BooleanValue',
@@ -66,7 +66,7 @@ class SortedDotDict(object):
             raise AttributeError(key)
 
     def __iter__(self):
-        vals = self.values()
+        vals = list(self.values())
         for k in vals:
             yield k
 
@@ -80,25 +80,25 @@ class SortedDotDict(object):
         del self._dict[key]
 
     def keys(self):
-        return self._dict.keys()
+        return list(self._dict.keys())
 
     def values(self):
-        vals = self._dict.values()
+        vals = list(self._dict.values())
         vals = [v for v in vals if isinstance(v, (ConfigurationGroup, Value))]
         vals.sort()
         return vals
 
     def items(self):
-        return self._dict.items()
+        return list(self._dict.items())
 
     def iterkeys(self):
-        return self._dict.iterkeys()
+        return iter(self._dict.keys())
 
     def itervalues(self):
-        return self._dict.itervalues()
+        return iter(self._dict.values())
 
     def iteritems(self):
-        return self._dict.iteritems()
+        return iter(self._dict.items())
 
     def get(self, *args, **kwargs):
         return self._dict.get(*args, **kwargs)
@@ -197,7 +197,7 @@ class ConfigurationGroup(SortedDotDict):
 
     def dict_values(self, load_modules=True):
         vals = {}
-        keys = super(ConfigurationGroup, self).keys()
+        keys = list(super(ConfigurationGroup, self).keys())
         for key in keys:
             v = self[key]
             if isinstance(v, Value):
@@ -208,7 +208,7 @@ class ConfigurationGroup(SortedDotDict):
         return vals
 
     def values(self):
-        vals = super(ConfigurationGroup, self).values()
+        vals = list(super(ConfigurationGroup, self).values())
         return [v for v in vals if v.enabled()]
 
 BASE_GROUP = ConfigurationGroup(
@@ -264,7 +264,7 @@ class Value(object):
             self.requires = group.requires
             self.requires_value = group.requires_value
 
-        if kwargs.has_key('default'):
+        if 'default' in kwargs:
             self.default = kwargs.pop('default')
             self.use_default = True
         else:
@@ -286,7 +286,7 @@ class Value(object):
         return iter(self.value)
 
     def __unicode__(self):
-        return unicode(self.value)
+        return str(self.value)
 
     def __str__(self):
         return str(self.value)
@@ -329,7 +329,7 @@ class Value(object):
             for x in self.choices:
                 if x[0] in self.default:
                     work.append(force_unicode(x[1]))
-            note = _('Default value: ') + unicode(u", ".join(work))
+            note = _('Default value: ') + str(", ".join(work))
         else:
             note = _("Default value: %s") % force_unicode(self.default)
 
@@ -373,7 +373,7 @@ class Value(object):
             default_code = django_settings.LANGUAGE_CODE
             default_name = langs_dict[default_code]
             langs_dict[0] = default_code, default_name
-            langs = langs_dict.keys()
+            langs = list(langs_dict.keys())
         else:
             langs = (django_settings.LANGUAGE_CODE,)
 
@@ -389,7 +389,7 @@ class Value(object):
 
         if self.localized and len(django_settings.LANGUAGES) > 1:
             for field in fields:
-                lang_name = unicode(langs_dict[field.language_code])
+                lang_name = str(langs_dict[field.language_code])
                 field.label += mark_safe(' <span class="lang">(%s)</span>' % lang_name)
 
         return fields
@@ -456,7 +456,7 @@ class Value(object):
                     if overrides:
                         # maybe override the default
                         grp = overrides.get(self.group.key, {})
-                        if grp.has_key(key):
+                        if key in grp:
                             val = grp[self.key]
                 else:
                     val = NOTSET
@@ -470,7 +470,7 @@ class Value(object):
                 global _WARN
                 log.error(e)
                 if str(e).find("configuration_setting") > -1:
-                    if not _WARN.has_key('configuration_setting'):
+                    if 'configuration_setting' not in _WARN:
                         log.warn('Error loading setting %s.%s from table, OK if you are in migrate', self.group.key, key)
                         _WARN['configuration_setting'] = True
 
@@ -494,7 +494,7 @@ class Value(object):
             new_value = self.to_python(value)
             if current_value != new_value:
                 if self.update_callback:
-                    new_value = apply(self.update_callback, (current_value, new_value))
+                    new_value = self.update_callback(*(current_value, new_value))
 
                 db_value = self.get_db_prep_save(new_value)
 
@@ -549,11 +549,11 @@ class Value(object):
             if language_code and self.localized:
                 current_lang = get_language()
                 activate_language(language_code)
-                localized_value = unicode(self.default)
+                localized_value = str(self.default)
                 activate_language(current_lang)
                 return localized_value
             elif self.use_default:
-                return unicode(self.default)
+                return str(self.default)
 
         return ''
 
@@ -588,13 +588,13 @@ class Value(object):
         "Returns a value suitable for storage into a CharField"
         if value == NOTSET:
             value = ""
-        return unicode(value)
+        return str(value)
 
     def to_editor(self, value):
         "Returns a value suitable for display in a form widget"
         if value == NOTSET:
             return NOTSET
-        return unicode(value)
+        return str(value)
 
 ###############
 # VALUE TYPES #
@@ -641,7 +641,7 @@ class DecimalValue(Value):
         if value == NOTSET:
             return "0"
         else:
-            return unicode(value)
+            return str(value)
 
 # DurationValue has a lot of duplication and ugliness because of issue #2443
 # Until DurationField is sorted out, this has to do some extra work
@@ -672,7 +672,7 @@ class DurationValue(Value):
         if value == NOTSET:
             return NOTSET
         else:
-            return unicode(value.days * 24 * 3600 + value.seconds + float(value.microseconds) / 1000000)
+            return str(value.days * 24 * 3600 + value.seconds + float(value.microseconds) / 1000000)
 
 class FloatValue(Value):
 
@@ -692,7 +692,7 @@ class FloatValue(Value):
         if value == NOTSET:
             return "0"
         else:
-            return unicode(value)
+            return str(value)
 
 class IntegerValue(Value):
     class field(forms.IntegerField):
@@ -710,7 +710,7 @@ class IntegerValue(Value):
         if value == NOTSET:
             return "0"
         else:
-            return unicode(value)
+            return str(value)
 
 
 class PercentValue(Value):
@@ -737,7 +737,7 @@ class PercentValue(Value):
         if value == NOTSET:
             return "0"
         else:
-            return unicode(value)
+            return str(value)
 
 class PositiveIntegerValue(IntegerValue):
 
@@ -764,7 +764,7 @@ class StringValue(Value):
     def to_python(self, value):
         if value == NOTSET:
             value = ""
-        return unicode(value)
+        return str(value)
 
     to_editor = to_python
 
@@ -800,7 +800,7 @@ class LongStringValue(Value):
     def to_python(self, value):
         if value == NOTSET:
             value = ""
-        return unicode(value)
+        return str(value)
 
     to_editor = to_python
 

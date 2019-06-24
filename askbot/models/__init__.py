@@ -10,7 +10,7 @@ import hashlib
 import logging
 import os
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from functools import partial
 import uuid
 from celery import states
@@ -385,8 +385,8 @@ def _check_gravatar(gravatar):
     #todo: think of whether we need this and if so
     #how to check the avatar type appropriately
     gravatar_url = askbot_settings.GRAVATAR_BASE_URL + "/%s?d=404" % gravatar
-    code = urllib.urlopen(gravatar_url).getcode()
-    if urllib.urlopen(gravatar_url).getcode() != 404:
+    code = urllib.request.urlopen(gravatar_url).getcode()
+    if urllib.request.urlopen(gravatar_url).getcode() != 404:
         return 'g' #gravatar
     else:
         return 'n' #none
@@ -1436,7 +1436,7 @@ def user_get_localized_profile(self):
 
 def user_update_localized_profile(self, **kwargs):
     profile = self.get_localized_profile()
-    for key, val in kwargs.items():
+    for key, val in list(kwargs.items()):
         setattr(profile, key, val)
     profile.update_cache()
     lp = LocalizedUserProfile.objects.filter(pk=profile.pk)
@@ -2297,7 +2297,7 @@ def user_create_post_reject_reason(
         author = self,
         revised_at = timestamp,
         text = details,
-        comment = unicode(const.POST_STATUS['default_version'])
+        comment = str(const.POST_STATUS['default_version'])
     )
 
     reason.details = details
@@ -2811,7 +2811,7 @@ def user_get_languages(self):
 
 
 def get_profile_link(self, text=None):
-    profile_link = u'<a href="%s">%s</a>' \
+    profile_link = '<a href="%s">%s</a>' \
         % (self.get_profile_url(), escape(text or self.username))
 
     return mark_safe(profile_link)
@@ -3836,8 +3836,8 @@ def notify_award_message(instance, created, **kwargs):
         with override(user.primary_language):
             badge = get_badge(instance.badge.slug)
 
-            msg = _(u"Congratulations, you have received a badge '%(badge_name)s'. "
-                    u"Check out <a href=\"%(user_profile)s\">your profile</a>.") \
+            msg = _("Congratulations, you have received a badge '%(badge_name)s'. "
+                    "Check out <a href=\"%(user_profile)s\">your profile</a>.") \
                     % {
                         'badge_name':badge.name,
                         'user_profile':user.get_profile_url()
@@ -4186,7 +4186,7 @@ def notify_punished_users(user, **kwargs):
                     suspended_user_cannot=True
                 )
     except django_exceptions.PermissionDenied as e:
-        user.message_set.create(message = unicode(e))
+        user.message_set.create(message = str(e))
 
 def post_anonymous_askbot_content(
                                 sender,

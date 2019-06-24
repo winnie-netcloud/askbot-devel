@@ -143,7 +143,7 @@ class ActivityQuerySet(models.query.QuerySet):
             else:
                 logging.debug(
                             'method get_origin_post() not implemented for %s' \
-                            % unicode(post)
+                            % str(post)
                         )
         return list(origin_posts)
 
@@ -160,7 +160,7 @@ class ActivityQuerySet(models.query.QuerySet):
 
         #3) get links from activity objects to content objects
         objects_by_activity = dict()
-        for content_type_id, object_id_list in content_object_ids.items():
+        for content_type_id, object_id_list in list(content_object_ids.items()):
             content_type = ContentType.objects.get_for_id(content_type_id)
             model_class = content_type.model_class()
             content_objects = model_class.objects.filter(id__in=object_id_list)
@@ -314,11 +314,11 @@ class Activity(models.Model):
     objects = ActivityManager()
 
     def __unicode__(self):
-        return u'[%s] was active at %s' % (self.user.username, self.active_at)
+        return '[%s] was active at %s' % (self.user.username, self.active_at)
 
     class Meta:
         app_label = 'askbot'
-        db_table = u'activity'
+        db_table = 'activity'
         verbose_name = _("activity")
         verbose_name_plural = _("activities")
 
@@ -439,14 +439,14 @@ class EmailFeedSetting(models.Model):
         app_label = 'askbot'
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         if self.reported_at is None:
             reported_at = "'not yet'"
         else:
             reported_at = '%s' % self.reported_at.strftime('%d/%m/%y %H:%M')
-        return u'Email feed for %s type=%s, frequency=%s, reported_at=%s' % (
+        return 'Email feed for %s type=%s, frequency=%s, reported_at=%s' % (
                                                      self.subscriber,
                                                      self.feed_type,
                                                      self.frequency,
@@ -687,7 +687,7 @@ class Group(AuthGroup):
         emails = functions.split_list(self.preapproved_emails)
         email_field = EmailField()
         try:
-            map(lambda v: email_field.clean(v), emails)
+            list(map(lambda v: email_field.clean(v), emails))
         except exceptions.ValidationError:
             raise exceptions.ValidationError(
                 _('Please give a list of valid email addresses.')
@@ -698,7 +698,7 @@ class Group(AuthGroup):
         from askbot.forms import DomainNameField
         domain_field = DomainNameField()
         try:
-            map(lambda v: domain_field.clean(v), domains)
+            list(map(lambda v: domain_field.clean(v), domains))
         except exceptions.ValidationError:
             raise exceptions.ValidationError(
                 _('Please give a list of valid email domain names.')

@@ -19,12 +19,12 @@ class MarkupTest(AskbotTestCase):
         anticipated_authors = [self.u1,]
         mentioned_authors, output = markup.mentionize_text(text, anticipated_authors)
         self.assertTrue(self.u1 in mentioned_authors)
-        self.assertEquals(output, expected_output % {'user_url': self.u1.get_profile_url()})
+        self.assertEqual(output, expected_output % {'user_url': self.u1.get_profile_url()})
 
     def test_extract_mentioned_name_seeds(self):
         text = "oh hai @user1 how are you?"
         output = markup.extract_mentioned_name_seeds(text)
-        self.assertEquals(output, set(['user1']))
+        self.assertEqual(output, set(['user1']))
 
 """
 More test cases for the future, taken from

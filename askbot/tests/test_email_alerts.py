@@ -100,14 +100,14 @@ class SubjectLineTests(TestCase):
         """
         askbot_settings.update('EMAIL_SUBJECT_PREFIX', 'test prefix')
         subj = mail.prefix_the_subject_line('hahah')
-        self.assertEquals(subj, 'test prefix hahah')
+        self.assertEqual(subj, 'test prefix hahah')
 
     def test_can_disable_prefix(self):
         """set prefix to empty string and make sure
         that the subject line is not altered"""
         askbot_settings.update('EMAIL_SUBJECT_PREFIX', '')
         subj = mail.prefix_the_subject_line('hahah')
-        self.assertEquals(subj, 'hahah')
+        self.assertEqual(subj, 'hahah')
 
 from django.test import TransactionTestCase
 class EmailAlertTests(TransactionTestCase):
@@ -754,7 +754,7 @@ class FeedbackTests(utils.AskbotTestCase):
         response = client.post(reverse('feedback'), data)
         template_names = set([t.name for t in response.templates])
         expected = set(('email/feedback/subject.txt', 'email/feedback/body.html'))
-        self.assertEquals(template_names, expected)
+        self.assertEqual(template_names, expected)
 
         outbox = django.core.mail.outbox
         self.assertEqual(len(outbox), 1)
@@ -981,7 +981,7 @@ class EmailFeedSettingTests(utils.AskbotTestCase):
         data_before = TO_JSON(self.get_user_feeds())
         self.user.add_missing_askbot_subscriptions()
         data_after = TO_JSON(self.get_user_feeds())
-        self.assertEquals(data_before, data_after)
+        self.assertEqual(data_before, data_after)
 
     def test_add_missing_q_all_subscription(self):
         feed = self.get_user_feeds().filter(feed_type = 'q_all')
@@ -989,11 +989,11 @@ class EmailFeedSettingTests(utils.AskbotTestCase):
         count_before = self.get_user_feeds().count()
         self.user.add_missing_askbot_subscriptions()
         count_after = self.get_user_feeds().count()
-        self.assertEquals(count_after - count_before, 1)
+        self.assertEqual(count_after - count_before, 1)
 
         feed = self.get_user_feeds().filter(feed_type = 'q_all')[0]
 
-        self.assertEquals(
+        self.assertEqual(
             feed.frequency,
             askbot_settings.DEFAULT_NOTIFICATION_DELIVERY_SCHEDULE_Q_ALL
         )
@@ -1009,7 +1009,7 @@ class EmailFeedSettingTests(utils.AskbotTestCase):
         data_before = TO_JSON(feeds_before)
         new_user.add_missing_askbot_subscriptions()
         data_after = TO_JSON(self.get_user_feeds())
-        self.assertEquals(data_before, data_after)
+        self.assertEqual(data_before, data_after)
 
 
 class EmailAlertTestsWithGroupsEnabled(utils.AskbotTestCase):
@@ -1070,24 +1070,24 @@ class PostApprovalTests(utils.AskbotTestCase):
         outbox = django.core.mail.outbox
         #here we should get just the notification of the post
         #being placed on the moderation queue
-        self.assertEquals(len(outbox), 1)
-        self.assertEquals(outbox[0].recipients(), [self.u1.email])
+        self.assertEqual(len(outbox), 1)
+        self.assertEqual(outbox[0].recipients(), [self.u1.email])
 
     def test_moderated_question_answerable_approval_notification(self):
         u1 = self.create_user('user1', status = 'w')
         question = self.post_question(user = u1, by_email = True)
 
-        self.assertEquals(question.approved, False)
+        self.assertEqual(question.approved, False)
 
         u2 = self.create_user('admin', status = 'd')
 
-        self.assertEquals(question.revisions.count(), 1)
+        self.assertEqual(question.revisions.count(), 1)
         u2.approve_post_revision(question.get_latest_revision())
 
         outbox = django.core.mail.outbox
-        self.assertEquals(len(outbox), 2)
+        self.assertEqual(len(outbox), 2)
         #moderation notification
-        self.assertEquals(outbox[0].recipients(), [u1.email,])
+        self.assertEqual(outbox[0].recipients(), [u1.email,])
         #self.assertEquals(outbox[1].recipients(), [u1.email,])#approval
 
 
@@ -1117,16 +1117,16 @@ class AbsolutizeUrlsInEmailsTests(utils.AskbotTestCase):
                 continue
             url_bits[link.attrs['href'][:4]] = 1
 
-        self.assertEqual(len(url_bits.keys()), 1)
-        self.assertEqual(url_bits.keys()[0], 'http')
+        self.assertEqual(len(list(url_bits.keys())), 1)
+        self.assertEqual(list(url_bits.keys())[0], 'http')
 
         images = soup.find_all('img')
         url_bits = {}
         for img in images:
             url_bits[img.attrs['src'][:4]] = 1
 
-        self.assertEqual(len(url_bits.keys()), 1)
-        self.assertEqual(url_bits.keys()[0], 'http')
+        self.assertEqual(len(list(url_bits.keys())), 1)
+        self.assertEqual(list(url_bits.keys())[0], 'http')
 
 
 class MailMessagesTests(utils.AskbotTestCase):

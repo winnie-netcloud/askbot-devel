@@ -22,7 +22,7 @@ This script parse a directory tree looking for python modules and packages and
 create ReST files appropriately to create code documentation with Sphinx.
 It also create a modules index.
 """
-from __future__ import print_function
+
 
 import os
 import optparse

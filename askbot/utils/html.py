@@ -1,13 +1,13 @@
 """Utilities for working with HTML."""
 import functools
 import re
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 import html5lib
 from html5lib import sanitizer, serializer, tokenizer, treebuilders,\
     treewalkers
-import htmlentitydefs
+import html.entities
 
 from django.conf import settings as django_settings
 from django.core.urlresolvers import reverse
@@ -78,7 +78,7 @@ def sanitize_html(html):
     s = serializer.HTMLSerializer(omit_optional_tags=False,
                                   quote_attr_values=True)
     output_generator = s.serialize(stream)
-    return u''.join(output_generator)
+    return ''.join(output_generator)
 
 
 def sanitized(func):
@@ -136,7 +136,7 @@ def urlize_html(html, trim_url_limit=40):
         # bs4 is weird, so we work around to replace nodes
         # maybe there is a better way though
         urlized_text = urlize(node, trim_url_limit=trim_url_limit)
-        if unicode(node) == urlized_text:
+        if str(node) == urlized_text:
             continue
 
         sub_soup = BeautifulSoup(urlized_text, 'html5lib')
@@ -160,7 +160,7 @@ def urlize_html(html, trim_url_limit=40):
     for node in extract_nodes:
         node.extract()
 
-    result = unicode(soup.find('body').renderContents(), 'utf8')
+    result = str(soup.find('body').renderContents(), 'utf8')
     if html.endswith('\n') and not result.endswith('\n'):
         result += '\n'
 
@@ -192,7 +192,7 @@ def replace_links_with_text(html):
         elif url == '' or re.match(abs_url_re, url):
             link.replaceWith(format_url_replacement(url, text))
 
-    return unicode(soup.find('body').renderContents(), 'utf-8')
+    return str(soup.find('body').renderContents(), 'utf-8')
 
 
 def get_text_from_html(html_text):
@@ -218,10 +218,7 @@ def get_text_from_html(html_text):
     #extract and join phrases
     body_element = soup.find('body')
     filter_func = lambda s: bool(s.strip())
-    phrases = map(
-        lambda s: s.strip(),
-        filter(filter_func, body_element.get_text().split('\n'))
-    )
+    phrases = [s.strip() for s in list(filter(filter_func, body_element.get_text().split('\n')))]
     return '\n\n'.join(phrases)
 
 
@@ -237,8 +234,8 @@ def strip_tags(html, tags=None):
     soup = BeautifulSoup(html, 'html5lib')
     for tag in tags:
         tag_matches = soup.find_all(tag)
-        map(lambda v: v.replaceWith(''), tag_matches)
-    return unicode(soup.find('body').renderContents(), 'utf-8')
+        list(map(lambda v: v.replaceWith(''), tag_matches))
+    return str(soup.find('body').renderContents(), 'utf-8')
 
 
 def has_moderated_tags(html):
@@ -272,7 +269,7 @@ def moderate_tags(html):
         if links:
             template = get_template('widgets/moderated_link.html')
             aviso = BeautifulSoup(template.render(), 'html5lib').find('body')
-            map(lambda v: v.replaceWith(aviso), links)
+            list(map(lambda v: v.replaceWith(aviso), links))
             replaced = True
 
     if settings.MODERATE_IMAGES:
@@ -280,11 +277,11 @@ def moderate_tags(html):
         if images:
             template = get_template('widgets/moderated_link.html')
             aviso = BeautifulSoup(template.render(), 'html5lib').find('body')
-            map(lambda v: v.replaceWith(aviso), images)
+            list(map(lambda v: v.replaceWith(aviso), images))
             replaced = True
 
     if replaced:
-        return unicode(soup.find('body').renderContents(), 'utf-8')
+        return str(soup.find('body').renderContents(), 'utf-8')
 
     return html
 
@@ -345,15 +342,15 @@ def unescape(text):
             # character reference
             try:
                 if text[:3] == "&#x":
-                    return unichr(int(text[3:-1], 16))
+                    return chr(int(text[3:-1], 16))
                 else:
-                    return unichr(int(text[2:-1]))
+                    return chr(int(text[2:-1]))
             except ValueError:
                 pass
         else:
             # named entity
             try:
-                text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
+                text = chr(html.entities.name2codepoint[text[1:-1]])
             except KeyError:
                 pass
         return text  # leave as is

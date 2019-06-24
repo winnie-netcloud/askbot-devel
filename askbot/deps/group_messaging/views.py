@@ -41,7 +41,7 @@ class NewThread(PjaxView):
         content should be cached in the client'
         """
         usernames = request.POST['to_usernames']
-        usernames = map(lambda v: v.strip(), usernames.split(','))
+        usernames = [v.strip() for v in usernames.split(',')]
         users = User.objects.filter(username__in=usernames)
 
         missing = copy.copy(usernames)

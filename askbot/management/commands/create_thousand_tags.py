@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         user = models.User.objects.get(id=2)
-        for i in xrange(1000):
+        for i in range(1000):
             name = 'tag' + str(i)
             models.Tag.objects.create(
                                 name=name,

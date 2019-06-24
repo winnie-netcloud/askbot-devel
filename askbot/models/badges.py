@@ -150,7 +150,7 @@ class PeerPressure(Badge):
 
     def __init__(self):
         description = _(
-            u'Deleted own post with %(votes)s or more downvotes'
+            'Deleted own post with %(votes)s or more downvotes'
         ) % {'votes': askbot_settings.PEER_PRESSURE_BADGE_MIN_DOWNVOTES}
         super(PeerPressure, self).__init__(
             name=_('Peer Pressure'), description=description,
@@ -889,7 +889,7 @@ def get_badge_keys(badges):
 
 def get_badges_dict(e_to_b):
     badges = set()
-    for event_badges in e_to_b.values():
+    for event_badges in list(e_to_b.values()):
         badges.update(set(event_badges))
 
     badges_dict = dict()
@@ -974,12 +974,12 @@ def init_badges():
     # TODO: maybe better to redo individual badges
     # so that get_stored_data() is called implicitly
     # from the __init__ function?
-    for key in BADGES.keys():
+    for key in list(BADGES.keys()):
         get_badge(key).get_stored_data()
     # remove any badges from the database
     # that are no longer in the BADGES dictionary
     from askbot.models.repute import BadgeData
-    BadgeData.objects.exclude(slug__in=map(slugify, BADGES.keys())).delete()
+    BadgeData.objects.exclude(slug__in=list(map(slugify, list(BADGES.keys())))).delete()
 
 award_badges_signal = Signal(providing_args=[
     'actor', 'event', 'context_object', 'timestamp'])

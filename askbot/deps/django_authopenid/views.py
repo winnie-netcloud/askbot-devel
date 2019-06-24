@@ -62,7 +62,7 @@ from askbot.deps.django_authopenid.exceptions import OAuthError
 from askbot.middleware.anon_user import connect_messages_to_anon_user
 from askbot.utils.loading import load_module
 from sanction.client import Client as OAuth2Client
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from openid.consumer.consumer import Consumer, \
     SUCCESS, CANCEL, FAILURE, SETUP_NEEDED
@@ -75,14 +75,14 @@ except ImportError:
     from yadis import xri
 
 try:
-    from xmlrpclib import Fault as WpFault
+    from xmlrpc.client import Fault as WpFault
     from wordpress_xmlrpc import Client
     from wordpress_xmlrpc.methods.users import GetUserInfo
 except ImportError:
     pass
 
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from askbot import forms as askbot_forms
 from askbot.deps.django_authopenid import util
 from askbot.deps.django_authopenid.models import UserAssociation, UserEmailVerifier
@@ -219,7 +219,7 @@ def ask_openid(
         auth_request = consumer.begin(openid_url)
     except DiscoveryFailure:
         openid_url = cgi.escape(openid_url)
-        msg = _(u"OpenID %(openid_url)s is invalid" % {'openid_url':openid_url})
+        msg = _("OpenID %(openid_url)s is invalid" % {'openid_url':openid_url})
         logging.debug(msg)
         return signin_failure(request, msg)
 
@@ -632,7 +632,7 @@ def signin(request, template_name='authopenid/signin.html'):
                 redirect_to = "%s%s?%s" % (
                         get_url_host(request),
                         reverse('user_complete_openid_signin'),
-                        urllib.urlencode({'next':next_url})
+                        urllib.parse.urlencode({'next':next_url})
                 )
                 return ask_openid(
                             request,
@@ -663,7 +663,7 @@ def signin(request, template_name='authopenid/signin.html'):
                     return HttpResponseRedirect(oauth_url)
 
                 except util.OAuthError as e:
-                    logging.critical(unicode(e))
+                    logging.critical(str(e))
                     msg = _('Unfortunately, there was some problem when '
                             'connecting to %(provider)s, please try again '
                             'or use another provider'
@@ -679,7 +679,7 @@ def signin(request, template_name='authopenid/signin.html'):
                     request.session['next_url'] = next_url
                     return HttpResponseRedirect(redirect_url)
                 except util.OAuthError as e:
-                    logging.critical(unicode(e))
+                    logging.critical(str(e))
                     msg = _('Unfortunately, there was some problem when '
                             'connecting to %(provider)s, please try again '
                             'or use another provider'
@@ -709,7 +709,7 @@ def signin(request, template_name='authopenid/signin.html'):
                                     redirect_url=next_url
                                 )
                 except WpFault as e:
-                    logging.critical(unicode(e))
+                    logging.critical(str(e))
                     msg = _('The login password combination was not correct')
                     request.user.message_set.create(message = msg)
             else:
@@ -845,8 +845,8 @@ def show_signin_view(
     minor_login_providers = util.get_enabled_minor_login_providers()
 
     #determine if we are only using password login
-    active_provider_names = [p['name'] for p in major_login_providers.values()]
-    active_provider_names.extend([p['name'] for p in minor_login_providers.values()])
+    active_provider_names = [p['name'] for p in list(major_login_providers.values())]
+    active_provider_names.extend([p['name'] for p in list(minor_login_providers.values())])
 
     have_buttons = True
     if (len(active_provider_names) == 1 and active_provider_names[0] == 'local'):
@@ -874,8 +874,8 @@ def show_signin_view(
                         active_provider_names = active_provider_names
                     )
 
-    data['major_login_providers'] = major_login_providers.values()
-    data['minor_login_providers'] = minor_login_providers.values()
+    data['major_login_providers'] = list(major_login_providers.values())
+    data['minor_login_providers'] = list(minor_login_providers.values())
 
     return render(request, template_name, data)
 
@@ -924,11 +924,11 @@ def complete_openid_signin(request):
     logging.debug('in askbot.deps.django_authopenid.complete')
     consumer = Consumer(request.session, util.DjangoOpenIDStore())
     # make sure params are encoded in utf8
-    params = dict((k,smart_unicode(v)) for k, v in request.GET.items())
+    params = dict((k,smart_unicode(v)) for k, v in list(request.GET.items()))
     return_to = get_url_host(request) + reverse('user_complete_openid_signin')
     openid_response = consumer.complete(params, return_to)
 
-    logging.debug(u'returned openid parameters were: %s' % unicode(params))
+    logging.debug('returned openid parameters were: %s' % str(params))
 
     if openid_response.status == SUCCESS:
         logging.debug('openid response status is SUCCESS')
@@ -1372,8 +1372,8 @@ def signup_with_password(request):
     context_data = {
         'form': form,
         'page_class': 'openid-signin',
-        'major_login_providers': major_login_providers.values(),
-        'minor_login_providers': minor_login_providers.values(),
+        'major_login_providers': list(major_login_providers.values()),
+        'minor_login_providers': list(minor_login_providers.values()),
         'login_form': login_form
     }
     return render(

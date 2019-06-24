@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from xml.etree import ElementTree as et
 import sys
 import re
@@ -46,7 +46,7 @@ def get_table_name(name):
         out += singular(name)
     else:
         bits = name.split('2')
-        bits = map(singular, bits)
+        bits = list(map(singular, bits))
         out += '2'.join(bits)
     return out
 

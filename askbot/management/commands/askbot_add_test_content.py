@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import sys
 from askbot.conf import settings as askbot_settings
 from askbot.models import User

@@ -17,17 +17,17 @@ def django_repr(obj):
 
 
 def get_args_key(*args):
-    return ':'.join(map(lambda v: django_repr(v), args))
+    return ':'.join([django_repr(v) for v in args])
 
 
 def get_kwargs_key(**kwargs):
-    key = get_args_key(*kwargs.values())
+    key = get_args_key(*list(kwargs.values()))
     return key or ''
     #todo: delete above line when args and kwargs resolution is fixed
-    items = kwargs.items()
-    items = map(lambda v: (django_repr(v[0]), django_repr(v[1])), items)
+    items = list(kwargs.items())
+    items = [(django_repr(v[0]), django_repr(v[1])) for v in items]
     items.sort(items)
-    return ':'.join(map(lambda v: v[0] + '=' + v[1], items))
+    return ':'.join([v[0] + '=' + v[1] for v in items])
 
 
 def make_cache_key(func, *args, **kwargs):

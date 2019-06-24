@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from askbot.search.state_manager import SearchState
 from django.test import signals
 from django.conf import settings
@@ -113,7 +113,7 @@ class PageLoadTestCase(AskbotTestCase):
         else:
             url_info = 'getting url %s' % url
         if data:
-            url_info += '?' + '&'.join(['%s=%s' % (k, v) for k, v in data.iteritems()])
+            url_info += '?' + '&'.join(['%s=%s' % (k, v) for k, v in data.items()])
         print(url_info)
 
         # if redirect expected, but we wont' follow
@@ -159,7 +159,7 @@ class PageLoadTestCase(AskbotTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(response.redirect_chain) == 1)
         redirect_url = response.redirect_chain[0][0]
-        self.assertTrue(unicode(redirect_url).endswith('/questions/'))
+        self.assertTrue(str(redirect_url).endswith('/questions/'))
         if hasattr(response, 'template'):
             templates = response.template
         elif hasattr(response, 'templates'):
@@ -765,13 +765,13 @@ class CommandViewTests(AskbotTestCase):
         self.client.login(user_id=user.id, method='force')
 
         from askbot import conf
-        values = dict(conf.get_tag_email_filter_strategy_choices()).keys()
+        values = list(dict(conf.get_tag_email_filter_strategy_choices()).keys())
         for value in values:
             run_test_for_setting(self, 'email', value)
             user = self.reload_object(user)
             self.assertEqual(user.email_tag_filter_strategy, value)
 
-        values = dict(conf.get_tag_display_filter_strategy_choices()).keys()
+        values = list(dict(conf.get_tag_display_filter_strategy_choices()).keys())
         for value in values:
             run_test_for_setting(self, 'display', value)
             user = self.reload_object(user)

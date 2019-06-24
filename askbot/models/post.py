@@ -246,7 +246,7 @@ class PostManager(BaseQuerySetManager):
             author=author,
             revised_at=added_at,
             text=text,
-            comment=unicode(const.POST_STATUS['default_version']),
+            comment=str(const.POST_STATUS['default_version']),
             by_email=by_email,
             ip_addr=ip_addr
         )
@@ -976,12 +976,12 @@ class Post(models.Model):
             if not question_post:
                 question_post = self.thread._question_post()
             if no_slug:
-                url = u'%(base)s?answer=%(id)d#post-id-%(id)d' % {
+                url = '%(base)s?answer=%(id)d#post-id-%(id)d' % {
                     'base': urlresolvers.reverse('question', args=[question_post.id]),
                     'id': self.id
                 }
             else:
-                url = u'%(base)s%(slug)s/?answer=%(id)d#post-id-%(id)d' % {
+                url = '%(base)s%(slug)s/?answer=%(id)d#post-id-%(id)d' % {
                     'base': urlresolvers.reverse('question', args=[question_post.id]),
                     'slug': django_urlquote(slugify(self.thread.title)),
                     'id': self.id
@@ -1065,7 +1065,7 @@ class Post(models.Model):
             title = title or self.thread.title
             tags = tags or self.thread.tagnames
             body_text = body_text or self.text
-            return u'{}\n\n{}\n\n{}'.format(title, tags, body_text)
+            return '{}\n\n{}\n\n{}'.format(title, tags, body_text)
         return body_text or self.text
 
     def get_snippet(self, max_length=None):
@@ -1594,7 +1594,7 @@ class Post(models.Model):
         return when, who
 
     def tagname_meta_generator(self):
-        return u','.join([unicode(tag) for tag in self.get_tag_names()])
+        return ','.join([str(tag) for tag in self.get_tag_names()])
 
     def get_parent_post(self):
         """returns parent post or None
@@ -1917,7 +1917,7 @@ class Post(models.Model):
             is_anonymous=is_anonymous,
             revised_at=revised_at,
             tagnames=self.thread.tagnames,
-            summary=unicode(comment),
+            summary=str(comment),
             text=text,
             by_email=by_email,
             email_address=email_address,
@@ -2004,7 +2004,7 @@ class Post(models.Model):
             else:
                 attr = None
             if attr is not None:
-                return u'%s %s' % (self.thread.title, unicode(attr))
+                return '%s %s' % (self.thread.title, str(attr))
             else:
                 return self.thread.title
         raise NotImplementedError
@@ -2102,7 +2102,7 @@ class PostRevisionManager(models.Manager):
             # set default summary
             if revision.summary == '':
                 if revision.revision == 1:
-                    revision.summary = unicode(const.POST_STATUS['default_version'])
+                    revision.summary = str(const.POST_STATUS['default_version'])
                 else:
                     revision.summary = 'No.%s Revision' % revision.revision
             revision.save()
@@ -2255,7 +2255,7 @@ class PostRevision(models.Model):
             raise ValueError()
 
     def __unicode__(self):
-        return u'%s - revision %s of %s' % (self.post.post_type, self.revision,
+        return '%s - revision %s of %s' % (self.post.post_type, self.revision,
                                             self.title)
 
     def parent(self):

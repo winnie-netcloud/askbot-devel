@@ -68,11 +68,11 @@ class AskByEmailFormTests(AskbotTestCase):
                 self.assertFalse(form.is_valid())
             else:
                 self.assertTrue(form.is_valid())
-                self.assertEquals(
+                self.assertEqual(
                     form.cleaned_data['tagnames'],
                     output[0]
                 )
-                self.assertEquals(
+                self.assertEqual(
                     form.cleaned_data['title'],
                     output[1]
                 )
@@ -91,7 +91,7 @@ class AskByEmailFormTests(AskbotTestCase):
                 self.assertFalse(form.is_valid())
             else:
                 self.assertTrue(form.is_valid())
-                self.assertEquals(
+                self.assertEqual(
                     form.cleaned_data['email'],
                     expected_result
                 )
@@ -222,7 +222,7 @@ class EditQuestionAnonymouslyFormTests(AskbotTestCase):
             current_item += 1
 
             expected_result = entry[4]
-            self.assertEquals(result, expected_result, error_message)
+            self.assertEqual(result, expected_result, error_message)
 
 
 class AskFormTests(AskbotTestCase):
@@ -239,7 +239,7 @@ class AskFormTests(AskbotTestCase):
         self.form.full_clean()
 
     def assert_anon_is(self, value):
-        self.assertEquals(
+        self.assertEqual(
             self.form.cleaned_data['ask_anonymously'],
             value
         )
@@ -275,19 +275,19 @@ class UserStatusFormTest(AskbotTestCase):
 
     def test_moderator_can_suspend_user(self):
         self.setup_data('s')
-        self.assertEquals(self.form.is_valid(), True)
+        self.assertEqual(self.form.is_valid(), True)
 
     def test_moderator_can_block_user(self):
         self.setup_data('s')
-        self.assertEquals(self.form.is_valid(), True)
+        self.assertEqual(self.form.is_valid(), True)
 
     def test_moderator_cannot_grant_admin(self):
         self.setup_data('d')
-        self.assertEquals(self.form.is_valid(), False)
+        self.assertEqual(self.form.is_valid(), False)
 
     def test_moderator_cannot_grant_moderator(self):
         self.setup_data('m')
-        self.assertEquals(self.form.is_valid(), False)
+        self.assertEqual(self.form.is_valid(), False)
 
 
 # Test for askbot.utils.forms
@@ -298,7 +298,7 @@ class UserNameFieldTest(AskbotTestCase):
 
     def test_clean(self):
         self.username_field.skip_clean = True
-        self.assertEquals(self.username_field.clean('bar'), 'bar')  # Will pass anything
+        self.assertEqual(self.username_field.clean('bar'), 'bar')  # Will pass anything
 
         self.username_field.skip_clean = False
 
@@ -308,7 +308,7 @@ class UserNameFieldTest(AskbotTestCase):
 
         self.username_field.user_instance = self.u1
         # Will pass
-        self.assertEquals(self.username_field.clean('user1'), self.u1.username)
+        self.assertEqual(self.username_field.clean('user1'), self.u1.username)
 
         # Not pass username required
         self.assertRaises(django_forms.ValidationError, self.username_field.clean, '')
@@ -337,7 +337,7 @@ class AnswerEditorFieldTests(AskbotTestCase):
                           'a')
 
     def test_pass_long_body(self):
-        self.assertEquals(self.field.clean(10*'a'), 10*'a')
+        self.assertEqual(self.field.clean(10*'a'), 10*'a')
 
 
 class PostAsSomeoneFormTests(AskbotTestCase):
@@ -421,16 +421,16 @@ class EditorFieldTests(AskbotTestCase):
 
 class CleanTagTest(AskbotTestCase):
     def test_look_in_db_true(self):
-        tag_name = u'foo'
+        tag_name = 'foo'
         new_name = forms.clean_tag(tag_name, look_in_db=True)
         self.assertEqual(tag_name, new_name)
 
     def test_look_in_db_false(self):
-        tag_name = u'foo'
+        tag_name = 'foo'
         new_name = forms.clean_tag(tag_name, look_in_db=False)
         self.assertEqual(tag_name, new_name)
 
     def test_name_too_long(self):
-        tag_name = u'foo' * askbot_settings.MAX_TAG_LENGTH
+        tag_name = 'foo' * askbot_settings.MAX_TAG_LENGTH
         with self.assertRaises(forms.forms.ValidationError):
             forms.clean_tag(tag_name, look_in_db=True)

@@ -78,5 +78,5 @@ def call_akismet(text, request=None, author=None, ip_addr=None, user_agent=None,
     except AkismetError:
         logging.critical('Akismet error: Invalid Akismet key or Akismet account issue!')
     except Exception as e:
-        logging.critical((u'Akismet error: %s' % unicode(e)).encode('utf-8'))
+        logging.critical(('Akismet error: %s' % str(e)).encode('utf-8'))
     return False

@@ -47,7 +47,7 @@ def bootstrap_callback(current_value, new_value):
         return new_value
 
     if new_value:
-        for key, value in LARGE_SITE_MODE_SETTINGS.items():
+        for key, value in list(LARGE_SITE_MODE_SETTINGS.items()):
             settings.update(key, value)
 
     else:

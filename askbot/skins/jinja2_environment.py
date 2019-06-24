@@ -53,7 +53,7 @@ if 'jinja2.ext.i18n' not in DEFAULT_EXTENSIONS:
 # this looks like a hack because it is one. We keep it as a separate
 # function to remind us that it ultimately must go
 def load_templatetags():
-  sib_zero  = SkinEnvironment.siblings.keys()[0]
+  sib_zero  = list(SkinEnvironment.siblings.keys())[0]
   dummy     = django_jinja.backend.Jinja2.__new__(django_jinja.backend.Jinja2)
   dummy.env = SkinEnvironment.siblings[sib_zero]
 
@@ -82,7 +82,7 @@ def factory(**options):
 
     skins = utils.get_available_skins()
     if askbot.is_multilingual() or HAS_ASKBOT_LOCALE_MIDDLEWARE:
-        languages = dict(django_settings.LANGUAGES).keys()
+        languages = list(dict(django_settings.LANGUAGES).keys())
     else:
         languages = [ django_settings.LANGUAGE_CODE ]
 

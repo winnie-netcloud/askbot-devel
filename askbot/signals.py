@@ -126,5 +126,5 @@ def set_all_db_signal_receivers(receiver_data):
     pop_all_db_signal_receivers() call
     and sets the receivers back to the signals
     """
-    for (signal, receivers) in receiver_data.items():
+    for (signal, receivers) in list(receiver_data.items()):
         signal.receivers = receivers

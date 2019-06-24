@@ -40,8 +40,8 @@ class Vote(models.Model):
     VOTE_UP = +1
     VOTE_DOWN = -1
     VOTE_CHOICES = (
-        (VOTE_UP,   u'Up'),
-        (VOTE_DOWN, u'Down'),
+        (VOTE_UP,   'Up'),
+        (VOTE_DOWN, 'Down'),
     )
     user = models.ForeignKey('auth.User', related_name='askbot_votes', on_delete=models.CASCADE)
     voted_post = models.ForeignKey('Post', related_name='votes', on_delete=models.CASCADE)
@@ -54,12 +54,12 @@ class Vote(models.Model):
     class Meta:
         unique_together = ('user', 'voted_post')
         app_label = 'askbot'
-        db_table = u'vote'
+        db_table = 'vote'
         verbose_name = _("vote")
         verbose_name_plural = _("votes")
 
     def __unicode__(self):
-        return u'[%s] voted at %s: %s' % (self.user, self.voted_at, self.vote)
+        return '[%s] voted at %s: %s' % (self.user, self.voted_at, self.vote)
 
     def __int__(self):
         """1 if upvote -1 if downvote"""
@@ -142,7 +142,7 @@ class BadgeData(models.Model):
         verbose_name_plural = _("badge data")
 
     def __unicode__(self):
-        return u'%s: %s' % (self.get_type_display(), self.slug)
+        return '%s: %s' % (self.get_type_display(), self.slug)
 
     def get_absolute_url(self):
         return '%s%s/' % (reverse('badge', args=[self.id]), self.slug)
@@ -159,13 +159,13 @@ class Award(models.Model):
     notified = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return u'[%s] is awarded a badge [%s] at %s' % (self.user.username,
+        return '[%s] is awarded a badge [%s] at %s' % (self.user.username,
                                                         self.badge.get_name(),
                                                         self.awarded_at)
 
     class Meta:
         app_label = 'askbot'
-        db_table = u'award'
+        db_table = 'award'
         verbose_name = _("award")
         verbose_name_plural = _("awards")
 
@@ -220,12 +220,12 @@ class Repute(models.Model):
     objects = ReputeManager()
 
     def __unicode__(self):
-        return u'[%s]\' reputation changed at %s' % (self.user.username,
+        return '[%s]\' reputation changed at %s' % (self.user.username,
                                                      self.reputed_at)
 
     class Meta:
         app_label = 'askbot'
-        db_table = u'repute'
+        db_table = 'repute'
         verbose_name = _("repute")
         verbose_name_plural = _("repute")
 

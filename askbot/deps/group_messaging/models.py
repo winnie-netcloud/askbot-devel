@@ -20,7 +20,7 @@ from askbot.deps.group_messaging.signals import response_created
 from askbot.deps.group_messaging.signals import thread_created
 import copy
 import datetime
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 MAX_HEADLINE_LENGTH = 80
 MAX_SUBJECT_LINE_LENGTH = 30
@@ -366,7 +366,7 @@ class Message(models.Model):
                     )
         params = copy.copy(settings['BASE_URL_PARAMS'])
         params['thread_id'] = self.id
-        url = url_getter(user) + '?' + urllib.urlencode(params)
+        url = url_getter(user) + '?' + urllib.parse.urlencode(params)
         #if include_domain_name: #don't need this b/c
         #    site = Site.objects.get_current()
         #    url = 'http://' + site.domain + url

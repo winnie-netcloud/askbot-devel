@@ -60,10 +60,10 @@ def slugify(input_text, max_length=150):
         return input_text
 
     allow_unicode_slugs = getattr(settings, 'ALLOW_UNICODE_SLUGS', False)
-    if isinstance(input_text, unicode) and not allow_unicode_slugs:
+    if isinstance(input_text, str) and not allow_unicode_slugs:
         input_text = unidecode(input_text)
 
-    if isinstance(input_text, unicode):
+    if isinstance(input_text, str):
         slug = unicode_slugify(input_text)
     else:
         slug = defaultfilters.slugify(input_text)

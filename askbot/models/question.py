@@ -74,7 +74,7 @@ def default_title_renderer(thread):
     else:
         attr = None
     if attr is not None:
-        return u'%s %s' % (thread.title, unicode(attr))
+        return '%s %s' % (thread.title, str(attr))
     else:
         return thread.title
 
@@ -144,7 +144,7 @@ class ThreadManager(BaseQuerySetManager):
                     tag_counts[tag_name] += 1
                 else:
                     tag_counts[tag_name] = 1
-        tag_list = tag_counts.keys()
+        tag_list = list(tag_counts.keys())
         tag_list.sort(key=lambda t: tag_counts[t], reverse=True)
 
         # note that double quote placement is important here
@@ -158,7 +158,7 @@ class ThreadManager(BaseQuerySetManager):
             tag_list = tag_list[:5]
             last_topic = _('" and more')
 
-        return '"' + '", "'.join(tag_list) + unicode(last_topic)
+        return '"' + '", "'.join(tag_list) + str(last_topic)
 
     def create(self, *args, **kwargs):
         raise NotImplementedError
@@ -199,7 +199,7 @@ class ThreadManager(BaseQuerySetManager):
             author=author,
             is_anonymous=is_anonymous,
             text=text,
-            comment=unicode(const.POST_STATUS['default_version']),
+            comment=str(const.POST_STATUS['default_version']),
             revised_at=added_at,
             by_email=by_email,
             email_address=email_address,
@@ -290,7 +290,7 @@ class ThreadManager(BaseQuerySetManager):
             if request_user.is_authenticated():
                 language_codes = request_user.get_languages()
             else:
-                language_codes = dict(django_settings.LANGUAGES).keys()
+                language_codes = list(dict(django_settings.LANGUAGES).keys())
             primary_filter['language_code__in'] = language_codes
 
         # TODO: add a possibility to see deleted questions
@@ -676,15 +676,15 @@ class Thread(models.Model):
         for hint in hints:
             orig_hints[hint.lower()] = hint
 
-        norm_hints = orig_hints.keys()
-        norm_tags = map(lambda v: v.lower(), existing_tags)
+        norm_hints = list(orig_hints.keys())
+        norm_tags = [v.lower() for v in existing_tags]
 
         common_words = (set(norm_hints) & post_words) - set(norm_tags)
 
         # 4) for each common word count occurances in corpus
         counts = dict()
         for word in common_words:
-            counts[word] = sum(map(lambda w: w.lower() == word.lower(), post_words))
+            counts[word] = sum([w.lower() == word.lower() for w in post_words])
 
         # 5) sort words by count
         sorted_words = sorted(
@@ -695,7 +695,7 @@ class Thread(models.Model):
         # 6) extract correct number of most frequently used tags
         need_tags = askbot_settings.MAX_TAGS_PER_POST - len(existing_tags)
         add_tags = sorted_words[0:need_tags]
-        add_tags = map(lambda h: orig_hints[h], add_tags)
+        add_tags = [orig_hints[h] for h in add_tags]
 
         tagnames = ' '.join(existing_tags + add_tags)
 
@@ -948,7 +948,7 @@ class Thread(models.Model):
         if self.tagnames.strip() == '':
             return list()
         else:
-            return self.tagnames.split(u' ')
+            return self.tagnames.split(' ')
 
     def get_title(self):
         title_renderer = load_plugin(
@@ -989,7 +989,7 @@ class Thread(models.Model):
         return False
 
     def tagname_meta_generator(self):
-        return u','.join([unicode(tag) for tag in self.get_tag_names()])
+        return ','.join([str(tag) for tag in self.get_tag_names()])
 
     def all_answers(self):
         return self.posts.get_answers()
@@ -1025,7 +1025,7 @@ class Thread(models.Model):
     def invalidate_cached_summary_html(self):
         """Invalidates cached summary html in all activated languages"""
         langs = translation_utils.get_language_codes()
-        keys = map(lambda v: self.get_summary_cache_key(v), langs)
+        keys = [self.get_summary_cache_key(v) for v in langs]
         cache.cache.delete_many(keys)
 
     def get_summary_cache_key(self, lang=None):
@@ -1040,8 +1040,8 @@ class Thread(models.Model):
         changes in the post data - on votes, adding,
         deleting, editing content"""
         # we can call delete_many() here if using Django > 1.2
-        sort_methods = map(lambda v: v[0], const.ANSWER_SORT_METHODS)
-        keys = map(lambda v: self.get_post_data_cache_key(v), sort_methods)
+        sort_methods = [v[0] for v in const.ANSWER_SORT_METHODS]
+        keys = [self.get_post_data_cache_key(v) for v in sort_methods]
         cache.cache.delete_many(keys)
 
     def reset_cached_data(self):
@@ -1059,7 +1059,7 @@ class Thread(models.Model):
             question = post_data[0]
             answers = post_data[1]
             question.reverse_cached_comments()
-            map(lambda v: v.reverse_cached_comments(), answers)
+            list(map(lambda v: v.reverse_cached_comments(), answers))
             return post_data
 
         def find_posts(posts, need_ids):
@@ -1120,9 +1120,9 @@ class Thread(models.Model):
                     all_posts.append(question)
                 posts = find_posts(all_posts, post_id_set)
 
-                rev_map = dict(zip(suggested_post_ids, suggested_revs))
+                rev_map = dict(list(zip(suggested_post_ids, suggested_revs)))
 
-                for post_id, post in posts.items():
+                for post_id, post in list(posts.items()):
                     rev = rev_map[post_id]
                     # patching work
                     post.text = rev.text
@@ -1146,7 +1146,7 @@ class Thread(models.Model):
                         post_to_author[post.id] = rev.author_id
                         if post.is_comment():
                             parents = find_posts(all_posts, set([post.parent_id]))
-                            parent = parents.values()[0]
+                            parent = list(parents.values())[0]
                             parent.add_cached_comment(post)
                         if post.is_answer():
                             answers.insert(0, post)
@@ -1254,11 +1254,11 @@ class Thread(models.Model):
                 question_post = post
 
         # 2) sort comments in the temporal order
-        for comment_list in comment_map.values():
+        for comment_list in list(comment_map.values()):
             comment_list.sort(key=operator.attrgetter('added_at'))
 
         # 3) attach comments to question and the answers
-        for post_id, comment_list in comment_map.items():
+        for post_id, comment_list in list(comment_map.items()):
             try:
                 post_map[post_id].set_cached_comments(comment_list)
             except KeyError:
@@ -1654,7 +1654,7 @@ class Thread(models.Model):
             author=retagged_by,
             revised_at=retagged_at,
             tagnames=tagnames,
-            summary=unicode(const.POST_STATUS['retagged']),
+            summary=str(const.POST_STATUS['retagged']),
             text=latest_revision.text
         )
 
@@ -1739,7 +1739,7 @@ class Thread(models.Model):
         return html
 
     def summary_html_cached(self):
-        return cache.cache.has_key(self.get_summary_cache_key())
+        return self.get_summary_cache_key() in cache.cache
 
 
 class QuestionView(models.Model):
@@ -1759,15 +1759,15 @@ class FavoriteQuestion(models.Model):
 
     class Meta:
         app_label = 'askbot'
-        db_table = u'favorite_question'
+        db_table = 'favorite_question'
         verbose_name = _("favorite question")
         verbose_name_plural = _("favorite questions")
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
-        return u'[%s] favorited at %s' % (self.user, self.added_at)
+        return '[%s] favorited at %s' % (self.user, self.added_at)
 
 
 class DraftQuestion(DraftContent):

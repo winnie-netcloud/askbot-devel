@@ -7,7 +7,7 @@ The "read-only" requirement here is not 100% strict, as for example "question" v
 allow adding new comments via Ajax form post.
 """
 import logging
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import operator
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -144,7 +144,7 @@ def questions(request, **kwargs):
         rss_query_dict.setlist('tags', search_state.tags)
         context_feed_url += '?' + rss_query_dict.urlencode()
 
-    reset_method_count = len(filter(None, [search_state.query, search_state.tags, meta_data.get('author_name', None)]))
+    reset_method_count = len([_f for _f in [search_state.query, search_state.tags, meta_data.get('author_name', None)] if _f])
 
     if request.is_ajax():
         q_count = paginator.count
@@ -441,7 +441,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     try:
         question_post.assert_is_visible_to(request.user)
     except exceptions.QuestionHidden as error:
-        request.user.message_set.create(message = unicode(error))
+        request.user.message_set.create(message = str(error))
         return HttpResponseRedirect(reverse('index'))
 
     #redirect if slug in the url is wrong
@@ -450,7 +450,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
         lang = translation.get_language()
         question_url = question_post.get_absolute_url(language=lang)
         if request.GET:
-            question_url += u'?' + urllib.urlencode(request.GET)
+            question_url += '?' + urllib.parse.urlencode(request.GET)
         return HttpResponseRedirect(question_url)
 
 
@@ -487,11 +487,11 @@ def question(request, id):#refactor - long subroutine. display question body, an
         try:
             show_comment.assert_is_visible_to(request.user)
         except exceptions.AnswerHidden as error:
-            request.user.message_set.create(message = unicode(error))
+            request.user.message_set.create(message = str(error))
             #use reverse function here because question is not yet loaded
             return HttpResponseRedirect(reverse('question', kwargs = {'id': id}))
         except exceptions.QuestionHidden as error:
-            request.user.message_set.create(message = unicode(error))
+            request.user.message_set.create(message = str(error))
             return HttpResponseRedirect(reverse('index'))
 
     elif show_answer:
@@ -506,7 +506,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
         try:
             show_post.assert_is_visible_to(request.user)
         except django_exceptions.PermissionDenied as error:
-            request.user.message_set.create(message = unicode(error))
+            request.user.message_set.create(message = str(error))
             return HttpResponseRedirect(reverse('question', kwargs = {'id': id}))
 
     thread = question_post.thread
@@ -523,7 +523,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
             request.user.message_set.create(message=message)
             return HttpResponseRedirect(thread.get_absolute_url())
 
-    logging.debug('answer_sort_method=' + unicode(answer_sort_method))
+    logging.debug('answer_sort_method=' + str(answer_sort_method))
 
     #load answers and post id's->athor_id mapping
     #posts are pre-stuffed with the correctly ordered comments
@@ -537,7 +537,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     if request.user.is_authenticated():
         user_votes = Vote.objects.filter(
                             user=request.user,
-                            voted_post__id__in = post_to_author.keys()
+                            voted_post__id__in = list(post_to_author.keys())
                         ).values_list('voted_post_id', 'vote')
         user_votes = dict(user_votes)
         #we can avoid making this query by iterating through

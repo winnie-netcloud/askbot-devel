@@ -40,7 +40,7 @@ class ReplyAddressManager(BaseQuerySetManager):
         reply_address = ReplyAddress(**kwargs)
         while True:
             reply_address.address = ''.join(random.choice(string.letters +
-                string.digits) for i in xrange(random.randint(12, 25))).lower()
+                string.digits) for i in range(random.randint(12, 25))).lower()
             if self.filter(address=reply_address.address).count() == 0:
                 break
         reply_address.save()

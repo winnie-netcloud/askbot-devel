@@ -13,7 +13,7 @@ from django.test import TestCase
 from django.utils import timezone
 from mock import Mock
 import time
-import urlparse
+import urllib.parse
 
 MESSAGE_TEXT = 'test message text'
 
@@ -172,15 +172,15 @@ class ViewsTests(GroupMessagingTests):
         html_message = get_html_message(outbox[0])
         link = BeautifulSoup(html_message, 'html5lib').find('a', attrs={'class': 'thread-link'})
         url = link['href'].replace('&amp;', '&')
-        parsed_url = urlparse.urlparse(url)
-        url_data = urlparse.parse_qsl(parsed_url.query)
+        parsed_url = urllib.parse.urlparse(url)
+        url_data = urllib.parse.parse_qsl(parsed_url.query)
         self.client.login(user_id=self.recipient.id, method='force')
         response = self.client.get(parsed_url.path, url_data)
         dom = BeautifulSoup(response.content, 'html5lib')
         threads = dom.find_all('ul', attrs={'class': 'js-thread'})
-        self.assertEquals(len(threads), 1)
+        self.assertEqual(len(threads), 1)
         thread_lists = dom.find_all('table', attrs={'class': 'js-thread-list'})
-        self.assertEquals(len(thread_lists), 0)
+        self.assertEqual(len(thread_lists), 0)
 
     def test_sent_thread_is_visited_by_sender(self):
         root = self.create_thread_for_user(self.sender, self.recipient)
@@ -218,7 +218,7 @@ class ModelsTests(GroupMessagingTests):
                                 message=message,
                                 user=self.sender
                             )
-        self.assertEquals(memos.count(), 1)
+        self.assertEqual(memos.count(), 1)
         self.assertEqual(memos[0].status, MessageMemo.SEEN)
 
     def test_get_senders_for_user(self):
@@ -308,9 +308,9 @@ class ModelsTests(GroupMessagingTests):
         root, response, response2 = self.setup_three_message_thread()
 
         threads = Message.objects.get_threads(recipient=self.sender)
-        self.assertEquals(threads.count(), 1)
+        self.assertEqual(threads.count(), 1)
         threads = Message.objects.get_threads(recipient=self.recipient)
-        self.assertEquals(threads.count(), 1)
+        self.assertEqual(threads.count(), 1)
 
         memo1, created = MessageMemo.objects.get_or_create(
                                         message=root,
@@ -319,13 +319,13 @@ class ModelsTests(GroupMessagingTests):
                                     )
 
         threads = Message.objects.get_threads(recipient=self.sender)
-        self.assertEquals(threads.count(), 1)
+        self.assertEqual(threads.count(), 1)
         threads = Message.objects.get_threads(recipient=self.recipient)
-        self.assertEquals(threads.count(), 0)
+        self.assertEqual(threads.count(), 0)
         threads = Message.objects.get_threads(
                                 recipient=self.recipient, deleted=True
                             )
-        self.assertEquals(threads.count(), 1)
+        self.assertEqual(threads.count(), 1)
 
     def test_user_specific_inboxes(self):
         self.create_thread_for_user(self.sender, self.recipient)
@@ -359,8 +359,8 @@ class ModelsTests(GroupMessagingTests):
         soup = BeautifulSoup(html_message, 'html5lib')
         links = soup.find_all('a', attrs={'class': 'thread-link'})
         self.assertEqual(len(links), 1)
-        parse_result = urlparse.urlparse(links[0]['href'])
-        query = urlparse.parse_qs(parse_result.query.replace('&amp;', '&'))
+        parse_result = urllib.parse.urlparse(links[0]['href'])
+        query = urllib.parse.parse_qs(parse_result.query.replace('&amp;', '&'))
         self.assertEqual(query['thread_id'][0], str(root.id))
 
     def test_get_sent_threads(self):

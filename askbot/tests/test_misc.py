@@ -36,20 +36,20 @@ class ContentConvertionTests(AskbotTestCase):
         old_parent = self.reload_object(self.another_answer)
 
         #test for convertion
-        self.assertEquals(converted_answer.post_type, 'answer')
+        self.assertEqual(converted_answer.post_type, 'answer')
         #test for parent change
-        self.assertNotEquals(old_parent.id, converted_answer.parent.id)
+        self.assertNotEqual(old_parent.id, converted_answer.parent.id)
         #test for answer count update
-        self.assertEquals(converted_answer.thread.answer_count, answer_count + 1)
+        self.assertEqual(converted_answer.thread.answer_count, answer_count + 1)
         #test for comment count update
-        self.assertEquals(old_parent.comment_count, old_parent_comment_count - 1)
+        self.assertEqual(old_parent.comment_count, old_parent_comment_count - 1)
 
         #test the delete post view for errors
         response = self.client.post(reverse('delete_post'),
                                     {'post_id': converted_answer.id,
                                      'cancel_vote': 'false'},
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue('is_deleted' in response.content)
 
     def test_convert_answer_to_comment(self):
@@ -65,8 +65,8 @@ class ContentConvertionTests(AskbotTestCase):
         old_parent = self.reload_object(self.question)
 
         #test for convertion
-        self.assertEquals(converted_comment.post_type, 'comment')
+        self.assertEqual(converted_comment.post_type, 'comment')
         #test for answer count update
-        self.assertEquals(converted_comment.thread.answer_count, answer_count - 1)
+        self.assertEqual(converted_comment.thread.answer_count, answer_count - 1)
         #test for comment count update
-        self.assertEquals(old_parent.comment_count, comment_count + 1)
+        self.assertEqual(old_parent.comment_count, comment_count + 1)

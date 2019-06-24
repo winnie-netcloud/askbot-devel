@@ -204,7 +204,7 @@ def vote(request):
         if vote_type in const.VOTE_TYPES_INVALIDATE_CACHE:
             post.thread.reset_cached_data()
     except Exception as e:
-        response_data['message'] = unicode(e)
+        response_data['message'] = str(e)
         response_data['success'] = 0
 
     data = simplejson.dumps(response_data)
@@ -784,7 +784,7 @@ def close(request, id):#close question
             }
             return render(request, 'close.html', data)
     except exceptions.PermissionDenied as e:
-        request.user.message_set.create(message = unicode(e))
+        request.user.message_set.create(message = str(e))
         return HttpResponseRedirect(question.get_absolute_url())
 
 @login_required
@@ -814,7 +814,7 @@ def reopen(request, id):#re-open question
             return render(request, 'reopen.html', data)
 
     except exceptions.PermissionDenied as e:
-        request.user.message_set.create(message = unicode(e))
+        request.user.message_set.create(message = str(e))
         return HttpResponseRedirect(question.get_absolute_url())
 
 
@@ -1464,7 +1464,7 @@ def translate_url(request):
         site_lang = translation.get_language()
         translation.activate(lang)
 
-        if match.url_name == 'questions' and None in match.kwargs.values():
+        if match.url_name == 'questions' and None in list(match.kwargs.values()):
             url = models.get_feed_url(match.kwargs['feed'])
         else:
             try:
@@ -1491,7 +1491,7 @@ def reorder_badges(request):
         position = form.cleaned_data['position']
         badge = models.BadgeData.objects.get(id=badge_id)
         badges = list(models.BadgeData.objects.all())
-        badges = filter(lambda v: v.is_enabled(), badges)
+        badges = [v for v in badges if v.is_enabled()]
         badges.remove(badge)
         badges.insert(position, badge)
         pos = 0

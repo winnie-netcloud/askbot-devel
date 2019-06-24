@@ -25,7 +25,7 @@ blah blah
 h3. Heading 3
 blah blah
 """
-        expected = u"""<h1>Heading1</h1>
+        expected = """<h1>Heading1</h1>
 <p>blah blah</p>
 <h2>Heading 2</h2>
 <p>blah blah</p>
@@ -39,7 +39,7 @@ blah blah
 -----
 some text
 """
-        expected = u'<hr/>\n<p>some text</p>'
+        expected = '<hr/>\n<p>some text</p>'
         self.assertEqual(self.convert(text), expected)
 
     def test_list1(self):
@@ -48,7 +48,7 @@ some text
 * two
 * three
 """
-        expected = u"""<ul>
+        expected = """<ul>
 <li>one</li>
 <li>two</li>
 <li>three</li>
@@ -61,7 +61,7 @@ some text
 # two
 # three
 """
-        expected = u"""<ol>
+        expected = """<ol>
 <li>one</li>
 <li>two</li>
 <li>three</li>
@@ -74,7 +74,7 @@ some text
 ** two
 * three
 """
-        expected = u"""<ul>
+        expected = """<ul>
 <li>one</li>
 <li>
 <ul>
@@ -89,7 +89,7 @@ some text
         text = """
 bq. two plus two equals four
 """
-        expected = u"""<blockquote><p>two plus two equals four</p></blockquote>"""
+        expected = """<blockquote><p>two plus two equals four</p></blockquote>"""
         self.assertEqual(self.convert(text), expected)
 
     def test_bq2(self):
@@ -97,7 +97,7 @@ bq. two plus two equals four
 two plus two equals four
 {quote}
 """
-        expected = u"""<blockquote><p>two plus two equals four</p></blockquote>"""
+        expected = """<blockquote><p>two plus two equals four</p></blockquote>"""
         self.assertEqual(self.convert(text), expected)
 
     def test_bq3(self):
@@ -105,7 +105,7 @@ two plus two equals four
 two plus two equals four
 {quote}
 """
-        expected = u"""<blockquote><span class="quote-header">alex wrote:</span><br/>
+        expected = """<blockquote><span class="quote-header">alex wrote:</span><br/>
 <p>two plus two equals four</p></blockquote>"""
         self.assertEqual(self.convert(text), expected)
 
@@ -116,7 +116,7 @@ two plus two equals four
 two plus two equals four
 {quote}
 """
-        expected = u"""<blockquote><span class="quote-header">alex wrote:</span><br/>
+        expected = """<blockquote><span class="quote-header">alex wrote:</span><br/>
 <p>two plus two equals four</p>
 <p>two plus two equals four</p></blockquote>"""
         self.assertEqual(self.convert(text), expected)
@@ -127,20 +127,20 @@ two plus two equals four
 >
 > two plus two equals four
 """
-        expected = u"""<blockquote><span class="quote-header">alex wrote:</span><br/>
+        expected = """<blockquote><span class="quote-header">alex wrote:</span><br/>
 <p>two plus two equals four</p>
 <p>two plus two equals four</p></blockquote>"""
         self.assertEqual(self.convert(text), expected)
 
     def test_code0(self):
         text = """something {code}#comment _haha_ http://example.com {code}"""
-        expected = u"""<p>something</p>
+        expected = """<p>something</p>
 <pre><code>#comment _haha_ http://example.com </code></pre>"""
         self.assertEqual(self.convert(text), expected)
 
     def test_code1(self):
         text = """something {code:html}#comment _haha_ http://example.com {code}"""
-        expected = u"""<p>something</p>
+        expected = """<p>something</p>
 <pre><code>#comment _haha_ http://example.com </code></pre>"""
         self.assertEqual(self.convert(text), expected)
 
@@ -153,7 +153,7 @@ http://example.com/1 blah
 [email@example.com]
 [/some/file/]
 """
-        expected = u"""<p><a href="http://example.com/2">http://example.com/2</a> blah<br/>
+        expected = """<p><a href="http://example.com/2">http://example.com/2</a> blah<br/>
 <a href="http://example.com/1">http://example.com/1</a> blah<br/>
 <a href="http://example.com/3" title="tooltip text3">link text3</a> blah2<br/>
 <a href="http://example.com/4" title="tooltip text4">link text4</a><br/>
@@ -166,42 +166,42 @@ http://example.com/1 blah
         text = "*some text*"
         self.assertEqual(
             self.convert(text),
-            u'<p><strong>some text</strong></p>'
+            '<p><strong>some text</strong></p>'
         )
 
     def test_italics(self):
         text = "+some text+"
         self.assertEqual(
             self.convert(text),
-            u'<p><em>some text</em></p>'
+            '<p><em>some text</em></p>'
         )
 
     def test_underline(self):
         text = "_some text_"
         self.assertEqual(
             self.convert(text),
-            u'<p><span class="underline">some text</span></p>'
+            '<p><span class="underline">some text</span></p>'
         )
 
     def test_super(self):
         text = "e = mc^2^"
         self.assertEqual(
             self.convert(text),
-            u'<p>e = mc<sup>2</sup></p>'
+            '<p>e = mc<sup>2</sup></p>'
         )
 
     def test_sub(self):
         text = "e~1~"
         self.assertEqual(
             self.convert(text),
-            u'<p>e<sub>1</sub></p>'
+            '<p>e<sub>1</sub></p>'
         )
 
     def test_strike(self):
         text = "--A--"
         self.assertEqual(
             self.convert(text),
-            u'<p><strike>A</strike></p>'
+            '<p><strike>A</strike></p>'
         )
 
     def test_leading_spaces(self):
@@ -211,7 +211,7 @@ function() {
     alert('hi');
 }
 """
-        expected = u"""<p>function() {<br/>
+        expected = """<p>function() {<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;alert('hi');<br/>
 }</p>"""
         self.assertEqual(self.convert(text), expected)
@@ -236,7 +236,7 @@ As you said:
 h2. Another time
 Nothing happened.
 """
-        expected = u"""<h1>Once <a href="http://example.com">upon</a> a <strong>time</strong></h1>
+        expected = """<h1>Once <a href="http://example.com">upon</a> a <strong>time</strong></h1>
 <p>There was a queen who said:</p>
 <blockquote><p>I <span class="underline">find</span> <strong>this</strong> interesting</p>
 <pre><code>e = mc^2;</code></pre>
