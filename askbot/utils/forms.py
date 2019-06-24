@@ -19,7 +19,7 @@ def clean_next(next_url, default=None):
     if next_url is None or not next_url.startswith('/'):
         return default or reverse('index')
     if isinstance(next_url, str):
-        next_url = str(urllib.parse.unquote(next_url), 'utf-8', 'replace')
+        next_url = urllib.parse.unquote(next_url)
     return next_url.strip()
 
 def get_error_list(form_instance):
