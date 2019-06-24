@@ -25,6 +25,7 @@ from askbot.mail import extract_first_email_address
 from captcha.fields import ReCaptchaField
 from askbot.conf import settings as askbot_settings
 from askbot.conf import get_tag_email_filter_strategy_choices
+from askbot.models import UserProfile
 from tinymce.widgets import TinyMCE
 import logging
 
@@ -1459,7 +1460,8 @@ class EditUserForm(forms.Form):
 
 class TagFilterSelectionForm(forms.ModelForm):
     email_tag_filter_strategy = forms.ChoiceField(
-        initial=const.EXCLUDE_IGNORED, label=_('Choose email tag filter'),
+        initial=const.EXCLUDE_IGNORED,
+        label=_('Choose email tag filter'),
         widget=forms.RadioSelect)
 
     def __init__(self, *args, **kwargs):
@@ -1468,7 +1470,7 @@ class TagFilterSelectionForm(forms.ModelForm):
         self.fields['email_tag_filter_strategy'].choices = choices
 
     class Meta:
-        model = User
+        model = UserProfile
         fields = ('email_tag_filter_strategy',)
 
     def save(self):

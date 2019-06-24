@@ -139,6 +139,11 @@ class Command(NoArgsCommand):
         views
         """
 
+        old_content_cutoff_timestamp = max(
+            user.date_joined, #exclude old stuff
+            django_settings.ASKBOT_DELAYED_EMAIL_ALERTS_CUTOFF_TIMESTAMP
+        )
+
         user_feeds = EmailFeedSetting.objects.filter(
             subscriber=user
         ).exclude(frequency__in=('n', 'i'))
@@ -173,10 +178,11 @@ class Command(NoArgsCommand):
         #base question query set for this user
         #basic things - not deleted, not closed, not too old
         #not last edited by the same user
+
         base_qs = Post.objects.get_questions().exclude(
             thread__last_activity_by=user
         ).exclude(
-            thread__last_activity_at__lt=user.date_joined#exclude old stuff
+            thread__last_activity_at__lt=old_content_cutoff_timestamp
         ).exclude(
             deleted=True
         ).exclude(
