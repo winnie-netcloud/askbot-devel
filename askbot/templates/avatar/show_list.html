@@ -22,9 +22,9 @@
                         </form>
                     {% endif %}
                 {% elif avatar.avatar_type == 'gravatar' %}
-                    {% spaceless %}
+                    {% filter trim %}
                     <p class="avatar-label" title="{% trans email=view_user.email %}This image, called 'gravatar', is linked to the email address {{ email }}.  It can be changed at http://gravatar.com{% endtrans %}">{% trans %}Gravatar{% endtrans %}</p>
-                    {% endspaceless %}
+                    {% endfilter %}
                     {# show gravatar #}
                     {% include "avatar/avatar.html" %}
                     {% if not avatar.is_primary %}

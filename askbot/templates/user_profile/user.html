@@ -1,6 +1,6 @@
 {% extends "one_column_body.html" %}
 <!-- user.html -->
-{% block title %}{% spaceless %}{{ page_title }}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{{ page_title }}{% endfilter %}{% endblock %}
 {% block forestyle %}
 <style type="text/css">
     .history-table td { padding: 5px; }
@@ -9,9 +9,9 @@
 {% endblock %}
 {% block content %}
     <h1 class="section-title">
-        {% spaceless %}
+        {% filter trim %}
         {% trans username=view_user.username|escape %}{{username}}'s profile{% endtrans %} - {% block profilesection %}{% endblock %}
-        {% endspaceless %}
+        {% endfilter %}
     </h1>
     {% include "user_profile/user_tabs.html" %}
     <div>

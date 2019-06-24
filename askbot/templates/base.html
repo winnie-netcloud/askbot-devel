@@ -51,12 +51,12 @@
         {% endif %}
         {% include "custom_footer.html" ignore missing %}
         {% include "meta/bottom_scripts.html" %}
-        {% spaceless %}
+        {% filter trim %}
         <div class="js-templates" style="display: none;">
         {% block js_templates %}
         {% endblock %}
         </div>
-        {% endspaceless %}
+        {% endfilter %}
         {% block endjs %}
         {% endblock %}
         <script type="text/javascript">

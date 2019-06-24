@@ -1,7 +1,7 @@
 {% extends "two_column_body.html" %}
 {% import "macros.html" as macros %}
 <!-- template ask.html -->
-{% block title %}{% spaceless %}{% trans %}Ask Your Question{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}Ask Your Question{% endtrans %}{% endfilter %}{% endblock %}
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" href="{{"/wmd/wmd.css"|media}}" />
 {% endblock %}

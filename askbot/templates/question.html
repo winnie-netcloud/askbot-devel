@@ -1,6 +1,6 @@
 {% extends "two_column_body.html" %}
 <!-- question.html -->
-{% block title %}{% spaceless %}{{ question.get_question_title()|escape }}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{{ question.get_question_title()|escape }}{% endfilter %}{% endblock %}
 {% block meta_description %}
     <meta name="description" content="{{ question.summary|striptags|escape }}" />
 {% endblock %}
@@ -392,8 +392,8 @@
     {{ tag_widget('none', deletable=True) }}
 {% endblock %}
 {% block endjs %}
-    {% spaceless %}
-    {% endspaceless %}
+    {% filter trim %}
+    {% endfilter %}
     <script type='text/javascript'>
         {# not compressable #}
         askbot['urls']['postComments'] = '{{ url('post_comments') }}';

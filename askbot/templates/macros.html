@@ -186,7 +186,7 @@
 
 {%- macro user_group_link(group) -%}
     <a class="group-name"
-        href="{% url users_by_group group.id, group.name|replace('-', ' ')|slugify %}"
+        href="{{ url('users_by_group', group.id, group.name|replace('-', ' ')|slugify) }}"
     >{{ group.name|escape }}</a>
 {%- endmacro -%}
 
@@ -220,7 +220,7 @@
     {% if group %}
         <span class="primary-group-name"><a
             class="primary-group-name"
-            href="{% url users_by_group group.id, group.name|replace('-', ' ')|slugify %}"
+            href="{{ url('users_by_group', group.id, group.name|replace('-', ' ')|slugify) }}"
         >{{ group.name|replace('-', ' ')|escape }}</a></span>
     {% endif %}
 {%- endmacro -%}
@@ -279,7 +279,7 @@
   {% if not search_state %}  {#  get empty SearchState() if there's none; CAUTION: for some reason this doesn't work inside `spaceless` tag below! #}
       {% set search_state=search_state|get_empty_search_state %}
   {% endif %}
-  {% spaceless %}
+  {% filter trim %}
     <div class="js-tag {% if deletable %} js-deletable-tag{% endif %}">
         <{% if is_link %}a{% else %}span{% endif %}
             class="js-tag-name{% if css_class %} {{ css_class }}{% endif %}"
@@ -301,7 +301,7 @@
         <span class="js-tag-extra-content">{{ extra_content }}</span>
         {% endif %}
     </div>
-  {% endspaceless %}
+  {% endfilter %}
 {%- endmacro -%}
 
 {%- macro radio_select(name = None, value = None, choices = None) -%}
@@ -422,7 +422,7 @@ for the purposes of the AJAX comment editor #}
         csrf_token=None
     )
 -%}
-    {% spaceless %}
+    {% filter trim %}
     {% if show_post == post and show_comment and show_comment_position > max_comments %}
         {% set comments = post.get_cached_comments()[:show_comment_position] %}
     {% else %}
@@ -456,7 +456,7 @@ for the purposes of the AJAX comment editor #}
             {% endif %}
         </div>
     </div>
-    {% endspaceless %}
+    {% endfilter %}
 {%- endmacro -%}
 
 {%- macro reversible_sort_button(button_sort_criterium=None, asc_tooltip=None,
@@ -572,7 +572,7 @@ for the purposes of the AJAX comment editor #}
 
 {#todo: rename this to avatar #}
 {%- macro gravatar(user, size) -%}
-{% spaceless %}
+{% filter trim %}
 <a class="js-avatar-box"
     href="{{ user.get_absolute_url() }}"
 ><img class="js-avatar gravatar"
@@ -581,7 +581,7 @@ for the purposes of the AJAX comment editor #}
     title="{{user.username|escape}}"
     alt="{% trans username=user.username|escape %}{{username}} gravatar image{% endtrans %}"
 /></a>
-{% endspaceless %}
+{% endfilter %}
 {%- endmacro -%}
 
 {%- macro user_website_link(user, max_display_length=25, force_show=False) -%}
@@ -599,7 +599,7 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {%- macro paginator(p, position='left', anchor='') -%}{# p is paginator context dictionary #}
-{% spaceless %}
+{% filter trim %}
     {% if p.is_paginated %}
         <div
             class="paginator"
@@ -662,12 +662,12 @@ for the purposes of the AJAX comment editor #}
 
     </div>
     {% endif %}
-{% endspaceless %}
+{% endfilter %}
 {%- endmacro -%}
 
 
 {%- macro paginator_main_page(p, position, search_state) -%} {# p is paginator context dictionary #}
-    {% spaceless %}
+    {% filter trim %}
         {% if p.is_paginated %}
             <div class="paginator" style="float:{{position}}">
                 {% if p.has_previous %}
@@ -700,7 +700,7 @@ for the purposes of the AJAX comment editor #}
                 {% endif %}
             </div>
         {% endif %}
-    {% endspaceless %}
+    {% endfilter %}
 {%- endmacro -%}
 
 

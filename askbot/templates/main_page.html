@@ -12,7 +12,7 @@
 {% block forejs %}
     {% include "main_page/custom_head_javascript.html" ignore missing %}
 {% endblock %}
-{% block title %}{% spaceless %}{% trans %}Questions{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}Questions{% endtrans %}{% endfilter %}{% endblock %}
 {% block content %}
     {% include "main_page/tab_bar.html" %}
     {% include "main_page/headline.html" %}

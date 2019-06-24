@@ -2,7 +2,7 @@
 {% import "authopenid/authopenid_macros.html" as login_macros %}
 {% from "macros.html" import timeago %}
 <!-- signin.html -->
-{% block title %}{% spaceless %}{% trans %}User login{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}User login{% endtrans %}{% endfilter %}{% endblock %}
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ "/style/openid.css"|media }}"/>
 {% endblock %}

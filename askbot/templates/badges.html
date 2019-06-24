@@ -1,6 +1,6 @@
 {% extends "two_column_body.html" %}
 <!-- template badges.html -->
-{% block title %}{% spaceless %}{% trans %}Badges{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}Badges{% endtrans %}{% endfilter %}{% endblock %}
 {% block content %}
 <h1 class="section-title">{% trans %}Badges{% endtrans %}</h1>
 <p>

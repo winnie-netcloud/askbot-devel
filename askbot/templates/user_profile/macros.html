@@ -2,7 +2,7 @@
 
 {% macro tag_selection(tag_names, selection_type) %}
     <a name="{{selection_type}}-tags"></a>
-    {% spaceless %}
+    {% filter trim %}
     <h2>{% 
             trans counter=tag_names|length, type=gettext(selection_type)|capitalize
         %}<span class="count">{{counter}}</span> {{type}} Tag{% 
@@ -11,7 +11,7 @@
             endtrans
         %}
     </h2>
-    {% endspaceless %}
+    {% endfilter %}
     <div class="user-stats-table">
         {{ macros.tag_list_widget(tag_names, deletable = False) }}
         <div class="clearfix"></div>

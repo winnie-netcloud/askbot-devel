@@ -1,7 +1,7 @@
 {% extends "one_column_body.html" %}
 {% import "macros.html" as macros %}
 <!-- template list_bulk_tag_subscription.html -->
-{% block title %}{% spaceless %}{% trans %}Manage tag subscriptions{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}Manage tag subscriptions{% endtrans %}{% endfilter %}{% endblock %}
 {% block content %}
 <h1 class="section-title">
     {% trans %}Manage tag subscription{% endtrans %}

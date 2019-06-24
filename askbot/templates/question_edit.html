@@ -1,7 +1,7 @@
 {% extends "two_column_body.html" %}
 {% import "macros.html" as macros %}
 <!-- question_edit.html -->
-{% block title %}{% spaceless %}{{ settings.WORDS_EDIT_QUESTION|escape }}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{{ settings.WORDS_EDIT_QUESTION|escape }}{% endfilter %}{% endblock %}
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" href="{{"/wmd/wmd.css"|media}}" />
 {% endblock %}
