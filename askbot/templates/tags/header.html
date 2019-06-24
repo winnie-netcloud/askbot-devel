@@ -14,13 +14,13 @@
             <span class="label">{% trans %}Sort by &raquo;{% endtrans %}</span>
             <a
                 id="sort_name"
-                href="{% url tags %}?sort=name{% if tag_query %}&query={{ tag_query }}{% endif %}"
+                href="{{ url('tags') }}?sort=name{% if tag_query %}&query={{ tag_query }}{% endif %}"
                 {% if tab_id == 'name' %}class="on"{% endif %}
                 title="{% trans %}sorted alphabetically{% endtrans %}"
             ><span>{% trans %}by name{% endtrans %}</span></a>
             <a
                 id="sort_used"
-                href="{% url tags %}?sort=used{% if tag_query %}&query={{ tag_query }}{% endif %}"
+                href="{{ url('tags') }}?sort=used{% if tag_query %}&query={{ tag_query }}{% endif %}"
                 {% if tab_id == 'used' %}class="on"{% endif %}
                 title="{% trans %}sorted by frequency of tag use{% endtrans %}"
             ><span>{% trans %}by popularity{% endtrans %}</span></a>
@@ -29,7 +29,7 @@
                 and request.user.is_administrator_or_moderator()
             %}
                 <a 
-                    href="{% url list_suggested_tags %}"
+                    href="{{ url('list_suggested_tags') }}"
                     {% if tab_id == 'suggested' %}class="on"{% endif %}
                     title="{% trans %}suggested{% endtrans %}"
                 ><span>{% trans %}suggested{% endtrans %}</span></a>
@@ -38,7 +38,7 @@
                 and request.user.is_authenticated()
                 and request.user.is_administrator()
             %}
-                <a href="{% url list_bulk_tag_subscription %}"
+                <a href="{{ url('list_bulk_tag_subscription') }}"
                     title="{% trans %}manage subscriptions{% endtrans %}"
                 ><span>{% trans %}manage subscriptions{% endtrans %}</span></a>
             {% endif %}

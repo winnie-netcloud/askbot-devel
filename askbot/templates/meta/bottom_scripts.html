@@ -15,19 +15,19 @@
 </div>
 {# this section cannot be compressed because lots of data is runtime #}
 <script type="text/javascript">
-    askbot['urls']['mark_read_message'] = '{% url "read_message" %}';
-    askbot['urls']['get_tags_by_wildcard'] = '{% url "get_tags_by_wildcard" %}';
-    askbot['urls']['get_tag_list'] = '{% url "get_tag_list" %}';
+    askbot['urls']['mark_read_message'] = '{{ url('read_message') }}';
+    askbot['urls']['get_tags_by_wildcard'] = '{{ url('get_tags_by_wildcard') }}';
+    askbot['urls']['get_tag_list'] = '{{ url('get_tag_list') }}';
     askbot['urls']['follow_user'] = '/followit/follow/user/{{ '{{' }}userId{{ '}}' }}/';
     askbot['urls']['unfollow_user'] = '/followit/unfollow/user/{{'{{'}}userId{{'}}'}}/';
     askbot['urls']['user_signin'] = '{{ settings.LOGIN_URL }}';
-    askbot['urls']['getEditor'] = '{% url "get_editor" %}';
+    askbot['urls']['getEditor'] = '{{ url('get_editor') }}';
     {% if settings.MULTILINGUAL %}
-        askbot['urls']['translateUrl'] = '{% url "translate_url" %}';
+        askbot['urls']['translateUrl'] = '{{ url('translate_url') }}';
     {% endif %}
-    askbot['urls']['apiGetQuestions'] = '{% url "api_get_questions" %}';
-    askbot['urls']['ask'] = '{% url "ask" %}';
-	askbot['urls']['questions'] = '{% url "questions" %}';
+    askbot['urls']['apiGetQuestions'] = '{{ url('api_get_questions') }}';
+    askbot['urls']['ask'] = '{{ url('ask') }}';
+	askbot['urls']['questions'] = '{{ url('questions') }}';
     askbot['settings']['groupsEnabled'] = {{ settings.GROUPS_ENABLED|as_js_bool }};
     askbot['settings']['static_url'] = '{{ settings.STATIC_URL }}';
     askbot['settings']['minSearchWordLength'] = {{ min_search_word_length }};
@@ -157,7 +157,7 @@
             $('body').addClass('admin');
         }
         if (askbot['settings']['groupsEnabled']) {
-            askbot['urls']['add_group'] = "{% url add_group %}";
+            askbot['urls']['add_group'] = "{{ url('add_group') }}";
             var group_dropdown = new GroupDropdown({{ group_list }});
             $('.groups-dropdown').append(group_dropdown.getElement());
         }
@@ -196,7 +196,7 @@
     </script>
 {% endif %}
 {% if settings.USE_CUSTOM_JS %}
-<script src="{% url "custom_js" %}?v={{ settings.MEDIA_RESOURCE_REVISION }}"
+<script src="{{ url('custom_js') }}?v={{ settings.MEDIA_RESOURCE_REVISION }}"
     type="text/javascript"
 ></script>
 {% endif %}

@@ -102,7 +102,7 @@
 {% block endjs %}
     {{ super() }}
     <script type="text/javascript">
-        askbot['urls']['join_or_leave_group'] = '{% url join_or_leave_group %}';
+        askbot['urls']['join_or_leave_group'] = '{{ url('join_or_leave_group') }}';
         $(document).ready(function(){
             setup_badge_details_toggle();
             $.each($('.group-join-btn'), function(idx, elem){

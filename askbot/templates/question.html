@@ -396,21 +396,21 @@
     {% endspaceless %}
     <script type='text/javascript'>
         {# not compressable #}
-        askbot['urls']['postComments'] = '{% url post_comments %}';
-        askbot['urls']['editComment'] = '{% url edit_comment %}';
-        askbot['urls']['deleteComment'] = '{% url delete_comment %}';
-        askbot['urls']['convertComment'] = '{% url comment_to_answer %}';
-        askbot['urls']['getComment'] = '{% url get_comment %}';
-        askbot['urls']['saveDraftAnswer'] = '{% url save_draft_answer %}';
-        askbot['urls']['vote_url'] = '{% url vote %}'
+        askbot['urls']['postComments'] = '{{ url('post_comments') }}';
+        askbot['urls']['editComment'] = '{{ url('edit_comment') }}';
+        askbot['urls']['deleteComment'] = '{{ url('delete_comment') }}';
+        askbot['urls']['convertComment'] = '{{ url('comment_to_answer') }}';
+        askbot['urls']['getComment'] = '{{ url('get_comment') }}';
+        askbot['urls']['saveDraftAnswer'] = '{{ url('save_draft_answer') }}';
+        askbot['urls']['vote_url'] = '{{ url('vote') }}'
         askbot['urls']['user_signin'] = '{{ settings.LOGIN_URL }}';
-        askbot['urls']['upvote_comment'] = '{% url upvote_comment %}';
-        askbot['urls']['delete_post'] = '{% url delete_post %}';
-        askbot['urls']['get_html_template'] = '{% url get_html_template %}';
-        askbot['urls']['getGroupsList'] = '{% url get_groups_list %}';
-        askbot['urls']['publishAnswer'] = '{% url publish_answer %}';
-        askbot['urls']['apiV1Questions'] = '{% url api_v1_questions %}';
-        askbot['urls']['mergeQuestions'] = '{% url merge_questions %}';
+        askbot['urls']['upvote_comment'] = '{{ url('upvote_comment') }}';
+        askbot['urls']['delete_post'] = '{{ url('delete_post') }}';
+        askbot['urls']['get_html_template'] = '{{ url('get_html_template') }}';
+        askbot['urls']['getGroupsList'] = '{{ url('get_groups_list') }}';
+        askbot['urls']['publishAnswer'] = '{{ url('publish_answer') }}';
+        askbot['urls']['apiV1Questions'] = '{{ url('api_v1_questions') }}';
+        askbot['urls']['mergeQuestions'] = '{{ url('merge_questions') }}';
         {# already added on top askbot['data']['userIsThreadModerator'] = {{ user_is_thread_moderator|as_js_bool }}; #}
         askbot['data']['questionAuthorId'] = {{ question.author_id }};
         askbot['data']['answersSortTab'] = '{{ tab_id }}';

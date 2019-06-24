@@ -15,7 +15,7 @@
                     {% include "avatar/avatar.html" %}
                     {% if not avatar.is_primary %}
                         {# select this avatar as primary #}
-                        <form method="POST" action="{% url askbot_avatar_enable_default_avatar view_user.id %}">
+                        <form method="POST" action="{{ url('askbot_avatar_enable_default_avatar',  view_user.id ) }}">
                             {% csrf_token %}
                             <input type="submit" class="btn btn-primary" 
                                 value="{% trans %}Set as primary{% endtrans %}" />
@@ -29,7 +29,7 @@
                     {% include "avatar/avatar.html" %}
                     {% if not avatar.is_primary %}
                         {# select this avatar as primary #}
-                        <form method="POST" action="{% url askbot_avatar_enable_gravatar view_user.id %}">
+                        <form method="POST" action="{{ url('askbot_avatar_enable_gravatar',  view_user.id ) }}">
                             {% csrf_token %}
                             <input type="submit" class="btn btn-primary" 
                                 value="{% trans %}Set as primary{% endtrans %}" />
@@ -40,13 +40,13 @@
                     {% include "avatar/avatar.html" %}
                     {% if not avatar.is_primary %}
                         {# select this avatar as primary #}
-                        <form method="POST" action="{% url askbot_avatar_set_primary view_user.id %}">{% csrf_token %}
+                        <form method="POST" action="{{ url('askbot_avatar_set_primary',  view_user.id ) }}">{% csrf_token %}
                             <input type="hidden" name="choice" value="{{ avatar.id }}" />
                             <p><input type="submit" class="btn btn-primary" value="{% trans %}Set as primary{% endtrans %}" /></p>
                         </form>
                     {% endif %}
                     {# delete avatar button #}
-                    <form method="POST" action="{% url askbot_avatar_delete avatar.id %}">
+                    <form method="POST" action="{{ url('askbot_avatar_delete',  avatar.id ) }}">
                         {% csrf_token %}
                         <input type="submit" class="btn btn-primary avatar-delete" value="x" />
                         <span class="sr-only">{% trans %}Remove{% endtrans %}</span>
@@ -62,7 +62,7 @@
             {% if not has_uploaded_avatar %}
                 <p>{% trans %}You haven't uploaded an avatar yet.{% endtrans %}</p>
             {% endif %}
-            <form enctype="multipart/form-data" method="POST" action="{% url askbot_avatar_upload view_user.id %}">
+            <form enctype="multipart/form-data" method="POST" action="{{ url('askbot_avatar_upload',  view_user.id ) }}">
                 {% csrf_token %}
                 {{ upload_avatar_form.as_p() }}
                 <p><input type="submit" class="btn btn-primary" value="{% trans %}Upload an avatar{% endtrans %}" /></p>

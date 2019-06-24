@@ -27,8 +27,8 @@
             </div>
             <div class="js-editable"
                 id="js-post-body-{{ answer.pk }}"
-                data-get-text-url="{% url get_post_body %}?post_id={{ answer.pk }}"
-                data-save-text-url="{% url set_post_body %}?post_id={{ answer.pk }}"
+                data-get-text-url="{{ url('get_post_body') }}?post_id={{ answer.pk }}"
+                data-save-text-url="{{ url('set_post_body') }}?post_id={{ answer.pk }}"
                 data-save-text-param-name="body_text"
                 data-validated-text-param-name="body_html"
                 data-min-lines="10"

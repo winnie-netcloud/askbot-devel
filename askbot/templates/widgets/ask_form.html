@@ -1,5 +1,5 @@
 {% import "macros.html" as macros %}
-<form class="js-ask-form" action="{% url "ask" %}" method="post"
+<form class="js-ask-form" action="{{ url('ask') }}" method="post"
     data-validated-fields="title,text"
     data-title-validator="askbot.validators.titleValidator"
     data-text-validator="askbot.validators.questionDetailsValidator"

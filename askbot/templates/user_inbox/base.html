@@ -40,8 +40,8 @@
     <script type="text/javascript">
         var askbot = askbot || {};
         askbot['urls'] = askbot['urls'] || {};
-        askbot['urls']['clearNewNotifications'] = '{% url clear_new_notifications %}';
-        askbot['urls']['deleteNotifications'] = '{% url delete_notifications %}';
+        askbot['urls']['clearNewNotifications'] = '{{ url('clear_new_notifications') }}';
+        askbot['urls']['deleteNotifications'] = '{{ url('delete_notifications') }}';
         $(document).ready(function(){
             $('body').addClass('inbox-{{ inbox_section }}');
             setup_inbox();

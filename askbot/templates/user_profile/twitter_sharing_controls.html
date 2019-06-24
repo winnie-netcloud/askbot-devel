@@ -1,8 +1,8 @@
 {% set auto_tweeting_status = view_user.get_social_sharing_status('twitter') %}
 {% set handle = view_user.twitter_handle|escape %}
 <tr class="auto-tweeting {{ auto_tweeting_status }}"
-    data-change-mode-url="{% url 'change_social_sharing_mode' %}"
-    data-start-url="{% url 'start_sharing_twitter' %}"
+    data-change-mode-url="{{ url('change_social_sharing_mode') }}"
+    data-start-url="{{ url('start_sharing_twitter') }}"
 >
 {% if auto_tweeting_status == 'enabled' %}
     <td>{% trans %}Auto-tweeting to @{{ handle }}{% endtrans %}</td>

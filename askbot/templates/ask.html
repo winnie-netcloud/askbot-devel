@@ -43,7 +43,7 @@
         {% include "meta/category_tree_js.html" %}
     {% endif %}
     <script type='text/javascript'>
-        askbot['urls']['saveDraftQuestion'] = '{% url save_draft_question %}';
+        askbot['urls']['saveDraftQuestion'] = '{{ url('save_draft_question') }}';
         askbot['messages']['userNamePrompt'] = '{{ gettext('User name:')|escapejs }}';
         (function() {
             var form = $('.js-ask-form');
@@ -51,7 +51,7 @@
                 var askForm = new AskForm();
                 askForm.decorate(form);
             }
-            
+
         })();
         $(document).ready(function(){
             //set current module button style

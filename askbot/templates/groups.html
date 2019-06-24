@@ -9,11 +9,11 @@
                 <div class="tabsC">
                     <a id="all-groups" class="first{% if tab_name=="all-groups" %} on{% endif %}"
                         title="{% trans %}All groups{% endtrans %}"
-                        href="{% url groups %}?sort=all-groups"
+                        href="{{ url('groups') }}?sort=all-groups"
                     ><span>{% trans %}all groups{% endtrans %}</span></a>
                     <a id="my-groups" {% if tab_name=="my-groups" %}class="on"{% endif %}
                         title="{% trans %}My groups{% endtrans %}"
-                        href="{% url groups %}?sort=my-groups"
+                        href="{{ url('groups') }}?sort=my-groups"
                     ><span>{% trans %}my groups{% endtrans %}</span></a>
                 </div>
             </div>
@@ -53,7 +53,7 @@
     {% endcompress %}
     {% if request.user.is_authenticated() %}
     <script type="text/javascript">
-        askbot['urls']['join_or_leave_group'] = '{% url join_or_leave_group %}';
+        askbot['urls']['join_or_leave_group'] = '{{ url('join_or_leave_group') }}';
         $.each($('.group-join-btn'), function(idx, elem){
             var group_join_btn = new GroupJoinButton();
             group_join_btn.decorate($(elem));

@@ -14,19 +14,19 @@
     <tbody>
         <tr>
             <td>"{{ settings.WORDS_ASK_YOUR_QUESTION|escape }}"</td>
-            <td><a href="{% url create_widget 'ask' %}">{% trans %}create{% endtrans %}</a></td>
+            <td><a href="{{ url('create_widget',  'ask' ) }}">{% trans %}create{% endtrans %}</a></td>
             <td>
                 {% if ask_widgets > 0 %}
-                    <a href="{% url list_widgets 'ask' %}">{% trans %}view list{% endtrans %}</a>
+                    <a href="{{ url('list_widgets',  'ask' ) }}">{% trans %}view list{% endtrans %}</a>
                 {% endif %}
             </td>
         </tr>
         <tr>
         <td>{{ settings.WORDS_LIST_OF_QUESTIONS|escape }}</td>
-            <td><a href="{% url create_widget 'question' %}">{% trans %}create{% endtrans %}</a></td>
+            <td><a href="{{ url('create_widget',  'question' ) }}">{% trans %}create{% endtrans %}</a></td>
             <td>
                 {% if question_widgets > 0 %}
-                    <a href="{% url list_widgets 'question' %}">{% trans %}view list{% endtrans %}</a>
+                    <a href="{{ url('list_widgets',  'question' ) }}">{% trans %}view list{% endtrans %}</a>
                 {% endif %}
             </td>
         </tr>

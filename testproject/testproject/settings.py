@@ -64,8 +64,8 @@ ASKBOT_LANGUAGE_MODE = 'single-lang' #'single-lang', 'url-lang', 'user-lang'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'askbot', 'upfiles')
 MEDIA_URL = '/upfiles/'
 STATIC_URL = '/m/'#this must be different from MEDIA_URL
+USE_LOCAL_FONTS = False
 
-PROJECT_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
@@ -243,7 +243,6 @@ CSRF_COOKIE_NAME = '_csrf'
 #https://docs.djangoproject.com/en/1.3/ref/contrib/csrf/
 #CSRF_COOKIE_DOMAIN = DOMAIN_NAME
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
 )
@@ -274,7 +273,6 @@ TINYMCE_SPELLCHECKER = False
 TINYMCE_JS_ROOT = os.path.join(STATIC_ROOT, 'default/media/tinymce/')
 TINYMCE_JS_URL = STATIC_URL + 'default/media/tinymce/tiny_mce.js'
 TINYMCE_DEFAULT_CONFIG = {
-    'plugins': 'askbot_imageuploader,askbot_attachment',
     'convert_urls': False,
     'theme': 'advanced',
     'content_css': STATIC_URL + 'default/media/style/tinymce/content.css',

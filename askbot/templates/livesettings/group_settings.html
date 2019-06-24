@@ -60,7 +60,7 @@
                 {% if g.key == settings_group.key %}
                     <li class="on">{{g.name}}</li>
                 {% else %}
-                    <li><a href="{% url "group_settings" g.key %}">{{g.name}}</a></li>
+                    <li><a href="{{ url('group_settings',  g.key ) }}">{{g.name}}</a></li>
                 {% endif %}
             {% endif %}
         {% endfor %}

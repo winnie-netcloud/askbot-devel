@@ -13,7 +13,7 @@
         <link
             rel="alternate"
             type="application/rss+xml"
-            href="{{ base_url }}{% url "latest_questions_feed" %}"
+            href="{{ base_url }}{{ url('latest_questions_feed') }}"
         />
         {% block before_css %}{% endblock %}
         {% include "meta/html_head_stylesheets.html" %}

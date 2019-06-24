@@ -47,14 +47,14 @@
             {% include "question/new_answer_form.html" %}
         {% else %}
             <a class="button submit"
-                href="{{settings.LOGIN_URL}}?next={% url question question.id %}"
+                href="{{settings.LOGIN_URL}}?next={{ url('question',  question.id ) }}"
                 >{{ settings.WORDS_LOGIN_SIGNUP_TO_ANSWER|escape }}</a>
         {% endif %}
     {% else %}
         {# TODO: make this button open in-place answer editor, if answer is on the same page #}
         <a
             class="button submit"
-            href="{% url "edit_answer" previous_answer.id %}"
+            href="{{ url('edit_answer',  previous_answer.id ) }}"
         >{{ settings.WORDS_EDIT_YOUR_PREVIOUS_ANSWER|escape }}</a>
         <span>{{ settings.WORDS_ONLY_ONE_ANSWER_PER_USER_IS_ALLOWED|escape }}</span>
         <div class="invisible">

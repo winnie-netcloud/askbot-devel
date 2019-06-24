@@ -7,7 +7,7 @@
     </a>
     <div class="answer-link">
         {% spaceless %}
-        <a href="{% url question top_answer.thread._question_post().id %}{{ top_answer.thread.title|slugify }}#{{top_answer.id}}">{{ top_answer.thread.title|escape }}</a>
+	<a href="{{ url('question', top_answer.thread._question_post().id) }}{{ top_answer.thread.title|slugify }}#{{top_answer.id}}">{{ top_answer.thread.title|escape }}</a>
         {% endspaceless %}
     </div>
 </div>

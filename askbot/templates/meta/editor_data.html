@@ -6,7 +6,7 @@
     askbot['settings']['maxTagsPerPost'] = {{ settings.MAX_TAGS_PER_POST }};
     askbot['messages']['maxTagsPerPost'] = "{{ ngettext('please use %(tag_count)s tag', 'please use %(tag_count)s tags or less', settings.MAX_TAGS_PER_POST)|format(tag_count=settings.MAX_TAGS_PER_POST)|escapejs }}";
     askbot['messages']['tagLimits'] = "{{ gettext('please use up to %(tag_count)s tags, less than %(max_chars)s characters each')|format(tag_count=settings.MAX_TAGS_PER_POST, max_chars=settings.MAX_TAG_LENGTH)|escapejs }}";
-    askbot['urls']['upload'] = '{% url "upload" %}';
+    askbot['urls']['upload'] = '{{ url('upload') }}';
     askbot['settings']['minTitleLength'] = {{ settings.MIN_TITLE_LENGTH }};
     askbot['settings']['minQuestionBodyLength'] = {{ settings.MIN_QUESTION_BODY_LENGTH }};
     askbot['settings']['minAnswerBodyLength'] = {{ settings.MIN_ANSWER_BODY_LENGTH }};

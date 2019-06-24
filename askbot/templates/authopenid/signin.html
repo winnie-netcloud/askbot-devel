@@ -78,7 +78,7 @@
                         <p class="error">{% trans %}Login failed, please try again{% endtrans %}</p>
                     {% endif %}
                     <div class="form-group">
-                        <input class="required login" id="id_username" 
+                        <input class="required login" id="id_username"
                             maxlength="255" name="username" type="text"
                             {% if login_form.username.value() %}
                                 value="{{ login_form.username.value()|escape }}"
@@ -91,7 +91,7 @@
                         >
                     </div>
                     <div class="form-group">
-                        <input class="required login" id="id_password" 
+                        <input class="required login" id="id_password"
                             maxlength="128" name="password" type="password"
                             {% if login_form.password.value() %}
                                 value="{{ login_form.password.value()|escape }}"
@@ -102,7 +102,7 @@
                 <p id="local_login_buttons">
                     <input class="button" name="login_with_password" type="submit" value="{% trans %}Sign in{% endtrans %}" />
                     {% if settings.USE_LDAP_FOR_PASSWORD_LOGIN == False and settings.NEW_REGISTRATIONS_DISABLED == False %}
-                        <a class="create-password-account" style="vertical-align:middle" href="{% url user_signup_with_password %}">{% trans %}Create a password-protected account{% endtrans %}</a>
+                        <a class="create-password-account" style="vertical-align:middle" href="{{ url('user_signup_with_password') }}">{% trans %}Create a password-protected account{% endtrans %}</a>
                     {% endif %}
                 </p>
             {% else %}{# change password form #}
@@ -112,7 +112,7 @@
                 <div class="login">
                     <div class="form-group js-new_password">
                         <span class="error form-error">{{login_form.new_password.errors[0]}}</span>
-                        <input class="required login" id="id_new_password" 
+                        <input class="required login" id="id_new_password"
                             maxlength="128" name="new_password" type="password"
                             {% if login_form.new_password.value() %}
                                 value="{{ login_form.new_password.value()|escape }}"
@@ -122,7 +122,7 @@
                     </div>
                     <div class="form-group js-new_password_retyped">
                         <span class="error form-error">{{login_form.new_password_retyped.errors[0]}}</span>
-                        <input class="required login" id="id_new_password_retyped" maxlength="128" 
+                        <input class="required login" id="id_new_password_retyped" maxlength="128"
                             name="new_password_retyped" type="password"
                             {% if login_form.new_password_retyped.value() %}
                                 value="{{ login_form.new_password_retyped.value()|escape }}"
@@ -177,8 +177,8 @@
     {% endif %}
     {% endif %}
     {% if view_subtype != 'email_sent' %}
-        {% if user.is_anonymous() and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
-        <form id="account-recovery-form" action="{% url user_account_recover %}" method="post">{% csrf_token %}
+        {% if user.is_anonymous and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
+        <form id="account-recovery-form" action="{{ url('user_account_recover') }}" method="post">{% csrf_token %}
             <h2 id='account-recovery-heading'>{% trans %}Having trouble signing in?{% endtrans %}</h2>
             {% if account_recovery_form.email.errors %}
             <p class="error">{{account_recovery_form.email.errors[0]}}</p>

@@ -121,9 +121,9 @@
     <p style="line-height:12px;">
         <a 
         {% if revision.post.post_type == 'question' %}
-            href="{% url question_revisions revision.post.id %}"
+            href="{{ url('question_revisions',  revision.post.id ) }}"
         {% else %}
-            href="{% url answer_revisions revision.post.id %}"
+            href="{{ url('answer_revisions',  revision.post.id ) }}"
         {% endif %}
         ><strong>{{ timeago(revision.revised_at, action_performed=action_label) }}</strong></a>
     </p>
@@ -394,12 +394,12 @@ for the purposes of the AJAX comment editor #}
                     class="js-edit"
                 >{% trans %}edit{% endtrans %}</a>
                 <form 
-                    action="{% url comment_to_answer %}"
+                    action="{{ url('comment_to_answer') }}"
                     method="POST"
                     accept-charset="utf-8"
                     class='convert-comment'
                 >
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    {{ csrf_input }}
                     <input type="hidden" value="{{ comment.id }}" name="comment_id">
                     <input type="submit" value="{% trans %}convert to answer{% endtrans %}">
                 </form>
@@ -515,7 +515,7 @@ for the purposes of the AJAX comment editor #}
 
 {%- macro tag_autocomplete_js(id = '#id_tags') -%}
     var tagAc = new AutoCompleter({
-            url: '{% url "get_tag_list" %}',
+            url: '{{ url('get_tag_list') }}',
             minChars: 1,
             useCache: true,
             matchInside: true,
@@ -720,7 +720,7 @@ for the purposes of the AJAX comment editor #}
 
 {%- macro moderation_items_link(user, moderation_items) -%}
     {% if moderation_items %}
-        <a id="ab-responses" href="{% url moderation_queue %}">
+        <a id="ab-responses" href="{{ url('moderation_queue') }}">
         {% if moderation_items['new_count'] > 0 %}
             <img src="{{'/images/dialog-warning.png'|media}}"
             {% if moderation_items['seen_count'] > 0 %}

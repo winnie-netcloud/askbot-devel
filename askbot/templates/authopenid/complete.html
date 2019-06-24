@@ -39,7 +39,7 @@ parameters:
                 id="register-form"
                 name="fregister" 
                 {% if login_type=='openid' %}
-                    action="{% url user_register %}"
+                    action="{{ url('user_register') }}"
                 {% elif login_type=='facebook' %}
                     action=""
                 {% else %}

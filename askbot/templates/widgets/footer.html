@@ -14,7 +14,7 @@
                         />
                 </a>
                 {% endif %}
-                {{settings.APP_COPYRIGHT}} {% trans 
+                {{settings.APP_COPYRIGHT}} {% trans
                     license_title=settings.LICENSE_TITLE,
                     license_url=settings.LICENSE_URL
                 %}Content on this site is licensed under a <a href="{{license_url}}">{{license_title}}</a> license.{% endtrans %}
@@ -23,7 +23,7 @@
             {% else %}
             <div class="copyright">
                 {% if settings.LICENSE_USE_LOGO %}
-                <img 
+                <img
                     class="license-logo"
                     src="{{settings.LICENSE_LOGO_URL|media }}"
                     title="{{settings.LICENSE_ACRONYM}}"
@@ -35,12 +35,12 @@
             {% endif %}
         {% endif %}
         <div class="footer-links" >
-            <a href="{% url about %}">{% trans %}about{% endtrans %}</a><span class="link-separator"> |</span>
-            <a href="{% url faq %}">{% trans %}faq{% endtrans %}</a><span class="link-separator"> |</span>
-            <a href="{% url help %}" title="{% trans %}help{% endtrans %}">{% trans %}help{% endtrans %}</a>
+            <a href="{{ url('about') }}">{% trans %}about{% endtrans %}</a><span class="link-separator"> |</span>
+            <a href="{{ url('faq') }}">{% trans %}faq{% endtrans %}</a><span class="link-separator"> |</span>
+            <a href="{{ url('help') }}" title="{% trans %}help{% endtrans %}">{% trans %}help{% endtrans %}</a>
             <span class="link-separator"> |</span>
-            <a href="{% url privacy %}">{% trans %}privacy policy{% endtrans %}</a><span class="link-separator"> |</span>
-            <a href="{% url terms %}">{% trans %}terms of service{% endtrans %}</a>
+            <a href="{{ url('privacy') }}">{% trans %}privacy policy{% endtrans %}</a><span class="link-separator"> |</span>
+            <a href="{{ url('terms') }}">{% trans %}terms of service{% endtrans %}</a>
             {% set feedback_mode = settings.FEEDBACK_MODE %}
             {% if feedback_mode == 'open' or (feedback_mode == 'auth-only' and request.user.is_authenticated()) %}
             <span class="link-separator"> |</span>
@@ -49,7 +49,7 @@
                     href="{{settings.FEEDBACK_SITE_URL}}"
                     target="_blank"
                 {% else %}
-                    href="{% url feedback %}?next={{request.path|escape}}"
+                    href="{{ url('feedback') }}?next={{request.path|escape}}"
                 {% endif %}
             >
                 {% trans %}give feedback{% endtrans %}
