@@ -205,7 +205,7 @@ class ManagementCommandTests(AskbotTestCase):
         subs = models.EmailFeedSetting.objects.filter(
                                                 subscriber = user,
                                             )
-        self.assertEquals(subs.count(), 5)
+        self.assertEquals(subs.count(), 6)
         #try to log in
         user = auth.authenticate(username=username, password=password)
         self.assertTrue(user is not None)
