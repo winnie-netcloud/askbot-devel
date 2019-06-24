@@ -31,7 +31,7 @@ REQUIREMENTS = {
     'jinja2': 'Jinja2>=2.8',
     'jsonfield': 'jsonfield>=2.0.0',
     'jwt': 'pyjwt<=1.7.1',
-    'keyedcache': 'django-keyedcache>=1.5.1',
+    'keyedcache': 'django-keyedcache3>=1.5.1',
     'markdown2': 'markdown2<=2.3.8',
     'mock': 'mock==3.0.5',
     'oauth2': 'oauth2<=1.9.0.post1',
@@ -49,7 +49,6 @@ REQUIREMENTS = {
     'sanction': 'sanction==0.3.1',
     'simplejson': 'simplejson<=3.16.1',
     'six': 'six==1.10.0',
-    'threaded_multihost': 'django-threaded-multihost<=1.4-1',
     'tinymce': 'django-tinymce>=2.8.0',
     'unidecode': 'unidecode<=1.0.23',
     #'stopforumspam': 'stopforumspam'
