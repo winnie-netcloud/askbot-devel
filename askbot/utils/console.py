@@ -1,16 +1,14 @@
 """functions that directly handle user input
 """
-
+import math
 import sys
 import time
 import logging
 from askbot.utils import path
 
 
-def decode_input(input):
-    decoded_input = input.decode(sys.stdin.encoding) if sys.stdin.encoding else input
-    decoded_input = decoded_input.strip()
-    return decoded_input
+def decode_input(input: str):
+    return input.strip()
 
 
 def start_printing_db_queries():
@@ -219,7 +217,7 @@ class ProgressBar(object):
         self.length = length
         self.counter = float(0)
         self.max_barlen = 60
-        self.curr_barlen = 0
+        self.curr_barlen: float = 0
         self.progress = ''
         if message and length > 0:
             print(message)
@@ -233,14 +231,14 @@ class ProgressBar(object):
 
         self.backspace_progress_percent()
 
-        tics_to_write = 0
+        tics_to_write = 0.0
         if self.length < self.max_barlen:
             tics_to_write = self.max_barlen/self.length
         elif int(self.counter) % (self.length/self.max_barlen) == 0:
-            tics_to_write = 1
+            tics_to_write = 1.0
 
         if self.curr_barlen + tics_to_write <= self.max_barlen:
-            sys.stdout.write('-' * tics_to_write)
+            sys.stdout.write('-' * int(math.floor(tics_to_write)))
             self.curr_barlen += tics_to_write
 
         self.print_progress_percent()
@@ -257,7 +255,7 @@ class ProgressBar(object):
     def finish_progress_bar(self):
         """brint the last bars, to make all bars equal length"""
         self.backspace_progress_percent()
-        sys.stdout.write('-' * (self.max_barlen - self.curr_barlen))
+        sys.stdout.write('-' * int(math.floor((self.max_barlen - self.curr_barlen))))
 
     def __next__(self):
 
