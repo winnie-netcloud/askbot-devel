@@ -3,6 +3,8 @@ import datetime
 import os
 import re
 import random
+from typing import List
+
 import simplejson
 import time
 import warnings
@@ -255,11 +257,12 @@ def list_directory_files(dir_path):
     including those located inside nested directories,
     returned file paths include the directory paths"""
     file_paths = list()
-    def handler(_, directory, file_names):
+    def handler(root: str, directories: List[str], file_names: List[str]):
         for file_name in file_names:
-            file_path = os.path.join(directory, file_name)
+            file_path = os.path.join(root, file_name)
             file_paths.append(file_path)
-    os.path.walk(dir_path, handler, None)
+    for elem in os.walk(dir_path):
+        handler(*elem)
     return file_paths
 
 
