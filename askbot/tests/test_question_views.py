@@ -3,7 +3,7 @@ from askbot.conf import settings as askbot_settings
 from askbot import const
 from askbot.tests.utils import AskbotTestCase
 from askbot import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 class PrivateQuestionViewsTests(AskbotTestCase):
 

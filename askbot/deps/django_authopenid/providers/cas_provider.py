@@ -3,7 +3,7 @@ from askbot.conf import settings as askbot_settings
 from askbot.utils.html import site_url
 from cas import CASClient
 from django.conf import settings as django_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import urllib.request, urllib.parse, urllib.error
 
 class CASLoginProvider(BaseProtocol):

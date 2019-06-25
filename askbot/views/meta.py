@@ -5,7 +5,7 @@ This module contains a collection of views displaying all sorts of secondary and
 """
 from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings as django_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.shortcuts import render
 from django.template import RequestContext
@@ -15,7 +15,7 @@ from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy

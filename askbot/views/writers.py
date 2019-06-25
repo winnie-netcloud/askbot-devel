@@ -26,7 +26,7 @@ from django.utils.html import strip_tags, escape
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core import exceptions
 from django.conf import settings
 from django.views.decorators import csrf

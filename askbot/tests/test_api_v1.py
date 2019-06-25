@@ -1,5 +1,5 @@
 from askbot.tests.utils import AskbotTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import simplejson
 
 class ApiV1Tests(AskbotTestCase):

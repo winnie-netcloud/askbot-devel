@@ -123,7 +123,7 @@ import itertools
 import re
 import random
 from django.conf import settings
-from django.core.urlresolvers import get_callable
+from django.urls import get_callable
 from django.utils.safestring import mark_safe
 _POST_FORM_RE = \
     re.compile(r'(<form\W[^>]*\bmethod\s*=\s*(\'|"|)POST(\'|"|)\b[^>]*>)', re.IGNORECASE)

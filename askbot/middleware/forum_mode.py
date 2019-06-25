@@ -5,7 +5,7 @@ enabling support of closed forum mode
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.conf import settings
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 from askbot.conf import settings as askbot_settings
 from askbot.utils.views import is_askbot_view
 import urllib.request, urllib.parse, urllib.error

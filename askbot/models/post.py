@@ -6,7 +6,6 @@ from django.contrib.sitemaps import ping_google
 from django.utils import html
 from django.conf import settings as django_settings
 from django.contrib.auth.models import User
-from django.core import urlresolvers
 from django.db import models
 from django.utils import html as html_utils
 from django.utils import timezone
@@ -18,7 +17,7 @@ from django.utils.http import urlquote as django_urlquote
 from django.core import exceptions as django_exceptions
 from django.core import cache
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 
 import askbot
@@ -977,17 +976,17 @@ class Post(models.Model):
                 question_post = self.thread._question_post()
             if no_slug:
                 url = '%(base)s?answer=%(id)d#post-id-%(id)d' % {
-                    'base': urlresolvers.reverse('question', args=[question_post.id]),
+                    'base': reverse('question', args=[question_post.id]),
                     'id': self.id
                 }
             else:
                 url = '%(base)s%(slug)s/?answer=%(id)d#post-id-%(id)d' % {
-                    'base': urlresolvers.reverse('question', args=[question_post.id]),
+                    'base': reverse('question', args=[question_post.id]),
                     'slug': django_urlquote(slugify(self.thread.title)),
                     'id': self.id
                 }
         elif self.is_question():
-            url = urlresolvers.reverse('question', args=[self.id])
+            url = reverse('question', args=[self.id])
             if thread:
                 url += django_urlquote(slugify(thread.title)) + '/'
             elif no_slug is False:

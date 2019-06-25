@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings as django_settings
 from django.core import exceptions
 #from django.core.management import call_command
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.http import HttpResponse
@@ -1452,7 +1452,7 @@ def translate_url(request):
     form = forms.TranslateUrlForm(request.GET)
     match = None
     if form.is_valid():
-        from django.core.urlresolvers import resolve, Resolver404, NoReverseMatch
+        from django.urls import resolve, Resolver404, NoReverseMatch
         try:
             match = resolve(form.cleaned_data['url'])
         except Resolver404:

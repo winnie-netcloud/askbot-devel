@@ -15,7 +15,7 @@ from functools import partial
 import uuid
 from celery import states
 from celery.task import task
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.urls import reverse, NoReverseMatch
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.db.models import signals as django_signals

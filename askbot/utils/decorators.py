@@ -5,7 +5,7 @@ import inspect
 import logging
 from django.conf import settings
 from django.core import exceptions as django_exceptions
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseForbidden, Http404
 from django.http import HttpResponseRedirect
 import simplejson

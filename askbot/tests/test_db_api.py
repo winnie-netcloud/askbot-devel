@@ -5,7 +5,7 @@ e.g. ``some_user.do_something(...)``
 """
 from bs4 import BeautifulSoup
 from django.core import exceptions
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test.client import Client
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser

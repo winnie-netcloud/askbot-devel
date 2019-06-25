@@ -26,7 +26,7 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 from django.utils import translation
 from django.views.decorators import csrf
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core import exceptions as django_exceptions
 from django.contrib.humanize.templatetags import humanize
 from django.http import QueryDict

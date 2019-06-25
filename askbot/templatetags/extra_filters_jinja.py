@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import get_language as django_get_language
 from django.contrib.humanize.templatetags import humanize
 from django.template import defaultfilters
-from django.core.urlresolvers import reverse, resolve
+from django.urls import reverse, resolve
 from django.http import Http404
 import simplejson
 from django.utils import timezone
@@ -438,7 +438,7 @@ def escapejs(text):
 
 @register.filter
 def url(viewname, *args, **kwargs):
-    from django.core.urlresolvers import reverse, NoReverseMatch
+    from django.urls import reverse, NoReverseMatch
 
     # Try to look up the URL twice: once given the view name,
     # and again relative to what we guess is the "main" app.

@@ -1,7 +1,7 @@
 import logging
 
 from django.http import HttpResponseRedirect, Http404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import render
 from django.template import RequestContext
 from django.views.decorators.cache import never_cache

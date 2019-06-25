@@ -8,7 +8,7 @@ from avatar.models import Avatar
 from avatar.signals import avatar_updated
 from django.conf import settings as django_settings
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.encoding import force_text

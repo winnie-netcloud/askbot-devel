@@ -3,7 +3,7 @@ from askbot.tests.utils import AskbotTestCase
 
 from django.test.client import Client
 from django.conf import settings as django_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import translation, timezone
 
 

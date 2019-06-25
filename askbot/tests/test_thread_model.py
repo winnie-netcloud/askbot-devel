@@ -2,7 +2,7 @@ from askbot.tests.utils import AskbotTestCase
 from askbot.conf import settings as askbot_settings
 from askbot import models
 import django.core.mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 class ThreadModelTestsWithGroupsEnabled(AskbotTestCase):
 

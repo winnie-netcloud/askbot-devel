@@ -10,7 +10,7 @@ from html5lib import sanitizer, serializer, tokenizer, treebuilders,\
 import html.entities
 
 from django.conf import settings as django_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.loader import get_template
 from django.utils.html import strip_tags as strip_all_tags
 from django.utils.html import urlize

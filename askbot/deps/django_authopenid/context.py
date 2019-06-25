@@ -1,7 +1,7 @@
 from .util import get_the_only_login_provider
 from askbot.utils import forms
 from django.conf import settings as django_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from .forms import LoginForm
 
 def get_after_login_url(request):
