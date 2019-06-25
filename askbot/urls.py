@@ -698,7 +698,7 @@ urlpatterns = [
     ),
     service_url(
         r'^jsi18n/$',
-        I18nViews.javascript_catalog,
+        I18nViews.JavaScriptCatalog,
         {'domain': 'djangojs', 'packages': ('askbot',)},
         name='askbot_jsi18n'
     ),
