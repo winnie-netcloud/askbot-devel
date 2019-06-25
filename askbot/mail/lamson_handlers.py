@@ -20,7 +20,7 @@ try:
 except ImportError:
     raise ImproperlyConfigured("""Askbot: to enable posting by email,
 install modules Lamson and django-lamson:
-pip install Lamson 
+pip install Lamson
 pip install django-lamson
 """)
 
@@ -171,9 +171,9 @@ def process_reply(func):
              received the notification.")
         except Exception as e:
             import sys
-            sys.stderr.write(str(e).encode('utf-8'))
+            sys.stderr.write(str(e))
             import traceback
-            sys.stderr.write(str(traceback.format_exc()).encode('utf-8'))
+            sys.stderr.write(str(traceback.format_exc()))
 
         if error is not None:
             from askbot.mail.messages import ReplyByEmailError

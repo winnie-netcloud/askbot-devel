@@ -141,7 +141,7 @@ def strip_email_client_quote_separator(text):
             return regex.sub('', text)
     #did not find a quote separator!!! log it
     log_message = '\nno matching quote separator: %s\n' % text
-    sys.stderr.write(log_message.encode('utf-8'))
+    sys.stderr.write(str(log_message))
     text_lines = text.splitlines(False)
     return '\n'.join(text_lines[:-3])#strip 3 lines as a guess
 

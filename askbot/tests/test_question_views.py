@@ -44,11 +44,11 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         #private question link is not shown on the main page
         #to unauthorized users
         response = self.client.get(reverse('questions'))
-        self.assertFalse(self.qdata['title'] in response.content)
+        self.assertFalse(self.qdata['title'] in str(response.content))
         #private question link is not shown on the poster profile
         #to the unauthorized users
         response = self.client.get(self.user.get_profile_url())
-        self.assertFalse(self.qdata['title'] in response.content)
+        self.assertFalse(self.qdata['title'] in str(response.content))
 
     def test_publish_private_question(self):
         question = self.post_question(user=self.user, is_private=True)
