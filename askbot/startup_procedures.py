@@ -848,11 +848,7 @@ def test_cache_backend():
             'the cache backend is working properly.')
     print_errors(errors)
 
-    # test the cache backend settings
-    if django.VERSION[1] > 2:
-        backend = django_settings.CACHES['default']['BACKEND']
-    else:
-        backend = django_settings.CACHE_BACKEND
+    backend = django_settings.CACHES['default']['BACKEND']
 
     if backend.strip() == '' or 'dummy' in backend:
         message = """Please enable at least a "locmem" cache (for a single process server).
