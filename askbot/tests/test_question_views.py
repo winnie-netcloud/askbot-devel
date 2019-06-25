@@ -71,7 +71,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
 
         self.client.logout()
         response = self.client.get(question.get_absolute_url())
-        self.assertTrue('edited question text' in response.content)
+        self.assertTrue(b'edited question text' in response.content)
 
     def test_privatize_public_question(self):
         question = self.post_question(user=self.user)
@@ -141,11 +141,11 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         user2 = self.create_user('user2')
         self.client.login(user_id=user2.id, method='force')
         response = self.client.get(self.question.get_absolute_url())
-        self.assertFalse('some answer text' in response.content)
+        self.assertFalse(b'some answer text' in response.content)
 
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertFalse('some answer text' in response.content)
+        self.assertFalse(b'some answer text' in response.content)
 
     def test_private_checkbox_is_on_when_editing_private_answer(self):
         answer = self.post_answer(
@@ -183,7 +183,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         self.assertTrue(models.Group.objects.get_global_group() in answer.groups.all())
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertTrue('edited answer text' in response.content)
+        self.assertTrue(b'edited answer text' in response.content)
 
 
     def test_privatize_public_answer(self):
@@ -202,4 +202,4 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         #check that countent is not seen by an anonymous user
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertFalse('edited answer text' in response.content)
+        self.assertFalse(b'edited answer text' in response.content)

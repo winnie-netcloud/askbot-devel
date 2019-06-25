@@ -50,7 +50,7 @@ class ContentConvertionTests(AskbotTestCase):
                                      'cancel_vote': 'false'},
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('is_deleted' in response.content)
+        self.assertTrue(b'is_deleted' in response.content)
 
     def test_convert_answer_to_comment(self):
         comment_count = self.question.comment_count
