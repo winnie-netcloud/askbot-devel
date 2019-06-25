@@ -698,7 +698,7 @@ class CommandViewTests(AskbotTestCase):
             data = {'object_id': group.id, 'model_name': 'Group'},
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, '')
+        self.assertEqual(response.content, b'')
 
     def test_load_full_object_description_works(self):
         group = models.Group(name='somegroup')
@@ -713,7 +713,7 @@ class CommandViewTests(AskbotTestCase):
             data = {'object_id': group.id,'model_name': 'Group'},
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'some text')
+        self.assertEqual(response.content, b'some text')
 
     def test_save_object_description_works(self):
         group = models.Group(name='somegroup')
@@ -760,7 +760,7 @@ class CommandViewTests(AskbotTestCase):
                                 HTTP_X_REQUESTED_WITH='XMLHttpRequest'
                             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content, '')
+            self.assertEqual(response.content, b'')
 
         self.client.login(user_id=user.id, method='force')
 
