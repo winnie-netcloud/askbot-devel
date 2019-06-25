@@ -63,13 +63,14 @@ internal_link_re = re.compile(internal_link_pattern, re.X)
 try:
     import uuid
 except ImportError:
-    SECRET_SALT = str(randint(0, 1000000))
+    SECRET_SALT = str(randint(0, 1000000)).encode("utf-8")
 else:
-    SECRET_SALT = str(uuid.uuid4())
-def _hash_ascii(s):
+    SECRET_SALT = str(uuid.uuid4()).encode("utf-8")
+
+def _hash_ascii(s: bytes) -> str:
     #return md5(s).hexdigest()   # Markdown.pl effectively does this.
     return 'md5-' + md5(SECRET_SALT + s).hexdigest()
-def _hash_text(s):
+def _hash_text(s: str) -> str:
     return 'md5-' + md5(SECRET_SALT + s.encode("utf-8")).hexdigest()
 
 def _regularize_eols(text):

@@ -113,9 +113,9 @@ def send_mail(
             headers=headers,
             attachments=attachments
         )
-        logging.debug('sent update to %s' % ','.join(recipient_list))
+        logging.debug('sent update to %s' % ','.join(map(str, recipient_list)))
     except Exception as error:
-        sys.stderr.write('\n' + str(error).encode('utf-8') + '\n')
+        sys.stderr.write(b'\n' + str(error).encode('utf-8') + b'\n')
         if raise_on_failure == True:
             raise exceptions.EmailNotSent(str(error))
 
