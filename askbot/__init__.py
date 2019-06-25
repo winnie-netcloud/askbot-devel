@@ -16,10 +16,10 @@ default_app_config = 'askbot.apps.AskbotConfig'
 REQUIREMENTS = {
     'appconf': 'django-appconf',
     'akismet': 'akismet==1.0.1',
-    'avatar': 'django-avatar==3.1.0',
+    'avatar': 'django-avatar>=4.0',
     'bs4': 'beautifulsoup4<=4.7.1',
     'compressor': 'django-compressor>=2.0,<=2.2',
-    'django': 'django>=1.9,<1.12',
+    'django': 'django>=1.11,<2.1',
     'django_countries': 'django-countries>=3.3',
     'django_jinja': 'django-jinja>=2.0',
     'celery': 'celery>=4.0,<=5.0',
