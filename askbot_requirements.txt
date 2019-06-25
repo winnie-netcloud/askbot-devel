@@ -4,7 +4,6 @@ django-appconf
 akismet==1.0.1
 beautifulsoup4<=4.7.1
 django-avatar==3.1.0
-django-celery>=3.0.11,<=3.3.0
 django-compressor>=2.0,<=2.2
 django-countries>=3.3
 -e git+https://github.com/martin-bts/django-followit.git#egg=django-followit

@@ -155,7 +155,6 @@ INSTALLED_APPS = (
     'keyedcache',
     'robots',
     'django_countries',
-    'djcelery',
     'kombu.transport.memory',
     'followit',
     'tinymce',
@@ -215,9 +214,6 @@ ALLOW_UNICODE_SLUGS = False
 #Celery Settings
 BROKER_TRANSPORT = "kombu.transport.memory.Transport"
 CELERY_ALWAYS_EAGER = True
-
-import djcelery
-djcelery.setup_loader()
 
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
