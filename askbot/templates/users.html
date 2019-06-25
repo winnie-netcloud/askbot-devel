@@ -101,7 +101,7 @@
     {% endcompress %}
     <script type="text/javascript">
         //todo move javascript out
-        {% if group and request.user.is_authenticated() %}
+        {% if group and request.user.is_authenticated %}
             $(document).ready(function(){
                 var group_join_btn = new GroupJoinButton();
                 group_join_btn.decorate($('.group-join-btn'));

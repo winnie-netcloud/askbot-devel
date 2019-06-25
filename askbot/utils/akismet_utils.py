@@ -14,7 +14,7 @@ def get_user_param(user, param_name):
     """Returns param from the user if user is not anonymous.
     Returns `None` otherwise.
     """
-    if user.is_anonymous():
+    if user.is_anonymous:
         return None
     return getattr(user, param_name)
 

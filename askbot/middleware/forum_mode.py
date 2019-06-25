@@ -37,7 +37,7 @@ class ForumModeMiddleware(object):
         All others will be redirected to the login url.
         """
         if (askbot_settings.ASKBOT_CLOSED_FORUM_MODE
-                and request.user.is_anonymous()):
+                and request.user.is_anonymous):
             resolver_match = resolve(request.path)
             if not is_askbot_view(resolver_match.func):
                 return

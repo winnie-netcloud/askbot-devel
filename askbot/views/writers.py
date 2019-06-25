@@ -61,7 +61,7 @@ def upload(request):#ajax upload file to a question or answer
     try:
         #may raise exceptions.PermissionDenied
         result, error, file_url, orig_file_name = None, '', None, None
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             msg = _('Sorry, anonymous users cannot upload files')
             raise exceptions.PermissionDenied(msg)
 
@@ -165,7 +165,7 @@ def import_data(request):
     """
     #allow to use this view to site admins
     #or when the forum in completely empty
-    if request.user.is_anonymous() or (not request.user.is_administrator()):
+    if request.user.is_anonymous or (not request.user.is_administrator()):
         if models.Post.objects.get_questions().exists():
             raise Http404
 
@@ -204,7 +204,7 @@ def ask(request):#view used to ask a new question
     user can start posting a question anonymously but then
     must login/register in order for the question go be shown
     """
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.is_read_only():
             referer = request.META.get("HTTP_REFERER", reverse('questions'))
             request.user.message_set.create(message=_('Sorry, but you have only read access'))
@@ -231,11 +231,11 @@ def ask(request):#view used to ask a new question
                 message = _('Spam was detected on your post, sorry if it was a mistake')
                 raise exceptions.PermissionDenied(message)
 
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 drafts = models.DraftQuestion.objects.filter(author=request.user)
                 drafts.delete()
                 user = form.get_post_user(request.user)
-            elif request.user.is_anonymous() and askbot_settings.ALLOW_ASK_UNREGISTERED:
+            elif request.user.is_anonymous and askbot_settings.ALLOW_ASK_UNREGISTERED:
                 user = models.get_or_create_anonymous_user()
                 ask_anonymously = True
             else:
@@ -291,7 +291,7 @@ def ask(request):#view used to ask a new question
     draft_title = ''
     draft_text = ''
     draft_tagnames = ''
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         drafts = models.DraftQuestion.objects.filter(author=request.user)
         if len(drafts) > 0:
             draft = drafts[0]
@@ -653,7 +653,7 @@ def answer(request, id, form_class=forms.AnswerForm):#process a new answer
         form = form_class(request.POST, user=request.user)
 
         if form.is_valid():
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 drafts = models.DraftAnswer.objects.filter(
                                                 author=request.user,
                                                 thread=question.thread
@@ -713,7 +713,7 @@ def __generate_comments_json(obj, user, avatar_size):
     json_comments = []
     for comment in comments:
 
-        if user and user.is_authenticated():
+        if user and user.is_authenticated:
             try:
                 user.assert_can_delete_comment(comment)
                 #/posts/392845/comments/219852/delete
@@ -794,7 +794,7 @@ def post_comments(request):#generic ajax handler to load comments to an object
         response = __generate_comments_json(post, user, avatar_size)
     elif request.method == "POST":
         try:
-            if user.is_anonymous():
+            if user.is_anonymous:
                 msg = _('Sorry, you appear to be logged out and '
                         'cannot post comments. Please '
                         '<a href="%(sign_in_url)s">sign in</a>.') % \
@@ -828,7 +828,7 @@ def post_comments(request):#generic ajax handler to load comments to an object
 @csrf.csrf_protect
 @decorators.ajax_only
 def edit_comment(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise exceptions.PermissionDenied(_('Sorry, anonymous users cannot edit comments'))
 
     if askbot_settings.READ_ONLY_MODE_ENABLED:
@@ -890,7 +890,7 @@ def delete_comment(request):
     """ajax handler to delete comment
     """
     try:
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             msg = _('Sorry, you appear to be logged out and '
                     'cannot delete comments. Please '
                     '<a href="%(sign_in_url)s">sign in</a>.') % \
@@ -933,7 +933,7 @@ def delete_comment(request):
 @decorators.post_only
 @csrf.csrf_protect
 def comment_to_answer(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         msg = _('Sorry, only logged in users can convert comments to answers. '
                 'Please <a href="%(sign_in_url)s">sign in</a>.') % \
                 {'sign_in_url': url_utils.get_login_url()}
@@ -964,7 +964,7 @@ def repost_answer_as_comment(request, destination=None):
                 'comment_under_previous_answer'
             )
     )
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         msg = _('Sorry, only logged in users can convert answers to comments. '
                 'Please <a href="%(sign_in_url)s">sign in</a>.') % \
                 {'sign_in_url': url_utils.get_login_url()}

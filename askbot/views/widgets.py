@@ -96,7 +96,7 @@ def ask_widget(request, widget_id):
                 'group_id': group_id,
                 'is_anonymous': ask_anonymously
             }
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 data_dict['author'] = request.user
                 #question = post_question(data_dict, request)
                 return redirect('ask_by_widget_complete')
@@ -110,7 +110,7 @@ def ask_widget(request, widget_id):
     else:
         if 'widget_question' in request.session and \
                 request.GET.get('action', 'post-after-login'):
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 data_dict = request.session['widget_question']
                 data_dict['author'] = request.user
                 question = post_question(request.session['widget_question'], request)

@@ -24,7 +24,7 @@
                 {{ macros.checkbox_in_div(form.suppress_email) }}
             {% endif %}
             {% if settings.GROUPS_ENABLED and
-                request.user.is_authenticated() and
+                request.user.is_authenticated and
                 request.user.can_make_group_private_posts()
             %}
                 {{ macros.checkbox_in_div(form.post_privately) }}

@@ -6,7 +6,7 @@ of the email code to detect the response signature that will appear under #}
 {% block title %}{% trans %}{{ site_name }} feedback{% endtrans %}{% endblock %}
 {% block headline %}{% trans %}{{ site_name }} feedback{% endtrans %}{% endblock %}
 {% block content %}
-    {% if user and user.is_authenticated() %}
+    {% if user and user.is_authenticated %}
         <p>{{ user.get_profile_link() }} ({{ macros.mailto_link(user.email) }}, ip:{{ ip_addr }}) {% trans %}wrote:{% endtrans %}</p>
     {% else %}
         <p>{{ name|safe }} ({% if email %}{{ macros.mailto_link(email) }} {% endif %}ip:{{ ip_addr }}) {% trans %}wrote:{% endtrans %}</p>

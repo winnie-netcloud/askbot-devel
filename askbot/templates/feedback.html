@@ -11,7 +11,7 @@
 {%endif%}
 <form method="post" action="{{ url('feedback') }}" accept-charset="utf-8">{% csrf_token %}
     <div class="message">{{ settings.FEEDBACK_PAGE_MESSAGE|sub_vars(user)|convert_markdown }}</div>
-    {% if user.is_anonymous() %}
+    {% if user.is_anonymous %}
         <div class="form-row"><label>{{form.name.label}}</label><br/>{{form.name}}</div>
         <div class="form-row">
             <label>{{form.email.label}}

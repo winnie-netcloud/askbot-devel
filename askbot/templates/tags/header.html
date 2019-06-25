@@ -24,18 +24,18 @@
                 {% if tab_id == 'used' %}class="on"{% endif %}
                 title="{% trans %}sorted by frequency of tag use{% endtrans %}"
             ><span>{% trans %}by popularity{% endtrans %}</span></a>
-            {% if settings.ENABLE_TAG_MODERATION 
-                and request.user.is_authenticated()
+            {% if settings.ENABLE_TAG_MODERATION
+                and request.user.is_authenticated
                 and request.user.is_administrator_or_moderator()
             %}
-                <a 
+                <a
                     href="{{ url('list_suggested_tags') }}"
                     {% if tab_id == 'suggested' %}class="on"{% endif %}
                     title="{% trans %}suggested{% endtrans %}"
                 ><span>{% trans %}suggested{% endtrans %}</span></a>
             {% endif %}
             {% if settings.SUBSCRIBED_TAG_SELECTOR_ENABLED
-                and request.user.is_authenticated()
+                and request.user.is_authenticated
                 and request.user.is_administrator()
             %}
                 <a href="{{ url('list_bulk_tag_subscription') }}"

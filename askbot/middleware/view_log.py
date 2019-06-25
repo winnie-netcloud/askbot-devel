@@ -14,7 +14,7 @@ class ViewLogMiddleware(object):
     """
     def process_view(self, request, view_func, view_args, view_kwargs):
         #send the site_visited signal for the authenticated users
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             signals.site_visited.send(None, #this signal has no sender
                 user=request.user,
                 timestamp=timezone.now()

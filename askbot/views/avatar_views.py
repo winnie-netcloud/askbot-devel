@@ -21,7 +21,7 @@ def admin_or_owner_required(func):
     call the view function"""
     @functools.wraps(func)
     def wrapped(request, user_id=None):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             if request.user.is_administrator() or request.user.id == user_id:
                 return func(request, user_id)
         #delegate to do redirect to the login_required
@@ -191,7 +191,7 @@ def delete(request, avatar_id):
     """deletes uploded avatar"""
     avatar = get_object_or_404(Avatar, pk=avatar_id)
     if request.method == 'POST' \
-        and request.user.is_authenticated() \
+        and request.user.is_authenticated \
         and (request.user.is_administrator_or_moderator() \
             or avatar.user_id == request.user.id):
         user = avatar.user

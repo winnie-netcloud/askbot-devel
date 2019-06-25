@@ -83,7 +83,7 @@ class ThreadQuerySet(models.query.QuerySet):
 
     def get_visible(self, user):
         """filters out threads not belonging to the user groups"""
-        if user.is_authenticated():
+        if user.is_authenticated:
             groups = user.get_groups()
         else:
             groups = [Group.objects.get_global_group()]
@@ -287,7 +287,7 @@ class ThreadManager(BaseQuerySetManager):
         if lang_mode == 'url-lang':
             primary_filter['language_code'] = get_language()
         elif lang_mode == 'user-lang':
-            if request_user.is_authenticated():
+            if request_user.is_authenticated:
                 language_codes = request_user.get_languages()
             else:
                 language_codes = list(dict(django_settings.LANGUAGES).keys())
@@ -297,7 +297,7 @@ class ThreadManager(BaseQuerySetManager):
         qs = self.filter(**primary_filter)
 
         if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
-            if request_user.is_authenticated():
+            if request_user.is_authenticated:
                 qs = qs.filter(Q(approved=True) | Q(posts__author_id=request_user.pk))
             else:
                 qs = qs.filter(approved=True)
@@ -412,7 +412,7 @@ class ThreadManager(BaseQuerySetManager):
                 meta_data['author_name'] = u.username
 
         # get users tag filters
-        if request_user and request_user.is_authenticated():
+        if request_user and request_user.is_authenticated:
             # mark questions tagged with interesting tags
             # a kind of fancy annotation, would be nice to avoid it
             lang = get_language()
@@ -744,7 +744,7 @@ class Thread(models.Model):
             'deleted': False
         }
 
-        if user and user.is_authenticated() and askbot_settings.GROUPS_ENABLED:
+        if user and user.is_authenticated and askbot_settings.GROUPS_ENABLED:
             # get post with groups shared with having at least
             # one of the user groups
             # of those posts return the latest revision
@@ -967,7 +967,7 @@ class Thread(models.Model):
 
     def has_moderator(self, user):
         """true if ``user`` is also a thread moderator"""
-        if user.is_anonymous():
+        if user.is_anonymous:
             return False
         if user.is_administrator_or_moderator():
             if askbot_settings.GROUPS_ENABLED:
@@ -998,7 +998,7 @@ class Thread(models.Model):
         """returns query set for answers to this question
         that may be shown to the given user
         """
-        if user is None or user.is_anonymous():
+        if user is None or user.is_anonymous:
             return self.posts.get_answers().filter(deleted=False)
         else:
             return self.posts.get_answers(
@@ -1084,7 +1084,7 @@ class Thread(models.Model):
             return 2
 
         post_data = self.get_cached_post_data(user=user, sort_method=sort_method)
-        if user.is_anonymous():
+        if user.is_anonymous:
             if askbot_settings.COMMENTS_REVERSED:
                 reverse_comments(post_data)
             return post_data
@@ -1189,7 +1189,7 @@ class Thread(models.Model):
 
         thread_posts = self.posts.all()
         if askbot_settings.GROUPS_ENABLED:
-            if user is None or user.is_anonymous():
+            if user is None or user.is_anonymous:
                 groups = (Group.objects.get_global_group(),)
             else:
                 groups = user.get_groups()
@@ -1389,7 +1389,7 @@ class Thread(models.Model):
 
     def is_followed_by(self, user=None):
         """True if thread is followed by user"""
-        if user and user.is_authenticated():
+        if user and user.is_authenticated:
             return self.followed_by.filter(id=user.id).count() > 0
         return False
 
@@ -1653,7 +1653,7 @@ class Thread(models.Model):
         )
 
     def has_favorite_by_user(self, user):
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
 
         return FavoriteQuestion.objects.filter(thread=self, user=user).exists()

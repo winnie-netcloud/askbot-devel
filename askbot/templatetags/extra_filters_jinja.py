@@ -93,7 +93,7 @@ def show_block_to(block_name, user):
     if block:
         flag_name = block_name + '_ANON_ONLY'
         require_anon = getattr(askbot_settings, flag_name, False)
-        return (require_anon is False) or user.is_anonymous()
+        return (require_anon is False) or user.is_anonymous
     return False
 
 @register.filter
@@ -108,7 +108,7 @@ def strip_tags(text):
 
 @register.filter
 def can_see_private_user_data(viewer, target):
-    if viewer.is_authenticated():
+    if viewer.is_authenticated:
         if viewer == target:
             return True
         if viewer.is_administrator_or_moderator():
@@ -246,7 +246,7 @@ def make_template_filter_from_permission_assertion(
         if askbot_settings.ALWAYS_SHOW_ALL_UI_FUNCTIONS:
             return True
 
-        if user.is_anonymous():
+        if user.is_anonymous:
             return False
 
         assertion = getattr(user, assertion_name)
@@ -271,7 +271,7 @@ def make_template_filter_from_permission_assertion(
 @register.filter
 def can_moderate_user(user, other_user):
     """True, if user can moderate account of `other_user`"""
-    if user.is_authenticated() and user.can_moderate_user(other_user):
+    if user.is_authenticated and user.can_moderate_user(other_user):
         return True
     return False
 
@@ -348,7 +348,7 @@ def can_see_offensive_flags(user, post):
 
     suspended or blocked users cannot see flags
     """
-    if user.is_authenticated():
+    if user.is_authenticated:
         if user.pk == post.author_id:
             return True
         if user.reputation >= askbot_settings.MIN_REP_TO_VIEW_OFFENSIVE_FLAGS:
@@ -401,7 +401,7 @@ def sub_vars(text, user=None):
     text = force_text(text)
 
     if user:
-        if user.is_anonymous():
+        if user.is_anonymous:
             username = _('Visitor')
         else:
             username = user.username

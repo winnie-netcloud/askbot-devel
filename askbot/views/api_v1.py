@@ -178,7 +178,7 @@ def questions(request):
                 tags=request.GET.get('tags', None),
                 author=author_id,
                 page=page,
-                user_logged_in=request.user.is_authenticated(),
+                user_logged_in=request.user.is_authenticated,
             )
 
     qs, meta_data = models.Thread.objects.run_advanced_search(

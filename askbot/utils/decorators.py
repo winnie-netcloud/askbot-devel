@@ -36,7 +36,7 @@ def auto_now_timestamp(func):
 def ajax_login_required(view_func):
     @functools.wraps(view_func)
     def wrap(request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return view_func(request, *args, **kwargs)
         else:
             json = simplejson.dumps({'login_required':True})
@@ -47,7 +47,7 @@ def ajax_login_required(view_func):
 def anonymous_forbidden(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             raise askbot_exceptions.LoginRequired()
         return view_func(request, *args, **kwargs)
     return wrapper
@@ -124,7 +124,7 @@ def check_authorization_to_post(func_or_message):
     def decorator(view_func):
         @functools.wraps(view_func)
         def wrapper(request, *args, **kwargs):
-            if request.user.is_anonymous():
+            if request.user.is_anonymous:
                 #todo: expand for handling ajax responses
                 if askbot_settings.ALLOW_POSTING_BEFORE_LOGGING_IN == False:
                     request.user.message_set.create(message=str(message))
@@ -142,7 +142,7 @@ def check_authorization_to_post(func_or_message):
 def moderators_only(view_func):
     @functools.wraps(view_func)
     def decorator(request, *args, **kwargs):
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             raise django_exceptions.PermissionDenied()
         if not request.user.is_administrator_or_moderator():
             raise django_exceptions.PermissionDenied(
@@ -155,7 +155,7 @@ def moderators_only(view_func):
 def admins_only(view_func):
     @functools.wraps(view_func)
     def decorator(request, *args, **kwargs):
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             raise django_exceptions.PermissionDenied()
         if not request.user.is_administrator():
             raise django_exceptions.PermissionDenied(

@@ -55,7 +55,7 @@ class ConnectToSessionMessagesMiddleware(object):
             #todo: a hack, for real we need to remove this middleware
             #and switch to the new-style session messages
             return
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             #1) Attach the ability to receive messages
             #plug on deepcopy which may be called by django db "driver"
             connect_messages_to_anon_user(request)
@@ -77,7 +77,7 @@ class ConnectToSessionMessagesMiddleware(object):
             #and switch to the new-style session messages
             return response
         if hasattr(request, 'user') and \
-                request.user.is_authenticated() and \
+                request.user.is_authenticated and \
                 'askbot_visitor' not in request.COOKIES :
             #import datetime
             #max_age = 365*24*60*60

@@ -26,7 +26,7 @@
 
         {% if user_follow_feature_on and request.user != view_user %}
             {# User follow button #}
-            {% if request.user.is_authenticated() %}
+            {% if request.user.is_authenticated %}
                 {% set is_following = request.user.is_following(view_user) %}
             {% else %}
                 {% set is_following = False %}
@@ -50,7 +50,7 @@
     </div>
     <div class="col2">
         <table class="user-details">
-            {% if request.user.is_authenticated() and (request.user.pk == view_user.pk or request.user.is_administrator_or_moderator()) %}
+            {% if request.user.is_authenticated and (request.user.pk == view_user.pk or request.user.is_administrator_or_moderator()) %}
             <tr>
                 <td class="user-profile-tool-links" align="left" colspan="2">
                     <a href="{{ url('edit_user',  view_user.id ) }}">
@@ -149,7 +149,7 @@
     </div>
     <div class="col3 user-about">
     {% if show_profile_info %}
-        {% set editable=(request.user.is_authenticated() 
+        {% set editable=(request.user.is_authenticated
             and (
                 (request.user == view_user) or request.user.is_admin_or_mod()
             )

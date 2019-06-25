@@ -60,7 +60,7 @@ def process_vote(user = None, vote_direction = None, post = None):
     also in the future make keys in response data be more meaningful
     right now they are kind of cryptic - "status", "count"
     """
-    if user.is_anonymous():
+    if user.is_anonymous:
         raise exceptions.PermissionDenied(_(
             'Sorry, anonymous users cannot vote'
         ))
@@ -155,7 +155,7 @@ def vote(request):
         if not request.is_ajax() or not request.method == 'POST':
             raise Exception(_('Sorry, something is not right here...'))
 
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             raise exceptions.PermissionDenied(
                 _('Sorry, but anonymous users cannot perform this action.'))
 
@@ -216,7 +216,7 @@ def vote(request):
 @decorators.post_only
 def mark_tag(request, **kwargs):#tagging system
 
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         msg = _('anonymous users cannot %(perform_action)s') % \
             {'perform_action': _('mark or unmark tags')}
         raise exceptions.PermissionDenied(msg + ' ' + get_login_link())
@@ -380,7 +380,7 @@ def save_object_description(request):
 @decorators.ajax_only
 @decorators.post_only
 def rename_tag(request):
-    if request.user.is_anonymous() \
+    if request.user.is_anonymous \
         or not request.user.is_administrator_or_moderator():
         raise exceptions.PermissionDenied()
     post_data = decode_and_loads(request.body)
@@ -406,7 +406,7 @@ def rename_tag(request):
 def delete_tag(request):
     """todo: actually delete tags
     now it is only deletion of category from the tree"""
-    if request.user.is_anonymous() \
+    if request.user.is_anonymous \
         or not request.user.is_administrator_or_moderator():
         raise exceptions.PermissionDenied()
 
@@ -440,7 +440,7 @@ def add_tag_category(request):
     todo: switch to json stored in the live settings
     now we have indented input
     """
-    if request.user.is_anonymous() \
+    if request.user.is_anonymous \
         or not request.user.is_administrator_or_moderator():
         raise exceptions.PermissionDenied()
 
@@ -481,7 +481,7 @@ def subscribe_for_tags(request):
     #todo - use special separator to split tags
     tag_names = getattr(request,request.method).get('tags','').strip().split()
     pure_tag_names, wildcards = forms.clean_marked_tagnames(tag_names)
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.method == 'POST':
             if 'ok' in request.POST:
                 request.user.mark_tags(
@@ -613,7 +613,7 @@ def edit_bulk_tag_subscription(request, pk):
 def toggle_follow_question(request):
     result = dict()
 
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         msg = _('anonymous users cannot %(perform_action)s') % \
             {'perform_action': askbot_settings.WORDS_FOLLOW_QUESTIONS}
         raise exceptions.PermissionDenied(msg + ' ' + get_login_link())
@@ -629,7 +629,7 @@ def toggle_follow_question(request):
 @decorators.ajax_only
 @decorators.post_only
 def set_question_title(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         message = _('anonymous users cannot %(perform_action)s') % \
             {'perform_action': _('make edits')}
         raise exceptions.PermissionDenied(message)
@@ -668,7 +668,7 @@ def get_post_body(request):
 @decorators.post_only
 def set_post_body(request):
     """Updates text body of post"""
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         message = _('anonymous users cannot %(perform_action)s') % \
             {'perform_action': _('make edits')}
         raise exceptions.PermissionDenied(message)
@@ -822,7 +822,7 @@ def reopen(request, id):#re-open question
 @decorators.ajax_only
 @decorators.post_only
 def upvote_comment(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise exceptions.PermissionDenied(_('Please sign in to vote'))
     form = forms.VoteForm(request.POST)
     if form.is_valid():
@@ -843,7 +843,7 @@ def upvote_comment(request):
 @decorators.ajax_only
 @decorators.post_only
 def delete_post(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise exceptions.PermissionDenied(_('Please sign in to delete/restore posts'))
     form = forms.VoteForm(request.POST)
     if form.is_valid():
@@ -867,7 +867,7 @@ def read_message(request):#marks message a read
     if request.method == "POST":
         if request.POST.get('formdata') == 'required':
             request.session['message_silent'] = 1
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 request.user.delete_messages()
     return HttpResponse('')
 
@@ -1048,7 +1048,7 @@ def join_or_leave_group(request):
 
     returns resulting "membership_level"
     """
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise exceptions.PermissionDenied()
 
     Group = models.Group
@@ -1163,7 +1163,7 @@ def moderate_suggested_tag(request):
 def save_draft_question(request):
     """saves draft questions"""
     #todo: maybe allow drafts for anonymous users
-    if request.user.is_anonymous() \
+    if request.user.is_anonymous \
         or request.user.is_read_only() \
         or askbot_settings.READ_ONLY_MODE_ENABLED \
         or request.user.is_active == False \
@@ -1195,7 +1195,7 @@ def save_draft_question(request):
 def save_draft_answer(request):
     """saves draft answers"""
     #todo: maybe allow drafts for anonymous users
-    if request.user.is_anonymous() \
+    if request.user.is_anonymous \
         or request.user.is_read_only() \
         or askbot_settings.READ_ONLY_MODE_ENABLED \
         or request.user.is_active == False \
@@ -1228,7 +1228,7 @@ def get_users_info(request):
     """retuns list of user names and email addresses
     of "fake" users - so that admins can post on their
     behalf"""
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         return HttpResponseForbidden()
 
     query = request.GET['q']
@@ -1405,7 +1405,7 @@ def publish_answer(request):
     current thread is moderated
     """
     denied_msg = _('Sorry, only thread moderators can use this function')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.is_administrator_or_moderator() is False:
             raise exceptions.PermissionDenied(denied_msg)
     #todo: assert permission
@@ -1433,7 +1433,7 @@ def publish_answer(request):
 @decorators.post_only
 def merge_questions(request):
     post_data = decode_and_loads(request.body)
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         denied_msg = _('Sorry, only thread moderators can use this function')
         raise exceptions.PermissionDenied(denied_msg)
 
@@ -1481,7 +1481,7 @@ def translate_url(request):
 @decorators.post_only
 def reorder_badges(request):
     """places given badge to desired position"""
-    if request.user.is_anonymous() \
+    if request.user.is_anonymous \
         or not request.user.is_administrator_or_moderator():
         raise exceptions.PermisionDenied()
 

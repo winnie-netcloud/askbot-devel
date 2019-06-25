@@ -79,7 +79,7 @@ def questions(request, **kwargs):
         return HttpResponseNotAllowed(['GET'])
 
     search_state = SearchState(
-                    user_logged_in=request.user.is_authenticated(),
+                    user_logged_in=request.user.is_authenticated,
                     **kwargs
                 )
 
@@ -272,7 +272,7 @@ def questions(request, **kwargs):
         #and one more thing:) give admin user heads up about
         #setting the domain name if they have not done that yet
         #todo: move this out to a separate middleware
-        if request.user.is_authenticated() and request.user.is_administrator():
+        if request.user.is_authenticated and request.user.is_administrator():
             if domain_is_bad():
                 url = askbot_settings.get_setting_url(('QA_SITE_SETTINGS', 'APP_URL'))
                 msg = _(
@@ -534,7 +534,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     user_votes = {}
     user_post_id_list = list()
     #todo: cache this query set, but again takes only 3ms!
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user_votes = Vote.objects.filter(
                             user=request.user,
                             voted_post__id__in = list(post_to_author.keys())
@@ -587,7 +587,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
 
     #maybe load draft
     initial = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         #todo: refactor into methor on thread
         drafts = models.DraftAnswer.objects.filter(
                                         author=request.user,
@@ -605,13 +605,13 @@ def question(request, id):#refactor - long subroutine. display question body, an
     answer_form = answer_form_class(initial=initial, user=request.user)
 
     user_can_post_comment = (
-        request.user.is_authenticated() \
+        request.user.is_authenticated \
         and request.user.can_post_comment(question_post)
     )
 
     new_answer_allowed = True
     previous_answer = None
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if askbot_settings.LIMIT_ONE_ANSWER_PER_USER:
             for answer in answers:
                 if answer.author_id == request.user.pk:
@@ -619,7 +619,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
                     previous_answer = answer
                     break
 
-    if request.user.is_authenticated() and askbot_settings.GROUPS_ENABLED:
+    if request.user.is_authenticated and askbot_settings.GROUPS_ENABLED:
         group_read_only = request.user.is_read_only()
     else:
         group_read_only = False
@@ -678,7 +678,7 @@ def revisions(request, id, post_type = None):
     post = get_object_or_404(models.Post, post_type=post_type, id=id)
 
     if post.deleted:
-        if request.user.is_anonymous() \
+        if request.user.is_anonymous \
             or not request.user.is_administrator_or_moderator():
             raise Http404
 

@@ -40,9 +40,9 @@
     askbot['urls']['getPostHtml'] = '{{ url('get_post_html') }}';
     askbot['urls']['retag'] = "{{ url('retag_question',  question.id ) }}";
 
-    {# IMPORTANT !!! the same number for avatar size as in below two lines 
+    {# IMPORTANT !!! the same number for avatar size as in below two lines
         must be set in the comment_widget macro #}
-    {% if request.user.is_authenticated() %}
+    {% if request.user.is_authenticated %}
         askbot['data']['userCommentAvatarUrl'] = '{{ request.user.get_avatar_url(16)|escapejs }}';
     {% endif %}
     askbot['settings']['commentAvatarSize'] = 16;

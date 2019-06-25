@@ -71,7 +71,7 @@ def application_settings(request):
 
     need_scope_links = askbot_settings.ALL_SCOPE_ENABLED or \
         askbot_settings.UNANSWERED_SCOPE_ENABLED or \
-        (request.user.is_authenticated() and askbot_settings.FOLLOWED_SCOPE_ENABLED)
+        (request.user.is_authenticated and askbot_settings.FOLLOWED_SCOPE_ENABLED)
 
     context = {
         'base_url': site_url(''),
@@ -87,7 +87,7 @@ def application_settings(request):
 
     use_askbot_login = 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS
     my_settings['USE_ASKBOT_LOGIN_SYSTEM'] = use_askbot_login
-    if use_askbot_login and request.user.is_anonymous():
+    if use_askbot_login and request.user.is_anonymous:
         from askbot.deps.django_authopenid import context as login_context
         context.update(login_context.login_context(request))
 

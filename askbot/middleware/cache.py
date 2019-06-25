@@ -79,7 +79,7 @@ class UpdateCacheMiddleware(object):
         # user's logged-in status has not affected the response anyway.
         if self.cache_anonymous_only and self._session_accessed(request):
             assert hasattr(request, 'user'), "The Django cache middleware with CACHE_MIDDLEWARE_ANONYMOUS_ONLY=True requires authentication middleware to be installed. Edit your MIDDLEWARE_CLASSES setting to insert 'django.contrib.auth.middleware.AuthenticationMiddleware' before the CacheMiddleware."
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 # Don't cache user-variable requests from authenticated users.
                 return False
         return True

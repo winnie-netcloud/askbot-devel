@@ -125,7 +125,7 @@ def faq(request):
 @csrf.csrf_protect
 def feedback(request):
     if askbot_settings.FEEDBACK_MODE == 'auth-only':
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             message = _('Please sign in or register to send your feedback')
             request.user.message_set.create(message=message)
             redirect_url = get_login_url() + '?next=' + request.path
@@ -147,7 +147,7 @@ def feedback(request):
                 'user': request.user
             }
 
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 data['email'] = request.user.email
             else:
                 data['email'] = form.cleaned_data.get('email', None)
@@ -186,7 +186,7 @@ def badges(request):#user status/reputation system
     badges = [v for v in badges if v.is_enabled()]
 
     my_badge_ids = list()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         my_badge_ids = Award.objects.filter( #pylint: disable=no-member
                                 user=request.user
                             ).values_list(

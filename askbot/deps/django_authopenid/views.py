@@ -236,7 +236,7 @@ def not_authenticated(func):
     """ decorator that redirect user to next page if
     he/she is already logged in."""
     def decorated(request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return HttpResponseRedirect(get_next_url(request))
         return func(request, *args, **kwargs)
     return decorated
@@ -478,7 +478,7 @@ def signin(request, template_name='authopenid/signin.html'):
     logging.debug('next url is %s' % next_url)
 
     if askbot_settings.ALLOW_ADD_REMOVE_LOGIN_METHODS == False \
-        and request.user.is_authenticated():
+        and request.user.is_authenticated:
         return HttpResponseRedirect(next_url)
 
     if next_url == reverse('user_signin'):
@@ -567,7 +567,7 @@ def signin(request, template_name='authopenid/signin.html'):
                             #for external login sites
                             return HttpResponseRedirect(next_url)
                     elif password_action == 'change_password':
-                        if request.user.is_authenticated():
+                        if request.user.is_authenticated:
                             new_password = \
                                 login_form.cleaned_data['new_password']
                             request.user.set_password(new_password)
@@ -719,7 +719,7 @@ def signin(request, template_name='authopenid/signin.html'):
             logging.debug('login form is not valid')
             logging.debug(login_form.errors)
 
-    if request.method == 'GET' and request.user.is_authenticated():
+    if request.method == 'GET' and request.user.is_authenticated:
         view_subtype = 'change_openid'
     else:
         view_subtype = 'default'
@@ -787,7 +787,7 @@ def show_signin_view(
     else:
         answer = None
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         existing_login_methods = UserAssociation.objects.filter(user = request.user)
         #annotate objects with extra data
         providers = util.get_enabled_login_providers()
@@ -852,14 +852,14 @@ def show_signin_view(
     if (len(active_provider_names) == 1 and active_provider_names[0] == 'local'):
         have_buttons = False
         login_form.initial['login_provider_name'] = 'local'
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             login_form.initial['password_action'] = 'change_password'
         else:
             login_form.initial['password_action'] = 'login'
 
     data['have_buttons'] = have_buttons
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         data['existing_login_methods'] = existing_login_methods
         active_provider_names = [
                         item.provider_name for item in existing_login_methods
@@ -1010,7 +1010,7 @@ def finalize_generic_signin(
         if redirect_url is None:
             redirect_url = reverse('questions')
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         #this branch is for adding a new association
         if user is None:
             try:
@@ -1477,7 +1477,7 @@ def recover_account(request):
 
         user = authenticate(email_key=key, method='email_key')
         if user:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 if user != request.user:
                     logout(request)
                     login(request, user)

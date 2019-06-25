@@ -76,7 +76,7 @@
                     choices = email_tag_filter_strategy_choices
                 )
             }}
-            {% if request.user.is_authenticated() %}
+            {% if request.user.is_authenticated %}
             <p>
                 <a
                     href="{{ url('user_profile', request.user.id, request.user.username|slugify)

@@ -215,7 +215,7 @@ def moderation_queue(request):
 @decorators.post_only
 @decorators.ajax_only
 def moderate_post_edits(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise exceptions.PermissionDenied()
     if not request.user.is_administrator_or_moderator():
         raise exceptions.PermissionDenied()

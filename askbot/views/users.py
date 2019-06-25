@@ -70,7 +70,7 @@ def owner_or_moderator_required(f):
     def wrapped_func(request, profile_owner, context):
         if profile_owner == request.user:
             pass
-        elif request.user.is_authenticated():
+        elif request.user.is_authenticated:
             if request.user.can_moderate_user(profile_owner):
                 pass
             else:
@@ -88,7 +88,7 @@ def owner_or_moderator_required(f):
 def clear_new_notifications(request):
     """clears all new notifications for logged in user"""
     user = request.user
-    if user.is_anonymous():
+    if user.is_anonymous:
         raise django_exceptions.PermissionDenied
 
     activity_types = const.RESPONSE_ACTIVITY_TYPES_FOR_DISPLAY
@@ -167,7 +167,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
                                                 )
                     user_ids = memberships.values_list('user__id', flat=True)
                     users = users.filter(id__in=user_ids)
-                    if request.user.is_authenticated():
+                    if request.user.is_authenticated:
                         membership = request.user.get_group_membership(group)
                         if membership:
                             user_membership_level = membership.get_level_display()
@@ -268,7 +268,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
 def manage_account(request, subject, context):
     """Allows requesting a data export, termination of account,
     anonymization of data and termination of the account."""
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         return HttpResponseForbidden()
 
     if not request.user.can_manage_account(subject):
@@ -311,7 +311,7 @@ def manage_account(request, subject, context):
 @decorators.ajax_only
 @decorators.get_only
 def get_todays_backup_file_name(request, id):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         return {'error': 'permission denied'}
 
     try:
@@ -327,7 +327,7 @@ def get_todays_backup_file_name(request, id):
 
 def download_user_data(request, id, file_name):
     """allows authorized user to download a given file"""
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         return HttpResponseForbidden()
 
     if os.path.sep in file_name:
@@ -358,7 +358,7 @@ def user_moderate(request, subject, context):
     """User subview for moderation"""
     moderator = request.user
 
-    if not (moderator.is_authenticated() and moderator.can_moderate_user(subject)):
+    if not (moderator.is_authenticated and moderator.can_moderate_user(subject)):
         raise Http404
 
     user_rep_changed = False
@@ -684,13 +684,13 @@ def user_stats(request, user, context):
     else:
         groups_membership_info = collections.defaultdict()
 
-    show_moderation_warning = (request.user.is_authenticated()
+    show_moderation_warning = (request.user.is_authenticated
                                 and request.user.pk == user.pk
                                 and (user.is_watched() or user.is_blocked())
                                 and (user.get_localized_profile().about or user.website)
                               )
     show_profile_info = ((not (user.is_watched() or user.is_blocked()))
-                          or (request.user.is_authenticated()
+                          or (request.user.is_authenticated
                               and (request.user.is_administrator_or_moderator()
                                    or user.pk == request.user.pk
                                   )
@@ -743,7 +743,7 @@ def user_stats(request, user, context):
 
 @decorators.ajax_only
 def get_user_description(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         if askbot_settings.CLOSED_FORUM_MODE:
             raise django_exceptions.PermissionDenied
 
@@ -760,7 +760,7 @@ def get_user_description(request):
 @decorators.ajax_only
 @decorators.post_only
 def set_user_description(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise django_exceptions.PermissionDenied
 
     if askbot_settings.READ_ONLY_MODE_ENABLED:
@@ -1216,7 +1216,7 @@ def user_favorites(request, user, context):
 @decorators.ajax_only
 @decorators.post_only
 def user_set_primary_language(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise django_exceptions.PermissionDenied
 
     form = forms.LanguageForm(request.POST)
@@ -1228,7 +1228,7 @@ def user_set_primary_language(request):
 
 @csrf.csrf_protect
 def user_select_languages(request, id=None, slug=None):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         raise django_exceptions.PermissionDenied
 
     user = get_object_or_404(models.User, id=id)
@@ -1427,7 +1427,7 @@ def user(request, id, slug=None, tab_name=None):
     profile_owner = get_object_or_404(models.User, id = id)
 
     if profile_owner.is_blocked():
-        if request.user.is_anonymous() \
+        if request.user.is_anonymous \
             or not request.user.is_administrator_or_moderator():
             raise Http404
 
@@ -1453,7 +1453,7 @@ def user(request, id, slug=None, tab_name=None):
         author=None,
         page=None,
         page_size=const.USER_POSTS_PAGE_SIZE,
-        user_logged_in=profile_owner.is_authenticated(),
+        user_logged_in=profile_owner.is_authenticated,
     )
 
     context = {
@@ -1474,7 +1474,7 @@ def groups(request, id = None, slug = None):
         raise Http404
 
     #6 lines of input cleaning code
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         scope = request.GET.get('sort', 'all-groups')
         if scope not in ('all-groups', 'my-groups'):
             scope = 'all-groups'
@@ -1491,11 +1491,11 @@ def groups(request, id = None, slug = None):
     groups = groups.exclude_personal()
     groups = groups.annotate(users_count=Count('user_membership'))
 
-    user_can_add_groups = request.user.is_authenticated() and \
+    user_can_add_groups = request.user.is_authenticated and \
             request.user.is_administrator_or_moderator()
 
     groups_membership_info = collections.defaultdict()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         #collect group memberhship information
         groups_membership_info = request.user.get_groups_membership_info(groups)
 
