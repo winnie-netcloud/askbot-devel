@@ -6,7 +6,6 @@ beautifulsoup4<=4.7.1
 django-avatar==3.1.0
 django-celery>=3.0.11,<=3.3.0
 django-compressor>=2.0,<=2.2
-celery==3.1.18
 django-countries>=3.3
 -e git+https://github.com/martin-bts/django-followit.git#egg=django-followit
 django-keyedcache3>=1.5.1
@@ -17,6 +16,7 @@ django-robots==3.0
 django-tinymce==2.8.0
 django-transaction-signals==1.0.0
 django>=1.11,<=2.0
+celery>=4.0,<=5.0
 html5lib==0.9999999
 jsonfield>=2.0.0
 kombu>=3.0
