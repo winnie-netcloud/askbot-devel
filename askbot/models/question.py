@@ -689,8 +689,8 @@ class Thread(models.Model):
         # 5) sort words by count
         sorted_words = sorted(
                         common_words,
-                        lambda a, b: cmp(counts[b], counts[a])
-                    )
+                        key=lambda a: counts[a],
+                        reverse=True)
 
         # 6) extract correct number of most frequently used tags
         need_tags = askbot_settings.MAX_TAGS_PER_POST - len(existing_tags)
