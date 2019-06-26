@@ -183,7 +183,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         self.assertTrue(models.Group.objects.get_global_group() in answer.groups.all())
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertTrue(b'edited answer text' in response.content)
+        self.assertIn(b'edited answer text', response.content)
 
 
     def test_privatize_public_answer(self):
