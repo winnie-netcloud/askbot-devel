@@ -266,7 +266,7 @@ class Migration(migrations.Migration):
                 ('wikified_at', models.DateTimeField(null=True, blank=True)),
                 ('locked', models.BooleanField(default=False)),
                 ('locked_at', models.DateTimeField(null=True, blank=True)),
-                ('points', models.IntegerField(default=0, db_column=b'score')),
+                ('points', models.IntegerField(default=0, db_column='score')),
                 ('vote_up_count', models.IntegerField(default=0)),
                 ('vote_down_count', models.IntegerField(default=0)),
                 ('comment_count', models.PositiveIntegerField(default=0)),
@@ -437,7 +437,7 @@ class Migration(migrations.Migration):
                 ('deleted', models.BooleanField(default=False, db_index=True)),
                 ('approved', models.BooleanField(default=True, db_index=True)),
                 ('added_at', models.DateTimeField(auto_now_add=True)),
-                ('points', models.IntegerField(default=0, db_column=b'score')),
+                ('points', models.IntegerField(default=0, db_column='score')),
                 ('accepted_answer', models.ForeignKey(related_name='+', blank=True, to='askbot.Post', null=True, on_delete=models.CASCADE)),
             ],
             options={
