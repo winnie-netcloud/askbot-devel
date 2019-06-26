@@ -5,7 +5,8 @@ import time
 from askbot.search.state_manager import SearchState
 from django.conf import settings as django_settings
 from django.contrib.auth.models import User
-from django.urls import cache, reverse
+from django.urls import reverse
+from django.core import cache
 from django.core.cache.backends.dummy import DummyCache
 from django.core.cache.backends.locmem import LocMemCache
 
@@ -305,7 +306,7 @@ class ThreadTagModelsTests(AskbotTestCase):
 
             user = User.objects.get(id=thread.last_activity_by_id)
             self.assertEqual(user.id, thread._last_activity_by_cache.id)
-            self.assertTrue(thread.last_activity_by is thread._last_activity_by_cache)
+            self.assertEqual(thread.last_activity_by, thread._last_activity_by_cache)
 
 
 class ThreadRenderLowLevelCachingTests(AskbotTestCase):
