@@ -4,6 +4,8 @@ copied from David Cramer's blog
 http://www.davidcramer.net/code/369/spaceless-html-in-django.html
 """
 import re
+
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.functional import keep_lazy
 from django.utils.encoding import force_text
 
@@ -16,7 +18,7 @@ def reduce_spaces_between_tags(value):
     """
     return re.sub(r'>\s+<', '> <', force_text(value))
 
-class SpacelessMiddleware(object):
+class SpacelessMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
         """strips whitespace from all documents
         whose content type is text/html

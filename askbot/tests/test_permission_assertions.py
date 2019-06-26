@@ -1587,7 +1587,7 @@ class ClosedForumTests(utils.AskbotTestCase):
         askbot_settings.update('ASKBOT_CLOSED_FORUM_MODE', False)
 
     @skipIf('askbot.middleware.forum_mode.ForumModeMiddleware' \
-        not in settings.MIDDLEWARE_CLASSES,
+        not in settings.MIDDLEWARE,
         'no ForumModeMiddleware set')
     def test_login_page_accessible(self):
         # futher see in page_load_tests.py
@@ -1595,7 +1595,7 @@ class ClosedForumTests(utils.AskbotTestCase):
         self.assertEqual(response.status_code, 200)
 
     @skipIf('askbot.middleware.forum_mode.ForumModeMiddleware' \
-        not in settings.MIDDLEWARE_CLASSES,
+        not in settings.MIDDLEWARE,
         'no ForumModeMiddleware set')
     def test_anonymous_access(self):
         response = self.client.get(self.test_url)
@@ -1603,7 +1603,7 @@ class ClosedForumTests(utils.AskbotTestCase):
         self.assertTrue(self.redirect_to in response['Location'])
 
     @skipIf('askbot.middleware.forum_mode.ForumModeMiddleware' \
-        not in settings.MIDDLEWARE_CLASSES,
+        not in settings.MIDDLEWARE,
         'no ForumModeMiddleware set')
     def test_authenticated_access(self):
         self.client.login(username=self.other_user.username, password=self.password)

@@ -451,7 +451,7 @@ class PageLoadTestCase(AskbotTestCase):
         self.proto_test_non_user_urls(status_code=200)
 
     @skipIf('askbot.middleware.forum_mode.ForumModeMiddleware' \
-        not in settings.MIDDLEWARE_CLASSES,
+        not in settings.MIDDLEWARE,
         'no ForumModeMiddleware set')
     @with_settings(ASKBOT_CLOSED_FORUM_MODE=True)
     def test_non_user_urls_in_closed_forum_mode(self):
@@ -523,7 +523,7 @@ class PageLoadTestCase(AskbotTestCase):
         self.proto_test_user_urls(status_code=200)
 
     @skipIf('askbot.middleware.forum_mode.ForumModeMiddleware' \
-        not in settings.MIDDLEWARE_CLASSES,
+        not in settings.MIDDLEWARE,
         'no ForumModeMiddleware set')
     @with_settings(ASKBOT_CLOSED_FORUM_MODE=True)
     def test_user_urls_in_closed_forum_mode(self):

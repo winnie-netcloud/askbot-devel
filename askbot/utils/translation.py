@@ -8,7 +8,7 @@ from django.utils.encoding import force_str
 from django.utils import translation
 
 HAS_ASKBOT_LOCALE_MIDDLEWARE = 'askbot.middleware.locale.LocaleMiddleware' in \
-                                   django_settings.MIDDLEWARE_CLASSES
+                                   django_settings.MIDDLEWARE
 
 def get_language():
     if askbot.is_multilingual():

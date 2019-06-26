@@ -168,7 +168,7 @@ def test_middleware():
         'askbot.middleware.spaceless.SpacelessMiddleware',
         'askbot.middleware.csrf.CsrfViewMiddleware'
     ])
-    found_middleware = [x for x in django_settings.MIDDLEWARE_CLASSES
+    found_middleware = [x for x in django_settings.MIDDLEWARE
                         if x in required_middleware]
     if found_middleware != required_middleware:
         # either middleware is out of order or it's missing an item
@@ -176,7 +176,7 @@ def test_middleware():
         middleware_text = ''
         if missing_middleware_set:
             error_message = """\n\nPlease add the following middleware (listed after this message)
-to the MIDDLEWARE_CLASSES variable in your site settings.py file.
+to the MIDDLEWARE variable in your site settings.py file.
 The order the middleware records is important, please take a look at the example in
 https://github.com/ASKBOT/askbot-devel/blob/master/askbot/setup_templates/settings.py:\n\n"""
             middleware_text = format_as_text_tuple_entries(missing_middleware_set)
@@ -195,10 +195,10 @@ for the correct order.\n\n"""
     ]
 
     invalid_middleware = [x for x in canceled_middleware
-                          if x in django_settings.MIDDLEWARE_CLASSES]
+                          if x in django_settings.MIDDLEWARE]
     if invalid_middleware:
         error_message = """\n\nPlease remove the following middleware entries from
-the list of MIDDLEWARE_CLASSES in your settings.py - these are not used any more:\n\n"""
+the list of MIDDLEWARE in your settings.py - these are not used any more:\n\n"""
         middleware_text = format_as_text_tuple_entries(invalid_middleware)
         raise AskbotConfigError(error_message + middleware_text)
 
@@ -659,10 +659,10 @@ def test_settings_for_test_runner():
         errors.append(
             'When testing - remove debug_toolbar from INSTALLED_APPS')
     if 'debug_toolbar.middleware.DebugToolbarMiddleware' in \
-        django_settings.MIDDLEWARE_CLASSES:
+        django_settings.MIDDLEWARE:
         errors.append(
             'When testing - remove debug_toolbar.middleware.DebugToolbarMiddleware '
-            'from MIDDLEWARE_CLASSES')
+            'from MIDDLEWARE')
     print_errors(errors)
 
 
@@ -917,10 +917,10 @@ def test_locale_middlewares():
     errors = list()
 
     if askbot.is_multilingual():
-        if askbot_locale_middleware in django_settings.MIDDLEWARE_CLASSES:
-            errors.append("Please remove '%s' from your MIDDLEWARE_CLASSES" % askbot_locale_middleware)
-        if django_locale_middleware not in django_settings.MIDDLEWARE_CLASSES:
-            errors.append("Please add '%s' to your MIDDLEWARE_CLASSES" % django_locale_middleware)
+        if askbot_locale_middleware in django_settings.MIDDLEWARE:
+            errors.append("Please remove '%s' from your MIDDLEWARE" % askbot_locale_middleware)
+        if django_locale_middleware not in django_settings.MIDDLEWARE:
+            errors.append("Please add '%s' to your MIDDLEWARE" % django_locale_middleware)
 
     print_errors(errors)
 
@@ -960,9 +960,9 @@ ASKBOT_LANGUAGE_MODE = 'single-lang' or just delete the setting""")
 
     if mode == 'url-lang':
         middleware = 'django.middleware.locale.LocaleMiddleware'
-        if middleware not in django_settings.MIDDLEWARE_CLASSES:
+        if middleware not in django_settings.MIDDLEWARE:
             errors.append(
-                "add 'django.middleware.locale.LocaleMiddleware' to your MIDDLEWARE_CLASSES "
+                "add 'django.middleware.locale.LocaleMiddleware' to your MIDDLEWARE "
                 "if you want a multilingual setup"
             )
 

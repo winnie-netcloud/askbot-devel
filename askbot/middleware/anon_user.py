@@ -47,6 +47,17 @@ class ConnectToSessionMessagesMiddleware(object):
     Middleware does not do anything if the anonymous user greeting
     is disabled.
     """
+    def __init__(self, get_response=None): # i think get_reponse is never None. If it's not another middleware it's the view, I think
+        if get_response is None:
+            get_response = lambda x:x
+        self.get_response = get_response
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request) # i think this simply chains all middleware
+        response = self.process_response(request, response)
+        return response
+
     def process_request(self, request):
         """Enables anonymous users to receive messages
         the same way as authenticated users, and sets

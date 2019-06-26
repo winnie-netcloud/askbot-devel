@@ -4,7 +4,7 @@ URL. The canonical way to enable cache middleware is to set
 ``UpdateCacheMiddleware`` as your first piece of middleware, and
 ``FetchFromCacheMiddleware`` as the last::
 
-    MIDDLEWARE_CLASSES = [
+    MIDDLEWARE = [
         'django.middleware.cache.UpdateCacheMiddleware',
         ...
         'django.middleware.cache.FetchFromCacheMiddleware'
@@ -56,14 +56,22 @@ class UpdateCacheMiddleware(object):
 
     Must be used as part of the two-part update/fetch cache middleware.
     UpdateCacheMiddleware must be the first piece of middleware in
-    MIDDLEWARE_CLASSES so that it'll get called last during the response phase.
+    MIDDLEWARE so that it'll get called last during the response phase.
     """
-    def __init__(self):
+    def __init__(self, get_response=None): # i think get_reponse is never None. If it's not another middleware it's the view, I think
+        if get_response is None:
+            get_response = lambda x:x
+        self.get_response = get_response
         self.cache_timeout = settings.CACHE_MIDDLEWARE_SECONDS
         self.key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
         self.cache_anonymous_only = getattr(settings, 'CACHE_MIDDLEWARE_ANONYMOUS_ONLY', False)
         self.cache_alias = settings.CACHE_MIDDLEWARE_ALIAS
         self.cache = caches[self.cache_alias]
+
+    def __call__(self, request):
+        response = self.get_response(request) # i think this simply chains all middleware
+        response = self.process_response(request, response)
+        return response
 
     def _session_accessed(self, request):
         try:
@@ -78,7 +86,7 @@ class UpdateCacheMiddleware(object):
         # cause it to be accessed here. If it hasn't been accessed, then the
         # user's logged-in status has not affected the response anyway.
         if self.cache_anonymous_only and self._session_accessed(request):
-            assert hasattr(request, 'user'), "The Django cache middleware with CACHE_MIDDLEWARE_ANONYMOUS_ONLY=True requires authentication middleware to be installed. Edit your MIDDLEWARE_CLASSES setting to insert 'django.contrib.auth.middleware.AuthenticationMiddleware' before the CacheMiddleware."
+            assert hasattr(request, 'user'), "The Django cache middleware with CACHE_MIDDLEWARE_ANONYMOUS_ONLY=True requires authentication middleware to be installed. Edit your MIDDLEWARE setting to insert 'django.contrib.auth.middleware.AuthenticationMiddleware' before the CacheMiddleware."
             if request.user.is_authenticated:
                 # Don't cache user-variable requests from authenticated users.
                 return False
@@ -125,12 +133,21 @@ class FetchFromCacheMiddleware(object):
 
     Must be used as part of the two-part update/fetch cache middleware.
     FetchFromCacheMiddleware must be the last piece of middleware in
-    MIDDLEWARE_CLASSES so that it'll get called last during the request phase.
+    MIDDLEWARE so that it'll get called last during the request phase.
     """
-    def __init__(self):
+    def __init__(self, get_response=None): # i think get_reponse is never None. If it's not another middleware it's the view, I think
+        if get_response is None:
+            get_response = lambda x:x
+        self.get_response = get_response
         self.key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
         self.cache_alias = settings.CACHE_MIDDLEWARE_ALIAS
         self.cache = caches[self.cache_alias]
+
+    def __call__(self, request):
+        response = self.process_request(request)
+        if response is None:
+            response = self.get_response(request) # i think this simply chains all middleware
+        return response
 
     def process_request(self, request):
         """
@@ -168,11 +185,14 @@ class CacheMiddleware(UpdateCacheMiddleware, FetchFromCacheMiddleware):
     Also used as the hook point for the cache decorator, which is generated
     using the decorator-from-middleware utility.
     """
-    def __init__(self, cache_timeout=None, cache_anonymous_only=None, **kwargs):
+    def __init__(self, get_response=None, cache_timeout=None, cache_anonymous_only=None, **kwargs):
         # We need to differentiate between "provided, but using default value",
         # and "not provided". If the value is provided using a default, then
         # we fall back to system defaults. If it is not provided at all,
         # we need to use middleware defaults.
+        if get_response is None:
+            get_response = lambda x:x
+        self.get_response = get_response
 
         try:
             key_prefix = kwargs['key_prefix']
@@ -199,3 +219,11 @@ class CacheMiddleware(UpdateCacheMiddleware, FetchFromCacheMiddleware):
         self.cache_anonymous_only = cache_anonymous_only
 
         self.cache = caches[self.cache_alias]
+
+    def __call__(self, request):
+        response = self.process_request(request)
+        if response is not None:
+            return response
+        response = self.get_response(request) # i think this simply chains all middleware
+        response = self.process_response(request, response)
+        return response
