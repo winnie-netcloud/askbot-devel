@@ -169,9 +169,9 @@ def deploy_askbot(options):
 
     path_utils.create_path(options['dir_name'])
 
-    if django.VERSION[0] > 1:
+    if django.VERSION[0] > 2:
         raise Exception(
-            'Django framework with major version > 1 is not supported'
+            'Django framework with major version > 2 is not supported'
         )
 
     if django.VERSION[1] < 3:
