@@ -9,7 +9,7 @@ except ImportError:
     from django.conf.urls.defaults import handler404
     from django.conf.urls.defaults import include, url
 
-import askbot
+from askbot import is_multilingual
 from askbot.views.error import internal_error as handler500
 from django.conf import settings
 from django.contrib import admin
@@ -17,7 +17,7 @@ from django.views import static as StaticViews
 
 admin.autodiscover()
 
-if askbot.is_multilingual():
+if is_multilingual():
     from django.conf.urls.i18n import i18n_patterns
     urlpatterns = i18n_patterns(
         url(r'%s' % settings.ASKBOT_URL, include('askbot.urls'))
@@ -28,7 +28,7 @@ else:
     ]
 
 urlpatterns += [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     #(r'^cache/', include('keyedcache.urls')), - broken views disable for now
     #(r'^settings/', include('askbot.deps.livesettings.urls')),
     url(r'^followit/', include('followit.urls')),
