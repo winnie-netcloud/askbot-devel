@@ -3,11 +3,11 @@
 {% block title %}{% filter trim %}{{ settings.WORDS_CLOSE_QUESTION|escape }}{% endfilter %}{% endblock %}
 {% block content %}
 <h1>{{ settings.WORDS_CLOSE_QUESTION|escape }}</h1>
-<p>{{ settings.WORDS_CLOSE_QUESTION|escape }}: 
+<p>{{ settings.WORDS_CLOSE_QUESTION|escape }}:
     <a href="{{ question.get_absolute_url() }}">
     <strong>{{ question.get_question_title()|escape }}</strong></a>
 </p>
-<form id="fmclose" action="{{ url('close',  question.id ) }}" method="post" >{% csrf_token %}
+<form id="fmclose" action="{{ url('close',  question.id ) }}" method="post" >{{ csrf_input }}
     <p>
         <strong>{% trans %}Reasons{% endtrans %}:</strong>
         {{ form.reason }}

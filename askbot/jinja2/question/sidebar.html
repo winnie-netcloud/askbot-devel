@@ -45,19 +45,19 @@
     {% if thread.is_private() %}
         <h2>{% trans %}Invite{% endtrans %}</h2>
         <p style="margin: 16px 0">{{ settings.WORDS_INVITE_OTHERS_TO_HELP_ANSWER_THIS_QUESTION|escape }}</p>
-        <form action="{{ url('share_question_with_user') }}" method="post">{% csrf_token %}
+        <form action="{{ url('share_question_with_user') }}" method="post">{{ csrf_input }}
             <input id="share_user_name" type="text" class="groups-input" name="recipient_name" />
             <input type="hidden" name="thread_id" value="{{ thread.id }}"/>
             <input type="submit" class="add-groups" value="{% trans %}add{% endtrans %}"/>
         </form>
         <p class="share-input-col">{% trans %}- or -{% endtrans %}</p>
-        <form action="{{ url('share_question_with_group') }}" method="post">{% csrf_token %}
+        <form action="{{ url('share_question_with_group') }}" method="post">{{ csrf_input }}
             <input id="share_group_name" type="text" class="groups-input" name="recipient_name" />
             <input type="hidden" name="thread_id" value="{{ thread.id }}"/>
             <input type="submit" class="add-groups" value="{% trans %}add{% endtrans %}"/>
         </form>
         <p class="share-input-col">{% trans %}- or -{% endtrans %}</p>
-        <form action="{{ url('share_question_with_group') }}" method="post">{% csrf_token %}
+        <form action="{{ url('share_question_with_group') }}" method="post">{{ csrf_input }}
             <input
                 type="hidden"
                 name="recipient_name"

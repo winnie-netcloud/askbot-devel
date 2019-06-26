@@ -6,7 +6,7 @@
     <form
         method="post"
         action="{{ url('user_select_languages', view_user.id,  view_user.username|slugify) }}"
-    >{% csrf_token %}
+    >{{ csrf_input }}
         <div class="user-lang-selector">
             {% if settings.LANGUAGE_MODE == 'user-lang' %}
                 <p class="message">{% trans %}View and subscribe to posts in these languages{% endtrans %}</p>

@@ -69,56 +69,8 @@ def module_has_submodule(package, module_name):
         # Exhausted the search, so the module cannot be found.
         return False
 
-class CsrfTokenNode(Node):
-    def render(self, context):
-        csrf_token = context.get('csrf_token', None)
-        if csrf_token:
-            if csrf_token == 'NOTPROVIDED':
-                return mark_safe("")
-            else:
-                return mark_safe("<div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='%s' /></div>" % csrf_token)
-        else:
-            # It's very probable that the token is missing because of
-            # misconfiguration, so we raise a warning
-            from django.conf import settings
-            if settings.DEBUG:
-                import warnings
-                warnings.warn("A {% csrf_token %} was used in a template, but the context did not provide the value.  This is usually caused by not using RequestContext.")
-            return ''
 
-def get_token(request):
-    """
-    Returns the the CSRF token required for a POST form.
-    A side effect of calling this function is to make the the csrf_protect
-    decorator and the CsrfViewMiddleware add a CSRF cookie and a 'Vary: Cookie'
-    header to the outgoing response.  For this reason, you may need to use this
-    function lazily, as is done by the csrf context processor.
-    """
-    request.META["CSRF_COOKIE_USED"] = True
-    return request.META.get("CSRF_COOKIE", None)
 
-def csrf(request):
-    """
-    Context processor that provides a CSRF token, or the string 'NOTPROVIDED' if
-    it has not been provided by either a view decorator or the middleware
-    """
-    def _get_val():
-        token = get_token(request)
-        if token is None:
-            # In order to be able to provide debugging info in the
-            # case of misconfiguration, we use a sentinel value
-            # instead of returning an empty dict.
-            return 'NOTPROVIDED'
-        else:
-            return token
-    _get_val = lazy(_get_val, str)
-    return {'csrf_token': _get_val() }
-
-"""
-Cross Site Request Forgery Middleware.
-This module provides a middleware that implements protection
-against request forgeries from other sites.
-"""
 import itertools
 import re
 import random
@@ -133,179 +85,17 @@ if hasattr(random, 'SystemRandom'):
     randrange = random.SystemRandom().randrange
 else:
     randrange = random.randrange
-_MAX_CSRF_KEY = 18446744073709551616     # 2 << 63
-def _get_failure_view():
-    """
-    Returns the view to be used for CSRF rejections
-    """
-    return get_callable(settings.CSRF_FAILURE_VIEW)
 
-# I am uncertain whether I should be a fan of this DIY CSRF, but lets keep it
-# somewhat compatible for the moment
-def _get_new_csrf_string():
-    return _get_new_csrf_key()
-
-def _get_new_csrf_key():
-    return hashlib.md5("%s%s"
-                % (randrange(0, _MAX_CSRF_KEY), settings.SECRET_KEY)).hexdigest()
-
-def _make_legacy_session_token(session_id):
-    return hashlib.md5(settings.SECRET_KEY + session_id).hexdigest()
-
-class CsrfViewMiddleware(object):
-    """
-    Middleware that requires a present and correct csrfmiddlewaretoken
-    for POST requests that have a CSRF cookie, and sets an outgoing
-    CSRF cookie.
-    This middleware should be used in conjunction with the csrf_token template
-    tag.
-    """
-    def process_view(self, request, callback, callback_args, callback_kwargs):
-        if getattr(callback, 'csrf_exempt', False):
-            return None
-        if getattr(request, 'csrf_processing_done', False):
-            return None
-        reject = lambda s: _get_failure_view()(request, reason=s)
-        def accept():
-            # Avoid checking the request twice by adding a custom attribute to
-            # request.  This will be relevant when both decorator and middleware
-            # are used.
-            request.csrf_processing_done = True
-            return None
-        # If the user doesn't have a CSRF cookie, generate one and store it in the
-        # request, so it's available to the view.  We'll store it in a cookie when
-        # we reach the response.
-        try:
-            request.META["CSRF_COOKIE"] = request.COOKIES[settings.CSRF_COOKIE_NAME]
-            cookie_is_new = False
-        except KeyError:
-            # No cookie, so create one.  This will be sent with the next
-            # response.
-            request.META["CSRF_COOKIE"] = _get_new_csrf_key()
-            # Set a flag to allow us to fall back and allow the session id in
-            # place of a CSRF cookie for this request only.
-            cookie_is_new = True
-        if request.method == 'POST':
-            if getattr(request, '_dont_enforce_csrf_checks', False):
-                # Mechanism to turn off CSRF checks for test suite.  It comes after
-                # the creation of CSRF cookies, so that everything else continues to
-                # work exactly the same (e.g. cookies are sent etc), but before the
-                # any branches that call reject()
-                return accept()
-            if request.is_ajax():
-                # .is_ajax() is based on the presence of X-Requested-With.  In
-                # the context of a browser, this can only be sent if using
-                # XmlHttpRequest.  Browsers implement careful policies for
-                # XmlHttpRequest:
-                #
-                #  * Normally, only same-domain requests are allowed.
-                #
-                #  * Some browsers (e.g. Firefox 3.5 and later) relax this
-                #    carefully:
-                #
-                #    * if it is a 'simple' GET or POST request (which can
-                #      include no custom headers), it is allowed to be cross
-                #      domain.  These requests will not be recognized as AJAX.
-                #
-                #    * if a 'preflight' check with the server confirms that the
-                #      server is expecting and allows the request, cross domain
-                #      requests even with custom headers are allowed. These
-                #      requests will be recognized as AJAX, but can only get
-                #      through when the developer has specifically opted in to
-                #      allowing the cross-domain POST request.
-                #
-                # So in all cases, it is safe to allow these requests through.
-                return accept()
-            if request.is_secure():
-                # Strict referer checking for HTTPS
-                referer = request.META.get('HTTP_REFERER')
-                if referer is None:
-                    return reject("Referer checking failed - no Referer.")
-                # The following check ensures that the referer is HTTPS,
-                # the domains match and the ports match.  This might be too strict.
-                good_referer = 'https://%s/' % request.get_host()
-                if not referer.startswith(good_referer):
-                    return reject("Referer checking failed - %s does not match %s." %
-                                  (referer, good_referer))
-            # If the user didn't already have a CSRF cookie, then fall back to
-            # the Django 1.1 method (hash of session ID), so a request is not
-            # rejected if the form was sent to the user before upgrading to the
-            # Django 1.2 method (session independent nonce)
-            if cookie_is_new:
-                try:
-                    session_id = request.COOKIES[settings.SESSION_COOKIE_NAME]
-                    csrf_token = _make_legacy_session_token(session_id)
-                except KeyError:
-                    # No CSRF cookie and no session cookie. For POST requests,
-                    # we insist on a CSRF cookie, and in this way we can avoid
-                    # all CSRF attacks, including login CSRF.
-                    return reject("No CSRF or session cookie.")
-            else:
-                csrf_token = request.META["CSRF_COOKIE"]
-            # check incoming token
-            request_csrf_token = request.POST.get('csrfmiddlewaretoken', None)
-            if request_csrf_token != csrf_token:
-                if cookie_is_new:
-                    # probably a problem setting the CSRF cookie
-                    return reject("CSRF cookie not set.")
-                else:
-                    return reject("CSRF token missing or incorrect.")
-        return accept()
-    def process_response(self, request, response):
-        if getattr(response, 'csrf_processing_done', False):
-            return response
-        # If CSRF_COOKIE is unset, then CsrfViewMiddleware.process_view was
-        # never called, probaby because a request middleware returned a response
-        # (for example, contrib.auth redirecting to a login page).
-        if request.META.get("CSRF_COOKIE") is None:
-            return response
-        if not request.META.get("CSRF_COOKIE_USED", False):
-            return response
-        # Set the CSRF cookie even if it's already set, so we renew the expiry timer.
-        response.set_cookie(settings.CSRF_COOKIE_NAME,
-                request.META["CSRF_COOKIE"], max_age = 60 * 60 * 24 * 7 * 52,
-                domain=settings.CSRF_COOKIE_DOMAIN)
-        # Content varies with the CSRF cookie, so set the Vary header.
-        from django.utils.cache import patch_vary_headers
-        patch_vary_headers(response, ('Cookie',))
-        response.csrf_processing_done = True
-        return response
 
 from django.utils.decorators import decorator_from_middleware
 from functools import wraps
 
-csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
-csrf_protect.__name__ = "csrf_protect"
-csrf_protect.__doc__ = """
-This decorator adds CSRF protection in exactly the same way as
-CsrfViewMiddleware, but it can be used on a per view basis.  Using both, or
-using the decorator multiple times, is harmless and efficient.
-"""
+
 
 def add_import_library_function():
     """TODO: Remove"""
 
-def add_csrf_protection():
-    """adds csrf_token template tag to django
-    Must be used if version of django is < 1.2
 
-    Also adds csrf function to the context processor
-    and the csrf_protect decorator for the views
-    """
-    import django.template.defaulttags
-    def csrf_token(parser, token):
-        return CsrfTokenNode()
-    django.template.defaulttags.CsrfTokenNode = CsrfTokenNode
-    django.template.defaulttags.register.tag(csrf_token)
-
-    #add csrf context processor
-    import django.core.context_processors
-    django.core.context_processors.csrf = csrf
-
-    #add csrf_protect decorator
-    import django.views.decorators
-    django.views.decorators.csrf = imp.new_module('csrf')
-    django.views.decorators.csrf.csrf_protect = csrf_protect
 
 def add_available_attrs_decorator():
     def available_attrs(fn):

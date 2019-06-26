@@ -7,18 +7,7 @@ from askbot.patches import django_patches
 from askbot.deployment import package_utils
 
 def patch_django():
-    """earlier versions of Django do not have
-    csrf token and function called import_library
-    (the latter is needed by coffin)
-    """
     (major, minor, micro) = package_utils.get_django_version()
-    if major == 1 and minor < 2:
-        django_patches.add_import_library_function()
-        django_patches.add_csrf_protection()
-        django_patches.add_available_attrs_decorator()
-
-    if major == 1 and minor <=2:
-        django_patches.add_render_shortcut()
 
     if major == 1 and minor > 4:
         # This shouldn't be required with django < 1.4.x

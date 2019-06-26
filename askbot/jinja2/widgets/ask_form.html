@@ -3,7 +3,7 @@
     data-validated-fields="title,text"
     data-title-validator="askbot.validators.titleValidator"
     data-text-validator="askbot.validators.questionDetailsValidator"
-    >{% csrf_token %}
+    >{{ csrf_input }}
     <div class="form-item form-group ask-form-bar">
         <label for="id_title">{{ form.title.label }}</label>
         <div class="js-title-error js-error">
@@ -21,7 +21,7 @@
     {% if editor_is_folded %}
         <a class="js-question-body-trigger">{{ form.text.label }}</a>
         <div class="folded-editor">
-            <label for="{{ text_field_id }}" 
+            <label for="{{ text_field_id }}"
                 class="js-text-label">{{ form.text.label }}</label>
             <div class="js-text-error js-error">
                 {% if form.text.errors %}
@@ -44,7 +44,7 @@
     {% endif %}
 
     {% include "widgets/tags_field.html" %}
-    
+
     {{ form.group_id }}
 
     <div class="question-options">

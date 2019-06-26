@@ -26,7 +26,7 @@
                 data-reply-btn-text="{% trans %}Reply{% endtrans %}"
                 data-editor-type="new-thread"
             >
-                {% csrf_token %}
+                {{ csrf_input }}
                 <div class="form-group js-to-container">
                     <label for="id_recipients" class="control-label"></label>
                     <input class="form-control" id="id_recipients"

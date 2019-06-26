@@ -14,7 +14,7 @@
             </td>
             <td>{# forms with accept and reject buttons #}
                 <form action="{{ url('moderate_group_join_request') }}" method="post"
-                >{% csrf_token %}
+                >{{ csrf_input }}
                     <input
                         type="hidden"
                         name="request_id"
@@ -29,7 +29,7 @@
             </td>
             <td>
                 <form action="{{ url('moderate_group_join_request') }}" method="post">
-                    {% csrf_token %}
+                    {{ csrf_input }}
                     <input
                         type="hidden"
                         name="request_id"
