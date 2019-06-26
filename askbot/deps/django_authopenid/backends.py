@@ -33,7 +33,7 @@ class AuthBackend(object):
         self.login_providers = util.get_enabled_login_providers()
         super(AuthBackend, self).__init__(*args, **kwargs)
 
-    def authenticate(self, method=None, provider_name=None, request=None, **kwargs):
+    def authenticate(self, request, method=None, provider_name=None, **kwargs):
         """this authentication function supports many login methods"""
         if method == 'password':
             return self.auth_by_password(
