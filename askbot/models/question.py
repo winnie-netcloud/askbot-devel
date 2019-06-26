@@ -1758,9 +1758,6 @@ class FavoriteQuestion(models.Model):
         verbose_name_plural = _("favorite questions")
 
     def __str__(self):
-        return str(self).encode('utf-8')
-
-    def __unicode__(self):
         return '[%s] favorited at %s' % (self.user, self.added_at)
 
 

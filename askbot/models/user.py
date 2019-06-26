@@ -313,7 +313,7 @@ class Activity(models.Model):
 
     objects = ActivityManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return '[%s] was active at %s' % (self.user.username, self.active_at)
 
     class Meta:
@@ -439,9 +439,6 @@ class EmailFeedSetting(models.Model):
         app_label = 'askbot'
 
     def __str__(self):
-        return str(self).encode('utf-8')
-
-    def __unicode__(self):
         if self.reported_at is None:
             reported_at = "'not yet'"
         else:

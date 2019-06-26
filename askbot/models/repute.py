@@ -58,7 +58,7 @@ class Vote(models.Model):
         verbose_name = _("vote")
         verbose_name_plural = _("votes")
 
-    def __unicode__(self):
+    def __str__(self):
         return '[%s] voted at %s: %s' % (self.user, self.voted_at, self.vote)
 
     def __int__(self):
@@ -141,7 +141,7 @@ class BadgeData(models.Model):
         verbose_name = _("badge data")
         verbose_name_plural = _("badge data")
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s: %s' % (self.get_type_display(), self.slug)
 
     def get_absolute_url(self):
@@ -158,7 +158,7 @@ class Award(models.Model):
     awarded_at = models.DateTimeField(default=timezone.now)
     notified = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return '[%s] is awarded a badge [%s] at %s' % (self.user.username,
                                                         self.badge.get_name(),
                                                         self.awarded_at)
@@ -219,7 +219,7 @@ class Repute(models.Model):
 
     objects = ReputeManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return '[%s]\' reputation changed at %s' % (self.user.username,
                                                      self.reputed_at)
 

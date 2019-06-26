@@ -289,7 +289,7 @@ class Tag(models.Model):
         ordering = ('-used_count', 'name')
         unique_together = ('name', 'language_code')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def decrement_used_count(self, delta=1):
@@ -323,5 +323,5 @@ class TagSynonym(models.Model):
     class Meta:
         app_label = 'askbot'
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s -> %s' % (self.source_tag_name, self.target_tag_name)

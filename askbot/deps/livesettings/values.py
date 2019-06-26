@@ -285,9 +285,6 @@ class Value(object):
     def __iter__(self):
         return iter(self.value)
 
-    def __unicode__(self):
-        return str(self.value)
-
     def __str__(self):
         return str(self.value)
 

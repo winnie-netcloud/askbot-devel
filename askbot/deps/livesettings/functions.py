@@ -145,7 +145,7 @@ class ConfigurationSettings(object):
         """ Delegate access to implementation """
         return setattr(self.__instance, attr, value)
 
-    def __unicode__(self):
+    def __str__(self):
         return "ConfigurationSettings: " + str(self.groups())
 
 def config_exists(group, key):

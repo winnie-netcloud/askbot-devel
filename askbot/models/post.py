@@ -1037,7 +1037,7 @@ class Post(models.Model):
 
         super(Post, self).delete(**kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.is_question():
             return self.thread.title
         else:
@@ -2254,7 +2254,7 @@ class PostRevision(models.Model):
         else:
             raise ValueError()
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s - revision %s of %s' % (self.post.post_type, self.revision,
                                             self.title)
 

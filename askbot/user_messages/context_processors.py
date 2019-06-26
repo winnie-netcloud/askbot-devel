@@ -47,10 +47,7 @@ class LazyMessages(object):
         return bool(self.messages)
 
     def __str__(self):
-        return self.__unicode__().encode('utf-8')
-
-    def __unicode__(self):
-        return str(self.messages)
+        return self.messages
 
     def __getitem__(self, *args, **kwargs):
         return self.messages.__getitem__(*args, **kwargs)
