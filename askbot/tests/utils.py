@@ -178,14 +178,6 @@ class AskbotTestCase(TestCase):
             args_list.pop(1)#so we can remove an item
             self.assertRaises(*args_list, **kwargs)
 
-    def assertQuerysetEqual(self, qs1, qs2, transform=repr, ordered=True):
-        '''borrowed from django1.4 and modified a bit'''
-        items = list(map(transform, qs1))
-        values = list(map(transform, qs2))
-        if not ordered:
-            return self.assertEqual(set(items), set(values))
-        return self.assertEqual(list(items), list(values))
-
     def post_question(
                     self,
                     user=None,
