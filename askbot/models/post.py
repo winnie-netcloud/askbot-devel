@@ -457,6 +457,7 @@ class Post(models.Model):
     objects = PostManager()
 
     class Meta:
+        ordering = [ '-last_edited_at', '-points' ]
         app_label = 'askbot'
         db_table = 'askbot_post'
 
