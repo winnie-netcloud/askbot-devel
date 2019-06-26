@@ -57,12 +57,10 @@ class UserModelTests(AskbotTestCase):
     def test_new_user_has_personal_group(self):
         user = User.objects.create_user('somebody', 'somebody@example.com')
         group_name = format_personal_group_name(user)
-        group = models.Group.objects.filter(name=group_name)
-        self.assertEqual(group.count(), 1)
-        memberships = models.GroupMembership.objects.filter(
+        group = models.Group.objects.get(name=group_name)
+        memberships = models.GroupMembership.objects.get(
                                                 group=group, user=user
                                             )
-        self.assertEqual(memberships.count(), 1)
 
     def test_new_user_has_subscriptions(self):
         old_value = settings.SUBSCRIBED_TAG_SELECTOR_ENABLED
