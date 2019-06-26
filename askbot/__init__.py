@@ -90,27 +90,17 @@ def get_version():
 
 def get_database_engine_name():
     """returns name of the database engine,
-    independently of the version of django
-    - for django >=1.2 looks into ``settings.DATABASES['default']``,
-    (i.e. assumes that askbot uses database named 'default')
-    , and for django 1.1 and below returns settings.DATABASE_ENGINE
+    independently of the version of django.
+    This was required for the django 1.0 -> 1.1 migration
     """
-    import django
     from django.conf import settings as django_settings
-    major_version = django.VERSION[0]
-    minor_version = django.VERSION[1]
-    if major_version == 1:
-        if minor_version > 1:
-            return django_settings.DATABASES['default']['ENGINE']
-        else:
-            return django_settings.DATABASE_ENGINE
+    return django_settings.DATABASES['default']['ENGINE']
 
 
 def get_lang_mode():
     from django.conf import settings as django_settings
     try:
         return django_settings.ASKBOT_LANGUAGE_MODE
-        return getattr(django_settings, 'ASKBOT_LANGUAGE_MODE', 'single-lang')
     except:
         import traceback
         traceback.print_stack()
