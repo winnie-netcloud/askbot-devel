@@ -79,6 +79,19 @@ rename_tags, but using tag id's
                             default=None,
                             help='id of the user who will be marked as a performer of this operation'
                            )
+        parser.add_argument('--lang',
+                            action='store',
+                            type=str,
+                            dest='lang',
+                            default=django_settings.LANGUAGE_CODE,
+                            help='language code of the tag, e.g. "en"'
+                           )
+        parser.add_argument('--is_force',
+                            action='store_true',
+                            dest='is_force',
+                            default=False,
+                            help='force the issue'
+                           )
 
     def handle(self, *args, **options):
         """command handle function. retrieves tags by id

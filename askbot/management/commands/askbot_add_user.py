@@ -47,6 +47,13 @@ class Command(BaseCommand):
             default='a',
             help="Set user status. Options: %s" % STATUS_INFO
         )
+        parser.add_argument('--frequency',
+            action='store',
+            type=str,
+            dest='frequency',
+            default='n',
+            help="Set user's update frequency.i Options: i,d,w,n; see askbot.models.user.UPDATE_FREQUENCY"
+        )
 
     def handle(self, *args, **options):
         """create an askbot user account, given email address,

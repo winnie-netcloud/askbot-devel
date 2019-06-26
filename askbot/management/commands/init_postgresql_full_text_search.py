@@ -5,6 +5,14 @@ from askbot.search.postgresql import setup_full_text_search
 
 class Command(BaseCommand):
 
+    def add_arguments(self, parser):
+        parser.add_argument('--interactive',
+                            action='store_true',
+                            dest='interactive',
+                            default=False,
+                            help='force the issue'
+                           )
+
     def handle(self, **options):
         dir_path = askbot.get_install_directory()
         script_path = os.path.join(
