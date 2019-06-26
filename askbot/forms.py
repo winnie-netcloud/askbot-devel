@@ -13,9 +13,9 @@ from django.forms.utils import ErrorList
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ungettext_lazy, string_concat
+from django.utils.translation import ungettext_lazy
 from askbot.utils.translation import get_language
-from django.utils.text import get_text_list
+from django.utils.text import get_text_list, format_lazy
 from django.contrib.auth.models import User
 from django_countries import countries
 from askbot.utils.forms import NextUrlField, UserNameField
@@ -230,14 +230,14 @@ class CountedWordsField(forms.CharField):
                                  self.min_words - 1) % (self.min_words - 1)
             # TODO - space is not used in Chinese
             raise forms.ValidationError(
-                string_concat(self.field_name, ' ', msg)
+                format_lazy('{} {}', self.field_name, msg)
             )
 
         if word_count > self.max_words:
             msg = ungettext_lazy('must be < %d word', 'must be < %d words',
                                  self.max_words + 1) % (self.max_words + 1)
             raise forms.ValidationError(
-                string_concat(self.field_name, ' ', msg))
+                format_lazy('{} {}', self.field_name, msg))
         return value
 
 

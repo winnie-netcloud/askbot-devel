@@ -2,7 +2,7 @@
 Email related settings
 """
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import string_concat
+from django.utils.text import format_lazy
 from django.conf import settings as django_settings
 
 from askbot.conf.settings_wrapper import settings
@@ -316,9 +316,8 @@ settings.register(
         'BLANK_EMAIL_ALLOWED',
         default=False,
         description=_('Allow blank email'),
-        help_text=string_concat(
+        help_text=format_lazy('{} {}',
             _('DANGER: makes impossible account recovery by email.'),
-            ' ',
             settings.get_related_settings_info(
                 ('ACCESS_CONTROL', 'REQUIRE_VALID_EMAIL_FOR', True, _('Must be optional')),
             )

@@ -5,23 +5,18 @@ from askbot import const
 from askbot.conf import settings as askbot_settings
 from askbot import models
 from askbot import mail
-from datetime import datetime
 from django.http import Http404
-from django.utils.translation import string_concat
+from django.utils.text import format_lazy
 from django.utils.translation import ungettext
 from django.utils.translation import ugettext as _
-from django.template.loader import get_template
 from django.conf import settings as django_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.utils.encoding import force_text
 from django.shortcuts import render
-from django.template import RequestContext
 from django.views.decorators import csrf
 from django.utils.encoding import force_text
 from django.core import exceptions
-import simplejson
 
 #some utility functions
 def get_object(memo):
@@ -122,8 +117,7 @@ def exclude_admins(users):
 
 def concat_messages(message1, message2):
     if message1:
-        message = string_concat(message1, ', ')
-        return string_concat(message, message2)
+        return format_lazy('{}, {}', message1, message2)
     else:
         return message2
 

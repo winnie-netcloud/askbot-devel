@@ -29,7 +29,7 @@ from django.core.files import uploadedfile
 from django.utils.encoding import force_text
 from django.utils.functional import lazy
 from django.utils.translation import get_language
-from django.utils.translation import string_concat
+from django.utils.text import format_lazy
 from django.utils.translation import ugettext_lazy as _
 
 import askbot
@@ -145,7 +145,7 @@ class ConfigSettings(object):
             anchor='id_%s__%s__%s' % (group_name, setting_name, get_language())
         )
         if len(data) == 4:
-            return force_text(string_concat(link, ' (', data[3], ')'))
+            return force_text(format_lazy('{} ({})',link, data[3]))
         return link
 
     def get_related_settings_info(self, *requirements):

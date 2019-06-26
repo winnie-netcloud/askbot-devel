@@ -2,12 +2,11 @@
 these automatically catch email-related exceptions
 """
 from django.conf import settings as django_settings
+
 DEBUG_EMAIL = django_settings.ASKBOT_DEBUG_INCOMING_EMAIL
 
 import logging
 import os
-import re
-import smtplib
 import sys
 from askbot import exceptions
 from askbot import const
@@ -20,10 +19,9 @@ from askbot.utils.html import get_text_from_html
 from django.core import mail
 from django.core.exceptions import PermissionDenied
 from django.forms import ValidationError
+from django.utils.text import format_lazy
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy
-from django.utils.translation import string_concat
-from django.template import Context
 from django.utils.html import strip_tags
 
 #todo: maybe send_mail functions belong to models
@@ -155,23 +153,19 @@ def bounce_email(
         ) % {'site': askbot_settings.APP_SHORT_NAME}
 
         if askbot_settings.TAGS_ARE_REQUIRED:
-            error_message = string_concat(
+            error_message = format_lazy('{}<ul>{}{}{}</ul>{}',
                                     INSTRUCTIONS_PREAMBLE,
-                                    '<ul>',
                                     QUESTION_TITLE_INSTRUCTION,
                                     REQUIRED_TAGS_INSTRUCTION,
                                     QUESTION_DETAILS_INSTRUCTION,
-                                    '</ul>',
                                     TAGS_INSTRUCTION_FOOTNOTE
                                 )
         else:
-            error_message = string_concat(
+            error_message = format_lazy('{}<ul>{}{}{}</ul>{}',
                                     INSTRUCTIONS_PREAMBLE,
-                                    '<ul>',
-                                        QUESTION_TITLE_INSTRUCTION,
-                                        QUESTION_DETAILS_INSTRUCTION,
-                                        OPTIONAL_TAGS_INSTRUCTION,
-                                    '</ul>',
+                                    QUESTION_TITLE_INSTRUCTION,
+                                    QUESTION_DETAILS_INSTRUCTION,
+                                    OPTIONAL_TAGS_INSTRUCTION,
                                     TAGS_INSTRUCTION_FOOTNOTE
                                 )
 

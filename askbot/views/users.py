@@ -30,8 +30,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseForbidden
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.http import StreamingHttpResponse
+from django.utils.text import format_lazy
 from django.utils.translation import get_language
-from django.utils.translation import string_concat
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 import simplejson
@@ -382,7 +382,7 @@ def user_moderate(request, subject, context):
                     num_deleted = request.user.delete_all_content_authored_by_user(subject)
                     if num_deleted:
                         num_deleted_message = ungettext('%d post deleted', '%d posts deleted', num_deleted) % num_deleted
-                        user_status_changed_message = string_concat(user_status_changed_message, ', ', num_deleted_message)
+                        user_status_changed_message = format_lazy('{}, {}', user_status_changed_message, num_deleted_message)
             user_status_changed = True
         elif 'send_message' in request.POST:
             send_message_form = forms.SendMessageForm(request.POST)

@@ -12,27 +12,23 @@ import os
 import re
 import urllib.request, urllib.parse, urllib.error
 from functools import partial
-import uuid
-from celery import states
 from celery.task import task
 from django.urls import reverse, NoReverseMatch
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.db.models import signals as django_signals
-from django.template import Context
-from django.template.loader import get_template
 from django.utils import timezone
 from django.utils import translation
 from django.utils.translation import ugettext as _
-from django.utils.translation import string_concat, override, ungettext
+from django.utils.translation import override, ungettext
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
+from django.utils.text import format_lazy
 from django.db.models import Count, Q
 from django.conf import settings as django_settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core import exceptions as django_exceptions
-from django_countries.fields import CountryField
 from askbot import exceptions as askbot_exceptions
 from askbot import const
 from askbot.const import message_keys
@@ -77,9 +73,6 @@ from askbot.utils.slug import slugify, ascii_slugify
 from askbot.utils.transaction import defer_celery_task
 from askbot.utils.translation import get_language
 from askbot.utils.html import replace_links_with_text
-from askbot.utils.html import site_url
-from askbot.utils.db import table_exists
-from askbot.utils.url_utils import strip_path
 from askbot.utils import functions
 from askbot import mail
 from askbot import signals
@@ -699,11 +692,10 @@ def _assert_user_can(
 
     elif ('@' in user.email) and email_is_blacklisted(user.email) \
         and askbot_settings.BLACKLISTED_EMAIL_PATTERNS_MODE == 'strict':
-        error_message = string_concat(
+        error_message = format_lazy('{} {}',
             _('Sorry, you cannot %(perform_action)s because '
               '%(domain)s emails have been blacklisted.'
             ),
-            ' ',
             _('Please <a href="%(url)s">change your email</a>.')
         ) % {
             'perform_action': action_display,
@@ -729,7 +721,7 @@ def _assert_user_can(
             'perform_action': action_display,
             'your_account_is': _('your account is blocked')
         }
-        error_message = string_concat(error_message, '.</br> ', _(message_keys.PUNISHED_USER_INFO))
+        error_message = format_lazy('{}.</br> {}',error_message, _(message_keys.PUNISHED_USER_INFO))
 
     elif post and owner_can and user.pk == post.author_id:
         if user.is_suspended() and suspended_owner_cannot:
