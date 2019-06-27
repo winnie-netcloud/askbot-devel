@@ -64,6 +64,10 @@ Programming, bug fixes and documentation
 * `Vanessa Hänni <https://github.com/n3ssi3>`_
 * `Vadim Sikora <https://github.com/vxsx>`_
 * `Zhe Li <https://github.com/zheli>`_
+* `Sebastian Wagner <https://github.com/sebastian-philipp>`_
+* `martin-bts <https://github.com/martin-bts>`_
+* `Ralf Bueker <https://github.com/rabueker>`_
+
 
 Translations
 ------------
