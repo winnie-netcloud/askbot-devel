@@ -4,6 +4,7 @@ import logging
 import sys
 import askbot
 import site
+from jinja2.runtime import Undefined
 
 #this line is added so that we can import pre-packaged askbot dependencies
 ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
@@ -81,6 +82,7 @@ TEMPLATES = (
         'OPTIONS': {
             'environment': 'askbot.skins.jinja2_environment.factory',
             'autoescape': False,
+            'undefined': Undefined
         },
     },
     {
