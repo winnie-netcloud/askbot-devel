@@ -119,7 +119,7 @@ Settings below are not perfect but may be a good starting point::
          #your SSL keys
          SSLCertificateFile /etc/httpd/ssl.crt/server.crt
          SSLCertificateKeyFile /etc/httpd/ssl.key/server.key
-         Alias /admin/media/ /usr/local/lib/python2.6/site-packages/django/contrib/admin/media/
+         Alias /admin/media/ /usr/lib/python3.6/site-packages/django/contrib/admin/media/
          WSGIScriptAlias / /path/to/django-project/django.wsgi
          CustomLog /var/log/httpd/askbot/access_log common
          ErrorLog /var/log/httpd/askbot/error_log
