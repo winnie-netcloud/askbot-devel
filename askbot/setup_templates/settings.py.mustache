@@ -9,6 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 #this line is added so that we can import pre-packaged askbot dependencies
 ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
 DEBUG = True  # set to True to enable debugging
@@ -68,10 +69,10 @@ LANGUAGES = (('en', 'English'),)
 # Absolute path to the directory that holds uploaded media
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'askbot', 'upfiles')
-MEDIA_URL = '/upfiles/'
+MEDIA_URL = '/upfiles/'#url to uploaded media
 STATIC_URL = '/m/'#this must be different from MEDIA_URL
 
-PROJECT_ROOT = os.path.dirname(__file__)
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')#path to files collected by collectstatic
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -98,7 +99,8 @@ TEMPLATES = (
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.core.context_processors.request',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
                 'django.contrib.auth.context_processors.auth',
             ]
         }
@@ -106,6 +108,7 @@ TEMPLATES = (
 )
 
 MIDDLEWARE = (
+    'django.middleware.csrf.CsrfViewMiddleware',
     #'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -216,7 +219,6 @@ ALLOW_UNICODE_SLUGS = False
 BROKER_TRANSPORT = "kombu.transport.memory.Transport"
 CELERY_ALWAYS_EAGER = True
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
 )
