@@ -9,6 +9,7 @@ class Command(BaseCommand):
     args = '<user id>'
 
     def add_arguments(self, parser):
+        parser.add_argument('user_id', help="the numeric user_id of the existing user that shall become an admin")
         parser.add_argument('--noinput', action='store_false', dest='interactive', default=True,
             help='Tells to NOT prompt the user for input of any kind.')
 
@@ -23,11 +24,11 @@ class Command(BaseCommand):
             print('user id must be integer, have %s' % uid_str)
             sys.exit(1)
 
-    def parse_arguments(self, arguments):
-        if len(arguments) != 1:
-            print('argument for this command id <user_id>')
-            sys.exit(1)
-        self.user = self.get_user(arguments[0])
+    #def parse_arguments(self, arguments):
+    #    if len(arguments) != 1:
+    #        print('argument for this command id <user_id>')
+    #        sys.exit(1)
+    #    self.user = self.get_user(arguments[0])
 
     def confirm_action(self):
         u = self.user
@@ -45,8 +46,13 @@ class Command(BaseCommand):
 
     def handle(self, *arguments, **options):
         #destroy pre_save and post_save signals
-        self.parse_arguments(arguments)
-        if options.get('interactive'):
+        #self.parse_arguments(arguments)
+        if options.get('user_id', None) is None:
+            print('argument for this command id <user_id>')
+            sys.exit(1)
+        self.user = self.get_user(options['user_id'])
+
+        if options.get('interactive', None) is not None:
             self.confirm_action()
 
         self.remove_signals()
