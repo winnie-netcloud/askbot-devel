@@ -18,9 +18,9 @@ from askbot.utils import console
 from askbot.deployment.template_loader import SettingsTemplate
 
 
-FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi')
-BLANK_FILES = ('__init__.py', 'manage.py')
-LOG_DIR_NAME = 'log'
+FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery.py')
+BLANK_FILES     = ('__init__.py', 'manage.py')
+LOG_DIR_NAME    = 'log'
 
 
 def split_at_break_point(directory):
@@ -155,35 +155,29 @@ def get_path_to_help_file():
     """returns path to the main plain text help file"""
     return os.path.join(SOURCE_DIR, 'doc', 'INSTALL')
 
-def deploy_into(directory, new_project = False, verbosity = 1, context = None):
-    """will copy necessary files into the directory
+def deploy_into(install_dir, new_project = False, verbosity = 1, context = None):
+    """will copy necessary files into the target directory
     """
     assert(isinstance(new_project, bool))
     if new_project:
-        copy_files = FILES_TO_CREATE
-        blank_files = BLANK_FILES
         if verbosity >= 1:
             print('Copying files: ')
-        for file_name in copy_files:
-            src = os.path.join(SOURCE_DIR, 'setup_templates', file_name)
-            if os.path.exists(os.path.join(directory, file_name)):
-                if file_name in blank_files:
+        for file_name in FILES_TO_CREATE:
+            src_file = os.path.join(SOURCE_DIR, 'setup_templates', file_name)
+            if verbosity >= 1:
+                print(f'* {file_name}')
+            if os.path.exists(os.path.join(install_dir, file_name)):
+                if file_name in BLANK_FILES:
                     continue
+                if file_name == 'urls.py' and verbosity >= 1:
+                    print('  ^^^ forced overwrite!')
                 else:
-                    if file_name == 'urls.py' and new_project:
-                        #overwrite urls.py
-                        shutil.copy(src, directory)
-                    else:
-                        if verbosity >= 1:
-                            print('* %s' % file_name, end=' ')
-                            print("- you already have one, please add contents of %s" % src)
-            else:
-                if verbosity >= 1:
-                    print('* %s ' % file_name)
-                shutil.copy(src, directory)
-        #copy log directory
-        src = os.path.join(SOURCE_DIR, 'setup_templates', LOG_DIR_NAME)
-        log_dir = os.path.join(directory, LOG_DIR_NAME)
+                    if verbosity >= 1:
+                        print(f'  ^^^ you already have one, please add contents of {src_file}')
+                    continue
+            shutil.copy(src_file, install_dir)
+        #create log directory
+        log_dir = os.path.join(install_dir, LOG_DIR_NAME)
         create_path(log_dir)
         touch(os.path.join(log_dir, 'askbot.log'))
 
@@ -191,48 +185,41 @@ def deploy_into(directory, new_project = False, verbosity = 1, context = None):
         if verbosity >= 1:
             print("Creating settings file")
         settings_contents = SettingsTemplate(context).render()
-        settings_path = os.path.join(directory, 'settings.py')
-        if os.path.exists(settings_path) and new_project == False:
+        settings_path = os.path.join(install_dir, 'settings.py')
+        if os.path.exists(settings_path):
             if verbosity >= 1:
                 print("* you already have a settings file please merge the contents")
-        elif new_project == True:
-            settings_file = open(settings_path, 'w+')
-            settings_file.write(settings_contents)
-            #Grab the file!
-            if os.path.exists(context['local_settings']):
-                local_settings = open(context['local_settings'], 'r').read()
-                settings_file.write('\n')
-                settings_file.write(local_settings)
+        else:
+            with open(settings_path, 'w+') as settings_file:
+                settings_file.write(settings_contents)
+                #Grab the file!
+                if os.path.exists(context['local_settings']):
+                    with open(context['local_settings'], 'r') as local_settings:
+                        settings_file.write('\n')
+                        settings_file.write(local_settings.read())
 
-            settings_file.close()
             if verbosity >= 1:
                 print("settings file created")
-
+    # end if new_project
     if verbosity >= 1:
         print('')
-    app_dir = os.path.join(directory, 'askbot')
+    app_dir = os.path.join(install_dir, 'askbot')
 
+    if verbosity >= 1:
+        print('copying directories: ')
     copy_dirs = ('doc', 'cron', 'upfiles')
-    dirs_copied = 0
     for dir_name in copy_dirs:
-        src = os.path.join(SOURCE_DIR, dir_name)
-        dst = os.path.join(app_dir, dir_name)
-        if os.path.abspath(src) != os.path.abspath(dst):
-            if dirs_copied == 0:
-                if verbosity >= 1:
-                    print('copying directories: ', end=' ')
+        src_dir = os.path.join(SOURCE_DIR, dir_name)
+        dst_dir = os.path.join(   app_dir, dir_name)
+        if os.path.abspath(src_dir) == os.path.abspath(dst_dir): # this is actually just a special form of an already existing directory
+            continue
+        if verbosity >= 1:
+            print(f'* {dir_name}')
+        if os.path.exists(dst_dir):
             if verbosity >= 1:
-                print('* ' + dir_name)
-            if os.path.exists(dst):
-                if os.path.isdir(dst):
-                    if verbosity >= 1:
-                        print('Directory %s not empty - skipped' % dst)
-                else:
-                    if verbosity >= 1:
-                        print('File %s already exists - skipped' % dst)
-                continue
-            shutil.copytree(src, dst)
-            dirs_copied += 1
+                print('  ^^^ already exists - skipped')
+            continue
+        shutil.copytree(src_dir, dst_dir)
     if verbosity >= 1:
         print('')
 

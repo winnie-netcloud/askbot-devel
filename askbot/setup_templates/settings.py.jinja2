@@ -12,10 +12,10 @@ ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
-DEBUG = True  # set to True to enable debugging
+DEBUG          = True   # set to True to enable debugging
 TEMPLATE_DEBUG = False  # keep false when debugging jinja2 templates
-INTERNAL_IPS = ('127.0.0.1',)
-ALLOWED_HOSTS = ['*',]#change this for better security on your site
+INTERNAL_IPS   = ('127.0.0.1',)
+ALLOWED_HOSTS  = ['*',] #change this for better security on your site
 
 ADMINS = (
     ('Your Name', 'your_email@domain.com'),
@@ -33,21 +33,23 @@ DATABASES = {
         'PORT': '{{database_port}}',                      # Set to empty string for default. Not used with sqlite3.
         'TEST': {
             'CHARSET': 'utf8',              # Setting the character set and collation to utf-8
+         {% if 'mysql' in database_engine %}
             'COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
+         {% endif %}
         }
     }
 }
 
 #outgoing mail server settings
-SERVER_EMAIL = ''
-DEFAULT_FROM_EMAIL = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+SERVER_EMAIL         = ''
+DEFAULT_FROM_EMAIL   = ''
+EMAIL_HOST_USER      = ''
+EMAIL_HOST_PASSWORD  = ''
 EMAIL_SUBJECT_PREFIX = ''
-EMAIL_HOST=''
-EMAIL_PORT=''
-EMAIL_USE_TLS=False
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST           = ''
+EMAIL_PORT           = ''
+EMAIL_USE_TLS        = False
+EMAIL_BACKEND        = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -62,9 +64,9 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N      = True
 LANGUAGE_CODE = 'en'
-LANGUAGES = (('en', 'English'),)
+LANGUAGES     = (('en', 'English'),)
 
 # Absolute path to the directory that holds uploaded media
 # Example: "/home/media/media.lawrence.com/"
