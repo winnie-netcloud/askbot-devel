@@ -139,7 +139,7 @@ class ConfigSettings(object):
         setting_name = data[1]
 
         link = internal_link(
-            'group_settings',
+            'livesettings_group',
             setting_name,  # TODO: better use description
             kwargs={'group': group_name},
             anchor='id_%s__%s__%s' % (group_name, setting_name, get_language())
