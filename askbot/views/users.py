@@ -27,9 +27,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseForbidden
-from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
-from django.http import StreamingHttpResponse
+from django.http import HttpResponse, HttpResponseForbidden, FileResponse
+from django.http import HttpResponseRedirect, Http404
 from django.utils.text import format_lazy
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
@@ -44,9 +43,7 @@ from askbot.utils.html import sanitize_html
 from askbot.utils.transaction import defer_celery_task
 from askbot.mail import send_mail
 from askbot.utils.translation import get_language
-from askbot.mail.messages import (AccountManagementRequest,
-                                  UnsubscribeLink)
-from askbot.utils.file_utils import read_file_chunkwise
+from askbot.mail.messages import UnsubscribeLink
 from askbot.utils.http import get_request_info
 from askbot.utils import decorators
 from askbot.utils import functions
@@ -343,14 +340,11 @@ def download_user_data(request, id, file_name):
 
     directory = subject.get_data_export_dir()
     file_path = os.path.join(directory, file_name)
-    if not os.path.isfile(os.path.join(directory, file_path)):
-        return Http404
 
-    response = StreamingHttpResponse(content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-    file_obj = open(os.path.join(directory, file_name))
-    response.streaming_content = read_file_chunkwise(file_obj)
-    return response
+    try:
+        return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_name)
+    except FileNotFoundError:
+        return Http404
 
 
 @csrf.csrf_protect
