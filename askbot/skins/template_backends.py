@@ -1,6 +1,7 @@
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.template.backends.base import BaseEngine
+from django.template.context import BaseContext
 from askbot.utils.loading import load_function
 from django_jinja.base import dict_from_context
 
@@ -17,20 +18,6 @@ except ImportError:
     pass # b/c we only use it with Django 1.11 and then it does exist
 
 
-class AskbotSkinTemplates(BaseEngine):
-
-    def __init__(self, params):
-        junk = params.pop('OPTIONS') #we don't use this parameter
-        super(AskbotSkinTemplates, self).__init__(params)
-        self.loader = Loader(self)
-
-    def get_template(self, name):
-        return Template(self.loader.load_template(name)[0])
-
-    def from_string(self, template_code):
-        skin = get_skin()
-        return Template(skin.from_string(template_code))
-
 CONTEXT_PROCESSORS = list()
 
 class Template(object):
@@ -44,6 +31,7 @@ class Template(object):
                 name=template.filename, template_name=template.name,
             )
 
+    # I doubt we want the following classmethods with the Template.
     @classmethod
     def load_context_processors(cls, paths):
         processors = list()
@@ -97,7 +85,7 @@ class Template(object):
     def render(self, context=None, request=None):
         if context is None:
             context = {}
-        else:
+        elif isinstance(context,BaseContext):
             context = dict_from_context(context)
 
         if request is not None:
