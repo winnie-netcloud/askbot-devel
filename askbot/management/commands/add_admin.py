@@ -59,3 +59,6 @@ class Command(BaseCommand):
 
         self.user.is_active = True
         self.user.set_status('d')
+        self.user.is_staff = True
+        self.user.is_superuser = True
+        self.user.save()
