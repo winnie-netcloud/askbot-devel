@@ -672,7 +672,7 @@ def user_stats(request, user, context):
         badges_dict[award.badge].append(award)
 
     badges = list(badges_dict.items())
-    badges.sort(key=operator.itemgetter(1), reverse=True)
+    badges.sort(key=lambda x:x[0].get_name(), reverse=True)
 
     user_groups = models.Group.objects.get_for_user(user = user)
     user_groups = user_groups.exclude_personal()
