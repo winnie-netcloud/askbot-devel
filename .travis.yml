@@ -4,7 +4,7 @@ services:
   - mysql
 
 python:
-  - "2.7"
+  - "3.6"
 
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS askbot;'
@@ -20,17 +20,17 @@ script:
   - tox -e $TOX_ENV
 
 after_success:
-  - tox -e $TOX_ENV -- pip install coveralls 
+  - tox -e $TOX_ENV -- pip install coveralls
   - tox -e $TOX_ENV -- coveralls $COVERALLS_OPTION
 
 matrix:
   fast_finish: true
   include:
-    - python: "2.7"
+    - python: "3.6"
       env: TOX_ENV=lint
       install: pip install tox
       script: tox -e $TOX_ENV
-    - python: "2.7"
+    - python: "3.6"
       env: TOX_ENV=setup
       install: pip install tox
       script: tox -e $TOX_ENV
