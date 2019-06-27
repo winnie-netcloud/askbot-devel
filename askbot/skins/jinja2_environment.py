@@ -8,13 +8,6 @@
 
 from django.conf import settings as django_settings
 
-# the module is still called coffin, but in its most recent version it is
-# merely "a lean collection of some Django tags that are not included in
-# django-jinja". Askbot uses at least URLExtension and Spaceless Extension,
-# which is why we keep this around.
-# Commented extensions have (hopefully) been replaced by django_jinja
-
-
 import askbot
 from askbot.conf import settings as askbot_settings
 from askbot.skins import utils
@@ -33,10 +26,17 @@ from   django_jinja import library as Library
 from   django_jinja.builtins import DEFAULT_EXTENSIONS
 import django_jinja.backend
 
-# As of this writing it is part of the DEFAULT_EXTENSIONS, but since it is
-# hard coded in the orginal askbot code, we enforce its presence.
+# django_jinja is also past its time, but we will keep it around for a
+# little longer. so we adapt its default behaviour to slowly but steadly
+# release Askbot
+
 if 'jinja2.ext.i18n' not in DEFAULT_EXTENSIONS:
     DEFAULT_EXTENSIONS.append('jinja2.ext.i18n')
+
+try:
+    DEFAULT_EXTENSIONS.remove('django_jinja.builtins.extensions.CsrfExtension')
+except ValueError:
+    pass
 
 # this looks like a hack because it is one. We keep it as a separate
 # function to remind us that it ultimately must go
