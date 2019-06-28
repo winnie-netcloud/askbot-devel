@@ -44,12 +44,12 @@ class Command(NoArgsCommand):
             email_setting = user.notification_subscriptions.filter(feed_type='q_noans')[0]
             if not email_setting.should_send_now():
                 continue
-
             filtered_questions = self.get_filtered_question_list(questions, user, schedule)
             if not filtered_questions:
                 continue
 
             self.send_email(user, filtered_questions)
+            email_setting.mark_reported_now()
 
 
     @staticmethod

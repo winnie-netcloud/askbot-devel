@@ -347,12 +347,8 @@ class Activity(models.Model):
         return self.content_object.get_absolute_url()
 
 class EmailFeedSettingManager(models.Manager):
-    def filter_subscribers(
-                        self,
-                        potential_subscribers = None,
-                        feed_type = None,
-                        frequency = None
-                    ):
+    def filter_subscribers(self, potential_subscribers=None,
+                           feed_type=None, frequency=None):
         """returns set of users who have matching subscriptions
         and if potential_subscribers is not none, search will
         be limited to only potential subscribers,
@@ -362,10 +358,7 @@ class EmailFeedSettingManager(models.Manager):
         todo: when EmailFeedSetting is merged into user table
         this method may become unnecessary
         """
-        matching_feeds = self.filter(
-                                        feed_type = feed_type,
-                                        frequency = frequency
-                                    )
+        matching_feeds = self.filter(feed_type=feed_type, frequency=frequency)
         if potential_subscribers is not None:
             matching_feeds = matching_feeds.filter(
                             subscriber__in = potential_subscribers
