@@ -85,6 +85,13 @@ def askbot_setup():
             )
 
     parser.add_option(
+                "--logfile-name",
+                dest="logfile_name",
+                default='askbot.log',
+                help="name of the askbot logfile."
+            )
+
+    parser.add_option(
                 "--append-settings",
                 dest = "local_settings",
                 default = '',
@@ -97,6 +104,13 @@ def askbot_setup():
                 action='store_true',
                 default=False,
                 help = "Force overwrite settings.py file"
+            )
+    parser.add_option(
+                "--no-secred-key",
+                dest="no_secred_key",
+                action='store_true',
+                default=False,
+                help="Don't generate a secret key. (not recommended)"
             )
 
     try:
@@ -192,7 +206,7 @@ def deploy_askbot(options):
         )
 
 def collect_missing_options(options_dict):
-    options_dict['secret_key'] = generate_random_key()
+    options_dict['secret_key'] = '' if options_dict['no_secred_key'] else generate_random_key()
     if options_dict['database_engine'] == '2':#sqlite
         if options_dict['database_name']:
             return options_dict
