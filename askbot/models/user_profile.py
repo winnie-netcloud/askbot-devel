@@ -60,9 +60,7 @@ def add_profile_property(cls, name):
     prop = user_profile_property(name)
     cls.add_to_class(name, prop)
 
-
-def add_profile_properties(cls):
-    names = (
+USER_PROFILE_PROPERTIES = (
         'avatar_type',
         'avatar_urls',
         'bronze',
@@ -97,7 +95,10 @@ def add_profile_properties(cls):
         'twitter_handle',
         'website',
     )
-    for name in names:
+
+
+def add_profile_properties(cls):
+    for name in USER_PROFILE_PROPERTIES:
         add_profile_property(cls, name)
 
 
