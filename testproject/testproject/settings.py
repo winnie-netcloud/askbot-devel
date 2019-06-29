@@ -84,6 +84,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 SECRET_KEY = '37c8505c47c1aea8dbe214ba31bce63d'
 
 ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
+    'askbot.context.application_settings',
     'askbot.user_messages.context_processors.user_messages',# must be before auth
     'django.contrib.messages.context_processors.messages', # this  will replace the one above soon
     'django.contrib.auth.context_processors.auth', # this is required for the admin app
