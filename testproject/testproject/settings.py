@@ -24,6 +24,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+DATABASES = {
+}
+
 db_url = dj_database_url.config(default='sqlite:///db.data')
 
 if db_url:
@@ -333,3 +336,4 @@ class DisableMigrations(object):
         return None
 
 MIGRATION_MODULES = DisableMigrations()
+GROUPS_ENABLED=True
