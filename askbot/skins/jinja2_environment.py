@@ -14,7 +14,6 @@ from askbot.skins import utils
 from askbot.skins.askbot_environments import SkinEnvironment
 from askbot.utils.translation import HAS_ASKBOT_LOCALE_MIDDLEWARE
 from askbot.utils.translation import get_language
-from askbot.utils.slug import slugify
 
 # since we dropped Coffin we cannot add filters to jinja like the original code
 # did. The people who brought us Coffin also brought us django-jinja which

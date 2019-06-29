@@ -64,7 +64,6 @@ class Template(object):
                 'askbot.context.application_settings',
                 'askbot.user_messages.context_processors.user_messages',#must be before auth
                 'django.contrib.auth.context_processors.auth', #this is required for the admin app
-                'django.template.context_processors.csrf', #necessary for csrf protection
                 'askbot.deps.group_messaging.context.group_messaging_context',
             )
             extra_paths = [] # cls.get_extra_context_processor_paths() # Disabled for now
