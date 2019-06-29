@@ -25,6 +25,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
+{%- if database_engine }
     'askbot': {
         'ENGINE': 'django.db.backends.{{database_engine}}', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '{{database_name}}',                      # Or path to database file if using sqlite3.
@@ -39,6 +40,7 @@ DATABASES = {
          {%- endif %}
         }
     }
+{%- endif }
 }
 
 db_url = dj_database_url.config(default='sqlite:///db.data')
@@ -130,26 +132,17 @@ TEMPLATES = (
 )
 
 MIDDLEWARE = (
-    'django.middleware.csrf.CsrfViewMiddleware',
-    #'django.middleware.gzip.GZipMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    ## Enable the following middleware if you want to enable
-    ## language selection in the site settings.
-    #'askbot.middleware.locale.LocaleMiddleware',
-    #'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.middleware.sqlprint.SqlPrintingMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',            # for csrf
+    'django.contrib.sessions.middleware.SessionMiddleware', # prerequisite for user messages
+    'django.contrib.messages.middleware.MessageMiddleware', # for user messages
+    'django.middleware.common.CommonMiddleware',               # FIXME: why do we even have this?
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # FIXME: why do we even have this?
 
-    #below is askbot stuff for this tuple
-    'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
+    'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware', # up next: get rid of this
     'askbot.middleware.forum_mode.ForumModeMiddleware',
     'askbot.middleware.cancel.CancelActionMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'askbot.middleware.view_log.ViewLogMiddleware',
-    'askbot.middleware.spaceless.SpacelessMiddleware',
+    'askbot.middleware.spaceless.SpacelessMiddleware', # FIXME: why do we even have this?
 )
 
 ATOMIC_REQUESTS = True
@@ -178,36 +171,33 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
 INSTALLED_APPS = (
+    'askbot',
+    'askbot.deps.django_authopenid',
+    'askbot.deps.group_messaging',
+
+    ## part of django
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.humanize',
+    'django.contrib.messages',
     'django.contrib.sessions',
+    'django.contrib.sitemaps',
     'django.contrib.sites',
     {{ staticfiles_app }}
 
-    #all of these are needed for the askbot
-    'django.contrib.admin',
-    'django.contrib.humanize',
-    'django.contrib.sitemaps',
-    'django.contrib.messages',
-    'django_jinja',
-    #'debug_toolbar',
-    #Optional, to enable haystack search
-    #'haystack',
-    'compressor',
-    'askbot',
-    'askbot.deps.django_authopenid',
-    #'askbot.importers.stackexchange', #se loader
-    'livesettings',
-    'keyedcache',
-    'robots',
-    'django_countries',
-    'kombu.transport.memory',
-    'followit',
-    'tinymce',
-    'askbot.deps.group_messaging',
-    #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
-    'captcha',
+    ## extra packages
     'avatar',
+    'captcha',
+    'compressor',
+    'django_jinja',
+    'django_countries',
+    'followit',
+    'keyedcache',
+    'kombu.transport.memory',
+    'livesettings',
+    'robots',
+    'tinymce',
 )
 
 
@@ -280,7 +270,7 @@ STATICFILES_FINDERS = (
 NOCAPTCHA = True
 
 #HAYSTACK_SETTINGS
-ENABLE_HAYSTACK_SEARCH = False
+ENABLE_HAYSTACK_SEARCH = False # needs "haystack" in INSTALLED_APPS
 #Uncomment for multilingual setup:
 #HAYSTACK_ROUTERS = ['askbot.search.haystack.routers.LanguageRouter',]
 
@@ -338,7 +328,7 @@ if 'ASKBOT_CSS_DEVEL' in locals() and ASKBOT_CSS_DEVEL == True:
 COMPRESS_JS_FILTERS = []
 COMPRESS_PARSER = 'compressor.parser.HtmlParser'
 JINJA2_EXTENSIONS = ('compressor.contrib.jinja2ext.CompressorExtension',)
-JINJA2_TEMPLATES = ('captcha',)
+JINJA2_TEMPLATES = ('captcha',) # FIXME: unused but checked in startup_procedures
 
 # Use migrate for tests instead of South migrations. Without this, some tests
 # fail spuriously in MySQL.
