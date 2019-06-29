@@ -43,9 +43,8 @@ class ExportUserDataTests(AskbotTestCase):
         Returns file path."""
         media_root = django_settings.MEDIA_ROOT
         path = os.path.join(media_root, file_name)
-        file_obj = open(path, 'w')
-        file_obj.write(file_name)
-        file_obj.close()
+        with open(path, 'w') as file_obj:
+            file_obj.write(file_name)
         return path
 
     @classmethod
@@ -58,7 +57,7 @@ class ExportUserDataTests(AskbotTestCase):
     def test_extract_upfile_paths_from_text(self):
         prefix = django_settings.MEDIA_URL
         path = os.path.join(prefix, 'somefile')
-        text = """hello {url}1.jpg) blabla <img src="{url}2.jpg" /> 
+        text = """hello {url}1.jpg) blabla <img src="{url}2.jpg" />
         <img src='{url}3.jpg' /> :{url}4.jpg {url}5.jpg""".format(url=path)
         from askbot.management.commands.askbot_export_user_data import Command
         paths = Command.extract_upfile_paths_from_text(text)
