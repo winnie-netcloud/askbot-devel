@@ -3,3 +3,4 @@ coverage
 dj-database-url
 -e git+https://github.com/dcollinsn/lamson#egg=lamson
 django-lamson
+psycopg2-binary
