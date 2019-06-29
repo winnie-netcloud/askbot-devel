@@ -15,6 +15,9 @@ from django.core.exceptions import ImproperlyConfigured
 from askbot.conf import settings as askbot_settings
 from askbot.utils.translation import get_language
 
+# probably just copy/paste this file contents here
+import askbot.skins.template_backends
+
 class MultilingualEnvironment(Environment):
     def __init__(self, *args, **kwargs):
         lang_code = kwargs.pop('language_code', None) # atm I don't see this ever becoming None

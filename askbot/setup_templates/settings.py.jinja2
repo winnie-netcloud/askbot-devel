@@ -48,7 +48,7 @@ if db_url:
     DATABASES['default'].update({ 'TEST': {
         'CHARSET': 'utf8',  # Setting the character set and collation to utf-8
     }})
-else
+else:
     DATABASES['default'] = DATABASES.get('askbot', None)
 
 #outgoing mail server settings
@@ -97,15 +97,24 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 # Make up some unique string, and don't share it with anybody.
 SECRET_KEY = '{{secret_key}}'
 
+ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
+    'askbot.user_messages.context_processors.user_messages',# must be before auth
+    'django.contrib.messages.context_processors.messages', # this  will replace the one above soon
+    'django.contrib.auth.context_processors.auth', # this is required for the admin app
+                                                   # not sure if the admin app even uses jinja2 ...
+    'askbot.deps.group_messaging.context.group_messaging_context'
+]
+
 TEMPLATES = (
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
-        'DIRS': [], # not sure if I should put templates here. I think it would clash with DjangoTemplates
+        'DIRS': [],
         'OPTIONS': {
             'environment': 'askbot.skins.jinja2_environment.factory',
             'autoescape': False,
-            'undefined': Undefined
+            'undefined': Undefined,
+            'context_processors': ASKBOT_COMMON_CONTEXT_PREPROCESSORS
         },
     },
     {
@@ -113,11 +122,9 @@ TEMPLATES = (
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.messages.context_processors.messages',
-                'django.contrib.auth.context_processors.auth',
-            ]
+            'context_processors':
+                ['django.template.context_processors.request' ] # because DTL
+                + ASKBOT_COMMON_CONTEXT_PREPROCESSORS
         }
     },
 )
@@ -232,7 +239,7 @@ AUTHENTICATION_BACKENDS = (
 #logging settings
 LOG_FILENAME = 'askbot.log'
 logging.basicConfig(
-    filename=os.path.join(PROJECT_ROOT, LOG_FILENAME) # os.path.join(os.path.dirname(__file__), 'log', LOG_FILENAME),
+    filename=os.path.join(PROJECT_ROOT, LOG_FILENAME), # os.path.join(os.path.dirname(__file__), 'log', LOG_FILENAME),
     level=logging.CRITICAL,
     format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
 )
