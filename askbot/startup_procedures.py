@@ -22,6 +22,7 @@ from datetime import datetime
 from askbot.utils.loading import load_module
 from askbot.utils.functions import enumerate_string_list
 from askbot.utils.url_utils import urls_equal
+import requirements
 from urlparse import urlparse
 
 PREAMBLE = """\n
@@ -282,25 +283,41 @@ def get_req_name_from_spec(spec):
     bits = spec.split('=')
     return bits[0]
 
-
-def find_mod_name(req_name):
-    from askbot import REQUIREMENTS
-    req2mod = dict([(get_req_name_from_spec(v), k) for (k, v) in REQUIREMENTS.items()])
-    return req2mod[req_name]
-
+MOD_NAMES = {
+    'django-appconf': 'appconf',
+    'django-avatar': 'avatar',
+    'beautifulsoup4': 'bs4',
+    'Coffin': 'coffin',
+    'django-compressor': 'compressor',
+    'django-countries': 'django_countries',
+    'django-transaction-signals': 'django_transaction_signals',
+    'django-celery': 'djcelery',
+    'django-kombu': 'djkombu',
+    'django-followit': 'followit',
+    'Jinja2': 'jinja2',
+    'django-keyedcache': 'keyedcache',
+    'python-openid': 'openid',
+    'django-picklefield': 'picklefield',
+    'pyjwt': 'jwt',
+    'django-recaptcha': 'captcha',
+    'python-cas': 'cas',
+    'requirements-parser': 'requirements',
+    'django-robots': 'robots',
+    'South': 'south',
+    'django-threaded-multihost': 'threaded_multihost',
+    'django-tinymce': 'tinymce'
+}
 
 def test_modules():
     """tests presence of required modules"""
-    from askbot import REQUIREMENTS
     #flatten requirements into file-like string
-    req_text = '\n'.join(REQUIREMENTS.values())
-    import requirements
-    parsed_requirements = requirements.parse(req_text)
-    for req in parsed_requirements:
-        pip_path = unparse_requirement(req)
-        mod_name = find_mod_name(req.name)
-        try_import(mod_name, pip_path)
-        test_specs(req)
+    req_path = os.path.join(os.path.dirname(askbot.get_install_directory()), 'askbot_requirements.txt')
+    with open(req_path, 'r') as req_file:
+        for req in requirements.parse(req_file):
+            pip_path = unparse_requirement(req)
+            mod_name = MOD_NAMES.get(req.name, req.name)
+            try_import(mod_name, pip_path)
+            test_specs(req)
 
 
 def test_postgres():

@@ -9,50 +9,6 @@ import platform
 
 VERSION = (0, 7, 58)
 
-#keys are module names used by python imports,
-#values - the package qualifier to use for pip
-REQUIREMENTS = {
-    'appconf': 'django-appconf',
-    'akismet': 'akismet==1.0.1',
-    'avatar': 'django-avatar==2.0',
-    'bs4': 'beautifulsoup4<=4.4.1',
-    'coffin': 'Coffin>=0.3,<=0.3.8',
-    'compressor': 'django-compressor==1.2',
-    'django': 'django>=1.5,<1.6',
-    'django_countries': 'django-countries==3.3',
-    'django_transaction_signals': 'django-transaction-signals==1.0.0',
-    'djcelery': 'django-celery>=3.0.11,<=3.1.17',
-    'celery': 'celery==3.1.18',
-    'djkombu': 'django-kombu==0.9.4',
-    'followit': 'django-followit==0.0.7',
-    'html5lib': 'html5lib==0.9999999',
-    'jinja2': 'Jinja2==2.8',
-    'jsonfield': 'jsonfield<=1.0.3',
-    'keyedcache': 'django-keyedcache<=1.5.1',
-    'longerusername': 'longerusername<=0.4',
-    'markdown2': 'markdown2<=2.3.1',
-    'mock': 'mock==2.0.0',
-    'oauth2': 'oauth2<=1.9.0.post1',
-    'openid': 'python-openid<=2.2.5',
-    'picklefield': 'django-picklefield==0.3.0',
-    'jwt': 'pyjwt<=1.4.0',
-    'pystache': 'pystache==0.3.1',
-    'pytz': 'pytz<=2016.4',
-    'captcha': 'django-recaptcha>=1.0.3,<=1.0.5',
-    'cas': 'python-cas==1.1.0',
-    'responses': 'responses>=0.9.0',
-    'requirements': 'requirements-parser==0.1.0',
-    'robots': 'django-robots==1.0',
-    'regex': 'regex',
-    'sanction': 'sanction==0.3.1',
-    'south': 'South>=0.7.1,<=1.0.2',
-    'six': 'six==1.10.0',
-    'threaded_multihost': 'django-threaded-multihost<=1.4-1',
-    'tinymce': 'django-tinymce==1.5.3',
-    'unidecode': 'unidecode<=0.4.19',
-    #'stopforumspam': 'stopforumspam'
-}
-
 #necessary for interoperability of django and coffin
 try:
     from askbot import patches
