@@ -102,8 +102,8 @@ def ldap_authenticate_default(username, password):
         email_field = askbot_settings.LDAP_EMAIL_FIELD
 
         get_attrs = [
-            email_field.encode(encoding),
-            login_name_field.encode(encoding)
+            email_field,
+            login_name_field
             #str(askbot_settings.LDAP_USERID_FIELD)
             #todo: here we have a chance to get more data from LDAP
             #maybe a point for some plugin
@@ -114,16 +114,16 @@ def ldap_authenticate_default(username, password):
         surname_field = askbot_settings.LDAP_SURNAME_FIELD.strip()
 
         if given_name_field and surname_field:
-            get_attrs.append(given_name_field.encode(encoding))
-            get_attrs.append(surname_field.encode(encoding))
+            get_attrs.append(given_name_field)
+            get_attrs.append(surname_field)
         elif common_name_field:
-            get_attrs.append(common_name_field.encode(encoding))
+            get_attrs.append(common_name_field)
 
         # search ldap directory for user
         user_search_result = ldap_session.search_s(
-            askbot_settings.LDAP_BASE_DN.encode(encoding),
+            askbot_settings.LDAP_BASE_DN,
             ldap.SCOPE_SUBTREE,
-            user_filter.encode(encoding),
+            user_filter,
             get_attrs
         )
         if user_search_result: # User found in LDAP Directory
@@ -141,9 +141,9 @@ def ldap_authenticate_default(username, password):
                 first_name, last_name = split_name(common_name, common_name_format)
 
             user_info = {
-                'first_name': first_name,
-                'last_name': last_name,
-                'ldap_username': user_information[login_name_field][0],
+                'first_name': first_name.decode('utf-8'),
+                'last_name': last_name.decode('utf-8'),
+                'ldap_username': user_information[login_name_field][0].decode('utf-8'),
                 'success': True
             }
 
