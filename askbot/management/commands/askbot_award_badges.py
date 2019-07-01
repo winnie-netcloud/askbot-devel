@@ -2,7 +2,7 @@
 This command is incomplete, current awards only
 Civic Duty badge
 """
-from __future__ import print_function
+
 
 from askbot.models import badges
 from askbot.models import User

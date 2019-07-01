@@ -19,17 +19,17 @@ class FollowUserTests(TEST_PROTOTYPE):
         self.u1.follow_user(self.u3)
         self.u2.follow_user(self.u1)
 
-        self.assertEquals(
+        self.assertEqual(
             set(self.u1.get_followers()),
             set([self.u2])
         )
 
-        self.assertEquals(
+        self.assertEqual(
             set(self.u2.get_followers()),
             set([self.u1])
         )
 
-        self.assertEquals(
+        self.assertEqual(
             set(self.u1.get_followed_users()),
             set([self.u2, self.u3])
         )
@@ -37,4 +37,4 @@ class FollowUserTests(TEST_PROTOTYPE):
     def test_unfollow(self):
         self.u1.follow_user(self.u2)
         self.u1.unfollow_user(self.u2)
-        self.assertEquals(self.u1.get_followed_users().count(), 0)
+        self.assertEqual(self.u1.get_followed_users().count(), 0)

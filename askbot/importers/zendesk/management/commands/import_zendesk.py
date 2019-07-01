@@ -71,7 +71,7 @@ TODO:
     - Use logging for more verbose output
     - Add option to import Attachments from existing Zendesk installation
 """
-from __future__ import print_function
+
 import os
 import re
 import sys
@@ -249,7 +249,7 @@ def post_question(zendesk_entry):
             askbot_post.thread.save()
         return askbot_post
     except Exception as e:
-        msg = unicode(e)
+        msg = str(e)
         print("Warning: entry %d skipped: %s" % (zendesk_entry.entry_id, msg))
 
 def post_question_from_ticket(zendesk_ticket):
@@ -275,7 +275,7 @@ def post_question_from_ticket(zendesk_ticket):
         )
         return askbot_post
     except Exception as e:
-        msg = unicode(e)
+        msg = str(e)
         print("Warning: ticket %d skipped: %s" % (zendesk_ticket.ticket_id, msg))
 
 def post_comment(source_post, parent):
@@ -297,7 +297,7 @@ def post_comment(source_post, parent):
         )
         return askbot_comment
     except Exception as e:
-        msg = unicode(e)
+        msg = str(e)
         print("Warning: post %d skipped: %s" % (source_post.post_id, msg))
 
 def post_answer(zendesk_post, question):
@@ -339,7 +339,7 @@ def post_answer(zendesk_post, question):
         askbot_comment = post_comment(zendesk_post, answer)
         return askbot_comment
     except Exception as e:
-        msg = unicode(e)
+        msg = str(e)
         print("Warning: post %d skipped: %s" % (zendesk_post.post_id, msg))
 
 def post_answer_from_comment(zendesk_comment, question):
@@ -372,7 +372,7 @@ def post_answer_from_comment(zendesk_comment, question):
         askbot_comment = post_comment(zendesk_comment, answer)
         return askbot_comment
     except Exception as e:
-        msg = unicode(e)
+        msg = str(e)
         print("Warning: comment %d skipped: %s" % (zendesk_comment.id, msg))
 
 def get_xml_element_val(elem, field_name):
@@ -733,7 +733,7 @@ class Command(BaseCommand):
 
             sub_instances = []
             for sub_entity in sub_entities:
-                for sub_field_name, sub_def in sub_entity.iteritems():
+                for sub_field_name, sub_def in sub_entity.items():
                     sub_list = get_xml_element_val(xml_entry, sub_field_name)
                     sub_model, sub_fields, sub_extra_field_mappings = sub_def
                     for child in sub_list:

@@ -3,7 +3,7 @@ from askbot.utils.akismet_utils import akismet_check_spam
 #from askbot.tasks import submit_spam_posts
 #from askbot.utils.transaction import defer_celery_task
 import responses
-from urlparse import parse_qsl
+from urllib.parse import parse_qsl
 
 TEXT = 'hello foobar'
 API_KEY = 'foobar'
@@ -20,7 +20,7 @@ class User(object):
     def __init__(self, anon=False, username=COMMENT_AUTHOR, email=COMMENT_AUTHOR_EMAIL):
         self.anon = anon
         if anon:
-            self.username = u''
+            self.username = ''
         else:
             self.username = username
             self.email = email

@@ -1,4 +1,4 @@
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from askbot.deps.django_authopenid.util import OAuthConnection
 
 class Twitter(OAuthConnection):

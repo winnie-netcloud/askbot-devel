@@ -23,7 +23,7 @@ class BadgeTests(AskbotTestCase):
         to this assertion"""
         filters = {'badge__slug': badge_key, 'user': recipient}
         count = models.Award.objects.filter(**filters).count()
-        self.assertEquals(count, expected_count)
+        self.assertEqual(count, expected_count)
 
     def assert_accepted_answer_badge_works(self,
                                     badge_key = None,
@@ -479,7 +479,7 @@ class BadgeTests(AskbotTestCase):
     def test_commentator_badge(self):
         question = self.post_question(user = self.u1)
         min_comments = settings.COMMENTATOR_BADGE_MIN_COMMENTS
-        for i in xrange(min_comments - 1):
+        for i in range(min_comments - 1):
             self.post_comment(user = self.u1, parent_post = question)
 
         self.assert_have_badge('commentator', self.u1, 0)
@@ -491,7 +491,7 @@ class BadgeTests(AskbotTestCase):
     def test_taxonomist_badge(self):
         self.post_question(user = self.u1, tags = 'test')
         min_use = settings.TAXONOMIST_BADGE_MIN_USE_COUNT
-        for i in xrange(min_use - 2):
+        for i in range(min_use - 2):
             self.post_question(user = self.u2, tags = 'test')
         self.assert_have_badge('taxonomist', self.u1, 0)
         self.post_question(user = self.u2, tags = 'test')

@@ -22,15 +22,15 @@ class WidgetViewsTests(AskbotTestCase):
     def test_post_with_auth(self):
         self.client.login(username='user1', password='sample')
         response = self.client.post(reverse('ask_by_widget', args=(self.widget.id, )), self.good_data)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.client.logout()
 
     def test_post_without_auth(self):
         #weird issue
         response = self.client.post(reverse('ask_by_widget', args=(self.widget.id, )), self.good_data)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertTrue('widget_question' in self.client.session)
-        self.assertEquals(self.client.session['widget_question']['title'],
+        self.assertEqual(self.client.session['widget_question']['title'],
                           self.good_data['title'])
 
     def test_post_after_login(self):
@@ -53,12 +53,12 @@ class WidgetViewsTests(AskbotTestCase):
             {'action': 'post-after-login'}
         )
         self.assertFalse('widget_question' in self.client.session)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         #verify posting question
 
     def test_render_widget_view(self):
         response = self.client.get(reverse('render_ask_widget', args=(self.widget.id, )))
-        self.assertEquals(200, response.status_code)
+        self.assertEqual(200, response.status_code)
         content_type = 'text/javascript'
         self.assertTrue(content_type in response['Content-Type'])
 
@@ -86,26 +86,26 @@ class WidgetCreatorViewsTests(AskbotTestCase):
     def test_list_ask_widget_view(self):
         self.client.login(username='user1', password='testpass')
         response = self.client.get(reverse('list_widgets', args=('ask',)))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue('widgets' in response.context)
 
     def test_create_ask_widget_get(self):
         self.client.login(username='user1', password='testpass')
         response = self.client.get(reverse('create_widget', args=('ask',)))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue('form' in response.context)
 
     def test_create_ask_widget_post(self):
         self.client.login(username='user1', password='testpass')
         post_data = {'title': 'Test widget'}
         response = self.client.post(reverse('create_widget', args=('ask',)), post_data)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
     def test_edit_ask_widget_get(self):
         self.client.login(username='user1', password='testpass')
         response = self.client.get(reverse('edit_widget',
             args=('ask', self.widget.id, )))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue('form' in response.context)
 
     def test_edit_ask_widget_post(self):
@@ -113,20 +113,20 @@ class WidgetCreatorViewsTests(AskbotTestCase):
         post_data = {'title': 'Test lalalla'}
         response = self.client.post(reverse('edit_widget',
             args=('ask', self.widget.id, )), post_data)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
     def test_delete_ask_widget_get(self):
         self.client.login(username='user1', password='testpass')
         response = self.client.get(reverse('delete_widget',
             args=('ask', self.widget.id, )))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue('widget' in response.context)
 
     def test_delete_ask_widget_post(self):
         self.client.login(username='user1', password='testpass')
         response = self.client.post(reverse('delete_widget',
             args=('ask', self.widget.id, )))
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
     #this test complains about 404.html template but it's correct
     #def test_bad_url(self):
@@ -166,7 +166,7 @@ class QuestionWidgetViewsTests(AskbotTestCase):
         threads = models.Thread.objects.filter(**filter_params)[:5]
 
         response = self.client.get(reverse('question_widget', args=(self.widget.id, )))
-        self.assertEquals(200, response.status_code)
+        self.assertEqual(200, response.status_code)
 
         self.assertQuerysetEqual(threads, response.context['threads'])
-        self.assertEquals(self.widget, response.context['widget'])
+        self.assertEqual(self.widget, response.context['widget'])

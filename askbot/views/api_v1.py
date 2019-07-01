@@ -1,11 +1,11 @@
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
-from django.contrib.auth.models import User
 import simplejson
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from askbot import models
+from askbot.models import User, UserProfile
 from askbot.conf import settings as askbot_settings
 from askbot.search.state_manager import SearchState
 from askbot.utils.html import site_url
@@ -93,52 +93,52 @@ def users(request):
     '''
        Returns data of the most active or latest users.
     '''
-    allowed_order_by = ('recent', 'oldest', 'reputation', 'username')
-    order_by = request.GET.get('sort', 'reputation')
+    allowed_sort_map = { #GET value -> Django query
+      'recent'    : '-pk__date_joined',
+      'oldest'    : 'pk__date_joined',
+      'reputation': '-reputation',
+      'username'  : 'pk__username'
+    }
+
+    page = request.GET.get("page", '1')
+    sort = request.GET.get('sort', 'reputation')
 
     try:
-        page = int(request.GET.get("page", '1'))
-    except ValueError:
+        page = int(page)
+        order_by = allowed_sort_map[sort]
+    except ValueError: # cast failed
         page = 1
-
-    if order_by not in allowed_order_by:
+    except KeyError:   # lookup failed
         raise Http404
-    else:
-        if order_by == 'reputation':
-            profiles = models.UserProfile.objects.exclude(status='b').order_by('-reputation')
-        elif order_by == 'oldest':
-            profiles = models.UserProfile.objects.exclude(status='b').order_by('pk__date_joined')
-        elif order_by == 'recent':
-            profiles = models.UserProfile.objects.exclude(status='b').order_by('-pk__date_joined')
-        elif order_by == 'username':
-            profiles = models.UserProfile.objects.exclude(status='b').order_by('pk__username')
-        else:
-            raise Exception("Order by method not allowed")
 
-        user_ids = models.UserProfile.objects.values_list('pk', flat=True)
-        users = User.objects.filter(id__in=user_ids)
+    profiles = UserProfile.objects.exclude(status='b').order_by('-reputation')
 
-        paginator = Paginator(users, 10)
+    #FIXME: Shouldn't we reuse profiles here?
+    #FIXME: Does this cause 2 DB querys? Should we merge the following 2 lines?
+    user_ids = UserProfile.objects.values_list('pk', flat=True)
+    users = User.objects.filter(id__in=user_ids).order_by('id')
 
-        try:
-            user_objects = paginator.page(page)
-        except (EmptyPage, InvalidPage):
-            user_objects = paginator.page(paginator.num_pages)
+    paginator = Paginator(users, 10)
 
-        user_list = []
-        #serializing to json
-        for user in user_objects:
-            user_dict = get_user_data(user)
-            user_list.append(dict.copy(user_dict))
+    try:
+        user_objects = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        user_objects = paginator.page(paginator.num_pages)
 
-        response_dict = {
-                    'pages': paginator.num_pages,
-                    'count': paginator.count,
-                    'users': user_list
-                }
-        json_string = simplejson.dumps(response_dict)
+    user_list = []
+    #serializing to json
+    for user in user_objects:
+        user_dict = get_user_data(user)
+        user_list.append(dict.copy(user_dict))
 
-        return HttpResponse(json_string, content_type='application/json')
+    response_dict = {
+                'pages': paginator.num_pages,
+                'count': paginator.count,
+                'users': user_list
+            }
+    json_string = simplejson.dumps(response_dict)
+
+    return HttpResponse(json_string, content_type='application/json')
 
 
 def question(request, question_id):

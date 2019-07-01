@@ -199,7 +199,7 @@ def moderation_queue(request):
         }
         queue.append(item)
 
-    queue.sort(lambda x,y: cmp(y['timestamp'], x['timestamp']))
+    queue.sort(key=lambda x: x['timestamp'], reverse=True)
     reject_reasons = models.PostFlagReason.objects.all().order_by('title')
     data = {
         'active_tab': 'users',

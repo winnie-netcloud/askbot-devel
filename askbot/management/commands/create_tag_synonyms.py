@@ -1,7 +1,7 @@
 """management command that creates a tag synonym
 all corresponding questions are retagged
 """
-from __future__ import print_function
+
 
 import sys
 from django.conf import settings as django_settings

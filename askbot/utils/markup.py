@@ -45,7 +45,7 @@ def get_parser(markdown_class_addr=None):
     if askbot_settings.ENABLE_AUTO_LINKING:
         pattern_list = askbot_settings.AUTO_LINK_PATTERNS.split('\n')
         url_list = askbot_settings.AUTO_LINK_URLS.split('\n')
-        pairs = zip(pattern_list, url_list)  # always takes equal number of items
+        pairs = list(zip(pattern_list, url_list))  # always takes equal number of items
         for item in pairs:
             if not item[0].strip() or not item[1].strip():
                 continue

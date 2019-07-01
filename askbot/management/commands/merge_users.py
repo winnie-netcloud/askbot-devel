@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from django.core.management.base import CommandError, BaseCommand
 from django.db import transaction
 from askbot.deployment import package_utils
@@ -69,13 +69,13 @@ class MergeUsersBaseCommand(BaseCommand):
         try:
             self.process_field(rel.related_model, rel.field.name)
         except Exception as error:
-            self.stdout.write((u'Warning: %s\n' % error).encode('utf-8'))
+            self.stdout.write(('Warning: %s\n' % error).encode('utf-8'))
 
     def process_m2m(self, rel):
         try:
             self.process_m2m_field(rel.related_model, rel.field.name)
         except Exception as error:
-            self.stdout.write((u'Warning: %s\n' % error).encode('utf-8'))
+            self.stdout.write(('Warning: %s\n' % error).encode('utf-8'))
 
     def process_field(self, model, field_name):
         """reassigns the related object to the new user"""

@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import sys
 from django.core.management.base import BaseCommand, CommandError
 from askbot import models
@@ -20,7 +20,7 @@ def get_tag_lines(tag_marks, width = 25):
 
 def get_empty_lines(num_lines):
     output = list()
-    for idx in xrange(num_lines):
+    for idx in range(num_lines):
         output.append('')
     return output
 
@@ -29,12 +29,12 @@ def pad_list(the_list, length):
         the_list.extend(get_empty_lines(length - len(the_list)))
 
 def format_table_row(*cols, **kwargs):
-    max_len = max(map(len, cols))
+    max_len = max(list(map(len, cols)))
     for col in cols:
         pad_list(col, max_len)
 
     output = list()
-    for idx in xrange(max_len):
+    for idx in range(max_len):
         bits = list()
         for col in cols:
             bits.append(col[idx])

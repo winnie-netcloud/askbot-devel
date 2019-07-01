@@ -117,7 +117,7 @@ def export_user_data(user_id):
         file_path = user.suggest_backup_file_path()
         data_dir = os.path.dirname(file_path)
         if not os.path.exists(data_dir):
-            os.makedirs(data_dir, 0700)
+            os.makedirs(data_dir, 0o700)
         call_command('askbot_export_user_data', user_id=user_id, file_name=file_path)
     except User.DoesNotExist:
         return
@@ -225,7 +225,7 @@ def record_post_update_celery_task(
             timestamp=timestamp,
             diff=diff)
     except Exception:
-        logger.error(unicode(traceback.format_exc()).encode('utf-8'))
+        logger.error(str(traceback.format_exc()).encode('utf-8'))
 
 
 @task(ignore_result=True)

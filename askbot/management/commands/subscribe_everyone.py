@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from django.core.management import BaseCommand
 from django.db import connection
 from askbot.models import EmailFeedSetting, User

@@ -73,7 +73,7 @@ class SkinEnvironment(MultilingualEnvironment):
         the loader for the skin templates
         """
         loaders = list()
-        skin_dirs = utils.get_available_skins(selected = self.skin).values()
+        skin_dirs = list(utils.get_available_skins(selected = self.skin).values())
         template_dirs = [os.path.join(skin_dir, 'templates') for skin_dir in skin_dirs]
         loaders.append(jinja_loaders.FileSystemLoader(template_dirs))
         return loaders
@@ -148,7 +148,7 @@ class AppDirectoryEnvironment(MultilingualEnvironment):
     """
 
     def get_app_setup_info(self, setup_item):
-        if isinstance(setup_item, basestring):
+        if isinstance(setup_item, str):
             return setup_item, list()
         elif isinstance(setup_item, (list, tuple)):
             dir_list = setup_item[1]

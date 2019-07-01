@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from askbot.search.postgresql import setup_full_text_search
 from django.db import models, migrations

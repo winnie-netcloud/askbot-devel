@@ -4,7 +4,7 @@ from askbot.deps.django_authopenid.protocols.base import BaseProtocol
 import cgi
 from django.core.exceptions import ImproperlyConfigured
 import oauth2 as oauth # OAuth1 protocol
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 class OAuth1Provider(BaseProtocol):
     """a simple class wrapping oauth2 library
@@ -30,7 +30,7 @@ class OAuth1Provider(BaseProtocol):
         self.callback_is_oob = True
         #skip entry of username and email and get the values
         #from the OAuth1 server
-        self.one_click_registration = False 
+        self.one_click_registration = False
 
     def get_user_id(self):
         """Returns user ID within the OAuth1 provider system,
@@ -43,12 +43,12 @@ class OAuth1Provider(BaseProtocol):
         raise NotImplementedError
 
     def get_user_email(self):
-        """Optionally, override this method to read email 
+        """Optionally, override this method to read email
         from the OAuth1 server"""
         return ''
 
     def get_username(self):
-        """Optionally, override this method to read username 
+        """Optionally, override this method to read username
         from the OAuth1 server"""
         return ''
 
@@ -61,7 +61,7 @@ class OAuth1Provider(BaseProtocol):
 
         url, params = url.split('?')
         if params:
-            kv = map(lambda v: v.split('='), params.split('&'))
+            kv = [v.split('=') for v in params.split('&')]
             if kv:
                 #kv must be list of two-element arrays
                 params = dict(kv)
@@ -74,11 +74,11 @@ class OAuth1Provider(BaseProtocol):
     @classmethod
     def format_request_params(cls, params):
         #convert to tuple
-        params = params.items()
+        params = list(params.items())
         #sort lexicographically by key
-        params = sorted(params, cmp=lambda x, y: cmp(x[0], y[0]))
+        params = sorted(params, key=lambda x: x[0])
         #urlencode the tuples
-        return urllib.urlencode(params)
+        return urllib.parse.urlencode(params)
 
     @classmethod
     def normalize_url_and_params(cls, url, params):

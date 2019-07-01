@@ -4,13 +4,13 @@ of email messages for various occasions
 import askbot
 import functools
 import logging
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from copy import copy
 from django.conf import settings as django_settings
 from django.core.urlresolvers import reverse
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from askbot import const
@@ -127,7 +127,7 @@ class BaseEmail(object):
 
         context = copy(self.get_context(context)) #copy context
         for key in context:
-            if isinstance(context[key], basestring):
+            if isinstance(context[key], str):
                 context[key] = mark_safe(context[key])
 
         return ' '.join(template.render(Context(context)).split())
@@ -152,7 +152,7 @@ class BaseEmail(object):
         else:
             LOG.warning(
                 'Attempting to send disabled email "%s"',
-                force_unicode(self.title)
+                force_text(self.title)
             )
 
 
@@ -346,7 +346,7 @@ class InstantEmailAlert(BaseEmail):
         update_activity = context.get('update_activity')
         update_type = self.get_update_type(update_activity)
 
-        #unhandled update_type 'post_shared' 
+        #unhandled update_type 'post_shared'
         #user_action = _('%(user)s shared a %(post_link)s.')
 
         origin_post = post.get_origin_post()
@@ -355,7 +355,7 @@ class InstantEmailAlert(BaseEmail):
         can_reply = to_user.can_post_by_email()
         from askbot.models import get_reply_to_addresses
         reply_address, alt_reply_address = get_reply_to_addresses(to_user, post)
-        alt_reply_subject = urllib.quote(('Re: ' + post.thread.title).encode('utf-8'))
+        alt_reply_subject = urllib.parse.quote(('Re: ' + post.thread.title).encode('utf-8'))
 
         return {
            'admin_email': askbot_settings.ADMIN_EMAIL,
@@ -628,7 +628,7 @@ class BatchEmailAlert(BaseEmail):
         qq = Post.objects.filter(post_type='question')[:2]
 
         act_list = list()
-        act_list.append(force_unicode(_('new question')))
+        act_list.append(force_text(_('new question')))
         format_action_count('%(num)d rev', 3, act_list)
         format_action_count('%(num)d ans', 2, act_list)
         qdata.append({
@@ -794,7 +794,7 @@ class ApprovedPostNotificationRespondable(BaseEmail):
 
     def process_context(self, context):
         revision = context['revision']
-        prompt = force_unicode(_('To add to your post EDIT ABOVE THIS LINE'))
+        prompt = force_text(_('To add to your post EDIT ABOVE THIS LINE'))
         context.update({
             'site_name': askbot_settings.APP_SHORT_NAME,
             'post': revision.post,

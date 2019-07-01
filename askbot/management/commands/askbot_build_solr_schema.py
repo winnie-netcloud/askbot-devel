@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import sys
 
 from django.utils.translation import activate as activate_language

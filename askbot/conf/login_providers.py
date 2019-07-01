@@ -233,7 +233,7 @@ NEED_EXTRA_SETUP = ('Google Plus', 'Twitter', 'MediaWiki', 'Facebook',
 
 for provider in providers:
     if provider == 'local':
-        provider_string = unicode(_('local password'))
+        provider_string = str(_('local password'))
     else:
         provider_string = provider
 

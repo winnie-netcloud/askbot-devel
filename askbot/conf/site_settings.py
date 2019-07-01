@@ -2,7 +2,7 @@
 Q&A website settings - title, desctiption, basic urls
 keywords
 """
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings as django_settings
@@ -31,7 +31,7 @@ settings.register(
     livesettings.StringValue(
         QA_SITE_SETTINGS,
         'APP_KEYWORDS',
-        default=u'Askbot,forum,community',
+        default='Askbot,forum,community',
         description=_('Comma separated list of Q&A site keywords')
     )
 )

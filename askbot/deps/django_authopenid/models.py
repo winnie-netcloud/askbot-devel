@@ -22,8 +22,8 @@ class Nonce(models.Model):
     timestamp = models.IntegerField()
     salt = models.CharField(max_length=40)
 
-    def __unicode__(self):
-        return u"Nonce: %s" % self.id
+    def __str__(self):
+        return "Nonce: %s" % self.id
 
 
 class Association(models.Model):
@@ -35,8 +35,8 @@ class Association(models.Model):
     lifetime = models.IntegerField()
     assoc_type = models.TextField(max_length=64)
 
-    def __unicode__(self):
-        return u"Association: %s, %s" % (self.server_url, self.handle)
+    def __str__(self):
+        return "Association: %s, %s" % (self.server_url, self.handle)
 
 class UserAssociation(models.Model):
     """
@@ -58,8 +58,8 @@ class UserAssociation(models.Model):
                                 ('openid_url', 'provider_name')
                             )
 
-    def __unicode__(self):
-        return u"Openid %s with user %s" % (self.openid_url, self.user)
+    def __str__(self):
+        return "Openid %s with user %s" % (self.openid_url, self.user)
 
     def update_timestamp(self):
         self.last_used_timestamp = datetime.datetime.now()
@@ -73,7 +73,7 @@ class UserPasswordQueueManager(models.Manager):
         # Use SECRET_KEY as added salt.
         while 1:
             confirm_key = hashlib.md5("%s%s%s%s" % (
-                random.randint(0, sys.maxint - 1), os.getpid(),
+                random.randint(0, sys.maxsize - 1), os.getpid(),
                 time.time(), settings.SECRET_KEY)).hexdigest()
             try:
                 self.get(confirm_key=confirm_key)
@@ -92,7 +92,7 @@ class UserPasswordQueue(models.Model):
 
     objects = UserPasswordQueueManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
 
 class UserEmailVerifier(models.Model):
@@ -114,5 +114,5 @@ class UserEmailVerifier(models.Model):
         now = timezone.now()
         return now > self.expires_on
 
-    def __unicode__(self):
+    def __str__(self):
         return self.key

@@ -1,9 +1,10 @@
 """utilities to work with the urls"""
 import sys
-import urlparse
+import urllib.parse
 from django.core.urlresolvers import reverse
 from django.conf import settings as django_settings
 from django.core.urlresolvers import clear_url_caches
+import imp
 try:
     from django.conf.urls import url
 except ImportError:
@@ -15,7 +16,7 @@ def reload_urlconf():
     clear_url_caches()
     urlconf = django_settings.ROOT_URLCONF
     if urlconf in sys.modules:
-        reload(sys.modules[urlconf])
+        imp.reload(sys.modules[urlconf])
 
 def reverse_i18n(lang, *args, **kwargs):
     """reverses url in requested language"""
@@ -40,9 +41,9 @@ def service_url(*args, **kwargs):
 
 def strip_path(input_url):
     """srips path, params and hash fragments of the url"""
-    purl = urlparse.urlparse(input_url)
-    return urlparse.urlunparse(
-        urlparse.ParseResult(
+    purl = urllib.parse.urlparse(input_url)
+    return urllib.parse.urlunparse(
+        urllib.parse.ParseResult(
             purl.scheme,
             purl.netloc,
             '', '', '', ''
@@ -62,8 +63,8 @@ def append_trailing_slash(urlpath):
 
 def urls_equal(url1, url2, ignore_trailing_slash=False):
     """True, if urls are equal"""
-    purl1 = urlparse.urlparse(url1)
-    purl2 = urlparse.urlparse(url2)
+    purl1 = urllib.parse.urlparse(url1)
+    purl2 = urllib.parse.urlparse(url2)
     if purl1.scheme != purl2.scheme:
         return False
 

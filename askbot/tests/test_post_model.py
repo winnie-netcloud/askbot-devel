@@ -476,7 +476,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
 
         self.assertEqual('test question title', question.thread.title)
         self.assertEqual('test body text', question.text)
-        self.assertItemsEqual(['tag1', 'tag2'], list(question.thread.tags.values_list('name', flat=True)))
+        self.assertCountEqual(['tag1', 'tag2'], list(question.thread.tags.values_list('name', flat=True)))
         self.assertEqual(0, question.thread.answer_count)
 
         self.assertTrue(question.thread.summary_html_cached())  # <<< make sure that caching backend is set up properly (i.e. it's not dummy)
@@ -531,7 +531,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
         question = Post.objects.all()[0]
         self.assertRedirects(response=response, expected_url=question.get_absolute_url())
 
-        self.assertItemsEqual(['tag1', 'tag2'], list(question.thread.tags.values_list('name', flat=True)))
+        self.assertCountEqual(['tag1', 'tag2'], list(question.thread.tags.values_list('name', flat=True)))
 
         self.assertTrue(question.thread.summary_html_cached())  # <<< make sure that caching backend is set up properly (i.e. it's not dummy)
         html = self._html_for_question(question)

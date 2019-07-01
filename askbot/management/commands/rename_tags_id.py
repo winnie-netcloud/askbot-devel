@@ -5,7 +5,7 @@ both "from" and "to" tags are identified by id
 
 also, corresponding questions are retagged
 """
-from __future__ import print_function
+
 import re
 import sys
 from django.conf import settings as django_settings
@@ -47,7 +47,7 @@ def get_tag_names(tag_list):
 
 def format_tag_name_list(tag_list):
     name_list = get_tag_names(tag_list)
-    return u', '.join(name_list)
+    return ', '.join(name_list)
 
 class Command(BaseCommand):
     "The command object itself"
@@ -154,7 +154,7 @@ or repost a bug, if that does not help""")
                                                 source_tag_name=to_tag_name,
                                                 language_code=lang
                                             )
-               raise CommandError(u'You gave %s as --to argument, but TagSynonym: %s -> %s exists, probably you want to provide %s as --to argument' % (to_tag_name, tag_synonym.source_tag_name, tag_synonym.target_tag_name, tag_synonym.target_tag_name))
+               raise CommandError('You gave %s as --to argument, but TagSynonym: %s -> %s exists, probably you want to provide %s as --to argument' % (to_tag_name, tag_synonym.source_tag_name, tag_synonym.target_tag_name, tag_synonym.target_tag_name))
             except models.TagSynonym.DoesNotExist:
                 pass
 
@@ -169,7 +169,7 @@ or repost a bug, if that does not help""")
 
             admin.retag_question(
                 question = question._question_post(),
-                tags = u' '.join(tag_names),
+                tags = ' '.join(tag_names),
                 #silent = True #do we want to timestamp activity on question
             )
             question.invalidate_cached_summary_html()

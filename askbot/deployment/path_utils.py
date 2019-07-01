@@ -4,7 +4,7 @@ that
 * create necessary directories
 * install deployment files
 """
-from __future__ import print_function
+
 import os
 import os.path
 import tempfile
@@ -259,7 +259,7 @@ def get_install_directory(force = False):
     """
     from askbot.deployment import messages
     where_to_deploy_msg = messages.WHERE_TO_DEPLOY
-    directory = raw_input(where_to_deploy_msg + ' ')
+    directory = input(where_to_deploy_msg + ' ')
 
     if directory.strip() == '':
         return None

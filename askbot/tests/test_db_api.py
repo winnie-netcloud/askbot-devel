@@ -61,7 +61,7 @@ class DBApiTests(AskbotTestCase):
     def test_flag_question(self):
         self.user.set_status('m')
         self.user.flag_post(self.question)
-        self.assertEquals(
+        self.assertEqual(
             self.user.get_flags().count(),
             1
         )
@@ -70,7 +70,7 @@ class DBApiTests(AskbotTestCase):
         self.post_answer()
         self.user.set_status('m')
         self.user.flag_post(self.answer)
-        self.assertEquals(
+        self.assertEqual(
             self.user.get_flags().count(),
             1
         )
@@ -112,9 +112,9 @@ class DBApiTests(AskbotTestCase):
     def test_post_unicode_question(self):
         """there was a bug that caused this to raise a db error"""
         self.user.post_question(
-            tags=u'\u043c\u043e\u0440\u0435',
-            body_text=u'\u041f\u043e\u0447\u0435\u043c\u0443 \u043c\u043e\u0440\u0435 \u0441\u0438\u043d\u0435\u0435? \u043e\u043f\u044f\u0442\u044c \u0436\u0435, \u0431\u044b\u043b\u043e \u0431\u044b \u043f\u0440\u0430\u043a\u0442\u0438\u0447\u043d\u0435\u0435 \u0435\u0441\u043b\u0438 \u0431\u044b \u043e\u043d\u043e \u0431\u044b\u043b\u043e \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0435, \u043c\u043e\u0436\u043d\u043e \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0437\u0443 \u0440\u0430\u0437\u0433\u043b\u044f\u0434\u0435\u0442\u044c \u0434\u043d\u043e.',
-            title=u'\u041f\u043e\u0447\u0435\u043c\u0443 \u043c\u043e\u0440\u0435 \u0441\u0438\u043d\u0435\u0435?'
+            tags='\u043c\u043e\u0440\u0435',
+            body_text='\u041f\u043e\u0447\u0435\u043c\u0443 \u043c\u043e\u0440\u0435 \u0441\u0438\u043d\u0435\u0435? \u043e\u043f\u044f\u0442\u044c \u0436\u0435, \u0431\u044b\u043b\u043e \u0431\u044b \u043f\u0440\u0430\u043a\u0442\u0438\u0447\u043d\u0435\u0435 \u0435\u0441\u043b\u0438 \u0431\u044b \u043e\u043d\u043e \u0431\u044b\u043b\u043e \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0435, \u043c\u043e\u0436\u043d\u043e \u0431\u044b\u043b\u043e \u0441\u0440\u0430\u0437\u0443 \u0440\u0430\u0437\u0433\u043b\u044f\u0434\u0435\u0442\u044c \u0434\u043d\u043e.',
+            title='\u041f\u043e\u0447\u0435\u043c\u0443 \u043c\u043e\u0440\u0435 \u0441\u0438\u043d\u0435\u0435?'
         )
 
     def test_post_bodyless_question(self):
@@ -123,7 +123,7 @@ class DBApiTests(AskbotTestCase):
             title = 'aeuaouaousaotuhao',
             tags = 'test'
         )
-        self.assertEquals(q.text.strip(), '')
+        self.assertEqual(q.text.strip(), '')
 
     def test_reveal_asker_identity(self):
         q = self.ask_anonymous_question()
@@ -163,7 +163,7 @@ class DBApiTests(AskbotTestCase):
         self.user.delete_answer(self.answer)
         self.assert_post_is_deleted(self.answer)
         saved_question = models.Post.objects.get_questions().get(id = self.question.id)
-        self.assertEquals(0, saved_question.thread.answer_count)
+        self.assertEqual(0, saved_question.thread.answer_count)
 
     def test_restore_answer(self):
         self.post_answer()
@@ -188,12 +188,12 @@ class DBApiTests(AskbotTestCase):
     def test_unused_tag_is_not_auto_deleted(self):
         self.user.retag_question(self.question, tags='one-tag')
         tag = models.Tag.objects.get(name='one-tag')
-        self.assertEquals(tag.used_count, 1)
-        self.assertEquals(tag.deleted, False)
+        self.assertEqual(tag.used_count, 1)
+        self.assertEqual(tag.deleted, False)
         self.user.retag_question(self.question, tags='two-tag')
 
         count = models.Tag.objects.filter(name='one-tag').count()
-        self.assertEquals(count, 1)
+        self.assertEqual(count, 1)
 
     @with_settings(MAX_TAG_LENGTH=200, MAX_TAGS_PER_POST=50)
     def test_retag_tags_too_long_raises(self):
@@ -231,7 +231,7 @@ class UserLikeTagTests(AskbotTestCase):
             reason = item[0]
             mt = models.MarkedTag(user = self.user, tag = tag, reason = reason)
             mt.save()
-            self.assertEquals(
+            self.assertEqual(
                 self.user.has_affinity_to_question(
                     question = self.question,
                     affinity_type = item[1]
@@ -265,7 +265,7 @@ class UserLikeTagTests(AskbotTestCase):
         askbot_settings.update('USE_WILDCARD_TAGS', True)
 
     def assert_affinity_is(self, affinity_type, expectation):
-        self.assertEquals(
+        self.assertEqual(
             self.user.has_affinity_to_question(
                 question = self.question,
                 affinity_type = affinity_type
@@ -334,7 +334,7 @@ class GlobalTagSubscriberGetterTests(AskbotTestCase):
             tag_mark_reason = reason,
             subscription_records = subscriptions
         )
-        self.assertEquals(actual_subscribers, expected_subscribers)
+        self.assertEqual(actual_subscribers, expected_subscribers)
 
     def test_nobody_likes_any_tags(self):
         """no-one had marked tags, so the set
@@ -429,17 +429,17 @@ class CommentTests(AskbotTestCase):
         self.other_user.upvote(self.comment)
         models.Post.objects.precache_comments(for_posts=[self.question], visitor = self.other_user)
         comments = self.question._cached_comments
-        self.assertEquals(len(comments), 1)
-        self.assertEquals(comments[0].upvoted_by_user, True)
-        self.assertEquals(comments[0].is_upvoted_by(self.other_user), True)
+        self.assertEqual(len(comments), 1)
+        self.assertEqual(comments[0].upvoted_by_user, True)
+        self.assertEqual(comments[0].is_upvoted_by(self.other_user), True)
 
     def test_other_user_can_cancel_upvote(self):
         self.test_other_user_can_upvote_comment()
         comment = models.Post.objects.get_comments().get(id = self.comment.id)
-        self.assertEquals(comment.points, 1)
+        self.assertEqual(comment.points, 1)
         self.other_user.upvote(comment, cancel = True)
         comment = models.Post.objects.get_comments().get(id = self.comment.id)
-        self.assertEquals(comment.points, 0)
+        self.assertEqual(comment.points, 0)
 
 class GroupTests(AskbotTestCase):
     def setUp(self):

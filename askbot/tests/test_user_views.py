@@ -4,8 +4,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from mock import Mock
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 
 class UserViewsTests(AskbotTestCase):
 
@@ -24,17 +24,17 @@ class UserViewsTests(AskbotTestCase):
         self.assertEqual(isinstance(response, HttpResponseRedirect), True)
 
         url = response['location']
-        parsed_url = urlparse.urlparse(url)
+        parsed_url = urllib.parse.urlparse(url)
 
         self.assertEqual(parsed_url.path, reverse('user_signin'))
 
-        next = dict(urlparse.parse_qsl(parsed_url.query))['next']
-        next_url = urllib.unquote(next)
-        parsed_url = urlparse.urlparse(next_url)
+        next = dict(urllib.parse.parse_qsl(parsed_url.query))['next']
+        next_url = urllib.parse.unquote(next)
+        parsed_url = urllib.parse.urlparse(next_url)
 
         self.assertEqual(parsed_url.path, request.path)
 
-        query = dict(urlparse.parse_qsl(parsed_url.query))
+        query = dict(urllib.parse.parse_qsl(parsed_url.query))
         self.assertEqual(set(query.keys()), set(['foo', 'abra']))
         self.assertEqual(set(query.values()), set(['bar', 'cadabra']))
         self.assertEqual(query['abra'], 'cadabra')

@@ -2,7 +2,7 @@
 copy from https://gist.githubusercontent.com/anonymous/2204527/
 http://stackoverflow.com/a/9871358/110274
 """
-from __future__ import print_function
+
 from unicodedata import *
 
 script_data = {
@@ -589,10 +589,10 @@ def _compile_scripts_txt():
     names = []
     cats = []
 
-    import urllib2, re, textwrap
+    import urllib.request, urllib.error, urllib.parse, re, textwrap
 
     url = 'http://www.unicode.org/Public/UNIDATA/Scripts.txt'
-    f = urllib2.urlopen(url)
+    f = urllib.request.urlopen(url)
     for ln in f:
         p = re.findall(r'([0-9A-F]+)(?:\.\.([0-9A-F]+))?\W+(\w+)\s*#\s*(\w+)', ln)
         if p:

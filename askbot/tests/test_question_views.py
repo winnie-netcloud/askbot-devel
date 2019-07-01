@@ -31,7 +31,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         response2 = self.client.get(response1['location'])
         dom = BeautifulSoup(response2.content, 'html5lib')
         title = dom.find('h1').text
-        self.assertTrue(unicode(const.POST_STATUS['private']) in title)
+        self.assertTrue(str(const.POST_STATUS['private']) in title)
         question = models.Thread.objects.get()
         self.assertEqual(question.title, self.qdata['title'])
         self.assertFalse(models.Group.objects.get_global_group() in set(question.groups.all()))
@@ -44,16 +44,16 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         #private question link is not shown on the main page
         #to unauthorized users
         response = self.client.get(reverse('questions'))
-        self.assertFalse(self.qdata['title'] in response.content)
+        self.assertFalse(self.qdata['title'] in str(response.content))
         #private question link is not shown on the poster profile
         #to the unauthorized users
         response = self.client.get(self.user.get_profile_url())
-        self.assertFalse(self.qdata['title'] in response.content)
+        self.assertFalse(self.qdata['title'] in str(response.content))
 
     def test_publish_private_question(self):
         question = self.post_question(user=self.user, is_private=True)
         title = question.thread.get_title()
-        self.assertTrue(unicode(const.POST_STATUS['private']) in title)
+        self.assertTrue(str(const.POST_STATUS['private']) in title)
         data = self.qdata
         #data['post_privately'] = 'false'
         data['select_revision'] = 'false'
@@ -71,12 +71,12 @@ class PrivateQuestionViewsTests(AskbotTestCase):
 
         self.client.logout()
         response = self.client.get(question.get_absolute_url())
-        self.assertTrue('edited question text' in response.content)
+        self.assertTrue(b'edited question text' in response.content)
 
     def test_privatize_public_question(self):
         question = self.post_question(user=self.user)
         title = question.thread.get_title()
-        self.assertFalse(unicode(const.POST_STATUS['private']) in title)
+        self.assertFalse(str(const.POST_STATUS['private']) in title)
         data = self.qdata
         data['post_privately'] = 'checked'
         data['select_revision'] = 'false'
@@ -88,7 +88,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         dom = BeautifulSoup(response2.content, 'html5lib')
         title = dom.find('h1').text
         self.assertFalse(models.Group.objects.get_global_group() in set(question.groups.all()))
-        self.assertTrue(unicode(const.POST_STATUS['private']) in title)
+        self.assertTrue(str(const.POST_STATUS['private']) in title)
 
     def test_private_checkbox_is_on_when_editing_private_question(self):
         question = self.post_question(user=self.user, is_private=True)
@@ -141,11 +141,11 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         user2 = self.create_user('user2')
         self.client.login(user_id=user2.id, method='force')
         response = self.client.get(self.question.get_absolute_url())
-        self.assertFalse('some answer text' in response.content)
+        self.assertFalse(b'some answer text' in response.content)
 
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertFalse('some answer text' in response.content)
+        self.assertFalse(b'some answer text' in response.content)
 
     def test_private_checkbox_is_on_when_editing_private_answer(self):
         answer = self.post_answer(
@@ -183,7 +183,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         self.assertTrue(models.Group.objects.get_global_group() in answer.groups.all())
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertTrue('edited answer text' in response.content)
+        self.assertTrue(b'edited answer text' in response.content)
 
 
     def test_privatize_public_answer(self):
@@ -202,4 +202,4 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         #check that countent is not seen by an anonymous user
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertFalse('edited answer text' in response.content)
+        self.assertFalse(b'edited answer text' in response.content)

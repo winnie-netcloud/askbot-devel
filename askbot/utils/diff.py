@@ -1,6 +1,6 @@
 """HTML Diff: http://www.aaronsw.com/2002/diff
 Rough code, badly documented. Send me comments and patches."""
-from __future__ import print_function
+
 
 __author__ = 'Aaron Swartz <me@aaronsw.com>'
 __copyright__ = '(C) 2003 Aaron Swartz. GNU GPL 2.'
@@ -34,7 +34,7 @@ def textDiff(a, b,
         elif e[0] == "equal":
             out.append(''.join(b[e[3]:e[4]]))
         else:
-            raise "Um, something's broken. I didn't expect a '" + `e[0]` + "'."
+            raise "Um, something's broken. I didn't expect a '" + repr(e[0]) + "'."
     return ''.join(out)
 
 def html2list(x, b=0):
@@ -66,7 +66,7 @@ def html2list(x, b=0):
             else:
                 cur += c
     out.append(cur)
-    return filter(lambda x: x is not '', out)
+    return [x for x in out if x is not '']
 
 if __name__ == '__main__':
     import sys

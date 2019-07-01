@@ -3,6 +3,8 @@ import datetime
 import os
 import re
 import random
+from typing import List
+
 import simplejson
 import time
 import warnings
@@ -105,7 +107,7 @@ def is_iterable(thing):
     #pylint: disable=missing-docstring
     if hasattr(thing, '__iter__'):
         return True
-    return isinstance(thing, basestring)
+    return isinstance(thing, str)
 
 BOT_REGEX = re.compile(
     r'bot|http|\.com|crawl|spider|python|curl|yandex'
@@ -191,7 +193,7 @@ def setup_paginator(context):
     if context["is_paginated"]:
         # initialize variables
         in_leading_range = in_trailing_range = False
-        pages_outside_leading_range = pages_outside_trailing_range = range(0)
+        pages_outside_leading_range = pages_outside_trailing_range = list(range(0))
 
         if context["pages"] <= LEADING_PAGE_RANGE_DISPLAYED:
             in_leading_range = in_trailing_range = True
@@ -255,11 +257,12 @@ def list_directory_files(dir_path):
     including those located inside nested directories,
     returned file paths include the directory paths"""
     file_paths = list()
-    def handler(_, directory, file_names):
+    def handler(root: str, directories: List[str], file_names: List[str]):
         for file_name in file_names:
-            file_path = os.path.join(directory, file_name)
+            file_path = os.path.join(root, file_name)
             file_paths.append(file_path)
-    os.path.walk(dir_path, handler, None)
+    for elem in os.walk(dir_path):
+        handler(*elem)
     return file_paths
 
 

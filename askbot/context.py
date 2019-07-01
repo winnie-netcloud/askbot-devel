@@ -50,7 +50,7 @@ def application_settings(request):
 
     if my_settings['EDITOR_TYPE'] == 'tinymce':
         tinymce_plugins = settings.TINYMCE_DEFAULT_CONFIG.get('plugins', '').split(',')
-        my_settings['TINYMCE_PLUGINS'] = map(lambda v: v.strip(), tinymce_plugins)
+        my_settings['TINYMCE_PLUGINS'] = [v.strip() for v in tinymce_plugins]
         my_settings['TINYMCE_EDITOR_DESELECTOR'] = settings.TINYMCE_DEFAULT_CONFIG['editor_deselector']
         my_settings['TINYMCE_CONFIG_JSON'] = simplejson.dumps(settings.TINYMCE_DEFAULT_CONFIG)
     else:
@@ -107,9 +107,7 @@ def application_settings(request):
         groups_data = list(groups.values('id', 'name'))
 
         # sort groups_data alphanumerically, but case-insensitive
-        groups_data = sorted(
-            groups_data,
-            lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+        groups_data = sorted(groups_data, key=lambda x: x['name'].lower())
 
         # insert data for the global group at the first position
         groups_data.insert(0, {'id': global_group.id, 'name': global_group.name})

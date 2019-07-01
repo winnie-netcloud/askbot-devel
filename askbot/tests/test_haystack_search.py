@@ -65,8 +65,8 @@ class HaystackSearchTests(AskbotTestCase):
         #title search
         title_search_qs = models.Thread.objects.get_for_query('title')
         title_search_qs_2  = models.Thread.objects.get_for_query('Nome')
-        self.assertEquals(title_search_qs.count(), 2)
-        self.assertEquals(title_search_qs_2.count(), 1)
+        self.assertEqual(title_search_qs.count(), 2)
+        self.assertEqual(title_search_qs_2.count(), 1)
 
     @skipIf('haystack' not in settings.INSTALLED_APPS,
         'Haystack not setup')
@@ -74,21 +74,21 @@ class HaystackSearchTests(AskbotTestCase):
 
         #bodysearch
         body_search_qs = models.Thread.objects.get_for_query('Lorem')
-        self.assertEquals(body_search_qs.count(), 2)
+        self.assertEqual(body_search_qs.count(), 2)
         body_search_qs_2 = models.Thread.objects.get_for_query('steps')
-        self.assertEquals(body_search_qs_2.count(), 1)
+        self.assertEqual(body_search_qs_2.count(), 1)
 
     @skipIf('haystack' not in settings.INSTALLED_APPS,
         'Haystack not setup')
     def test_user_profile_search(self):
         #must return pinocho
         user_profile_qs = models.get_users_by_text_query('wood')
-        self.assertEquals(user_profile_qs.count(), 1)
+        self.assertEqual(user_profile_qs.count(), 1)
 
         #returns both gepeto and pinocho because gepeto nickname
         #and gepeto name in pinocho's profile
         user_profile_qs = models.get_users_by_text_query('gepeto')
-        self.assertEquals(user_profile_qs.count(), 2)
+        self.assertEqual(user_profile_qs.count(), 2)
 
     @skipIf('haystack' not in settings.INSTALLED_APPS,
         'Haystack not setup')

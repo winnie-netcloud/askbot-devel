@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from askbot import models
 from askbot.conf import settings as askbot_settings
 from askbot.utils.console import ProgressBar

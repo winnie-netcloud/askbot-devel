@@ -147,7 +147,7 @@ class OnScreenUpdateNotificationTests(TestCase):
 
     def assertNewResponseCountsEqual(self, counts_vector):
         self.reload_users()
-        self.assertEquals(
+        self.assertEqual(
             [
                 self.u11.new_response_count,
                 self.u12.new_response_count,
@@ -167,7 +167,7 @@ class OnScreenUpdateNotificationTests(TestCase):
 
     def assertSeenResponseCountsEqual(self, counts_vector):
         self.reload_users()
-        self.assertEquals(
+        self.assertEqual(
             [
                 self.u11.seen_response_count,
                 self.u12.seen_response_count,

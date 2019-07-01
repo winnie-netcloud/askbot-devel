@@ -1,7 +1,7 @@
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.template.backends.base import BaseEngine
-from askbot.utils.loading import load_module
+from askbot.utils.loading import load_function
 from django_jinja.base import dict_from_context
 
 try:
@@ -48,7 +48,7 @@ class Template(object):
     def load_context_processors(cls, paths):
         processors = list()
         for path in paths:
-            processors.append(load_module(path))
+            processors.append(load_function(path))
         return processors
 
     @classmethod
