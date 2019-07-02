@@ -613,6 +613,9 @@ class QuestionPageRedirectTests(AskbotTestCase):
         self.c.save()
 
     def test_show_bare_question(self):
+        self.q.old_question_id = 101
+        self.q.save()
+
         resp = self.client.get(self.q.get_absolute_url())
         self.assertEqual(200, resp.status_code)
         self.assertEqual(self.q, resp.context['question'])
@@ -635,6 +638,9 @@ class QuestionPageRedirectTests(AskbotTestCase):
         self.assertEqual(self.q, resp.context['question'])
 
     def test_show_answer(self):
+        self.q.old_question_id = 101
+        self.q.save()
+
         resp = self.client.get(self.a.get_absolute_url())
         self.assertEqual(200, resp.status_code)
         self.assertEqual(self.q, resp.context['question'])
