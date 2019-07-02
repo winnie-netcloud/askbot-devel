@@ -144,7 +144,8 @@ class ExportUserDataTests(AskbotTestCase):
         self.assertTrue(os.path.isfile(json_file))
 
         # test: load json
-        json_data = json.loads(open(json_file).read())
+        with open(json_file) as f:
+            json_data = json.loads(f.read())
         # test: validate question
         q_data = json_data['questions'][0]
         thread = question.thread
