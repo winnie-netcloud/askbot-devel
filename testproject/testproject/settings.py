@@ -172,7 +172,7 @@ INSTALLED_APPS = (
     'robots',
     'django_countries',
     'djcelery',
-    'djkombu',
+    'kombu.transport.django',
     'followit',
     'tinymce',
     'askbot.deps.group_messaging',
@@ -232,7 +232,7 @@ ALLOW_UNICODE_SLUGS = False
 ASKBOT_USE_STACKEXCHANGE_URLS = False #mimic url scheme of stackexchange
 
 #Celery Settings
-BROKER_TRANSPORT = "djkombu.transport.DatabaseTransport"
+BROKER_TRANSPORT = "kombu.transport.django.Transport"
 CELERY_ALWAYS_EAGER = True
 
 import djcelery

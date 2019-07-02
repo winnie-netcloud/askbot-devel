@@ -1,4 +1,5 @@
 factory_boy
 coverage
 dj-database-url
+-e git+https://github.com/dcollinsn/lamson#egg=lamson
 django-lamson

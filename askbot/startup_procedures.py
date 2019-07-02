@@ -999,11 +999,6 @@ def test_versions():
     """inform of version incompatibilities, where possible"""
     errors = list()
     py_ver = sys.version_info
-    # python3 will not work
-    if py_ver[0] == 3:
-        errors.append(
-            'Askbot does not yet support Python3, please use '
-            'the latest release of Python 2.x')
 
     dj_ver = django.VERSION
     upgrade_msg = 'About upgrades, please read http://askbot.org/doc/upgrade.html'
