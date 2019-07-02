@@ -2,7 +2,7 @@
 {% import "macros.html" as macros %}
 <div id="tagSelector" class="box">
     <h2>{% trans %}Interesting tags{% endtrans %}</h2>
-    {{ 
+    {{
         macros.tag_list_widget(
             interesting_tag_names,
             deletable = True,
@@ -28,7 +28,7 @@
             search_state = search_state
         )
     }}
-    {# todo: add this via javascript 
+    {# todo: add this via javascript
         "remove '%(tag_name)s' from the list of ignored tags"|
         format(tag_name = tag_name)
     #}
@@ -46,7 +46,7 @@
                 search_state = search_state
             )
         }}
-        {# todo: add this via javascript 
+        {# todo: add this via javascript
             "remove '%(tag_name)s' from the list of ignored tags"|
             format(tag_name = tag_name)
         #}
@@ -78,11 +78,9 @@
             }}
             {% if request.user.is_authenticated() %}
             <p>
-                <a 
-                    href="{% 
-                        url user_profile 
-                        request.user.id, request.user.username|slugify 
-                    %}?sort=email_subscriptions"
+                <a
+                    href="{{ url('user_profile', request.user.id, request.user.username|slugify)
+                        }}?sort=email_subscriptions"
                 >{% trans %}Change frequency of emails{% endtrans %}</a>
             </p>
             {% endif %}

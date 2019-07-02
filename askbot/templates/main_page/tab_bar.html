@@ -1,5 +1,4 @@
 {% import "macros.html" as macros %}
-{% load extra_filters_jinja %}
 {% cache 0 "scope_sort_tabs" search_tags request.user author_name scope sort query context.page language_code %}
 {% if settings.RSS_ENABLED %}
 <a class="rss" href="{{ feed_url }}"

@@ -1,5 +1,5 @@
 {% extends "one_column_body.html" %}
-{% block title %}{% spaceless %}{% trans %}Confirm email address{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}Confirm email address{% endtrans %}{% endfilter %}{% endblock %}
 {% block content %}
     <h1 class="section-title">{% trans %}Confirm email address{% endtrans %}</h1>
     <label for="validation_code">

@@ -10,7 +10,7 @@
 {% if settings.USE_CUSTOM_CSS %}
     {# can't compress yet because this comes from live settings #}
     <link
-        href="{% url "custom_css" %}?v={{ settings.MEDIA_RESOURCE_REVISION }}"
+        href="{{ url('custom_css') }}?v={{ settings.MEDIA_RESOURCE_REVISION }}"
         rel="stylesheet"
         type="text/css"
     />

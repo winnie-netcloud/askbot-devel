@@ -2,7 +2,7 @@
 {% import "macros.html" as macros %}
 {%from "macros.html" import gravatar %}
 <!-- template badge.html -->
-{% block title %}{% spaceless %}{% trans name=badge.get_name() %}{{name}}{% endtrans %} - {% trans %}Badge{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans name=badge.get_name() %}{{name}}{% endtrans %} - {% trans %}Badge{% endtrans %}{% endfilter %}{% endblock %}
 {% block content %}
 <h1 class="section-title">{% trans name=badge.get_name() %}Badge "{{name}}"{% endtrans %}</h1>
     <p>

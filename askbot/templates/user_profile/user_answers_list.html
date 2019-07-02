@@ -6,9 +6,9 @@
         </span>
     </a>
     <div class="answer-link">
-        {% spaceless %}
-        <a href="{% url question top_answer.thread._question_post().id %}{{ top_answer.thread.title|slugify }}#{{top_answer.id}}">{{ top_answer.thread.title|escape }}</a>
-        {% endspaceless %}
+        {% filter trim %}
+	<a href="{{ url('question', top_answer.thread._question_post().id) }}{{ top_answer.thread.title|slugify }}#{{top_answer.id}}">{{ top_answer.thread.title|escape }}</a>
+        {% endfilter %}
     </div>
 </div>
 {% endfor %}

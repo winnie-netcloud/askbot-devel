@@ -6,7 +6,7 @@
 {% if result == 'success' %}{# success|ready|bad_input|bad_key|key_resent|error #}
     <p>{% trans %}Successfully unsubscribed.{% endtrans %}</p>
 {% elif result == 'ready' %}
-    <form action={% url 'user_unsubscribe' %} method="post">{% csrf_token %}
+    <form action={{ url('user_unsubscribe') }} method="post">{% csrf_token %}
         {{ unsubscribe_form.key }}{{ unsubscribe_form.email }}
         <input type="submit" value="{% trans %}Yes, unsubscribe{% endtrans %}" />
     </form>
@@ -18,7 +18,7 @@
     </p>
 {% elif result == 'bad_key' %}
     <p>{% trans %}The unsubscribe key sent with the link had expired.{% endtrans %}</p>
-    <form action="{% url 'user_unsubscribe' %}" method="post">{% csrf_token %}
+    <form action="{{ url('user_unsubscribe') }}" method="post">{% csrf_token %}
         {{ unsubscribe_form.key }}{{ unsubscribe_form.email }}
         <input type="submit" name="resend_key" value="{% trans %}Resend unsubscribe link{% endtrans %}" />
     </form>

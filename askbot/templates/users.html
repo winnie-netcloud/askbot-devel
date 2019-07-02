@@ -5,7 +5,7 @@
 {% endif %}
 {% import "macros.html" as macros %}
 <!-- users.html -->
-{% block title %}{% spaceless %}{% trans %}Users{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}Users{% endtrans %}{% endfilter %}{% endblock %}
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" href="{{ '/wmd/wmd.css'|media }}" />
 {% endblock %}
@@ -24,7 +24,7 @@
             <span class="label">{% trans %}Select/Sort by &raquo;{% endtrans %}</span>
             {% for a_group in user_groups %}
                 <a
-                    href="{% url users_by_group group_id=a_group.id, group_slug=a_group.name|slugify %}"
+                    href="{{ url('users_by_group', group_id=a_group.id, group_slug=a_group.name|slugify) }}"
                     {% if group.name == a_group.name  %}class="on"{% endif %}
                     title="{% trans name=a_group.name|escape %}people in group {{name}}{% endtrans %}"
                 ><span>{{ a_group.name|replace('-',' ')|escape }}</span></a>
@@ -83,12 +83,12 @@
     <script type="text/javascript">
         var Attacklab = Attacklab || {};
         Attacklab.wmd = 1;{# a trick to launch wmd manually #}
-        askbot['urls']['upload'] = '{% url upload %}';
-        askbot['urls']['load_object_description'] = '{% url load_object_description %}';
-        askbot['urls']['save_object_description'] = '{% url save_object_description %}';
-        askbot['urls']['save_group_logo_url'] = '{% url save_group_logo_url %}';
-        askbot['urls']['delete_group_logo_url'] = '{% url delete_group_logo %}';
-        askbot['urls']['join_or_leave_group'] = '{% url join_or_leave_group %}';
+        askbot['urls']['upload'] = '{{ url('upload') }}';
+        askbot['urls']['load_object_description'] = '{{ url('load_object_description') }}';
+        askbot['urls']['save_object_description'] = '{{ url('save_object_description') }}';
+        askbot['urls']['save_group_logo_url'] = '{{ url('save_group_logo_url') }}';
+        askbot['urls']['delete_group_logo_url'] = '{{ url('delete_group_logo') }}';
+        askbot['urls']['join_or_leave_group'] = '{{ url('join_or_leave_group') }}';
     </script>
     {% compress js %}
     <script type="text/javascript" src="{{ '/jslib/editor.js'|media }}"></script>

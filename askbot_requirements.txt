@@ -1,6 +1,5 @@
 --trusted-host github.com
 Jinja2==2.10
-Coffin==2.0.1
 django-appconf
 akismet==1.0.1
 beautifulsoup4<=4.7.1

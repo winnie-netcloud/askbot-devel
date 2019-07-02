@@ -7,8 +7,8 @@
     <script type="text/javascript" src="{{ '/js/jquery-openid/changepasswordform.js'|media }}"></script>
 {% endcompress %}
 <script type="text/javascript">
-    askbot['urls']['changePassword'] = '{% url change_password %}';
-    askbot['urls']['deleteLoginMethod'] = '{% url delete_login_method %}';
+    askbot['urls']['changePassword'] = '{{ url('change_password') }}';
+    askbot['urls']['deleteLoginMethod'] = '{{ url('delete_login_method') }}';
     askbot['auth'] = {};
     askbot['auth']['extraTokenName'] = {};
     askbot['auth']['providerCount'] = {{ existing_login_methods|length }};

@@ -2,7 +2,7 @@
 {% import "authopenid/authopenid_macros.html" as login_macros %}
 {% from "macros.html" import timeago %}
 <!-- signin.html -->
-{% block title %}{% spaceless %}{% trans %}User login{% endtrans %}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{% trans %}User login{% endtrans %}{% endfilter %}{% endblock %}
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ "/style/openid.css"|media }}"/>
 {% endblock %}
@@ -37,7 +37,7 @@
         <p class="warning">{{ openid_error_message }}</p>
     {% endif %}
     {% if view_subtype != 'email_sent' %}
-    <form id="signin-form" method="post" action="{% url widget_signin %}">{% csrf_token %}
+    <form id="signin-form" method="post" action="{{ url('widget_signin') }}">{% csrf_token %}
         {# in this branch - the real signin view we display the login icons
             here we hide the local login button only if admin
             wants to always show the password login form - then
@@ -87,7 +87,7 @@
                 <p id="local_login_buttons">
                     <input name="login_with_password" type="submit" value="{% trans %}Sign in{% endtrans %}" />
                     {% if settings.USE_LDAP_FOR_PASSWORD_LOGIN == False %}
-                    <a class="create-password-account" style="vertical-align:middle" href="{% url user_signup_with_password %}?login_provider=local">{% trans %}Create a password-protected account{% endtrans %}</a>
+                    <a class="create-password-account" style="vertical-align:middle" href="{{ url('user_signup_with_password') }}?login_provider=local">{% trans %}Create a password-protected account{% endtrans %}</a>
                     {% endif %}
                 </p>
             {% elif settings.USE_LDAP_FOR_PASSWORD_LOGIN == False %}
@@ -160,8 +160,8 @@
     {% endif %}
     {% endif %}
     {% if view_subtype != 'email_sent' %}
-        {% if user.is_anonymous() and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
-        <form id="account-recovery-form" action="{% url user_account_recover %}" method="post">{% csrf_token %}
+        {% if user.is_anonymous and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
+        <form id="account-recovery-form" action="{{ url('user_account_recover') }}" method="post">{% csrf_token %}
             <h2 id='account-recovery-heading'>{% trans %}Having trouble signing in?{% endtrans %}</h2>
             {% if account_recovery_form.email.errors %}
             <p class="error">{{ account_recovery_form.email.errors[0] }}</p>

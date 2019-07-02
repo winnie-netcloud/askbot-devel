@@ -10,11 +10,11 @@
         <div class='avatar'>
             {{ macros.gravatar(view_user, 128) }}
             {% if request.user.pk == view_user.pk %}
-                <p><a 
+                <p><a
                     {% if support_custom_avatars %}
-                        href="{% url askbot_avatar_show_list view_user.id %}"
+                        href="{{ url('askbot_avatar_show_list',  view_user.id ) }}"
                     {% else %}
-                        href="{% url faq %}#gravatar"
+                        href="{{ url('faq') }}#gravatar"
                     {% endif %}
                 >{% trans %}change picture{% endtrans %}</a></p>
             {% endif %}
@@ -38,7 +38,7 @@
                 data-min-lines="10"
                 data-on-state-text="{% trans %}following{% endtrans %}"
                 data-off-state-text="{% trans %}follow{% endtrans %}"
-                data-toggle-url="{% url 'toggle_follow_object' model_name='user', object_id=view_user.id %}"
+		data-toggle-url="{{ url('toggle_follow_object', model_name='user', object_id=view_user.id) }}"
             >
                 {% if is_following %}
                     {% trans %}following{% endtrans %}
@@ -53,7 +53,7 @@
             {% if request.user.is_authenticated() and (request.user.pk == view_user.pk or request.user.is_administrator_or_moderator()) %}
             <tr>
                 <td class="user-profile-tool-links" align="left" colspan="2">
-                    <a href="{% url edit_user view_user.id %}">
+                    <a href="{{ url('edit_user',  view_user.id ) }}">
                         {% trans %}update profile{% endtrans %}
                     </a>
                     {% if settings.USE_ASKBOT_LOGIN_SYSTEM and request.user.pk == view_user.pk and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
@@ -62,7 +62,7 @@
                         </a>
                     {% endif %}
                 </td>
-            </tr>  
+            </tr>
             {% endif %}
             <tr>
                 <th colspan="2" align="left">
@@ -120,10 +120,10 @@
                     }}</td>
             </tr>
             {% endif  %}
-            {% if request.user == view_user and 
-                settings.TWITTER_SECRET and 
-                settings.TWITTER_KEY and 
-                settings.ENABLE_SHARING_TWITTER 
+            {% if request.user == view_user and
+                settings.TWITTER_SECRET and
+                settings.TWITTER_KEY and
+                settings.ENABLE_SHARING_TWITTER
             %}
                 {% include "user_profile/twitter_sharing_controls.html" %}
             {% endif %}
@@ -159,8 +159,8 @@
             <div class="js-editable"
                 id="js-user-about-{{ view_user.pk}}"
                 {# urls below are parsed and parameters added as part of request #}
-                data-get-text-url="{% url get_user_description %}?user_id={{ view_user.pk }}"
-                data-save-text-url="{% url set_user_description %}?user_id={{ view_user.pk }}"
+                data-get-text-url="{{ url('get_user_description') }}?user_id={{ view_user.pk }}"
+                data-save-text-url="{{ url('set_user_description') }}?user_id={{ view_user.pk }}"
                 data-save-text-param-name="description"
                 data-validated-text-param-name="description_html"
                 data-editor-type="{{ settings.EDITOR_TYPE }}"

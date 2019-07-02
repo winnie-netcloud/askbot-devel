@@ -213,8 +213,8 @@ body{
     {% endcompress %}
     <script type="text/javascript" charset="utf-8">
         askbot['settings']['minSearchWordLength'] = {{ min_search_word_length }};
-        askbot['urls']['apiGetQuestions'] = '{% url "api_get_questions" %}';
-        askbot['urls']['upload'] = '{% url upload %}';
+        askbot['urls']['apiGetQuestions'] = '{{ url('api_get_questions') }}';
+        askbot['urls']['upload'] = '{{ url('upload') }}';
         $(document).ready(function(){
             var searchInput = $('#id_title');
             searchInput.addClass('questionTitleInput');

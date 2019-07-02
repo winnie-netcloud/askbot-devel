@@ -7,8 +7,8 @@
     <div id="post-id-{{question.id}}" class="post-content{% if question.deleted %} deleted{% endif %}">
         <h1 class="js-editable"
             id="js-question-title-{{ question.pk}}"
-            data-get-text-url="{% url get_question_title %}?question_id={{ question.pk }}"
-            data-save-text-url="{% url set_question_title %}?question_id={{ question.pk }}"
+            data-get-text-url="{{ url('get_question_title') }}?question_id={{ question.pk }}"
+            data-save-text-url="{{ url('set_question_title') }}?question_id={{ question.pk }}"
             data-save-text-param-name="title"
             data-validated-text-param-name="title"
             data-min-lines="1"
@@ -36,8 +36,8 @@
             </div>
             <div class="js-editable"
                 id="js-post-body-{{ question.pk }}"
-                data-get-text-url="{% url get_post_body %}?post_id={{ question.pk }}"
-                data-save-text-url="{% url set_post_body %}?post_id={{ question.pk }}"
+                data-get-text-url="{{ url('get_post_body') }}?post_id={{ question.pk }}"
+                data-save-text-url="{{ url('set_post_body') }}?post_id={{ question.pk }}"
                 data-save-text-param-name="body_text"
                 data-validated-text-param-name="body_html"
                 data-min-lines="10"

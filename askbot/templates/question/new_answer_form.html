@@ -18,7 +18,7 @@
     <div class="editor-proper">
         <form id="fmanswer"
             class="js-answer-form"
-            action="{% url answer question.id %}"
+            action="{{ url('answer',  question.id ) }}"
             method="post"
             data-validated-fields="text"
             data-text-validator="askbot.validators.answerValidator"

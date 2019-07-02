@@ -1,4 +1,3 @@
-{% load compress %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -13,7 +12,7 @@
         <link
             rel="alternate"
             type="application/rss+xml"
-            href="{{ base_url }}{% url "latest_questions_feed" %}"
+            href="{{ base_url }}{{ url('latest_questions_feed') }}"
         />
         {% block before_css %}{% endblock %}
         {% include "meta/html_head_stylesheets.html" %}
@@ -52,12 +51,12 @@
         {% endif %}
         {% include "custom_footer.html" ignore missing %}
         {% include "meta/bottom_scripts.html" %}
-        {% spaceless %}
+        {% filter trim %}
         <div class="js-templates" style="display: none;">
         {% block js_templates %}
         {% endblock %}
         </div>
-        {% endspaceless %}
+        {% endfilter %}
         {% block endjs %}
         {% endblock %}
         <script type="text/javascript">

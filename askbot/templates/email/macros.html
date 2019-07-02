@@ -20,7 +20,7 @@
         is_leaf_post=False
     )
 %}
-    {% spaceless %}
+    {% filter trim %}
     {{ start_quote(quote_level) }}
 
         {% set author %}{{ emailed_user_info(recipient, post.author, post.is_anonymous) }}{% endset %}
@@ -73,7 +73,7 @@
         {{ post.html }}
 
     {{ end_quote(quote_level) }}
-    {% endspaceless %}
+    {% endfilter %}
 {% endmacro %}
 
 {% macro start_quote(level = 0) %}

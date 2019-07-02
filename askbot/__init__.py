@@ -18,7 +18,6 @@ REQUIREMENTS = {
     'akismet': 'akismet==1.0.1',
     'avatar': 'django-avatar==3.1.0',
     'bs4': 'beautifulsoup4<=4.7.1',
-    'coffin': 'Coffin>=2.0',
     'compressor': 'django-compressor>=2.0,<=2.2',
     'django': 'django>=1.9,<1.12',
     'django_countries': 'django-countries>=3.3',
@@ -60,7 +59,6 @@ try:
     from askbot.deployment.assertions import assert_package_compatibility
     assert_package_compatibility()
     patches.patch_django()
-    patches.patch_coffin()  # must go after django
 except ImportError:
     pass
 

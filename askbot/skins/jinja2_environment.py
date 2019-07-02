@@ -14,18 +14,6 @@ from django.conf import settings as django_settings
 # which is why we keep this around.
 # Commented extensions have (hopefully) been replaced by django_jinja
 
-import coffin
-
-COFFIN_EXTENSIONS = [
-    coffin.LoadExtension,
-    coffin.URLExtension,
-    #coffin.WithExtension,
-    coffin.SpacelessExtension,
-    coffin.PrefixExtension,
-    coffin.GetStaticPrefixExtension,
-    coffin.GetMediaPrefixExtension,
-    #coffin.StaticExtension
-]
 
 import askbot
 from askbot.conf import settings as askbot_settings
@@ -74,7 +62,6 @@ def factory(**options):
     # JINJA2_EXTENSIONS was a thing in Coffin. We keep it around because it
     # may be used in Askbot. Should think about deprecating its use.
     options["extensions"] = DEFAULT_EXTENSIONS \
-                          + COFFIN_EXTENSIONS  \
                           + list(django_settings.JINJA2_EXTENSIONS)
     askbot_globals = { 'settings': askbot_settings,
                        'hasattr' : hasattr

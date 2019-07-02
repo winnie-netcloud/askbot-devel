@@ -1,6 +1,6 @@
 {% extends "one_column_body.html" %}
 <!-- user.html -->
-{% block title %}{% spaceless %}{{ page_title }}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{{ page_title }}{% endfilter %}{% endblock %}
 {% block forestyle %}
 <style type="text/css">
     .history-table td { padding: 5px; }
@@ -9,9 +9,9 @@
 {% endblock %}
 {% block content %}
     <h1 class="section-title">
-        {% spaceless %}
+        {% filter trim %}
         {% trans username=view_user.username|escape %}{{username}}'s profile{% endtrans %} - {% block profilesection %}{% endblock %}
-        {% endspaceless %}
+        {% endfilter %}
     </h1>
     {% include "user_profile/user_tabs.html" %}
     <div>
@@ -24,12 +24,12 @@
         askbot['data']['viewUserName'] = '{{ view_user.username|escape }}';
         askbot['data']['viewUserId'] = {{ view_user.id }};
         askbot['data']['isExportingData'] = {{ exporting|as_js_bool }};
-        askbot['urls']['edit_group_membership'] = '{% url edit_group_membership %}';
-        askbot['urls']['getGroupsList'] = '{% url get_groups_list %}';
-        askbot['urls']['getTopAnswers'] = '{% url get_top_answers %}';
-        askbot['urls']['upload'] = '{% url "upload" %}';
-        askbot['urls']['getTodaysBackupFileName'] = '{% url get_todays_backup_file_name view_user.pk %}';
-        askbot['urls']['downloadUserData'] = '{% url download_user_data view_user.pk, "file_name" %}';
+        askbot['urls']['edit_group_membership'] = '{{ url('edit_group_membership') }}';
+        askbot['urls']['getGroupsList'] = '{{ url('get_groups_list') }}';
+        askbot['urls']['getTopAnswers'] = '{{ url('get_top_answers') }}';
+        askbot['urls']['upload'] = '{{ url('upload') }}';
+        askbot['urls']['getTodaysBackupFileName'] = '{{ url('get_todays_backup_file_name',  view_user.pk ) }}';
+        askbot['urls']['downloadUserData'] = '{{ url('download_user_data',  view_user.pk, "file_name" ) }}';
 
         {% if page_size %}
             askbot['data']['userPostsPageSize'] = {{ page_size }};

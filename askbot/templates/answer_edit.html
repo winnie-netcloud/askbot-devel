@@ -1,7 +1,7 @@
 {% extends "two_column_body.html" %}
 {% import "macros.html" as macros %}
 <!-- template answer_edit.html -->
-{% block title %}{% spaceless %}{{ settings.WORDS_EDIT_ANSWER|escape }}{% endspaceless %}{% endblock %}
+{% block title %}{% filter trim %}{{ settings.WORDS_EDIT_ANSWER|escape }}{% endfilter %}{% endblock %}
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" href="{{ '/wmd/wmd.css'|media }}" />
 {% endblock %}
@@ -11,7 +11,7 @@
 [<a href="{{ answer.get_absolute_url() }}">{% trans %}back{% endtrans %}</a>]
 </div>
 <div class="ask-body">
-    <form id="fmedit" action="{% url edit_answer answer.id %}" method="post" >{% csrf_token %}
+    <form id="fmedit" action="{{ url('edit_answer',  answer.id ) }}" method="post" >{% csrf_token %}
         {% if revision_form.revision.errors %}{{ revision_form.revision.errors.as_ul() }}{% endif %}
         {{ revision_form.revision }}
         <input type="hidden" id="select_revision" name="select_revision" value="false"/>

@@ -2,7 +2,7 @@
 {% block title %}{% trans title=email.title %}Preview of email "{{ title }}"{% endtrans %}{% endblock %}
 {% block content %}
     <ol class="breadcrumb">
-        <li><a href="{% url "list_emails" %}">{% trans %}Askbot emails{% endtrans %}:</a></li>
+        <li><a href="{{ url('list_emails') }}">{% trans %}Askbot emails{% endtrans %}:</a></li>
         <li>{{ email.title }}</li>
     </ol>
     <h1>{% trans title=email.title %}Preview of email "{{ title }}"{% endtrans %}</h1>
@@ -23,8 +23,8 @@
                 {# adds content of the email to the iframe #}
                 (function() {
                     var iframe = document.getElementById('js-email-body-{{ loop.index }}');
-                    var doc = iframe.contentDocument ? 
-                            iframe.contentDocument : 
+                    var doc = iframe.contentDocument ?
+                            iframe.contentDocument :
                             (iframe.contentWindow ? iframe.contentWindow.document : iframe.document);
                     doc.write("{{ sample['body']|escapejs }}");
                     iframe.style.height = 0;

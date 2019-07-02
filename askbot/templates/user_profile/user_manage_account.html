@@ -12,7 +12,7 @@
     <p>{% trans %}Download backup files:{% endtrans %}</p>
     <ul id="data-backups" style="list-style: none; margin-left: 0">
         {% for file_name in backup_file_names %} 
-        <li><a href="{% url download_user_data id=view_user.pk, file_name=file_name %}">{{ file_name }}</a></li>
+	<li><a href="{{ url('download_user_data', id=view_user.pk, file_name=file_name) }}">{{ file_name }}</a></li>
     {% endfor %}
     </ul>      
 </div>
