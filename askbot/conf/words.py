@@ -2,8 +2,8 @@
 General skin settings
 """
 from askbot.conf.settings_wrapper import settings
-from askbot.deps.livesettings.values import ConfigurationGroup
-from askbot.deps.livesettings import values
+from livesettings.values import ConfigurationGroup
+from livesettings import values
 from django.utils.translation import ugettext_lazy as _
 from askbot.skins import utils as skin_utils
 from askbot import const
@@ -91,7 +91,7 @@ settings.register(
 settings.register(
     values.LongStringValue(
         WORDS,
-        'WORDS_INSTRUCTION_TO_GIVE_ANSWERS',
+        'WORDS_INSTRUCTION_TO_GIVE_ANSWER',
         default=_(
             'This space is reserved only for answers. '
             'If you would like to engage in a discussion, '

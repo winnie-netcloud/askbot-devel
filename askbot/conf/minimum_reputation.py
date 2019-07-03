@@ -5,7 +5,7 @@ a variety of actions on the askbot askbot
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import REP_AND_BADGES
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 
 MIN_REP = livesettings.ConfigurationGroup(
     'MIN_REP',

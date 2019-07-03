@@ -13,7 +13,7 @@ askbot_settings.BLAH
 NOTE that at the moment there is distinction between settings
 (django settings) and askbot_settings (forum.deps.livesettings)
 
-the value will be taken from askbot.deps.livesettings database or cache
+the value will be taken from livesettings database or cache
 note that during compilation phase database is not accessible
 for the most part, so actual values are reliably available only
 at run time
@@ -25,6 +25,7 @@ import logging
 from django.conf import settings as django_settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
+from django.core.files import uploadedfile
 from django.utils.encoding import force_text
 from django.utils.functional import lazy
 from django.utils.translation import get_language
@@ -32,10 +33,10 @@ from django.utils.translation import string_concat
 from django.utils.translation import ugettext_lazy as _
 
 import askbot
-from askbot.deps.livesettings.values import SortedDotDict
-from askbot.deps.livesettings.functions import config_register
-from askbot.deps.livesettings.functions import config_get
-from askbot.deps.livesettings import signals
+from livesettings.values import SortedDotDict
+from livesettings.functions import config_register
+from livesettings.functions import config_get
+from livesettings import signals
 from askbot.utils.functions import format_setting_name
 
 
@@ -90,7 +91,7 @@ class ConfigSettings(object):
         """returns setting to the default value"""
         self.update(key, self.get_default(key))
 
-    def update(self, key, value, language_code=None):
+    def update(self, key, value: uploadedfile.UploadedFile, language_code=None):
         try:
             setting = config_get(self.__group_map[key], key)
             if setting.localized:
@@ -100,7 +101,7 @@ class ConfigSettings(object):
             setting.update(value, lang)
 
         except:
-            from askbot.deps.livesettings.models import Setting
+            from livesettings.models import Setting
             lang_postfix = '_' + get_language().upper()
             # First try localized setting
             try:
@@ -138,7 +139,7 @@ class ConfigSettings(object):
         setting_name = data[1]
 
         link = internal_link(
-            'group_settings',
+            'livesettings_group',
             setting_name,  # TODO: better use description
             kwargs={'group': group_name},
             anchor='id_%s__%s__%s' % (group_name, setting_name, get_language())
@@ -198,7 +199,7 @@ class ConfigSettings(object):
 
     @classmethod
     def precache_all_values(cls):
-        from askbot.deps.livesettings.models import Setting, LongSetting
+        from livesettings.models import Setting, LongSetting
         from django.contrib.sites.models import Site
         settings = Setting.objects.filter(site=Site.objects.get_current())
         settings = settings.select_related('site')

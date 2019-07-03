@@ -3,8 +3,8 @@ Sidebar settings
 """
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf.settings_wrapper import settings
-from askbot.deps.livesettings.values import ConfigurationGroup
-from askbot.deps.livesettings import values
+from livesettings.values import ConfigurationGroup
+from livesettings import values
 from askbot.conf.super_groups import CONTENT_AND_UI
 
 SIDEBAR_MAIN = ConfigurationGroup(

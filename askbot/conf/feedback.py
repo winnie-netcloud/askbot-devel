@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.validators import validate_email, ValidationError
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import LOGIN_USERS_COMMUNICATION
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 
 FEEDBACK = livesettings.ConfigurationGroup(
     'FEEDBACK',

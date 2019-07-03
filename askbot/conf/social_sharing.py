@@ -4,7 +4,7 @@ Social sharing settings
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import EXTERNAL_SERVICES
-from askbot.deps.livesettings.values import ConfigurationGroup, BooleanValue, \
+from livesettings.values import ConfigurationGroup, BooleanValue, \
     StringValue
 
 SOCIAL_SHARING = ConfigurationGroup(

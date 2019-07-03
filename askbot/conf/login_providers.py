@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import LOGIN_USERS_COMMUNICATION
-from askbot.deps.livesettings import values as livesettings
+from livesettings import values as livesettings
 from askbot.skins import utils as skin_utils
 from askbot.utils.loading import module_exists
 

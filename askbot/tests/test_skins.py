@@ -60,7 +60,7 @@ class SkinTests(TestCase):
                             'images',
                             'logo.gif'
                         )
-        logo_file = open(logo_src, 'r')
+        logo_file = open(logo_src, 'rb')
         new_logo = UploadedFile(file = logo_file)
         askbot_settings.update('SITE_LOGO_URL', new_logo)
         logo_url = askbot_settings.SITE_LOGO_URL
