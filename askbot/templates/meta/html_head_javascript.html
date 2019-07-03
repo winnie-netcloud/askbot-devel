@@ -2,9 +2,9 @@
 <script type="text/javascript">
     var askbot = {};
     askbot['data'] = {};
-    askbot['data']['userIsAuthenticated'] = {{ request.user.is_authenticated()|as_js_bool }};
+    askbot['data']['userIsAuthenticated'] = {{ request.user.is_authenticated|as_js_bool }};
     askbot['data']['languageCode'] = '{{ current_language_code|escapejs }}';
-    {% if request.user.is_authenticated() %}
+    {% if request.user.is_authenticated %}
         askbot['data']['userId'] = {{ request.user.id }};
         askbot['data']['userName'] = '{{ request.user.username|escapejs }}';
         askbot['data']['userEmail'] = '{{ request.user.email|escapejs }}';

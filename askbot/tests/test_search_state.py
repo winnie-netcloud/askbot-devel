@@ -1,7 +1,7 @@
 from askbot.tests.utils import AskbotTestCase
 from askbot.search.state_manager import SearchState
 import askbot.conf
-from django.core import urlresolvers
+from django.urls import reverse
 
 
 class SearchStateTests(AskbotTestCase):
@@ -257,7 +257,7 @@ class SearchStateTests(AskbotTestCase):
         self.assertEqual(ss.query_title, 'what is this?')
         self.assertTrue(ss.query_title is ss2.query_title)
 
-        self.assertEqual(ss._questions_url, urlresolvers.reverse('questions'))
+        self.assertEqual(ss._questions_url, reverse('questions'))
         self.assertTrue(ss._questions_url is ss2._questions_url)
 
     def test_deep_copy_2(self):

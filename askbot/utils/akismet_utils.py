@@ -4,7 +4,7 @@ from askbot import get_version
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.encoding import smart_str
 from askbot.utils.html import site_url
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import logging
 
 def get_user(user, request):
@@ -14,7 +14,7 @@ def get_user_param(user, param_name):
     """Returns param from the user if user is not anonymous.
     Returns `None` otherwise.
     """
-    if user.is_anonymous():
+    if user.is_anonymous:
         return None
     return getattr(user, param_name)
 

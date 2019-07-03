@@ -3,7 +3,7 @@ from askbot.search.state_manager import SearchState
 from django.test import signals
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core import management
 from django.core.cache.backends.dummy import DummyCache
 from django.core import cache
@@ -57,7 +57,7 @@ class PageLoadTestCase(AskbotTestCase):
     def setUpClass(cls):
         management.call_command('flush', verbosity=0, interactive=False)
         activate_language(settings.LANGUAGE_CODE)
-        management.call_command('askbot_add_test_content', nospam=True, verbosity=0, interactive=False)
+        management.call_command('askbot_add_test_content', verbosity=0, interactive=False)
         super(PageLoadTestCase, cls).setUpClass()
 
     @classmethod
@@ -451,7 +451,7 @@ class PageLoadTestCase(AskbotTestCase):
         self.proto_test_non_user_urls(status_code=200)
 
     @skipIf('askbot.middleware.forum_mode.ForumModeMiddleware' \
-        not in settings.MIDDLEWARE_CLASSES,
+        not in settings.MIDDLEWARE,
         'no ForumModeMiddleware set')
     @with_settings(ASKBOT_CLOSED_FORUM_MODE=True)
     def test_non_user_urls_in_closed_forum_mode(self):
@@ -523,7 +523,7 @@ class PageLoadTestCase(AskbotTestCase):
         self.proto_test_user_urls(status_code=200)
 
     @skipIf('askbot.middleware.forum_mode.ForumModeMiddleware' \
-        not in settings.MIDDLEWARE_CLASSES,
+        not in settings.MIDDLEWARE,
         'no ForumModeMiddleware set')
     @with_settings(ASKBOT_CLOSED_FORUM_MODE=True)
     def test_user_urls_in_closed_forum_mode(self):

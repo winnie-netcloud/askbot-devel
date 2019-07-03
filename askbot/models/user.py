@@ -645,7 +645,7 @@ class Group(AuthGroup):
         templates. The value must match the verbose versions of the
         openness choices!!!
         """
-        if user.is_anonymous():
+        if user.is_anonymous:
             return 'closed'
 
         # A special case - automatic global group cannot be joined or left

@@ -14,7 +14,7 @@
             href="{{ search_state.change_scope('unanswered').change_sort('answers-asc').full_url() }}"
         >{{ settings.WORDS_UNANSWERED|escape }}</a>
         {% endif %}
-        {% if request.user.is_authenticated() and settings.FOLLOWED_SCOPE_ENABLED %} 
+        {% if request.user.is_authenticated and settings.FOLLOWED_SCOPE_ENABLED %}
         <a class="scope-selector {% if scope == 'followed' %}on{% endif %}"
             href="{{ search_state.change_scope('followed').full_url() }}"
         >{% trans %}FOLLOWED{% endtrans %}</a>

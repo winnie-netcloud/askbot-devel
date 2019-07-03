@@ -7,7 +7,7 @@ from django.conf import settings as django_settings
 from django.core import management
 from django.core import serializers
 import django.core.mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.test.client import Client
 from django.utils import translation, timezone

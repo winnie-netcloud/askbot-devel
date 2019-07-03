@@ -3,7 +3,7 @@ from askbot.conf import settings as askbot_settings
 from askbot import const
 from askbot.tests.utils import AskbotTestCase
 from askbot import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 class PrivateQuestionViewsTests(AskbotTestCase):
 
@@ -40,7 +40,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         self.client.logout()
         response = self.client.get(question._question_post().get_absolute_url())
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.content, '')
+        self.assertEqual(response.content, b'')
         #private question link is not shown on the main page
         #to unauthorized users
         response = self.client.get(reverse('questions'))
@@ -99,7 +99,7 @@ class PrivateQuestionViewsTests(AskbotTestCase):
         checkbox = dom.find(
             'input', attrs={'type': 'checkbox', 'name': 'post_privately'}
         )
-        self.assertEqual(checkbox['checked'], 'checked')
+        self.assertTrue(checkbox.has_attr('checked'))
 
     def test_private_checkbox_is_off_when_editing_public_question(self):
         question = self.post_question(user=self.user)
@@ -158,7 +158,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         checkbox = dom.find(
             'input', attrs={'type': 'checkbox', 'name': 'post_privately'}
         )
-        self.assertEqual(checkbox['checked'], 'checked')
+        self.assertTrue(checkbox.has_attr('checked'))
 
     def test_privaet_checkbox_is_off_when_editing_public_answer(self):
         answer = self.post_answer(question=self.question, user=self.user)
@@ -183,7 +183,7 @@ class PrivateAnswerViewsTests(AskbotTestCase):
         self.assertTrue(models.Group.objects.get_global_group() in answer.groups.all())
         self.client.logout()
         response = self.client.get(self.question.get_absolute_url())
-        self.assertTrue(b'edited answer text' in response.content)
+        self.assertIn(b'edited answer text', response.content)
 
 
     def test_privatize_public_answer(self):

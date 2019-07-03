@@ -51,14 +51,14 @@
                 major_login_providers = major_login_providers,
                 minor_login_providers = minor_login_providers,
                 settings = settings,
-                logged_in = user.is_authenticated(),
+                logged_in = user.is_authenticated,
                 show_buttons = have_buttons
             )
         }}
           {% if use_password_login == True %}
         <fieldset id="password-fs">
             {{login_form.password_action}}
-            {% if user.is_anonymous() %}
+            {% if user.is_anonymous %}
                 {% if have_buttons %}
                     <h2 id="password-heading">
                         {% trans %}or enter your <span>user name and password</span>, then sign in{% endtrans %}
@@ -121,7 +121,7 @@
         </fieldset>
         {% endif %}
     </form>
-    {% if user.is_authenticated() and existing_login_methods and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
+    {% if user.is_authenticated and existing_login_methods and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
     <div
         id='existing-login-methods'
         {% if login_form.password_change_failed %}

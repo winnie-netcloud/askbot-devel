@@ -10,7 +10,7 @@ __version_info__ = (0, 0, 0)
 __version__ = '.'.join([str(v) for v in __version_info__])
 __author__ = "Evgeny Fadeev"
 
-import cgi
+from html import escape
 import sys
 #from pprint import pprint
 import re
@@ -118,7 +118,7 @@ class JiveConverter(object):
             text = str(text, 'utf-8')
 
         #escape any html special chars globally as in jive they can be anywhere
-        text = cgi.escape(text)
+        text = escape(text, quote=False)
         #delete "Edited by" comments
         text = re.sub(r'\n\s*Edited by:[^\n]*(\n|$)', '\n', text)
         # Standardize line endings:

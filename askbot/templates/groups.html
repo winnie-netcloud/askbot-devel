@@ -4,7 +4,7 @@
 {% block content %}
     <div id="content-header">
         <h1 class="section-title">{% trans %}Groups{% endtrans %}</h1>
-        {% if request.user.is_authenticated() %}
+        {% if request.user.is_authenticated %}
             <div class="tabBar">
                 <div class="tabsC">
                     <a id="all-groups" class="first{% if tab_name=="all-groups" %} on{% endif %}"
@@ -51,7 +51,7 @@
     <script type="text/javascript" src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/post.js'|media }}"></script>
     {% endcompress %}
-    {% if request.user.is_authenticated() %}
+    {% if request.user.is_authenticated %}
     <script type="text/javascript">
         askbot['urls']['join_or_leave_group'] = '{{ url('join_or_leave_group') }}';
         $.each($('.group-join-btn'), function(idx, elem){

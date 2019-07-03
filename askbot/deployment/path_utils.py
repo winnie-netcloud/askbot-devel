@@ -12,6 +12,8 @@ import re
 import glob
 import shutil
 import imp
+
+from askbot.deployment import messages
 from askbot.utils import console
 from askbot.deployment.template_loader import SettingsTemplate
 
@@ -49,9 +51,7 @@ def clean_directory(directory):
     directory = os.path.abspath(directory)
 
     if os.path.isfile(directory):
-        if options.verbosity >= 1 and os.path.isfile(directory):
-            print(messages.CANT_INSTALL_INTO_FILE % {'path':directory})
-        sys.exit(1)
+        print(messages.CANT_INSTALL_INTO_FILE % {'path':directory})
 
         return None
     return directory
@@ -144,7 +144,7 @@ def create_path(directory):
 def touch(file_path, times = None):
     """implementation of unix ``touch`` in python"""
     #http://stackoverflow.com/questions/1158076/implement-touch-using-python
-    fhandle = file(file_path, 'a')
+    fhandle = open(file_path, 'a')
     try:
         os.utime(file_path, times)
     finally:

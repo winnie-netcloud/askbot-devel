@@ -56,14 +56,14 @@
                 major_login_providers = major_login_providers,
                 minor_login_providers = minor_login_providers,
                 settings = settings,
-                logged_in = user.is_authenticated(),
+                logged_in = user.is_authenticated,
                 show_buttons = have_buttons
             )
         }}
           {% if use_password_login == True %}
         <fieldset id="password-fs">
             {{login_form.password_action}}
-            {% if user.is_anonymous() or settings.USE_LDAP_FOR_PASSWORD_LOGIN %}
+            {% if user.is_anonymous or settings.USE_LDAP_FOR_PASSWORD_LOGIN %}
                 {% if have_buttons %}
                     <h2 id="password-heading">
                         {% trans %}or enter your <span>user name and password</span>{% endtrans %}
@@ -138,7 +138,7 @@
         </fieldset>
         {% endif %}
     </form>
-    {% if user.is_authenticated() and existing_login_methods and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
+    {% if user.is_authenticated and existing_login_methods and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
     <div
         id='existing-login-methods'
         {% if login_form.password_change_failed %}
@@ -177,7 +177,7 @@
     {% endif %}
     {% endif %}
     {% if view_subtype != 'email_sent' %}
-        {% if user.is_anonymous() and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
+        {% if user.is_anonymous and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
         <form id="account-recovery-form" action="{{ url('user_account_recover') }}" method="post">{% csrf_token %}
             <h2 id='account-recovery-heading'>{% trans %}Having trouble signing in?{% endtrans %}</h2>
             {% if account_recovery_form.email.errors %}

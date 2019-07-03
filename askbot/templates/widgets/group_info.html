@@ -20,7 +20,7 @@
                 membership_level = user_membership_level
             )
         }}
-    {% if request.user.is_authenticated() and request.user.is_administrator() %}
+    {% if request.user.is_authenticated and request.user.is_administrator() %}
     <div class="controls">
         <a class="edit-description"
         >{% trans %}edit description{% endtrans %}</a>

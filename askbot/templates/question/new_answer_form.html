@@ -6,7 +6,7 @@
     {% endif %}
 </h2>
 <p class="message">
-{% if request.user.is_anonymous() %}
+{% if request.user.is_anonymous %}
     {{ settings.WORDS_INSTRUCTION_TO_POST_ANONYMOUSLY|safe }}
 {% elif request.user==question.author  %}
     {{ settings.WORDS_INSTRUCTION_TO_ANSWER_OWN_QUESTION|safe }}
@@ -32,8 +32,8 @@
                 {% if settings.WIKI_ON %}
                     {{ macros.checkbox_in_div(answer.wiki) }}
                 {% endif %}
-                {% if settings.GROUPS_ENABLED and 
-                    request.user.is_authenticated() and 
+                {% if settings.GROUPS_ENABLED and
+                    request.user.is_authenticated and
                     request.user.can_make_group_private_posts()
                 %}
                     {{ macros.checkbox_in_div(answer.post_privately) }}

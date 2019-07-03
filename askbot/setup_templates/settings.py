@@ -96,7 +96,7 @@ TEMPLATES = (
     },
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     #'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -155,8 +155,7 @@ INSTALLED_APPS = (
     'keyedcache',
     'robots',
     'django_countries',
-    'djcelery',
-    'kombu.transport.django',
+    'kombu.transport.memory',
     'followit',
     'tinymce',
     #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
@@ -213,11 +212,8 @@ LOGIN_REDIRECT_URL = ASKBOT_URL #adjust if needed
 ALLOW_UNICODE_SLUGS = False
 
 #Celery Settings
-BROKER_TRANSPORT = "kombu.transport.django.Transport"
+BROKER_TRANSPORT = "kombu.transport.memory.Transport"
 CELERY_ALWAYS_EAGER = True
-
-import djcelery
-djcelery.setup_loader()
 
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),

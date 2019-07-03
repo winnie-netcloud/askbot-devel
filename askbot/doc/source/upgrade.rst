@@ -164,7 +164,7 @@ do the following:
 
 * Remove whole entries `TEMPLATE_LOADERS` and `TEMPLATE_CONTEXT_PROCESSORS`
 * Remove sub-entry `'django.middleware.transaction.TransactionMiddleware'`
-  from `MIDDLEWARE_CLASSES`
+  from `MIDDLEWARE`
 * Add `TEMPLATES` entry with the following contents::
 
   TEMPLATES = (

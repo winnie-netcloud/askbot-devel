@@ -14,7 +14,7 @@ def get_info_on_moderation_items(user):
     counts of new and seen moderation items for a given user
     if user is not a moderator or admin, returns None
     """
-    if user.is_anonymous():
+    if user.is_anonymous:
         return None
     if not(user.is_moderator() or user.is_administrator()):
         return None

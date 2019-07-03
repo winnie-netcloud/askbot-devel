@@ -27,7 +27,7 @@ def get_for_tag_editor():
 
 def get_for_inbox(user):
     """adds response counts of various types"""
-    if user.is_anonymous():
+    if user.is_anonymous:
         return None
 
     #get flags count

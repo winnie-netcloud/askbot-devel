@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
 import simplejson
 from django.db.models import Q
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from askbot import models
 from askbot.models import User, UserProfile
 from askbot.conf import settings as askbot_settings
@@ -178,7 +178,7 @@ def questions(request):
                 tags=request.GET.get('tags', None),
                 author=author_id,
                 page=page,
-                user_logged_in=request.user.is_authenticated(),
+                user_logged_in=request.user.is_authenticated,
             )
 
     qs, meta_data = models.Thread.objects.run_advanced_search(

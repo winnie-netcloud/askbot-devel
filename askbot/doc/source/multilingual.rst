@@ -64,7 +64,7 @@ This section will help users who disable the Askbot self-tests and
 when the mode is `'url-lang'` or `'user-lang'`.
 
 Activate the django's locale middleware by adding to the 
-`MIDDLEWARE_CLASSES` the following entry::
+`MIDDLEWARE` the following entry::
     'django.middleware.locale.LocaleMiddleware',
 
 Add the following to the `settings.py`::

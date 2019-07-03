@@ -63,7 +63,7 @@ profound knowledge and ability in addition to your active participation.{% endtr
 </div>
 {% endblock %}
 {% block endjs %}
-    {% if request.user.is_authenticated() and request.user.is_administrator_or_moderator() %}
+    {% if request.user.is_authenticated and request.user.is_administrator_or_moderator() %}
     <script type="text/javascript">
         askbot['urls']['reorderBadges'] = '{{ url('reorder_badges') }}';
     </script>

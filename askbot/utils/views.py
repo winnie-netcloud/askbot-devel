@@ -66,7 +66,7 @@ class PjaxView(object):
         """returns the view function - for the urls.py"""
         def view_function(request, *args, **kwargs):
             """the actual view function"""
-            if request.user.is_authenticated() and request.is_ajax():
+            if request.user.is_authenticated and request.is_ajax():
                 view_method = getattr(self, request.method.lower())
                 return view_method(request, *args, **kwargs)
             else:

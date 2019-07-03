@@ -5,7 +5,7 @@ enabling support of closed forum mode
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.conf import settings
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 from askbot.conf import settings as askbot_settings
 from askbot.utils.views import is_askbot_view
 import urllib.request, urllib.parse, urllib.error
@@ -31,23 +31,34 @@ def is_view_allowed(func):
 class ForumModeMiddleware(object):
     """protects forum views is the closed forum mode"""
 
+    def __init__(self, get_response=None): # i think get_reponse is never None. If it's not another middleware it's the view, I think
+        if get_response is None:
+            get_response = lambda x:x
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response  = self.process_request(request)
+        if response is None:
+            response = self.get_response(request) # i think this simply chains all middleware
+        return response
+
     def process_request(self, request):
         """when askbot is in the closed mode
         it will let through only authenticated users.
         All others will be redirected to the login url.
         """
         if (askbot_settings.ASKBOT_CLOSED_FORUM_MODE
-                and request.user.is_anonymous()):
+                and request.user.is_anonymous):
             resolver_match = resolve(request.path)
             if not is_askbot_view(resolver_match.func):
-                return
+                return None
 
             internal_ips = getattr(settings, 'ASKBOT_INTERNAL_IPS', None)
             if internal_ips and request.META.get('REMOTE_ADDR') in internal_ips:
                 return None
 
             if is_view_allowed(resolver_match.func):
-                return
+                return None
 
             if is_askbot_view(resolver_match.func):
                 request.user.message_set.create(

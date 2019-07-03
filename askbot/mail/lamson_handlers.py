@@ -3,7 +3,7 @@ import re
 import sys
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings as django_settings
 from django.template import Context
 from django.template.loader import get_template

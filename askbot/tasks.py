@@ -255,7 +255,7 @@ def record_question_visit(
     user = User.objects.get(id=user_id)
 
     # 2) question view count per user and clear response displays
-    if user.is_authenticated():
+    if user.is_authenticated:
         # get response notifications
         user.visit_question(question_post)
 

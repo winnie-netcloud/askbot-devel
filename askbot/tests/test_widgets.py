@@ -3,7 +3,7 @@ from askbot.tests.utils import AskbotTestCase
 
 from django.test.client import Client
 from django.conf import settings as django_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import translation, timezone
 
 
@@ -158,15 +158,16 @@ class QuestionWidgetViewsTests(AskbotTestCase):
             self.post_question(title=title, tags=tagnames)
 
     def test_valid_response(self):
+        # TODO: This depends on side effect of other (unknown) tests. Just executing this fails.
         filter_params = {
             'title__icontains': self.widget.search_query,
             'tags__name__in': self.widget.tagnames.split(' ')
         }
-
-        threads = models.Thread.objects.filter(**filter_params)[:5]
+        threads = models.Thread.objects.filter(**filter_params).order_by(self.widget.order_by)[:5]
+        # threads = models.Thread.objects.filter(**filter_params)[:5]
 
         response = self.client.get(reverse('question_widget', args=(self.widget.id, )))
         self.assertEqual(200, response.status_code)
 
-        self.assertQuerysetEqual(threads, response.context['threads'])
+        self.assertQuerysetEqual(threads, response.context['threads'], transform=lambda x: x)
         self.assertEqual(self.widget, response.context['widget'])

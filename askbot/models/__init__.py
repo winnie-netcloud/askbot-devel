@@ -15,7 +15,7 @@ from functools import partial
 import uuid
 from celery import states
 from celery.task import task
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.urls import reverse, NoReverseMatch
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.db.models import signals as django_signals
@@ -564,7 +564,7 @@ def user_can_see_karma(user, karma_owner):
     if askbot_settings.KARMA_MODE == 'public':
         return True
     elif askbot_settings.KARMA_MODE == 'private':
-        if user.is_anonymous():
+        if user.is_anonymous:
             return False
         elif user.is_administrator_or_moderator():
             return True
@@ -930,7 +930,7 @@ def user_assert_can_post_text(self, text):
     """
     if re.search(URL_RE, text):
         min_rep = askbot_settings.MIN_REP_TO_SUGGEST_LINK
-        if self.is_authenticated() and self.reputation < min_rep:
+        if self.is_authenticated and self.reputation < min_rep:
             message = _(
                 'Could not post, because your karma is insufficient to publish links'
             )

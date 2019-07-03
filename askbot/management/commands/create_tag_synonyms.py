@@ -49,6 +49,12 @@ remove source_tag"""
                             default=django_settings.LANGUAGE_CODE,
                             help='language code of the tag, e.g. "en"'
                            )
+        parser.add_argument('--is_force',
+                            action='store_true',
+                            dest='is_force',
+                            default=False,
+                            help='force the issue'
+                           )
 
     def handle(self, *args, **options):
         """command handle function. reads tag names, decodes

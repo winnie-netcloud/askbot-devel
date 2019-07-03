@@ -3,7 +3,7 @@ import re
 import urllib.request, urllib.parse, urllib.error
 import copy
 
-from django.core import urlresolvers
+from django.urls import reverse
 from django.utils.http import urlencode
 from django.utils.encoding import smart_str
 
@@ -142,7 +142,7 @@ class SearchState(object):
         default_page_size = int(askbot_settings.DEFAULT_QUESTIONS_PAGE_SIZE)
         self.page_size = int(page_size) if page_size else default_page_size
 
-        self._questions_url = urlresolvers.reverse('questions')
+        self._questions_url = reverse('questions')
 
     def __str__(self):
         return self.query_string()
@@ -158,7 +158,7 @@ class SearchState(object):
         return '?' + urlencode({'title': ask_title})
 
     def full_ask_url(self):
-        return urlresolvers.reverse('ask') + self.ask_query_string()
+        return reverse('ask') + self.ask_query_string()
 
     def unified_tags(self):
         "Returns tags both from tag selector and extracted from query"

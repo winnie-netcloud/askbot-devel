@@ -61,7 +61,7 @@ settings.register(
 LANG_MODE = getattr(django_settings, 'ASKBOT_LANGUAGE_MODE', 'single-lang')
 HAS_ASKBOT_LOCALE_MIDDLEWARE = (
     'askbot.middleware.locale.LocaleMiddleware' in
-    django_settings.MIDDLEWARE_CLASSES
+    django_settings.MIDDLEWARE
 )
 if LANG_MODE == 'single-lang' and HAS_ASKBOT_LOCALE_MIDDLEWARE:
     settings.register(

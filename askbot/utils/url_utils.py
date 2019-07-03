@@ -1,9 +1,9 @@
 """utilities to work with the urls"""
 import sys
 import urllib.parse
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings as django_settings
-from django.core.urlresolvers import clear_url_caches
+from django.urls import clear_url_caches
 import imp
 try:
     from django.conf.urls import url

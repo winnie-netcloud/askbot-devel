@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from askbot.deps.django_authopenid import mimeparse
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import logging
 
 __all__ = ["OpenIDMiddleware"]

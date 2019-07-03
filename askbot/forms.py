@@ -41,7 +41,7 @@ def split_tags(data):
 def should_use_recaptcha(user):
     """True if user must use recaptcha"""
     return askbot_settings.USE_RECAPTCHA and \
-        (user.is_anonymous() or user.is_watched())
+        (user.is_anonymous or user.is_watched())
 
 
 def cleanup_dict(dictionary, key, empty_value):
@@ -380,7 +380,7 @@ class EditorField(forms.CharField):
             ) % {'length': self.min_length}
             raise forms.ValidationError(msg)
 
-        if self.user.is_anonymous():
+        if self.user.is_anonymous:
             # we postpone this validation if user is posting
             # before logging in, up until publishing the post
             return value
@@ -736,7 +736,7 @@ class ChangeUserStatusForm(forms.Form):
         super(ChangeUserStatusForm, self).__init__(*arg, **kwarg)
 
         # Select user_status_choices depending on status of the moderator
-        if moderator.is_authenticated():
+        if moderator.is_authenticated:
             if moderator.is_administrator():
                 user_status_choices = ADMINISTRATOR_STATUS_CHOICES
             elif moderator.is_moderator():
@@ -856,7 +856,7 @@ class FeedbackForm(forms.Form):
 
     def clean(self):
         super(FeedbackForm, self).clean()
-        if self.user and self.user.is_anonymous():
+        if self.user and self.user.is_anonymous:
             need_email = not bool(self.cleaned_data.get('no_email', False))
             email = self.cleaned_data.get('email', '').strip()
             if need_email and email == '':
@@ -906,7 +906,7 @@ class PostPrivatelyForm(forms.Form, FormWithHideableFields):
         user = self._user
         return (
             askbot_settings.GROUPS_ENABLED and
-            user and user.is_authenticated() and
+            user and user.is_authenticated and
             user.can_make_group_private_posts()
         )
 
@@ -1026,7 +1026,7 @@ class AskForm(PostAsSomeoneForm, PostPrivatelyForm):
         self.fields['ask_anonymously'] = forms.BooleanField(
             label=_('post anonymously'), required=False)
 
-        if user.is_anonymous() or not askbot_settings.ALLOW_ASK_ANONYMOUSLY:
+        if user.is_anonymous or not askbot_settings.ALLOW_ASK_ANONYMOUSLY:
             self.hide_field('ask_anonymously')
 
         if askbot.is_multilingual():
@@ -1060,7 +1060,7 @@ class AskWidgetForm(forms.Form, FormWithHideableFields):
         super(AskWidgetForm, self).__init__(*args, **kwargs)
         self.fields['title'] = TitleField()
         # hide ask_anonymously field
-        if user.is_anonymous() or not askbot_settings.ALLOW_ASK_ANONYMOUSLY:
+        if user.is_anonymous or not askbot_settings.ALLOW_ASK_ANONYMOUSLY:
             self.hide_field('ask_anonymously')
         self.fields['text'] = QuestionEditorField(user=user)
         if not include_text:

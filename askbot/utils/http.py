@@ -41,7 +41,7 @@ def get_request_info(request):
     data = hide_passwords(copy(data))
     info += 'data: %s\n' % str(data)
     info += 'host: %s\n' % request.get_host()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         info += 'user ID: %d\n' % request.user.id
     else:
         info += 'user is anonymous\n'

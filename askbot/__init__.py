@@ -16,21 +16,20 @@ default_app_config = 'askbot.apps.AskbotConfig'
 REQUIREMENTS = {
     'appconf': 'django-appconf',
     'akismet': 'akismet==1.0.1',
-    'avatar': 'django-avatar==3.1.0',
+    'avatar': 'django-avatar>=4.0',
     'bs4': 'beautifulsoup4<=4.7.1',
     'compressor': 'django-compressor>=2.0,<=2.2',
-    'django': 'django>=1.9,<1.12',
+    'django': 'django>=1.11,<2.1',
     'django_countries': 'django-countries>=3.3',
     'django_jinja': 'django-jinja>=2.0',
-    'djcelery': 'django-celery>=3.0.11,<=3.3.0',
-    'celery': 'celery==3.1.18',
+    'celery': 'celery>=4.0,<=5.0',
     'followit': 'django-followit>=0.3.0',
     'html5lib': 'html5lib==0.9999999',
     'jinja2': 'Jinja2>=2.8',
     'jsonfield': 'jsonfield>=2.0.0',
     'jwt': 'pyjwt<=1.7.1',
     'keyedcache': 'django-keyedcache3>=1.5.1',
-    'kombu': 'kombu>=2.0,<4.0',
+    'kombu': 'kombu>=4.0,<5.0',
     'markdown2': 'markdown2<=2.3.8',
     'mock': 'mock==3.0.5',
     'oauth2': 'oauth2<=1.9.0.post1',
@@ -42,8 +41,7 @@ REQUIREMENTS = {
     'cas': 'python-cas==1.4.0',
     'responses': 'responses>=0.9.0',
     'requirements': 'requirements-parser==0.2.0',
-    'robots': 'django-robots==1.1',
-    'robots': 'django-robots==3.0',
+    'robots': 'django-robots>=3.1',
     'regex': 'regex',
     'sanction': 'sanction==0.3.1',
     'simplejson': 'simplejson<=3.16.1',
@@ -92,27 +90,17 @@ def get_version():
 
 def get_database_engine_name():
     """returns name of the database engine,
-    independently of the version of django
-    - for django >=1.2 looks into ``settings.DATABASES['default']``,
-    (i.e. assumes that askbot uses database named 'default')
-    , and for django 1.1 and below returns settings.DATABASE_ENGINE
+    independently of the version of django.
+    This was required for the django 1.0 -> 1.1 migration
     """
-    import django
     from django.conf import settings as django_settings
-    major_version = django.VERSION[0]
-    minor_version = django.VERSION[1]
-    if major_version == 1:
-        if minor_version > 1:
-            return django_settings.DATABASES['default']['ENGINE']
-        else:
-            return django_settings.DATABASE_ENGINE
+    return django_settings.DATABASES['default']['ENGINE']
 
 
 def get_lang_mode():
     from django.conf import settings as django_settings
     try:
         return django_settings.ASKBOT_LANGUAGE_MODE
-        return getattr(django_settings, 'ASKBOT_LANGUAGE_MODE', 'single-lang')
     except:
         import traceback
         traceback.print_stack()

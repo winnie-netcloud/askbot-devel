@@ -5,7 +5,7 @@
         {% set enabled_scopes_class = 'scopes-' +
             '%s'|format(settings.ALL_SCOPE_ENABLED) + '-' +
             '%s'|format(settings.UNANSWERED_SCOPE_ENABLED) + '-' +
-            '%s'|format((request.user.is_authenticated() and settings.FOLLOWED_SCOPE_ENABLED))
+            '%s'|format((request.user.is_authenticated and settings.FOLLOWED_SCOPE_ENABLED))
         %}
         <form
             {% if active_tab == "tags" %}

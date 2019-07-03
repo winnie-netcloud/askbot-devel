@@ -7,7 +7,7 @@ import logging
 import urllib.request, urllib.parse, urllib.error
 from copy import copy
 from django.conf import settings as django_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.encoding import force_text
