@@ -4,7 +4,7 @@ user in response to various actions by the same
 users or others
 """
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import string_concat
+from django.utils.text import format_lazy
 
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import REP_AND_BADGES
@@ -35,7 +35,7 @@ def register_badge_settings(badge_slug=None, badge_name=None, params=None):
             IntegerValue(
                 BADGES,
                 badge_slug + '_BADGE_' + param_slug,
-                description=string_concat(badge_name, ': ', param_description),
+                description=format_lazy('{}: {}', badge_name, param_description),
                 default=param_default)
         )
 

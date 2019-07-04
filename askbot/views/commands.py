@@ -29,7 +29,6 @@ from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
-from django.utils.translation import string_concat
 from askbot.utils.slug import slugify
 from askbot import models
 from askbot import forms

@@ -10,11 +10,10 @@ from django.db.models import F, Q
 from django.contrib.auth.models import User
 from django.core import cache  # import cache, not from cache import cache, to be able to monkey-patch cache.cache in test cases
 from django.core import exceptions as django_exceptions
-from django.urls import reverse
 from django.template.loader import get_template
 from django.template import Context
 from django.utils.translation import ugettext as _
-from django.utils.translation import ungettext, string_concat, get_language
+from django.utils.translation import get_language
 from django.utils import timezone
 
 import askbot

@@ -2,7 +2,7 @@
 Q&A forum flatpages (about, etc.)
 """
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import string_concat
+from django.utils.text import format_lazy
 from askbot.conf.settings_wrapper import settings
 from livesettings.values import ConfigurationGroup, LongStringValue
 from askbot.conf.super_groups import CONTENT_AND_UI
@@ -94,11 +94,10 @@ settings.register(
         'TERMS',
         description=_('Terms and conditions'),
         localized=True,
-        help_text=string_concat(
+        help_text=format_lazy('{} {}',
             _('Save, then <a href="http://validator.w3.org/">'
               'use HTML validator</a> on the "terms" page to check '
               'your input.'),
-            ' ',
             settings.get_related_settings_info(
                 ('LOGIN_PROVIDERS', 'TERMS_ACCEPTANCE_REQUIRED', False))
         )

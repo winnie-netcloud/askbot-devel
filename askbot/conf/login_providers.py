@@ -1,7 +1,7 @@
 """
 External service key settings
 """
-from django.utils.translation import string_concat
+from django.utils.text import format_lazy
 from django.utils.translation import ugettext_lazy as _
 
 from askbot.conf.settings_wrapper import settings
@@ -274,10 +274,9 @@ for provider in providers:
                 'MEDIAWIKI_ONE_CLICK_REGISTRATION_ENABLED',
                 default=False,
                 description=_('MediaWiki - enable one click registration'),
-                help_text=string_concat(
+                help_text=format_lazy('{} {}',
                     _('Allows skipping the registration page after the wiki '
                       'authentication.'),
-                    ' ',
                     settings.get_related_settings_info(
                         ('EMAIL', 'BLANK_EMAIL_ALLOWED', True, _('Must be enabled')),
                         ('ACCESS_CONTROL', 'REQUIRE_VALID_EMAIL_FOR', True, _('Must be not be required')),

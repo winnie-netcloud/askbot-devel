@@ -1,5 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import string_concat
+from django.utils.text import format_lazy
 
 from askbot.conf.settings_wrapper import settings
 from askbot.conf.super_groups import LOGIN_USERS_COMMUNICATION
@@ -98,9 +98,8 @@ settings.register(
         'ALLOWED_EMAILS',
         default='',
         description=_('Allowed email addresses'),
-        help_text=string_concat(
+        help_text=format_lazy('{}. {}',
             _('Please use space to separate the entries'),
-            '. ',
             _('Entry disables blacklisted email patterns')
         ),
         update_callback=update_email_callback
@@ -113,9 +112,8 @@ settings.register(
         'ALLOWED_EMAIL_DOMAINS',
         default='',
         description=_('Allowed email domain names'),
-        help_text=string_concat(
+        help_text=format_lazy('{}. {}',
             _('Please use space to separate the entries, do not use the @ symbol!'),
-            '. ',
             _('Entry disables blacklisted email patterns')
         ),
         update_callback=update_email_callback
@@ -124,8 +122,8 @@ settings.register(
 
 BLACKLISTED_EMAIL_PATTERNS_MODE_CHOICES = (
     ('disabled', _('disable')),
-    ('medium', string_concat(_('block user registrations'),
-                             ', ',
+    ('medium', format_lazy('{}, {}',
+                             _('block user registrations'),
                              _('allow existing users to post'))),
     ('strict', _('block completely')),
 )
@@ -146,11 +144,9 @@ settings.register(
         'BLACKLISTED_EMAIL_PATTERNS',
         default='',
         description=_('Blacklisted email address patterns'),
-        help_text=string_concat(
+        help_text=format_lazy('{}, {}.',
             _('Please use space to separate the entries'),
-            ', ',
-            _('regular expressions are allowed'),
-            '.'
+            _('regular expressions are allowed')
         )
     )
 )
