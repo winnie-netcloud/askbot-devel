@@ -3,14 +3,11 @@ from copy import deepcopy
 from jinja2 import Template as Jinja2Template
 
 
-
-
-class SettingsTemplate(object):
-    tmpl_dir  = 'setup_templates'
-    tmpl_name = 'settings.py.jinja2'
-
-    def __init__(self, context={}):
+class DeploymentTemplate(object):
+    def __init__(self, tmpl_name, tmpl_dir='setup_templates', context={}):
         self.context = context
+        self.tmpl_name = tmpl_name
+        self.tmpl_dir = tmpl_dir
         source_dir = os.path.dirname(os.path.dirname(__file__))
         self.tmpl_path = os.path.join(source_dir,self.tmpl_dir,self.tmpl_name)
 
