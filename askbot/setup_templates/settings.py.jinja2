@@ -98,7 +98,11 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 # Make up some unique string, and don't share it with anybody.
 
-SECRET_KEY = "{{ secret_key if secret_key else "os.environ['SECRET_KEY']"}}"
+{% if secret_key %}
+SECRET_KEY = "{{ secret_key }}"
+{% else %}
+SECRET_KEY = os.environ['SECRET_KEY']
+{% endif %}
 
 ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
     'askbot.context.application_settings',
