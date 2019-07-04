@@ -10,7 +10,8 @@ fi
 
 if [ -z "$NO_CRON" ]
 then
-    set | grep -e 'PATH' -e 'DATABASE_URL' -e 'SECRET_KEY' -e 'PYTHONUNBUFFERED' > /cron_environ
+    set | grep -e 'PATH' -e 'DATABASE_URL' -e 'SECRET_KEY' -e 'PYTHONUNBUFFERED' -e 'ASKBOT_SITE' > /cron_environ
+    echo 'PYTHONPATH="/usr/local/lib/python36.zip:/usr/local/lib/python3.6:/usr/local/lib/python3.6/lib-dynload:/usr/local/lib/python3.6/site-packages:/src/src/django-followit:/src/src/django-livesettings3"' >> /cron_environ
     crond || cron
 fi
 
