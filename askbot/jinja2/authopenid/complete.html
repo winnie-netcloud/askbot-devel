@@ -2,7 +2,7 @@
 {% import "macros.html" as macros %}
 <!-- complete.html -->
 {#
-views calling this template: 
+views calling this template:
 * django_authopenid.views.register with login_type='openid'
 * django_authopenid.views.signin - with login_type='legacy'
 
@@ -10,7 +10,7 @@ purpose of this template is to allow user enter his/her name
 email and sign up for email alerts at the initial registratio
 
 parameters:
-* provider 
+* provider
 * login_type openid|legacy
 * username (same as screen name or username in the models, and nickname in openid sreg)
 * openid_register_form
@@ -35,9 +35,9 @@ parameters:
                 {% endfor %}
                 </ul>
             {% endif %}
-            <form 
+            <form
                 id="register-form"
-                name="fregister" 
+                name="fregister"
                 {% if login_type=='openid' %}
                     action="{{ url('user_register') }}"
                 {% elif login_type=='facebook' %}
@@ -46,13 +46,13 @@ parameters:
                     action="{{ default_form_action }}"
                 {% endif %}
                 method="POST"
-            >{% csrf_token %}
+            >{{ csrf_input }}
                 {{ openid_register_form.next }}
                 <div class="form-group">
-                    {% if openid_register_form.username.errors %} 
+                    {% if openid_register_form.username.errors %}
                         <p class="error">{{ openid_register_form.username.errors|join(", ") }}</p>
                     {% endif %}
-                    <input class="required login" id="id_username" 
+                    <input class="required login" id="id_username"
                         maxlength="255" name="username" tabindex="0" type="text"
                         {% if openid_register_form.username.value() %}
                             value="{{ openid_register_form.username.value()|escape }}"
@@ -61,10 +61,10 @@ parameters:
                     >
                 </div>
                 <div class="form-group">
-                    {% if openid_register_form.email.errors %} 
+                    {% if openid_register_form.email.errors %}
                         <p class="error">{{ openid_register_form.email.errors|join(", ") }}</p>
                     {% endif %}
-                    <input class="required login" id="id_email" maxlength="200" 
+                    <input class="required login" id="id_email" maxlength="200"
                         name="email" type="text"
                         {% if openid_register_form.email.value() %}
                             value="{{ openid_register_form.email.value()|escape }}"
@@ -81,7 +81,7 @@ parameters:
                 </div>
                 {% endif %}
                 <div class="submit-row">
-                    <input 
+                    <input
                         id="register-button"
                         type="submit"
                         name="bnewaccount"

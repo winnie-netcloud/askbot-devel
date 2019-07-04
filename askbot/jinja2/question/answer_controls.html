@@ -2,14 +2,14 @@
     <a id="js-edit-btn-post-body-{{ answer.pk }}" class="question-edit js-edit" href="{{ url('edit_answer',  answer.id ) }}">{% trans %}edit{% endtrans %}</a>
 </span>
 {% if answer.offensive_flag_count > 0 %}
-<span 
+<span
     id="answer-offensive-remove-flag-{{ answer.id }}"
     class="action-link offensive-flag"
     title="{% trans %}remove offensive flag{% endtrans %}"
 >
     <a class="question-flag">{% trans %}remove flag{% endtrans %}</a>
 </span>
-<span 
+<span
     id="answer-offensive-flag-{{ answer.id }}"
     class="action-link offensive-flag"
     title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
@@ -17,7 +17,7 @@
     <a class="question-flag">{% trans %}flag offensive{% endtrans %} ({{ answer.offensive_flag_count }})</a>
 </span>
 {% else %}
-<span 
+<span
     id="answer-offensive-flag-{{ answer.id }}"
     class="action-link offensive-flag"
     title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
@@ -30,17 +30,17 @@
     >{% if answer.deleted %}{% trans %}undelete{% endtrans %}{% else %}{% trans %}delete{% endtrans %}{% endif %}</a>
 </span>
 {% if thread.is_moderated() %}
-<span 
+<span
     id="post-{{answer.id}}-publish"
     class="action-link"
 >
     {% if answer.id in published_answer_ids %}
-        <a 
+        <a
             class="answer-unpublish"
             data-answer-id="{{ answer.id }}"
         >{% trans %}unpublish{% endtrans %}</a>
     {% else %}
-        <a 
+        <a
             class="answer-publish"
             data-answer-id="{{ answer.id}}"
         >{% trans %}publish{% endtrans %}</a>
@@ -57,14 +57,14 @@
 <span class="action-link dropdown-toggle">{% trans %}more{% endtrans %}
 <ul class="dropdown-menu">
     <li id='post-{{answer.id}}-convert'>
-        <form 
+        <form
             class="answer-convert"
             action="{{ url('repost_answer_as_comment_under_question') }}"
             method="post"
         >
-            {% csrf_token %}
+            {{ csrf_input }}
             <input type="hidden" name="answer_id" value="{{answer.id}}"/>
-            <input 
+            <input
                 type="submit"
                 class="link"
                 value="{{ settings.WORDS_REPOST_AS_A_QUESTION_COMMENT|escape }}"
@@ -76,9 +76,9 @@
             action="{{ url('repost_answer_as_comment_under_previous_answer') }}"
             method="post"
         >
-            {% csrf_token %}
+            {{ csrf_input }}
             <input type="hidden" name="answer_id" value="{{ answer.id }}"/>
-            <input 
+            <input
                 type="submit"
                 class="link"
                 value="{{ settings.WORDS_REPOST_AS_A_COMMENT_UNDER_THE_OLDER_ANSWER|escape }}"

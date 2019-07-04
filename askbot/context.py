@@ -5,6 +5,7 @@ and the application available for the templates
 import sys
 import json
 from django.conf import settings
+from django.middleware import csrf
 from django.urls import reverse
 
 import askbot
@@ -14,7 +15,6 @@ from askbot import const
 from askbot.conf import settings as askbot_settings
 from askbot.search.state_manager import SearchState
 from askbot.utils import url_utils
-from askbot.utils.csrf import get_or_create_csrf_token
 from askbot.utils.slug import slugify
 from askbot.utils.html import site_url
 from askbot.utils.translation import get_language
@@ -75,7 +75,7 @@ def application_settings(request):
 
     context = {
         'base_url': site_url(''),
-        'csrf_token': get_or_create_csrf_token(request),
+        'csrf_token': csrf.get_token(request),
         'empty_search_state': SearchState.get_empty(),
         'min_search_word_length': min_search_word_length,
         'current_language_code': current_language,

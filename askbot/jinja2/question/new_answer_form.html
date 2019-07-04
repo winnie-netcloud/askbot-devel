@@ -22,7 +22,7 @@
             method="post"
             data-validated-fields="text"
             data-text-validator="askbot.validators.answerValidator"
-            >{% csrf_token %}
+            >{{ csrf_input }}
             <div class="js-error js-text-error"></div>
             {% set draft_answer=answer.text.value() %}
             <div class="form-group editor-placeholder"

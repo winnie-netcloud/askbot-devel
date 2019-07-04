@@ -4,12 +4,12 @@
 {% block title %}{{ settings.WORDS_REOPEN_QUESTION|escape }}{% endblock %}
 {% block content %}
 <h1>{{ settings.WORDS_REOPEN_QUESTION|escape }}</h1>
-<p>{% trans %}Title{% endtrans %}: 
+<p>{% trans %}Title{% endtrans %}:
     <a href="{{ question.get_absolute_url() }}">
         <span class="big">{{ question.get_question_title()|escape }}</span>
     </a>
 </p>
-<p>{% trans username = closed_by_username|escape %}Closed by: 
+<p>{% trans username = closed_by_username|escape %}Closed by:
     <a href="{{closed_by_profile_url}}">{{username}}</a>
 {% endtrans %}
 </p>
@@ -20,7 +20,7 @@
     {% trans %}When:{% endtrans %} {{ timeago(question.thread.closed_at) }}
 </p>
 <p>{{ settings.WORDS_REOPEN_QUESTION|escape }}?</p>
-<form id="fmclose" action="{{ url('reopen',  question.id ) }}" method="post" >{% csrf_token %}
+<form id="fmclose" action="{{ url('reopen',  question.id ) }}" method="post" >{{ csrf_input }}
     <div id="" style="padding:20px 0 20px 0">
         <input type="submit" value="{{ settings.WORDS_REOPEN_QUESTION|escape }}"/>
         <input id="btBack" type="button" value="{% trans %}Cancel{% endtrans %}"/>

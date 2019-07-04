@@ -170,7 +170,7 @@ body{
 {% block body %}
     <div class="title">{{ widget.title }}</div>
     <form action="." method="POST" accept-charset="utf-8">
-        {% csrf_token %}
+        {{ csrf_input }}
         <label>{{ settings.WORDS_PLEASE_ENTER_YOUR_QUESTION|escape }}</label>
         <div class="input-title">{{ form.title }}</div>
         <div id='question-list'></div>

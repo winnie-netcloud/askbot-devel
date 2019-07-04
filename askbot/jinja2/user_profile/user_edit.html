@@ -18,7 +18,7 @@
         >{% trans %}change picture{% endtrans %}</a></p>
     {% endif %}
 </div>
-<form name="" action="{{ url('edit_user',  view_user.id ) }}" method="post">{% csrf_token %}
+<form name="" action="{{ url('edit_user',  view_user.id ) }}" method="post">{{ csrf_input }}
     <table class="user-details">
         <tr>
             <td><label for="id_username">{% trans %}Screen Name{% endtrans %}:<label></td>
