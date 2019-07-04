@@ -8,7 +8,8 @@ in askbot by default.
 .. _haystack:
 
 Haystack search
-=============
+================
+
 Askbot supports `Haystack <http://haystacksearch.org/>`_, a modular search framework that supports popular search engine backends as 
 Solr, Elasticsearch, Whoosh and Xapian. 
 
@@ -24,7 +25,7 @@ To enable:
 * Configure your search backend according to your setup following `this guide <http://django-haystack.readthedocs.org/en/latest/tutorial.html#modify-your-settings-py>`_
 
 Solr and  Multilingual Support
--------------------------
+-------------------------------
 
 There is more documentation about solr and multilingual support  please visit :ref:`this link <solr>`
 

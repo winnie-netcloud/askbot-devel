@@ -3,7 +3,7 @@ Askbot - a Django Q&A forum platform
 ====================================
 
 This is Askbot project - open source Q&A system, like StackOverflow, Yahoo Answers and some others.
-Askbot is based on code of CNPROG, originally created by Mike Chen 
+Askbot is based on code of CNPROG, originally created by Mike Chen
 and Sailing Cai and some code written for OSQA.
 
 Demos and hosting are available at http://askbot.com.
@@ -14,7 +14,9 @@ Branch `0.8.x` - transitional version for the upgrade of the database to Django 
 
 Branch `0.9.x` - supports Django 1.7
 
-Branch `master` supports Django 1.8
+Branch `master` - supports Django 1.8
+
+Branch `0.11.x` - supports Django 2.2
 
 How to contribute
 =================
@@ -38,7 +40,7 @@ License, copyright and trademarks
 =================================
 Askbot software is licensed under GPL, version 3.
 
-Copyright Askbot S.p.A and the project contributors, 2010-2017.
+Copyright Askbot S.p.A and the project contributors, 2010-2019.
 
 "Askbot" is a trademark and service mark registered in the United States, number 4323777.
 
