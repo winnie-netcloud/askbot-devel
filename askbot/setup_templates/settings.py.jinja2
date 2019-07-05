@@ -25,7 +25,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-{%- if database_engine }
+{%- if database_engine %}
     'askbot': {
         'ENGINE': 'django.db.backends.{{database_engine}}', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '{{database_name}}',                      # Or path to database file if using sqlite3.
@@ -40,7 +40,7 @@ DATABASES = {
          {%- endif %}
         }
     }
-{%- endif }
+{%- endif %}
 }
 
 db_url = dj_database_url.config(default='sqlite:///db.data')
