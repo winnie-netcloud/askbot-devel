@@ -18,10 +18,9 @@ from askbot.utils import console
 from askbot.deployment.template_loader import SettingsTemplate
 
 
-FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery.py')
+FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery_app.py')
 BLANK_FILES     = ('__init__.py', 'manage.py')
 LOG_DIR_NAME    = 'log'
-
 
 def split_at_break_point(directory):
     """splits directory path into two pieces
