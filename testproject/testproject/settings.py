@@ -89,7 +89,6 @@ ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
     'django.contrib.messages.context_processors.messages', # this  will replace the one above soon
     'django.contrib.auth.context_processors.auth', # this is required for the admin app
                                                    # not sure if the admin app even uses jinja2 ...
-    'askbot.deps.group_messaging.context.group_messaging_context'
 ]
 
 TEMPLATES = (
