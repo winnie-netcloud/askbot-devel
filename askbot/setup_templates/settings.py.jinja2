@@ -9,7 +9,7 @@ from jinja2.runtime import Undefined
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 #this line is added so that we can import pre-packaged askbot dependencies
-ASKBOT_ROOT  = os.path.abspath(os.path.dirname(askbot.__file__))
+ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
@@ -85,11 +85,11 @@ ASKBOT_LANGUAGE_MODE = 'single-lang' #'single-lang', 'url-lang', 'user-lang'
 # Absolute path to the directory that holds uploaded media
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'askbot', 'upfiles')
-MEDIA_URL  = '/upfiles/'#url to uploaded media
+MEDIA_URL = '/upfiles/'#url to uploaded media
 STATIC_URL = '/m/'#this must be different from MEDIA_URL
 USE_LOCAL_FONTS = False
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static') # path to files collected by collectstatic
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')#path to files collected by collectstatic
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -107,7 +107,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
     'askbot.context.application_settings',
     'askbot.user_messages.context_processors.user_messages',# must be before auth
-    'django.contrib.messages.context_processors.messages', # this  will replace the one above soon
+    'django.contrib.messages.context_processors.messages',
     'django.contrib.auth.context_processors.auth', # this is required for the admin app
                                                    # not sure if the admin app even uses jinja2 ...
 ]
@@ -345,7 +345,6 @@ AVATAR_AUTO_GENERATE_SIZES = (16, 32, 48, 128) #change if avatars are sized diff
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-# The following is probably not for productive use
 #class DisableMigrations(object):
 #    def __contains__(self, item):
 #        return True
