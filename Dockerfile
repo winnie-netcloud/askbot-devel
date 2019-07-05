@@ -14,36 +14,42 @@
 #
 # User uploads are stored in **/askbot_site/askbot/upfiles** . I'd recommend to make it a kubernetes volume.
 
-FROM tiangolo/uwsgi-nginx:python3.6
+FROM tiangolo/uwsgi-nginx:python3.6-alpine3.9
 
+ARG SITE=askbot-site
+ARG ASKBOT=.
 ENV PYTHONUNBUFFERED 1
-ENV UWSGI_INI /askbot_site/uwsgi.ini
-ENV PRE_START_PATH /askbot_site/prestart.sh
+ENV ASKBOT_SITE /${SITE}
+
+ENV UWSGI_INI /${SITE}/askbot_app/uwsgi.ini
+# Not recognized by uwsgi-nginx, yet.
+# The file doesn't exist either!
+#ENV PRE_START_PATH /${SITE}/prestart.sh
 
 # TODO: changing this requires another cache backend
 ENV NGINX_WORKER_PROCESSES 1
 ENV UWSGI_PROCESSES 1
 ENV UWSGI_CHEAPER 0
 
-ADD . /src/
-WORKDIR /src/
+ADD askbot_requirements.txt /
 
-RUN apt-get update && apt-get -y install cron && \
-  pip install -r askbot_requirements.txt && \
-  python setup.py install && \
-  mkdir /askbot_site/ && \
-  cp askbot/container/* /askbot_site && \
-  cp /askbot_site/prestart.sh /app
+#RUN apt-get update && apt-get -y install cron git \
+RUN apk add --update --no-cache git py3-cffi \
+	gcc g++ git make unzip mkinitfs kmod mtools squashfs-tools py3-cffi \
+	libffi-dev linux-headers musl-dev libc-dev openssl-dev \
+	python3-dev zlib-dev libxml2-dev libxslt-dev jpeg-dev \
+        postgresql-dev zlib jpeg libxml2 libxslt postgresql-libs \
+    && python -m pip install --upgrade pip \
+    && pip install -r /askbot_requirements.txt \
+    && pip install psycopg2
 
-WORKDIR /askbot_site/
+ADD $ASKBOT /src
+RUN cd /src/ && python setup.py install \
+    && askbot-setup -n /${SITE} -e 1 -d postgres -u postgres -p askbotPW --db-host=postgres --db-port=5432 --logfile-name=stdout --no-secret-key --create-project container-uwsgi
 
-RUN askbot-setup --dir-name=. --db-engine=2 \
-    --db-name=USE_DATABASE_URL_INSTEAD \
-    --db-user=USE_DATABASE_URL_INSTEAD \
-    --db-password=USE_DATABASE_URL_INSTEAD \
-    --logfile-name=stdout \
-    --no-secred-key && \
-  sed -i "s/ROOT_URLCONF.*/ROOT_URLCONF = 'urls'/"  settings.py && \
-  sed -i 's!PROJECT_ROOT = .*!PROJECT_ROOT = "/askbot_site"!g' settings.py && \
-  /usr/bin/crontab /askbot_site/crontab && \
-  SECRET_KEY=whatever python manage.py collectstatic --noinput
+RUN true \
+    && cp /${SITE}/askbot_app/prestart.sh /app \
+    && /usr/bin/crontab /${SITE}/askbot_app/crontab \
+    && cd /${SITE} && SECRET_KEY=whatever DJANGO_SETTINGS_MODULE=askbot_app.settings python manage.py collectstatic --noinput
+
+WORKDIR /${SITE}
