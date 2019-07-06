@@ -76,7 +76,7 @@ if do_admin is True and os.environ.get('ADMIN_PASSWORD') is not None:
 
 if do_make_admin is True:
     print('Grant superuser to admin')
-    argv = [ 'manage.py', 'add_admin', str(admin_to_be_id) ]
+    argv = [ 'manage.py', 'add_admin', str(admin_to_be_id), '--noinput' ]
     execute_from_command_line(argv)
 
 if do_uwsgi_ini is True:
