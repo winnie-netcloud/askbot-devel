@@ -131,7 +131,7 @@ MIDDLEWARE = (
     #'django.middleware.sqlprint.SqlPrintingMiddleware',
 
     #below is askbot stuff for this tuple
-    'askbot.user_messages.middlewares.AnonymousUserMessagesMiddleware',
+    'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
     'askbot.middleware.forum_mode.ForumModeMiddleware',
     'askbot.middleware.cancel.CancelActionMiddleware',
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
