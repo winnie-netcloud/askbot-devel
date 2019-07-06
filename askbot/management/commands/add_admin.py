@@ -47,12 +47,12 @@ class Command(BaseCommand):
     def handle(self, *arguments, **options):
         #destroy pre_save and post_save signals
         #self.parse_arguments(arguments)
-        if options.get('user_id', None) is None:
+        if options.get('user_id') is None:
             print('argument for this command id <user_id>')
             sys.exit(1)
-        self.user = self.get_user(options['user_id'])
+        self.user = self.get_user(options.get('user_id'))
 
-        if options.get('interactive', None) is not None:
+        if options.get('interactive') is True:
             self.confirm_action()
 
         self.remove_signals()
