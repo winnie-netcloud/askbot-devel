@@ -20,5 +20,6 @@ services:
     - DATABASE_URL=postgres://askbot:askB0T!@postgres/askbottest
     - ADMIN_PASSWORD=admin
     - SECRET_KEY=123456789
+    - WAIT_HOSTS=postgres:5432
 
 # vim:ts=2:sw=2:sts=2:expandtab

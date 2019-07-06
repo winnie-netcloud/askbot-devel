@@ -52,4 +52,7 @@ RUN true \
     && /usr/bin/crontab /${SITE}/askbot_app/crontab \
     && cd /${SITE} && SECRET_KEY=whatever DJANGO_SETTINGS_MODULE=askbot_app.settings python manage.py collectstatic --noinput
 
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.5.0/wait /wait
+RUN chmod +x /wait
+
 WORKDIR /${SITE}
