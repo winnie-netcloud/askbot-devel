@@ -158,33 +158,16 @@ def deploy_askbot(options):
     all the neccessary directories for askbot,
     and the log file
     """
-    create_new_project = False
+    create_new_project = True
     if os.path.exists(options['dir_name']):
         if path_utils.has_existing_django_project(options['dir_name']):
             create_new_project = bool(options['force'])
-        else:
-            create_new_project = True
-    else:
-        create_new_project = True
 
     path_utils.create_path(options['dir_name'])
 
-    if django.VERSION[0] > 2:
-        raise Exception(
-            'Django framework with major version > 2 is not supported'
-        )
+    options['staticfiles_app'] = "'django.contrib.staticfiles',"
 
-    if django.VERSION[1] < 3:
-        #force people install the django-staticfiles app
-        options['staticfiles_app'] = ''
-    else:
-        options['staticfiles_app'] = "'django.contrib.staticfiles',"
-
-    if django.VERSION[1] <=3:
-        auth_context_processor = 'django.core.context_processors.auth'
-    else:
-        auth_context_processor = 'django.contrib.auth.context_processors.auth'
-    options['auth_context_processor'] = auth_context_processor
+    options['auth_context_processor'] = 'django.contrib.auth.context_processors.auth'
 
     verbosity = options['verbosity']
 
