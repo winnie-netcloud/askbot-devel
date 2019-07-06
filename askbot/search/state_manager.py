@@ -136,7 +136,7 @@ class SearchState(object):
 
         self.author = int(author) if author else None
         self.page = int(page) if page else 1
-        if self.page == 0:  # in case someone likes jokes :)
+        if self.page <= 0:  # in case someone likes jokes :)
             self.page = 1
 
         default_page_size = int(askbot_settings.DEFAULT_QUESTIONS_PAGE_SIZE)

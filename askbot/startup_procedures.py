@@ -997,13 +997,10 @@ def test_versions():
 
     dj_ver = django.VERSION
     upgrade_msg = 'About upgrades, please read http://askbot.org/doc/upgrade.html'
-    if dj_ver < (1, 7) or dj_ver >= (2, 3):
-        errors.append('This version of Askbot supports only django 1.7 and 1.8 ' + upgrade_msg)
-    elif py_ver[:3] < (2, 7, 0):
-        errors.append(
-            'Django 1.7 and higher requires Python 2.7'
-            'please see the release notes.\n'
-            'https://docs.djangoproject.com/en/dev/releases/1.7/')
+    if dj_ver < (2, 2) or dj_ver >= (2, 3):
+        errors.append('This version of Askbot supports only django 2.2 ' + upgrade_msg)
+    elif py_ver[:3] < (3, 6, 0):
+        errors.append('Askbot requires Python 3.6')
 
     print_errors(errors)
 

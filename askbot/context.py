@@ -19,6 +19,35 @@ from askbot.utils.slug import slugify
 from askbot.utils.html import site_url
 from askbot.utils.translation import get_language
 
+def make_group_list():
+    if not askbot_settings.GROUPS_ENABLED:
+        return []
+    # calculate context needed to list all the groups
+    def _get_group_url(group):
+        """calculates url to the group based on its id and name"""
+        group_slug = slugify(group['name'])
+        return reverse(
+            'users_by_group',
+            kwargs={'group_id': group['id'], 'group_slug': group_slug})
+
+    # load id's and names of all groups
+    global_group = models.Group.objects.get_global_group()
+    groups = models.Group.objects.exclude_personal()
+    groups = groups.exclude(id=global_group.id)
+    groups_data = list(groups.values('id', 'name'))
+
+    # sort groups_data alphanumerically, but case-insensitive
+    groups_data = sorted(groups_data, key=lambda x: x['name'].lower())
+
+    # insert data for the global group at the first position
+    groups_data.insert(0, {'id': global_group.id, 'name': global_group.name})
+
+    # build group_list for the context
+    group_list = list()
+    for group in groups_data:
+        link = _get_group_url(group)
+        group_list.append({'name': group['name'], 'link': link})
+    return group_list
 
 def application_settings(request):
     """The context processor function"""
@@ -52,7 +81,7 @@ def application_settings(request):
         tinymce_plugins = settings.TINYMCE_DEFAULT_CONFIG.get('plugins', '').split(',')
         my_settings['TINYMCE_PLUGINS'] = [v.strip() for v in tinymce_plugins]
         my_settings['TINYMCE_EDITOR_DESELECTOR'] = settings.TINYMCE_DEFAULT_CONFIG['editor_deselector']
-        my_settings['TINYMCE_CONFIG_JSON'] = simplejson.dumps(settings.TINYMCE_DEFAULT_CONFIG)
+        my_settings['TINYMCE_CONFIG_JSON'] = json.dumps(settings.TINYMCE_DEFAULT_CONFIG)
     else:
         my_settings['TINYMCE_PLUGINS'] = []
         my_settings['TINYMCE_EDITOR_DESELECTOR'] = ''
@@ -91,33 +120,7 @@ def application_settings(request):
         from askbot.deps.django_authopenid import context as login_context
         context.update(login_context.login_context(request))
 
-    if askbot_settings.GROUPS_ENABLED:
-        # calculate context needed to list all the groups
-        def _get_group_url(group):
-            """calculates url to the group based on its id and name"""
-            group_slug = slugify(group['name'])
-            return reverse(
-                'users_by_group',
-                kwargs={'group_id': group['id'], 'group_slug': group_slug})
-
-        # load id's and names of all groups
-        global_group = models.Group.objects.get_global_group()
-        groups = models.Group.objects.exclude_personal()
-        groups = groups.exclude(id=global_group.id)
-        groups_data = list(groups.values('id', 'name'))
-
-        # sort groups_data alphanumerically, but case-insensitive
-        groups_data = sorted(groups_data, key=lambda x: x['name'].lower())
-
-        # insert data for the global group at the first position
-        groups_data.insert(0, {'id': global_group.id, 'name': global_group.name})
-
-        # build group_list for the context
-        group_list = list()
-        for group in groups_data:
-            link = _get_group_url(group)
-            group_list.append({'name': group['name'], 'link': link})
-        context['group_list'] = json.dumps(group_list)
+    context['group_list'] = json.dumps(make_group_list())
 
     if askbot_settings.EDITOR_TYPE == 'tinymce':
         from tinymce.widgets import TinyMCE

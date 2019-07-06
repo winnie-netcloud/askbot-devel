@@ -1,12 +1,14 @@
 ## Django settings for ASKBOT enabled project.
 import os.path
 import logging
-import sys
 import askbot
 import site
+import sys
+from jinja2.runtime import Undefined
 
 #this line is added so that we can import pre-packaged askbot dependencies
 ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
 DEBUG = True  # set to True to enable debugging
@@ -20,12 +22,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'postgresql_psycopg2' # only postgres (>8.3) and mysql are supported so far others have not been tested yet
-DATABASE_NAME = ''             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.XXX', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
 
 #outgoing mail server settings
 SERVER_EMAIL = ''
@@ -55,13 +61,12 @@ USE_I18N = True
 LANGUAGE_CODE = 'en'
 LANGUAGES = (('en', 'English'),)
 
-# Absolute path to the directory that holds media.
+# Absolute path to the directory that holds uploaded media
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'askbot', 'upfiles')
 MEDIA_URL = '/upfiles/'#url to uploaded media
 STATIC_URL = '/m/'#url to project static files
 
-PROJECT_ROOT = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')#path to files collected by collectstatic
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
@@ -81,6 +86,7 @@ TEMPLATES = (
         'OPTIONS': {
             'environment': 'askbot.skins.jinja2_environment.factory',
             'autoescape': False,
+            'undefined': Undefined
         },
     },
     {
@@ -89,7 +95,8 @@ TEMPLATES = (
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.core.context_processors.request',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
                 'django.contrib.auth.context_processors.auth',
             ]
         }
@@ -114,7 +121,6 @@ MIDDLEWARE = (
     'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
     'askbot.middleware.forum_mode.ForumModeMiddleware',
     'askbot.middleware.cancel.CancelActionMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'askbot.middleware.view_log.ViewLogMiddleware',
     'askbot.middleware.spaceless.SpacelessMiddleware',
@@ -145,9 +151,10 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.messages',
     'django_jinja',
-    'compressor',
     #'debug_toolbar',
+    #Optional, to enable haystack search
     #'haystack',
+    'compressor',
     'askbot',
     'askbot.deps.django_authopenid',
     #'askbot.importers.stackexchange', #se loader
@@ -158,9 +165,9 @@ INSTALLED_APPS = (
     'kombu.transport.memory',
     'followit',
     'tinymce',
+    'askbot.deps.group_messaging',
     #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
-
-    'compressor',
+#    'captcha',
 )
 
 
@@ -210,6 +217,7 @@ LOGIN_REDIRECT_URL = ASKBOT_URL #adjust if needed
 #note - it is important that upload dir url is NOT translated!!!
 #also, this url must not have the leading slash
 ALLOW_UNICODE_SLUGS = False
+ASKBOT_USE_STACKEXCHANGE_URLS = False #mimic url scheme of stackexchange
 
 #Celery Settings
 BROKER_TRANSPORT = "kombu.transport.memory.Transport"

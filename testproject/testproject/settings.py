@@ -5,6 +5,7 @@ import askbot
 import site
 import sys
 import dj_database_url
+from jinja2.runtime import Undefined
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 #this line is added so that we can import pre-packaged askbot dependencies
@@ -84,6 +85,7 @@ TEMPLATES = (
         'OPTIONS': {
             'environment': 'askbot.skins.jinja2_environment.factory',
             'autoescape': False,
+            'undefined': Undefined
         },
     },
     {
@@ -168,7 +170,6 @@ INSTALLED_APPS = (
     'askbot',
     'askbot.deps.django_authopenid',
     #'askbot.importers.stackexchange', #se loader
-    #'askbot.deps.livesettings',
     'livesettings',
     'keyedcache',
     'robots',

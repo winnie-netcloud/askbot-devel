@@ -33,6 +33,9 @@ from django_countries import countries
 from django_countries import settings as countries_settings
 
 from django_jinja import library as d_j_library
+
+import jinja2
+
 class template:
     @classmethod
     def Library(cls):
@@ -423,10 +426,27 @@ def convert_text(text):
     return _convert_text(text)
 
 # escapejs somehow got lost along the way. The following is from
-# https://stackoverflow.com/a/12340004/1129682
+# https://stackoverflow.com/a/18900930/3185053
+_js_escapes = {
+        '\\': '\\u005C',
+        '\'': '\\u0027',
+        '"': '\\u0022',
+        '>': '\\u003E',
+        '<': '\\u003C',
+        '&': '\\u0026',
+        '=': '\\u003D',
+        '-': '\\u002D',
+        ';': '\\u003B',
+        u'\u2028': '\\u2028',
+        u'\u2029': '\\u2029'
+}
+# Escape every ASCII character with a value less than 32.
+_js_escapes.update(('%c' % z, '\\u%04X' % z) for z in range(32))
+
 @register.filter
-def escapejs(text):
-    return simplejson.dumps(str(text))
+def escapejs(value):
+    return jinja2.Markup("".join(_js_escapes.get(l, l) for l in value))
+
 
 # with coffin we also threw out the url filter. in Coffin-0.3.8 there is this
 # comment on the url filter:
