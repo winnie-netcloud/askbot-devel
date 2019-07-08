@@ -36,7 +36,6 @@ REQUIREMENTS = {
     'oauth2': 'oauth2<=1.9.0.post1',
     'openid': 'python-openid2>=2.3.0',
     'picklefield': 'django-picklefield==1.0.0',
-    'pystache': 'pystache==0.3.1',
     'pytz': 'pytz<=2019.1',
     'captcha': 'django-recaptcha>=1.0.3,<=1.3.0',
     'cas': 'python-cas==1.4.0',

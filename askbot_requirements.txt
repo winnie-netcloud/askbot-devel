@@ -1,5 +1,4 @@
 --trusted-host github.com
-Jinja2==2.10
 django-appconf
 akismet==1.0.1
 beautifulsoup4<=4.7.1
@@ -18,13 +17,13 @@ django-transaction-signals==1.0.0
 django>=2.1,<2.3
 celery>=4.0,<=5.0
 html5lib==0.9999999
+Jinja2>=2.10
 jsonfield>=2.0.0
 kombu>=3.0
 markdown2<=2.3.8
 mock==3.0.5
 oauth2<=1.9.0.post1
 pyjwt<=1.7.1
-pystache==0.3.1
 python-cas==1.4.0
 python-openid2>=2.3.0
 pytz<=2019.1

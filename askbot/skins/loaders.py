@@ -22,12 +22,3 @@ def render_into_skin_as_string(template, data, request):
 
 def render_text_into_skin(text, data, request):
     return askbot.skins.shortcuts.render_text_into_skin(text, data, request)
-
-# FIXME: Squeeze this into askbot.skins.jinja2_environment.factory
-def get_app_dir_env(language_code):
-    env = AppDirectoryEnvironment(
-                            extensions=['jinja2.ext.i18n',],
-                            globals={'settings': askbot_settings}
-                        )
-    env.set_language(language_code)
-    return env

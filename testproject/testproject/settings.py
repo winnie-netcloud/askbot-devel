@@ -9,14 +9,14 @@ from jinja2.runtime import Undefined
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 #this line is added so that we can import pre-packaged askbot dependencies
-ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
+ASKBOT_ROOT  = os.path.abspath(os.path.dirname(askbot.__file__))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
-DEBUG = True  # set to True to enable debugging
+DEBUG          = True   # set to True to enable debugging
 TEMPLATE_DEBUG = False  # keep false when debugging jinja2 templates
-INTERNAL_IPS = ('127.0.0.1',)
-ALLOWED_HOSTS = ['*',]#change this for better security on your site
+INTERNAL_IPS   = ('127.0.0.1',)
+ALLOWED_HOSTS  = ['*',] #change this for better security on your site
 
 ADMINS = (
     ('Your Name', 'your_email@domain.com'),
@@ -24,23 +24,29 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE = dj_database_url.config(default='sqlite:///db.data')
-DATABASE.update({ 'TEST': {
-    'CHARSET': 'utf8',              # Setting the character set and collation to utf-8
-    'COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
-}})
-DATABASES = {'default': DATABASE}
+DATABASES = {
+}
+
+db_url = dj_database_url.config(default='sqlite:///db.data')
+
+if db_url:
+    DATABASES['default'] = db_url
+    DATABASES['default'].update({ 'TEST': {
+        'CHARSET': 'utf8',  # Setting the character set and collation to utf-8
+    }})
+else:
+    DATABASES['default'] = DATABASES.get('askbot', None)
 
 #outgoing mail server settings
-SERVER_EMAIL = ''
-DEFAULT_FROM_EMAIL = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+SERVER_EMAIL         = ''
+DEFAULT_FROM_EMAIL   = ''
+EMAIL_HOST_USER      = ''
+EMAIL_HOST_PASSWORD  = ''
 EMAIL_SUBJECT_PREFIX = ''
-EMAIL_HOST=''
-EMAIL_PORT=''
-EMAIL_USE_TLS=False
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST           = ''
+EMAIL_PORT           = ''
+EMAIL_USE_TLS        = False
+EMAIL_BACKEND        = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -55,19 +61,19 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N      = True
 LANGUAGE_CODE = 'en'
-LANGUAGES = (('en', 'English'),)
+LANGUAGES     = (('en', 'English'),)
 ASKBOT_LANGUAGE_MODE = 'single-lang' #'single-lang', 'url-lang', 'user-lang'
 
 # Absolute path to the directory that holds uploaded media
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'askbot', 'upfiles')
-MEDIA_URL = '/upfiles/'
+MEDIA_URL  = '/upfiles/'#url to uploaded media
 STATIC_URL = '/m/'#this must be different from MEDIA_URL
 USE_LOCAL_FONTS = False
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static') # path to files collected by collectstatic
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -77,15 +83,24 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 # Make up some unique string, and don't share it with anybody.
 SECRET_KEY = '37c8505c47c1aea8dbe214ba31bce63d'
 
+ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
+    'askbot.context.application_settings',
+    'askbot.user_messages.context_processors.user_messages',# must be before auth
+    'django.contrib.messages.context_processors.messages', # this  will replace the one above soon
+    'django.contrib.auth.context_processors.auth', # this is required for the admin app
+                                                   # not sure if the admin app even uses jinja2 ...
+]
+
 TEMPLATES = (
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
-        'DIRS': [], # not sure if I should put templates here. I think it would clash with DjangoTemplates
+        'DIRS': [],
         'OPTIONS': {
             'environment': 'askbot.skins.jinja2_environment.factory',
             'autoescape': False,
-            'undefined': Undefined
+            'undefined': Undefined,
+            'context_processors': ASKBOT_COMMON_CONTEXT_PREPROCESSORS
         },
     },
     {
@@ -93,11 +108,9 @@ TEMPLATES = (
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.messages.context_processors.messages',
-                'django.contrib.auth.context_processors.auth',
-            ]
+            'context_processors':
+                ['django.template.context_processors.request' ] # because DTL
+                + ASKBOT_COMMON_CONTEXT_PREPROCESSORS
         }
     },
 )
@@ -210,9 +223,9 @@ AUTHENTICATION_BACKENDS = (
 )
 
 #logging settings
-LOG_FILENAME = os.path.join(PROJECT_ROOT, 'askbot.log')
+LOG_FILENAME = 'askbot.log'
 logging.basicConfig(
-    filename=LOG_FILENAME,
+    filename=os.path.join(PROJECT_ROOT, LOG_FILENAME), # os.path.join(os.path.dirname(__file__), 'log', LOG_FILENAME),
     level=logging.CRITICAL,
     format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
 )
@@ -226,7 +239,7 @@ logging.basicConfig(
 ASKBOT_URL = '' #no leading slash, default = '' empty string
 ASKBOT_TRANSLATE_URL = True #translate specific URLs
 _ = lambda v:v #fake translation function for the login url
-LOGIN_URL = '/%s%s%s' % (ASKBOT_URL,_('account/'),_('signin/'))
+LOGIN_URL = '/%s%s%s' % (ASKBOT_URL, _('account/'), _('signin/'))
 LOGIN_REDIRECT_URL = ASKBOT_URL #adjust, if needed
 #note - it is important that upload dir url is NOT translated!!!
 #also, this url must not have the leading slash
@@ -240,8 +253,6 @@ CELERY_ALWAYS_EAGER = True
 DOMAIN_NAME = ''
 
 CSRF_COOKIE_NAME = '_csrf'
-#https://docs.djangoproject.com/en/1.3/ref/contrib/csrf/
-#CSRF_COOKIE_DOMAIN = DOMAIN_NAME
 
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
@@ -332,3 +343,4 @@ class DisableMigrations(object):
         return None
 
 MIGRATION_MODULES = DisableMigrations()
+GROUPS_ENABLED=True
