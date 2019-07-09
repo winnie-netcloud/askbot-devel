@@ -20,10 +20,10 @@ do_admin      = True
 do_make_admin = True
 do_uwsgi_ini  = True
 
-import psycopg2
 from time import sleep
 
-if dsn is not None:
+if dsn is not None and dsn.startswith('postgres'):
+    import psycopg2
     print(f'Waiting for database {dsn}')
     for retry in range(1,10):
         try:
