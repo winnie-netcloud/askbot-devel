@@ -1084,19 +1084,17 @@ class OAuthConnection(object):
 
 def get_oauth2_starter_url(provider_name, csrf_token):
     """returns redirect url for the oauth2 protocol for a given provider"""
-    from sanction.client import Client
+    from requests_oauthlib.oauth2_session import OAuth2Session
 
     providers = get_enabled_login_providers()
     params = providers[provider_name]
     client_id = getattr(askbot_settings, format_setting_name(provider_name) + '_KEY')
     redirect_uri = site_url(reverse('user_complete_oauth2_signin'))
-    client = Client(
-        auth_endpoint=params['auth_endpoint'],
-        client_id=client_id,
-        redirect_uri=redirect_uri
-    )
+    session = OAuth2Session(client_id, redirect_uri=redirect_uri, state=csrf_token)
 
-    return client.auth_uri(state=csrf_token, **params.get('extra_auth_params', {}))
+    url, csrf = session.authorization_url(params['auth_endpoint'],  **params.get('extra_auth_params', {}))
+    return url.encode('utf-8')
+
 
 
 def ldap_check_password(username, password):
