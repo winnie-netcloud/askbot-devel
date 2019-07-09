@@ -10,8 +10,13 @@ services:
     volumes:
     - ./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
 
+  redis:
+    image: redis:5
+    ports:
+     - 6397
+
   askbot:
-    image: "askbot:latest"
+    image: "askbot:latest_redis"
     ports:
       - "8000:80"
     depends_on:
