@@ -32,6 +32,7 @@ class AskbotSetup:
 
     def _add_arguments(self):
         self._add_db_args()
+        self._add_cache_args()
         self._add_setup_args()
         self._add_settings_args()
 
@@ -100,6 +101,37 @@ class AskbotSetup:
                 dest = "dir_name",
                 default = None,
                 help = "Directory where you want to install."
+            )
+
+    def _add_cache_args(self):
+        """Cache settings
+        """
+        self.parser.add_argument('--cache-engine',
+                dest='cache_engine',
+                action='store',
+                default='locmem',
+                help='Select with Django cache backend to use. <locmem|redis|memcached>'
+            )
+
+        self.parser.add_argument('--cache-node',
+                dest='cache_nodes',
+                action='append',
+                help='Add cache node to list of nodes. Specify node as <ip-address>:<port>. Can be provided multiple times.'
+            )
+
+        # only used by redis at the moment
+        self.parser.add_argument('--cache-db',
+                dest='cache_db',
+                action='store',
+                default=1,
+                help='The name of the cache DB to use.'
+            )
+
+        # only used by redis at the moment
+        self.parser.add_argument('--cache-password',
+                dest='cache_password',
+                action='store',
+                help='The password to connect to the cache.'
             )
 
     def _add_db_args(self):
