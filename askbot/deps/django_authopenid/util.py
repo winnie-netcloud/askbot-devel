@@ -467,6 +467,10 @@ def get_enabled_major_login_providers():
         return get_user_id_from_resource_endpoint(session, yammer,
                                 get_user_id=lambda data: data['user']['id'])
 
+    def get_windows_live_user_id(session, wlive):
+        return get_user_id_from_resource_endpoint(session, wlive,
+                                get_user_id=lambda data: data['user_id'])
+
     def get_github_user_id(session, github):
         return get_user_id_from_resource_endpoint(session, github)
 
@@ -506,8 +510,8 @@ def get_enabled_major_login_providers():
             'token_endpoint': 'https://login.live.com/oauth20_token.srf',
             'resource_endpoint': 'https://apis.live.net/v5.0/me',
             'icon_media_path': 'images/jquery-openid/windows-live.png',
-            'get_user_id_function': lambda data: data.user_id,
-            'response_parser': lambda data: simplejson.loads(data),
+            'get_user_id_function': get_windows_live_user_id,
+            'response_parser': simplejson.loads,
             'extra_auth_params': {'scope': ('wl.basic',)},
         }
 
