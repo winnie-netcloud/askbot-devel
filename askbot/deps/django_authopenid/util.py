@@ -471,6 +471,10 @@ def get_enabled_major_login_providers():
         return get_user_id_from_resource_endpoint(session, wlive,
                                 get_user_id=lambda data: data['user_id'])
 
+    def get_microsoft_azure_user_id(session, azure):
+        return get_user_id_from_resource_endpoint(session, azure,
+                                get_user_id=lambda data: data['id'])
+
     def get_github_user_id(session, github):
         return get_user_id_from_resource_endpoint(session, github)
 
@@ -515,17 +519,6 @@ def get_enabled_major_login_providers():
             'extra_auth_params': {'scope': ('wl.basic',)},
         }
 
-    def get_microsoft_azure_user_id(client):
-        conn = http.client.HTTPSConnection('graph.microsoft.com')
-        headers = {
-            'Authorization' : 'Bearer {0}'.format(client.access_token),
-            'Accept' : 'application/json',
-        }
-        conn.request('GET', '/v1.0/me', '', headers)
-        response = conn.getresponse()
-        profile = simplejson.loads(response.read())
-        return profile['id']
-
     if askbot_settings.MICROSOFT_AZURE_KEY and askbot_settings.MICROSOFT_AZURE_SECRET:
         data['microsoft-azure'] = {
             'name': 'microsoft-azure',
@@ -533,10 +526,10 @@ def get_enabled_major_login_providers():
             'type': 'oauth2',
             'auth_endpoint': 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
             'token_endpoint': 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-            'resource_endpoint': 'https://graph.microsoft.com/v1.0/',
+            'resource_endpoint': 'https://graph.microsoft.com/v1.0/me',
             'icon_media_path': 'images/jquery-openid/microsoft-azure.png',
             'get_user_id_function': get_microsoft_azure_user_id,
-            'response_parser': lambda data: simplejson.loads(data),
+            'response_parser': simplejson.loads,
             'extra_auth_params': {'scope': ('User.Read',),},
         }
 
