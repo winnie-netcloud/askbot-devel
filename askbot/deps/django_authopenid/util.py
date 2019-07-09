@@ -458,6 +458,16 @@ def get_enabled_major_login_providers():
         profile = client.request('me')
         return profile['id']
 
+    def get_user_id_from_resource_endpoint(session, provider, get_user_id=None):
+        if get_user_id is None:
+            get_user_id = lambda data:data['id']
+        response = session.get(provider['resource_endpoint'])  # fetch data
+        user_data = provider['response_parser'](response.text) # parse json
+        return get_user_id(user_data)                          # get user id
+
+    def get_github_user_id(session, github):
+        return get_user_id_from_resource_endpoint(session, github)
+
     if askbot_settings.FACEBOOK_KEY and askbot_settings.FACEBOOK_SECRET:
         data['facebook'] = {
             'name': 'facebook',
@@ -665,6 +675,18 @@ def get_enabled_major_login_providers():
         'icon_media_path': 'images/jquery-openid/openid.gif',
         'openid_endpoint': None,
     }
+    data['github'] = {
+        'name': 'github',
+        'display_name': 'GitHub',
+        'type': 'oauth2',
+        'auth_endpoint': 'https://github.com/login/oauth/authorize',
+        'token_endpoint': 'https://github.com/login/oauth/access_token',
+        'resource_endpoint': 'https://api.github.com/user',
+        'icon_media_path': 'images/jquery-openid/GitHub_Logo.png',
+        'get_user_id_function': get_github_user_id,
+        'response_parser': simplejson.loads,
+    }
+
     if askbot_settings.SIGNIN_OPENSTACKID_ENABLED and askbot_settings.OPENSTACKID_ENDPOINT_URL:
         data['openstackid'] = {
             'name': 'openstackid',
@@ -882,6 +904,9 @@ def get_oauth_parameters(provider_name):
     elif provider_name == 'microsoft-azure':
         consumer_key = askbot_settings.MICROSOFT_AZURE_KEY
         consumer_secret = askbot_settings.MICROSOFT_AZURE_SECRET
+    elif provider_name == 'github':
+        consumer_key = askbot_settings.GITHUB_KEY
+        consumer_secret = askbot_settings.GITHUB_SECRET
     elif provider_name != 'mediawiki':
         raise ValueError('unexpected oauth provider %s' % provider_name)
 

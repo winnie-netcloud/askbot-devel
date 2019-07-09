@@ -265,3 +265,24 @@ settings.register(
         description=_('Microsoft Azure secret key'),
     )
 )
+
+settings.register(
+    livesettings.StringValue(
+        EXTERNAL_KEYS,
+        'GITHUB_KEY',
+        description=_('GitHub OAuth App Client ID'),
+        help_text=_(
+            'Please register your client application at <a href="%(url)s">'
+            'Github OAuth Apps site</a>'
+        ) % {'url': 'https://github.com/settings/developers'},
+
+    )
+)
+
+settings.register(
+    livesettings.StringValue(
+        EXTERNAL_KEYS,
+        'GITHUB_SECRET',
+        description=_('GitHub OAuth App Client Secret'),
+    )
+)
