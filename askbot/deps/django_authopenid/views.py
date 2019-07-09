@@ -298,7 +298,8 @@ def complete_oauth2_signin(request):
     request.session['username'] = ''#todo: pull from profile
 
     if provider_name == 'facebook':
-        profile = session.request("me")
+        response = session.get(params['resource_endpoint'])
+        profile = params['response_parser'](response.text)
         request.session['email'] = profile.get('email', '')
         request.session['username'] = profile.get('username', '')
     elif provider_name == 'google-plus' and user is None:

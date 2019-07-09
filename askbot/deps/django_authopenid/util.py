@@ -453,17 +453,15 @@ def get_enabled_major_login_providers():
             'extra_token_name': _('%(login_name)s username') % context_dict
         }
 
-    def get_facebook_user_id(client):
-        """returns facebook user id given the access token"""
-        profile = client.request('me')
-        return profile['id']
-
     def get_user_id_from_resource_endpoint(session, provider, get_user_id=None):
         if get_user_id is None:
             get_user_id = lambda data:data['id']
         response = session.get(provider['resource_endpoint'])  # fetch data
         user_data = provider['response_parser'](response.text) # parse json
         return get_user_id(user_data)                          # get user id
+
+    def get_facebook_user_id(session, facebook):
+        return get_user_id_from_resource_endpoint(session, facebook)
 
     def get_github_user_id(session, github):
         return get_user_id_from_resource_endpoint(session, github)
@@ -475,11 +473,11 @@ def get_enabled_major_login_providers():
             'type': 'oauth2',
             'auth_endpoint': 'https://www.facebook.com/v3.2/dialog/oauth/',
             'token_endpoint': 'https://graph.facebook.com/v3.2/oauth/access_token',
-            'resource_endpoint': 'https://graph.facebook.com/v3.2/',
+            'resource_endpoint': 'https://graph.facebook.com/v3.2/me',
             'icon_media_path': 'images/jquery-openid/facebook.gif',
             'get_user_id_function': get_facebook_user_id,
-            'response_parser': lambda data: simplejson.loads(data),
-            'scope': ['email',],
+            'response_parser': simplejson.loads,
+            'extra_auth_params': {'scope': ['email']},
         }
 
     if askbot_settings.YAMMER_KEY and askbot_settings.YAMMER_SECRET:
