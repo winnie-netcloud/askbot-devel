@@ -475,6 +475,10 @@ def get_enabled_major_login_providers():
         return get_user_id_from_resource_endpoint(session, azure,
                                 get_user_id=lambda data: data['id'])
 
+    def get_google_user_id(session, google):
+        return get_user_id_from_resource_endpoint(session, google,
+                                get_user_id=lambda data: data['id'])
+
     def get_github_user_id(session, github):
         return get_user_id_from_resource_endpoint(session, github)
 
@@ -620,9 +624,6 @@ def get_enabled_major_login_providers():
             'get_user_id_function': get_linked_in_user_id
         }
 
-    def get_google_user_id(client):
-        return client.request('me')['id']
-
     if askbot_settings.GOOGLE_PLUS_KEY and askbot_settings.GOOGLE_PLUS_SECRET:
         data['google-plus'] = {
             'name': 'google-plus',
@@ -630,7 +631,7 @@ def get_enabled_major_login_providers():
             'type': 'oauth2',
             'auth_endpoint': 'https://accounts.google.com/o/oauth2/auth',
             'token_endpoint': 'https://accounts.google.com/o/oauth2/token',
-            'resource_endpoint': 'https://www.googleapis.com/plus/v1/people/',
+            'resource_endpoint': 'https://www.googleapis.com/plus/v1/people/me',
             'icon_media_path': 'images/jquery-openid/google.gif',
             'get_user_id_function': get_google_user_id,
             'extra_auth_params': {'scope': ('profile', 'email', 'openid'), 'openid.realm': askbot_settings.APP_URL}
