@@ -284,7 +284,7 @@ def complete_oauth2_signin(request):
 
 
     #todo: possibly set additional parameters here
-    user_id = params['get_user_id_function'](session)
+    user_id = params['get_user_id_function'](session, params)
 
     user = authenticate(
                 user_identifier=user_id,
