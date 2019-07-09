@@ -20,12 +20,9 @@ DATABASE_ENGINE_CHOICES = ('1', '2', '3', '4')
 
 class AskbotSetup:
 
-    PROJECT_FILES_TO_CREATE = [ 'manage.py' ]
-    APP_FILES_TO_CREATE     = [ '__init__.py', 'urls.py', 'django.wsgi', 'celery_app.py' ]
-    SOURCE_DIR              = os.path.dirname(os.path.dirname(__file__))
-
-    FILES_TO_CREATE = [ '__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery_app.py' ]
-    BLANK_FILES     = [ '__init__.py', 'manage.py' ]
+    PROJECT_FILES_TO_CREATE = set(('manage.py',))
+    APP_FILES_TO_CREATE     = set(path_utils.FILES_TO_CREATE) - set(('manage.py',))
+    SOURCE_DIR              = os.path.dirname(os.path.dirname(__file__)) # a.k.a. ASKBOT_ROOT in settings.py
 
     def __init__(self):
         self.parser = ArgumentParser(description="Setup a Django project and app for Askbot")
@@ -174,7 +171,7 @@ class AskbotSetup:
             todo.append(wish)
         self._todo['create_project'] = todo
 
-    def __call__(self):
+    def __call__(self): # this is the main part of the original askbot_setup()
       try:
         options = self.parser.parse_args()
         self._set_verbosity(options)
@@ -227,100 +224,106 @@ class AskbotSetup:
         sys.exit(1)
         pass
 
-    def _create_new_django_project(self, install_dir, options):
-        path_utils.create_path(options['dir_name'])
+    def _install_copy(self, copy_list, forced_overwrite=[], skip_silently=[]):
         print_message('Copying files:', self.verbosity)
-        from pprint import pprint
-        pprint(self._todo)
-        pprint(dict(options))
-        copy_list = list()
-        if 'django' in self._todo.get('create_project',[]):
-            copy_list.extend([
-               (  os.path.join(self.SOURCE_DIR, 'setup_templates', file_name),
-                  os.path.join(install_dir, file_name)
-               ) for file_name in self.PROJECT_FILES_TO_CREATE
-            ])
-
-        pprint(copy_list)
         for src,dst in copy_list:
             print_message(f'* to {dst} from {src}', self.verbosity)
             if not os.path.exists(dst):
                 shutil.copy(src, dst)
-            elif dst.endswith('urls.py'):
+                continue
+            matches = [ dst for c in forced_overwrite
+                            if dst.endswith(f'{os.path.sep}{c}') ]
+            if len(matches) > 0:
                 print_message('  ^^^ forced overwrite!', self.verbosity)
                 shutil.copy(src, dst)
-            elif dst.split(os.path.sep)[-1] not in BLANK_FILES:
-                    print_message(f'  ^^^ you already have one, please add contents of {src_file}', self.verbosity)
+            elif dst.split(os.path.sep)[-1] not in skip_silently:
+                print_message(f'  ^^^ you already have one, please add contents of {src_file}', self.verbosity)
+        print_message('Done.', self.verbosity)
 
-        #create log directory
-        log_dir = os.path.join(install_dir, path_utils.LOG_DIR_NAME)
-        path_utils.create_path(log_dir)
-        path_utils.touch(os.path.join(log_dir, 'askbot.log')) # Fixme
-
-    def _create_new_django_app(self, app_name, options):
-        app_dir =  os.path.join(options['dir_name'], app_name)
-
-        settings_py = os.path.join(app_dir, 'settings.py')
-        crontab     = os.path.join(app_dir, 'crontab')
-        uwsgi_ini   = os.path.join(app_dir, 'uwsgi.ini')
-
-        copy_list_django = [(
-            os.path.join(self.SOURCE_DIR, 'setup_templates', file_name),
-            os.path.join(app_dir, file_name)
-            ) for file_name in self.APP_FILES_TO_CREATE ]
-
-        copy_list_uwsgi  = [(
-            os.path.join(self.SOURCE_DIR, 'container', file_name),
-            os.path.join(app_dir, file_name)
-            ) for file_name in [ 'cron-askbot.sh', 'prestart.sh', 'prestart.py' ]]
-
-        render_list_django = [
-            (settings_py, 'setup_templates', 'settings.py.jinja2', None ),
-            ]
-        render_list_uwsgi  = [
-            (crontab,   'container', 'crontab',   None ),
-            (uwsgi_ini, 'container', 'uwsgi.ini', None ),
-            ]
-        path_utils.create_path(app_dir)
-
-        copy_list = list()
-        if 'django' in self._todo.get('create_project',[]):
-            copy_list.extend(copy_list_django)
-        if 'container-uwsgi' in self._todo.get('create_project',[]):
-            copy_list.extend(copy_list_uwsgi)
-
-        for src,dst in copy_list:
-            print_message(f'* to {dst} from {src}', self.verbosity)
-            if not os.path.exists(dst):
-                shutil.copy(src, dst)
-            elif dst.endswith('urls.py'):
-                print_message('  ^^^ forced overwrite!', self.verbosity)
-                shutil.copy(src, dst)
-            elif dst.split(os.path.sep)[-1] not in BLANK_FILES:
-                    print_message(f'  ^^^ you already have one, please add contents of {src_file}', self.verbosity)
-
-        render_list = list()
-        if 'django' in self._todo.get('create_project',[]):
-            render_list.extend(render_list_django)
-        if 'container-uwsgi' in self._todo.get('create_project',[]):
-            render_list.extend(render_list_uwsgi)
-
-        options['askbot_site'] = options['dir_name']
-        options['askbot_app']  = app_name
-        for dst, tmpl_dir, tmpl_file, output in render_list:
+    def _install_render_with_jinja2(self, render_list, context):
+        print_message('Rendering files:', self.verbosity)
+        template = DeploymentTemplate('dummy.name') # we use this a little differently than originally intended
+        for src, dst in render_list:
             if os.path.exists(dst):
                 print_message(f'* you already have a file "{dst}" please merge the contents', self.verbosity)
-            else:
-                print_message(f'Creating file {dst}', self.verbosity)
-                output = DeploymentTemplate(tmpl_file, tmpl_dir, options).render()
-                with open(dst, 'w+') as output_file:
-                    output_file.write(output)
-        if os.path.exists(options['local_settings']):
-            with open(settings_py, 'a') as settings_file:
+                continue
+            print_message(f'*    {dst} from {src}', self.verbosity)
+            template.tmpl_path = src
+            output = template.render(context)
+            with open(dst, 'w+') as output_file:
+                output_file.write(output)
+        print_message('Done.', self.verbosity)
+
+    def _create_new_django_project(self, install_dir, options):
+        log_dir  = os.path.join(install_dir, path_utils.LOG_DIR_NAME)
+        log_file = os.path.join(log_dir, options['logfile_name'])
+
+        create_me = [ install_dir, log_dir ]
+        copy_me   = list()
+
+        if 'django' in self._todo.get('create_project',[]):
+            src = lambda x:os.path.join(self.SOURCE_DIR, 'setup_templates', x)
+            dst = lambda x:os.path.join(install_dir, x)
+            copy_me.extend([
+               ( src(file_name), dst(file_name) )
+               for file_name in self.PROJECT_FILES_TO_CREATE
+            ])
+
+        for d in create_me:
+            path_utils.create_path(d)
+
+        path_utils.touch(log_file)
+        self._install_copy(copy_me, skip_silently=path_utils.BLANK_FILES)
+
+    def _create_new_django_app(self, app_name, options):
+        options['askbot_site'] = options['dir_name']
+        options['askbot_app']  = app_name
+        app_dir =  os.path.join(options['dir_name'], app_name)
+
+        create_me = [ app_dir ]
+        copy_me   = list()
+        render_me = list()
+
+        if 'django' in self._todo.get('create_project',[]):
+            src = lambda x:os.path.join(self.SOURCE_DIR, 'setup_templates', x)
+            dst = lambda x:os.path.join(app_dir, x)
+            copy_me.extend([
+                ( src(file_name), dst(file_name) )
+                for file_name in self.APP_FILES_TO_CREATE
+                ])
+            render_me.extend([
+                ( src('settings.py.jinja2'), dst('settings.py') )
+                ])
+
+        if 'container-uwsgi' in self._todo.get('create_project',[]):
+            src = lambda x:os.path.join(self.SOURCE_DIR, 'container', x)
+            dst = lambda x:os.path.join(app_dir, x)
+            copy_me.extend([
+                ( src(file_name), dst(file_name) )
+                for file_name in [ 'cron-askbot.sh', 'prestart.sh', 'prestart.py' ]
+            ])
+            render_me.extend([
+                ( src(file_name), dst(file_name) )
+                for file_name in [ 'crontab', 'uwsgi.ini' ]
+            ])
+
+        for d in create_me:
+            path_utils.create_path(d)
+
+        self._install_copy(copy_me, skip_silently=path_utils.BLANK_FILES,
+                                    forced_overwrite=['urls.py'])
+
+        self._install_render_with_jinja2(render_me, options)
+
+        if len(options['local_settings']) > 0 \
+        and os.path.exists(options['local_settings']):
+            dst = os.path.join(app_dir, 'settings.py')
+            print_message(f'Appending {options["local_settings"]} to {dst}', self.verbosity)
+            with open(dst, 'a') as settings_file:
                 with open(context['local_settings'], 'r') as local_settings:
                     settings_file.write('\n')
                     settings_file.write(local_settings.read())
-        print_message("done creating files", self.verbosity)
+            print_message('Done.', self.verbosity)
 
     def deploy_askbot(self, options):
         """function that creates django project files,
@@ -355,11 +358,8 @@ class AskbotSetup:
                 self.verbosity
             )
 
-
-
+# set to askbot_setup_orig to return to original installer
 askbot_setup = AskbotSetup()
-
-
 
 def askbot_setup_orig():
     """basic deployment procedure
