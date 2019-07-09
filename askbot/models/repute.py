@@ -162,6 +162,8 @@ class Award(models.Model):
         return '[%s] is awarded a badge [%s] at %s' % (self.user.username,
                                                         self.badge.get_name(),
                                                         self.awarded_at)
+    def __lt__(self, other):
+        return self.id < other.id
 
     class Meta:
         app_label = 'askbot'

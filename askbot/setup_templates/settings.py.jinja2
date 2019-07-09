@@ -13,7 +13,7 @@ ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
-DEBUG          = True   # set to True to enable debugging
+DEBUG          = False   # set to True to enable debugging
 TEMPLATE_DEBUG = False  # keep false when debugging jinja2 templates
 INTERNAL_IPS   = ('127.0.0.1',)
 ALLOWED_HOSTS  = ['*',] #change this for better security on your site
@@ -97,12 +97,17 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')#path to files collected by co
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 # Make up some unique string, and don't share it with anybody.
-SECRET_KEY = '{{secret_key}}'
+
+{% if secret_key %}
+SECRET_KEY = "{{ secret_key }}"
+{% else %}
+SECRET_KEY = os.environ['SECRET_KEY']
+{% endif %}
 
 ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
     'askbot.context.application_settings',
     'askbot.user_messages.context_processors.user_messages',# must be before auth
-    'django.contrib.messages.context_processors.messages', # this  will replace the one above soon
+    'django.contrib.messages.context_processors.messages',
     'django.contrib.auth.context_processors.auth', # this is required for the admin app
                                                    # not sure if the admin app even uses jinja2 ...
 ]
@@ -227,9 +232,10 @@ AUTHENTICATION_BACKENDS = (
 )
 
 #logging settings
-LOG_FILENAME = 'askbot.log'
 logging.basicConfig(
-    filename=os.path.join(PROJECT_ROOT, LOG_FILENAME), # os.path.join(os.path.dirname(__file__), 'log', LOG_FILENAME),
+{%- if logfile_name != 'stdout' %}
+    filename=os.path.join(PROJECT_ROOT, 'log', '{{ logfile_name }}'),
+{%- endif %}
     level=logging.CRITICAL,
     format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
 )
@@ -339,11 +345,11 @@ AVATAR_AUTO_GENERATE_SIZES = (16, 32, 48, 128) #change if avatars are sized diff
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-class DisableMigrations(object):
-    def __contains__(self, item):
-        return True
-
-    def __getitem__(self, item):
-        return None
-
-MIGRATION_MODULES = DisableMigrations()
+#class DisableMigrations(object):
+#    def __contains__(self, item):
+#        return True
+#
+#    def __getitem__(self, item):
+#        return None
+#
+#MIGRATION_MODULES = DisableMigrations()

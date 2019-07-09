@@ -1,25 +1,58 @@
-FROM python:2
+# This Dockerifle builds a simple Askbot installation
+#
+# It makes use of environment variables:
+# 1. DATABASE_URL See https://github.com/kennethreitz/dj-database-url for details
+# 2. SECRET_KEY for making hashes within Django.
+# 3. ADMIN_PASSWORD used for creating a user named "admin"
+# 4. NO_CRON set this to "yes" to disable the embedded cron job.
+#
+# Make sure to *+always* start the container with the same SECRET_KEY.
+#
+# Start with something like
+#
+# docker run -e 'DATABASE_URL=sqlite:////askbot_site/askbot.db' -e "SECRET_KEY=$(openssl rand 14 | base64)" -e ADMIN_PASSWORD=admin -p 8080:80 askbot/askbot:latest
+#
+# User uploads are stored in **/askbot_site/askbot/upfiles** . I'd recommend to make it a kubernetes volume.
 
+FROM tiangolo/uwsgi-nginx:python3.6-alpine3.9
+
+ARG SITE=askbot-site
+ARG ASKBOT=.
 ENV PYTHONUNBUFFERED 1
+ENV ASKBOT_SITE /${SITE}
 
-ADD . /src/
-WORKDIR /src/
-RUN pip install -r askbot_requirements.txt
-RUN python setup.py install
+ENV UWSGI_INI /${SITE}/askbot_app/uwsgi.ini
+# Not recognized by uwsgi-nginx, yet.
+# The file doesn't exist either!
+#ENV PRE_START_PATH /${SITE}/prestart.sh
 
-RUN mkdir /site/
-WORKDIR /site/
-RUN askbot-setup --dir-name=. --db-engine=${ASKBOT_DATABASE_ENGINE:-2} \
-    --db-name=${ASKBOT_DATABASE_NAME:-db.sqlite} \
-    --db-user="${ASKBOT_DATABASE_USER}" \
-    --db-password="${ASKBOT_DATABASE_PASSWORD}"
+# TODO: changing this requires another cache backend
+ENV NGINX_WORKER_PROCESSES 1
+ENV UWSGI_PROCESSES 1
+ENV UWSGI_CHEAPER 0
 
-RUN sed "s/ROOT_URLCONF.*/ROOT_URLCONF = 'urls'/"  settings.py -i
+ADD askbot_requirements.txt /
 
-RUN python manage.py migrate --noinput
-RUN python manage.py collectstatic --noinput
+#RUN apt-get update && apt-get -y install cron git \
+RUN apk add --update --no-cache git py3-cffi \
+	gcc g++ git make unzip mkinitfs kmod mtools squashfs-tools py3-cffi \
+	libffi-dev linux-headers musl-dev libc-dev openssl-dev \
+	python3-dev zlib-dev libxml2-dev libxslt-dev jpeg-dev \
+        postgresql-dev zlib jpeg libxml2 libxslt postgresql-libs \
+    && python -m pip install --upgrade pip \
+    && pip install -r /askbot_requirements.txt \
+    && pip install psycopg2
 
+ADD $ASKBOT /src
+RUN cd /src/ && python setup.py install \
+    && askbot-setup -n /${SITE} -e 1 -d postgres -u postgres -p askbotPW --db-host=postgres --db-port=5432 --logfile-name=stdout --no-secret-key --create-project container-uwsgi
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+RUN true \
+    && cp /${SITE}/askbot_app/prestart.sh /app \
+    && /usr/bin/crontab /${SITE}/askbot_app/crontab \
+    && cd /${SITE} && SECRET_KEY=whatever DJANGO_SETTINGS_MODULE=askbot_app.settings python manage.py collectstatic --noinput
 
-EXPOSE 8080
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.5.0/wait /wait
+RUN chmod +x /wait
+
+WORKDIR /${SITE}

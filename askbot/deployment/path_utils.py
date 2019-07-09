@@ -15,7 +15,7 @@ import imp
 
 from askbot.deployment import messages
 from askbot.utils import console
-from askbot.deployment.template_loader import SettingsTemplate
+from askbot.deployment.template_loader import DeploymentTemplate
 
 
 FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery_app.py')
