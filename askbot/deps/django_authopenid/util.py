@@ -463,6 +463,10 @@ def get_enabled_major_login_providers():
     def get_facebook_user_id(session, facebook):
         return get_user_id_from_resource_endpoint(session, facebook)
 
+    def get_yammer_user_id(session, yammer):
+        return get_user_id_from_resource_endpoint(session, yammer,
+                                get_user_id=lambda data: data['user']['id'])
+
     def get_github_user_id(session, github):
         return get_user_id_from_resource_endpoint(session, github)
 
@@ -489,8 +493,8 @@ def get_enabled_major_login_providers():
             'token_endpoint': 'https://www.yammer.com/oauth2/access_token',
             'resource_endpoint': 'https://www.yammer.com/api/v1/users/current.json',
             'icon_media_path': 'images/jquery-openid/yammer.png',
-            'get_user_id_function': lambda data: data.user['id'],
-            'response_parser': lambda data: simplejson.loads(data),
+            'get_user_id_function': get_yammer_user_id,
+            'response_parser': simplejson.loads,
         }
 
     if askbot_settings.WINDOWS_LIVE_KEY and askbot_settings.WINDOWS_LIVE_SECRET:
