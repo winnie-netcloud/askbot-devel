@@ -453,10 +453,34 @@ def get_enabled_major_login_providers():
             'extra_token_name': _('%(login_name)s username') % context_dict
         }
 
-    def get_facebook_user_id(client):
-        """returns facebook user id given the access token"""
-        profile = client.request('me')
-        return profile['id']
+    def get_user_id_from_resource_endpoint(session, provider, get_user_id=None):
+        if get_user_id is None:
+            get_user_id = lambda data:data['id']
+        response = session.get(provider['resource_endpoint'])  # fetch data
+        user_data = provider['response_parser'](response.text) # parse json
+        return get_user_id(user_data)                          # get user id
+
+    def get_facebook_user_id(session, facebook):
+        return get_user_id_from_resource_endpoint(session, facebook)
+
+    def get_yammer_user_id(session, yammer):
+        return get_user_id_from_resource_endpoint(session, yammer,
+                                get_user_id=lambda data: data['user']['id'])
+
+    def get_windows_live_user_id(session, wlive):
+        return get_user_id_from_resource_endpoint(session, wlive,
+                                get_user_id=lambda data: data['user_id'])
+
+    def get_microsoft_azure_user_id(session, azure):
+        return get_user_id_from_resource_endpoint(session, azure,
+                                get_user_id=lambda data: data['id'])
+
+    def get_google_user_id(session, google):
+        return get_user_id_from_resource_endpoint(session, google,
+                                get_user_id=lambda data: data['id'])
+
+    def get_github_user_id(session, github):
+        return get_user_id_from_resource_endpoint(session, github)
 
     if askbot_settings.FACEBOOK_KEY and askbot_settings.FACEBOOK_SECRET:
         data['facebook'] = {
@@ -465,11 +489,11 @@ def get_enabled_major_login_providers():
             'type': 'oauth2',
             'auth_endpoint': 'https://www.facebook.com/v3.2/dialog/oauth/',
             'token_endpoint': 'https://graph.facebook.com/v3.2/oauth/access_token',
-            'resource_endpoint': 'https://graph.facebook.com/v3.2/',
+            'resource_endpoint': 'https://graph.facebook.com/v3.2/me',
             'icon_media_path': 'images/jquery-openid/facebook.gif',
             'get_user_id_function': get_facebook_user_id,
-            'response_parser': lambda data: simplejson.loads(data),
-            'scope': ['email',],
+            'response_parser': simplejson.loads,
+            'extra_auth_params': {'scope': ['email']},
         }
 
     if askbot_settings.YAMMER_KEY and askbot_settings.YAMMER_SECRET:
@@ -481,8 +505,8 @@ def get_enabled_major_login_providers():
             'token_endpoint': 'https://www.yammer.com/oauth2/access_token',
             'resource_endpoint': 'https://www.yammer.com/api/v1/users/current.json',
             'icon_media_path': 'images/jquery-openid/yammer.png',
-            'get_user_id_function': lambda data: data.user['id'],
-            'response_parser': lambda data: simplejson.loads(data),
+            'get_user_id_function': get_yammer_user_id,
+            'response_parser': simplejson.loads,
         }
 
     if askbot_settings.WINDOWS_LIVE_KEY and askbot_settings.WINDOWS_LIVE_SECRET:
@@ -494,21 +518,10 @@ def get_enabled_major_login_providers():
             'token_endpoint': 'https://login.live.com/oauth20_token.srf',
             'resource_endpoint': 'https://apis.live.net/v5.0/me',
             'icon_media_path': 'images/jquery-openid/windows-live.png',
-            'get_user_id_function': lambda data: data.user_id,
-            'response_parser': lambda data: simplejson.loads(data),
+            'get_user_id_function': get_windows_live_user_id,
+            'response_parser': simplejson.loads,
             'extra_auth_params': {'scope': ('wl.basic',)},
         }
-
-    def get_microsoft_azure_user_id(client):
-        conn = http.client.HTTPSConnection('graph.microsoft.com')
-        headers = {
-            'Authorization' : 'Bearer {0}'.format(client.access_token),
-            'Accept' : 'application/json',
-        }
-        conn.request('GET', '/v1.0/me', '', headers)
-        response = conn.getresponse()
-        profile = simplejson.loads(response.read())
-        return profile['id']
 
     if askbot_settings.MICROSOFT_AZURE_KEY and askbot_settings.MICROSOFT_AZURE_SECRET:
         data['microsoft-azure'] = {
@@ -517,10 +530,10 @@ def get_enabled_major_login_providers():
             'type': 'oauth2',
             'auth_endpoint': 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
             'token_endpoint': 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-            'resource_endpoint': 'https://graph.microsoft.com/v1.0/',
+            'resource_endpoint': 'https://graph.microsoft.com/v1.0/me',
             'icon_media_path': 'images/jquery-openid/microsoft-azure.png',
             'get_user_id_function': get_microsoft_azure_user_id,
-            'response_parser': lambda data: simplejson.loads(data),
+            'response_parser': simplejson.loads,
             'extra_auth_params': {'scope': ('User.Read',),},
         }
 
@@ -611,9 +624,6 @@ def get_enabled_major_login_providers():
             'get_user_id_function': get_linked_in_user_id
         }
 
-    def get_google_user_id(client):
-        return client.request('me')['id']
-
     if askbot_settings.GOOGLE_PLUS_KEY and askbot_settings.GOOGLE_PLUS_SECRET:
         data['google-plus'] = {
             'name': 'google-plus',
@@ -621,7 +631,7 @@ def get_enabled_major_login_providers():
             'type': 'oauth2',
             'auth_endpoint': 'https://accounts.google.com/o/oauth2/auth',
             'token_endpoint': 'https://accounts.google.com/o/oauth2/token',
-            'resource_endpoint': 'https://www.googleapis.com/plus/v1/people/',
+            'resource_endpoint': 'https://www.googleapis.com/plus/v1/people/me',
             'icon_media_path': 'images/jquery-openid/google.gif',
             'get_user_id_function': get_google_user_id,
             'extra_auth_params': {'scope': ('profile', 'email', 'openid'), 'openid.realm': askbot_settings.APP_URL}
@@ -665,6 +675,18 @@ def get_enabled_major_login_providers():
         'icon_media_path': 'images/jquery-openid/openid.gif',
         'openid_endpoint': None,
     }
+    data['github'] = {
+        'name': 'github',
+        'display_name': 'GitHub',
+        'type': 'oauth2',
+        'auth_endpoint': 'https://github.com/login/oauth/authorize',
+        'token_endpoint': 'https://github.com/login/oauth/access_token',
+        'resource_endpoint': 'https://api.github.com/user',
+        'icon_media_path': 'images/jquery-openid/GitHub_Logo.png',
+        'get_user_id_function': get_github_user_id,
+        'response_parser': simplejson.loads,
+    }
+
     if askbot_settings.SIGNIN_OPENSTACKID_ENABLED and askbot_settings.OPENSTACKID_ENDPOINT_URL:
         data['openstackid'] = {
             'name': 'openstackid',
@@ -882,6 +904,9 @@ def get_oauth_parameters(provider_name):
     elif provider_name == 'microsoft-azure':
         consumer_key = askbot_settings.MICROSOFT_AZURE_KEY
         consumer_secret = askbot_settings.MICROSOFT_AZURE_SECRET
+    elif provider_name == 'github':
+        consumer_key = askbot_settings.GITHUB_KEY
+        consumer_secret = askbot_settings.GITHUB_SECRET
     elif provider_name != 'mediawiki':
         raise ValueError('unexpected oauth provider %s' % provider_name)
 
@@ -1059,19 +1084,17 @@ class OAuthConnection(object):
 
 def get_oauth2_starter_url(provider_name, csrf_token):
     """returns redirect url for the oauth2 protocol for a given provider"""
-    from sanction.client import Client
+    from requests_oauthlib.oauth2_session import OAuth2Session
 
     providers = get_enabled_login_providers()
     params = providers[provider_name]
     client_id = getattr(askbot_settings, format_setting_name(provider_name) + '_KEY')
     redirect_uri = site_url(reverse('user_complete_oauth2_signin'))
-    client = Client(
-        auth_endpoint=params['auth_endpoint'],
-        client_id=client_id,
-        redirect_uri=redirect_uri
-    )
+    session = OAuth2Session(client_id, redirect_uri=redirect_uri, state=csrf_token)
 
-    return client.auth_uri(state=csrf_token, **params.get('extra_auth_params', {}))
+    url, csrf = session.authorization_url(params['auth_endpoint'],  **params.get('extra_auth_params', {}))
+    return url.encode('utf-8')
+
 
 
 def ldap_check_password(username, password):

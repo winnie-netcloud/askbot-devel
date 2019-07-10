@@ -61,7 +61,7 @@ from askbot.deps.django_authopenid.ldap_auth import ldap_authenticate
 from askbot.deps.django_authopenid.exceptions import OAuthError
 from askbot.middleware.anon_user import connect_messages_to_anon_user
 from askbot.utils.loading import load_module
-from sanction.client import Client as OAuth2Client
+from requests_oauthlib.oauth2_session import OAuth2Session
 from urllib.parse import urlparse
 
 from openid.consumer.consumer import Consumer, \
@@ -269,22 +269,22 @@ def complete_oauth2_signin(request):
             name_token + '_SECRET',
         )
 
-    client = OAuth2Client(
-            token_endpoint=params['token_endpoint'],
-            resource_endpoint=params['resource_endpoint'],
+    session = OAuth2Session(
             redirect_uri=site_url(reverse('user_complete_oauth2_signin')),
             client_id=client_id,
-            client_secret=client_secret,
-            token_transport=params.get('token_transport', None)
+            auto_refresh_url=params['token_endpoint'],
+            token_updater = params.get('token_transport', None)
         )
 
-    client.request_token(
+    session.fetch_token(
+        params['token_endpoint'],
         code=request.GET['code'],
-        parser=params.get('response_parser', None)
+        client_secret=client_secret
     )
 
+
     #todo: possibly set additional parameters here
-    user_id = params['get_user_id_function'](client)
+    user_id = params['get_user_id_function'](session, params)
 
     user = authenticate(
                 user_identifier=user_id,
@@ -298,13 +298,14 @@ def complete_oauth2_signin(request):
     request.session['username'] = ''#todo: pull from profile
 
     if provider_name == 'facebook':
-        profile = client.request("me")
+        response = session.get(params['resource_endpoint'])
+        profile = params['response_parser'](response.text)
         request.session['email'] = profile.get('email', '')
         request.session['username'] = profile.get('username', '')
     elif provider_name == 'google-plus' and user is None:
         #todo: factor this out into separate function
         #attempt to migrate user from the old OpenId protocol
-        openid_url, email = util.google_gplus_get_openid_data(client)
+        openid_url, email = util.google_gplus_get_openid_data(session)
         if openid_url:
             msg_tpl = 'trying to migrate user from OpenID %s to g-plus %s'
             logging.critical(msg_tpl, str(openid_url), str(user_id))

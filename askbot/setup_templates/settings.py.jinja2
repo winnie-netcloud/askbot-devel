@@ -209,15 +209,57 @@ INSTALLED_APPS = (
 #setup memcached for production use!
 # See http://docs.djangoproject.com/en/1.8/topics/cache/ for details.
 CACHES = {
-    'default': {
+    'locmem': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'askbot',
         'TIMEOUT': 6000,
-        # Chose a unique KEY_PREFIX to avoid clashes with other applications
-        # using the same cache (e.g. a shared memcache instance).
-        'KEY_PREFIX': 'askbot',
     }
 }
+
+{% if cache_engine and cache_engine == 'redis' %}
+CACHES['redis'] = {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': [
+    {% for node in cache_nodes %}
+        '{{ node }}',
+    {% endfor %}
+        ],
+        'TIMEOUT': 6000,
+        'OPTIONS': {
+            'DB': '{{ cache_db }}',
+            {% if cache_password %}
+            'PASSWORD': '{{ cache_password }}',
+            {% endif %}
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'CONNECTION_POOL_CLASS_KWARGS': {
+                'max_connections': 50,
+                'timeout': 20,
+            },
+            'MAX_CONNECTIONS': 1000,
+            'PICKLE_VERSION': -1,
+        },
+    }
+cache_select_default = 'redis'
+{% elif cache_engine and cache_engine == 'memcached' %}
+CACHES['memcached'] = {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+    {% for node in cache_nodes %}
+        '{{ node }}',
+    {% endfor %}
+        ],
+        'TIMEOUT': 6000,
+    }
+cache_select_default = 'memcached'
+{% else %}
+cache_select_default = 'locmem'
+{% endif %}
+cache_select = os.environ.get('ASKBOT_CACHE', cache_select_default)
+CACHES['default'] = CACHES[cache_select]
+
+# Chose a unique KEY_PREFIX to avoid clashes with other applications
+# using the same cache (e.g. a shared memcache instance).
+CACHES['default'].update({'KEY_PREFIX': 'askbot',})
 
 #sets a special timeout for livesettings if you want to make them different
 LIVESETTINGS_CACHE_TIMEOUT = CACHES['default']['TIMEOUT']

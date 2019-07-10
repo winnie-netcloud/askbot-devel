@@ -205,6 +205,7 @@ providers = (
     'Facebook',
     'Fedora',
     'Flickr',
+    'GitHub',
     'Google Plus',
     'Mozilla Persona',
     'Twitter',
@@ -229,7 +230,7 @@ providers = (
 DISABLED_BY_DEFAULT = ('LaunchPad', 'Mozilla Persona', 'OpenStackID')
 
 NEED_EXTRA_SETUP = ('Google Plus', 'Twitter', 'MediaWiki', 'Facebook',
-                    'LinkedIn', 'identi.ca', 'Yammer', 'Windows Live', 'Microsoft Azure',)
+                    'LinkedIn', 'identi.ca', 'Yammer', 'Windows Live', 'Microsoft Azure', 'GitHub',)
 
 for provider in providers:
     if provider == 'local':
