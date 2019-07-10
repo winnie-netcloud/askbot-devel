@@ -10,7 +10,7 @@
 #
 # Start with something like
 #
-# docker run -e 'DATABASE_URL=sqlite:////askbot_site/askbot.db' -e "SECRET_KEY=$(openssl rand 14 | base64)" -e ADMIN_PASSWORD=admin -p 8080:80 askbot/askbot:latest
+# docker run -e 'DATABASE_URL=sqlite:////askbot-site/askbot.db' -e "SECRET_KEY=$(openssl rand 14 | base64)" -e ADMIN_PASSWORD=admin -p 8080:80 askbot/askbot:latest
 #
 # User uploads are stored in **/askbot_site/askbot/upfiles** . I'd recommend to make it a kubernetes volume.
 
