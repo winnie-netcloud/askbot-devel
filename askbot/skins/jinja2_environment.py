@@ -6,6 +6,7 @@
 # faintest idea if that is a wise thing to do. For now we will simply mimic
 # this behaviour in factory()
 
+from copy import deepcopy
 from django.conf import settings as django_settings
 
 import askbot
@@ -66,6 +67,8 @@ def factory(**options):
                        'hasattr' : hasattr
                      }
 
+    mother_of_all_loaders = options.pop('loader')
+
     skins = utils.get_available_skins()
     if askbot.is_multilingual() or HAS_ASKBOT_LOCALE_MIDDLEWARE:
         languages = list(dict(django_settings.LANGUAGES).keys())
@@ -77,8 +80,11 @@ def factory(**options):
     # consideration here. It may greatly simplify loading templatetags ...
     all_combinations = [ (name,lang) for name in skins for lang in languages ]
     for name,lang in all_combinations:
+        skin_basedir = utils.get_path_to_skin(name)
         options["skin"] = name
         options["language_code"] = lang
+        options['loader'] = deepcopy(mother_of_all_loaders)
+        options['loader'].searchpath = [ f'{skin_basedir}/jinja2' ] + options['loader'].searchpath
         env = SkinEnvironment(**options)
         env.globals.update(askbot_globals)
         env.set_language(lang)

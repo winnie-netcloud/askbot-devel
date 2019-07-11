@@ -85,7 +85,7 @@ ASKBOT_LANGUAGE_MODE = 'single-lang' #'single-lang', 'url-lang', 'user-lang'
 # Absolute path to the directory that holds uploaded media
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'askbot', 'upfiles')
-MEDIA_URL = '/upfiles/'#url to uploaded media
+MEDIA_URL = '/upfiles/' # url to uploaded media. This is expected to start with a /
 STATIC_URL = '/m/'#this must be different from MEDIA_URL
 USE_LOCAL_FONTS = False
 
