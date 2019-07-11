@@ -379,7 +379,7 @@ def add_custom_provider(func):
             mod = LoginMethod(login_module_path)
             if mod.is_major != func.is_major:
                 return providers#only patch the matching provider set
-            providers.insert(mod.order_number - 1, mod.name, mod.as_dict())
+            providers['mod.name'] = mod.as_dict()
         return providers
     return wrapper
 
