@@ -140,6 +140,7 @@ MIDDLEWARE = (
     'django.middleware.csrf.CsrfViewMiddleware',            # for csrf
     'django.contrib.sessions.middleware.SessionMiddleware', # prerequisite for user messages
     'django.contrib.messages.middleware.MessageMiddleware', # for user messages
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',               # FIXME: why do we even have this?
     'django.contrib.auth.middleware.AuthenticationMiddleware', # FIXME: why do we even have this?
 
@@ -203,6 +204,7 @@ INSTALLED_APPS = (
     'livesettings',
     'robots',
     'tinymce',
+    'corsheaders',
 )
 
 
@@ -395,3 +397,12 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 #        return None
 #
 #MIGRATION_MODULES = DisableMigrations()
+#
+#
+
+GRAPHENE = {
+    'SCHEMA': 'askbot.schema.schema',
+    'MIDDLEWARE': ['graphql_jwt.middleware.JSONWebTokenMiddleware',]
+}
+
+CORS_ORIGIN_ALLOW_ALL = True

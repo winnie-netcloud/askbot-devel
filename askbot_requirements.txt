@@ -2,9 +2,11 @@
 django-appconf
 akismet==1.0.1
 beautifulsoup4<=4.7.1
+graphene-django>=2.4.0
 dj-database-url
 django-avatar
 django-compressor>=2.0,<=2.2
+django-cors-headers>=3.0.2
 django-countries>=3.3
 -e git+https://github.com/martin-bts/django-followit.git@django2.0_ready#egg=django-followit
 django-keyedcache3>=1.5.1

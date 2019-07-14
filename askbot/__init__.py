@@ -47,6 +47,8 @@ REQUIREMENTS = {
     'simplejson': 'simplejson<=3.16.1',
     'tinymce': 'django-tinymce>=2.8.0',
     'unidecode': 'unidecode<=1.0.23',
+    'graphene_django': 'graphene-django>=2.4.0',
+    'corsheaders': 'django-cors-headers>=3.0.2'
 }
 
 #necessary for interoperability of django and coffin

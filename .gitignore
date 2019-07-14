@@ -2,9 +2,11 @@
 *.swp
 *.log
 *~
+db.data
 fetch
 push
 propagate
+askbot_app
 askbot/media/style/.sass-cache/
 .sass-cache
 db
