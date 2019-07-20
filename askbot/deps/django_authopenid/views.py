@@ -1306,7 +1306,8 @@ def verify_email_and_register(request):
             cleanup_post_register_session(request)
 
             return HttpResponseRedirect(get_next_url(request))
-        except Exception as e:
+        except Exception as error:
+            logging.critical('Could not verify account: %s', unicode(error).encode('utf-8'))
             message = _(
                 'Sorry, registration failed. '
                 'The token can be already used or has expired. Please try again'
