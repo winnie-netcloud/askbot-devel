@@ -269,7 +269,7 @@ class AskbotSetup:
                 print_message('  ^^^ forced overwrite!', self.verbosity)
                 shutil.copy(src, dst)
             elif dst.split(os.path.sep)[-1] not in skip_silently:
-                print_message(f'  ^^^ you already have one, please add contents of {src_file}', self.verbosity)
+                print_message(f'  ^^^ you already have one, please add contents of {src}', self.verbosity)
         print_message('Done.', self.verbosity)
 
     def _install_render_with_jinja2(self, render_list, context):
@@ -352,7 +352,7 @@ class AskbotSetup:
             dst = os.path.join(app_dir, 'settings.py')
             print_message(f'Appending {options["local_settings"]} to {dst}', self.verbosity)
             with open(dst, 'a') as settings_file:
-                with open(context['local_settings'], 'r') as local_settings:
+                with open(options['local_settings'], 'r') as local_settings:
                     settings_file.write('\n')
                     settings_file.write(local_settings.read())
             print_message('Done.', self.verbosity)
