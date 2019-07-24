@@ -1,6 +1,14 @@
 from askbot.utils import console
 
-class ConfigManager(object):
+class ObjectWithOutput(object):
+    def __init__(self, verbosity=1):
+        self.verbosity = verbosity
+
+    def print(self, message, verbosity=1):
+        if verbosity <= self.verbosity:
+            print(message)
+
+class ConfigManager(ObjectWithOutput):
     """ConfigManagers are used to ensure the installation can proceed.
 
     Each ConfigManager looks at some installation parameters, usually
@@ -32,7 +40,8 @@ class ConfigManager(object):
         'eNoValue': 'You must specify a value for "{name}"!',
     }
 
-    def __init__(self, interactive=True):
+    def __init__(self, interactive=True, verbosity=1):
+        super(ConfigManager, self).__init__(verbosity=verbosity)
         self.interactive = interactive
         self._catalog = dict()
         self.keys = set()
@@ -45,6 +54,7 @@ class ConfigManager(object):
         - handler: the class to handle the parameter"""
         self._catalog[name] = handler
         self.keys.update({name})
+        handler.verbosity = self.verbosity
 
     def _remember(self, name, value):
         """With this method, instances remember the accepted piece of
@@ -65,7 +75,7 @@ class ConfigManager(object):
         configField   = self._catalog[name]
 
         while not configField.acceptable(current_value):
-            print(f'Current value {current_value} not acceptable!')
+            self.print(f'Current value {current_value} not acceptable!', 2)
             if not self.interactive:
                 raise ValueError(self.strings['eNoValue'].format(name=name))
             current_value = configField.ask_user(current_value)
@@ -91,29 +101,33 @@ class ConfigManager(object):
             contribution.setdefault(k, v)
         collection.update(contribution)
 
-class ConfigField(object):
+class ConfigField(ObjectWithOutput):
     defaultOk   = True
     default     = None
     user_prompt = 'Please enter something'
 
-    @classmethod
-    def acceptable(cls, value):
+    def __init__(self, defaultOk=None, default=None, user_prompt=None, verbosity=1):
+        super(ConfigField, self).__init__(verbosity=verbosity)
+        self.defaultOk   = self.__class__.defaultOk   if defaultOk is None   else defaultOk
+        self.default     = self.__class__.default     if default is None     else default
+        self.user_prompt = self.__class__.user_prompt if user_prompt is None else user_prompt
+
+    def acceptable(self, value):
         """High level sanity check for a specific value. This method is called
         for an installation parameter with the value provided by the user, or
         the default value, if the user didn't provide any value. There must be
         a boolean response, if the installation can proceed with :var:value as
         the setting for this ConfigField."""
-        if value is None and cls.default is None \
-        or value == cls.default:
-            return cls.defaultOk
+        #self.print(f'This is {cls.__name__}.acceptable({value}) {cls.defaultOk}', 2)
+        if value is None and self.default is None or value == self.default:
+            return self.defaultOk
         return True
 
-    @classmethod
-    def ask_user(cls, current):
+    def ask_user(self, current):
         """Prompt the user to provide a value for this installation
         parameter."""
-        user_prompt = cls.user_prompt
-        if cls.defaultOk is True:
+        user_prompt = self.user_prompt
+        if self.defaultOk is True:
             user_prompt += ' (Just press ENTER, to use the current '\
                         + f'value "{current}")'
         return console.simple_dialog(user_prompt)
