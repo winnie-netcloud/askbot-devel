@@ -710,6 +710,7 @@ urlpatterns = patterns(
     url('^api/v1/users/(?P<user_id>\d+)/$', views.api_v1.user, name='api_v1_user'),
     url('^api/v1/questions/$', views.api_v1.questions, name='api_v1_questions'),
     url('^api/v1/questions/(?P<question_id>\d+)/$', views.api_v1.question, name='api_v1_question'),
+    url('^api/v1/answers/(?P<answer_id>\d+)/$', views.api_v1.answer, name='api_v1_answer'),
 )
 
 if 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS:

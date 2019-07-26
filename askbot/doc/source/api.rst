@@ -18,6 +18,7 @@ Returns basic parameters of the site.
 Returns, count, number of pages and basic data for each user.
 
 Optional parameters::
+
 * page (<int> page number)
 * sort (reputation|oldest|recent|name, default value - "reputation")
 
@@ -43,3 +44,7 @@ Optional parameters::
 `/api/v1/questions/<question_id>/`
 ----------------------------------
 Returns data about individual question
+
+`/api/v1/answers/<answer_id>/`
+----------------------------------
+Returns data about individual answer

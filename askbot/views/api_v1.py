@@ -56,6 +56,26 @@ def get_question_data(thread):
     }
     return datum
 
+def get_answer_data(post):
+    """returns data dictionary for a given answer post"""
+    datum = {
+        'added_at': post.added_at.strftime('%s'),
+        'id': post.id,
+        'score': post.score,
+        'last_activity_at': post.last_activity_at.strftime('%s'),
+        'summary': post.summary,
+        'url': site_url(post.get_absolute_url()),
+    }
+    datum['author'] = {
+        'id': post.author.id,
+        'username': post.author.username
+    }
+    datum['last_activity_by'] = {
+        'id': post.last_activity_by.id,
+        'username': post.last_activity_by.username
+    }
+    return datum
+
 def info(request):
     '''
        Returns general data about the forum
@@ -155,6 +175,18 @@ def question(request, question_id):
     json_string = simplejson.dumps(datum)
     return HttpResponse(json_string, content_type='application/json')
 
+def answer(request, answer_id):
+    '''
+    Gets a single answer
+    '''
+    #we retrieve answer by answer id, b/c that's what is in the url,
+    post = get_object_or_404(
+        models.Post, id=answer_id,
+        post_type='answer', deleted=False
+    )
+    datum = get_answer_data(post)
+    json_string = simplejson.dumps(datum)
+    return HttpResponse(json_string, content_type='application/json')
 
 def questions(request):
     """
