@@ -426,7 +426,6 @@
         {% endif %}
         askbot['settings']['saveCommentOnEnter'] = {{ settings.SAVE_COMMENT_ON_ENTER|as_js_bool }};
         askbot['settings']['tagSource'] = '{{ settings.TAG_SOURCE }}';
-        askbot['settings']['enableSharingGoogle'] = {{ settings.ENABLE_SHARING_GOOGLE|as_js_bool }};
         askbot['settings']['enableEmailAlerts'] = {{ settings.ENABLE_EMAIL_ALERTS|as_js_bool }};
     </script>
     {% include "meta/editor_data.html" %}

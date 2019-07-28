@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils.translation import pgettext
+from django.utils import timezone
 from appconf import AppConf
 import os
 from askbot import const
@@ -28,6 +29,10 @@ class AskbotStaticSettings(AppConf):
             'tinymce': 'askbot.utils.markup.tinymce_input_converter',
         }
 
+    # only report on updates after this date, useful when
+    # enabling delayed email alerts on a site with a lot of content
+    # in order to prevent sending too many outdated alerts
+    DELAYED_EMAIL_ALERTS_CUTOFF_TIMESTAMP = timezone.datetime.fromtimestamp(0)
     QUESTION_PAGE_BASE_URL = pgettext('urls', 'question') + '/'
     SERVICE_URL_PREFIX = 's/' # prefix for non-UI urls
     SELF_TEST = True # if true - run startup self-test

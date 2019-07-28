@@ -7,6 +7,7 @@
         <li><a href="{{ question.get_absolute_url() }}">{{ question.thread.title }}</a></li>
     {% endfor %}
 </ul>
+{% include "email/change_settings_info.html" %}
 {% endblock %}
 {% block footer %}
     {% include "email/footer.html" %}
