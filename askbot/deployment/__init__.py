@@ -31,77 +31,100 @@ class AskbotSetup:
         self._add_arguments()
 
     def _add_arguments(self):
-        self._add_db_args()
-        self._add_cache_args()
         self._add_setup_args()
         self._add_settings_args()
+        self._add_db_args()
+        self._add_cache_args()
+
 
     def _add_settings_args(self):
         """Misc parameters for rendering settings.py
         Adds
         --logfile-name
+        --append-settings
         --no-secret-key
-        --create-project
         """
+
         self.parser.add_argument(
                 "--logfile-name",
                 dest="logfile_name",
                 default='askbot.log',
                 help="name of the askbot logfile."
-            )
+        )
 
         self.parser.add_argument(
-                "--no-secret-key",
-                dest="no_secret_key",
-                action='store_true',
-                default=False,
-                help="Don't generate a secret key. (not recommended)"
-            )
+            "--append-settings",
+            dest="local_settings",
+            default='',
+            help="Extra settings file to append custom settings"
+        )
 
         self.parser.add_argument(
-                '--create-project',
-                dest='create_project',
-                action='store',
-                default='django',
-                help='Deploy a new Django project (default)'
+            "--no-secret-key",
+            dest="no_secret_key",
+            action='store_true',
+            help="Don't generate a secret key. (not recommended)"
         )
 
     def _add_setup_args(self):
         """Control the behaviour of this setup procedure
         Adds
-        --verbose, -v
-        --append-settings
-        --force
+        --create - project
         --dir-name, -n
+
+        --verbose, -v
+        --force
         """
-        self.parser.add_argument(
-                "-v", "--verbose",
-                dest = "verbosity",
-                default = 1,
-                help = "verbosity level available values 0, 1, 2."
-            )
 
         self.parser.add_argument(
-                "--append-settings",
-                dest = "local_settings",
-                default = '',
-                help = "Extra settings file to append custom settings"
-            )
+            '--create-project',
+            dest='create_project',
+            action='store',
+            default='django',
+            help='Deploy a new Django project (default)'
+        )
 
         self.parser.add_argument(
-                "--force",
-                dest="force",
-                action='store_true',
-                default=False,
-                help = "Force overwrite settings.py file"
-            )
-
-        self.parser.add_argument(
-                "-n", "--dir-name",
+                "--dir-name", "-n",
                 dest = "dir_name",
                 default = None,
                 help = "Directory where you want to install."
-            )
+        )
+
+        self.parser.add_argument(
+                "--verbose", "-v",
+                dest = "verbosity",
+                default = 1,
+                help = "verbosity level available values 0, 1, 2."
+        )
+
+        self.parser.add_argument(
+            "--force",
+            dest="force",
+            action='store_true',
+            help="Force overwrite settings.py file"
+        )
+
+        self.parser.add_argument(
+            "--dry-run",
+            dest = "dry_run",
+            action='store_true',
+            help="Dump parameters and do not install askbot after input validation."
+        )
+
+        self.parser.add_argument(
+            "--use-defaults",
+            dest="use_defaults",
+            action='store_true',
+            help="Use Askbot defaults where applicable. Defaults will be overwritten by commandline arguments."
+        )
+
+        self.parser.add_argument(
+            "--no-input",
+            dest="interactive",
+            action='store_false',
+            help="The installer will fail instead of asking for missing values."
+        )
 
     def _add_cache_args(self):
         """Cache settings
@@ -109,8 +132,8 @@ class AskbotSetup:
         self.parser.add_argument('--cache-engine',
                 dest='cache_engine',
                 action='store',
-                default='locmem',
-                help='Select with Django cache backend to use. <locmem|redis|memcached>'
+                default=None,
+                help='Select which Django cache backend to use. <locmem|redis|memcached>'
             )
 
         self.parser.add_argument('--cache-node',
@@ -145,47 +168,47 @@ class AskbotSetup:
         --db-port
         """
         self.parser.add_argument(
-                '-e', '--db-engine',
+                '--db-engine', '-e',
                 dest='database_engine',
                 action='store',
                 choices=DATABASE_ENGINE_CHOICES,
-                default=2,
-                help='Database engine, type 1 for postgresql, 2 for sqlite, 3 for mysql'
+                default=None,
+                help='Database engine, type 1 for PostgreSQL, 2 for SQLite, 3 for MySQL, 4 for Oracle'
             )
 
         self.parser.add_argument(
-                "-d", "--db-name",
+                "--db-name", "-d",
                 dest = "database_name",
                 default = None,
-                help = "The database name"
+                help = "The database name Askbot will use"
             )
 
         self.parser.add_argument(
-                "-u", "--db-user",
+                "--db-user", "-u",
                 dest = "database_user",
                 default = None,
-                help = "The database user"
+                help = "The username Askbot uses to connect to the database"
             )
 
         self.parser.add_argument(
-                "-p", "--db-password",
+                "--db-password", "-p",
                 dest = "database_password",
                 default = None,
-                help = "the database password"
+                help = "The password Askbot uses to connect to the database"
             )
 
         self.parser.add_argument(
                 "--db-host",
                 dest = "database_host",
                 default = None,
-                help = "the database host"
+                help = "The database host"
             )
 
         self.parser.add_argument(
                 "--db-port",
                 dest = "database_port",
                 default = None,
-                help = "the database host"
+                help = "The database port"
             )
 
     def _set_verbosity(self, options):
@@ -213,7 +236,7 @@ class AskbotSetup:
         # the destination directory
         directory = path_utils.clean_directory(options.dir_name)
         while directory is None:
-            directory = path_utils.get_install_directory(force=options.get('force')) # i.e. ask the user
+            directory = path_utils.get_install_directory(force=options.force) # i.e. ask the user
         options.dir_name = directory
 
         if options.database_engine not in DATABASE_ENGINE_CHOICES:
@@ -224,6 +247,10 @@ class AskbotSetup:
             )
 
         options_dict = vars(options)
+
+        #from copy import deepcopy
+        #options_dict_2 = deepcopy(options_dict)
+
         if options.force is False:
             options_dict = collect_missing_options(options_dict)
 
@@ -235,6 +262,21 @@ class AskbotSetup:
         }
         database_engine = database_engine_codes[options.database_engine]
         options_dict['database_engine'] = database_engine
+
+        #from askbot.deployment.parameters import ConfigManagerCollection
+
+        #cm = ConfigManagerCollection(interactive=True, verbosity=2)
+        #cm.complete(options_dict_2)
+
+
+
+
+        if options_dict['dry_run'] == True:
+            from pprint import pprint
+            pprint(options_dict)
+            #pprint(options_dict_2)
+            pprint(self.__dict__)
+            raise KeyboardInterrupt
 
         self.deploy_askbot(options_dict)
 
