@@ -70,7 +70,7 @@ class ConfigManager(ObjectWithOutput):
         If this is not an interactive installation, a not acceptable() value
         raises a ValueError"""
         if name not in self.keys:
-            raise Exception
+            raise KeyError
 
         configField   = self._catalog[name]
 

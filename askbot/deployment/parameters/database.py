@@ -41,11 +41,11 @@ class DbConfigManager(ConfigManager):
         return [ item for item in full_set if item in keys ]
 
     def _remember(self, name, value):
-        super(DbConfigManager, self)._remember(name, value)
+        super(DbConfigManager, self)._remember(name, int(value))
         if name == 'database_engine':
-            self._catalog['database_name'].db_type = value
+            self._catalog['database_name'].db_type = int(value)
             self._catalog['database_name'].set_user_prompt()
-            if value == 2:
+            if int(value) == 2:
                 self._catalog['database_user'].defaultOk = True
                 self._catalog['database_password'].defaultOk = True
 
@@ -60,7 +60,12 @@ class DbEngine(ConfigField):
     ]
 
     def acceptable(self, value):
-        return value in [e[0] for e in self.database_engines]
+        self.print(f'DbEngine.complete called with {value} of type {type(value)}', 2)
+        try:
+            return int(value) in [e[0] for e in self.database_engines]
+        except:
+            pass
+        return False
 
     def ask_user(self, current_value, depth=0):
         user_prompt = 'Please select database engine:\n'
@@ -68,7 +73,7 @@ class DbEngine(ConfigField):
             user_prompt += f'{index} - for {name}; '
         user_input = console.choice_dialog(
             user_prompt,
-            choices=[e[0] for e in self.database_engines]
+            choices=[str(e[0]) for e in self.database_engines]
         )
 
         try:

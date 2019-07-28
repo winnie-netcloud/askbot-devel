@@ -25,11 +25,11 @@ class CacheConfigManager(ConfigManager):
         return [ item for item in full_set if item in keys ]
 
     def _remember(self, name, value):
-        super(CacheConfigManager, self)._remember(name, value)
+        super(CacheConfigManager, self)._remember(name, int(value))
         if name == 'cache_engine':
-            if value == 3:
+            if int(value) == 3:
                 self._catalog['cache_nodes'].defaultOk = True
-            elif value == 2:
+            elif int(value) == 2:
                 self._catalog['cache_db'].defaultOk = False
                 self._catalog['cache_password'].defaultOk = False
 
@@ -43,7 +43,7 @@ class CacheEngine(ConfigField):
     ]
 
     def acceptable(self, value):
-        return value in [e[0] for e in self.cache_engines]
+        return int(value) in [e[0] for e in self.cache_engines]
 
     def ask_user(self, current_value, depth=0):
         user_prompt = 'Please select cache engine:\n'
@@ -51,7 +51,7 @@ class CacheEngine(ConfigField):
             user_prompt += f'{index} - for {name}; '
         user_input = console.choice_dialog(
             user_prompt,
-            choices=[e[0] for e in self.cache_engines]
+            choices=[str(e[0]) for e in self.cache_engines]
         )
 
         try:
