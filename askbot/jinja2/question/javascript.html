@@ -70,10 +70,6 @@
             $('#fmanswer textarea').focus();
         }
 
-        if (askbot['settings']['enableSharingGoogle']) {
-            $.getScript("//apis.google.com/js/plusone.js");
-        }
-
         if (askbot['data']['userId'] === askbot['data']['questionAuthorId']) {
             $("#fmanswer_button").click(function() {
                 $("#fmanswer").show();

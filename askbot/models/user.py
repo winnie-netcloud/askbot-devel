@@ -347,12 +347,8 @@ class Activity(models.Model):
         return self.content_object.get_absolute_url()
 
 class EmailFeedSettingManager(models.Manager):
-    def filter_subscribers(
-                        self,
-                        potential_subscribers = None,
-                        feed_type = None,
-                        frequency = None
-                    ):
+    def filter_subscribers(self, potential_subscribers=None,
+                           feed_type=None, frequency=None):
         """returns set of users who have matching subscriptions
         and if potential_subscribers is not none, search will
         be limited to only potential subscribers,
@@ -362,10 +358,7 @@ class EmailFeedSettingManager(models.Manager):
         todo: when EmailFeedSetting is merged into user table
         this method may become unnecessary
         """
-        matching_feeds = self.filter(
-                                        feed_type = feed_type,
-                                        frequency = frequency
-                                    )
+        matching_feeds = self.filter(feed_type=feed_type, frequency=frequency)
         if potential_subscribers is not None:
             matching_feeds = matching_feeds.filter(
                             subscriber__in = potential_subscribers
@@ -390,6 +383,7 @@ class EmailFeedSetting(models.Model):
             'q_ask',  # questions that user asks
             'q_all',  # enture forum, tag filtered
             'q_ans',  # questions that user answers
+            'q_noans', # questions without answers
             'q_sel',  # questions that user decides to follow
             'm_and_c'  # comments and mentions of user anywhere
     )
@@ -397,6 +391,7 @@ class EmailFeedSetting(models.Model):
     NO_EMAIL_SCHEDULE = {
         'q_ask': 'n',
         'q_ans': 'n',
+        'q_noans': 'n',
         'q_all': 'n',
         'q_sel': 'n',
         'm_and_c': 'n'
@@ -404,6 +399,7 @@ class EmailFeedSetting(models.Model):
     MAX_EMAIL_SCHEDULE = {
         'q_ask': 'i',
         'q_ans': 'i',
+        'q_noans': 'd',
         'q_all': 'i',
         'q_sel': 'i',
         'm_and_c': 'i'
@@ -413,6 +409,7 @@ class EmailFeedSetting(models.Model):
         ('q_all', ugettext_lazy('Entire forum')),
         ('q_ask', ugettext_lazy('Questions that I asked')),
         ('q_ans', ugettext_lazy('Questions that I answered')),
+        ('q_noans', ugettext_lazy('Unanswered questions')),
         ('q_sel', ugettext_lazy('Individually selected questions')),
         ('m_and_c', ugettext_lazy('Mentions and comment responses')),
     )
@@ -426,8 +423,10 @@ class EmailFeedSetting(models.Model):
     subscriber = models.ForeignKey(User, related_name='notification_subscriptions', on_delete=models.CASCADE)
     feed_type = models.CharField(max_length=16, choices=FEED_TYPE_CHOICES)
     frequency = models.CharField(
-        max_length=8, choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
-        default='n')
+                    max_length=8,
+                    choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES,
+                    default='n'
+                )
     added_at = models.DateTimeField(auto_now_add=True)
     reported_at = models.DateTimeField(null=True)
 
