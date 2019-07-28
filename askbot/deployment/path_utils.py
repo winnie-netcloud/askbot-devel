@@ -15,7 +15,7 @@ import imp
 
 from askbot.deployment import messages
 from askbot.utils import console
-from askbot.deployment.template_loader import DeploymentTemplate
+from askbot.deployment.template_loader import DeploymentTemplate as SettingsTemplate
 
 
 FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery_app.py')
@@ -98,12 +98,10 @@ def has_existing_django_project(directory):
         if file_name.endswith(os.path.sep + 'manage.py'):
             #a hack allowing to install into the distro directory
             continue
-        py_file = open(file_name)
-        for line in py_file:
-            if IMPORT_RE1.match(line) or IMPORT_RE2.match(line):
-                py_file.close()
-                return True
-        py_file.close()
+        with open(file_name, 'r') as py_file:
+            for line in py_file:
+                if IMPORT_RE1.match(line) or IMPORT_RE2.match(line):
+                    return True
     return False
 
 
