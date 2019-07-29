@@ -1,8 +1,9 @@
 from askbot.utils import console
 
 class ObjectWithOutput(object):
-    def __init__(self, verbosity=1):
+    def __init__(self, verbosity=1, force=False):
         self.verbosity = verbosity
+        self.force = force
 
     def print(self, message, verbosity=1):
         if verbosity <= self.verbosity:
