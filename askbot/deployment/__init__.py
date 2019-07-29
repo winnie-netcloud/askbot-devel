@@ -71,9 +71,10 @@ class AskbotSetup:
         Adds
         --create - project
         --dir-name, -n
-
         --verbose, -v
         --force
+        --dry-run
+        --use-defaults
         """
 
         self.parser.add_argument(
@@ -128,6 +129,11 @@ class AskbotSetup:
 
     def _add_cache_args(self):
         """Cache settings
+        Adds
+        --cache-engine
+        --cache-node
+        --cache-db
+        --cache-password
         """
         self.parser.add_argument('--cache-engine',
                 dest='cache_engine',
