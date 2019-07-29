@@ -41,11 +41,13 @@ class DbConfigManager(ConfigManager):
         return [ item for item in full_set if item in keys ]
 
     def _remember(self, name, value):
-        super(DbConfigManager, self)._remember(name, int(value))
         if name == 'database_engine':
-            self._catalog['database_name'].db_type = int(value)
+            value = int(value)
+        super(DbConfigManager, self)._remember(name, value)
+        if name == 'database_engine':
+            self._catalog['database_name'].db_type = value
             self._catalog['database_name'].set_user_prompt()
-            if int(value) == 2:
+            if value == 2:
                 self._catalog['database_user'].defaultOk = True
                 self._catalog['database_password'].defaultOk = True
 
@@ -62,7 +64,7 @@ class DbEngine(ConfigField):
     def acceptable(self, value):
         self.print(f'DbEngine.complete called with {value} of type {type(value)}', 2)
         try:
-            return int(value) in [e[0] for e in self.database_engines]
+            return value in [e[0] for e in self.database_engines]
         except:
             pass
         return False
