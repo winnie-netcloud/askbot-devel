@@ -516,7 +516,7 @@ def signin(request, template_name='authopenid/signin.html'):
                         if user_info['success']:
                             if askbot_settings.LDAP_AUTOCREATE_USERS:
                                 #create new user or
-                                user = ldap_create_user(user_info).user
+                                user = ldap_create_user(user_info, request).user
                                 user = authenticate(method='force', user_id=user.pk)
                                 assert(user is not None)
                                 login(request, user)
@@ -1195,7 +1195,7 @@ def register(request, login_provider_name=None,
                 #they can override the default provided by LDAP
                 user_info['django_username'] = username
                 user_info['email'] = email
-                user = ldap_create_user(user_info).user
+                user = ldap_create_user(user_info, request).user
                 user = authenticate(user_id=user.id, method='force')
                 del request.session['ldap_user_info']
                 login(request, user)
