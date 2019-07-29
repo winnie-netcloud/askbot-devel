@@ -19,8 +19,8 @@ from askbot.deployment.template_loader import DeploymentTemplate
 
 
 FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery_app.py')
-BLANK_FILES     = ('__init__.py', 'manage.py')
-LOG_DIR_NAME    = 'log'
+BLANK_FILES = ('__init__.py', 'manage.py')
+LOG_DIR_NAME = 'log'
 
 def split_at_break_point(directory):
     """splits directory path into two pieces
@@ -88,23 +88,20 @@ def can_create_path(directory):
 
 IMPORT_RE1 = re.compile(r'from django.*import')
 IMPORT_RE2 = re.compile(r'import django')
-def has_existing_django_project(directory):
+def find_files_importing_from_django(directory):
     """returns True is any of the .py files
     in a given directory imports anything from django
     """
     directory = os.path.normpath(directory)
     file_list = glob.glob(directory  + os.path.sep + '*.py')
+    django_files = list()
     for file_name in file_list:
-        if file_name.endswith(os.path.sep + 'manage.py'):
-            #a hack allowing to install into the distro directory
-            continue
         py_file = open(file_name)
         for line in py_file:
             if IMPORT_RE1.match(line) or IMPORT_RE2.match(line):
-                py_file.close()
-                return True
+                django_files.append(os.path.join(directory, file_name))
         py_file.close()
-    return False
+    return django_files
 
 
 def find_parent_dir_with_django(directory):
@@ -114,7 +111,7 @@ def find_parent_dir_with_django(directory):
     """
     parent_dir = os.path.dirname(directory)
     while parent_dir != directory:
-        if has_existing_django_project(parent_dir):
+        if find_files_importing_from_django(parent_dir):
             return parent_dir
         else:
             directory = parent_dir
@@ -140,7 +137,7 @@ def create_path(directory):
     else:
         os.makedirs(directory)
 
-def touch(file_path, times = None):
+def touch(file_path, times=None):
     """implementation of unix ``touch`` in python"""
     #http://stackoverflow.com/questions/1158076/implement-touch-using-python
     fhandle = open(file_path, 'a')
@@ -154,7 +151,7 @@ def get_path_to_help_file():
     """returns path to the main plain text help file"""
     return os.path.join(SOURCE_DIR, 'doc', 'INSTALL')
 
-def deploy_into(install_dir, new_project = False, verbosity = 1, context = None):
+def deploy_into(install_dir, new_project=False, verbosity=1, context=None):
     """will copy necessary files into the target directory
     """
     assert(isinstance(new_project, bool))
@@ -237,7 +234,7 @@ def dir_taken_by_python_module(directory):
     except ImportError:
         return False
 
-def get_install_directory(force = False):
+def get_install_directory(force=False):
     """returns a directory where a new django app/project
     can be installed.
     If ``force`` is ``True`` - will permit
@@ -261,10 +258,33 @@ def get_install_directory(force = False):
 
     if os.path.exists(directory):
         if path_is_clean_for_django(directory):
-            if has_existing_django_project(directory):
+            django_files = find_files_importing_from_django(directory)
+            if django_files:
                 if not force:
-                    print(messages.CANNOT_OVERWRITE_DJANGO_PROJECT % \
-                        {'directory': directory})
+                    found_django_file_names = set([os.path.basename(file_path) for file_path in django_files])
+                    files_needed_for_askbot = set(FILES_TO_CREATE)
+                    will_overwrite = found_django_file_names & files_needed_for_askbot
+                    will_not_overwrite = found_django_file_names - files_needed_for_askbot
+
+                    print()
+                    print('Directory %(directory)s contains files using Django' % \
+                        {'directory': directory}, end='')
+
+                    if will_overwrite:
+                        print(',\nsome will be overwritten by the installation:\n')
+                    else:
+                        print(':\n')
+
+                    print('\n'.join(['* {} <- will overwrite'.format(file_name) for file_name in will_overwrite]))
+                    print('\n'.join(['* {}'.format(file_name) for file_name in will_not_overwrite]))
+                    print()
+
+                    if not will_overwrite:
+                        print('None of the above files will be overwritten.\n')
+
+                    print('If you wish to continue,\n'
+                          'enter ^C and repeat this current command with --force.\n')
+
                     return None
         else:
             print(messages.format_msg_dir_unclean_django(directory))

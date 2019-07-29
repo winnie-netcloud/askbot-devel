@@ -26,7 +26,14 @@ class PermissionAssertionTestCase(AskbotTestCase):
                                       status='a')
         self.extraSetUp()
 
+    def tearDown(self):
+        self.extraTearDown()
+        self.user.delete()
+
     def extraSetUp(self):
+        pass
+
+    def extraTearDown(self):
         pass
 
     def create_other_user(self):
@@ -1115,6 +1122,7 @@ class CommentPermissionAssertionTests(PermissionAssertionTestCase):
 
     def test_suspended_user_cannot_comment_others_question(self):
         question = self.post_question(author = self.other_user)
+
         self.user.set_status('s')
         self.assertRaises(
                 exceptions.PermissionDenied,
@@ -1417,6 +1425,11 @@ class VotePermissionAssertionTests(PermissionAssertionTestCase):
         self.min_rep_up = askbot_settings.MIN_REP_TO_VOTE_UP
         self.min_rep_down = askbot_settings.MIN_REP_TO_VOTE_DOWN
         self.other_user = self.create_other_user()
+
+    def extraTearDown(self):
+        import pdb
+        pdb.set_trace()
+        self.other_user.delete()
 
     def assert_cannot_vote(self, user = None, dir = None):
         assert(dir in ('up', 'down'))

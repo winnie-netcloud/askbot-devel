@@ -1,5 +1,4 @@
-"""
-module for deploying askbot
+""" module for deploying askbot
 """
 
 import os.path
@@ -16,7 +15,13 @@ from askbot.utils.functions import generate_random_key
 from askbot.deployment.template_loader import DeploymentTemplate
 import shutil
 
-DATABASE_ENGINE_CHOICES = ('1', '2', '3', '4')
+DATABASE_ENGINES = {
+    '1': 'postgresql_psycopg2',
+    '2': 'sqlite3',
+    '3': 'mysql',
+    '4': 'oracle'
+}
+DATABASE_ENGINE_CODES = sorted(DATABASE_ENGINES.keys())
 
 class AskbotSetup:
 
@@ -97,10 +102,17 @@ class AskbotSetup:
             )
 
         self.parser.add_argument(
-                "-n", "--dir-name",
-                dest = "dir_name",
-                default = None,
-                help = "Directory where you want to install."
+                "-n", "--project-dir-name",
+                dest="dir_name",
+                default=None,
+                help="Directory where you want to install the Django project."
+            )
+
+        self.parser.add_argument(
+                '--app-dir-name',
+                dest='app_name',
+                default='askbot_app',
+                help='Subdirectory within the project directory to install the askbot app'
             )
 
     def _add_cache_args(self):
@@ -148,7 +160,7 @@ class AskbotSetup:
                 '-e', '--db-engine',
                 dest='database_engine',
                 action='store',
-                choices=DATABASE_ENGINE_CHOICES,
+                choices=DATABASE_ENGINE_CODES,
                 default=2,
                 help='Database engine, type 1 for postgresql, 2 for sqlite, 3 for mysql'
             )
@@ -213,38 +225,27 @@ class AskbotSetup:
         # the destination directory
         directory = path_utils.clean_directory(options.dir_name)
         while directory is None:
-            directory = path_utils.get_install_directory(force=options.get('force')) # i.e. ask the user
+            directory = path_utils.get_install_directory(force=options.force) # i.e. ask the user
         options.dir_name = directory
 
-        if options.database_engine not in DATABASE_ENGINE_CHOICES:
-            options.database_engine = console.choice_dialog(
-                'Please select database engine:\n1 - for postgresql, '
-                '2 - for sqlite, 3 - for mysql, 4 - oracle',
-                choices=DATABASE_ENGINE_CHOICES
-            )
+        deployment_config = vars(options)
+        deployment_config['secret_key'] = get_secret_key(options.no_secret_key)
+        deployment_config['database_engine'] = get_database_engine(options.database_engine)
 
-        options_dict = vars(options)
-        if options.force is False:
-            options_dict = collect_missing_options(options_dict)
+        if deployment_config['database_engine'] == 'sqlite':
+            deployment_config['database_name'] = get_sqlite_db_file_name(deployment_config['database_name'])
+        else:
+            deployment_config = get_db_config_settings(deployment_config)
 
-        database_engine_codes = {
-            '1': 'postgresql_psycopg2',
-            '2': 'sqlite3',
-            '3': 'mysql',
-            '4': 'oracle'
-        }
-        database_engine = database_engine_codes[options.database_engine]
-        options_dict['database_engine'] = database_engine
+        self.deploy_askbot(deployment_config)
 
-        self.deploy_askbot(options_dict)
-
-        if database_engine == 'postgresql_psycopg2':
+        if deployment_config['database_engine'] == 'postgresql_psycopg2':
             try:
                 import psycopg2
             except ImportError:
                 print('\nNEXT STEPS: install python binding for postgresql')
-                print('pip install psycopg2\n')
-        elif database_engine == 'mysql':
+                print('pip install psycopg2-binary\n')
+        elif deployment_config['database_engine'] == 'mysql':
             try:
                 import _mysql
             except ImportError:
@@ -258,7 +259,7 @@ class AskbotSetup:
 
     def _install_copy(self, copy_list, forced_overwrite=[], skip_silently=[]):
         print_message('Copying files:', self.verbosity)
-        for src,dst in copy_list:
+        for src, dst in copy_list:
             print_message(f'* to {dst} from {src}', self.verbosity)
             if not os.path.exists(dst):
                 shutil.copy(src, dst)
@@ -269,7 +270,7 @@ class AskbotSetup:
                 print_message('  ^^^ forced overwrite!', self.verbosity)
                 shutil.copy(src, dst)
             elif dst.split(os.path.sep)[-1] not in skip_silently:
-                print_message(f'  ^^^ you already have one, please add contents of {src_file}', self.verbosity)
+                print_message(f'  ^^^ you already have one, please add contents of {src}', self.verbosity)
         print_message('Done.', self.verbosity)
 
     def _install_render_with_jinja2(self, render_list, context):
@@ -291,13 +292,13 @@ class AskbotSetup:
         log_file = os.path.join(log_dir, options['logfile_name'])
 
         create_me = [ install_dir, log_dir ]
-        copy_me   = list()
+        render_me   = list()
 
         if 'django' in self._todo.get('create_project',[]):
             src = lambda x:os.path.join(self.SOURCE_DIR, 'setup_templates', x)
             dst = lambda x:os.path.join(install_dir, x)
-            copy_me.extend([
-               ( src(file_name), dst(file_name) )
+            render_me.extend([
+               ( src(file_name + '.jinja2'), dst(file_name) )
                for file_name in self.PROJECT_FILES_TO_CREATE
             ])
 
@@ -305,11 +306,13 @@ class AskbotSetup:
             path_utils.create_path(d)
 
         path_utils.touch(log_file)
-        self._install_copy(copy_me, skip_silently=path_utils.BLANK_FILES)
 
-    def _create_new_django_app(self, app_name, options):
+        options['django_settings_module'] = get_django_settings_module(options)
+        self._install_render_with_jinja2(render_me, options)
+
+    def _create_new_django_app(self, options):
         options['askbot_site'] = options['dir_name']
-        options['askbot_app']  = app_name
+        app_name  = options['app_name']
         app_dir =  os.path.join(options['dir_name'], app_name)
 
         create_me = [ app_dir ]
@@ -362,11 +365,10 @@ class AskbotSetup:
         all the neccessary directories for askbot,
         and the log file
         """
-
         create_new_project = True
         if os.path.exists(options['dir_name']) and \
-           path_utils.has_existing_django_project(options['dir_name']) and \
-           options.force is False:
+           path_utils.find_files_importing_from_django(options['dir_name']) and \
+           options['force'] is False:
              create_new_project = False
 
         options['staticfiles_app'] = "'django.contrib.staticfiles',"
@@ -375,7 +377,7 @@ class AskbotSetup:
         if create_new_project is True:
             self._create_new_django_project(options['dir_name'], options)
 
-        self._create_new_django_app('askbot_app', options)
+        self._create_new_django_app(options)
 
         help_file = path_utils.get_path_to_help_file()
 
@@ -390,245 +392,73 @@ class AskbotSetup:
                 self.verbosity
             )
 
-# set to askbot_setup_orig to return to original installer
 askbot_setup = AskbotSetup()
 
-def askbot_setup_orig():
-    """basic deployment procedure
-    asks user several questions, then either creates
-    new deployment (in the case of new installation)
-    or gives hints on how to add askbot to an existing
-    Django project
-    """
-    parser = OptionParser(usage = "%prog [options]")
+def get_sqlite_db_file_name(file_name):
+    """Returns usable file name for the sqlite database"""
+    while True:
+        # if file is acceptable, return it
+        if os.path.isfile(file_name):
+            message = 'file %s exists, use it anyway?' % file_name
+            if console.get_yes_or_no(message) == 'yes':
+                return file_name
+        elif os.path.isdir(file_name):
+            print('%s is a directory, choose another name' % file_name)
+        elif file_name in path_utils.FILES_TO_CREATE:
+            print('name %s cannot be used for the database name' % file_name)
+        elif file_name == path_utils.LOG_DIR_NAME:
+            print('name %s cannot be used for the database name' % file_name)
+        else:
+            return file_name
 
-    parser.add_option(
-                "-v", "--verbose",
-                dest = "verbosity",
-                type = "int",
-                default = 1,
-                help = "verbosity level available values 0, 1, 2."
-            )
-
-    parser.add_option(
-                "-n", "--dir-name",
-                dest = "dir_name",
-                default = None,
-                help = "Directory where you want to install."
-            )
-
-    parser.add_option(
-                '-e', '--db-engine',
-                dest='database_engine',
-                action='store',
-                type='choice',
-                choices=DATABASE_ENGINE_CHOICES,
-                default=None,
-                help='Database engine, type 1 for postgresql, 2 for sqlite, 3 for mysql'
-            )
-
-    parser.add_option(
-                "-d", "--db-name",
-                dest = "database_name",
-                default = None,
-                help = "The database name"
-            )
-
-    parser.add_option(
-                "-u", "--db-user",
-                dest = "database_user",
-                default = None,
-                help = "The database user"
-            )
-
-    parser.add_option(
-                "-p", "--db-password",
-                dest = "database_password",
-                default = None,
-                help = "the database password"
-            )
-
-    parser.add_option(
-                "--db-host",
-                dest = "database_host",
-                default = None,
-                help = "the database host"
-            )
-
-    parser.add_option(
-                "--db-port",
-                dest = "database_port",
-                default = None,
-                help = "the database host"
-            )
-
-    parser.add_option(
-                "--logfile-name",
-                dest="logfile_name",
-                default='askbot.log',
-                help="name of the askbot logfile."
-            )
-
-    parser.add_option(
-                "--append-settings",
-                dest = "local_settings",
-                default = '',
-                help = "Extra settings file to append custom settings"
-            )
-
-    parser.add_option(
-                "--force",
-                dest="force",
-                action='store_true',
-                default=False,
-                help = "Force overwrite settings.py file"
-            )
-    parser.add_option(
-                "--no-secret-key",
-                dest="no_secret_key",
-                action='store_true',
-                default=False,
-                help="Don't generate a secret key. (not recommended)"
-            )
-
-    try:
-        options = parser.parse_args()[0]
-
-        #ask users to give missing parameters
-        #todo: make this more explicit here
-        if options.verbosity >= 1:
-            print(messages.DEPLOY_PREAMBLE)
-
-        directory = path_utils.clean_directory(options.dir_name)
-        while directory is None:
-            directory = path_utils.get_install_directory(force=options.force)
-        options.dir_name = directory
-
-        if options.database_engine not in DATABASE_ENGINE_CHOICES:
-            options.database_engine = console.choice_dialog(
-                'Please select database engine:\n1 - for postgresql, '
-                '2 - for sqlite, 3 - for mysql, 4 - oracle',
-                choices=DATABASE_ENGINE_CHOICES
-            )
-
-        options_dict = vars(options)
-        if options.force is False:
-            options_dict = collect_missing_options(options_dict)
-
-        database_engine_codes = {
-            '1': 'postgresql_psycopg2',
-            '2': 'sqlite3',
-            '3': 'mysql',
-            '4': 'oracle'
-        }
-        database_engine = database_engine_codes[options.database_engine]
-        options_dict['database_engine'] = database_engine
-
-        deploy_askbot(options_dict)
-
-        if database_engine == 'postgresql_psycopg2':
-            try:
-                import psycopg2
-            except ImportError:
-                print('\nNEXT STEPS: install python binding for postgresql')
-                print('pip install psycopg2\n')
-        elif database_engine == 'mysql':
-            try:
-                import _mysql
-            except ImportError:
-                print('\nNEXT STEP: install python binding for mysql')
-                print('pip install mysql-python\n')
-
-    except KeyboardInterrupt:
-        print("\n\nAborted.")
-        sys.exit(1)
+        file_name = console.simple_dialog('Please enter database file name')
 
 
-#separated all the directory creation process to make it more useful
-def deploy_askbot(options):
-    """function that creates django project files,
-    all the neccessary directories for askbot,
-    and the log file
-    """
-    create_new_project = True
-    if os.path.exists(options['dir_name']):
-        if path_utils.has_existing_django_project(options['dir_name']):
-            create_new_project = bool(options['force'])
+def get_secret_key(nokey):
+    """Returns SECRET_KEY value for the Django settings file"""
+    if nokey:
+        return ''
+    return generate_random_key()
+    
 
-    path_utils.create_path(options['dir_name'])
+def get_db_config_settings(deployment_config):
+    db_keys = OrderedDict([
+        ('database_name', True),
+        ('database_user', True),
+        ('database_password', True),
+        ('database_host', False),
+        ('database_port', False)
+    ])
+    for key, required in list(db_keys.items()):
+        if deployment_config[key] is None:
+            key_name = key.replace('_', ' ')
+            fmt_string = '\nPlease enter %s'
+            if not required:
+                fmt_string += ' (press "Enter" to use the default value)'
 
-    options['staticfiles_app'] = "'django.contrib.staticfiles',"
-
-    options['auth_context_processor'] = 'django.contrib.auth.context_processors.auth'
-
-    verbosity = options['verbosity']
-
-    path_utils.deploy_into(
-        options['dir_name'],
-        new_project=create_new_project,
-        verbosity=verbosity,
-        context=options
-    )
-
-    help_file = path_utils.get_path_to_help_file()
-
-    if create_new_project:
-        print_message(
-            messages.HOW_TO_DEPLOY_NEW % {'help_file': help_file},
-            verbosity
-        )
-    else:
-        print_message(
-            messages.HOW_TO_ADD_ASKBOT_TO_DJANGO % {'help_file': help_file},
-            verbosity
-        )
-
-def collect_missing_options(options_dict):
-    options_dict['secret_key'] = '' if options_dict['no_secret_key'] else generate_random_key()
-    if options_dict['database_engine'] == '2':#sqlite
-        if options_dict['database_name']:
-            return options_dict
-        while True:
             value = console.simple_dialog(
-                            'Please enter database file name'
-                        )
-            database_file_name = None
-            if os.path.isfile(value):
-                message = 'file %s exists, use it anyway?' % value
-                if console.get_yes_or_no(message) == 'yes':
-                    database_file_name = value
-            elif os.path.isdir(value):
-                print('%s is a directory, choose another name' % value)
-            elif value in path_utils.FILES_TO_CREATE:
-                print('name %s cannot be used for the database name' % value)
-            elif value == path_utils.LOG_DIR_NAME:
-                print('name %s cannot be used for the database name' % value)
-            else:
-                database_file_name = value
+                fmt_string % key_name,
+                required=db_keys[key]
+            )
 
-            if database_file_name:
-                options_dict['database_name'] = database_file_name
-                return options_dict
+            deployment_config[key] = value
+    return deployment_config
 
-    else:#others
-        db_keys = OrderedDict([
-            ('database_name', True),
-            ('database_user', True),
-            ('database_password', True),
-            ('database_host', False),
-            ('database_port', False)
-        ])
-        for key, required in list(db_keys.items()):
-            if options_dict[key] is None:
-                key_name = key.replace('_', ' ')
-                fmt_string = '\nPlease enter %s'
-                if not required:
-                    fmt_string += ' (press "Enter" to use the default value)'
 
-                value = console.simple_dialog(
-                    fmt_string % key_name,
-                    required=db_keys[key]
-                )
+def get_django_settings_module(options):
+    proj_name = os.path.basename(options['dir_name'])
+    app_name = options['app_name']
 
-                options_dict[key] = value
-        return options_dict
+    import pdb
+    pdb.set_trace()
+
+
+def get_database_engine(engine_code):
+    """Returns database engine string for the Django settings"""
+    if engine_code not in DATABASE_ENGINE_CODES:
+        engine_code = console.choice_dialog(
+            'Please select database engine:\n1 - for postgresql, '
+            '2 - for sqlite, 3 - for mysql, 4 - oracle',
+            choices=DATABASE_ENGINE_CODES
+        )
+    return DATABASE_ENGINES[engine_code]

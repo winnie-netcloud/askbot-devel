@@ -33,10 +33,6 @@ but %(existing_prefix)s is not writable"""
 CONFIRM_DIR_CREATION = """Adding new directories:\n%(existing_prefix)s <-/%(non_existing_tail)s
 Accept?"""
 
-CANNOT_OVERWRITE_DJANGO_PROJECT = """Directory %(directory)s
-already has a django project. If you want to overwrite
-settings.py and urls.py files, use parameter --force"""
-
 INVALID_INPUT = 'Please type one of: %(opt_string)s ' \
                 + '(or hit Ctrl-C to quit)'
 
