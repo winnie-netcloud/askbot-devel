@@ -1,5 +1,7 @@
 from askbot.tests.utils import AskbotTestCase
 from django.core.urlresolvers import reverse
+from askbot.utils.html import site_url
+from askbot.utils.functions import get_epoch_str
 import simplejson
 
 class ApiV1Tests(AskbotTestCase):
@@ -29,6 +31,20 @@ class ApiV1Tests(AskbotTestCase):
                             'joined_at', 'last_seen_at', 'reputation',
                             'gold', 'silver', 'bronze'])
         self.assertEqual(expected_keys, set(response_data['users'][0].keys()))
+
+    def test_api_v1_answer(self):
+        user = self.create_user('user')
+        question = self.post_question(user=user)
+        answer = self.post_answer(user=user, question=question)
+        response = self.client.get(reverse('api_v1_answer', kwargs={'answer_id': answer.id}))
+        data = simplejson.loads(response.content)
+        self.assertEqual(data['author']['id'], user.id)
+        self.assertEqual(data['author']['username'], user.username)
+        self.assertEqual(data['url'], site_url(answer.get_absolute_url()))
+        self.assertEqual(data['added_at'], get_epoch_str(answer.added_at))
+        self.assertEqual(data['score'], answer.score)
+        self.assertEqual(data['id'], answer.id)
+        self.assertEqual(data['summary'], answer.summary)
 
     def test_api_v1_questions(self):
         user = self.create_user('user')
