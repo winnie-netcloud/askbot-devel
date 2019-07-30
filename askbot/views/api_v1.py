@@ -66,6 +66,12 @@ def get_question_data(thread):
     if question_post.last_edited_by:
         datum['last_edited_by'] = get_user_id_info(question_post.last_edited_by)
 
+    if thread.closed:
+        datum['closed'] = True
+        datum['closed_by'] = get_user_id_info(thread.closed_by)
+        datum['closed_at'] = get_epoch_str(thread.closed_at)
+        datum['closed_reason'] = thread.get_close_reason_display()
+
     datum['author'] = get_user_id_info(question_post.author)
     datum['last_activity_by'] = get_user_id_info(thread.last_activity_by)
     return datum
