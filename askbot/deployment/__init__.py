@@ -228,6 +228,7 @@ class AskbotSetup:
         self.verbosity = options.verbosity
 
     # I think this logic can be immediately attached to argparse
+    # it would be a hack though
     def _set_create_project(self, options):
         # Currently the --create-project option only changes the installer's
         # behaviour if one passes "container-uwsgi" as argument
@@ -261,8 +262,8 @@ class AskbotSetup:
 
         options_dict = vars(options)
 
-        #from copy import deepcopy
-        #options_dict_2 = deepcopy(options_dict)
+        from copy import deepcopy
+        options_dict_2 = deepcopy(options_dict)
 
         if options.force is False:
             options_dict = collect_missing_options(options_dict)
@@ -276,18 +277,14 @@ class AskbotSetup:
         database_engine = database_engine_codes[options.database_engine]
         options_dict['database_engine'] = database_engine
 
-        #from askbot.deployment.parameters import ConfigManagerCollection
-
-        #cm = ConfigManagerCollection(interactive=True, verbosity=2)
-        #cm.complete(options_dict_2)
-
-
-
-
         if options_dict['dry_run'] == True:
+            from askbot.deployment.parameters import ConfigManagerCollection
+
+            cm = ConfigManagerCollection(interactive=True, verbosity=2)
+            cm.complete(options_dict_2)
             from pprint import pprint
             pprint(options_dict)
-            #pprint(options_dict_2)
+            pprint(options_dict_2)
             pprint(self.__dict__)
             raise KeyboardInterrupt
 

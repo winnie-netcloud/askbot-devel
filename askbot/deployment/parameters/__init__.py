@@ -8,8 +8,10 @@ class ConfigManagerCollection(object):
         self.interactive = interactive
         self.database = DbConfigManager(interactive=interactive, verbosity=verbosity)
         self.cache = CacheConfigManager(interactive=interactive, verbosity=verbosity)
+        self.filesystem = FilesystemConfigManager(interactive=interactive, verbosity=verbosity)
 
     def complete(self, *args, **kwargs):
+        self.filesystem.complete(*args, **kwargs)
         self.database.complete(*args, **kwargs)
         self.cache.complete(*args, **kwargs)
 
