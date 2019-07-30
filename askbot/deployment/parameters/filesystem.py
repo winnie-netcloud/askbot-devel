@@ -1,12 +1,14 @@
 from askbot.utils import console
-from askbot.deployment.parameters.base import ConfigField, ConfigManager
 from askbot.deployment import messages
+from askbot.deployment.parameters.base import ConfigField, ConfigManager
 from askbot.deployment.path_utils import has_existing_django_project
 
+from importlib.util import find_spec
 import os.path
 import re
-from importlib.machinery import PathFinder
 import tempfile
+
+DEBUG_VERBOSITY = 2
 
 class FilesystemConfigManager(ConfigManager):
     """A config manager for validating setup parameters pertaining to
@@ -18,69 +20,125 @@ class FilesystemConfigManager(ConfigManager):
             defaultOk=True,
             user_prompt="Please enter the name for Askbot's logfile.",
         )
-        self.register('dir_name', DirName())
+        self.register('dir_name', ProjectDirName())
+        self.register('app_name', AppDirName())
         self.register('logfile_name', logfile)
 
-
     def _order(self, keys):
-        full_set = ['dir_name', 'logfile_name']
+        full_set = ['dir_name', 'app_name', 'logfile_name']
         return [item for item in full_set if item in keys]
 
 class DirNameError(Exception):
     """There is something about the chosen install dir we don't like."""
 
-class DirName(ConfigField):
+class RestrictionsError(DirNameError):
+    pass
+
+class NameCollisionError(DirNameError):
+    pass
+
+class IsFileError(DirNameError):
+    pass
+
+class CreateWriteError(DirNameError):
+    pass
+
+class NestedProjectsError(DirNameError):
+    pass
+
+class OverwriteError(DirNameError):
+    pass
+
+class BaseDirName(ConfigField):
     defaultOk = False
 
     def _check_django_name_restrictions(self, directory):
         dir_name = os.path.basename(directory)
-        if not re.match(r'[_a-zA-Z][\w-]*$', dir_name):
-            raise DirNameError("""\nDirectory %s is not acceptable for a Django
+        if re.match(r'[_a-zA-Z][\w-]*$', dir_name) is None:
+            raise RestrictionsError("""\nDirectory %s is not acceptable for a Django
             project. Please use lower case characters, numbers and underscore.
             The first character cannot be a number.\n""" % os.path.basename(directory))
 
     def _check_module_name_collision(self, directory):
         dir_name = os.path.basename(directory)
-        finder = PathFinder.find_spec(dir_name,os.path.dirname(directory))
-        if finder is not None:
-            raise DirNameError(messages.format_msg_bad_dir_name(directory))
+        spec = find_spec(dir_name,os.path.dirname(directory))
+        if spec is not None:
+            raise NameCollisionError(messages.format_msg_bad_dir_name(directory))
 
     def _check_is_file(self, directory):
         directory = os.path.normpath(directory)
         directory = os.path.abspath(directory)
         if os.path.isfile(directory):
-            raise DirNameError(messages.CANT_INSTALL_INTO_FILE % {'path': directory})
+            raise IsFileError(messages.CANT_INSTALL_INTO_FILE % {'path': directory})
 
     def _check_can_create_write_path(self, directory):
+        self.print(f'_check_can_create_write_path({directory})', DEBUG_VERBOSITY)
         if not os.path.exists(directory):
             self._check_can_create_write_path(os.path.dirname(directory))
         else:
             try:
                 with tempfile.NamedTemporaryFile(dir=directory) as f:
-                    f.write("Hello World!")
+                    f.write(b"Hello World!")
             except:
-                raise DirNameError(messages.format_msg_dir_not_writable(directory))
+                raise CreateWriteError(messages.format_msg_dir_not_writable(directory))
 
     def _check_nested_django_projects(self, directory):
         if has_existing_django_project(directory):
-            raise DirNameError(messages.format_msg_dir_unclean_django(directory))
+            raise NestedProjectsError(messages.format_msg_dir_unclean_django(directory))
         if len(os.path.split(directory)[1].strip()) > 0:
             self._check_nested_django_projects(os.path.dirname(directory))
 
     def _check_forced_overwrite(self, directory):
         if has_existing_django_project(directory) and self.force is False:
-            raise DirNameError(messages.CANNOT_OVERWRITE_DJANGO_PROJECT % \
+            raise OverwriteError(messages.CANNOT_OVERWRITE_DJANGO_PROJECT % \
                         {'directory': directory})
 
+class ProjectDirName(BaseDirName):
     def acceptable(self, value):
+        self.print(f'Got "{value}" of type "{type(value)}".', DEBUG_VERBOSITY)
         try:
             self._check_django_name_restrictions(value)
             self._check_module_name_collision(value)
-            self._check_is_file(value)
-            self._check_can_create_write_path(value)
-            self._check_nested_django_projects(os.path.dirname(value))
-            self._check_forced_overwrite(value)
+            path_to_value = os.path.abspath(value)
+            self._check_is_file(path_to_value)
+            self._check_can_create_write_path(path_to_value)
+            self._check_nested_django_projects(os.path.dirname(path_to_value))
+            self._check_forced_overwrite(path_to_value)
         except DirNameError as error:
-            self.print(error)
+            self.print(f'{error.__class__.__name__}:', DEBUG_VERBOSITY)
+            self.print(error, 1)
+            return False
+        return True
+
+    def ask_user(self, current_value):
+        self.user_prompt = messages.WHERE_TO_DEPLOY
+        user_input = os.path.abspath(
+            super(ProjectDirName, self).ask_user(current_value))
+
+        should_create_new = console.choice_dialog(
+            messages.format_msg_create(user_input),
+            choices=['yes', 'no'],
+            invalid_phrase=messages.INVALID_INPUT
+        )
+
+        return None if should_create_new == 'no' else user_input
+
+class AppDirName(BaseDirName):
+    defaultOk = True,
+    default = 'askbot_app',
+    user_prompt = "Please enter a Django App name for this Askbot deployment."
+
+    def acceptable(self, value):
+        self.print(f'Got "{value}" of type "{type(value)}".', DEBUG_VERBOSITY)
+        try:
+            self._check_django_name_restrictions(value)
+            self._check_module_name_collision(value)
+            if os.path.sep in value:
+                raise DirNameError(f'The App name must be a single valid name without any path information, not {value}.')
+            path_to_value = os.path.abspath(value)
+            self._check_is_file(path_to_value)
+        except DirNameError as error:
+            self.print(f'{error.__class__.__name__}:', DEBUG_VERBOSITY)
+            self.print(error, 1)
             return False
         return True
