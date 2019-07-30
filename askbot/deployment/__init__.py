@@ -88,8 +88,15 @@ class AskbotSetup:
         self.parser.add_argument(
                 "--dir-name", "-n",
                 dest = "dir_name",
-                default = None,
-                help = "Directory where you want to install."
+                default = '',
+                help = "Directory where you want to install the Django project."
+        )
+
+        self.parser.add_argument(
+            "--app-name",
+            dest="app_name",
+            default='askbot_app',
+            help="Django app name (subdir) for this Askbot deployment in the target Django project."
         )
 
         self.parser.add_argument(
