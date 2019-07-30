@@ -57,6 +57,11 @@ class ConfigManager(ObjectWithOutput):
         self.keys.update({name})
         handler.verbosity = self.verbosity
 
+    def configField(self, name):
+        if name not in self.keys:
+            raise KeyError(f'{self.__class__.__name__}: No handler for {name} registered.')
+        return self._catalog[name]
+
     def _remember(self, name, value):
         """With this method, instances remember the accepted piece of
         information for a given name. Making this a method allows derived
