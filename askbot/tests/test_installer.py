@@ -1,7 +1,18 @@
 from askbot.tests.utils import AskbotTestCase
 from askbot.deployment import AskbotSetup
-
 from askbot.deployment.parameters import *
+
+from unittest.mock import patch
+
+class MockInput:
+  def __init__(self, *args):
+    self.return_values = iter(args)
+
+  def __call__(self, *args):
+    value = next(self.return_values)
+    #print(f'MockInput called with >>>{args}<<<; answering >>>{value}<<<', file=sys.stderr)
+    return value
+
 
 ## Database config related tests
 class DbConfigManagerTest(AskbotTestCase):
@@ -305,3 +316,106 @@ class CacheEngineTest(AskbotTestCase):
         self.assertEqual(len(expected_issues), len(met_issues))
         e = self.run_complete(manager, parameters)
         self.assertIsNone(e)
+
+class FilesystemTests(AskbotTestCase):
+
+    def setUp(self):
+        self.installer = AskbotSetup()
+        self.parser = self.installer.parser
+
+    @staticmethod
+    def _setUpTest():
+        manager = FilesystemConfigManager(interactive=False, verbosity=0)
+        new_empty = lambda: dict([(k, None) for k in manager.keys])
+        return manager, new_empty
+
+    @staticmethod
+    def run_complete(manager, parameters):
+        e = None
+        try:
+            manager.complete(parameters)
+        except ValueError as ve:
+            e = ve
+        return e
+
+    def test_filesystem_configmanager(self):
+        manager, new_empty = self._setUpTest()
+
+        parameters = new_empty()  # includes ALL cache parameters
+        self.assertGreater(len(parameters), 0)
+
+        # with interactive=False ConfigManagers (currently) raise an exception
+        # if a required parameter is not set or not acceptable
+        # the ConfigManager must trip over missing/empty cache settings
+        parameters = {'dir_name': ''}
+        e = self.run_complete(manager, parameters)
+        self.assertIs(type(e), ValueError)
+
+    def test_project_dir(self):
+        manager, new_empty = self._setUpTest()
+
+        failing_dir_names = [
+            '', # empty string violates name restriction
+            'os', # name of a module in PYTHONPATH causes a name collision
+            'askbot',  # name of a module in PYTHONPATH causes a name collision
+            '/bin/bash', # is a file
+            '/root', # cannot write there
+            '/usr/local/lib/python3.x/dist-packages/some-package/module/submodule/subsubmodule', # practice recursion
+        ]
+        for name in failing_dir_names:
+            parameters = {'dir_name': name}
+            e = self.run_complete(manager, parameters)
+            self.assertIs(type(e), ValueError)
+
+        valid_dir_names = [
+            'validDeployment',
+            '/tmp/validDeployment',
+        ]
+        for name in valid_dir_names:
+            parameters = {'dir_name': name}
+            e = self.run_complete(manager, parameters)
+            self.assertIsNone(e)
+
+    def test_app_name(self):
+        manager, new_empty = self._setUpTest()
+
+        failing_app_names = [
+            '',  # empty string violates name restriction
+            'os',  # name of a module in PYTHONPATH causes a name collision
+            'askbot',  # name of a module in PYTHONPATH causes a name collision
+            'bin/bash',  # is a file
+            '/root',  # cannot write there
+            '\/root',
+            'usr/local/',
+            'usr\/local\/',
+            'usr/',
+            'usr\/',
+            'me\no\like\this',
+            'me\\no\\like\\this',
+            'me\\\no\\\like\\\this',
+        ]
+        for name in failing_app_names:
+            parameters = {'app_name': name}
+            e = self.run_complete(manager, parameters)
+            self.assertIs(type(e), ValueError, parameters)
+
+        valid_app_names = [
+            'validDeployment',
+            'askbot_app',
+        ]
+        for name in valid_app_names:
+            parameters = {'app_name': name}
+            e = self.run_complete(manager, parameters)
+            self.assertIsNone(e)
+
+    def __test_project_dir_interactive(self):
+        """The console functions contain endless loops, which impedes
+        testability. If we mock the console functions, then there is no merrit
+        in testing interactively at all."""
+        manager = FilesystemConfigManager(interactive=True, verbosity=1)
+        parameters = {'dir_name': ''}
+
+        #with patch('askbot.utils.console.simple_dialog', return_value='validDeployment'), patch('askbot.utils.console.choice_dialog', return_value='yes'):
+        with patch('builtins.input', new=MockInput('martin', 'yes')):
+            e = self.run_complete(manager, parameters)
+            self.assertIsNone(e)
