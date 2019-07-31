@@ -46,10 +46,10 @@ class AskbotSetup:
         """
 
         self.parser.add_argument(
-                "--logfile-name",
-                dest="logfile_name",
-                default='askbot.log',
-                help="name of the askbot logfile."
+            "--logfile-name",
+            dest="logfile_name",
+            default='askbot.log',
+            help="name of the askbot logfile."
         )
 
         self.parser.add_argument(
@@ -86,10 +86,10 @@ class AskbotSetup:
         )
 
         self.parser.add_argument(
-                "--dir-name", "-n",
-                dest = "dir_name",
-                default = '',
-                help = "Directory where you want to install the Django project."
+            "--dir-name", "-n",
+            dest = "dir_name",
+            default = '',
+            help = "Directory where you want to install the Django project."
         )
 
         self.parser.add_argument(
@@ -100,10 +100,11 @@ class AskbotSetup:
         )
 
         self.parser.add_argument(
-                "--verbose", "-v",
-                dest = "verbosity",
-                default = 1,
-                help = "verbosity level available values 0, 1, 2."
+            "--verbose", "-v",
+            dest = "verbosity",
+            default = 1,
+            type=int,
+            help = "verbosity level available values 0, 1, 2."
         )
 
         self.parser.add_argument(
@@ -143,32 +144,34 @@ class AskbotSetup:
         --cache-password
         """
         self.parser.add_argument('--cache-engine',
-                dest='cache_engine',
-                action='store',
-                default=None,
-                help='Select which Django cache backend to use. <locmem|redis|memcached>'
-            )
+            dest='cache_engine',
+            action='store',
+            default=None,
+            type=int,
+            help='Select which Django cache backend to use.'
+        )
 
         self.parser.add_argument('--cache-node',
-                dest='cache_nodes',
-                action='append',
-                help='Add cache node to list of nodes. Specify node as <ip-address>:<port>. Can be provided multiple times.'
-            )
+            dest='cache_nodes',
+            action='append',
+            help='Add cache node to list of nodes. Specify node as <ip-address>:<port>. Can be provided multiple times.'
+        )
 
         # only used by redis at the moment
         self.parser.add_argument('--cache-db',
-                dest='cache_db',
-                action='store',
-                default=1,
-                help='The name of the cache DB to use.'
-            )
+            dest='cache_db',
+            action='store',
+            default=1,
+            type=int,
+            help='The name of the cache DB to use.'
+        )
 
         # only used by redis at the moment
         self.parser.add_argument('--cache-password',
-                dest='cache_password',
-                action='store',
-                help='The password to connect to the cache.'
-            )
+            dest='cache_password',
+            action='store',
+            help='The password to connect to the cache.'
+        )
 
     def _add_db_args(self):
         """How to connect to the database
@@ -181,48 +184,50 @@ class AskbotSetup:
         --db-port
         """
         self.parser.add_argument(
-                '--db-engine', '-e',
-                dest='database_engine',
-                action='store',
-                choices=DATABASE_ENGINE_CHOICES,
-                default=None,
-                help='Database engine, type 1 for PostgreSQL, 2 for SQLite, 3 for MySQL, 4 for Oracle'
-            )
+            '--db-engine', '-e',
+            dest='database_engine',
+            action='store',
+            choices=DATABASE_ENGINE_CHOICES,
+            default=None,
+            type=int,
+            help='Database engine, type 1 for PostgreSQL, 2 for SQLite, 3 for MySQL, 4 for Oracle'
+        )
 
         self.parser.add_argument(
-                "--db-name", "-d",
-                dest = "database_name",
-                default = None,
-                help = "The database name Askbot will use"
-            )
+            "--db-name", "-d",
+            dest = "database_name",
+            default = None,
+            help = "The database name Askbot will use"
+        )
 
         self.parser.add_argument(
-                "--db-user", "-u",
-                dest = "database_user",
-                default = None,
-                help = "The username Askbot uses to connect to the database"
-            )
+            "--db-user", "-u",
+            dest = "database_user",
+            default = None,
+            help = "The username Askbot uses to connect to the database"
+        )
 
         self.parser.add_argument(
-                "--db-password", "-p",
-                dest = "database_password",
-                default = None,
-                help = "The password Askbot uses to connect to the database"
-            )
+            "--db-password", "-p",
+            dest = "database_password",
+            default = None,
+            help = "The password Askbot uses to connect to the database"
+        )
 
         self.parser.add_argument(
-                "--db-host",
-                dest = "database_host",
-                default = None,
-                help = "The database host"
-            )
+            "--db-host",
+            dest = "database_host",
+            default = None,
+            help = "The database host"
+        )
 
         self.parser.add_argument(
-                "--db-port",
-                dest = "database_port",
-                default = None,
-                help = "The database port"
-            )
+            "--db-port",
+            dest = "database_port",
+            default = None,
+            type=int,
+            help = "The database port"
+        )
 
     def _set_verbosity(self, options):
         self.verbosity = options.verbosity
