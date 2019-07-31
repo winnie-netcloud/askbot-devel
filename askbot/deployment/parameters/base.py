@@ -42,11 +42,36 @@ class ConfigManager(ObjectWithOutput):
     }
 
     def __init__(self, interactive=True, verbosity=1):
-        super(ConfigManager, self).__init__(verbosity=verbosity)
-        self.interactive = interactive
+        self._verbosity = verbosity
+        self._interactive = interactive
         self._catalog = dict()
         self.keys = set()
         self._managed_config = dict()
+        super(ConfigManager, self).__init__(verbosity=verbosity)
+        self.interactive = interactive
+
+    #maybe we also want to do the following for force ...
+    @property
+    def interactive(self):
+        return self._interactive
+
+    @interactive.setter
+    def interactive(self, interactive):
+        self._interactive = interactive
+        for name, handler in self._catalog.items():
+            if hasattr(handler,'interactive'):
+                handler.interactive = interactive
+
+    @property
+    def verbosity(self):
+        return self._verbosity
+
+    @verbosity.setter
+    def verbosity(self, verbosity):
+        self._verbosity = verbosity
+        for name, handler in self._catalog.items():
+            if hasattr(handler, 'verbosity'):
+                handler.verbosity = verbosity
 
     def register(self, name, handler):
         """Add the ability to handle a specific install parameter.

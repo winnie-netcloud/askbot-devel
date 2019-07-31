@@ -4,7 +4,6 @@ module for deploying askbot
 
 import os.path
 import sys
-import django
 from collections import OrderedDict
 from optparse import OptionParser
 from argparse import ArgumentParser
@@ -14,6 +13,8 @@ from askbot.deployment import path_utils
 from askbot.utils import console
 from askbot.utils.functions import generate_random_key
 from askbot.deployment.template_loader import DeploymentTemplate
+from askbot.deployment.parameters import ConfigManagerCollection
+
 import shutil
 
 DATABASE_ENGINE_CHOICES = ('1', '2', '3', '4')
@@ -24,10 +25,11 @@ class AskbotSetup:
     APP_FILES_TO_CREATE     = set(path_utils.FILES_TO_CREATE) - set(('manage.py',))
     SOURCE_DIR              = os.path.dirname(os.path.dirname(__file__)) # a.k.a. ASKBOT_ROOT in settings.py
 
-    def __init__(self):
+    def __init__(self, interactive=True, verbosity=-128):
         self.parser = ArgumentParser(description="Setup a Django project and app for Askbot")
-        self.verbosity = -128
+        self.verbosity = verbosity
         self._todo = {}
+        self.configManagers = ConfigManagerCollection(interactive=interactive, verbosity=verbosity)
         self._add_arguments()
 
     def _add_arguments(self):
@@ -104,7 +106,8 @@ class AskbotSetup:
             dest = "verbosity",
             default = 1,
             type=int,
-            help = "verbosity level available values 0, 1, 2."
+            choices=[0,1,2],
+            help = "verbosity level with 0 being the lowest"
         )
 
         self.parser.add_argument(
@@ -143,11 +146,14 @@ class AskbotSetup:
         --cache-db
         --cache-password
         """
+        engines = self.configManagers.configManager('cache').configField('cache_engine').cache_engines
+        engine_choices = [e[0] for e in engines]
         self.parser.add_argument('--cache-engine',
             dest='cache_engine',
             action='store',
             default=None,
             type=int,
+            choices=engine_choices,
             help='Select which Django cache backend to use.'
         )
 
@@ -183,11 +189,13 @@ class AskbotSetup:
         --db-host
         --db-port
         """
+        engines = self.configManagers.configManager('database').configField('database_engine').database_engines
+        engine_choices = [e[0] for e in engines]
         self.parser.add_argument(
             '--db-engine', '-e',
             dest='database_engine',
             action='store',
-            choices=DATABASE_ENGINE_CHOICES,
+            choices=engine_choices,
             default=None,
             type=int,
             help='Database engine, type 1 for PostgreSQL, 2 for SQLite, 3 for MySQL, 4 for Oracle'
@@ -282,11 +290,9 @@ class AskbotSetup:
         database_engine = database_engine_codes[options.database_engine]
         options_dict['database_engine'] = database_engine
 
-        if options_dict['dry_run'] == True:
-            from askbot.deployment.parameters import ConfigManagerCollection
+        if options_dict['dry_run']:
 
-            cm = ConfigManagerCollection(interactive=True, verbosity=2)
-            cm.complete(options_dict_2)
+            self.configManagers.complete(options_dict_2)
             from pprint import pprint
             pprint(options_dict)
             pprint(options_dict_2)
@@ -448,7 +454,7 @@ class AskbotSetup:
             )
 
 # set to askbot_setup_orig to return to original installer
-askbot_setup = AskbotSetup()
+askbot_setup = AskbotSetup(interactive=True, verbosity=1)
 
 def askbot_setup_orig():
     """basic deployment procedure
