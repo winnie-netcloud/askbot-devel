@@ -41,16 +41,16 @@ class ConfigManager(ObjectWithOutput):
         'eNoValue': 'You must specify a value for "{name}"!',
     }
 
-    def __init__(self, interactive=True, verbosity=1):
+    def __init__(self, interactive=True, verbosity=1, force=False):
         self._verbosity = verbosity
         self._interactive = interactive
+        self._force = force
         self._catalog = dict()
         self.keys = set()
         self._managed_config = dict()
         super(ConfigManager, self).__init__(verbosity=verbosity)
         self.interactive = interactive
 
-    #maybe we also want to do the following for force ...
     @property
     def interactive(self):
         return self._interactive
@@ -61,6 +61,17 @@ class ConfigManager(ObjectWithOutput):
         for name, handler in self._catalog.items():
             if hasattr(handler,'interactive'):
                 handler.interactive = interactive
+
+    @property
+    def force(self):
+        return self._force
+
+    @force.setter
+    def force(self, force):
+        self._force = force
+        for name, handler in self._catalog.items():
+            if hasattr(handler,'force'):
+                handler.force = force
 
     @property
     def verbosity(self):

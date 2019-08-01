@@ -239,6 +239,7 @@ class AskbotSetup:
 
     def _set_verbosity(self, options):
         self.verbosity = options.verbosity
+        self.configManagers.verbosity = options.verbosity
 
     # I think this logic can be immediately attached to argparse
     # it would be a hack though
@@ -260,54 +261,35 @@ class AskbotSetup:
         self._set_create_project(options)
         print_message(messages.DEPLOY_PREAMBLE, self.verbosity)
 
-        # the destination directory
-        directory = path_utils.clean_directory(options.dir_name)
-        while directory is None:
-            directory = path_utils.get_install_directory(force=options.force) # i.e. ask the user
-        options.dir_name = directory
-
-        if options.database_engine not in DATABASE_ENGINE_CHOICES:
-            options.database_engine = console.choice_dialog(
-                'Please select database engine:\n1 - for postgresql, '
-                '2 - for sqlite, 3 - for mysql, 4 - oracle',
-                choices=DATABASE_ENGINE_CHOICES
-            )
-
         options_dict = vars(options)
 
-        from copy import deepcopy
-        options_dict_2 = deepcopy(options_dict)
+        options_dict['dir_name']   = path_utils.clean_directory(options_dict['dir_name'])
+        options_dict['secret_key'] = '' if options_dict['no_secret_key'] else generate_random_key()
 
-        if options.force is False:
-            options_dict = collect_missing_options(options_dict)
+        self.configManagers.complete(options_dict)
 
-        database_engine_codes = {
-            '1': 'postgresql_psycopg2',
-            '2': 'sqlite3',
-            '3': 'mysql',
-            '4': 'oracle'
-        }
-        database_engine = database_engine_codes[options.database_engine]
-        options_dict['database_engine'] = database_engine
+        engines = self.configManagers.configManager(
+                    'database').configField(
+                    'database_engine').__class__.database_engines
+        choice = options_dict['database_engine']
+        database_interface = [ e[1] for e in engines if e[0] == choice][0]
+        options_dict['database_engine'] = database_interface
 
         if options_dict['dry_run']:
-
-            self.configManagers.complete(options_dict_2)
             from pprint import pprint
             pprint(options_dict)
-            pprint(options_dict_2)
             pprint(self.__dict__)
             raise KeyboardInterrupt
 
         self.deploy_askbot(options_dict)
 
-        if database_engine == 'postgresql_psycopg2':
+        if database_interface == 'postgresql_psycopg2':
             try:
                 import psycopg2
             except ImportError:
                 print('\nNEXT STEPS: install python binding for postgresql')
                 print('pip install psycopg2\n')
-        elif database_engine == 'mysql':
+        elif database_interface == 'mysql':
             try:
                 import _mysql
             except ImportError:
@@ -317,7 +299,6 @@ class AskbotSetup:
       except KeyboardInterrupt:
         print("\n\nAborted.")
         sys.exit(1)
-        pass
 
     def _install_copy(self, copy_list, forced_overwrite=[], skip_silently=[]):
         print_message('Copying files:', self.verbosity)
@@ -429,7 +410,7 @@ class AskbotSetup:
         create_new_project = True
         if os.path.exists(options['dir_name']) and \
            path_utils.has_existing_django_project(options['dir_name']) and \
-           options.force is False:
+           options['force'] is False:
              create_new_project = False
 
         options['staticfiles_app'] = "'django.contrib.staticfiles',"
