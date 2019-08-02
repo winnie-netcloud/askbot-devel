@@ -2,7 +2,7 @@ from askbot.tests.utils import AskbotTestCase
 from askbot.deployment import AskbotSetup
 from askbot.deployment.parameters import *
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, mock_open
 
 class MockInput:
   def __init__(self, *args):
@@ -487,3 +487,16 @@ class MainInstallerTests(AskbotTestCase):
             self.installer()
         except Exception as e:
             self.fail(f'Running the installer raised {e}')
+
+    def test_flow_mock_deployment(self):
+        mva = ['--dir-name', '/tmp/AskbotTestDir',
+               '--db-engine', '2',
+               '--db-name', '/tmp/AskbotTest.db',
+               '--cache-engine', '3']
+        run_opts = ['-v', '0']
+        opts = self.installer.parser.parse_args(mva + run_opts)
+        parse_args = MagicMock(name='parse_args', return_value=opts)
+        self.installer.parser.parse_args = parse_args
+        fake_open = mock_open(read_data='foobar')
+        with patch('askbot.deployment.path_utils.create_path'), patch('askbot.deployment.path_utils.touch'), patch('shutil.copy'), patch('builtins.open', fake_open):
+            self.installer()
