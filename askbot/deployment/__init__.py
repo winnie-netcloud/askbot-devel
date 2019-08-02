@@ -30,6 +30,10 @@ class AskbotSetup:
         self.verbosity = verbosity
         self._todo = {}
         self.configManagers = ConfigManagerCollection(interactive=interactive, verbosity=verbosity)
+        self.database_engines = self.configManagers.configManager(
+                'database').configField(
+                'database_engine').database_engines
+
         self._add_arguments()
 
     def _add_arguments(self):
@@ -189,8 +193,8 @@ class AskbotSetup:
         --db-host
         --db-port
         """
-        engines = self.configManagers.configManager('database').configField('database_engine').database_engines
-        engine_choices = [e[0] for e in engines]
+
+        engine_choices = [e[0] for e in self.database_engines]
         self.parser.add_argument(
             '--db-engine', '-e',
             dest='database_engine',
@@ -237,9 +241,9 @@ class AskbotSetup:
             help = "The database port"
         )
 
-    def _set_verbosity(self, options):
-        self.verbosity = options.verbosity
-        self.configManagers.verbosity = options.verbosity
+    def _set_verbosity(self, v):
+        self.verbosity = v
+        self.configManagers.verbosity = v
 
     # I think this logic can be immediately attached to argparse
     # it would be a hack though
@@ -247,7 +251,7 @@ class AskbotSetup:
         # Currently the --create-project option only changes the installer's
         # behaviour if one passes "container-uwsgi" as argument
         todo = [ 'django' ] # This is the default as Askbot has always worked
-        wish = str.lower(options.create_project)
+        wish = str.lower(options['create_project'])
         if wish in [ 'no', 'none', 'false', '0']:
             todo = [ 'nothing' ]
         elif wish == 'container-uwsgi':
@@ -257,47 +261,45 @@ class AskbotSetup:
     def __call__(self): # this is the main part of the original askbot_setup()
       try:
         options = self.parser.parse_args()
-        self._set_verbosity(options)
+        options = vars(options)
+        self._set_verbosity(options['verbosity'])
         self._set_create_project(options)
         print_message(messages.DEPLOY_PREAMBLE, self.verbosity)
 
-        options_dict = vars(options)
 
-        options_dict['dir_name']   = path_utils.clean_directory(options_dict['dir_name'])
-        options_dict['secret_key'] = '' if options_dict['no_secret_key'] else generate_random_key()
 
-        self.configManagers.complete(options_dict)
+        options['dir_name']   = path_utils.clean_directory(options['dir_name'])
+        options['secret_key'] = '' if options['no_secret_key'] else generate_random_key()
 
-        engines = self.configManagers.configManager(
-                    'database').configField(
-                    'database_engine').__class__.database_engines
-        choice = options_dict['database_engine']
-        database_interface = [ e[1] for e in engines if e[0] == choice][0]
-        options_dict['database_engine'] = database_interface
+        self.configManagers.complete(options)
 
-        if options_dict['dry_run']:
-            from pprint import pprint
-            pprint(options_dict)
-            pprint(self.__dict__)
+        database_interface = [ e[1] for e in self.database_engines
+                               if e[0] == options['database_engine'] ][0]
+        options['database_engine'] = database_interface
+
+        if options['dry_run']:
+            from pprint import pformat
+            print_message(pformat(options), self.verbosity)
+            print_message(pformat(self.__dict__), self.verbosity)
             raise KeyboardInterrupt
 
-        self.deploy_askbot(options_dict)
+        self.deploy_askbot(options)
 
         if database_interface == 'postgresql_psycopg2':
             try:
                 import psycopg2
             except ImportError:
-                print('\nNEXT STEPS: install python binding for postgresql')
-                print('pip install psycopg2\n')
+                print_message('\nNEXT STEPS: install python binding for postgresql', self.verbosity)
+                print_message('pip install psycopg2\n', self.verbosity)
         elif database_interface == 'mysql':
             try:
                 import _mysql
             except ImportError:
-                print('\nNEXT STEP: install python binding for mysql')
-                print('pip install mysql-python\n')
+                print_message('\nNEXT STEP: install python binding for mysql', self.verbosity)
+                print_message('pip install mysql-python\n', self.verbosity)
 
       except KeyboardInterrupt:
-        print("\n\nAborted.")
+        print_message("\n\nAborted.", self.verbosity)
         sys.exit(1)
 
     def _install_copy(self, copy_list, forced_overwrite=[], skip_silently=[]):

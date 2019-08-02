@@ -2,7 +2,7 @@ from askbot.tests.utils import AskbotTestCase
 from askbot.deployment import AskbotSetup
 from askbot.deployment.parameters import *
 
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 class MockInput:
   def __init__(self, *args):
@@ -419,3 +419,71 @@ class FilesystemTests(AskbotTestCase):
         with patch('builtins.input', new=MockInput('martin', 'yes')):
             e = self.run_complete(manager, parameters)
             self.assertIsNone(e)
+
+class MainInstallerTests(AskbotTestCase):
+    def setUp(self):
+        self.installer = AskbotSetup(interactive=True, verbosity=0)
+
+    def test_propagate_attributes(self):
+        collection = self.installer.configManagers
+        managers = [collection.configManager(key) for key in collection.keys]
+        fields = [m.configField(k) for m in managers for k in m.keys]
+
+        has_verbosity = [ self.installer, collection ]
+        has_verbosity.extend(managers)
+        has_verbosity.extend(fields)
+        for obj in has_verbosity:
+            self.assertEqual(obj.verbosity, self.installer.verbosity)
+
+        for new_verbosity in [2, 5, 13, 23, 42, 666, 1337, 16061, self.installer.verbosity]:
+            self.installer._set_verbosity(new_verbosity)
+            for obj in has_verbosity:
+                self.assertEqual(obj.verbosity, new_verbosity)
+
+        interactive_fields = [m.configField(k)
+                              for m in managers
+                              for k in m.keys
+                              if hasattr(m.configField(k),'interactive')]
+        has_interactive = [ collection ]
+        has_interactive.extend(managers)
+        has_interactive.extend(interactive_fields)
+        for obj in has_interactive:
+            self.assertEqual(obj.interactive, collection.interactive)
+
+        for new_interactive in [True, False, True, collection.interactive]:
+            collection.interactive = new_interactive
+            for obj in has_interactive:
+                self.assertEqual(obj.interactive, new_interactive)
+
+    def test_flow_dry_run(self):
+        self.installer.configManagers.interactive=False
+        # minimal_viable_argument_set
+        mva = ['--dir-name', '/tmp/AskbotTestDir',
+               '--db-engine', '2',
+               '--db-name', '/tmp/AskbotTest.db',
+               '--cache-engine', '3']
+
+        run_opts = ['--dry-run', '-v', '0']
+        with patch('sys.exit') as mock:
+            opts = self.installer.parser.parse_args(mva + run_opts)
+            parse_args = MagicMock(name='parse_args', return_value=opts)
+            self.installer.parser.parse_args = parse_args
+            self.installer()
+            self.assertEqual(mock.call_count, 1)
+
+    def test_flow_skip_deploy(self):
+        mva = ['--dir-name', '/tmp/AskbotTestDir',
+               '--db-engine', '2',
+               '--db-name', '/tmp/AskbotTest.db',
+               '--cache-engine', '3']
+        run_opts = ['-v', '0']
+
+        opts = self.installer.parser.parse_args(mva + run_opts)
+        parse_args = MagicMock(name='parse_args', return_value=opts)
+        deploy_askbot = MagicMock()
+        self.installer.parser.parse_args = parse_args
+        self.installer.deploy_askbot = deploy_askbot
+        try:
+            self.installer()
+        except Exception as e:
+            self.fail(f'Running the installer raised {e}')
