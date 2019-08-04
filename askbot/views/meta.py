@@ -205,20 +205,38 @@ def badge(request, id):
     #todo: supplement database data with the stuff from badges.py
     badge = get_object_or_404(BadgeData, id=id)
 
-    badge_recipients = User.objects.filter(
-                            award_user__badge = badge
-                        ).annotate(
-                            last_awarded_at = Max('award_user__awarded_at'),
-                            award_count = Count('award_user')
-                        ).order_by(
-                            '-last_awarded_at'
-                        )
+    all_badge_recipients = User.objects.filter(
+        award_user__badge = badge
+    ).annotate(
+        last_awarded_at = Max('award_user__awarded_at'),
+        award_count = Count('award_user')
+    ).order_by(
+        '-last_awarded_at'
+    )
+
+    objects_list = Paginator(all_badge_recipients, askbot_settings.USERS_PAGE_SIZE)
+    page = PageField().clean(request.GET.get('page'))
+
+    try:
+        badge_recipients = objects_list.page(page)
+    except (EmptyPage, InvalidPage):
+        badge_recipients = objects_list.page(objects_list.num_pages)
+
+    paginator_data = {
+        'is_paginated' : (objects_list.num_pages > 1),
+        'pages': objects_list.num_pages,
+        'current_page_number': page,
+        'page_object': badge_recipients,
+        'base_url' : reverse('badge', kwargs={'id': badge.id}) + '?'
+    }
+    paginator_context = functions.setup_paginator(paginator_data)
 
     data = {
         'active_tab': 'badges',
-        'badge_recipients' : badge_recipients,
+        'badge_recipients': badge_recipients,
         'badge' : badge,
         'page_class': 'meta',
+        'paginator_context': paginator_context
     }
     return render(request, 'badge.html', data)
 

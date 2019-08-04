@@ -185,7 +185,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
     is_paginated = True
 
     form = forms.ShowUsersForm(request.REQUEST)
-    form.full_clean()#always valid
+    form.full_clean() # always valid
     sort_method = form.cleaned_data['sort']
     page = form.cleaned_data['page']
     search_query = form.cleaned_data['query']
