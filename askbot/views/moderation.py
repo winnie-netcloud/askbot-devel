@@ -265,7 +265,8 @@ def moderate_post_edits(request):
             editors = exclude_admins(get_editors(memo_set))
             assert(request.user not in editors)
             for editor in editors:
-                editor.set_status('a')
+                if not editor.is_fake: # fake user accounts should not be pre-approved
+                    editor.set_status('a')
 
             num_users = len(editors)
             if num_users:

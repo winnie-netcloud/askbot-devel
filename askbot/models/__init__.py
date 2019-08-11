@@ -596,7 +596,7 @@ def user_get_social_sharing_status(self, channel):
     else:
         return 'disabled'
 
-def user_get_or_create_fake_user(self, username, email):
+def user_get_or_create_fake_user(self, username, email, status='w'):
     """
     Get's or creates a user, most likely with the purpose
     of posting under that account.
@@ -609,8 +609,10 @@ def user_get_or_create_fake_user(self, username, email):
         user = User()
         user.username = username
         user.email = email
-        user.is_fake = True
         user.set_unusable_password()
+        user.save()
+        user.is_fake = True
+        user.status = status
         user.save()
     return user
 
@@ -623,8 +625,9 @@ def get_or_create_anonymous_user():
         user = User()
         user.username = username
         user.email = askbot_settings.ANONYMOUS_USER_EMAIL
-        user.is_fake = True
         user.set_unusable_password()
+        user.save()
+        user.is_fake = True
         user.save()
     return user
 
