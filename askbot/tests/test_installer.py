@@ -113,9 +113,71 @@ class DeployObjectsTest(AskbotTestCase):
         test.deploy()
 
 
+class DeployableComponentsTest(AskbotTestCase):
+    def setUp(self):
+        """creates two temporary directories:
+        - project_root, not contents
+        - setup_templates, source files for installation tests:
+        All supported DeployableComponents are registered here and then searched
+        for the files they want to deploy. corresponding templates are then
+        generated in setup_templates, so that the deployment may succeed.
+        """
 
+        jinja2 = "Hello {{ world }}! <-- This should read Hello World!\n"
+        hello = "Hello World.\n"
 
-if __name__ == '__main__':
-    askbot_site = AskbotSite()
-    askbot_app = AskbotApp()
+        self.project_root = tempfile.TemporaryDirectory()
+        self.setup_templates = tempfile.TemporaryDirectory()
+
+        x, y, z = AskbotApp(), AskbotSite(), ProjectRoot(self.project_root.name)
+        self.deployableComponents = {
+            x.name: x,
+            y.name: y,
+            z.name: z,
+        }
+
+        def flatten_components(components):
+            found = [i for i in components
+                          if i[1] is RenderedFile
+                          or i[1] is CopiedFile]
+
+            for descent in [list(i[1].items()) for i in components
+                          if isinstance(i[1], dict) ]:
+                found.extend(
+                    flatten_components(descent)
+                )
+            return found
+
+        for cname, comp in self.deployableComponents.items():
+            for fname, ftype in flatten_components(list(comp.contents.items())):
+                if ftype is RenderedFile:
+                    with open(os.path.join(
+                            self.setup_templates.name,
+                            f'{fname}.jinja2'), 'wb') as f:
+                        f.write(jinja2.encode('utf-8'))
+                elif ftype is CopiedFile:
+                    with open(os.path.join(
+                            self.setup_templates.name, fname), 'wb') as f:
+                        f.write(hello.encode('utf-8'))
+
+    def tearDown(self):
+        del(self.project_root)
+        del(self.setup_templates)
+
+    def test_ProjectRoot(self):
+        test = ProjectRoot(self.project_root.name)
+        test.src_dir = self.setup_templates.name
+        test.deploy()
+
+    def test_AskbotSite(self):
+        test = AskbotSite()
+        test.src_dir = self.setup_templates.name
+        test.dst_dir = self.project_root.name
+        test.deploy()
+
+    def test_AskbotApp(self):
+        test = AskbotApp()
+        test.src_dir = self.setup_templates.name
+        test.dst_dir = self.project_root.name
+        test.deploy()
 
