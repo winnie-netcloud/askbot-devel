@@ -6,11 +6,9 @@ occurs the deployment is considered as failed. Ideally, all the work this code
 did up to the error is undone. Yet, this code has no means to undo anything.
 """
 
-from .objects import RenderedFile, CopiedFile, Directory, LinkedDir
+from .objects import RenderedFile, CopiedFile, Directory, LinkedDir, AskbotDeploymentError
 from .components import AskbotApp, AskbotSite, ProjectRoot
 
-class AskbotDeploymentError(Exception):
-    """Use this when something goes wrong while deploying Askbot"""
 
 __all__ = ['RenderedFile', 'CopiedFile', 'Directory', 'LinkedDir',
            'AskbotApp', 'AskbotSite', 'ProjectRoot', 'AskbotDeploymentError']

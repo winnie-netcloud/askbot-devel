@@ -1,6 +1,10 @@
 import os.path
+import shutil
 from askbot.deployment.messages import print_message
-from askbot.deployment.deployables import AskbotDeploymentError
+from askbot.deployment.template_loader import DeploymentTemplate
+
+class AskbotDeploymentError(Exception):
+    """Use this when something goes wrong while deploying Askbot"""
 
 
 class DeployObject(object):
@@ -83,8 +87,9 @@ class DeployFile(DeployObject):
             raise AskbotDeploymentError(f'     You already have a file "{self.dst}" please merge the contents.')
         template = DeploymentTemplate('dummy.name')  # we use this a little differently than originally intended
         template.tmpl_path = self.src
+        content = template.render(context) # do not put this in the context. If this statement fails, we do not want an empty self.dst to be created!
         with open(self.dst, 'w+') as output_file:
-            output_file.write(template.render(context))
+            output_file.write(content)
 
     def _copy(self):
         exists, force, skip = self.__validate()
