@@ -100,6 +100,26 @@ class DeployObjectsTest(AskbotTestCase):
         # not doing anything.
         test.deploy()
 
+    def test_individualEmptyFile(self):
+        basename = os.path.basename(self.text_file.name)
+
+        test = EmptyFile(basename, self.setup_templates.name, self.project_root.name + '_target_does_not_exist')
+        self.assertRaises(FileNotFoundError, test.deploy)
+
+        # this should just work and copy the file
+        test = EmptyFile(basename, self.setup_templates.name, self.project_root.name)
+        test.deploy()
+
+        new_file = os.path.join(self.project_root.name, basename)
+        try:
+            with open(new_file, 'rb') as file:
+                buf = file.read()
+        except FileNotFoundError:
+            self.fail(FileNotFoundError('Copying the file did not work!'))
+
+        # do it again. Should yield a user notification and then succeed by
+        # not doing anything.
+        test.deploy()
 
     def test_individualDirectory(self):
         basename = 'foobar'
@@ -197,3 +217,34 @@ class DeployableComponentsTest(AskbotTestCase):
         for name, value in comp.contents.items():
             self.assertTrue(os.path.exists(os.path.join(self.project_root.name, comp.name, name)))
 
+    def test_addFileBeforeDeploy(self):
+        test = ProjectRoot(self.project_root.name)
+
+        another_file = os.path.join(self.setup_templates.name, 'additional.file')
+        with open(another_file, 'wb') as f:
+            f.write(self.hello.encode('utf-8'))
+        test.contents.update({'additional.file': CopiedFile})
+
+        test.src_dir = self.setup_templates.name
+        test.deploy()
+
+        comp = self.deployableComponents[test.name]
+        for name, value in comp.contents.items():
+            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, name)))
+        self.assertTrue(os.path.exists(os.path.join(self.project_root.name, 'additional.file')))
+
+    def test_addDirBeforeDeploy(self):
+        test = ProjectRoot(self.project_root.name)
+
+        another_file = os.path.join(self.setup_templates.name, 'additional.file')
+        with open(another_file, 'wb') as f:
+            f.write(self.hello.encode('utf-8'))
+        test.contents.update({'additionalDir': {'additional.file': CopiedFile}})
+
+        test.src_dir = self.setup_templates.name
+        test.deploy()
+
+        comp = self.deployableComponents[test.name]
+        for name, value in comp.contents.items():
+            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, name)))
+        self.assertTrue(os.path.exists(os.path.join(self.project_root.name, 'additionalDir', 'additional.file')))

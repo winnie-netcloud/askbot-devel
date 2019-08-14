@@ -75,20 +75,22 @@ class AskbotSite(DeployableComponent):
         '__init__.py': CopiedFile,
         'celery_app.py': CopiedFile,
         'urls.py': CopiedFile,
+        'django.wsgi': CopiedFile,
     }
 
 class AskbotApp(DeployableComponent):
     default_name = 'askbot_app'
+    contents = {}
+
+class ProjectRoot(DeployableComponent):
     contents = {
+        'manage.py': RenderedFile,
         'cron': {
             'send_email_alerts.sh': CopiedFile,
         },
         'doc': LinkedDir,
         'upfiles': {},
     }
-
-class ProjectRoot(DeployableComponent):
-    contents = { 'manage.py': RenderedFile }
 
     def __init__(self, install_path):
         dirname, basename = os.path.split(install_path)

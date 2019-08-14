@@ -102,6 +102,18 @@ class DeployFile(DeployObject):
                 raise AskbotDeploymentError(f'     You already have a file "{self.dst}", please add contents of {self.src}.')
         shutil.copy(self.src, self.dst)
 
+    #####################
+    ## from path_utils ##
+    #####################
+    def _touch(self, times=None):
+        """implementation of unix ``touch`` in python"""
+        #http://stackoverflow.com/questions/1158076/implement-touch-using-python
+        fhandle = open(self.dst, 'a')
+        try:
+            os.utime(self.dst, times)
+        finally:
+            fhandle.close()
+
 
 class DeployDir(DeployObject):
     def __init__(self, name, parent=None, *content):
@@ -208,6 +220,10 @@ class RenderedFile(DeployFile):
 class CopiedFile(DeployFile):
     def _deploy_now(self):
         self._copy()
+
+class EmptyFile(DeployFile):
+    def _deploy_now(self):
+        self._touch()
 
 class Directory(DeployDir):
     pass
