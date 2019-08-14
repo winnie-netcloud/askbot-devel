@@ -20,12 +20,14 @@ class DeployObjectsTest(AskbotTestCase):
         path!) that must be used with RenderedFile, so that it will load
         jinja2_template.
         """
+        self.jinja2 = "Hello {{ world }}! <-- This should read Hello World!\n"
+        self.hello = "Hello World.\n"
+
         self.project_root = tempfile.TemporaryDirectory()
         self.setup_templates = tempfile.TemporaryDirectory()
 
         self.jinja2_template = tempfile.NamedTemporaryFile(suffix='.jinja2', delete=False, dir=self.setup_templates.name)
-        jinja2 = "Hello {{ world }}! <-- This should read Hello World!\n"
-        self.jinja2_template.write(jinja2.encode('utf-8'))
+        self.jinja2_template.write(self.jinja2.encode('utf-8'))
         self.jinja2_template.close()
 
         self.jinja2_target = os.path.splitext(
@@ -33,12 +35,12 @@ class DeployObjectsTest(AskbotTestCase):
                                     self.jinja2_template.name))[0]
 
         self.text_file = tempfile.NamedTemporaryFile(delete=False, dir=self.setup_templates.name)
-        self.text_file.write("Hello World.\n".encode('utf-8'))
+        self.text_file.write(self.hello.encode('utf-8'))
         self.text_file.close()
 
     def tearDown(self):
-        del(self.project_root)
-        del(self.setup_templates)
+        del self.project_root
+        del self.setup_templates
 
     def test_individualCopiedFile(self):
         basename = os.path.basename(self.text_file.name)
@@ -58,10 +60,11 @@ class DeployObjectsTest(AskbotTestCase):
 
         new_file = os.path.join(self.project_root.name, basename)
         try:
-            with open(new_file, 'r') as file:
+            with open(new_file, 'rb') as file:
                 buf = file.read()
                 self.assertGreater(len(buf), 0)
-        except FileNotFoundError as e:
+                self.assertEqual(buf.decode('utf-8'), self.hello)
+        except FileNotFoundError:
             self.fail(FileNotFoundError('Copying the file did not work!'))
 
         # do it again. Should yield a user notification and then succeed by
@@ -86,10 +89,11 @@ class DeployObjectsTest(AskbotTestCase):
 
         new_file = os.path.join(self.project_root.name, basename)
         try:
-            with open(new_file, 'r') as file:
+            with open(new_file, 'rb') as file:
                 buf = file.read()
                 self.assertGreater(len(buf), 0)
-        except FileNotFoundError as e:
+                self.assertNotEqual(buf.decode('utf-8'), self.jinja2)
+        except FileNotFoundError:
             self.fail(FileNotFoundError('Rendering the file did not work!'))
 
         # do it again. Should yield a user notification and then succeed by
@@ -114,6 +118,18 @@ class DeployObjectsTest(AskbotTestCase):
 
 
 class DeployableComponentsTest(AskbotTestCase):
+    def _flatten_components(self, components):
+        found = [i for i in components
+                 if i[1] is RenderedFile
+                 or i[1] is CopiedFile]
+
+        for descent in [list(i[1].items()) for i in components
+                        if isinstance(i[1], dict)]:
+            found.extend(
+                self._flatten_components(descent)
+            )
+        return found
+
     def setUp(self):
         """creates two temporary directories:
         - project_root, not contents
@@ -123,8 +139,8 @@ class DeployableComponentsTest(AskbotTestCase):
         generated in setup_templates, so that the deployment may succeed.
         """
 
-        jinja2 = "Hello {{ world }}! <-- This should read Hello World!\n"
-        hello = "Hello World.\n"
+        self.jinja2 = "Hello {{ world }}! <-- This should read Hello World!\n"
+        self.hello = "Hello World.\n"
 
         self.project_root = tempfile.TemporaryDirectory()
         self.setup_templates = tempfile.TemporaryDirectory()
@@ -136,38 +152,30 @@ class DeployableComponentsTest(AskbotTestCase):
             z.name: z,
         }
 
-        def flatten_components(components):
-            found = [i for i in components
-                          if i[1] is RenderedFile
-                          or i[1] is CopiedFile]
-
-            for descent in [list(i[1].items()) for i in components
-                          if isinstance(i[1], dict) ]:
-                found.extend(
-                    flatten_components(descent)
-                )
-            return found
-
         for cname, comp in self.deployableComponents.items():
-            for fname, ftype in flatten_components(list(comp.contents.items())):
+            for fname, ftype in self._flatten_components(list(comp.contents.items())):
                 if ftype is RenderedFile:
                     with open(os.path.join(
                             self.setup_templates.name,
                             f'{fname}.jinja2'), 'wb') as f:
-                        f.write(jinja2.encode('utf-8'))
+                        f.write(self.jinja2.encode('utf-8'))
                 elif ftype is CopiedFile:
                     with open(os.path.join(
                             self.setup_templates.name, fname), 'wb') as f:
-                        f.write(hello.encode('utf-8'))
+                        f.write(self.hello.encode('utf-8'))
 
     def tearDown(self):
-        del(self.project_root)
-        del(self.setup_templates)
+        del self.project_root
+        del self.setup_templates
 
     def test_ProjectRoot(self):
         test = ProjectRoot(self.project_root.name)
         test.src_dir = self.setup_templates.name
         test.deploy()
+
+        comp = self.deployableComponents[test.name]
+        for name, value in comp.contents.items():
+            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, name)))
 
     def test_AskbotSite(self):
         test = AskbotSite()
@@ -175,9 +183,17 @@ class DeployableComponentsTest(AskbotTestCase):
         test.dst_dir = self.project_root.name
         test.deploy()
 
+        comp = self.deployableComponents[test.name]
+        for name, value in comp.contents.items():
+            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, comp.name, name)))
+
     def test_AskbotApp(self):
         test = AskbotApp()
         test.src_dir = self.setup_templates.name
         test.dst_dir = self.project_root.name
         test.deploy()
+
+        comp = self.deployableComponents[test.name]
+        for name, value in comp.contents.items():
+            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, comp.name, name)))
 
