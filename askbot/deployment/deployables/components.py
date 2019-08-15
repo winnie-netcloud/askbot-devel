@@ -101,3 +101,14 @@ class ProjectRoot(DeployableComponent):
             dirname, basename = os.path.split(dirname)
         super(ProjectRoot, self).__init__(basename)
         self.dst_dir = dirname
+
+    def deploy(self):
+        tree = self._grow_deployment_tree(self.contents)
+        root = self._root_deployment_tree(tree)
+        # doc has no template in setup_templates. we point src_dir to the
+        # correct directory after applying all defaults in _root_deployment_tree()
+        doc = [ node for node in root.content
+                if isinstance(node,LinkedDir)
+                and node.name == 'doc' ][0]
+        doc.src_path = os.path.dirname(doc.src_path)
+        root.deploy()
