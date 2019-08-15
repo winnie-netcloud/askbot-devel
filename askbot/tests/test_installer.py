@@ -46,16 +46,20 @@ class DeployObjectsTest(AskbotTestCase):
         basename = os.path.basename(self.text_file.name)
 
         test = CopiedFile(basename, self.setup_templates.name, self.project_root.name + '_target_does_not_exist')
+        test.verbosity = 0
         self.assertRaises(FileNotFoundError, test.deploy)
 
         test = CopiedFile(basename, self.setup_templates.name + '_source_does_not_exist', self.project_root.name)
+        test.verbosity = 0
         self.assertRaises(FileNotFoundError, test.deploy)
 
         test = CopiedFile(basename + '_bogus', self.setup_templates.name, self.project_root.name)
+        test.verbosity = 0
         self.assertRaises(FileNotFoundError, test.deploy)
 
         # this should just work and copy the file
         test = CopiedFile(basename, self.setup_templates.name, self.project_root.name)
+        test.verbosity = 0
         test.deploy()
 
         new_file = os.path.join(self.project_root.name, basename)
@@ -75,15 +79,19 @@ class DeployObjectsTest(AskbotTestCase):
         basename = self.jinja2_target
 
         test = RenderedFile(basename, self.setup_templates.name, self.project_root.name + '_target_does_not_exist')
+        test.verbosity = 0
         self.assertRaises(FileNotFoundError, test.deploy)
 
         test = RenderedFile(basename, self.setup_templates.name + '_source_does_not_exist', self.project_root.name)
+        test.verbosity = 0
         self.assertRaises(FileNotFoundError, test.deploy)
 
         test = RenderedFile(basename + '_bogus', self.setup_templates.name, self.project_root.name)
+        test.verbosity = 0
         self.assertRaises(FileNotFoundError, test.deploy)
 
         test = RenderedFile(basename, self.setup_templates.name, self.project_root.name)
+        test.verbosity = 0
         test.context = {'world': 'World'}
         test.deploy()
 
@@ -104,10 +112,12 @@ class DeployObjectsTest(AskbotTestCase):
         basename = os.path.basename(self.text_file.name)
 
         test = EmptyFile(basename, self.setup_templates.name, self.project_root.name + '_target_does_not_exist')
+        test.verbosity = 0
         self.assertRaises(FileNotFoundError, test.deploy)
 
         # this should just work and copy the file
         test = EmptyFile(basename, self.setup_templates.name, self.project_root.name)
+        test.verbosity = 0
         test.deploy()
 
         new_file = os.path.join(self.project_root.name, basename)
@@ -125,6 +135,7 @@ class DeployObjectsTest(AskbotTestCase):
         basename = 'foobar'
 
         test = Directory(basename, self.project_root.name)
+        test.verbosity = 0
         test.deploy()
 
         new_dir = os.path.join(self.project_root.name, basename)
@@ -191,6 +202,7 @@ class DeployableComponentsTest(AskbotTestCase):
     def test_ProjectRoot(self):
         test = ProjectRoot(self.project_root.name)
         test.src_dir = self.setup_templates.name
+        test.verbosity = 0
         test.deploy()
 
         comp = self.deployableComponents[test.name]
@@ -201,6 +213,7 @@ class DeployableComponentsTest(AskbotTestCase):
         test = AskbotSite()
         test.src_dir = self.setup_templates.name
         test.dst_dir = self.project_root.name
+        test.verbosity = 0
         test.deploy()
 
         comp = self.deployableComponents[test.name]
@@ -211,6 +224,7 @@ class DeployableComponentsTest(AskbotTestCase):
         test = AskbotApp()
         test.src_dir = self.setup_templates.name
         test.dst_dir = self.project_root.name
+        test.verbosity = 0
         test.deploy()
 
         comp = self.deployableComponents[test.name]
@@ -226,6 +240,7 @@ class DeployableComponentsTest(AskbotTestCase):
         test.contents.update({'additional.file': CopiedFile})
 
         test.src_dir = self.setup_templates.name
+        test.verbosity = 0
         test.deploy()
 
         comp = self.deployableComponents[test.name]
@@ -242,6 +257,7 @@ class DeployableComponentsTest(AskbotTestCase):
         test.contents.update({'additionalDir': {'additional.file': CopiedFile}})
 
         test.src_dir = self.setup_templates.name
+        test.verbosity = 0
         test.deploy()
 
         comp = self.deployableComponents[test.name]

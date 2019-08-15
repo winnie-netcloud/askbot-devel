@@ -2,27 +2,16 @@ import os.path
 import shutil
 from askbot.deployment.messages import print_message
 from askbot.deployment.template_loader import DeploymentTemplate
+from askbot.deployment.deployables.base import AskbotDeploymentError,  ObjectWithOutput
 
-class AskbotDeploymentError(Exception):
-    """Use this when something goes wrong while deploying Askbot"""
-
-
-class DeployObject(object):
+class DeployObject(ObjectWithOutput):
     """Base class for filesystem objects, i.e. files and directories, that can
     be/are deployed using askbot-setup."""
     def __init__(self, name, src_path=None, dst_path=None):
-        self._verbosity = 2
+        super(DeployObject, self).__init__(verbosity=2)
         self.name = name
         self._src_path = src_path
         self._dst_path = dst_path
-
-    @property
-    def verbosity(self):
-        return self._verbosity
-
-    @verbosity.setter
-    def verbosity(self, value):
-        self._verbosity = value
 
     @property
     def src_path(self):
@@ -55,11 +44,11 @@ class DeployObject(object):
         """The main method of this class. DeployableComponents call this method
          to have this object do the filesystem operations which deploy a single
          file or directory."""
-        print_message(f'*    {self.dst} from {self.src}', self.verbosity)
+        self.print(f'*    {self.dst} from {self.src}')
         try:
             self._deploy_now()
         except AskbotDeploymentError as e:
-            print_message(e, self.verbosity)
+            self.print(e)
 
 class DeployFile(DeployObject):
     """This class collects all logic w.r.t. writing files. It has to be
@@ -97,7 +86,7 @@ class DeployFile(DeployObject):
             if skip: # this makes skip more important than force. This is good, because when in doubt, we rather leave the current installation the way it is. This is bad because we cannot explicitly force an overwrite.
                 return
             elif force:
-                print_message('     ^^^ forced overwrite!', self.verbosity)
+                self.print('     ^^^ forced overwrite!')
             else:
                 raise AskbotDeploymentError(f'     You already have a file "{self.dst}", please add contents of {self.src}.')
         shutil.copy(self.src, self.dst)
@@ -121,6 +110,16 @@ class DeployDir(DeployObject):
         self.content = list(content)
         if parent is not None:
             self.dst_path = self.__clean_directory(parent)
+
+    @property
+    def verbosity(self):
+        return super().verbosity
+
+    @verbosity.setter
+    def verbosity(self, value):
+        self._verbosity = value
+        for child in self.content:
+            child.verbosity = value
 
     @property
     def src_path(self):

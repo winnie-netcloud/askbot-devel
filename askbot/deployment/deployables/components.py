@@ -1,7 +1,8 @@
 
 from askbot.deployment.deployables.objects import *
+from askbot.deployment.deployables.base import ObjectWithOutput
 
-class DeployableComponent(object):
+class DeployableComponent(ObjectWithOutput):
     """These constitute sensible deployment chunks of Askbot. For instance,
     one would never deploy just a settings.py, because Django projects need
     additional files as well."""
@@ -9,6 +10,7 @@ class DeployableComponent(object):
     contents = dict()
 
     def __init__(self, name=None, contents=None):
+        super(DeployableComponent, self).__init__(verbosity=2)
         name = name if name is not None else self.__class__.default_name
         contents = contents if contents is not None else self.__class__.contents
 
@@ -42,6 +44,7 @@ class DeployableComponent(object):
         root.context = self.context
         root.forced_overwrite = self.forced_overwrite
         root.skip_silently = self.skip_silently
+        root.verbosity = self.verbosity
         return root
 
     @property
