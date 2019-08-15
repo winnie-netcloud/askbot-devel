@@ -152,7 +152,8 @@ class DeployableComponentsTest(AskbotTestCase):
     def _flatten_components(self, components):
         found = [i for i in components
                  if i[1] is RenderedFile
-                 or i[1] is CopiedFile]
+                 or i[1] is CopiedFile
+                 or i[1] is LinkedDir]
 
         for descent in [list(i[1].items()) for i in components
                         if isinstance(i[1], dict)]:
@@ -194,6 +195,9 @@ class DeployableComponentsTest(AskbotTestCase):
                     with open(os.path.join(
                             self.setup_templates.name, fname), 'wb') as f:
                         f.write(self.hello.encode('utf-8'))
+                elif ftype is LinkedDir:
+                    os.makedirs(os.path.join(
+                            self.setup_templates.name, fname), exist_ok=True)
 
     def tearDown(self):
         del self.project_root
@@ -206,8 +210,15 @@ class DeployableComponentsTest(AskbotTestCase):
         test.deploy()
 
         comp = self.deployableComponents[test.name]
+        comp = self.deployableComponents[test.name]
+        root_path = self.project_root.name
+        message = f"\n{root_path}"
+        message += ' exists' if os.path.isdir(root_path) else ' does not exist'
         for name, value in comp.contents.items():
-            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, name)))
+            name_path = os.path.join(self.project_root.name, name)
+            message += f"\n{name_path}"
+            message += ' exists' if os.path.isdir(name_path) else ' does not exist'
+            self.assertTrue(os.path.exists(name_path), message)
 
     def test_AskbotSite(self):
         test = AskbotSite()
@@ -217,8 +228,17 @@ class DeployableComponentsTest(AskbotTestCase):
         test.deploy()
 
         comp = self.deployableComponents[test.name]
+        root_path = self.project_root.name
+        comp_path = os.path.join(root_path, comp.name)
+        message  = f"\n{root_path}"
+        message += ' exists' if os.path.isdir(root_path) else ' does not exist'
+        message += f"\n{comp_path}"
+        message += ' exists' if os.path.isdir(comp_path) else ' does not exist'
         for name, value in comp.contents.items():
-            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, comp.name, name)))
+            name_path = os.path.join(self.project_root.name, comp.name, name)
+            message += f"\n{name_path}"
+            message += ' exists' if os.path.isdir(name_path) else ' does not exist'
+            self.assertTrue(os.path.exists(name_path),message)
 
     def test_AskbotApp(self):
         test = AskbotApp()
@@ -228,10 +248,20 @@ class DeployableComponentsTest(AskbotTestCase):
         test.deploy()
 
         comp = self.deployableComponents[test.name]
+        root_path = self.project_root.name
+        comp_path = os.path.join(root_path, comp.name)
+        message = f"\n{root_path}"
+        message += ' exists' if os.path.isdir(root_path) else ' does not exist'
+        message += f"\n{comp_path}"
+        message += ' exists' if os.path.isdir(comp_path) else ' does not exist'
         for name, value in comp.contents.items():
-            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, comp.name, name)))
+            name_path = os.path.join(self.project_root.name, comp.name, name)
+            message += f"\n{name_path}"
+            message += ' exists' if os.path.isdir(name_path) else ' does not exist'
+            self.assertTrue(os.path.exists(name_path), message)
 
-    def test_addFileBeforeDeploy(self):
+
+def test_addFileBeforeDeploy(self):
         test = ProjectRoot(self.project_root.name)
 
         another_file = os.path.join(self.setup_templates.name, 'additional.file')

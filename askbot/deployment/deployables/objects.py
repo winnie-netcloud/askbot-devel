@@ -171,6 +171,15 @@ class DeployDir(DeployObject):
         for child in self.content: # in practice, we only need this for directories and copied files.
             child.forced_overwrite = value
 
+    def _link_dir(self):
+        """Derived from __create_path()"""
+        if os.path.isdir(self.dst):
+            return
+        elif os.path.exists(self.dst):
+            raise AskbotDeploymentError('expect directory or a non-existing path')
+        else:
+            os.symlink(self.src, self.dst)
+
     #####################
     ## from path_utils ##
     #####################
@@ -228,4 +237,5 @@ class Directory(DeployDir):
     pass
 
 class LinkedDir(DeployDir):
-    pass
+    def _deploy_now(self):
+        self._link_dir()
