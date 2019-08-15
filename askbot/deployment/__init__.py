@@ -12,7 +12,7 @@ from askbot.deployment import path_utils
 from askbot.utils.functions import generate_random_key
 from askbot.deployment.template_loader import DeploymentTemplate
 from askbot.deployment.parameters import ConfigManagerCollection
-
+import askbot.deployment.deployables as deployable
 import shutil
 
 class AskbotSetup:
@@ -280,14 +280,14 @@ class AskbotSetup:
             print_message(pformat(self.__dict__), self.verbosity)
             raise KeyboardInterrupt
 
-        self.deploy_askbot(options)
+        self.deploy_askbot_new(options)
 
         if database_interface == 'postgresql_psycopg2':
             try:
                 import psycopg2
             except ImportError:
                 print_message('\nNEXT STEPS: install python binding for postgresql', self.verbosity)
-                print_message('pip install psycopg2\n', self.verbosity)
+                print_message('pip install psycopg2-binary\n', self.verbosity)
         elif database_interface == 'mysql':
             try:
                 import _mysql
@@ -432,6 +432,47 @@ class AskbotSetup:
                 messages.HOW_TO_ADD_ASKBOT_TO_DJANGO % {'help_file': help_file},
                 self.verbosity
             )
+
+    def deploy_askbot_new(self, options):
+        create_new_project = True
+        if os.path.exists(options['dir_name']) and \
+            path_utils.has_existing_django_project(options['dir_name']) and \
+            options.force is False:
+            create_new_project = False
+
+        options['staticfiles_app'] = "'django.contrib.staticfiles',"
+        options['auth_context_processor'] = 'django.contrib.auth.context_processors.auth'
+
+        project = deployable.ProjectRoot(options['dir_name'])
+        site = deployable.AskbotSite(project.name)
+
+        if create_new_project is True:
+            project.src_dir = os.path.join(self.SOURCE_DIR, 'setup_templates')
+            project.contents.update({
+                path_utils.LOG_DIR_NAME: {options['logfile_name']: deployable.EmptyFile}
+            })
+            project.context = {'settings_path': f'{site.name}.settings'}
+            project.deploy()
+
+        site.src_dir = os.path.join(self.SOURCE_DIR, 'setup_templates')
+        site.dst_dir = options['dir_name']
+        site.context.update(options)
+        site.deploy()
+
+        help_file = path_utils.get_path_to_help_file()
+
+        if create_new_project:
+            print_message(
+                messages.HOW_TO_DEPLOY_NEW % {'help_file': help_file},
+                self.verbosity
+            )
+        else:
+            print_message(
+                messages.HOW_TO_ADD_ASKBOT_TO_DJANGO % {'help_file': help_file},
+                self.verbosity
+            )
+
+
 
 # set to askbot_setup_orig to return to original installer
 askbot_setup = AskbotSetup(interactive=True, verbosity=1)
