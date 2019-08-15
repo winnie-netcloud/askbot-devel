@@ -261,7 +261,7 @@ class DeployableComponentsTest(AskbotTestCase):
             self.assertTrue(os.path.exists(name_path), message)
 
 
-def test_addFileBeforeDeploy(self):
+    def test_addFileBeforeDeploy(self):
         test = ProjectRoot(self.project_root.name)
 
         another_file = os.path.join(self.setup_templates.name, 'additional.file')
