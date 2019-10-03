@@ -1,13 +1,5 @@
 from askbot.utils import console
-
-class ObjectWithOutput(object):
-    def __init__(self, verbosity=1, force=False):
-        self.verbosity = verbosity
-        self.force = force
-
-    def print(self, message, verbosity=1):
-        if verbosity <= self.verbosity:
-            print(message)
+from askbot.deployment.common.base import ObjectWithOutput
 
 class ConfigManager(ObjectWithOutput):
     """ConfigManagers are used to ensure the installation can proceed.
@@ -42,13 +34,11 @@ class ConfigManager(ObjectWithOutput):
     }
 
     def __init__(self, interactive=True, verbosity=1, force=False):
-        self._verbosity = verbosity
         self._interactive = interactive
-        self._force = force
         self._catalog = dict()
         self.keys = set()
         self._managed_config = dict()
-        super(ConfigManager, self).__init__(verbosity=verbosity)
+        super(ConfigManager, self).__init__(verbosity=verbosity, force=force)
         self.interactive = interactive
 
     @property
@@ -73,11 +63,7 @@ class ConfigManager(ObjectWithOutput):
             if hasattr(handler,'force'):
                 handler.force = force
 
-    @property
-    def verbosity(self):
-        return self._verbosity
-
-    @verbosity.setter
+    @ObjectWithOutput.verbosity.setter
     def verbosity(self, verbosity):
         self._verbosity = verbosity
         for name, handler in self._catalog.items():

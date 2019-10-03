@@ -6,7 +6,7 @@ occurs the deployment is considered as failed. Ideally, all the work this code
 did up to the error is undone. Yet, this code has no means to undo anything.
 """
 
-from .base import AskbotDeploymentError
+from askbot.deployment.common.base import AskbotDeploymentError
 from .objects import RenderedFile, CopiedFile, EmptyFile, Directory, LinkedDir
 from .components import AskbotApp, AskbotSite, ProjectRoot
 

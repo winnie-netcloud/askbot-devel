@@ -1,6 +1,5 @@
-
 from askbot.deployment.deployables.objects import *
-from askbot.deployment.deployables.base import ObjectWithOutput
+from askbot.deployment.common.base import ObjectWithOutput
 
 class DeployableComponent(ObjectWithOutput):
     """These constitute sensible deployment chunks of Askbot. For instance,
@@ -28,11 +27,8 @@ class DeployableComponent(ObjectWithOutput):
             if isinstance(deployable,dict):
                 branch = self._grow_deployment_tree(deployable)
                 todo.append(
-                    Directory(
-                        name,
-                        None,
-                        *branch
-                 ))
+                    Directory(name, None, *branch)
+                 )
             else:
                 todo.append(deployable(name))
         return todo
@@ -81,9 +77,15 @@ class AskbotSite(DeployableComponent):
         'django.wsgi': CopiedFile,
     }
 
+# The naming is terribly misleading here. This is just some of the stuff we use
+# for building Askbot containers. This has nothing to do with Django.
 class AskbotApp(DeployableComponent):
     default_name = 'askbot_app'
-    contents = {}
+    contents = {
+        'prestart.sh': CopiedFile,
+        'prestart.py': CopiedFile,
+        'uwsgi.ini': RenderedFile,  # askbot_site, askbot_app
+    }
 
 class ProjectRoot(DeployableComponent):
     contents = {
@@ -93,6 +95,7 @@ class ProjectRoot(DeployableComponent):
         },
         'doc': LinkedDir,
         'upfiles': {},
+        'static': {},
     }
 
     def __init__(self, install_path):

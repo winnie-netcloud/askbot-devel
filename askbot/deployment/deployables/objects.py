@@ -2,7 +2,7 @@ import os.path
 import shutil
 from askbot.deployment.messages import print_message
 from askbot.deployment.template_loader import DeploymentTemplate
-from askbot.deployment.deployables.base import AskbotDeploymentError,  ObjectWithOutput
+from askbot.deployment.common.base import AskbotDeploymentError,  ObjectWithOutput
 
 class DeployObject(ObjectWithOutput):
     """Base class for filesystem objects, i.e. files and directories, that can
@@ -42,8 +42,8 @@ class DeployObject(ObjectWithOutput):
 
     def deploy(self):
         """The main method of this class. DeployableComponents call this method
-         to have this object do the filesystem operations which deploy a single
-         file or directory."""
+         to have this object do the filesystem operations which deploys
+         whatever this class represents."""
         self.print(f'*    {self.dst} from {self.src}')
         try:
             self._deploy_now()
@@ -51,10 +51,13 @@ class DeployObject(ObjectWithOutput):
             self.print(e)
 
 class DeployFile(DeployObject):
-    """This class collects all logic w.r.t. writing files. It has to be
+    """This class collects all logic w.r.t. a single files. It has to be
     subclassed and the subclasses must/should overwrite _deploy_now to call
     one of the methods defined in this class. At the time of this writing, this
-    is either _render_with_jinja2 or _copy."""
+    is either _render_with_jinja2 or _copy.
+
+    The subclasses may then be used to deploy a single file.
+    """
     def __init__(self, name, src_path=None, dst_path=None):
         super(DeployFile, self).__init__(name, src_path, dst_path)
         self.context = dict()
@@ -97,11 +100,10 @@ class DeployFile(DeployObject):
     def _touch(self, times=None):
         """implementation of unix ``touch`` in python"""
         #http://stackoverflow.com/questions/1158076/implement-touch-using-python
-        fhandle = open(self.dst, 'a')
         try:
             os.utime(self.dst, times)
-        finally:
-            fhandle.close()
+        except:
+            open(self.dst, 'a').close()
 
 
 class DeployDir(DeployObject):
@@ -111,32 +113,20 @@ class DeployDir(DeployObject):
         if parent is not None:
             self.dst_path = self.__clean_directory(parent)
 
-    @property
-    def verbosity(self):
-        return super().verbosity
-
-    @verbosity.setter
+    @DeployObject.verbosity.setter
     def verbosity(self, value):
         self._verbosity = value
         for child in self.content:
             child.verbosity = value
 
-    @property
-    def src_path(self):
-        return super().src_path
-
-    @src_path.setter
+    @DeployObject.src_path.setter
     def src_path(self, value):
         value = self.__clean_directory(value)
         self._src_path = value
         for child in self.content:
             child.src_path = value
 
-    @property
-    def dst_path(self):
-        return super().dst_path
-
-    @dst_path.setter
+    @DeployObject.dst_path.setter
     def dst_path(self, value):
         value = self.__clean_directory(value)
         self._dst_path = value
