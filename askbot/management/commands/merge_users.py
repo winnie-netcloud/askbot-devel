@@ -1,7 +1,6 @@
 
 from django.core.management.base import CommandError, BaseCommand
 from django.db import transaction
-from askbot.deployment import package_utils
 from askbot.models import (User, LocalizedUserProfile, Post,
                            GroupMembership
                           )

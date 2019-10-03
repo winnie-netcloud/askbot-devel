@@ -15,7 +15,6 @@ from bs4 import BeautifulSoup
 import askbot
 from askbot import models
 from askbot.utils.slug import slugify
-from askbot.deployment import package_utils
 from askbot.tests.utils import AskbotTestCase
 from askbot.conf import settings as askbot_settings
 from askbot.tests.utils import skipIf

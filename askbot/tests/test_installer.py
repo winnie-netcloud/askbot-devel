@@ -439,7 +439,7 @@ class MainInstallerTests(AskbotTestCase):
             self.assertEqual(obj.verbosity, self.installer.verbosity)
 
         for new_verbosity in [2, 5, 13, 23, 42, 666, 1337, 16061, self.installer.verbosity]:
-            self.installer._set_verbosity(new_verbosity)
+            self.installer.verbosity = new_verbosity
             for obj in has_verbosity:
                 self.assertEqual(obj.verbosity, new_verbosity)
 
@@ -459,9 +459,10 @@ class MainInstallerTests(AskbotTestCase):
                 self.assertEqual(obj.interactive, new_interactive)
 
     def test_flow_dry_run(self):
+        destdir = tempfile.TemporaryDirectory()
         self.installer.configManagers.interactive=False
         # minimal_viable_argument_set
-        mva = ['--dir-name', '/tmp/AskbotTestDir',
+        mva = ['--dir-name', destdir.name,
                '--db-engine', '2',
                '--db-name', '/tmp/AskbotTest.db',
                '--cache-engine', '3']
@@ -475,7 +476,8 @@ class MainInstallerTests(AskbotTestCase):
             self.assertEqual(mock.call_count, 1)
 
     def test_flow_skip_deploy(self):
-        mva = ['--dir-name', '/tmp/AskbotTestDir',
+        destdir = tempfile.TemporaryDirectory()
+        mva = ['--dir-name', destdir.name,
                '--db-engine', '2',
                '--db-name', '/tmp/AskbotTest.db',
                '--cache-engine', '3']
@@ -492,7 +494,8 @@ class MainInstallerTests(AskbotTestCase):
             self.fail(f'Running the installer raised {e}')
 
     def test_flow_mock_deployment(self):
-        mva = ['--dir-name', '/tmp/AskbotTestDir',
+        destdir = tempfile.TemporaryDirectory()
+        mva = ['--dir-name',destdir.name,
                '--db-engine', '2',
                '--db-name', '/tmp/AskbotTest.db',
                '--cache-engine', '3']
@@ -501,8 +504,8 @@ class MainInstallerTests(AskbotTestCase):
         parse_args = MagicMock(name='parse_args', return_value=opts)
         self.installer.parser.parse_args = parse_args
         fake_open = mock_open(read_data='foobar')
-        with patch('askbot.deployment.path_utils.create_path'), patch('askbot.deployment.path_utils.touch'), patch('shutil.copy'), patch('builtins.open', fake_open):
-            self.installer()
+        #with patch('askbot.deployment.path_utils.create_path'), patch('shutil.copy'), patch('builtins.open', fake_open):
+        self.installer()
 
 
 class DeployObjectsTest(AskbotTestCase):
@@ -699,13 +702,28 @@ class DeployableComponentsTest(AskbotTestCase):
         del self.project_root
         del self.setup_templates
 
+    def test_TestSetup(self):
+        self.assertTrue(os.path.isdir(self.project_root.name))
+        self.assertTrue(os.path.isdir(self.setup_templates.name))
+        self.assertFalse(self.project_root.name == self.setup_templates.name)
+
+
     def test_ProjectRoot(self):
+        mock_doc_dir = tempfile.TemporaryDirectory()
+        os.mkdir(os.path.join(mock_doc_dir.name, 'doc'))
         test = ProjectRoot(self.project_root.name)
         test.src_dir = self.setup_templates.name
         test.verbosity = 0
-        test.deploy()
 
-        comp = self.deployableComponents[test.name]
+        # ProiectRoot.deploy works under the assumption that 'setup_templates'
+        # and 'doc' are directories inside the same parent directory. While
+        # this holds true for an actual Askbot installation, it doesn't in this
+        # unittest. We use the following patch context to align the
+        # directory structure assumption of ProjectRoot.deploy with the
+        # test environment, which is auto-generated temporary directories.
+        with patch('os.path.dirname', return_value=mock_doc_dir.name):
+            test.deploy()
+
         comp = self.deployableComponents[test.name]
         root_path = self.project_root.name
         message = f"\n{root_path}"
@@ -713,8 +731,9 @@ class DeployableComponentsTest(AskbotTestCase):
         for name, value in comp.contents.items():
             name_path = os.path.join(self.project_root.name, name)
             message += f"\n{name_path}"
-            message += ' exists' if os.path.isdir(name_path) else ' does not exist'
+            message += ' exists' if os.path.exists(name_path) else ' does not exist'
             self.assertTrue(os.path.exists(name_path), message)
+
 
     def test_AskbotSite(self):
         test = AskbotSite()
@@ -758,35 +777,44 @@ class DeployableComponentsTest(AskbotTestCase):
 
 
     def test_addFileBeforeDeploy(self):
-        test = ProjectRoot(self.project_root.name)
-
         another_file = os.path.join(self.setup_templates.name, 'additional.file')
         with open(another_file, 'wb') as f:
             f.write(self.hello.encode('utf-8'))
+
+        test = AskbotSite()
         test.contents.update({'additional.file': CopiedFile})
 
         test.src_dir = self.setup_templates.name
+        test.dst_dir = self.project_root.name
         test.verbosity = 0
         test.deploy()
 
+        del test.contents['additional.file']
+
         comp = self.deployableComponents[test.name]
-        for name, value in comp.contents.items():
-            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, name)))
-        self.assertTrue(os.path.exists(os.path.join(self.project_root.name, 'additional.file')))
+        name_path = os.path.join(self.project_root.name, comp.name, 'additional.file')
+        message  = f"\n{name_path}"
+        message += ' exists' if os.path.isdir(name_path) else ' does not exist'
+        self.assertTrue(os.path.exists(name_path), message)
+
 
     def test_addDirBeforeDeploy(self):
-        test = ProjectRoot(self.project_root.name)
-
         another_file = os.path.join(self.setup_templates.name, 'additional.file')
         with open(another_file, 'wb') as f:
             f.write(self.hello.encode('utf-8'))
+
+        test = AskbotSite()
         test.contents.update({'additionalDir': {'additional.file': CopiedFile}})
 
         test.src_dir = self.setup_templates.name
+        test.dst_dir = self.project_root.name
         test.verbosity = 0
         test.deploy()
 
+        del test.contents['additionalDir']
+
         comp = self.deployableComponents[test.name]
-        for name, value in comp.contents.items():
-            self.assertTrue(os.path.exists(os.path.join(self.project_root.name, name)))
-        self.assertTrue(os.path.exists(os.path.join(self.project_root.name, 'additionalDir', 'additional.file')))
+        name_path = os.path.join(self.project_root.name, comp.name, 'additionalDir', 'additional.file')
+        message = f"\n{name_path}"
+        message += ' exists' if os.path.isdir(name_path) else ' does not exist'
+        self.assertTrue(os.path.exists(name_path), message)
