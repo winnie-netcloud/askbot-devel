@@ -7,6 +7,11 @@ from askbot.deployment.parameters.filesystem import FilesystemConfigManager
 # ConfigManager because the collection serves a different purpose than the
 # individual manager, but they are still quite similar
 class ConfigManagerCollection(ConfigManager):
+    """
+    This is the main config manager that will be used by the Askbot installer.
+    It is a hard coded ordered collection of all config managers the installer
+    shall use.
+    """
     def __init__(self, interactive=False, verbosity=0):
         super(ConfigManagerCollection, self).__init__(interactive=interactive, verbosity=verbosity)
         self.register('database', DbConfigManager(interactive=interactive, verbosity=verbosity))

@@ -51,6 +51,22 @@ class DbConfigManager(ConfigManager):
                 self._catalog['database_user'].defaultOk = True
                 self._catalog['database_password'].defaultOk = True
 
+    def _complete(self, name, current_value):
+        """
+        Wrap the default _complete() to implement a special handling of
+        `database_engine`. While the user selects database engines by index,
+        i.e. 1,2,3 or 4, at the time of this writing, the installer and Askbot
+        use Django module names (I think that's what this is). Therefore we
+        perform a lookup after the user made their final choice and return
+        the name, rather than the index.
+        """
+        ret = super(DbConfigManager, self)._complete(name, current_value)
+        if name == 'database_engine':
+            return [ e[1] for e in
+                     self.configField(name).database_engines
+                     if e[0] == ret ].pop()
+        return ret
+
 class DbEngine(ConfigField):
     defaultOk = False
 

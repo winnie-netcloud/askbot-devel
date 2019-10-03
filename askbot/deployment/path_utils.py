@@ -10,12 +10,10 @@ import os.path
 import tempfile
 import re
 import glob
-import shutil
 import imp
 
 from askbot.deployment import messages
 from askbot.utils import console
-from askbot.deployment.template_loader import DeploymentTemplate as SettingsTemplate
 
 
 FILES_TO_CREATE = ('__init__.py', 'manage.py', 'urls.py', 'django.wsgi', 'celery_app.py')
@@ -55,15 +53,14 @@ def clean_directory(directory):
         return None
     return directory
 
-
+# Only used in can_create_path
 def directory_is_writable(directory):
     """returns True if directory exists
     and is writable, False otherwise
     """
-    tempfile.tempdir = directory
     try:
         #run writability test
-        temp_path = tempfile.mktemp()
+        temp_path = tempfile.mktemp(dir=directory)
         assert(os.path.dirname(temp_path) == directory)
         temp_file = open(temp_path, 'w')
         temp_file.close()
@@ -73,6 +70,7 @@ def directory_is_writable(directory):
         return False
 
 
+# Only used in get_install_directory
 def can_create_path(directory):
     """returns True if user can write file into
     directory even if it does not exist yet
@@ -120,6 +118,7 @@ def find_parent_dir_with_django(directory):
     return None
 
 
+# Only used in get_install_directory
 def path_is_clean_for_django(directory):
     """returns False if any of the parent directories
     contains a Django project, otherwise True
@@ -129,6 +128,7 @@ def path_is_clean_for_django(directory):
     return (django_dir is None)
 
 
+# Can be removed after fixing askbot.tests.test_installer
 def create_path(directory):
     """equivalent to mkdir -p"""
     if os.path.isdir(directory):
@@ -138,94 +138,20 @@ def create_path(directory):
     else:
         os.makedirs(directory)
 
-def touch(file_path, times = None):
-    """implementation of unix ``touch`` in python"""
-    #http://stackoverflow.com/questions/1158076/implement-touch-using-python
-    fhandle = open(file_path, 'a')
-    try:
-        os.utime(file_path, times)
-    finally:
-        fhandle.close()
 
 SOURCE_DIR = os.path.dirname(os.path.dirname(__file__))
 def get_path_to_help_file():
     """returns path to the main plain text help file"""
     return os.path.join(SOURCE_DIR, 'doc', 'INSTALL')
 
-def deploy_into(install_dir, new_project = False, verbosity = 1, context = None):
-    """will copy necessary files into the target directory
-    """
-    assert(isinstance(new_project, bool))
-    if new_project:
-        if verbosity >= 1:
-            print('Copying files: ')
-        for file_name in FILES_TO_CREATE:
-            src_file = os.path.join(SOURCE_DIR, 'setup_templates', file_name)
-            if verbosity >= 1:
-                print(f'* {file_name}')
-            if os.path.exists(os.path.join(install_dir, file_name)):
-                if file_name in BLANK_FILES:
-                    continue
-                if file_name == 'urls.py' and verbosity >= 1:
-                    print('  ^^^ forced overwrite!')
-                else:
-                    if verbosity >= 1:
-                        print(f'  ^^^ you already have one, please add contents of {src_file}')
-                    continue
-            shutil.copy(src_file, install_dir)
-        #create log directory
-        log_dir = os.path.join(install_dir, LOG_DIR_NAME)
-        create_path(log_dir)
-        touch(os.path.join(log_dir, 'askbot.log'))
-
-        #creating settings file from template
-        if verbosity >= 1:
-            print("Creating settings file")
-        settings_contents = SettingsTemplate(context).render()
-        settings_path = os.path.join(install_dir, 'settings.py')
-        if os.path.exists(settings_path):
-            if verbosity >= 1:
-                print("* you already have a settings file please merge the contents")
-        else:
-            with open(settings_path, 'w+') as settings_file:
-                settings_file.write(settings_contents)
-                #Grab the file!
-                if os.path.exists(context['local_settings']):
-                    with open(context['local_settings'], 'r') as local_settings:
-                        settings_file.write('\n')
-                        settings_file.write(local_settings.read())
-
-            if verbosity >= 1:
-                print("settings file created")
-    # end if new_project
-    if verbosity >= 1:
-        print('')
-    app_dir = os.path.join(install_dir, 'askbot')
-
-    if verbosity >= 1:
-        print('copying directories: ')
-    copy_dirs = ('doc', 'cron', 'upfiles')
-    for dir_name in copy_dirs:
-        src_dir = os.path.join(SOURCE_DIR, dir_name)
-        dst_dir = os.path.join(   app_dir, dir_name)
-        if os.path.abspath(src_dir) == os.path.abspath(dst_dir): # this is actually just a special form of an already existing directory
-            continue
-        if verbosity >= 1:
-            print(f'* {dir_name}')
-        if os.path.exists(dst_dir):
-            if verbosity >= 1:
-                print('  ^^^ already exists - skipped')
-            continue
-        shutil.copytree(src_dir, dst_dir)
-    if verbosity >= 1:
-        print('')
-
+# Only used in get_install_directory
 def dir_name_unacceptable_for_django_project(directory):
     dir_name = os.path.basename(directory)
     if re.match(r'[_a-zA-Z][\w-]*$', dir_name):
         return False
     return True
 
+# Only used in get_install_directory
 def dir_taken_by_python_module(directory):
     """True if directory is not taken by another python module"""
     dir_name = os.path.basename(directory)

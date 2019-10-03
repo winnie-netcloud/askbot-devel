@@ -125,7 +125,7 @@ class ProjectDirName(BaseDirName):
 
 class AppDirName(BaseDirName):
     defaultOk = True,
-    default = 'askbot_app',
+    default = None,
     user_prompt = "Please enter a Django App name for this Askbot deployment."
 
     def acceptable(self, value):
