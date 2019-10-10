@@ -1,40 +1,69 @@
-from askbot.deployment.parameters.base import ConfigManager
-from askbot.deployment.parameters.cache import CacheConfigManager
-from askbot.deployment.parameters.database import DbConfigManager
-from askbot.deployment.parameters.filesystem import FilesystemConfigManager
+from askbot.deployment.base import ConfigManagerCollection, ConfigManager
+from .configmanagers import CacheConfigManager, DbConfigManager
 
-# one could make a case for not deriving ConfigManagerCollection from
-# ConfigManager because the collection serves a different purpose than the
-# individual manager, but they are still quite similar
-class ConfigManagerCollection(ConfigManager):
-    """
-    This is the main config manager that will be used by the Askbot installer.
-    It is a hard coded ordered collection of all config managers the installer
-    shall use.
-    """
-    def __init__(self, interactive=False, verbosity=0):
-        super(ConfigManagerCollection, self).__init__(interactive=interactive, verbosity=verbosity)
-        self.register('database', DbConfigManager(interactive=interactive, verbosity=verbosity))
-        self.register('cache', CacheConfigManager(interactive=interactive, verbosity=verbosity))
-        self.register('filesystem', FilesystemConfigManager(interactive=interactive, verbosity=verbosity))
+from .cache import *
+from .database import *
+from .filesystem import *
 
-    def _order(self, keys):
-        full_set = ['filesystem', 'database', 'cache']
-        return [item for item in full_set if item in keys]
+"""
+In this module we assemble the input validation capabilities for the Askbot
+installer.
 
-    def configManager(self, name):
-        return super(ConfigManagerCollection, self).configField(name)
+The goal is to provide a single ConfigManagerCollection instance
+(currently named askbotCollection), the installer will use to validate its
+parameters.
 
-    def complete(self, *args, **kwargs):
-        for manager in self._order(self.keys):
-            handler = self.configManager(manager)
-            handler.complete(*args, **kwargs)
+The idea is askbotCollection will be able to validate just the
+parameters that are register()-ed in this module/file. First we create the
+collection and managers. Then we register() all the parameters for which we
+want validation.
 
-    # these should never be called. we keep these, just in case
-    def _remember(self, name, value):
-        raise NotImplementedError(f'Not implemented in {self.__class__.__name__}.')
+The validation implementations vary in complexity. Therefore, all
+implementations are defined in derived classes in submodules, structured by
+their topic, e.g. cache, database and filesystem. Here, at this level, we
+import all classes and use register() as a mapping from parameter name, to
+validation implementation.
 
-    def _complete(self, name, value):
-        raise NotImplementedError(f'Not implemented in {self.__class__.__name__}.')
+The parameter names must match the argpare argument destinations, i.e. the
+`dest` argument to ArgumentParser.add_argument(), do be effective.
 
-__all__ = [ 'DbConfigManager', 'CacheConfigManager', 'FilesystemConfigManager', 'ConfigManagerCollection']
+THE ORDER IN WHICH VALIDATIONS ARE register()-ed WITH THEIR ConfigManagers
+MATTERS!
+"""
+
+# use these values while inizializing this module
+interactive=False
+verbosity=0
+
+# the ConfigManagerCollection the installer will use
+askbotCollection = ConfigManagerCollection(interactive=interactive, verbosity=verbosity)
+
+# the ConfigManagers the installer will use
+cacheManager = CacheConfigManager(interactive=interactive, verbosity=verbosity)
+databaseManager = DbConfigManager(interactive=interactive, verbosity=verbosity)
+filesystemManager = ConfigManager(interactive=interactive, verbosity=verbosity)
+
+# register the ConfigManagers with the ConfigManagerCollection
+askbotCollection.register('filesystem', filesystemManager)
+askbotCollection.register('database', databaseManager)
+askbotCollection.register('cache', cacheManager)
+
+# register parameters with config managers. THE ORDERING MATTERS!
+cacheManager.register('cache_engine', CacheEngine())
+cacheManager.register('cache_nodes', CacheNodes())
+cacheManager.register('cache_db', CacheDb())
+cacheManager.register('cache_password', CachePass())
+
+databaseManager.register('database_engine', DbEngine())
+databaseManager.register('database_name', DbName())
+databaseManager.register('database_user', DbUser())
+databaseManager.register('database_password', DbPass())
+databaseManager.register('database_host', DbHost())
+databaseManager.register('database_port', DbPort())
+
+filesystemManager.register('dir_name', ProjectDirName())
+filesystemManager.register('app_name', AppDirName())
+filesystemManager.register('logfile_name', LogfileName())
+
+
+__all__ = ['askbotCollection', 'cacheManager', 'databaseManager', 'filesystemManager']

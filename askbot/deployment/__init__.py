@@ -12,7 +12,7 @@ from askbot.deployment import path_utils
 from askbot.utils.functions import generate_random_key
 from askbot.deployment.template_loader import DeploymentTemplate
 from askbot.deployment.parameters import ConfigManagerCollection
-from askbot.deployment.common.base import ObjectWithOutput
+from askbot.deployment.base import ObjectWithOutput
 from askbot.deployment.deployables.components import DeployableComponent
 import askbot.deployment.deployables as deployable
 
@@ -285,17 +285,30 @@ class AskbotSetup(ObjectWithOutput):
         nothing = DeployableComponent()
         nothing.deploy = lambda: None
 
+        # install into options['dir_name']
         project = deployable.ProjectRoot(options['dir_name'])
+
+        # select where to look for source files and templates
         project.src_dir = os.path.join(self.ASKBOT_ROOT, self.SOURCE_DIR)
+
+        # set log dir an log file
         project.contents.update({
             options['logdir_name']: {options['logfile_name']: deployable.EmptyFile}
         })
 
+        # set the directory where settings.py etc. go, defaults to
         site = deployable.AskbotSite(options['app_name'])
-        site.src_dir = os.path.join(self.ASKBOT_ROOT, self.SOURCE_DIR)
+
+        # install as a sub-directory to the intall directory
         site.dst_dir = options['dir_name']
+
+        # select where to look for source files and templates
+        site.src_dir = os.path.join(self.ASKBOT_ROOT, self.SOURCE_DIR)
+
+        # use user provided paramters to render files
         site.context.update(options)
 
+        # install container specifics, analogous to site
         uwsgi = deployable.AskbotApp()
         uwsgi.src_dir = os.path.join(self.ASKBOT_ROOT, self.SOURCE_DIR)
         uwsgi.dst_dir = options['dir_name']
@@ -304,13 +317,15 @@ class AskbotSetup(ObjectWithOutput):
             'askbot_app': uwsgi.name, # defaults to askbot_app
         })
 
+        # put the path to settings.py into manage.py
         project.context = {'settings_path': f'{site.name}.settings'}
 
         todo = [ project, site ]
 
         if options['create_project'] in ['no', 'none', 'false', '0', 'nothing']:
-            todo = [ nothing ]
+            todo = [ nothing ]  # undocumented noop for the installer
         elif options['create_project'] == 'container-uwsgi':
+            # if we install into a container we additionally want these files
             project.contents.update({
             'cron': {
                 'crontab': deployable.RenderedFile,  # askbot_site, askbot_app
@@ -318,12 +333,15 @@ class AskbotSetup(ObjectWithOutput):
             }})
             todo.append(uwsgi)
 
+        # maybe we could just use the noop nothing instead of this?
         if options['dry_run']:
             raise StopIteration
 
+        # install askbot
         for component in todo:
             component.deploy()
 
+        # the happily ever after section for successful deployments
         help_file = path_utils.get_path_to_help_file()
 
         self.print(messages.HOW_TO_DEPLOY_NEW % {'help_file': help_file})
