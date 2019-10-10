@@ -1,5 +1,4 @@
-from askbot.utils import console
-from askbot.deployment.common.base import ObjectWithOutput
+from .objectwithoutput import ObjectWithOutput
 
 class ConfigManager(ObjectWithOutput):
     """ConfigManagers are used to ensure the installation can proceed.
@@ -35,9 +34,10 @@ class ConfigManager(ObjectWithOutput):
 
     def __init__(self, interactive=True, verbosity=1, force=False):
         self._interactive = interactive
-        self._catalog = dict()
-        self.keys = set()
-        self._managed_config = dict()
+        self._catalog = dict() # we use this to hold the ConfigFields
+        self.keys = set() # we use this for scoping and consistency
+        self._ordered_keys = list() # we use this for ordering our keys
+        self._managed_config = dict() # we use this as regestry for completed work
         super(ConfigManager, self).__init__(verbosity=verbosity, force=force)
         self.interactive = interactive
 
@@ -75,9 +75,11 @@ class ConfigManager(ObjectWithOutput):
         Parameters:
         - name: the install parameter to handle
         - handler: the class to handle the parameter"""
+        handler.verbosity = self.verbosity
         self._catalog[name] = handler
         self.keys.update({name})
-        handler.verbosity = self.verbosity
+        self._ordered_keys.append(name)
+
 
     def configField(self, name):
         if name not in self.keys:
@@ -114,7 +116,15 @@ class ConfigManager(ObjectWithOutput):
 
     def _order(self, keys):
         """Gives implementations control over the order in which they process
-        installation parameters."""
+        installation parameters. A ConfigManager should restrict itself to
+        the ConfigFields it knows about and ensure each field is only
+        consulted once."""
+        ordered_keys = []
+        known_fields = list(self.keys & set(keys)) # only handle keys we know
+        for f in self._ordered_keys: # use this order
+            if f in known_fields: # only fields the caller wants sorted
+                ordered_keys.append(f)
+                known_fields.remove(f) # avoid duplicates
         return keys
 
     def complete(self, collection):
@@ -129,33 +139,28 @@ class ConfigManager(ObjectWithOutput):
             contribution.setdefault(k, v)
         collection.update(contribution)
 
-class ConfigField(ObjectWithOutput):
-    defaultOk   = True
-    default     = None
-    user_prompt = 'Please enter something'
 
-    def __init__(self, defaultOk=None, default=None, user_prompt=None, verbosity=1):
-        super(ConfigField, self).__init__(verbosity=verbosity)
-        self.defaultOk   = self.__class__.defaultOk   if defaultOk is None   else defaultOk
-        self.default     = self.__class__.default     if default is None     else default
-        self.user_prompt = self.__class__.user_prompt if user_prompt is None else user_prompt
+# one could make a case for not deriving ConfigManagerCollection from
+# ConfigManager because the collection serves a different purpose than the
+# individual manager, but they are still quite similar
+class ConfigManagerCollection(ConfigManager):
+    """
+    Container class for ConfigManagers.
+    """
+    def __init__(self, interactive=False, verbosity=1):
+        super(ConfigManagerCollection, self).__init__(interactive=interactive, verbosity=verbosity)
 
-    def acceptable(self, value):
-        """High level sanity check for a specific value. This method is called
-        for an installation parameter with the value provided by the user, or
-        the default value, if the user didn't provide any value. There must be
-        a boolean response, if the installation can proceed with :var:value as
-        the setting for this ConfigField."""
-        #self.print(f'This is {cls.__name__}.acceptable({value}) {cls.defaultOk}', 2)
-        if value is None and self.default is None or value == self.default:
-            return self.defaultOk
-        return True
+    def configManager(self, name):
+        return super(ConfigManagerCollection, self).configField(name)
 
-    def ask_user(self, current):
-        """Prompt the user to provide a value for this installation
-        parameter."""
-        user_prompt = self.user_prompt
-        if self.defaultOk is True:
-            user_prompt += ' (Just press ENTER, to use the current '\
-                        + f'value "{current}")'
-        return console.simple_dialog(user_prompt)
+    def complete(self, *args, **kwargs):
+        for manager in self._order(self.keys):
+            handler = self.configManager(manager)
+            handler.complete(*args, **kwargs)
+
+    # these should never be called. we keep these implementations, just in case
+    def _remember(self, name, value):
+        raise NotImplementedError(f'Not implemented in {self.__class__.__name__}.')
+
+    def _complete(self, name, value):
+        raise NotImplementedError(f'Not implemented in {self.__class__.__name__}.')

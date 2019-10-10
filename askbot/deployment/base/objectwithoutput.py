@@ -1,7 +1,3 @@
-class AskbotDeploymentError(Exception):
-    """Use this when something goes wrong while deploying Askbot"""
-
-
 class ObjectWithOutput(object):
     def __init__(self, verbosity=1, force=False):
         self._verbosity = verbosity
