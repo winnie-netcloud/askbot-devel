@@ -1,39 +1,5 @@
 from askbot.utils import console
-from askbot.deployment.parameters.base import ConfigField, ConfigManager
-
-class CacheConfigManager(ConfigManager):
-    """A config manager for validating setup parameters pertaining to
-        the cache Askbot will use."""
-    def __init__(self, interactive=True, verbosity=1):
-        super(CacheConfigManager, self).__init__(interactive=interactive, verbosity=verbosity)
-        db = ConfigField(
-            defaultOk = True,
-            user_prompt = 'Please enter the cache database name to use',
-        )
-        password = ConfigField(
-            defaultOk = True,
-            user_prompt = 'Please enter the shared secret for accessing the cache',
-        )
-        self.register('cache_engine', CacheEngine())
-        self.register('cache_nodes', CacheNodes())
-        self.register('cache_db', db)
-        self.register('cache_password', password)
-
-    def _order(self, keys):
-        full_set = [ 'cache_engine', 'cache_nodes', 'cache_db',
-                     'cache_password' ]
-        return [ item for item in full_set if item in keys ]
-
-    def _remember(self, name, value):
-        if name == 'cache_engine':
-            value = int(value)
-        super(CacheConfigManager, self)._remember(name, value)
-        if name == 'cache_engine':
-            if value == 3:
-                self._catalog['cache_nodes'].defaultOk = True
-            elif value == 2:
-                self._catalog['cache_db'].defaultOk = False
-                self._catalog['cache_password'].defaultOk = False
+from askbot.deployment.base import ConfigField
 
 class CacheEngine(ConfigField):
     defaultOk = False
@@ -76,3 +42,11 @@ class CacheNodes(ConfigField):
     def ask_user(self, current):
         value = super(CacheNodes, self).ask_user(current)
         return [ value ]
+
+class CacheDb(ConfigField):
+    defaultOk = True
+    user_prompt = 'Please enter the cache database name to use'
+
+class CachePass(ConfigField):
+    defaultOk=True
+    user_prompt='Please enter the shared secret for accessing the cache'

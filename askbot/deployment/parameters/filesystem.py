@@ -1,56 +1,23 @@
-from askbot.utils import console
-from askbot.deployment import messages
-from askbot.deployment.parameters.base import ConfigField, ConfigManager
-from askbot.deployment.path_utils import has_existing_django_project
-
 from importlib.util import find_spec
 import os.path
 import re
 import tempfile
+from askbot.utils import console
+from askbot.deployment import messages
+from askbot.deployment.parameters.base import ConfigField
+from askbot.deployment.path_utils import has_existing_django_project
+from askbot.deployment.base.exceptions import *
 
 DEBUG_VERBOSITY = 2
 
-class FilesystemConfigManager(ConfigManager):
-    """A config manager for validating setup parameters pertaining to
-            files and directories Askbot will use."""
-
-    def __init__(self, interactive=True, verbosity=1):
-        super(FilesystemConfigManager, self).__init__(interactive=interactive, verbosity=verbosity)
-        logfile = ConfigField(
-            defaultOk=True,
-            user_prompt="Please enter the name for Askbot's logfile.",
-        )
-        self.register('dir_name', ProjectDirName())
-        self.register('app_name', AppDirName())
-        self.register('logfile_name', logfile)
-
-    def _order(self, keys):
-        full_set = ['dir_name', 'app_name', 'logfile_name']
-        return [item for item in full_set if item in keys]
-
-class DirNameError(Exception):
-    """There is something about the chosen install dir we don't like."""
-
-class RestrictionsError(DirNameError):
-    pass
-
-class NameCollisionError(DirNameError):
-    pass
-
-class IsFileError(DirNameError):
-    pass
-
-class CreateWriteError(DirNameError):
-    pass
-
-class NestedProjectsError(DirNameError):
-    pass
-
-class OverwriteError(DirNameError):
-    pass
+class LogfileName(ConfigField):
+    defaultOk = True
+    user_prompt = "Please enter the name for Askbot's logfile."
 
 class BaseDirName(ConfigField):
-    defaultOk = False
+    """Base class for directory parameters.
+    This extends ConfigField with a set of tests for directories and/or the
+    filesystem layout, to be used in ConfigField classes for directories."""
 
     def _check_django_name_restrictions(self, directory):
         dir_name = os.path.basename(directory)
@@ -94,6 +61,8 @@ class BaseDirName(ConfigField):
                         {'directory': directory})
 
 class ProjectDirName(BaseDirName):
+    defaultOk = False
+
     def acceptable(self, value):
         self.print(f'Got "{value}" of type "{type(value)}".', DEBUG_VERBOSITY)
         try:
