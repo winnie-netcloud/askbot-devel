@@ -11,7 +11,7 @@ from askbot.deployment.messages import print_message
 from askbot.deployment import path_utils
 from askbot.utils.functions import generate_random_key
 from askbot.deployment.template_loader import DeploymentTemplate
-from askbot.deployment.parameters import ConfigManagerCollection
+from askbot.deployment.parameters import askbotCollection
 from askbot.deployment.base import ObjectWithOutput
 from askbot.deployment.deployables.components import DeployableComponent
 import askbot.deployment.deployables as deployable
@@ -24,7 +24,7 @@ class AskbotSetup(ObjectWithOutput):
         super(AskbotSetup, self).__init__(verbosity=verbosity)
         self.parser = ArgumentParser(description="Setup a Django project and app for Askbot")
         self._todo = {}
-        self.configManagers = ConfigManagerCollection(interactive=interactive, verbosity=verbosity)
+        self.configManagers = askbotCollection
         self.database_engines = self.configManagers.configManager(
                 'database').configField(
                 'database_engine').database_engines

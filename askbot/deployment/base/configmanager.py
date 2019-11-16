@@ -125,7 +125,7 @@ class ConfigManager(ObjectWithOutput):
             if f in known_fields: # only fields the caller wants sorted
                 ordered_keys.append(f)
                 known_fields.remove(f) # avoid duplicates
-        return keys
+        return ordered_keys
 
     def complete(self, collection):
         """Main method of this :class:ConfigManager.
@@ -138,6 +138,13 @@ class ConfigManager(ObjectWithOutput):
             v = self._complete(k, collection[k])
             contribution.setdefault(k, v)
         collection.update(contribution)
+
+    def reset(self):
+        """ConfigManagers may keep a state. This method shall be used to reset
+        the state to whatever that means for the specific config manager. This
+        implementation merely flushes the memory about completed work."""
+        self._managed_config = dict()
+
 
 
 # one could make a case for not deriving ConfigManagerCollection from

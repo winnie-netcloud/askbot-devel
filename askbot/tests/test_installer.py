@@ -29,7 +29,7 @@ class DbConfigManagerTest(AskbotTestCase):
         default_dict = vars(default_opts)
 
     def test_db_configmanager(self):
-        manager = DbConfigManager(interactive=False, verbosity=0)
+        manager = databaseManager
         new_empty = lambda:dict([(k,None) for k in manager.keys])
 
         parameters = new_empty()  # includes ALL database parameters
@@ -54,29 +54,29 @@ class DatabaseEngineTest(AskbotTestCase):
     def setUp(self):
         self.installer = AskbotSetup()
         self.parser = self.installer.parser
+        self.manager = databaseManager
+        self.manager.reset()
 
     def test_database_engine(self):
-        manager = DbConfigManager(interactive=False, verbosity=0)
-        new_empty = lambda: dict([(k, None) for k in manager.keys])
-
+        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
 
         # DbConfigManager is supposed to test database_engine first
         # here: engine is NOT acceptable and name is NOT acceptable
         parameters = new_empty() # includes ALL database parameters
         try:
-            manager.complete(parameters)
+            self.manager.complete(parameters)
         except ValueError as e:
             self.assertIn('database_engine', str(e))
 
         # With a database_engine set, users must provide a database_name
         # here: engine is acceptable and name is NOT acceptable
-        engines = manager._catalog['database_engine'].database_engines
+        engines = self.manager._catalog['database_engine'].database_engines
         parameters = {'database_engine': None, 'database_name': None}
         caught_exceptions = 0
         for db_type in [e[0] for e in engines]:
             parameters['database_engine'] = db_type
             try:
-                manager.complete(parameters)
+                self.manager.complete(parameters)
             except ValueError as ve:
                 caught_exceptions += 1
                 self.assertIn('database_name', str(ve))
@@ -86,17 +86,17 @@ class DatabaseEngineTest(AskbotTestCase):
         parameters = {'database_engine': None, 'database_name': 'acceptable_value'}
         e = None
         try:
-            manager.complete(parameters)
+            self.manager.complete(parameters)
         except ValueError as ve:
             e = ve
         self.assertIn('database_engine', str(e))
 
         # here: engine is acceptable and name is acceptable
-        acceptable_engine = manager._catalog['database_engine'].database_engines[0][0]
+        acceptable_engine = self.manager._catalog['database_engine'].database_engines[0][0]
         parameters = {'database_engine': acceptable_engine, 'database_name': 'acceptable_value'}
         e = None
         try:
-            manager.complete(parameters)
+            self.manager.complete(parameters)
         except ValueError as ve:
             e = ve
         self.assertIsNone(e)
@@ -104,27 +104,27 @@ class DatabaseEngineTest(AskbotTestCase):
     # at the moment, the  parameter parse does not have special code for
     # mysql and oracle, so we do not provide dedicated tests for them
     def test_database_postgres(self):
-        manager = DbConfigManager(interactive=False, verbosity=0)
-        new_empty = lambda: dict([(k, None) for k in manager.keys])
+        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
         parameters = new_empty()
         parameters['database_engine'] = 1
 
-        acceptable_answers = {
-            'database_name': 'testDB',
-            'database_user': 'askbot',
-            'database_password': 'd34db33f',
-        }
-        expected_issues = acceptable_answers.keys()
+        ordered_acceptable_answers = (
+            ('database_name', 'testDB'),
+            ('database_user', 'askbot'),
+            ('database_password', 'd34db33f'),
+        )
+
+        acceptable_answers = dict(ordered_acceptable_answers)
+        expected_issues = [item[0] for item in ordered_acceptable_answers]
         met_issues = set()
         for i in expected_issues:
             e = None
             try:
-                manager.complete(parameters)
+                self.manager.complete(parameters)
             except ValueError as ve:
                 e = ve
                 matches = [issue for issue in expected_issues if issue in str(e)]
                 self.assertEqual(len(matches), 1, str(e))
-            self.assertIs(type(e), ValueError)
 
             issue = matches[0]
             cnt_old = len(met_issues)
@@ -135,14 +135,13 @@ class DatabaseEngineTest(AskbotTestCase):
         self.assertEqual(len(expected_issues), len(met_issues))
         e = None
         try:
-            manager.complete(parameters)
+            self.manager.complete(parameters)
         except ValueError as ve:
             e = ve
         self.assertIsNone(e)
 
     def test_database_sqlite(self):
-        manager = DbConfigManager(interactive=False, verbosity=0)
-        new_empty = lambda: dict([(k, None) for k in manager.keys])
+        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
         parameters = new_empty()
         parameters['database_engine'] = 2
 
@@ -154,7 +153,7 @@ class DatabaseEngineTest(AskbotTestCase):
         for i in expected_issues:
             e = None
             try:
-                manager.complete(parameters)
+                self.manager.complete(parameters)
             except ValueError as ve:
                 e = ve
                 matches = [issue for issue in expected_issues if issue in str(e)]
@@ -170,7 +169,7 @@ class DatabaseEngineTest(AskbotTestCase):
         self.assertEqual(len(expected_issues), len(met_issues))
         e = None
         try:
-            manager.complete(parameters)
+            self.manager.complete(parameters)
         except ValueError as ve:
             e = ve
         self.assertIsNone(e)
@@ -181,13 +180,13 @@ class CacheEngineTest(AskbotTestCase):
     def setUp(self):
         self.installer = AskbotSetup()
         self.parser = self.installer.parser
+        self.manager = cacheManager
+        self.manager.reset()
 
-    @staticmethod
-    def _setUpTest():
-        manager = CacheConfigManager(interactive=False, verbosity=0)
-        engines = manager._catalog['cache_engine'].cache_engines
-        new_empty = lambda: dict([(k, None) for k in manager.keys])
-        return manager, engines, new_empty
+    def _setUpTest(self):
+        engines = self.manager._catalog['cache_engine'].cache_engines
+        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
+        return self.manager, engines, new_empty
 
     @staticmethod
     def run_complete(manager, parameters):
@@ -325,12 +324,12 @@ class FilesystemTests(AskbotTestCase):
     def setUp(self):
         self.installer = AskbotSetup()
         self.parser = self.installer.parser
+        self.manager = filesystemManager
+        self.manager.reset()
 
-    @staticmethod
-    def _setUpTest():
-        manager = FilesystemConfigManager(interactive=False, verbosity=0)
-        new_empty = lambda: dict([(k, None) for k in manager.keys])
-        return manager, new_empty
+    def _setUpTest(self):
+        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
+        return self.manager, new_empty
 
     @staticmethod
     def run_complete(manager, parameters):
@@ -415,12 +414,11 @@ class FilesystemTests(AskbotTestCase):
         """The console functions contain endless loops, which impedes
         testability. If we mock the console functions, then there is no merrit
         in testing interactively at all."""
-        manager = FilesystemConfigManager(interactive=True, verbosity=1)
         parameters = {'dir_name': ''}
 
         #with patch('askbot.utils.console.simple_dialog', return_value='validDeployment'), patch('askbot.utils.console.choice_dialog', return_value='yes'):
         with patch('builtins.input', new=MockInput('martin', 'yes')):
-            e = self.run_complete(manager, parameters)
+            e = self.run_complete(self.manager, parameters)
             self.assertIsNone(e)
 
 class MainInstallerTests(AskbotTestCase):

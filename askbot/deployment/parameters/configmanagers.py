@@ -15,9 +15,20 @@ class CacheConfigManager(ConfigManager):
                 self._catalog['cache_db'].defaultOk = False
                 self._catalog['cache_password'].defaultOk = False
 
+    def reset(self):
+        super(CacheConfigManager, self).reset()
+        self._catalog['cache_nodes'].defaultOk = False
+        self._catalog['cache_db'].defaultOk = True
+        self._catalog['cache_password'].defaultOk = True
+
 class DbConfigManager(ConfigManager):
     """A config manager for validating setup parameters pertaining to
     the database Askbot will use."""
+
+    def reset(self):
+        super(DbConfigManager, self).reset()
+        self._catalog['database_user'].defaultOk = False
+        self._catalog['database_password'].defaultOk = False
 
     def _remember(self, name, value):
         if name == 'database_engine':

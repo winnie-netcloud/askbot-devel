@@ -4,10 +4,9 @@ versions of various components used in askbot
 """
 import django
 from askbot.patches import django_patches
-from askbot.deployment import package_utils
 
 def patch_django():
-    (major, minor, micro) = package_utils.get_django_version()
+    (major, minor, micro, _, __) = django.VERSION
 
     if major == 1 and minor > 4:
         # This shouldn't be required with django < 1.4.x

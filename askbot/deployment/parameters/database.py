@@ -37,7 +37,7 @@ class DbEngine(ConfigField):
         self.print(f'DbEngine.complete called with {value} of type {type(value)}', 2)
         try:
             return value in [e[0] for e in self.database_engines]
-        finally:
+        except AttributeError:
             return False
 
     def ask_user(self, current_value, depth=0):
