@@ -1,7 +1,7 @@
 import os
 from askbot.utils import console
 from askbot.deployment import path_utils
-from askbot.deployment.parameters.base import ConfigField
+from askbot.deployment.base import ConfigField
 
 class DbUser(ConfigField):
     defaultOk = False

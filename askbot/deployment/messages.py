@@ -6,7 +6,7 @@ from askbot.deployment import path_utils
 
 DEPLOY_PREAMBLE = """
 Deploying Askbot - Django Q&A forum application
-Problems installing? -> please email admin@askbot.org
+Problems installing? -> please email support@askbot.com
 
 To CANCEL - hit Ctr-C at any time
 """

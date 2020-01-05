@@ -10,7 +10,7 @@ from askbot.deployment import messages
 from askbot.deployment.messages import print_message
 from askbot.deployment import path_utils
 from askbot.utils.functions import generate_random_key
-from askbot.deployment.template_loader import DeploymentTemplate
+from askbot.deployment.base.template_loader import DeploymentTemplate
 from askbot.deployment.parameters import askbotCollection
 from askbot.deployment.base import ObjectWithOutput
 from askbot.deployment.deployables.components import DeployableComponent
@@ -225,15 +225,14 @@ class AskbotSetup(ObjectWithOutput):
         self.parser.add_argument(
             "--db-host",
             dest = "database_host",
-            default = None,
+            default = '',
             help = "The database host"
         )
 
         self.parser.add_argument(
             "--db-port",
             dest = "database_port",
-            default = None,
-            type=int,
+            default = '',
             help = "The database port"
         )
 

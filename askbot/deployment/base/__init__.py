@@ -6,8 +6,6 @@ from .configmanager import ConfigManager, ConfigManagerCollection
 
 from askbot.deployment.base import exceptions
 
-
-
 __all__ = ['exceptions', 'DeployableComponent', 'ObjectWithOutput',
            'DeployableObject', 'DeployableFile', 'DeployableDir',
            'ConfigField', 'ConfigManager', 'ConfigManagerCollection',

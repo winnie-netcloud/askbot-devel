@@ -4,7 +4,7 @@ import re
 import tempfile
 from askbot.utils import console
 from askbot.deployment import messages
-from askbot.deployment.parameters.base import ConfigField
+from askbot.deployment.base import ConfigField
 from askbot.deployment.path_utils import has_existing_django_project
 from askbot.deployment.base.exceptions import *
 
