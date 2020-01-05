@@ -25,6 +25,7 @@ from askbot.mail import extract_first_email_address
 from captcha.fields import ReCaptchaField
 from askbot.conf import settings as askbot_settings
 from askbot.conf import get_tag_email_filter_strategy_choices
+from askbot.models import UserProfile
 from tinymce.widgets import TinyMCE
 import logging
 
@@ -1459,7 +1460,8 @@ class EditUserForm(forms.Form):
 
 class TagFilterSelectionForm(forms.ModelForm):
     email_tag_filter_strategy = forms.ChoiceField(
-        initial=const.EXCLUDE_IGNORED, label=_('Choose email tag filter'),
+        initial=const.EXCLUDE_IGNORED,
+        label=_('Choose email tag filter'),
         widget=forms.RadioSelect)
 
     def __init__(self, *args, **kwargs):
@@ -1468,7 +1470,7 @@ class TagFilterSelectionForm(forms.ModelForm):
         self.fields['email_tag_filter_strategy'].choices = choices
 
     class Meta:
-        model = User
+        model = UserProfile
         fields = ('email_tag_filter_strategy',)
 
     def save(self):
@@ -1480,7 +1482,7 @@ class TagFilterSelectionForm(forms.ModelForm):
 
 class EmailFeedSettingField(forms.ChoiceField):
     def __init__(self, *arg, **kwarg):
-        kwarg['choices'] = const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES
+        kwarg['choices'] = kwarg.get('choices', const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES)
         kwarg['widget'] = forms.RadioSelect
         super(EmailFeedSettingField, self).__init__(*arg, **kwarg)
 
@@ -1492,12 +1494,14 @@ class EditUserEmailFeedsForm(forms.Form):
         'answered_by_me': 'q_ans',
         'individually_selected': 'q_sel',
         'mentions_and_comments': 'm_and_c',
+        'unanswered_questions': 'q_noans'
     }
     NO_EMAIL_INITIAL = {
         'all_questions': 'n',
         'asked_by_me': 'n',
         'answered_by_me': 'n',
         'individually_selected': 'n',
+        'unanswered_questions': 'n',
         'mentions_and_comments': 'n',
     }
     INSTANT_EMAIL_INITIAL = {
@@ -1505,6 +1509,7 @@ class EditUserEmailFeedsForm(forms.Form):
         'asked_by_me': 'i',
         'answered_by_me': 'i',
         'individually_selected': 'i',
+        'unanswered_questions': 'd',
         'mentions_and_comments': 'i',
     }
 
@@ -1514,8 +1519,14 @@ class EditUserEmailFeedsForm(forms.Form):
             ('asked_by_me', EmailFeedSettingField(label=askbot_settings.WORDS_ASKED_BY_ME)),
             ('answered_by_me', EmailFeedSettingField(label=askbot_settings.WORDS_ANSWERED_BY_ME)),
             ('individually_selected', EmailFeedSettingField(label=_('Individually selected'))),
+            ('unanswered_questions',
+                EmailFeedSettingField(
+                    label=_('Unanswered questions'),
+                    choices=const.NOTIFICATION_DELIVERY_SCHEDULE_CHOICES_Q_NOANS
+                )
+            ),
             ('all_questions', EmailFeedSettingField(label=_('Entire forum (tag filtered)'))),
-            ('mentions_and_comments', EmailFeedSettingField(label=_('Comments and posts mentioning me')))
+            ('mentions_and_comments', EmailFeedSettingField(label=_('Comments and posts mentioning me'))),
         ))
 
     def set_initial_values(self, user=None):
@@ -1555,6 +1566,7 @@ class EditUserEmailFeedsForm(forms.Form):
     def set_frequency(self, frequency='n'):
         data = {
             'all_questions': frequency,
+            'unanswered_questions': frequency,
             'asked_by_me': frequency,
             'answered_by_me': frequency,
             'individually_selected': frequency,

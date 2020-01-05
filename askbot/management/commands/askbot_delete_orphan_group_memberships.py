@@ -5,7 +5,7 @@ from askbot.models import GroupMembership
 
 class Command(BaseCommand):
 
-    def handle(self): #pylint: disable=arguments-differ
+    def handle(self, *args, **kwargs): #pylint: disable=unused-argument
         #1) select distinct group ids from memberships
         print('Getting group ids assigned to Group Memberships')
         memb_group_ids = GroupMembership.objects.values_list('group_id', flat=True)
