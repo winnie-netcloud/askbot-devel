@@ -1064,7 +1064,7 @@ def user_responses(request, user, context):
         'tab_name' : 'inbox',
         'inbox_section': section,
         'page_title' : _('profile - responses'),
-        'messages' : filtered_message_list,
+        'notifications' : filtered_message_list,
     }
     context.update(data)
     template = 'user_inbox/responses.html'
