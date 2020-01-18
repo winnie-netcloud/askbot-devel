@@ -99,7 +99,7 @@ class SenderList(models.Model):
     sender list is populated automatically
     as new messages are created
     """
-    recipient = models.ForeignKey(Group, unique=True)
+    recipient = models.OneToOneField(Group)
     senders = models.ManyToManyField(User)
     objects = SenderListManager()
 
