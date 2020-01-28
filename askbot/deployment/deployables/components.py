@@ -1,6 +1,6 @@
 import os
 
-from .objects import *
+from .objects import RenderedFile, CopiedFile, EmptyFile, Directory, LinkedDir
 from askbot.deployment.base import DeployableComponent
 
 """The classes defined herein are what we want to do when we talk about

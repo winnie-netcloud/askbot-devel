@@ -6,7 +6,9 @@ from askbot.utils import console
 from askbot.deployment import messages
 from askbot.deployment.base import ConfigField
 from askbot.deployment.path_utils import has_existing_django_project
-from askbot.deployment.base.exceptions import *
+from askbot.deployment.base.exceptions import DirNameError, RestrictionsError,\
+     NameCollisionError, IsFileError, CreateWriteError, NestedProjectsError,\
+     OverwriteError
 
 DEBUG_VERBOSITY = 2
 

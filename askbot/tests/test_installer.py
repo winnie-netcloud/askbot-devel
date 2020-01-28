@@ -1,7 +1,9 @@
 from askbot.tests.utils import AskbotTestCase
 from askbot.deployment import AskbotSetup
-from askbot.deployment.parameters import *
-from askbot.deployment.deployables import *
+from askbot.deployment.parameters import askbotCollection, cacheManager,\
+     databaseManager, filesystemManager
+from askbot.deployment.deployables import RenderedFile, CopiedFile, EmptyFile,\
+     Directory, LinkedDir, AskbotApp, AskbotSite, ProjectRoot
 from unittest.mock import patch, MagicMock, mock_open
 
 import tempfile

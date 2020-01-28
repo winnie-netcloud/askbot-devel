@@ -1,9 +1,9 @@
 from askbot.deployment.base import ConfigManagerCollection, ConfigManager
 from .configmanagers import CacheConfigManager, DbConfigManager
 
-from .cache import *
-from .database import *
-from .filesystem import *
+from .cache import CacheEngine, CacheNodes, CacheDb, CachePass
+from .database import DbUser, DbPass, DbHost, DbPort, DbEngine, DbName
+from .filesystem import LogfileName, BaseDirName, ProjectDirName, AppDirName
 
 """
 In this module we assemble the input validation capabilities for the Askbot
