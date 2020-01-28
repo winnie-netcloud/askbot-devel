@@ -27,6 +27,9 @@ class ExportUserDataTests(AskbotTestCase):
         django_settings.LANGUAGE_CODE = 'en'
         django_settings.ASKBOT_LANGUAGE_MODE = 'url-lang'
         django_settings.LANGUAGES = (('en', 'English'), ('es', 'Spanish'))
+        media_root = django_settings.MEDIA_ROOT
+        if not os.path.isdir(media_root):
+            os.makedirs(media_root)
         reload_urlconf()
 
     def tearDown(self):
@@ -34,6 +37,9 @@ class ExportUserDataTests(AskbotTestCase):
         django_settings.LANGUAGE_CODE = self.prev_lang
         django_settings.LANGUAGES = self.prev_langs
         django_settings.ASKBOT_LANGUAGE_MODE = self.prev_lang_mode
+        media_root = django_settings.MEDIA_ROOT
+        if os.path.isdir(media_root):
+            shutil.rmtree(media_root)
         reload_urlconf()
 
     @classmethod
@@ -55,18 +61,20 @@ class ExportUserDataTests(AskbotTestCase):
         return os.path.join(media_url, file_name)
 
     def test_extract_upfile_paths_from_text(self):
+        from askbot.management.commands.askbot_export_user_data import Command
         prefix = django_settings.MEDIA_URL
         path = os.path.join(prefix, 'somefile')
-        text = """hello {url}1.jpg) blabla <img src="{url}2.jpg" />
-        <img src='{url}3.jpg' /> :{url}4.jpg {url}5.jpg""".format(url=path)
-        from askbot.management.commands.askbot_export_user_data import Command
+        expected = [path + str(i) + '.jpg' for i in range(1,6)]
+        text = f"hello {path}1.jpg) blabla <img src=\"{path}2.jpg\" />\
+        <img src='{path}3.jpg' /> :{path}4.jpg {path}5.jpg"
+
         paths = Command.extract_upfile_paths_from_text(text)
         self.assertEqual(len(paths), 5)
-        expected = ('/upfiles/somefile1.jpg',
-                    '/upfiles/somefile2.jpg',
-                    '/upfiles/somefile3.jpg',
-                    '/upfiles/somefile4.jpg',
-                    '/upfiles/somefile5.jpg')
+        #expected = ('/upfiles/somefile1.jpg',
+        #            '/upfiles/somefile2.jpg',
+        #            '/upfiles/somefile3.jpg',
+        #            '/upfiles/somefile4.jpg',
+        #            '/upfiles/somefile5.jpg')
 
         self.assertEqual(set(paths), set(expected))
 
