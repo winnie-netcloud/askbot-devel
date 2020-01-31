@@ -205,7 +205,7 @@ class AskbotSetup(ObjectWithOutput):
         self.parser.add_argument(
             "--db-name", "-d",
             dest = "database_name",
-            default = None,
+            default = '',
             help = "The database name Askbot will use"
         )
 

@@ -23,7 +23,7 @@ class MockInput:
 class DbConfigManagerTest(AskbotTestCase):
 
     def setUp(self):
-        self.installer = AskbotSetup()
+        self.installer = AskbotSetup(interactive=False)
         self.parser = self.installer.parser
 
     def test_get_options(self):
@@ -32,7 +32,7 @@ class DbConfigManagerTest(AskbotTestCase):
 
     def test_db_configmanager(self):
         manager = databaseManager
-        new_empty = lambda:dict([(k,None) for k in manager.keys])
+        new_empty = lambda:dict([(k,'') for k in manager.keys])
 
         parameters = new_empty()  # includes ALL database parameters
         self.assertGreater(len(parameters), 0)
@@ -54,13 +54,13 @@ class DbConfigManagerTest(AskbotTestCase):
 class DatabaseEngineTest(AskbotTestCase):
 
     def setUp(self):
-        self.installer = AskbotSetup()
+        self.installer = AskbotSetup(interactive=False)
         self.parser = self.installer.parser
         self.manager = databaseManager
         self.manager.reset()
 
     def test_database_engine(self):
-        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
+        new_empty = lambda: dict([(k, '') for k in self.manager.keys])
 
         # DbConfigManager is supposed to test database_engine first
         # here: engine is NOT acceptable and name is NOT acceptable
@@ -73,7 +73,7 @@ class DatabaseEngineTest(AskbotTestCase):
         # With a database_engine set, users must provide a database_name
         # here: engine is acceptable and name is NOT acceptable
         engines = self.manager._catalog['database_engine'].database_engines
-        parameters = {'database_engine': None, 'database_name': None}
+        parameters = {'database_engine': '', 'database_name': ''}
         caught_exceptions = 0
         for db_type in [e[0] for e in engines]:
             parameters['database_engine'] = db_type
@@ -85,7 +85,7 @@ class DatabaseEngineTest(AskbotTestCase):
         self.assertEquals(caught_exceptions, len(engines))
 
         # here: engine is not acceptable and name is acceptable
-        parameters = {'database_engine': None, 'database_name': 'acceptable_value'}
+        parameters = {'database_engine': '', 'database_name': 'acceptable_value'}
         e = None
         try:
             self.manager.complete(parameters)
@@ -106,7 +106,7 @@ class DatabaseEngineTest(AskbotTestCase):
     # at the moment, the  parameter parse does not have special code for
     # mysql and oracle, so we do not provide dedicated tests for them
     def test_database_postgres(self):
-        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
+        new_empty = lambda: dict([(k, '') for k in self.manager.keys])
         parameters = new_empty()
         parameters['database_engine'] = 1
 
@@ -114,6 +114,8 @@ class DatabaseEngineTest(AskbotTestCase):
             ('database_name', 'testDB'),
             ('database_user', 'askbot'),
             ('database_password', 'd34db33f'),
+            ('database_host', 'localhost'),
+            ('database_port', '5432'),
         )
 
         acceptable_answers = dict(ordered_acceptable_answers)
@@ -121,6 +123,7 @@ class DatabaseEngineTest(AskbotTestCase):
         met_issues = set()
         for i in expected_issues:
             e = None
+            matches = None
             try:
                 self.manager.complete(parameters)
             except ValueError as ve:
@@ -128,9 +131,10 @@ class DatabaseEngineTest(AskbotTestCase):
                 matches = [issue for issue in expected_issues if issue in str(e)]
                 self.assertEqual(len(matches), 1, str(e))
 
-            issue = matches[0]
             cnt_old = len(met_issues)
-            met_issues.update({issue})
+            if matches is not None:
+                issue = matches[0]
+                met_issues.update({issue})
             cnt_new = len(met_issues)
             self.assertNotEqual(cnt_new, cnt_old)
             parameters[issue] = acceptable_answers[issue]
@@ -143,7 +147,7 @@ class DatabaseEngineTest(AskbotTestCase):
         self.assertIsNone(e)
 
     def test_database_sqlite(self):
-        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
+        new_empty = lambda: dict([(k, '') for k in self.manager.keys])
         parameters = new_empty()
         parameters['database_engine'] = 2
 
@@ -180,7 +184,7 @@ class DatabaseEngineTest(AskbotTestCase):
 class CacheEngineTest(AskbotTestCase):
 
     def setUp(self):
-        self.installer = AskbotSetup()
+        self.installer = AskbotSetup(interactive=False)
         self.parser = self.installer.parser
         self.manager = cacheManager
         self.manager.reset()
@@ -323,13 +327,13 @@ class CacheEngineTest(AskbotTestCase):
 class FilesystemTests(AskbotTestCase):
 
     def setUp(self):
-        self.installer = AskbotSetup()
+        self.installer = AskbotSetup(interactive=False)
         self.parser = self.installer.parser
         self.manager = filesystemManager
         self.manager.reset()
 
     def _setUpTest(self):
-        new_empty = lambda: dict([(k, None) for k in self.manager.keys])
+        new_empty = lambda: dict([(k, '') for k in self.manager.keys])
         return self.manager, new_empty
 
     @staticmethod

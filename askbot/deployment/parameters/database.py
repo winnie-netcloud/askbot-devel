@@ -66,6 +66,7 @@ class DbEngine(ConfigField):
 
 class DbName(ConfigField):
     defaultOk = False
+    default = ''
     db_type = 1
 
     def set_user_prompt(self):
@@ -75,20 +76,9 @@ class DbName(ConfigField):
             self.user_prompt = 'Please enter database name'
 
     def acceptable(self, value):
-        if value is None:
+        if value is None and self.default is None \
+            or value == self.default and self.defaultOk is False:
             return False
         if self.db_type != 2:
             return len(value.split(' ')) < 2
-        if os.path.isfile(value):
-            message = 'file %s exists, use it anyway?' % value
-            if console.get_yes_or_no(message) == 'yes':
-                return True
-        elif os.path.isdir(value):
-            self.print('%s is a directory, choose another name' % value)
-        elif value in path_utils.FILES_TO_CREATE:
-            self.print('name %s cannot be used for the database name' % value)
-        elif value == path_utils.LOG_DIR_NAME:
-            self.print('name %s cannot be used for the database name' % value)
-        else:
-            return True
-        return False
+        return True
