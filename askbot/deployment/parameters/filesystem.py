@@ -24,9 +24,11 @@ class BaseDirName(ConfigField):
     def _check_django_name_restrictions(self, directory):
         dir_name = os.path.basename(directory)
         if re.match(r'[_a-zA-Z][\w-]*$', dir_name) is None:
-            raise RestrictionsError("""\nDirectory %s is not acceptable for a Django
-            project. Please use lower case characters, numbers and underscore.
-            The first character cannot be a number.\n""" % os.path.basename(directory))
+            tmp_out = '(empty)' if len(dir_name) == 0 else dir_name
+            raise RestrictionsError(
+                    f"\nDirectory {tmp_out} is not acceptable for a Django\n"
+                    "project. Please use lower case characters, numbers and underscore.\n"
+                    "The first character cannot be a number.\n")
 
     def _check_module_name_collision(self, directory):
         dir_name = os.path.basename(directory)
@@ -64,6 +66,7 @@ class BaseDirName(ConfigField):
 
 class ProjectDirName(BaseDirName):
     defaultOk = False
+    default = ''
 
     def acceptable(self, value):
         self.print(f'Got "{value}" of type "{type(value)}".', DEBUG_VERBOSITY)
@@ -76,8 +79,9 @@ class ProjectDirName(BaseDirName):
             self._check_nested_django_projects(os.path.dirname(path_to_value))
             self._check_forced_overwrite(path_to_value)
         except DirNameError as error:
-            self.print(f'{error.__class__.__name__}:', DEBUG_VERBOSITY)
-            self.print(error, 1)
+            if self.defaultOk is True or value != self.default:
+                self.print(f'{error.__class__.__name__}:', DEBUG_VERBOSITY)
+                self.print(error, 1)
             return False
         return True
 
@@ -86,11 +90,13 @@ class ProjectDirName(BaseDirName):
         user_input = os.path.abspath(
             super(ProjectDirName, self).ask_user(current_value))
 
-        should_create_new = console.choice_dialog(
-            messages.format_msg_create(user_input),
-            choices=['yes', 'no'],
-            invalid_phrase=messages.INVALID_INPUT
-        )
+        should_create_new = 'yes'
+        if not os.path.exists(user_input):
+            should_create_new = console.choice_dialog(
+                messages.format_msg_create(user_input),
+                choices=['yes', 'no'],
+                invalid_phrase=messages.INVALID_INPUT
+            )
 
         return None if should_create_new == 'no' else user_input
 
@@ -109,7 +115,8 @@ class AppDirName(BaseDirName):
             path_to_value = os.path.abspath(value)
             self._check_is_file(path_to_value)
         except DirNameError as error:
-            self.print(f'{error.__class__.__name__}:', DEBUG_VERBOSITY)
-            self.print(error, 1)
+            if self.defaultOk is True or value != self.default:
+                self.print(f'{error.__class__.__name__}:', DEBUG_VERBOSITY)
+                self.print(error, 1)
             return False
         return True

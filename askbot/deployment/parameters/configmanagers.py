@@ -29,6 +29,8 @@ class DbConfigManager(ConfigManager):
         super(DbConfigManager, self).reset()
         self._catalog['database_user'].defaultOk = False
         self._catalog['database_password'].defaultOk = False
+        self._catalog['database_host'].defaultOk = False
+        self._catalog['database_port'].defaultOk = False
 
     def _remember(self, name, value):
         if name == 'database_engine':
@@ -40,6 +42,8 @@ class DbConfigManager(ConfigManager):
             if value == 2:
                 self._catalog['database_user'].defaultOk = True
                 self._catalog['database_password'].defaultOk = True
+                self._catalog['database_host'].defaultOk = True
+                self._catalog['database_port'].defaultOk = True
 
     def _complete(self, name, current_value):
         """

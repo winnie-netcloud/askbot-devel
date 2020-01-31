@@ -45,7 +45,8 @@ class DeployableObject(ObjectWithOutput):
         """The main method of this class. DeployableComponents call this method
          to have this object do the filesystem operations which deploys
          whatever this class represents."""
-        self.print(f'*    {self.dst} from {self.src}')
+        self.print(f'*    {self.dst}')
+        # self.print(f'*    {self.dst} from {self.src}')
         try:
             self._deploy_now()
         except AskbotDeploymentError as e:

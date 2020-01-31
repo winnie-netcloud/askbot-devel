@@ -40,7 +40,7 @@ settings.py and urls.py files, use parameter --force"""
 INVALID_INPUT = 'Please type one of: %(opt_string)s ' \
                 + '(or hit Ctrl-C to quit)'
 
-DIR_NAME_TAKEN_BY_PYTHON = """Directory '%(dir)s' is aready used by other Python module.
+DIR_NAME_TAKEN_BY_PYTHON = """Directory '%(dir)s' is already used by other Python module.
 Please choose some other name for your django project"""
 
 DIR_NAME_TAKEN_BY_ASKBOT = """Please do not name your entire Django project 'askbot',
@@ -65,11 +65,11 @@ def format_msg_dir_not_writable(directory):
         return PARENT_DIR_IS_NOT_WRITABLE % data
 
 def format_msg_create(directory):
-    """returns a message explaining wha directories
+    """returns a message explaining which directories
     are about to be created and asks user if they want to proceed
     """
     if os.path.exists(directory):
-        raise Exception('directory %s aready exists' % directory)
+        raise Exception('directory %s already exists' % directory)
     else:
         prefix, tail = path_utils.split_at_break_point(directory)
         data = {

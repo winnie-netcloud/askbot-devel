@@ -25,6 +25,7 @@ class AskbotSetup(ObjectWithOutput):
         self.parser = ArgumentParser(description="Setup a Django project and app for Askbot")
         self._todo = {}
         self.configManagers = askbotCollection
+        self.configManagers.interactive = interactive
         self.database_engines = self.configManagers.configManager(
                 'database').configField(
                 'database_engine').database_engines
@@ -97,7 +98,7 @@ class AskbotSetup(ObjectWithOutput):
         self.parser.add_argument(
             "--app-name",
             dest="app_name",
-            default=None,
+            default='askbot_qa',
             help="Django app name (subdir) for this Askbot deployment in the target Django project."
         )
 
@@ -211,14 +212,14 @@ class AskbotSetup(ObjectWithOutput):
         self.parser.add_argument(
             "--db-user", "-u",
             dest = "database_user",
-            default = None,
+            default = '',
             help = "The username Askbot uses to connect to the database"
         )
 
         self.parser.add_argument(
             "--db-password", "-p",
             dest = "database_password",
-            default = None,
+            default = '',
             help = "The password Askbot uses to connect to the database"
         )
 
