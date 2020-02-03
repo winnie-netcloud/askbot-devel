@@ -1,13 +1,46 @@
 /* 
-Script depends on functions defined for general askbot full text search.
-to_tsvector(), add_tsvector_column()
-
-calculates text search vector for the user profile
+Calculates text search vector for the user profile
 the searched fields are: 
 1) user name
 2) user profile
 3) group names - for groups to which user belongs
 */
+CREATE OR REPLACE FUNCTION column_exists(colname text, tablename text)
+RETURNS boolean AS 
+$$
+DECLARE
+    q text;
+    onerow record;
+BEGIN
+
+    q = 'SELECT attname FROM pg_attribute WHERE attrelid = ( SELECT oid FROM pg_class WHERE relname = '''||tablename||''') AND attname = '''||colname||''''; 
+
+    FOR onerow IN EXECUTE q LOOP
+        RETURN true;
+    END LOOP;
+
+    RETURN false;
+END;
+$$ LANGUAGE plpgsql;
+
+/* function adding tsvector column to table if it does not exists */
+CREATE OR REPLACE FUNCTION add_tsvector_column(colname text, tablename text)
+RETURNS boolean AS
+$$
+DECLARE
+    q text;
+BEGIN
+    IF NOT column_exists(colname, tablename) THEN
+        q = 'ALTER TABLE ' || tablename || ' ADD COLUMN ' || colname || ' tsvector';
+        EXECUTE q;
+        RETURN true;
+    ELSE
+        q = 'UPDATE ' || tablename || ' SET ' || colname || '=NULL';
+        EXECUTE q;
+        RETURN false;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION get_auth_user_tsv(user_id integer)
 RETURNS tsvector AS
 $$

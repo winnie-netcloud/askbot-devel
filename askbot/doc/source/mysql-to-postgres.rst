@@ -79,14 +79,16 @@ To fix it run the command::
 
 This may also take some time, depending on the database size.
 Test this by running a search query on the askbot site.
+24:                            'thread_and_post_models_03012016.plsql'
+32:                            'user_profile_search_12202015.plsql'
 
 ..
     If you have an issue with the above command, it is possible to run the search setup sql script manually:
-        1. Download `thread_and_post_models_10032013.plsql <https://raw.github.com/ASKBOT/askbot-devel/master/askbot/search/postgresql/thread_and_post_models_10032013.plsql>`_
-        2. Download `user_profile_search_08312012.plsql <https://raw.github.com/ASKBOT/askbot-devel/master/askbot/search/postgresql/user_profile_search_08312012.plsql>`_
+        1. Download `thread_and_post_models_03012016.plsql <https://raw.github.com/ASKBOT/askbot-devel/master/askbot/search/postgresql/thread_and_post_models_03012016.plsql>`_
+        2. Download `user_profile_search_12202015.plsql <https://raw.github.com/ASKBOT/askbot-devel/master/askbot/search/postgresql/user_profile_search_12202015.plsql>`_
         3. Apply the scripts to your postgres database::
-            psql your_database < thread_and_post_models_10032013.plsql
-            psql your_database < user_profile_search_08312012.plsql
+            psql your_database < thread_and_post_models_03012016.plsql
+            psql your_database < user_profile_search_12202015.plsql
 
 
 Fixing data types

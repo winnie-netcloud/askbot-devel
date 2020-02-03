@@ -38,8 +38,11 @@ class ExportUserDataTests(AskbotTestCase):
         django_settings.LANGUAGES = self.prev_langs
         django_settings.ASKBOT_LANGUAGE_MODE = self.prev_lang_mode
         media_root = django_settings.MEDIA_ROOT
-        if os.path.isdir(media_root):
-            shutil.rmtree(media_root)
+        # IMPORTANT: commented out below to not break the production files by accident
+        # it would be better to create a temp test directory and then
+        # delete it entirely
+        #if os.path.isdir(media_root):
+        #    shutil.rmtree(media_root)
         reload_urlconf()
 
     @classmethod
