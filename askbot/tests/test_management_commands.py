@@ -2,8 +2,11 @@
 from datetime import date
 import json
 import os
+import sys
+import io
 import shutil
 import unittest
+from unittest.mock import patch, MagicMock, mock_open
 import zipfile
 import askbot
 from django.core import management, mail
@@ -51,6 +54,10 @@ class ExportUserDataTests(AskbotTestCase):
         being the file name.
         Returns file path."""
         media_root = django_settings.MEDIA_ROOT
+        try:
+            os.makedirs(media_root)
+        except FileExistsError:
+            pass
         path = os.path.join(media_root, file_name)
         with open(path, 'w') as file_obj:
             file_obj.write(file_name)
@@ -256,31 +263,30 @@ class ManagementCommandTests(AskbotTestCase):
             'user_id': admin.id,
             'is_force': True
             }
-        management.call_command(
-            'create_tag_synonyms',
-            **options
-            )
 
-        options['from'] = 'tag3'
-        options['to'] = 'tag4'
-        management.call_command(
-            'create_tag_synonyms',
-            **options
-            )
-
-        options['from']='tag5'
-        options['to']='tag4'
-        management.call_command(
-            'create_tag_synonyms',
-            **options
-            )
-
-        options['from']='tag2'
-        options['to']='tag3'
-        management.call_command(
-            'create_tag_synonyms',
-            **options
-            )
+        with patch('sys.stdout', new_callable=io.StringIO):
+            management.call_command(
+                'create_tag_synonyms',
+                **options
+                )
+            options['from'] = 'tag3'
+            options['to'] = 'tag4'
+            management.call_command(
+                'create_tag_synonyms',
+                **options
+                )
+            options['from']='tag5'
+            options['to']='tag4'
+            management.call_command(
+                'create_tag_synonyms',
+                **options
+                )
+            options['from']='tag2'
+            options['to']='tag3'
+            management.call_command(
+                'create_tag_synonyms',
+                **options
+                )
 
         self.assertEqual(models.TagSynonym.objects.filter(source_tag_name = 'tag1',
                                                           target_tag_name = 'tag4'
@@ -298,10 +304,11 @@ class ManagementCommandTests(AskbotTestCase):
 
         options['from']='tag4'
         options['to']='tag6'
-        management.call_command(
-            'create_tag_synonyms',
-            **options
-            )
+        with patch('sys.stdout', new_callable=io.StringIO):
+            management.call_command(
+                'create_tag_synonyms',
+                **options
+                )
 
         self.assertEqual(models.TagSynonym.objects.filter(source_tag_name = 'tag1',
                                                           target_tag_name = 'tag6'
@@ -320,7 +327,7 @@ class ManagementCommandTests(AskbotTestCase):
                                                           ).count(), 1)
         self.assertEqual(models.TagSynonym.objects.count(), 5)
 
-        print('done create_tag_synonym_test')
+        # print('done create_tag_synonym_test')
 
     def test_delete_unused_tags(self):
 
@@ -336,7 +343,10 @@ class ManagementCommandTests(AskbotTestCase):
 
         #check they're in the db
         self.assertEqual(models.Tag.objects.count(), tag_count+3)
-        management.call_command('delete_unused_tags')
+
+        # with patch('builtins.print', new=MagicMock()):
+        with patch('sys.stdout', new_callable=io.StringIO):
+            management.call_command('delete_unused_tags')
 
         #now they should be removed
         self.assertEqual(models.Tag.objects.count(), tag_count)

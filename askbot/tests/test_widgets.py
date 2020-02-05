@@ -5,6 +5,23 @@ from django.test.client import Client
 from django.conf import settings as django_settings
 from django.urls import reverse
 from django.utils import translation, timezone
+from django.test import signals
+
+def patch_jinja2():
+    from jinja2 import Template
+    ORIG_JINJA2_RENDERER = Template.render
+
+    def instrumented_render(template_object, *args, **kwargs):
+        context = dict(*args, **kwargs)
+        signals.template_rendered.send(
+                                sender=template_object,
+                                template=template_object,
+                                context=context
+                            )
+        return ORIG_JINJA2_RENDERER(template_object, *args, **kwargs)
+    Template.render = instrumented_render
+
+patch_jinja2()
 
 
 class WidgetViewsTests(AskbotTestCase):
@@ -158,7 +175,6 @@ class QuestionWidgetViewsTests(AskbotTestCase):
             self.post_question(title=title, tags=tagnames)
 
     def test_valid_response(self):
-        # TODO: This depends on side effect of other (unknown) tests. Just executing this fails.
         filter_params = {
             'title__icontains': self.widget.search_query,
             'tags__name__in': self.widget.tagnames.split(' ')
