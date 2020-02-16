@@ -626,7 +626,6 @@ def user_stats(request, user, context):
 #        tag_ids.add(t['thread__tags'])
 #        if t['thread__tags'] == 11:
 #            print t['thread'], t['id']
-#    import ipdb; ipdb.set_trace()
 
     #
     # Badges/Awards (TODO: refactor into Managers/QuerySets when a pattern emerges; Simplify when we get rid of Question&Answer models)

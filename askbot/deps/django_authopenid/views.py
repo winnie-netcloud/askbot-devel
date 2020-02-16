@@ -52,7 +52,7 @@ from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 import simplejson
-from askbot.mail.messages import EmailValidation
+from askbot.mail.messages import AccountActivation, AccountRecovery
 from askbot.utils import decorators as askbot_decorators
 from askbot.utils.functions import format_setting_name
 from askbot.utils.html import site_url
@@ -1221,7 +1221,7 @@ def register(request, login_provider_name=None,
                                         'login_provider_name': login_provider_name}
                 email_verifier.save()
                 send_email_key(email, email_verifier.key,
-                               handler_url_name='verify_email_and_register')
+                               email_type='verify_email_and_register')
                 redirect_url = reverse('verify_email_and_register') + '?next=' + next_url
                 return HttpResponseRedirect(redirect_url)
 
@@ -1356,10 +1356,9 @@ def signup_with_password(request):
                                         'login_provider_name': 'local',
                                         'email': email, 'password': password}
                 email_verifier.save()
-                send_email_key(
-                    email, email_verifier.key,
-                    handler_url_name='verify_email_and_register'
-                )
+
+                send_email_key(email, email_verifier.key,
+                               email_type='verify_email_and_register')
                 redirect_url = reverse('verify_email_and_register') + \
                                 '?next=' + get_next_url(request)
                 return HttpResponseRedirect(redirect_url)
@@ -1425,16 +1424,19 @@ def set_new_email(user, new_email):
         user.email_isvalid = False
         user.save()
 
-def send_email_key(address, key, handler_url_name='user_account_recover'):
+def send_email_key(address, key, email_type='user_account_recover'):
     """private function. sends email containing validation key
     to user's email address
     """
-    email = EmailValidation({
-        'handler_url_name': handler_url_name,
-        'key': key
-    })
-    email.send([address,])
+    if email_type == 'user_account_recover':
+        email_class = AccountRecovery
+    elif email_type == 'verify_email_and_register':
+        email_class = AccountActivation
+    else:
+        raise ValueError('Unrecognized email_type=%s', email_type)
 
+    email = email_class({'key': key})
+    email.send([address,])
 
 def send_user_new_email_key(user):
     user.email_key = generate_random_key()
@@ -1453,54 +1455,52 @@ def recover_account(request):
     """
     if not askbot_settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL:
         raise Http404
-    if request.method == 'POST':
+    if request.method == 'POST' and 'validation_code' not in request.POST:
         form = forms.AccountRecoveryForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data['user']
             send_user_new_email_key(user)
-            message = _(
-                    'Please check your email and visit the enclosed link.'
-                )
-            return show_signin_view(
-                            request,
-                            account_recovery_message = message,
-                            view_subtype = 'email_sent'
-                        )
-        else:
-            return show_signin_view(
-                            request,
-                            account_recovery_form = form
-                        )
-    else:
-        key = request.GET.get('validation_code', None)
-        if key is None:
-            return HttpResponseRedirect(reverse('user_signin'))
+            message = _('Please check your email and visit the enclosed link.')
+            data = {'page_class': 'validate-email-page'}
+            return render(request, 'authopenid/verify_email.html', data)
+        return show_signin_view(request, account_recovery_form=form)
 
-        user = authenticate(email_key=key, method='email_key')
-        if user:
-            if request.user.is_authenticated():
-                if user != request.user:
-                    logout(request)
-                    login(request, user)
-            else:
-                login(request, user)
+    key = request.REQUEST.get('validation_code', None)
+    return auth_user_by_token(request, key)
 
-            from askbot.models import greet_new_user
-            greet_new_user(user)
+def auth_user_by_token(request, key):
+    """Non-view function.
+    Try to log in user via account recovery `key`.
+    This key is normally sent to the user to help recover account by email.
 
-            #need to show "sticky" signin view here
-            request.session['in_recovery'] = True
-            return show_signin_view(
-                                request,
-                                view_subtype='add_openid',
-                                sticky=True
-                            )
-        else:
-            data = {
-                'account_recovery_form': forms.AccountRecoveryForm(),
-                'message': _('Sorry, this account recovery key has expired or is invalid'),
-                'bad_key': True
-            }
-            return render(request, 'authopenid/recover_account.html', data)
+    In the case of success - logs in
+    and shows user the current login methods,
+    so that user has a chance to change the password or
+    add an authentication method.
 
-        return HttpResponseRedirect(get_next_url(request))
+    TODO: instead of using sub-branch of the login view
+    create a dedicated view.
+
+    In the case of failure - redirects to the authentication page
+    """
+
+    if key is None:
+        return HttpResponseRedirect(reverse('user_signin'))
+
+    user = authenticate(email_key=key, method='email_key')
+    if user:
+        if request.user.is_authenticated() and user != request.user:
+            logout(request)
+        login(request, user)
+        from askbot.models import greet_new_user
+        greet_new_user(user)
+        #need to show "sticky" signin view here
+        request.session['in_recovery'] = True
+        return show_signin_view(request, view_subtype='add_openid', sticky=True)
+
+    data = {
+        'account_recovery_form': forms.AccountRecoveryForm(),
+        'message': _('Sorry, this account recovery key has expired or is invalid'),
+        'bad_key': True
+    }
+    return render(request, 'authopenid/recover_account.html', data)

@@ -19,12 +19,12 @@
 <form style="margin-top: 1em" method="post">{% csrf_token %}
     <input type="hidden" name="sort" value="manage-account"/>
     <input type="submit"
-	name="terminate_account"
-	{% if can_terminate_account %}
+	    name="terminate_account"
+        {% if can_terminate_account %}
             value="{% trans %}Remove account{% endtrans %}"
-	{% else %}
+        {% else %}
             value="{% trans %}Ask to remove account{% endtrans %}"
-	{% endif %}
+        {% endif %}
     />
     {% if exporting %}
     	<span id="exporting">{% trans %}Exporting{% endtrans %}&hellip;</span>

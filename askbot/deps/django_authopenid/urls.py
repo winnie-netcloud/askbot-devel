@@ -53,11 +53,7 @@ urlpatterns = patterns('askbot.deps.django_authopenid.views',
         name='change_password'
     ),
     url(r'^%s$' % pgettext('urls', 'logout/'), 'logout_page', name='logout'),
-    url(
-        r'^%s$' % pgettext('urls', 'recover/'),
-        'recover_account',
-        name='user_account_recover'
-    ),
+    url(r'^%s$' % pgettext('urls', 'recover/'), 'recover_account', name='user_account_recover'),
     url(
         r'^%s$' % pgettext('urls', 'verify-email/'),
         'verify_email_and_register',
