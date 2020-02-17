@@ -1,5 +1,6 @@
 factory_boy
 coverage
+tblib
 -e git+https://github.com/dcollinsn/lamson#egg=lamson
 django-lamson
 psycopg2-binary
