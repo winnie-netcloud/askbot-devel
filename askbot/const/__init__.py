@@ -509,6 +509,7 @@ USER_STATUS_CHOICES = (
     ('w', _('watched')), #regular user placed on the moderation watch
     ('s', _('suspended')), #suspended user who cannot post new stuff
     ('b', _('blocked')), #blocked
+    ('t', _('terminated')) #terminated account, personal data deleted, content anonymized and retained
 )
 DEFAULT_USER_STATUS = 'w'
 

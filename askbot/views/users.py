@@ -125,7 +125,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
         return HttpResponseRedirect(new_url)
 
     users = models.User.objects.exclude(
-                                    askbot_profile__status='b'
+                                    askbot_profile__status__in=('b', 't')
                                 ).exclude(
                                     is_active=False
                                 ).select_related('askbot_profile')
@@ -291,6 +291,16 @@ def manage_account(request, subject, context):
                 user_msg = _('Thank you, you will soon hear from the site administrator.')
                 request.user.message_set.create(message=user_msg)
 
+        elif 'anonymize_account' in request.POST:
+            if request.user.can_anonymize_account(subject):
+                subject.anonymize()
+                return HttpResponseRedirect(subject.get_absolute_url())
+            else:
+                msg = _('Sorry, something is not right here...')
+                request.user.message_set.create(message=msg)
+                return HttpResponseRedirect(subject.get_absolute_url())
+
+
         elif 'export_data' in request.POST:
             from askbot.tasks import export_user_data
             if has_todays_backup:
@@ -302,10 +312,10 @@ def manage_account(request, subject, context):
                     exporting = True
 
     #todo: get backup download link -> context
-    context['can_terminate_account'] = request.user.can_terminate_account(subject)
     context['has_todays_backup'] = has_todays_backup
     context['backup_file_names'] = subject.get_backup_file_names()
     context['exporting'] = exporting
+    context['anon_user_name'] = models.get_name_of_anonymous_user()
     return render(request, 'user_profile/user_manage_account.html', context)
 
 @decorators.ajax_only
@@ -1422,6 +1432,15 @@ def user(request, id, slug=None, tab_name=None):
     in the code in any way
     """
     profile_owner = get_object_or_404(models.User, id = id)
+
+    if profile_owner.is_terminated():
+        if request.user.pk == profile_owner.pk:
+            return render(request, 'user_profile/account_terminated.html')
+        if request.user.is_authenticated():
+            if not request.user.is_administrator_or_moderator():
+                raise Http404
+        else:
+            raise Http404
 
     if profile_owner.is_blocked():
         if request.user.is_anonymous() \

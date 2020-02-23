@@ -345,9 +345,14 @@ var makeKeyHandler = function (key, callback) {
 };
 
 
-var setupButtonEventHandlers = function (button, callback) {
+var setupButtonEventHandlers = function (button, callback, data) {
+  if (data) {
+    button.keydown(data, makeKeyHandler(13, callback));
+    button.click(data, callback);
+  } else {
     button.keydown(makeKeyHandler(13, callback));
     button.click(callback);
+  }
 };
 
 var removeButtonEventHandlers = function (button) {

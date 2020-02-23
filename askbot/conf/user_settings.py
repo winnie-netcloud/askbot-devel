@@ -92,6 +92,18 @@ settings.register(
 )
 
 settings.register(
+    livesettings.StringValue(
+        USER_SETTINGS,
+        'WHO_CAN_ANONYMIZE_ACCOUNTS',
+        choices=(('admins', _('administrators')),
+                 ('mods', _('administrators and moderators')),
+                 ('users', _('account owners, administrators and moderators'))),
+        default='admins',
+        description=_('Who can anonymize and disable accounts')
+    )
+)
+
+settings.register(
     livesettings.BooleanValue(
         USER_SETTINGS,
         'ALLOW_ADD_REMOVE_LOGIN_METHODS',
