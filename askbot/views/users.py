@@ -548,7 +548,10 @@ def edit_user(request, id):
 
 def user_stats(request, user, context):
     question_filter = {}
-    if request.user != user:
+
+    is_author = (request.user == user)
+    is_mod = request.user.is_authenticated() and request.user.is_administrator_or_moderator()
+    if not (is_mod or is_author):
         question_filter['is_anonymous'] = False
 
     if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
