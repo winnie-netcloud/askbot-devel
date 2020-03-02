@@ -325,10 +325,20 @@ def user_calculate_avatar_url(self, size=48):
     return self.get_gravatar_url(size)
 
 
+def user_clear_cached_data(self):
+    """Calls .clear_cached_data() on threads where
+    user contributed any content"""
+    posts = self.posts.all().only('thread_id')
+    for post in posts:
+        if hasattr(post, 'thread_id'):
+            post.thread.clear_cached_data()
+
+
 def user_clear_avatar_urls(self):
     """Assigns avatar urls for each required size.
     """
     self.avatar_urls = {}
+
 
 def user_init_avatar_urls(self):
     """Assigns missing avatar urls,
@@ -1447,6 +1457,7 @@ def user_anonymize(self):
     self.posts.update(is_anonymous=True)
     revs = PostRevision.objects.filter(author=self)
     revs.update(is_anonymous=True)
+    self.clear_cached_data()
     self.notification_subscriptions.update(frequency='n')
     for prof in self.localized_askbot_profiles.all():
         prof.anonymize()
@@ -3566,6 +3577,7 @@ User.add_to_class('can_terminate_account', user_can_terminate_account)
 User.add_to_class('can_manage_account', user_can_manage_account)
 User.add_to_class('calculate_avatar_url', user_calculate_avatar_url)
 User.add_to_class('clear_avatar_urls', user_clear_avatar_urls)
+User.add_to_class('clear_cached_data', user_clear_cached_data)
 User.add_to_class('init_avatar_urls', user_init_avatar_urls)
 User.add_to_class('get_default_avatar_url', user_get_default_avatar_url)
 User.add_to_class('get_gravatar_url', user_get_gravatar_url)

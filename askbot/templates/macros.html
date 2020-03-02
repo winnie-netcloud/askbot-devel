@@ -383,11 +383,22 @@ for the purposes of the AJAX comment editor #}
             </div>
             <div class="comment-controls">
                 {# important - the same number for avatar size must be in question/javascript.html #}
-                {{ gravatar(comment.author, 16) }}
-                <a 
-                    class="author"
-                    href="{{ comment.author.get_profile_url() }}"
-                >{{ comment.author.username|escape }}</a>
+                {% if hasattr(comment.author, 'is_terminated') and comment.author.is_terminated() %} {#comment.author.is_terminated() %#}
+                    <span class="js-avatar-box">
+                        <img class="gravatar"
+                            alt="{% trans %}anonymous user{% endtrans %}"
+                            src="{{ '/images/anon.png'|media }}"
+                            width="16"
+                            height="16"
+                        />
+                    </span>
+                    <span class="author">{{ comment.author.get_anonymous_name() }}</span>
+                {% else %}
+                    {{ gravatar(comment.author, 16) }}
+                    <a class="author" href="{{ comment.author.get_profile_url() }}">
+                        {{ comment.author.username|escape }}
+                    </a>
+                {% endif %}
                 <span class="age">&nbsp;({{ timeago(comment.added_at) }})</span>
                 <a 
                     id="post-{{ comment.id }}-edit"
