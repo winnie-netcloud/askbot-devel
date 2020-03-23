@@ -90,6 +90,7 @@ input[type="email"],
 input[type="text"],
 input[type="password"],
 input[type="number"],
+input[type="url"],
 select,
 textarea,
 #askFormBar .questionTitleInput,
@@ -4870,7 +4871,8 @@ td.setting-input {
   width: 70%;
 }
 td.setting-input input[type="text"],
-td.setting-input input[type="number"] {
+td.setting-input input[type="number"],
+td.setting-input input[type="url"] {
   font-size: 13px;
   height: 28px;
   line-height: 28px;

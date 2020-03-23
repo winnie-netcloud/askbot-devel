@@ -58,6 +58,7 @@ from askbot.utils.functions import format_setting_name
 from askbot.utils.html import site_url
 from askbot.deps.django_authopenid.ldap_auth import ldap_create_user
 from askbot.deps.django_authopenid.ldap_auth import ldap_authenticate
+from askbot.deps.django_authopenid.providers import discourse
 from askbot.deps.django_authopenid.exceptions import OAuthError
 from askbot.middleware.anon_user import connect_messages_to_anon_user
 from askbot.utils.loading import load_module
@@ -240,6 +241,39 @@ def not_authenticated(func):
             return HttpResponseRedirect(get_next_url(request))
         return func(request, *args, **kwargs)
     return decorated
+
+
+def complete_discourse_signin(request):
+    """Logs in a discourse user, creates an account, if needed"""
+    discourse_login_session = request.session.get('discourse_login')
+    nonce = discourse_login_session.get('nonce', None)
+    from askbot.deps.django_authopenid.providers import discourse
+    form = discourse.DiscourseSsoForm(request.REQUEST, nonce=nonce)
+    next_url = discourse_login_session.get('success_url', reverse('questions'))
+    if not form.is_valid():
+        # if form is invalid - show login screen with error message
+        info = unicode(form.errors).encode('utf-8')
+        logging.error('Could not aunenticate via a Discourse site %s', info)
+        login_form = forms.LoginForm(initial={'next': next_url})
+        message = _('Unfortunately, there was some problem logging in via the Discourse site')
+        request.user.message_set.create(message=message)
+        return show_signin_view(request, login_form=login_form)
+
+    sso_data = form.get_sso_data()
+    user_identifier = sso_data['username'] + '@discourse'
+
+    user = authenticate(method='identifier',
+                        user_identifier=user_identifier,
+                        provider_name='discourse')
+
+    request.session['username'] = sso_data['username']
+    request.session['email'] = sso_data['email']
+
+    return finalize_generic_signin(request=request,
+                                   user=user,
+                                   user_identifier=user_identifier,
+                                   login_provider_name='discourse',
+                                   redirect_url=next_url)
 
 
 def complete_oauth2_signin(request):
@@ -466,8 +500,6 @@ def signin(request, template_name='authopenid/signin.html'):
     template : authopenid/signin.htm
     """
     logging.debug('in signin view')
-    on_failure = signin_failure
-
     #we need a special priority on where to redirect on successful login
     #here:
     #1) url parameter "next" - if explicitly set
@@ -581,6 +613,9 @@ def signin(request, template_name='authopenid/signin.html'):
                             'unknown password action %s' % password_action
                         )
                         raise Http404
+
+            elif login_form.cleaned_data['login_type'] == 'discourse':
+                return HttpResponseRedirect(discourse.get_sso_login_url(request, next_url))
 
             elif login_form.cleaned_data['login_type'] == 'mozilla-persona':
                 assertion = login_form.cleaned_data['persona_assertion']

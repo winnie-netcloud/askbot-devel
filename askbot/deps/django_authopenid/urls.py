@@ -37,6 +37,11 @@ urlpatterns = patterns('askbot.deps.django_authopenid.views',
         name='user_complete_oauth1_signin'
     ),
     url(
+        r'^signin/complete-discourse/',
+        'complete_discourse_signin',
+        name='user_complete_discourse_signin'
+    ),
+    url(
         r'^signin/complete-oauth2/',
         'complete_oauth2_signin',
         name='user_complete_oauth2_signin'

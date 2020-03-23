@@ -29,8 +29,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import logging
+import base64
 import cgi
+import logging
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
