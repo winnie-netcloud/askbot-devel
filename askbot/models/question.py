@@ -912,6 +912,7 @@ class Thread(models.Model):
             raise ValueError("Answer doesn't belong to this thread")
         # TODO: in the future there may be >1 accepted answer
         self.accepted_answer = answer
+        self.set_last_activity_info(timestamp, actor)
         self.save()
         answer.endorsed = True
         answer.endorsed_at = timestamp
