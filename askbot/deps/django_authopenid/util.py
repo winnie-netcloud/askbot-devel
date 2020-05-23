@@ -2,8 +2,6 @@
 import cgi
 import functools
 import httplib
-import jwt
-import random
 import re
 import urllib
 import urlparse
@@ -38,7 +36,7 @@ try:
 except:
     from yadis import xri
 
-import time, base64, hmac, hashlib, operator, logging
+import time, base64, hashlib, operator, logging
 from models import Association, Nonce
 
 __all__ = ['OpenID', 'DjangoOpenIDStore', 'from_openid_response']
@@ -913,7 +911,7 @@ class OAuthConnection(object):
         if provider_name == 'mediawiki':
             return providers.mediawiki.Provider()
         else:
-            return super(OAuthConnection, cls).__new__(cls, provider_name)
+            return super(OAuthConnection, cls).__new__(cls)
 
     def __init__(self, provider_name):
         """initializes oauth connection
