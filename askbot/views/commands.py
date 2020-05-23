@@ -644,7 +644,7 @@ def set_question_title(request):
 
     user = request.user
     user.edit_question(question, title=title)
-    return {'title': title}
+    return {'title': question.thread.get_title()}
 
 
 @decorators.ajax_only
