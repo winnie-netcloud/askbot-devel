@@ -59,7 +59,8 @@ class Command(BaseCommand):
             help="Use Django's base manager to dump all models stored in the database, including those that would otherwise be filtered or modified by a custom manager.")
 
     def handle(self, *app_labels, **options):
-        from django.db.models import get_app, get_apps, get_models, get_model
+        from django.apps import apps
+        from django.db.models import get_app, get_apps
 
         indent = options.get('indent', None)
         using = options.get('database', DEFAULT_DB_ALIAS)
@@ -74,7 +75,7 @@ class Command(BaseCommand):
         for exclude in excludes:
             if '.' in exclude:
                 app_label, model_name = exclude.split('.', 1)
-                model_obj = get_model(app_label, model_name)
+                model_obj = apps.get_model(app_label, model_name)
                 if not model_obj:
                     raise CommandError('Unknown model in excludes: %s' % exclude)
                 excluded_models.add(model_obj)
@@ -144,13 +145,14 @@ def sort_dependencies(app_list):
     is serialized before a normal model, and any model with a natural key
     dependency has it's dependencies serialized first.
     """
-    from django.db.models import get_model, get_models
+    from django.apps import apps
+
     # Process the list of models, and get the list of dependencies
     model_dependencies = []
     models = set()
     for app, model_list in app_list:
         if model_list is None:
-            model_list = get_models(app)
+            model_list = apps.get_models(app)
 
         for model in model_list:
             models.add(model)
@@ -158,7 +160,7 @@ def sort_dependencies(app_list):
             if hasattr(model, 'natural_key'):
                 deps = getattr(model.natural_key, 'dependencies', [])
                 if deps:
-                    deps = [get_model(*d.split('.')) for d in deps]
+                    deps = [apps.get_model(*d.split('.')) for d in deps]
             else:
                 deps = []
 

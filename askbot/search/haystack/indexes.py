@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.db.models import get_model
+from django.apps import apps
 
 from haystack import indexes
 
@@ -19,7 +19,7 @@ class ThreadIndex(get_base_index()):
         return obj.language_code
 
     def get_model(self):
-        return get_model('askbot', 'Thread')
+        return apps.get_model('askbot', 'Thread')
 
     def get_index_kwargs(self, language):
         kwargs = {'deleted': False}
@@ -41,4 +41,4 @@ class UserIndex(get_base_index()):
     haystack_use_for_indexing = ENABLE_HAYSTACK_SEARCH
 
     def get_model(self):
-        return get_model('auth', 'User')
+        return apps.get_model('auth', 'User')
