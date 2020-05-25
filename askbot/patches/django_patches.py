@@ -134,15 +134,6 @@ def add_hashcompat():
     sys.modules['django.utils.hashcompat'] = hashcompat
 
 
-def add_simplejson():
-    """adds back simplejson - which may be used
-    by the dependency libraries"""
-    import django.utils
-    import simplejson
-    django.utils.simplejson = simplejson
-    sys.modules['django.utils.simplejson'] = simplejson
-
-
 from django.utils import six
 from django.utils.functional import Promise
 import django.utils.html

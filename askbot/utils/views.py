@@ -3,7 +3,7 @@ from django.http import HttpResponseNotAllowed
 from django.http import HttpResponseForbidden
 from django.template import Context
 from django.template.loader import get_template
-import simplejson
+import json
 
 ASKBOT_VIEW_MODULES = (
     'askbot.views',
@@ -36,8 +36,8 @@ class PjaxView(object):
         template_name = template_name or self.template_name
         template = get_template(template_name)
         html = template.render(Context(context))
-        json = simplejson.dumps({'html': html, 'success': True})
-        return HttpResponse(json, content_type='application/json')
+        content = json.dumps({'html': html, 'success': True})
+        return HttpResponse(content, content_type='application/json')
 
 
     def get(self, request, *args, **kwargs):

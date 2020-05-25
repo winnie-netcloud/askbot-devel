@@ -22,7 +22,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.views.decorators import csrf
-import simplejson
+import json
 from django.utils import timezone
 from django.utils import translation
 from django.utils.encoding import force_text
@@ -206,7 +206,7 @@ def vote(request):
         response_data['message'] = str(e)
         response_data['success'] = 0
 
-    data = simplejson.dumps(response_data)
+    data = json.dumps(response_data)
     return HttpResponse(data, content_type='application/json')
 
 #internally grouped views - used by the tagging system
@@ -283,7 +283,7 @@ def get_tags_by_wildcard(request):
     matching_tags = models.Tag.objects.get_by_wildcards( [wildcard,] )
     count = matching_tags.count()
     names = matching_tags.values_list('name', flat = True)[:20]
-    re_data = simplejson.dumps({'tag_count': count, 'tag_names': list(names)})
+    re_data = json.dumps({'tag_count': count, 'tag_names': list(names)})
     return HttpResponse(re_data, content_type='application/json')
 
 @decorators.get_only
@@ -297,7 +297,7 @@ def get_thread_shared_users(request):
         'users': users,
     }
     html = render_into_skin_as_string('widgets/user_list.html', data, request)
-    re_data = simplejson.dumps({
+    re_data = json.dumps({
         'html': html,
         'users_count': users.count(),
         'success': True
@@ -313,7 +313,7 @@ def get_thread_shared_groups(request):
     groups = thread.get_groups_shared_with()
     data = {'groups': groups}
     html = render_into_skin_as_string('widgets/groups_list.html', data, request)
-    re_data = simplejson.dumps({
+    re_data = json.dumps({
         'html': html,
         'groups_count': groups.count(),
         'success': True
@@ -730,7 +730,7 @@ def api_get_questions(request):
         except:
             continue
 
-    json_data = simplejson.dumps(thread_list)
+    json_data = json.dumps(thread_list)
     return HttpResponse(json_data, content_type="application/json")
 
 
@@ -1366,7 +1366,7 @@ def get_editor(request):
     """
     if 'config' not in request.GET:
         return HttpResponseForbidden()
-    config = simplejson.loads(request.GET['config'])
+    config = json.loads(request.GET['config'])
     element_id = request.GET.get('id', 'editor')
     form = forms.EditorForm(
                 attrs={'id': element_id},
@@ -1394,7 +1394,7 @@ def get_editor(request):
         'scripts': parsed_scripts,
         'success': True
     }
-    return HttpResponse(simplejson.dumps(data), content_type='application/json')
+    return HttpResponse(json.dumps(data), content_type='application/json')
 
 @csrf.csrf_protect
 @decorators.ajax_only
@@ -1482,7 +1482,7 @@ def reorder_badges(request):
     """places given badge to desired position"""
     if request.user.is_anonymous \
         or not request.user.is_administrator_or_moderator():
-        raise exceptions.PermisionDenied()
+        raise exceptions.PermissionDenied()
 
     form = forms.ReorderBadgesForm(request.POST)
     if form.is_valid():

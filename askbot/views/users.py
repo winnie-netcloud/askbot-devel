@@ -33,7 +33,7 @@ from django.utils.text import format_lazy
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
-import simplejson
+import json
 from django.utils import timezone
 from django.utils.html import strip_tags as strip_all_tags
 from django.views.decorators import csrf
@@ -92,7 +92,7 @@ def clear_new_notifications(request):
     activity_types += (
         const.TYPE_ACTIVITY_MENTION,
     )
-    post_data = simplejson.loads(request.body)
+    post_data = json.loads(request.body)
     memo_set = models.ActivityAuditStatus.objects.filter(
         id__in=post_data['memo_ids'],
         activity__activity_type__in=activity_types,
@@ -103,7 +103,7 @@ def clear_new_notifications(request):
 
 @decorators.ajax_only
 def delete_notifications(request):
-    post_data = simplejson.loads(request.body)
+    post_data = json.loads(request.body)
     memo_set = models.ActivityAuditStatus.objects.filter(
         id__in=post_data['memo_ids'],
         user=request.user

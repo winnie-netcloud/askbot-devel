@@ -18,46 +18,36 @@ REQUIREMENTS = {
     'akismet': 'akismet==1.0.1',
     'avatar': 'django-avatar>=4.0',
     'bs4': 'beautifulsoup4<=4.7.1',
-    'compressor': 'django-compressor>=2.0,<=2.2',
+    'compressor': 'django-compressor>=2.0,<=2.4',
     'django': 'django>=1.11,<3.0',
     'django_countries': 'django-countries>=3.3',
+    'dj_database_url': 'dj-database-url',
     'django_jinja': 'django-jinja>=2.0',
-    'celery': 'celery>=4.0,<=5.0',
-    'followit': 'django-followit>=0.3.0',
+    'celery': 'celery>=4.0,<5.0',
+    'followit': 'django-followit==0.4.1',
     'html5lib': 'html5lib==0.9999999',
-    'jinja2': 'Jinja2>=2.8',
+    'jinja2': 'Jinja2>=2.10',
     'jsonfield': 'jsonfield>=2.0.0',
     'jwt': 'pyjwt<=1.7.1',
     'keyedcache': 'django-keyedcache3>=1.5.1',
-    'kombu': 'kombu>=4.0,<5.0',
-    'livesettings': 'django-livesettings3>=1.4.19',
-    'markdown2': 'markdown2<=2.3.8',
+    'kombu': 'kombu>=4.0,<4.6',
+    'livesettings': 'django-livesettings3==1.4.20',
+    'markdown2': 'markdown2<=2.3.9',
     'mock': 'mock==3.0.5',
     'oauth2': 'oauth2<=1.9.0.post1',
-    'openid': 'python-openid2>=2.3.0',
-    'picklefield': 'django-picklefield==1.0.0',
-    'pytz': 'pytz<=2019.1',
+    'openid': 'python-openid2>=3.0',
+    'picklefield': 'django-picklefield>=1.0.0',
+    'pytz': 'pytz',
     'captcha': 'django-recaptcha>=1.0.3,<=1.3.0',
-    'cas': 'python-cas==1.4.0',
+    'cas': 'python-cas>=1.4.0,<1.6',
     'responses': 'responses>=0.9.0',
     'requests_oauthlib': 'requests-oauthlib>=1.2.0',
-    'requirements': 'requirements-parser==0.2.0',
+    'requirements': 'requirements-parser>=0.2.0',
     'robots': 'django-robots>=3.1',
     'regex': 'regex',
-    'simplejson': 'simplejson<=3.16.1',
     'tinymce': 'django-tinymce>=2.8.0',
-    'unidecode': 'unidecode<=1.0.23',
+    'unidecode': 'unidecode'
 }
-
-#necessary for interoperability of django and coffin
-try:
-    from askbot import patches
-    from askbot.deployment.assertions import assert_package_compatibility
-    assert_package_compatibility()
-    patches.patch_django()
-except ImportError:
-    pass
-
 
 def get_install_directory():
     """returns path to directory

@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.core import management
 from django.core.cache.backends.dummy import DummyCache
 from django.core import cache
-import simplejson
+import json
 from django.utils.translation import activate as activate_language
 
 from bs4 import BeautifulSoup
@@ -174,7 +174,7 @@ class PageLoadTestCase(AskbotTestCase):
     def test_title_search_groups_disabled(self):
         data = {'query_text': 'Question'}
         response = self.client.get(reverse('api_get_questions'), data)
-        data = simplejson.loads(response.content)
+        data = json.loads(response.content)
         self.assertTrue(len(data) > 1)
 
     @with_settings(GROUPS_ENABLED=True)
@@ -189,13 +189,13 @@ class PageLoadTestCase(AskbotTestCase):
         #ask for data anonymously - should get nothing
         query_data = {'query_text': 'alibaba'}
         response = self.client.get(reverse('api_get_questions'), query_data)
-        response_data = simplejson.loads(response.content)
+        response_data = json.loads(response.content)
         self.assertEqual(len(response_data), 0)
 
         #log in - should get the question
         self.client.login(method='force', user_id=user.id)
         response = self.client.get(reverse('api_get_questions'), query_data)
-        response_data = simplejson.loads(response.content)
+        response_data = json.loads(response.content)
         self.assertEqual(len(response_data), 1)
 
     def test_ask_page_disallowed_anonymous(self):

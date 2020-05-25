@@ -1,6 +1,6 @@
 import unittest
 from askbot.utils import category_tree as ct
-import simplejson
+import json
 
 class CategoryTreeTests(unittest.TestCase):
     def setUp(self):
@@ -109,7 +109,7 @@ class CategoryTreeTests(unittest.TestCase):
             ]
         ]
         sorted_data = ct.sort_tree(unsorted_data)
-        sorted_dump = simplejson.dumps(sorted_data)
+        sorted_dump = json.dumps(sorted_data)
         self.assertEqual(
             sorted_dump,
             '[["dummy", [["audio", [["amadeus", []], ["mp3", []]]], ["cars", []]]]]'

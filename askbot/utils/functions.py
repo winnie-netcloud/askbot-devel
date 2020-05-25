@@ -5,7 +5,7 @@ import re
 import random
 from typing import List
 
-import simplejson
+import json
 import time
 import warnings
 import zlib
@@ -24,7 +24,7 @@ mark_safe_lazy = lazy(mark_safe, six.text_type) #pylint: disable=invalid-name
 
 def decode_and_loads(input_str):
     """utf-8 decodes the input, then runs json loads"""
-    return simplejson.loads(input_str.decode('utf-8'))
+    return json.loads(input_str.decode('utf-8'))
 
 def is_email_valid(email):
     """Returns `True` if email is valid"""
@@ -41,7 +41,6 @@ def timedelta_total_seconds(time_delta):
     """
     if hasattr(time_delta, 'total_seconds'):
         return time_delta.total_seconds()
-    from future import __division__
     # pylint: disable=line-too-long
     return (time_delta.microseconds + (time_delta.seconds + time_delta.days * 24 * 3600) * 10**6) / 10**6
 

@@ -18,7 +18,7 @@ from django.forms import IntegerField
 from django.http import HttpResponse
 from django.http import HttpResponseNotAllowed
 from django.http import HttpResponseForbidden
-import simplejson
+import json
 from django.utils import timezone
 from askbot.utils.views import PjaxView
 from askbot.deps.group_messaging.models import Message
@@ -67,7 +67,7 @@ class NewThread(PjaxView):
                         )
             result['success'] = True
             result['message_id'] = message.id
-        return HttpResponse(simplejson.dumps(result), content_type='application/json')
+        return HttpResponse(json.dumps(result), content_type='application/json')
 
 
 class PostReply(PjaxView):

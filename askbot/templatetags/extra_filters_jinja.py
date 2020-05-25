@@ -12,7 +12,7 @@ from django.contrib.humanize.templatetags import humanize
 from django.template import defaultfilters
 from django.urls import reverse, resolve
 from django.http import Http404
-import simplejson
+import json
 from django.utils import timezone
 from django.utils.text import Truncator
 from askbot import exceptions as askbot_exceptions
@@ -61,7 +61,7 @@ def as_js_bool(some_object):
 
 @register.filter
 def as_json(data):
-    return simplejson.dumps(data)
+    return json.dumps(data)
 
 @register.filter
 def is_current_language(lang):

@@ -51,7 +51,7 @@ from askbot.utils.functions import generate_random_key
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
-import simplejson
+import json
 from askbot.mail.messages import EmailValidation
 from askbot.utils import decorators as askbot_decorators
 from askbot.utils.functions import format_setting_name
@@ -892,7 +892,7 @@ def change_password(request):
         data['message'] = _('Your new password is saved')
     else:
         data['errors'] = form.errors
-    return HttpResponse(simplejson.dumps(data), content_type='application/json')
+    return HttpResponse(json.dumps(data), content_type='application/json')
 
 @login_required
 def delete_login_method(request):
@@ -1308,7 +1308,7 @@ def verify_email_and_register(request):
 
             return HttpResponseRedirect(get_next_url(request))
         except Exception as error:
-            logging.critical('Could not verify account: %s', unicode(error).encode('utf-8'))
+            logging.critical('Could not verify account: %s', str(error).encode('utf-8'))
             message = _(
                 'Sorry, registration failed. '
                 'The token can be already used or has expired. Please try again'

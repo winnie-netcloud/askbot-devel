@@ -1,12 +1,12 @@
 from askbot.tests.utils import AskbotTestCase
 from django.urls import reverse
-import simplejson
+import json
 
 class ApiV1Tests(AskbotTestCase):
     def test_api_v1_user(self):
         user = self.create_user('apiuser')
         response = self.client.get(reverse('api_v1_user', args=(user.id,)))
-        response_data = simplejson.loads(response.content)
+        response_data = json.loads(response.content)
         expected_keys = set(['id', 'username', 'reputation', 'questions', 'comments',
                 'avatar', 'joined_at', 'last_seen_at', 'answers', 'gold', 'silver',
                 'bronze'])
@@ -14,14 +14,14 @@ class ApiV1Tests(AskbotTestCase):
 
     def test_api_v1_info(self):
         response = self.client.get(reverse('api_v1_info'))
-        response_data = simplejson.loads(response.content)
+        response_data = json.loads(response.content)
         expected_keys = set(['answers', 'comments', 'users', 'groups', 'questions'])
         self.assertEqual(expected_keys, set(response_data.keys()))
 
     def test_api_v1_users(self):
         self.create_user('somebody')
         response = self.client.get(reverse('api_v1_users'))
-        response_data = simplejson.loads(response.content)
+        response_data = json.loads(response.content)
         expected_keys = set(['pages', 'count', 'users'])
         self.assertEqual(expected_keys, set(response_data.keys()))
 
@@ -34,7 +34,7 @@ class ApiV1Tests(AskbotTestCase):
         user = self.create_user('user')
         self.post_question(user=user)
         response = self.client.get(reverse('api_v1_questions'))
-        response_data = simplejson.loads(response.content)
+        response_data = json.loads(response.content)
         expected_keys = set(['count', 'pages', 'questions'])
         self.assertEqual(expected_keys, set(response_data.keys()))
 
