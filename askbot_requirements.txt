@@ -19,7 +19,6 @@ celery>=4.0,<5.0
 html5lib==0.9999999
 Jinja2>=2.10
 jsonfield>=2.0.0
-kombu>=4.0,<4.6
 markdown2<=2.3.9
 mock==3.0.5
 oauth2<=1.9.0.post1

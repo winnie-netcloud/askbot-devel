@@ -228,6 +228,19 @@ def unparse_requirement(req):
         line += ' [%s]' % ','.join(req.extras)
     return line
 
+def assert_version_matches(mod_ver, op, spec_ver):
+    """Asserts that version strings match the op"""
+    if op == '==':
+        assert mod_ver == spec_ver
+    elif op == '>':
+        assert mod_ver > spec_ver
+    elif op == '<':
+        assert mod_ver < spec_ver
+    elif op == '<=':
+        assert mod_ver <= spec_ver
+    elif op == '>=':
+        assert mod_ver >= spec_ver
+
 
 def test_specs(req):
     """Check if the dependency described by `req` value
@@ -255,18 +268,16 @@ def test_specs(req):
         for spec in req.specs:
             op = spec[0]
             spec_ver = map_int(spec[1].split('.'))
-            if op == '==':
-                assert mod_ver == spec_ver
-            elif op == '>':
-                assert mod_ver > spec_ver
-            elif op == '<':
-                assert mod_ver < spec_ver
-            elif op == '<=':
-                assert mod_ver <= spec_ver
-            elif op == '>=':
-                assert mod_ver >= spec_ver
-            else:
+            if op not in ('==', '>', '<', '<=', '>='):
                 raise ValueError('Unsupported pip dependency version operator %s' % op)
+
+            try:
+                assert_version_matches(mod_ver, op, spec_ver)
+            except TypeError:
+                mod_ver = [str(item) for item in mod_ver]
+                spec_ver = [str(item) for item in spec_ver]
+                assert_version_matches(mod_ver, op, spec_ver)
+
     except AssertionError:
         data = {
             'name': req.name,
