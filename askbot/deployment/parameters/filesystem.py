@@ -4,6 +4,7 @@ import re
 import tempfile
 from askbot.utils import console
 from askbot.deployment import messages
+from askbot.deployment.const import DEFAULT_PROJECT_NAME
 from askbot.deployment.base import ConfigField
 from askbot.deployment.path_utils import has_existing_django_project
 from askbot.deployment.base.exceptions import DirNameError, RestrictionsError,\
@@ -32,8 +33,8 @@ class BaseDirName(ConfigField):
 
     def _check_module_name_collision(self, directory):
         dir_name = os.path.basename(directory)
-        spec = find_spec(dir_name,os.path.dirname(directory))
-        if spec is not None:
+        spec = find_spec(dir_name, os.path.dirname(directory))
+        if spec:
             raise NameCollisionError(messages.format_msg_bad_dir_name(directory))
 
     def _check_is_file(self, directory):
@@ -66,13 +67,13 @@ class BaseDirName(ConfigField):
 
 class ProjectDirName(BaseDirName):
     defaultOk = False
-    default = ''
+    default = DEFAULT_PROJECT_NAME
 
     def acceptable(self, value):
         self.print(f'Got "{value}" of type "{type(value)}".', DEBUG_VERBOSITY)
         try:
             self._check_django_name_restrictions(value)
-            self._check_module_name_collision(value)
+            #self._check_module_name_collision(value)
             path_to_value = os.path.abspath(value)
             self._check_is_file(path_to_value)
             self._check_can_create_write_path(path_to_value)
@@ -101,8 +102,8 @@ class ProjectDirName(BaseDirName):
         return None if should_create_new == 'no' else user_input
 
 class AppDirName(BaseDirName):
-    defaultOk = True,
-    default = None,
+    defaultOk = True
+    default = DEFAULT_PROJECT_NAME
     user_prompt = "Please enter a Django App name for this Askbot deployment."
 
     def acceptable(self, value):

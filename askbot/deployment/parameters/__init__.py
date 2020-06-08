@@ -46,24 +46,30 @@ filesystemManager = ConfigManager(interactive=interactive, verbosity=verbosity)
 # register the ConfigManagers with the ConfigManagerCollection
 askbotCollection.register('filesystem', filesystemManager)
 askbotCollection.register('database', databaseManager)
-askbotCollection.register('cache', cacheManager)
 
+# don't support cache setup yet, there are too many 
+# options specific to the cache engine
+#askbotCollection.register('cache', cacheManager)
 # register parameters with config managers. THE ORDERING MATTERS!
-cacheManager.register('cache_engine', CacheEngine())
-cacheManager.register('cache_nodes', CacheNodes())
-cacheManager.register('cache_db', CacheDb())
-cacheManager.register('cache_password', CachePass())
+#cacheManager.register('cache_engine', CacheEngine())
+#cacheManager.register('cache_nodes', CacheNodes())
+#cacheManager.register('cache_db', CacheDb())
+#cacheManager.register('cache_password', CachePass())
 
 databaseManager.register('database_engine', DbEngine())
 databaseManager.register('database_name', DbName())
 databaseManager.register('database_user', DbUser())
 databaseManager.register('database_password', DbPass())
-databaseManager.register('database_host', DbHost())
-databaseManager.register('database_port', DbPort())
+#databaseManager.register('database_host', DbHost())
+# default port depends on the db engine and the logic
+# to support defaults with good UX is not there yet, so comment out
+#databaseManager.register('database_port', DbPort())
 
 filesystemManager.register('dir_name', ProjectDirName())
 filesystemManager.register('app_name', AppDirName())
-filesystemManager.register('logfile_name', LogfileName())
+
+# log file name is fixed for now.
+#filesystemManager.register('logfile_name', LogfileName())
 
 
 __all__ = ['askbotCollection', 'cacheManager', 'databaseManager', 'filesystemManager']

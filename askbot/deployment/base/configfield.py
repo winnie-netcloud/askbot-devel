@@ -28,6 +28,5 @@ class ConfigField(ObjectWithOutput):
         parameter."""
         user_prompt = self.user_prompt
         if self.defaultOk is True:
-            user_prompt += ' (Just press ENTER, to use the current '\
-                        + f'value "{current}")'
+            user_prompt += f'\nTo use the "{current}" value anyway - prest ENTER'
         return console.simple_dialog(user_prompt)

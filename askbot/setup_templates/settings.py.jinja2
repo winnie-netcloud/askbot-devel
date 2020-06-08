@@ -4,7 +4,6 @@ import logging
 import askbot
 import site
 import sys
-import dj_database_url
 from jinja2.runtime import Undefined
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
@@ -25,14 +24,13 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-{%- if database_engine %}
-    'askbot': {
+    'default': {
         'ENGINE': 'django.db.backends.{{database_engine}}', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '{{database_name}}',                      # Or path to database file if using sqlite3.
         'USER': '{{database_user}}',                      # Not used with sqlite3.
         'PASSWORD': '{{database_password}}',                  # Not used with sqlite3.
-        'HOST': '{{database_host}}',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '{{database_port}}',                      # Set to empty string for default. Not used with sqlite3.
+        'HOST': '',
+        'PORT': '',
         'TEST': {
             'CHARSET': 'utf8',              # Setting the character set and collation to utf-8
          {%- if 'mysql' in database_engine %}
@@ -40,18 +38,7 @@ DATABASES = {
          {%- endif %}
         }
     }
-{%- endif %}
 }
-
-db_config_dict = dj_database_url.config()
-
-if len(db_config_dict):
-    DATABASES['default'] = db_config_dict
-    DATABASES['default'].update({ 'TEST': {
-        'CHARSET': 'utf8',  # Setting the character set and collation to utf-8
-    }})
-else:
-    DATABASES['default'] = DATABASES.get('askbot', None)
 
 #outgoing mail server settings
 SERVER_EMAIL         = ''
@@ -100,8 +87,6 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 {% if secret_key %}
 SECRET_KEY = "{{ secret_key }}"
-{% else %}
-SECRET_KEY = os.environ['SECRET_KEY']
 {% endif %}
 
 ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
@@ -207,52 +192,12 @@ INSTALLED_APPS = (
 
 
 #setup memcached for production use!
-# See http://docs.djangoproject.com/en/1.8/topics/cache/ for details.
 CACHES = {
-    'locmem': {
+    'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'askbot',
     }
 }
-
-{% if cache_engine and cache_engine == 'redis' %}
-CACHES['redis'] = {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': [
-    {% for node in cache_nodes %}
-        '{{ node }}',
-    {% endfor %}
-        ],
-        'OPTIONS': {
-            'DB': '{{ cache_db }}',
-            {% if cache_password %}
-            'PASSWORD': '{{ cache_password }}',
-            {% endif %}
-            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
-            'CONNECTION_POOL_CLASS_KWARGS': {
-                'max_connections': 50,
-                'timeout': 20,
-            },
-            'MAX_CONNECTIONS': 1000,
-            'PICKLE_VERSION': -1,
-        },
-    }
-cache_select_default = 'redis'
-{% elif cache_engine and cache_engine == 'memcached' %}
-CACHES['memcached'] = {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': [
-    {% for node in cache_nodes %}
-        '{{ node }}',
-    {% endfor %}
-        ],
-    }
-cache_select_default = 'memcached'
-{% else %}
-cache_select_default = 'locmem'
-{% endif %}
-cache_select = os.environ.get('ASKBOT_CACHE', cache_select_default)
-CACHES['default'] = CACHES[cache_select]
 
 # Chose a unique KEY_PREFIX to avoid clashes with other applications
 # using the same cache (e.g. a shared memcache instance).
@@ -272,9 +217,7 @@ AUTHENTICATION_BACKENDS = (
 
 #logging settings
 logging.basicConfig(
-{%- if logfile_name != 'stdout' %}
-    filename=os.path.join(PROJECT_ROOT, 'log', '{{ logfile_name }}'),
-{%- endif %}
+    filename=os.path.join(PROJECT_ROOT, 'log', 'askbot.log'),
     level=logging.CRITICAL,
     format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
 )
@@ -375,20 +318,7 @@ COMPRESS_PARSER = 'compressor.parser.HtmlParser'
 JINJA2_EXTENSIONS = ('compressor.contrib.jinja2ext.CompressorExtension',)
 JINJA2_TEMPLATES = ('captcha',) # FIXME: unused but checked in startup_procedures
 
-# Use migrate for tests instead of South migrations. Without this, some tests
-# fail spuriously in MySQL.
-SOUTH_TESTS_MIGRATE = False
-
 VERIFIER_EXPIRE_DAYS = 3
 AVATAR_AUTO_GENERATE_SIZES = (16, 32, 48, 128) #change if avatars are sized differently
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-
-#class DisableMigrations(object):
-#    def __contains__(self, item):
-#        return True
-#
-#    def __getitem__(self, item):
-#        return None
-#
-#MIGRATION_MODULES = DisableMigrations()

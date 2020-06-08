@@ -9,12 +9,13 @@ from argparse import ArgumentParser
 from askbot.deployment import messages
 from askbot.deployment.messages import print_message
 from askbot.deployment import path_utils
+from askbot.deployment.const import DEFAULT_PROJECT_NAME
 from askbot.utils.functions import generate_random_key
 from askbot.deployment.base.template_loader import DeploymentTemplate
 from askbot.deployment.parameters import askbotCollection
 from askbot.deployment.base import ObjectWithOutput
 from askbot.deployment.deployables.components import DeployableComponent
-import askbot.deployment.deployables as deployable
+from askbot.deployment import deployables
 
 class AskbotSetup(ObjectWithOutput):
     ASKBOT_ROOT = os.path.dirname(os.path.dirname(__file__))
@@ -36,7 +37,8 @@ class AskbotSetup(ObjectWithOutput):
         self._add_setup_args()
         self._add_settings_args()
         self._add_db_args()
-        self._add_cache_args()
+        #don't support cache params setup yet
+        #self._add_cache_args()
 
 
     def _add_settings_args(self):
@@ -71,72 +73,63 @@ class AskbotSetup(ObjectWithOutput):
     def _add_setup_args(self):
         """Control the behaviour of this setup procedure
         Adds
-        --create-project
         --dir-name, -n
         --app-name
         --verbose, -v
         --force
         --dry-run
-        --use-defaults
         """
+        
+        #self.parser.add_argument(
+        #    '--create-project',
+        #    dest='create_project',
+        #    action='store',
+        #    default='django',
+        #    help='Deploy a new Django project (default)'
+        #)
 
         self.parser.add_argument(
-            '--create-project',
-            dest='create_project',
-            action='store',
-            default='django',
-            help='Deploy a new Django project (default)'
+            '--dir-name', '-n',
+            dest='dir_name',
+            default=DEFAULT_PROJECT_NAME,
+            help='Root directory for the Django project (for the manage.py file)'
         )
 
         self.parser.add_argument(
-            "--dir-name", "-n",
-            dest = "dir_name",
-            default = '',
-            help = "Directory where you want to install the Django project."
+            '--app-name',
+            dest='app_name',
+            default=DEFAULT_PROJECT_NAME,
+            help='Project settings directory name (for the settings.py, urls.py files)'
         )
 
         self.parser.add_argument(
-            "--app-name",
-            dest="app_name",
-            default='askbot_qa',
-            help="Django app name (subdir) for this Askbot deployment in the target Django project."
-        )
-
-        self.parser.add_argument(
-            "--verbose", "-v",
-            dest = "verbosity",
+            '--verbose', '-v',
+            dest = 'verbosity',
             default = 1,
             type=int,
-            choices=[0,1,2],
-            help = "verbosity level with 0 being the lowest"
+            choices=[0, 1, 2],
+            help = 'verbosity level with 0 being the lowest'
         )
 
         self.parser.add_argument(
-            "--force",
-            dest="force",
+            '--force',
+            dest='force',
             action='store_true',
-            help="(DEFUNCT!) Force overwrite settings.py file"
+            help='(DEFUNCT!) Force overwrite settings.py file'
         )
 
         self.parser.add_argument(
-            "--dry-run",
-            dest = "dry_run",
+            '--dry-run',
+            dest = 'dry_run',
             action='store_true',
-            help="Dump parameters and do not install askbot after input validation."
+            help='Dump parameters and do not install askbot after input validation.'
         )
 
         self.parser.add_argument(
-            "--use-defaults",
-            dest="use_defaults",
-            action='store_true',
-            help="Use Askbot defaults where applicable. Defaults will be overwritten by commandline arguments."
-        )
-
-        self.parser.add_argument(
-            "--no-input",
-            dest="interactive",
+            '--no-input',
+            dest='interactive',
             action='store_false',
-            help="The installer will fail instead of asking for missing values."
+            help='The installer will fail instead of asking for missing values.'
         )
 
     def _add_cache_args(self):
@@ -181,15 +174,7 @@ class AskbotSetup(ObjectWithOutput):
         )
 
     def _add_db_args(self):
-        """How to connect to the database
-        Adds
-        --db-engine,   -e
-        --db-name,     -d
-        --db-user",    -u
-        --db-password, -p
-        --db-host
-        --db-port
-        """
+        """Adds some of the database parameters"""
 
         engine_choices = [e[0] for e in self.database_engines]
         self.parser.add_argument(
@@ -223,19 +208,19 @@ class AskbotSetup(ObjectWithOutput):
             help = "The password Askbot uses to connect to the database"
         )
 
-        self.parser.add_argument(
-            "--db-host",
-            dest = "database_host",
-            default = '',
-            help = "The database host"
-        )
+        #self.parser.add_argument(
+        #    "--db-host",
+        #    dest = "database_host",
+        #    default = 'localhost',
+        #    help = "The database host"
+        #)
 
-        self.parser.add_argument(
-            "--db-port",
-            dest = "database_port",
-            default = '',
-            help = "The database port"
-        )
+        #self.parser.add_argument(
+        #    "--db-port",
+        #    dest = "database_port",
+        #    default = '',
+        #    help = "The database port"
+        #)
 
     @ObjectWithOutput.verbosity.setter
     def verbosity(self, v):
@@ -244,8 +229,8 @@ class AskbotSetup(ObjectWithOutput):
 
     def _process_args(self, options):
         """
-        In this method we fiddle with askbot-setup parameters, i.e. cli
-        arguments. This is run BEFORE the installer uses the ConfigManagers to
+        In this method we modify the askbot-setup cli parameters.
+        This is run BEFORE the installer uses the ConfigManagers to
         do sanity checks and interact with the user.
         """
         options = vars(options)  # use dictionary instead of Namespace
@@ -265,7 +250,7 @@ class AskbotSetup(ObjectWithOutput):
         options['logdir_name'] = logdir_name
         options['secret_key'] = secret_key
         options['app_name'] = app_name
-        options['create_project'] = str.lower(options['create_project'])
+        #options['create_project'] = str.lower(options['create_project'])
         return options
 
     def __call__(self): # this is the main part of the original askbot_setup()
@@ -274,8 +259,9 @@ class AskbotSetup(ObjectWithOutput):
 
         options = self.parser.parse_args()
         options = self._process_args(options)
-
         self.verbosity = options['verbosity']
+
+        # will ask user to complete the parameters
         self.configManagers.complete(options)
 
         #database_interface = [ e[1] for e in self.database_engines
@@ -286,18 +272,18 @@ class AskbotSetup(ObjectWithOutput):
         nothing.deploy = lambda: None
 
         # install into options['dir_name']
-        project = deployable.ProjectRoot(options['dir_name'])
+        project = deployables.ProjectRoot(options['dir_name'])
 
         # select where to look for source files and templates
         project.src_dir = os.path.join(self.ASKBOT_ROOT, self.SOURCE_DIR)
 
         # set log dir an log file
         project.contents.update({
-            options['logdir_name']: {options['logfile_name']: deployable.EmptyFile}
+            options['logdir_name']: {options['logfile_name']: deployables.EmptyFile}
         })
 
         # set the directory where settings.py etc. go, defaults to
-        site = deployable.AskbotSite(options['app_name'])
+        site = deployables.AskbotSite(options['app_name'])
 
         # install as a sub-directory to the intall directory
         site.dst_dir = options['dir_name']
@@ -309,7 +295,7 @@ class AskbotSetup(ObjectWithOutput):
         site.context.update(options)
 
         # install container specifics, analogous to site
-        uwsgi = deployable.AskbotApp()
+        uwsgi = deployables.AskbotApp()
         uwsgi.src_dir = os.path.join(self.ASKBOT_ROOT, self.SOURCE_DIR)
         uwsgi.dst_dir = options['dir_name']
         uwsgi.context.update({
@@ -322,16 +308,18 @@ class AskbotSetup(ObjectWithOutput):
 
         todo = [ project, site ]
 
+        """ don't like this easter egg.
         if options['create_project'] in ['no', 'none', 'false', '0', 'nothing']:
             todo = [ nothing ]  # undocumented noop for the installer
         elif options['create_project'] == 'container-uwsgi':
             # if we install into a container we additionally want these files
             project.contents.update({
             'cron': {
-                'crontab': deployable.RenderedFile,  # askbot_site, askbot_app
-                'cron-askbot.sh': deployable.CopiedFile,
+                'crontab': deployables.RenderedFile,  # askbot_site, askbot_app
+                'cron-askbot.sh': deployables.CopiedFile,
             }})
             todo.append(uwsgi)
+        """
 
         # maybe we could just use the noop nothing instead of this?
         if options['dry_run']:

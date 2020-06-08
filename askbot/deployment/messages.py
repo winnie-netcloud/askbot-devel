@@ -11,16 +11,19 @@ Problems installing? -> please email support@askbot.com
 To CANCEL - hit Ctr-C at any time
 """
 
-WHERE_TO_DEPLOY = """Enter directory path (absolute or relative) to deploy
-askbot. To choose current directory - enter "."
->"""
+WHERE_TO_DEPLOY = """Where should be the root directory of the Django project?
+It normally contains the Django's manage.py file
+and the project settings subdirectory.
+Default value is "askbot_site" (Enter to accept the default).
+"""
 
 CANT_INSTALL_INTO_FILE = '%(path)s is a file\ncannot install there'
 
 SHOULD_ADD_APP_HERE = 'Directory %(path)s?\nalready has a Django ' \
                     + 'project - do you want to add askbot app to that project?'
 
-HOW_TO_DEPLOY_NEW = 'Done. Please find further instructions at http://askbot.org/doc/'
+HOW_TO_DEPLOY_NEW = """Done. Please find further instructions at http://askbot.org/doc/
+You will probably want to edit the settings.py file"""
 
 HOW_TO_ADD_ASKBOT_TO_DJANGO = HOW_TO_DEPLOY_NEW
 
