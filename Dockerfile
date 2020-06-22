@@ -1,3 +1,10 @@
+#
+# WARNING: this Docker file is not tested with the current askbot-setup script.
+# most likely at least this file will need to be adapted to make it work.
+# if you can help - please make explain what you want to do in the issues
+# section of the repository and once your contribution is accepted - make a pull request.
+#
+#----------------------------------------------------
 # This Dockerifle builds a simple Askbot installation
 #
 # It makes use of environment variables:

@@ -21,7 +21,6 @@ REQUIREMENTS = {
     'compressor': 'django-compressor>=2.0,<=2.4',
     'django': 'django>=1.11,<3.0',
     'django_countries': 'django-countries>=3.3',
-    'dj_database_url': 'dj-database-url',
     'django_jinja': 'django-jinja>=2.0',
     'celery': 'celery>=4.0,<5.0',
     'followit': 'django-followit==0.4.1',

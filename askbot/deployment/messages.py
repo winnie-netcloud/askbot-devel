@@ -22,11 +22,6 @@ CANT_INSTALL_INTO_FILE = '%(path)s is a file\ncannot install there'
 SHOULD_ADD_APP_HERE = 'Directory %(path)s?\nalready has a Django ' \
                     + 'project - do you want to add askbot app to that project?'
 
-HOW_TO_DEPLOY_NEW = """Done. Please find further instructions at http://askbot.org/doc/
-You will probably want to edit the settings.py file"""
-
-HOW_TO_ADD_ASKBOT_TO_DJANGO = HOW_TO_DEPLOY_NEW
-
 DIR_IS_NOT_WRITABLE = 'Directory %(dir)s is not writable'
 
 PARENT_DIR_IS_NOT_WRITABLE = """To create directory %(target_dir)s

@@ -18,7 +18,7 @@ def start_printing_db_queries():
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
 
-def choice_dialog(prompt_phrase, choices = None, invalid_phrase = None):
+def choice_dialog(prompt_phrase, choices=None, invalid_phrase=None):
     """prints a prompt, accepts keyboard input
     and makes sure that user response is one of given
     in the choices argument, which is required
@@ -38,7 +38,7 @@ def choice_dialog(prompt_phrase, choices = None, invalid_phrase = None):
         elif invalid_phrase != None:
             opt_string = ','.join(choices)
             print(invalid_phrase % {'opt_string': opt_string})
-        time.sleep(1)
+        time.sleep(.1)
 
 def numeric_choice_dialog(prompt_phrase, choices):
     """Prints a list of choices with numeric options and requires the
@@ -115,21 +115,30 @@ def numeric_multiple_choice_dialog(prompt_phrase, choices, all_option=False):
             else:
                 return choice_indexes
 
-def simple_dialog(prompt_phrase, required=False):
+def simple_dialog(prompt_phrase, required=False, default=None):
     """asks user to enter a string, if `required` is True,
     will repeat question until non-empty input is given
     """
+    if required:
+        prompt_phrase += ' (required)'
+    if default:
+        prompt_phrase += f'\nPress ENTER to use {default}.'
+
     while 1:
 
-        if required:
-            prompt_phrase += ' (required)'
+        if required and default:
+            raise RuntimeError('provide either `required` or `default')
+
 
         response = input(prompt_phrase + '\n> ').strip()
 
+        if not response and default:
+            return default
+
         if response or required is False:
             return response
-
-        time.sleep(1)
+        
+        time.sleep(.1)
 
 
 def get_yes_or_no(prompt_phrase, default=None):

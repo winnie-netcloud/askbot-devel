@@ -2,7 +2,6 @@
 django-appconf
 akismet==1.0.1
 beautifulsoup4<=4.7.1
-dj-database-url
 django-avatar>=4.0
 django-compressor>=2.0,<=2.4
 django-countries>=3.3
