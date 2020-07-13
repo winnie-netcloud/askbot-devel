@@ -18,7 +18,7 @@ def start_printing_db_queries():
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
 
-def choice_dialog(prompt_phrase, choices=None, invalid_phrase=None):
+def choice_dialog(prompt_phrase, choices=None, invalid_phrase=None, default=None):
     """prints a prompt, accepts keyboard input
     and makes sure that user response is one of given
     in the choices argument, which is required
@@ -29,10 +29,21 @@ def choice_dialog(prompt_phrase, choices=None, invalid_phrase=None):
     """
     assert(hasattr(choices, '__iter__'))
     assert(not isinstance(choices, str))
+
+    choices = [str(ch) for ch in choices]
+
+    if default is None:
+        prompt = '%s\ntype %s\n> ' % (prompt_phrase, '/'.join(choices))
+    else:
+        default = str(default)
+        prompt = '%s\nType %s, press ENTER to select %s\n> ' % (prompt_phrase, '/'.join(choices), default)
+
     while 1:
-        response = input(
-            '\n%s\ntype %s: ' % (prompt_phrase, '/'.join(choices))
-        )
+        response = input(prompt).strip()
+
+        if response == '' and default:
+            return default
+
         if response in choices:
             return response
         elif invalid_phrase != None:
@@ -40,7 +51,7 @@ def choice_dialog(prompt_phrase, choices=None, invalid_phrase=None):
             print(invalid_phrase % {'opt_string': opt_string})
         time.sleep(.1)
 
-def numeric_choice_dialog(prompt_phrase, choices):
+def numeric_choice_dialog(prompt_phrase, choices, default=None):
     """Prints a list of choices with numeric options and requires the
     user to select a single choice from the list.
 
@@ -56,8 +67,17 @@ def numeric_choice_dialog(prompt_phrase, choices):
     assert(hasattr(choices, '__iter__'))
     assert(not isinstance(choices, str))
     choice_menu = "\n".join(["%d - %s" % (i,x) for i, x in enumerate(choices)])
+    if default:
+        prompt_phrase = '%s\n%s\nPress ENTER to select %s> ' % (choice_menu, prompt_phrase, default)
+    else:
+        prompt_phrase = '%s\n%s> ' % (choice_menu, prompt_phrase)
+
     while True:
-        response = input('\n%s\n%s> ' % (choice_menu, prompt_phrase))
+        response = input(prompt_phrase).strip()
+
+        if response == '' and default:
+            return default
+
         try:
             index = int(response)
         except ValueError:
@@ -156,9 +176,9 @@ def get_yes_or_no(prompt_phrase, default=None):
     while True:
         prompt_phrase += ' (yes/no)'
         if default:
-            prompt_phrase += '\n[%s] >' % default
+            prompt_phrase += '[%s] >' % default
         else:
-            prompt_phrase += '\n >'
+            prompt_phrase += '>'
         response = input(prompt_phrase).strip()
         if not response and default:
             return default

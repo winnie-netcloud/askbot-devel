@@ -51,7 +51,7 @@ class AskbotSetup:
             dest='domain_name',
             action='store',
             default=None,
-            help='Domain name of your Askbot site. Used for the ALLOWED_DOMAINS setting.'
+            help=const.DOMAIN_NAME_HELP
         )
 
         self.parser.add_argument(
@@ -59,7 +59,7 @@ class AskbotSetup:
             dest='language_code',
             action='store',
             default='en',
-            help='Two or four letter with a dash language code (e.g. fr, de, zh_CN).'
+            help=const.LANGUAGE_CODE_HELP
         )
 
         self.parser.add_argument(
@@ -87,34 +87,34 @@ class AskbotSetup:
             dest='email_settings',
             action='store',
             default=None,
-            help='Settings snippet for the email - Python code (*).'
+            help='Settings snippet for the email - Python code.'
         )
 
         self.parser.add_argument(
             '--language-settings',
             dest='language_settings',
             default=None,
-            help='Settings snippet for the language - Python code (*).'
+            help='Settings snippet for the language - Python code.'
         )
 
         self.parser.add_argument(
             '--logging-settings',
             dest='logging_settings',
             default=None,
-            help='Settings snippet for the logging - Python code (*).'
+            help='Settings snippet for the logging - Python code.'
         )
 
         self.parser.add_argument(
             '--caching-settings',
             dest='caching_settings',
-            help='Settings snippet for caching - Python code (*).'
+            help='Settings snippet for caching - Python code.'
         )
 
         self.parser.add_argument(
             '--append-settings',
             dest='extra_settings',
             default=None,
-            help='Extra settings snippet - python code - appended to the settings.py file (*).'
+            help='Extra settings snippet - python code - appended to the settings.py file - Python code.'
         )
 
     def add_db_args(self):
@@ -125,17 +125,17 @@ class AskbotSetup:
             dest='database_settings',
             action='store',
             default=None,
-            help='Database settings snippet - python code (*). If given, all remaining db parameters will be ignored.'
+            help='Database settings snippet - Python code.\nIf given, all remaining db parameters will be ignored.'
         )
 
         self.parser.add_argument(
             '--db-engine', '-e',
             dest='database_engine',
             action='store',
-            choices=[eng[0] for eng in const.DB_ENGINE_CHOICES],
+            choices=[eng[0] for eng in const.DATABASE_ENGINE_CHOICES],
             default=const.SQLITE,
             type=int,
-            help='Database engine, type 1 for PostgreSQL, 2 for SQLite, 3 for MySQL, 4 for Oracle'
+            help=const.DATABASE_ENGINE_HELP
         )
 
         self.parser.add_argument(
@@ -181,7 +181,7 @@ class AskbotSetup:
             dest='media_root',
             action='store',
             default=None,
-            help='Value of the MEDIA_ROOT setting for the settings.py file - where the downloaded files will go.'
+            help=const.MEDIA_ROOT_HELP
         )
 
         self.parser.add_argument(
