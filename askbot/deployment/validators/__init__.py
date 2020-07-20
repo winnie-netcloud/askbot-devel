@@ -22,7 +22,7 @@ class ParamsValidator:
         )
 
         for validator_class in validators:
-            validator = validator_class(self.console, self.parser)
+            validator = validator_class(self.console, self.parser, params)
             params.update(validator.get_params())
 
         options = self.parser.parse_args()

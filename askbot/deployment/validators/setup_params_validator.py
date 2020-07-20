@@ -17,10 +17,11 @@ def dir_clashes_with_python_module(path):
     return False
 
 class SetupParamsValidator:
-    def __init__(self, console, parser):
+    def __init__(self, console, parser, params=None):
         self.console = console
         self.parser = parser
         self.options = parser.parse_args()
+        self.prev_params = params
 
     def get_params(self):
         """Returns setup parameters"""
@@ -29,7 +30,7 @@ class SetupParamsValidator:
             'force': self.options.force,
             'interactive': self.options.interactive,
             'root_dir': root_dir,
-            'proj_name': self.get_valid_proj_name(root_dir),
+            'proj_dir': self.get_valid_proj_dir(root_dir),
             'media_root': self.get_valid_media_root(root_dir)
         }
 
@@ -109,7 +110,7 @@ class SetupParamsValidator:
                 return root_dir
 
 
-    def get_valid_proj_name(self, root_dir):
+    def get_valid_proj_dir(self, root_dir):
         """Returns valid name of the django project,
         which will be the name of the directory
         to hold the settings.py file"""
@@ -117,6 +118,10 @@ class SetupParamsValidator:
         parser = self.parser
 
         if not options.interactive:
+
+            if os.path.sep in options.proj_name:
+                raise ValidationError(f'Project name cannot have the {os.path.sep} symbol')
+
             proj_dir = os.path.abspath(os.path.join(root_dir, options.proj_name))
             #todo: test for absence of slash
             if dir_clashes_with_python_module(proj_dir):
@@ -124,7 +129,7 @@ class SetupParamsValidator:
                 raise ValidationError(f'Value of --proj-name clashes with the `{mod_name}` python module.\nTry a different value.')
 
             if options.force:
-                return options.proj_name
+                return os.path.join(root_dir, options.proj_name)
             #not -force
             if os.path.exists(proj_dir):
                 # cannot overwrite silently - raise an exception
@@ -149,37 +154,39 @@ class SetupParamsValidator:
             else:
                 user_input = self.console.simple_dialog(user_prompt, required=True)
             entered_by_hand = True
-            proj_name = os.path.abspath(user_input)
+            proj_name = user_input
         else:
             proj_name = options.proj_name
 
-        proj_dir = os.path.abspath(os.path.join(root_dir, proj_name))
+        has_error = False
         while True:
-            # todo: test for absence of slash
-            # test name clash with python module
+
+            if os.path.sep in proj_name:
+                self.console.print_error(f'Value cannot have the {os.path.sep} symbol.')
+                has_error = True
+
+            proj_dir = os.path.abspath(os.path.join(root_dir, proj_name))
+
             if dir_clashes_with_python_module(proj_dir):
                 mod_name = proj_name
                 if entered_by_hand:
                     self.console.print_error(f'Value clashes with the `{mod_name}` python module.\nTry a different value.')
                 else:
                     self.console.print_error(f'Value of --proj-name clashes with the `{mod_name}` python module.\nTry a different value.')
-                if default:
-                    user_input = self.console.simple_dialog(user_prompt, default=default)
-                else:
-                    user_input = self.console.simple_dialog(user_prompt, required=True)
-                entered_by_hand = True
-                proj_dir = os.path.abspath(os.path.join(root_dir, user_input))
+                has_error = True
 
             if os.path.exists(proj_dir):
-                if self.options.force:
+                # make an exception for the --force parameter if there are no other errors
+                if not has_error and self.options.force:
                     return proj_dir
-
                 self.console.print_error(f'{proj_dir} already exists.')
+                has_error = True
+
+            if has_error:
                 if default:
-                    user_input = self.console.simple_dialog(user_prompt, default=default)
+                    proj_name = self.console.simple_dialog(user_prompt, default=default)
                 else:
-                    user_input = self.console.simple_dialog(user_prompt, required=True)
+                    proj_name = self.console.simple_dialog(user_prompt, required=True)
                 entered_by_hand = True
-                proj_dir = os.path.abspath(os.path.join(root_dir, user_input))
             else:
                 return proj_dir

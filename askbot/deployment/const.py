@@ -37,3 +37,8 @@ LANGUAGE_CODE_HELP = 'two or four letter with a dash language code (e.g. ' + \
         'Default value is ' + bold('en') + '.'
 
 DATABASE_ENGINE_HELP = 'database engine, type 1 for PostgreSQL, 2 for SQLite, 3 for MySQL, 4 for Oracle.'
+
+def get_sqlite_db_path_prompt(project_dir):
+    return 'Enter the ' + bold('SQLite database file path') + '.\n' + \
+        ('If path is relative, %s will be prepended.\n' % project_dir) + \
+        'Absolute path will be used as given.'
