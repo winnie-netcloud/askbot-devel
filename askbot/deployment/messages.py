@@ -51,16 +51,15 @@ def format_msg_dir_not_writable(directory):
     if os.path.exists(directory):
         if path_utils.directory_is_writable(directory):
             return ''
-        else:
-            return DIR_IS_NOT_WRITABLE % {'dir': directory}
-    else:
-        prefix, tail = path_utils.split_at_break_point(directory)
-        data = {
-                'existing_prefix': prefix,
-                'non_existing_tail': tail,
-                'target_dir': directory
-            }
-        return PARENT_DIR_IS_NOT_WRITABLE % data
+        return DIR_IS_NOT_WRITABLE % {'dir': directory}
+
+    prefix, tail = path_utils.split_at_break_point(directory)
+    data = {
+        'existing_prefix': prefix,
+        'non_existing_tail': tail,
+        'target_dir': directory
+    }
+    return PARENT_DIR_IS_NOT_WRITABLE % data
 
 def format_msg_create(directory):
     """returns a message explaining which directories
@@ -68,13 +67,13 @@ def format_msg_create(directory):
     """
     if os.path.exists(directory):
         raise Exception('directory %s already exists' % directory)
-    else:
-        prefix, tail = path_utils.split_at_break_point(directory)
-        data = {
-                'existing_prefix': prefix,
-                'non_existing_tail': tail,
-            }
-        return CONFIRM_DIR_CREATION % data
+
+    prefix, tail = path_utils.split_at_break_point(directory)
+    data = {
+        'existing_prefix': prefix,
+        'non_existing_tail': tail,
+    }
+    return CONFIRM_DIR_CREATION % data
 
 def format_msg_dir_unclean_django(directory):
     """retuns a message telling which of the parent
@@ -90,9 +89,9 @@ def format_msg_bad_dir_name(directory):
     dir_name = os.path.basename(directory)
     if dir_name == 'askbot':
         return DIR_NAME_TAKEN_BY_ASKBOT
-    else:
-        return DIR_NAME_TAKEN_BY_PYTHON % {'dir': dir_name}
+    return DIR_NAME_TAKEN_BY_PYTHON % {'dir': dir_name}
 
 def print_message(message, verbosity):
+    #pylint: disable=missing-function-docstring
     if verbosity >= 1:
         print(message)

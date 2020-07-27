@@ -30,6 +30,8 @@ have a look at the Dockerfile.
 """
 
 class AskbotSetup:
+    """Class that does the job of this module."""
+
     ASKBOT_ROOT = os.path.dirname(os.path.dirname(__file__))
     SOURCE_DIR = 'setup_templates'
 
@@ -38,6 +40,7 @@ class AskbotSetup:
         self.add_arguments()
 
     def add_arguments(self):
+        """Configures the CLI parameters"""
         self.add_setup_args()
         self.add_db_args()
         self.add_site_args()
@@ -72,7 +75,7 @@ class AskbotSetup:
 
     def add_settings_snippet_args(self):
         """Arguments for the settings snippets.
-        Values of these must be a Python code in the format of the 
+        Values of these must be a Python code in the format of the
         django settings.py file, containing the specific groups of settings.
         Use of these is intended with the scripted deployments, e.g. - with Docker.
 
@@ -114,7 +117,8 @@ class AskbotSetup:
             '--append-settings',
             dest='extra_settings',
             default=None,
-            help='Extra settings snippet - python code - appended to the settings.py file - Python code.'
+            help='Extra settings snippet - python code - ' + \
+                'appended to the settings.py file - Python code.'
         )
 
     def add_db_args(self):
@@ -125,7 +129,8 @@ class AskbotSetup:
             dest='database_settings',
             action='store',
             default=None,
-            help='Database settings snippet - Python code.\nIf given, all remaining db parameters will be ignored.'
+            help='Database settings snippet - Python code.\n' + \
+                    'If given, all remaining db parameters will be ignored.'
         )
 
         self.parser.add_argument(
@@ -161,18 +166,17 @@ class AskbotSetup:
 
     def add_setup_args(self):
         """Control the behaviour of this setup procedure"""
-        
         self.parser.add_argument(
             '--root-directory', '-r',
             dest='root_dir',
-            default='./' + const.DEFAULT_PROJECT_NAME,
+            default='', # default is handled by the validator
             help=const.ROOT_DIR_HELP
         )
 
         self.parser.add_argument(
             '--proj-name',
             dest='proj_name',
-            default=const.DEFAULT_PROJECT_NAME,
+            default='', # default is handled by the validator as it matches basename of the root dir
             help=const.PROJ_NAME_HELP
         )
 
@@ -180,7 +184,7 @@ class AskbotSetup:
             '--media-root',
             dest='media_root',
             action='store',
-            default=None,
+            default=None, # real value is handled by the validator, b/c it matches the root
             help=const.MEDIA_ROOT_HELP
         )
 
@@ -231,7 +235,7 @@ class AskbotSetup:
             print(f'\n\n{error}\nAborted')
             sys.exit(1)
 
-        except (KeyboardInterrupt):
+        except KeyboardInterrupt:
             print("\n\nAborted.")
             sys.exit(1)
 

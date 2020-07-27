@@ -1,3 +1,6 @@
+"""Constants used by the deployment script"""
+from askbot.utils.console import bold
+
 DEFAULT_PROJECT_NAME = 'askbot_site'
 DEFAULT_MEDIA_ROOT_SUBDIR = 'upfiles'
 
@@ -9,16 +12,9 @@ DATABASE_ENGINE_CHOICES = (
     (4, 'Oracle')
 )
 
-YELLOW = '\033[33m'
-RED = '\033[31m'
-BOLD = '\033[1m'
-RESET = '\033[0m'
-
-def bold(text):
-    return RED + BOLD + text + RESET
-
 ROOT_DIR_HELP = 'the ' + bold('Root') + \
-        ' directory path (relative or absolute).\nThis directory will contain the Django project\'s manage.py file'
+        ' directory path (relative or absolute).\n' + \
+        'This directory will contain the Django project\'s manage.py file'
 
 PROJ_NAME_HELP = 'the ' + bold('Project') + \
         ' directory name.\nWill be a subdirectory within the ' + \
@@ -29,16 +25,15 @@ MEDIA_ROOT_HELP = 'value of the ' + bold('MEDIA_ROOT') + \
         'This directory is for the user uploaded files.\n ' + \
         'Default is /upfiles within the ' + bold('Root') + ' directory.'
 
-DOMAIN_NAME_HELP = 'domain name of your Askbot site. Used for the ' + bold('ALLOWED_DOMAINS') + ' setting.'
+DOMAIN_NAME_HELP = 'domain name of your Askbot site. Used for the ' + \
+        bold('ALLOWED_DOMAINS') + ' setting.'
 
 LANGUAGE_CODE_HELP = 'two or four letter with a dash language code (e.g. ' + \
         bold('fr') + ', ' + bold('de') + ', ' + bold('zh_CN') + '.\n ' + \
         'Value of the ' + bold('LANGUAGE_CODE') + ' setting.\n ' + \
         'Default value is ' + bold('en') + '.'
 
-DATABASE_ENGINE_HELP = 'database engine, type 1 for PostgreSQL, 2 for SQLite, 3 for MySQL, 4 for Oracle.'
+DATABASE_ENGINE_HELP = 'database engine, type 1 for PostgreSQL, 2 for SQLite, ' + \
+        '3 for MySQL, 4 for Oracle.'
 
-def get_sqlite_db_path_prompt(project_dir):
-    return 'Enter the ' + bold('SQLite database file path') + '.\n' + \
-        ('If path is relative, %s will be prepended.\n' % project_dir) + \
-        'Absolute path will be used as given.'
+USE_FORCE_PARAMETER = 're-run askbot-setup with a --force parameter'

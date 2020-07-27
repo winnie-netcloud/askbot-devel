@@ -6,6 +6,15 @@ import time
 import logging
 from askbot.utils import path
 
+YELLOW = '\033[33m'
+RED = '\033[31m'
+BOLD = '\033[1m'
+RESET = '\033[0m'
+
+def bold(text):
+    """Returns string printable in bold red"""
+    return RED + BOLD + text + RESET
+
 
 def decode_input(input: str):
     return input.strip()
