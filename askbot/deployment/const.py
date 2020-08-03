@@ -3,6 +3,7 @@ from askbot.utils.console import bold
 
 DEFAULT_PROJECT_NAME = 'askbot_site'
 DEFAULT_MEDIA_ROOT_SUBDIR = 'upfiles'
+DEFAULT_STATIC_ROOT_SUBDIR = 'static'
 
 SQLITE = 2
 DATABASE_ENGINE_CHOICES = (

@@ -1,7 +1,8 @@
 """Validators for the CLI arguments"""
-from .setup_params_validator import SetupParamsValidator
-from .site_params_validator import SiteParamsValidator
-from .db_params_validator import DbParamsValidator
+from askbot.deployment.validators.setup_params_validator import SetupParamsValidator
+from askbot.deployment.validators.site_params_validator import SiteParamsValidator
+from askbot.deployment.validators.db_params_validator import DbParamsValidator
+from askbot.deployment.validators.option_validator import OptionValidator
 
 class ParamsValidator:
     def __init__(self, console, parser):

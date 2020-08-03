@@ -16,7 +16,8 @@ from askbot.deployment import const
 from askbot.deployment import deployables
 from askbot.deployment.validators import ParamsValidator
 from askbot.deployment.console import Console
-from askbot.deployment.exceptions import ValidationError
+from askbot.deployment.exceptions import DeploymentError, ValidationError
+from askbot.utils.functions import generate_random_key
 
 DESCRIPTION = """Creates files for the django project of Askbot.
 
@@ -49,6 +50,20 @@ class AskbotSetup:
 
     def add_site_args(self):
         """Settings specific to the workings of the site"""
+        self.parser.add_argument(
+            '--admin-name',
+            action='store',
+            default='',
+            help='Name of the site admin'
+        )
+
+        self.parser.add_argument(
+            '--admin-email',
+            action='store',
+            default='',
+            help='Admin of the site admin'
+        )
+
         self.parser.add_argument(
             '--domain-name',
             dest='domain_name',
@@ -176,7 +191,7 @@ class AskbotSetup:
         self.parser.add_argument(
             '--proj-name',
             dest='proj_name',
-            default='', # default is handled by the validator as it matches basename of the root dir
+            default=None, # handled by the validator as it matches basename of the root dir
             help=const.PROJ_NAME_HELP
         )
 
@@ -184,8 +199,15 @@ class AskbotSetup:
             '--media-root',
             dest='media_root',
             action='store',
-            default=None, # real value is handled by the validator, b/c it matches the root
+            default=None, # real value is handled by the validator, b/c it depends on the root_dir
             help=const.MEDIA_ROOT_HELP
+        )
+
+        self.parser.add_argument(
+            '--static-root',
+            dest='static_root',
+            action='store',
+            default=None, # validator provides the default value, b/c it depends on the root_dir
         )
 
         self.parser.add_argument(
@@ -210,28 +232,28 @@ class AskbotSetup:
             console = Console()
             validator = ParamsValidator(console, self.parser)
             params = validator.get_params()
+            params['secret_key'] = generate_random_key(length=32)
 
             for key, val in params.items():
                 print(f'{key}={val}')
 
             # make the directories
-            """
-            deployables.ProjectRoot().deploy(params)
-            deployables.ProjectDir().deploy(params)
-            deployables.MediaRoot().deploy(params)
-            deployables.StaticRoot().deploy(params)
+            force = params['force']
+            deployables.makedir(params['root_dir'], force)
+            deployables.makedir(params['proj_dir'], force)
+            deployables.makedir(params['media_root_dir'], force)
+            deployables.makedir(params['static_root_dir'], force)
 
             # make the manage.py file
-            deployables.ManagePy().deploy(params)
+            deployables.ManagePy(params).deploy()
             # make the settings.py file
-            deployables.SettingsPy().deploy(params)
+            #deployables.UrlsPy().deploy(params)
+            #deployables.SettingsPy().deploy(params)
             # make the urls.py file
-            deployables.UrlsPy().deploy(params)
             # print next steps help
-            self.print_postamble()
-            """
+            #console.print_postamble(params)
 
-        except ValidationError as error:
+        except (ValidationError, DeploymentError) as error:
             print(f'\n\n{error}\nAborted')
             sys.exit(1)
 

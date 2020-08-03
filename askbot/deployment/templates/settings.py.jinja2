@@ -12,44 +12,16 @@ ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
-DEBUG          = False   # set to True to enable debugging
+DEBUG = False   # set to True to enable debugging
 TEMPLATE_DEBUG = False  # keep false when debugging jinja2 templates
-INTERNAL_IPS   = ('127.0.0.1',)
-ALLOWED_HOSTS  = ['*',] #change this for better security on your site
+INTERNAL_IPS = ('127.0.0.1',)
+ALLOWED_HOSTS  = ['{{ domain_name }}',] #change this for better security on your site
 
-ADMINS = (
-    ('Your Name', 'your_email@domain.com'),
-)
+{{ admins_settings }}
 
-MANAGERS = ADMINS
+{{ database_settings }}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.{{database_engine}}', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '{{database_name}}',                      # Or path to database file if using sqlite3.
-        'USER': '{{database_user}}',                      # Not used with sqlite3.
-        'PASSWORD': '{{database_password}}',                  # Not used with sqlite3.
-        'HOST': '',
-        'PORT': '',
-        'TEST': {
-            'CHARSET': 'utf8',              # Setting the character set and collation to utf-8
-         {%- if 'mysql' in database_engine %}
-            'COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
-         {%- endif %}
-        }
-    }
-}
-
-#outgoing mail server settings
-SERVER_EMAIL         = ''
-DEFAULT_FROM_EMAIL   = ''
-EMAIL_HOST_USER      = ''
-EMAIL_HOST_PASSWORD  = ''
-EMAIL_SUBJECT_PREFIX = ''
-EMAIL_HOST           = ''
-EMAIL_PORT           = ''
-EMAIL_USE_TLS        = False
-EMAIL_BACKEND        = 'django.core.mail.backends.smtp.EmailBackend'
+{{ email_settings }}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -58,25 +30,24 @@ EMAIL_BACKEND        = 'django.core.mail.backends.smtp.EmailBackend'
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = '{{ timezone }}'
 
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N      = True
-LANGUAGE_CODE = 'en'
-LANGUAGES     = (('en', 'English'),)
-ASKBOT_LANGUAGE_MODE = 'single-lang' #'single-lang', 'url-lang', 'user-lang'
+USE_I18N = True
+
+{{ language_settings }}
 
 # Absolute path to the directory that holds uploaded media
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'upfiles')
+MEDIA_ROOT = '{{ media_root_dir }}'
 MEDIA_URL = '/upfiles/' # url to uploaded media. This is expected to start with a /
 STATIC_URL = '/m/'#this must be different from MEDIA_URL
 USE_LOCAL_FONTS = False
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')#path to files collected by collectstatic
+STATIC_ROOT = '{{ static_root_dir }}'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -84,10 +55,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')#path to files collected by co
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 # Make up some unique string, and don't share it with anybody.
-
-{% if secret_key %}
 SECRET_KEY = "{{ secret_key }}"
-{% endif %}
 
 ASKBOT_COMMON_CONTEXT_PREPROCESSORS = [
     'askbot.context.application_settings',
@@ -139,7 +107,6 @@ ATOMIC_REQUESTS = True
 
 ROOT_URLCONF = os.path.basename(os.path.dirname(__file__)) + '.urls'
 
-
 #UPLOAD SETTINGS
 FILE_UPLOAD_TEMP_DIR = os.path.join(
                                 os.path.dirname(__file__),
@@ -190,23 +157,8 @@ INSTALLED_APPS = (
     'tinymce',
 )
 
+{{ caching_settings }}
 
-#setup memcached for production use!
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'askbot',
-    }
-}
-
-# Chose a unique KEY_PREFIX to avoid clashes with other applications
-# using the same cache (e.g. a shared memcache instance).
-CACHES['default'].update({'KEY_PREFIX': 'askbot', 'TIMEOUT': 6000})
-
-#sets a special timeout for livesettings if you want to make them different
-LIVESETTINGS_CACHE_TIMEOUT = CACHES['default']['TIMEOUT']
-CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
-CACHE_MIDDLEWARE_SECONDS = 600
 #If you use memcache you may want to uncomment the following line to enable memcached based sessions
 #SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
@@ -215,12 +167,7 @@ AUTHENTICATION_BACKENDS = (
     'askbot.deps.django_authopenid.backends.AuthBackend',
 )
 
-#logging settings
-logging.basicConfig(
-    filename=os.path.join(PROJECT_ROOT, 'log', 'askbot.log'),
-    level=logging.CRITICAL,
-    format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
-)
+{{ logging_settings }}
 
 ###########################
 #
@@ -242,8 +189,6 @@ ASKBOT_USE_STACKEXCHANGE_URLS = False #mimic url scheme of stackexchange
 BROKER_TRANSPORT = "kombu.transport.memory.Transport"
 CELERY_ALWAYS_EAGER = True
 
-DOMAIN_NAME = ''
-
 CSRF_COOKIE_NAME = '_csrf'
 
 STATICFILES_DIRS = (
@@ -256,20 +201,7 @@ STATICFILES_FINDERS = (
 )
 
 NOCAPTCHA = True
-
-#HAYSTACK_SETTINGS
-ENABLE_HAYSTACK_SEARCH = False # needs "haystack" in INSTALLED_APPS
-#Uncomment for multilingual setup:
-#HAYSTACK_ROUTERS = ['askbot.search.haystack.routers.LanguageRouter',]
-
-#Uncomment if you use haystack
-#More info in http://django-haystack.readthedocs.org/en/latest/settings.html
-#HAYSTACK_CONNECTIONS = {
-#            'default': {
-#                        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
-#            }
-#}
-
+ENABLE_HAYSTACK_SEARCH = False # don't enable it, will be removed
 
 TINYMCE_COMPRESSOR = True
 TINYMCE_SPELLCHECKER = False

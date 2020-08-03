@@ -55,7 +55,7 @@ def get_install_directory():
     return os.path.dirname(__file__)
 
 
-def get_path_to(relative_path):
+def get_askbot_module_path(relative_path):
     """returns absolute path to a file
     relative to ``askbot`` directory
     ``relative_path`` must use only forward slashes

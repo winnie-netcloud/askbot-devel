@@ -1,14 +1,20 @@
-"""
-The main purpose of this code is to do a one-shot deployment of Askbot. It is
-built on the premise that the chosen deployment is viable and possible. If an
-error occurs, it is not this code's task to remedy the issue. If an error
-occurs the deployment is considered as failed. Ideally, all the work this code
-did up to the error is undone. Yet, this code has no means to undo anything.
-"""
+"""Module with helpers for creating of the deployable components"""
+import os
+from askbot.deployment.exceptions import DeploymentError
+from .manage_py import ManagePy
+from .settings_py import SettingsPy
+from .urls_py import UrlsPy
 
-from .objects import RenderedFile, CopiedFile, EmptyFile, Directory, LinkedDir
-from .components import AskbotApp, AskbotSite, ProjectRoot
+def makedir(path, force):
+    """Create a directory path.
+    If path exists, and force is False, raise an exception.
+    Otherwise force-create the directory/directories.
+    Equivalent of mkdir -p
+    """
+    if os.path.exists(path) and not force:
+        raise DeploymentError(f'Directory {path} exists')
 
-
-__all__ = ['RenderedFile', 'CopiedFile', 'EmptyFile', 'Directory', 'LinkedDir',
-           'AskbotApp', 'AskbotSite', 'ProjectRoot']
+    if force:
+        # to be on the safe side put this in a branch
+        os.makedirs(path, exists_ok=True)
+    os.makedirs(path)

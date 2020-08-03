@@ -1,3 +1,7 @@
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
+from askbot.deployment.validators import OptionValidator
+
 class SiteParamsValidator:
     """Validates website parameters"""
     def __init__(self, console, parser, params=None):
@@ -8,23 +12,44 @@ class SiteParamsValidator:
 
     def get_params(self):
         """Returns setup-related parameters"""
+        #todo: validate the values
         return {
-            'domain_name': self.get_domain_name(),
-            'language_code': self.get_timezone(),
-            'timezone': self.get_timezone(),
+            'admin_name': self.get_admin_name(),
+            'admin_email': self.get_admin_email(),
+            'domain_name': self.options.domain_name,
+            'language_code': self.options.language_code,
+            'timezone': self.options.timezone,
             'language_settings': self.options.language_settings
         }
 
-    def get_domain_name(self):
-        """Returns the site domain name"""
-        self.options.domain_name
+    def get_admin_name(self): #pylint: disable=missing-function-docstring
+        if self.options.admin_settings:
+            # we won't use this if admin_settings is provided
+            return ''
 
-    def get_language_code(self):
-        """Returns language code usable by the LANGUAGE_CODE setting"""
-        # if have language_settings - override
-        #validate the lanuage code string
-        pass
+        validator = OptionValidator(self.console,
+                                    self.parser,
+                                    option_name='admin_name',
+                                    required=True,
+                                    prompt='Enter name of the site admin',
+                                    cli_error_messages={'missing': '--admin-name is required'},
+                                    interactive_error_messages={'missing': 'Admin name is required'})
+        return validator.get_value()
 
-    def get_timezone(self):
-        """Returns the time zone, e.g. America/Chicago"""
-        # validate the timezone string
+    def get_admin_email(self):
+        """Returns valid email"""
+        if self.options.admin_settings:
+            # we won't use this if admin_settings is provided
+            return ''
+
+        validator = OptionValidator(self.console,
+                                    self.parser,
+                                    required=True,
+                                    option_name='admin_email',
+                                    prompt='Enter email of the site admin',
+                                    validator=EmailValidator,
+                                    cli_error_messages={'missing': '--admin-email is required',
+                                                        'invalid': 'value of --admin-email is invalid'},
+                                    interactive_error_messages={'missing': 'Admin email is required',
+                                                                'invalid': 'Invalid email address'})
+        return validator.get_value()

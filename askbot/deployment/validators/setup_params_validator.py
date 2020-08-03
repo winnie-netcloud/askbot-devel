@@ -23,15 +23,16 @@ class SetupParamsValidator:
             'interactive': self.options.interactive,
             'root_dir': root_dir,
             'proj_dir': ProjDirValidator(self.console, self.parser, root_dir).get_value(),
-            'media_root': self.get_valid_media_root(root_dir)
+            'media_root_dir': self.get_valid_dir(root_dir, const.DEFAULT_MEDIA_ROOT_SUBDIR),
+            'static_root_dir': self.get_valid_dir(root_dir, const.DEFAULT_STATIC_ROOT_SUBDIR)
         }
 
 
-    def get_valid_media_root(self, root_dir):
+    def get_valid_dir(self, root_dir, default_subdir):
         """Returns valid value for the `MEDIA_ROOT` setting."""
         raw_value = self.options.media_root
         # if missing - return default
         if not raw_value:
-            return os.path.join(root_dir, const.DEFAULT_MEDIA_ROOT_SUBDIR)
+            return os.path.join(root_dir, default_subdir)
 
         return os.path.abspath(raw_value)

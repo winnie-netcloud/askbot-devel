@@ -1,0 +1,16 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.{{database_engine}}', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '{{database_name}}',                      # Or path to database file if using sqlite3.
+        'USER': '{{database_user}}',                      # Not used with sqlite3.
+        'PASSWORD': '{{database_password}}',                  # Not used with sqlite3.
+        'HOST': '',
+        'PORT': '',
+        'TEST': {
+            'CHARSET': 'utf8', # Setting the character set and collation to utf-8
+         {%- if 'mysql' in database_engine %}
+            'COLLATION': 'utf8_general_ci', # is necessary for MySQL tests to work properly.
+         {%- endif %}
+        }
+    }
+}
