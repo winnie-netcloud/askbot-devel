@@ -1,6 +1,6 @@
+"""Validates site-related setup parameters"""
 from django.core.validators import EmailValidator
-from django.core.exceptions import ValidationError
-from askbot.deployment.validators import OptionValidator
+from askbot.deployment.validators.option_validator import OptionValidator
 
 class SiteParamsValidator:
     """Validates website parameters"""
@@ -14,12 +14,13 @@ class SiteParamsValidator:
         """Returns setup-related parameters"""
         #todo: validate the values
         return {
-            'admin_name': self.get_admin_name(),
             'admin_email': self.get_admin_email(),
+            'admin_name': self.get_admin_name(),
+            'admin_settings': self.options.admin_settings,
             'domain_name': self.options.domain_name,
             'language_code': self.options.language_code,
-            'timezone': self.options.timezone,
-            'language_settings': self.options.language_settings
+            'language_settings': self.options.language_settings,
+            'timezone': self.options.timezone
         }
 
     def get_admin_name(self): #pylint: disable=missing-function-docstring
@@ -33,7 +34,8 @@ class SiteParamsValidator:
                                     required=True,
                                     prompt='Enter name of the site admin',
                                     cli_error_messages={'missing': '--admin-name is required'},
-                                    interactive_error_messages={'missing': 'Admin name is required'})
+                                    interactive_error_messages=\
+                                            {'missing': 'Admin name is required'})
         return validator.get_value()
 
     def get_admin_email(self):
@@ -48,8 +50,10 @@ class SiteParamsValidator:
                                     option_name='admin_email',
                                     prompt='Enter email of the site admin',
                                     validator=EmailValidator,
-                                    cli_error_messages={'missing': '--admin-email is required',
-                                                        'invalid': 'value of --admin-email is invalid'},
-                                    interactive_error_messages={'missing': 'Admin email is required',
-                                                                'invalid': 'Invalid email address'})
+                                    cli_error_messages=\
+                                            {'missing': '--admin-email is required',
+                                             'invalid': 'value of --admin-email is invalid'},
+                                    interactive_error_messages=\
+                                            {'missing': 'Admin email is required',
+                                             'invalid': 'Invalid email address'})
         return validator.get_value()

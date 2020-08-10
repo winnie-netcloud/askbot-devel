@@ -1,7 +1,7 @@
 """Base class for the more specialized directory validators:
 RootDirValidator, ProjDirValidator."""
 import os
-from askbot.deployment.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 
 class DirValidator:
     """The base class for the directory validation.
@@ -48,7 +48,8 @@ class DirValidator:
         """Returns validater absolute directory path"""
         if not self.options.interactive:
             raw_cli_value = getattr(self.options, self.option_name)
-            dir_path, error_message = self.clean(raw_cli_value)
+            default = self.get_default_value()
+            dir_path, error_message = self.clean(raw_cli_value or default)
             if error_message:
                 if self.options.force:
                     return dir_path

@@ -6,6 +6,7 @@ DEFAULT_MEDIA_ROOT_SUBDIR = 'upfiles'
 DEFAULT_STATIC_ROOT_SUBDIR = 'static'
 
 SQLITE = 2
+DEFAULT_SQLITE_DB_NAME = 'db.sqlite'
 DATABASE_ENGINE_CHOICES = (
     (1, 'PostgreSQL'),
     (SQLITE, 'SQLite'),

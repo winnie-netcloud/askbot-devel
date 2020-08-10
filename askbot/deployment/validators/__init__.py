@@ -2,9 +2,9 @@
 from askbot.deployment.validators.setup_params_validator import SetupParamsValidator
 from askbot.deployment.validators.site_params_validator import SiteParamsValidator
 from askbot.deployment.validators.db_params_validator import DbParamsValidator
-from askbot.deployment.validators.option_validator import OptionValidator
 
-class ParamsValidator:
+class ParamsValidator: #pylint: disable=too-few-public-methods
+    """Root parameters validator"""
     def __init__(self, console, parser):
         self.console = console
         self.parser = parser

@@ -8,15 +8,16 @@ of the deployment scripts (e.g. Dockerfile).
 
 import os.path
 import sys
-
 from argparse import ArgumentParser
+from django.core.exceptions import ValidationError
+
 from askbot.deployment import messages
 from askbot.deployment.messages import print_message
 from askbot.deployment import const
 from askbot.deployment import deployables
 from askbot.deployment.validators import ParamsValidator
 from askbot.deployment.console import Console
-from askbot.deployment.exceptions import DeploymentError, ValidationError
+from askbot.deployment.exceptions import DeploymentError
 from askbot.utils.functions import generate_random_key
 
 DESCRIPTION = """Creates files for the django project of Askbot.
@@ -53,14 +54,12 @@ class AskbotSetup:
         self.parser.add_argument(
             '--admin-name',
             action='store',
-            default='',
             help='Name of the site admin'
         )
 
         self.parser.add_argument(
             '--admin-email',
             action='store',
-            default='',
             help='Admin of the site admin'
         )
 
@@ -68,7 +67,6 @@ class AskbotSetup:
             '--domain-name',
             dest='domain_name',
             action='store',
-            default=None,
             help=const.DOMAIN_NAME_HELP
         )
 
@@ -101,24 +99,27 @@ class AskbotSetup:
         For example - `--db-settings` if provided, will override --db-name, --db-password, etc.
         """
         self.parser.add_argument(
+            '--admin-settings',
+            dest='admin_settings',
+            action='store',
+            help='Settings snippet for the ADMINS and MANAGERS variables - Python code.'
+        )
+        self.parser.add_argument(
             '--email-settings',
             dest='email_settings',
             action='store',
-            default=None,
             help='Settings snippet for the email - Python code.'
         )
 
         self.parser.add_argument(
             '--language-settings',
             dest='language_settings',
-            default=None,
             help='Settings snippet for the language - Python code.'
         )
 
         self.parser.add_argument(
             '--logging-settings',
             dest='logging_settings',
-            default=None,
             help='Settings snippet for the logging - Python code.'
         )
 
@@ -131,7 +132,6 @@ class AskbotSetup:
         self.parser.add_argument(
             '--append-settings',
             dest='extra_settings',
-            default=None,
             help='Extra settings snippet - python code - ' + \
                 'appended to the settings.py file - Python code.'
         )
@@ -143,7 +143,6 @@ class AskbotSetup:
             '--db-settings',
             dest='database_settings',
             action='store',
-            default=None,
             help='Database settings snippet - Python code.\n' + \
                     'If given, all remaining db parameters will be ignored.'
         )
@@ -153,7 +152,6 @@ class AskbotSetup:
             dest='database_engine',
             action='store',
             choices=[eng[0] for eng in const.DATABASE_ENGINE_CHOICES],
-            default=const.SQLITE,
             type=int,
             help=const.DATABASE_ENGINE_HELP
         )
@@ -161,21 +159,18 @@ class AskbotSetup:
         self.parser.add_argument(
             '--db-name', '-d',
             dest='database_name',
-            default='askbot',
             help='Database name'
         )
 
         self.parser.add_argument(
             '--db-user', '-u',
             dest='database_user',
-            default=None,
             help='Database user name'
         )
 
         self.parser.add_argument(
             '--db-password', '-p',
             dest='database_password',
-            default='',
             help='Database password'
         )
 
@@ -184,14 +179,12 @@ class AskbotSetup:
         self.parser.add_argument(
             '--root-directory', '-r',
             dest='root_dir',
-            default='', # default is handled by the validator
             help=const.ROOT_DIR_HELP
         )
 
         self.parser.add_argument(
             '--proj-name',
             dest='proj_name',
-            default=None, # handled by the validator as it matches basename of the root dir
             help=const.PROJ_NAME_HELP
         )
 
@@ -199,7 +192,6 @@ class AskbotSetup:
             '--media-root',
             dest='media_root',
             action='store',
-            default=None, # real value is handled by the validator, b/c it depends on the root_dir
             help=const.MEDIA_ROOT_HELP
         )
 
@@ -207,7 +199,6 @@ class AskbotSetup:
             '--static-root',
             dest='static_root',
             action='store',
-            default=None, # validator provides the default value, b/c it depends on the root_dir
         )
 
         self.parser.add_argument(
@@ -253,7 +244,13 @@ class AskbotSetup:
             # print next steps help
             #console.print_postamble(params)
 
-        except (ValidationError, DeploymentError) as error:
+        except ValidationError as error:
+            if error.messages and len(error.messages) == 1:
+                print(f'\n\n{error.messages[0]}\nAborted')
+                sys.exit(1)
+            print(f'\n\n{error}\nAborted')
+            sys.exit(1)
+        except DeploymentError as error:
             print(f'\n\n{error}\nAborted')
             sys.exit(1)
 
