@@ -4,15 +4,15 @@
 # 
 # Translators:
 # cor nouws <nouwsc@xs4all.nl>, 2017
-# kees kriek <kees538@gmail.com>, 2016
+# kees kriek <kees538@gmail.com>, 2016,2020
 # Rob Westein <robwestein@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-09-19 18:52+0000\n"
-"Last-Translator: cor nouws <nouwsc@xs4all.nl>\n"
+"PO-Revision-Date: 2020-05-15 06:30+0000\n"
+"Last-Translator: kees kriek <kees538@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/askbot/askbot/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,7 +64,7 @@ msgstr[1] "Sorry, deze labels bestaan niet"
 
 #: media/js/live_search.js:315
 msgid "Search or ask your question"
-msgstr ""
+msgstr "Zoek naar of stel uw vraag"
 
 #: media/js/post.js:28
 msgid "loading..."
@@ -74,15 +74,15 @@ msgstr "laden.."
 #: media/js/post.js:253
 msgid "enter > %(length)s character"
 msgid_plural "enter > %(length)s characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "enter > %(length)s character"
+msgstr[1] "voer > %(length)s tekens in"
 
 #: media/js/post.js:155 media/js/post.js.c:218
 #, c-format
 msgid "details must have > %s character"
 msgid_plural "details must have > %s characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "details must have > %s character"
+msgstr[1] "details moeten > %s tekens bevatten"
 
 #: media/js/post.js:209 media/js/post.js.c:1457
 msgid "tags cannot be empty"
@@ -146,7 +146,7 @@ msgstr "sorry, anonieme gebruikers kunnen niet stemmen"
 
 #: media/js/post.js:827
 msgid "anonymous users cannot flag offensive posts"
-msgstr ""
+msgstr "anonieme gebruikers kunnen geen aanstootgevende berichten markeren"
 
 #: media/js/post.js:828
 msgid "confirm delete"
@@ -166,7 +166,7 @@ msgstr "uw inzending is verwijderd"
 
 #: media/js/post.js:1047
 msgid "sorry, you cannot %(accept_own_answer)s"
-msgstr ""
+msgstr "sorry, u kunt niet %(accept_own_answer)s"
 
 #: media/js/post.js:1101
 msgid "remove flag"
@@ -174,7 +174,7 @@ msgstr "verwijder label"
 
 #: media/js/post.js:1135 media/js/post.js.c:1166
 msgid "flag offensive"
-msgstr ""
+msgstr "aanstootgevende berichten markeren"
 
 #: media/js/post.js:1191 media/js/post.js.c:1687
 msgid "undelete"
@@ -259,7 +259,7 @@ msgstr "opslaan"
 
 #: media/js/post.js:3489
 msgid "Enter the logo url or upload an image"
-msgstr ""
+msgstr "Voer de logo-URL in of upload een afbeelding"
 
 #: media/js/post.js:3515
 msgid "Do you really want to remove the image?"
@@ -327,7 +327,7 @@ msgstr "Gedeeld met de volgende groepen:"
 
 #: media/js/tag_selector.js:14
 msgid "Tag \"<span></span>\" matches:"
-msgstr ""
+msgstr "Tag \"<span></span>\" komt overeen:"
 
 #: media/js/tag_selector.js:91
 #, c-format
@@ -336,7 +336,7 @@ msgstr "en %s meer, niet weergegeven..."
 
 #: media/js/user.js:50
 msgid "Please <a href=\"%(signin_url)s\">signin</a> to follow %(username)s"
-msgstr ""
+msgstr "Meldt u aan<a href=\"%(signin_url)s\">om</a>%(username)s te volgen"
 
 #: media/js/utils.js:206
 msgid "must be shorter than %(max_chars)s character"
@@ -394,7 +394,7 @@ msgstr "Voer uw %s in en ga dan verder"
 
 #: media/js/jquery-openid/jquery.authenticator.js:264
 msgid "Connect your %(provider_name)s account to %(site)s"
-msgstr ""
+msgstr "Verbind uw %(provider_name)s account met%(site)s"
 
 #: media/js/jquery-openid/jquery.authenticator.js:362
 #, c-format
@@ -462,7 +462,7 @@ msgstr "klik om deze opmerkinge bij te werken"
 #: media/js/utils/file_upload_dialog.js:138
 #, c-format
 msgid "Uploaded file: %s"
-msgstr ""
+msgstr "Geupload bestand: %s"
 
 #: media/js/utils/file_upload_dialog.js:152
 msgid "Choose a different file"
@@ -503,7 +503,7 @@ msgstr "nieuwe groep toevoegen"
 
 #: media/js/utils/group_dropdown.js:118
 msgid "Group %(name)s already exists. Group names are case-insensitive."
-msgstr ""
+msgstr "Groep %(name)s bestaat al. Groepsnamen zijn hoofdlettergevoelig."
 
 #: media/js/utils/modal_dialog.js:7
 msgid "Ok"
@@ -671,7 +671,7 @@ msgstr "voer de URL van de afbeelding in, zoals http://www.voorbeeld.com/afbeeld
 
 #: media/wmd/wmd.js:55
 msgid "enter url"
-msgstr ""
+msgstr "voer internetadres in, zoals https://www.voorbeeld.com \"paginatitel\""
 
 #: media/wmd/wmd.js:56
 msgid "upload file attachment"
