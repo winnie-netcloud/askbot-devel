@@ -7,22 +7,23 @@
 # Anthony Monthe <anthony.monthe@gmail.com>, 2016
 # Axel Haustant, 2013
 # Axel Haustant, 2013
-# Benjamin Abel <inactive+bigben@transifex.com>, 2014
-# Benjamin Abel <inactive+bigben@transifex.com>, 2014
-# Benjamin Abel <inactive+bigben@transifex.com>, 2014
+# 6259ba9bc283509570cff338e0550528_9dac94e <b4ee7ee4648e053784936e31a8879dca_139719>, 2014
+# 6259ba9bc283509570cff338e0550528_9dac94e <b4ee7ee4648e053784936e31a8879dca_139719>, 2014
+# 6259ba9bc283509570cff338e0550528_9dac94e <b4ee7ee4648e053784936e31a8879dca_139719>, 2014
 # Bérenger Enselme <benselme@gmail.com>, 2014
 # Camille Baldock <mademoisellegeek42@gmail.com>, 2011
 # ProfGra <christophegragnic@gmail.com>, 2014
 # Christophe CHAUVET <christophe.chauvet@gmail.com>, 2011-2013
+# Denis Bitouzé <dbitouze@wanadoo.fr>, 2020
 # Emmanuel <emmanuel@raviart.com>, 2013
 # evgeny <evgeny.fadeev@gmail.com>, 2009,2016
 # evgeny <evgeny.fadeev@gmail.com>, 2009
 # evgeny <evgeny.fadeev@gmail.com>, 2016
-# François Bureau, 2013
+# 7020b921e453a3eabcf0009489df4839_d6267c2, 2013
 # florent <fpam1108@gmail.com>, 2012
 # florent <fpam1108@gmail.com>, 2012
 # François Bureau, 2013
-# François Bureau, 2013
+# 7020b921e453a3eabcf0009489df4839_d6267c2, 2013
 # Camille Baldock <mademoisellegeek42@gmail.com>, 2011
 # Camille Baldock <mademoisellegeek42@gmail.com>, 2011
 # noirbizarre, 2013
@@ -37,8 +38,8 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2018-11-06 14:33+0000\n"
-"Last-Translator: Sophie Gautier <gautier.sophie@gmail.com>\n"
+"PO-Revision-Date: 2020-07-30 21:40+0000\n"
+"Last-Translator: Denis Bitouzé <dbitouze@wanadoo.fr>\n"
 "Language-Team: French (http://www.transifex.com/askbot/askbot/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1815,7 +1816,7 @@ msgstr "Version 3"
 
 #: conf/ldap.py:38
 msgid "Version 2 (insecure and deprecated)!!!"
-msgstr "Version 2 (non sécurisé et obsolète)!!!"
+msgstr "Version 2 (non sécurisé et obsolète) !!!"
 
 #: conf/ldap.py:47
 msgid "LDAP protocol version"
@@ -1825,7 +1826,7 @@ msgstr "Version du protocole LDAP"
 msgid ""
 "Note that Version 2 protocol is not secure!!! Do not use it on unprotected "
 "network."
-msgstr "Notez que la version 2 du protocole n'est pas sécurisée! Ne pas l'utiliser sur un réseau non protégé."
+msgstr "Notez que la version 2 du protocole n'est pas sécurisée ! Ne l'utilisez pas sur un réseau non protégé."
 
 #: conf/ldap.py:59
 msgid "LDAP URL"
@@ -3791,7 +3792,7 @@ msgstr "monsterid"
 
 #: const/__init__.py:473
 msgid "wavatar"
-msgstr "Comment modifier mon image (gravatar) et qu'est-ce que gravatar?"
+msgstr "Comment modifier mon image (gravatar) et qu'est-ce que gravatar ?"
 
 #: const/__init__.py:474
 msgid "retro"
@@ -3807,11 +3808,11 @@ msgstr "Avatar par défaut"
 
 #: const/__init__.py:480 templates/avatar/show_list.html:26
 msgid "Gravatar"
-msgstr "Comment changer mon image (gravatar) et qu'est-ce que gravatar?"
+msgstr "Comment changer mon image (gravatar) et qu'est-ce que gravatar ?"
 
 #: const/__init__.py:485
 msgid "Uploaded Avatar"
-msgstr "Comment changer mon image (gravatar) et qu'est-ce que gravatar?"
+msgstr "Comment changer mon image (gravatar) et qu'est-ce que gravatar ?"
 
 #: const/__init__.py:532 templates/badges.html:32
 msgid "gold"
@@ -3973,7 +3974,7 @@ msgstr "Votre compte est peut-être bloqué - Veuillez contacter les administrat
 msgid ""
 "Welcome! Please set email address (important!) in your profile and adjust "
 "screen name, if necessary."
-msgstr "Bienvenue ! Veuillez remplir votre adresse email (important!) dans votre profil et ajuster votre nom d'utilisateur, si nécessaire."
+msgstr "Bienvenue ! Veuillez remplir votre adresse email (important !) dans votre profil et ajuster votre nom d'utilisateur, si nécessaire."
 
 #: deps/django_authopenid/forms.py:62
 msgid "I have read and agree with the terms of service"
@@ -4220,7 +4221,7 @@ msgstr "Si vous le voulez, merci d'ajouter, supprimer ou de re-valider vos méth
 
 #: deps/django_authopenid/views.py:823
 msgid "Please wait a second! Your account is recovered, but ..."
-msgstr "Veuillez attendre une seconde ! votre compte est en cours de récupération, mais ..."
+msgstr "Veuillez attendre une seconde ! Votre compte est en cours de récupération, mais..."
 
 #: deps/django_authopenid/views.py:907
 #, python-format
@@ -5439,7 +5440,7 @@ msgstr "supprimer les commentaires"
 
 #: templates/faq_static.html:68
 msgid "How to change my picture (gravatar) and what is gravatar?"
-msgstr "Comment changer ma vignette (gravatar) et qu'est qu'un gravatar?"
+msgstr "Comment changer ma vignette (gravatar) et qu'est qu'un gravatar ?"
 
 #: templates/faq_static.html:69
 msgid ""
@@ -6097,7 +6098,7 @@ msgstr "Retourner à l'enregistrement."
 
 #: templates/authopenid/confirm_email.txt:1
 msgid "Thank you for registering at our Q&A forum!"
-msgstr "Merci de vous être inscrit à notre FAQ!"
+msgstr "Merci de vous être inscrit à notre FAQ !"
 
 #: templates/authopenid/confirm_email.txt:3
 msgid "Your account details are:"
