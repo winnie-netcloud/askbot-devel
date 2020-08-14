@@ -4,7 +4,7 @@
 # 
 # Translators:
 # cor nouws <nouwsc@xs4all.nl>, 2016-2017
-# kees kriek <kees538@gmail.com>, 2016-2019
+# kees kriek <kees538@gmail.com>, 2016-2020
 # Maurice <m-ou.se@m-ou.se>, 2013
 # Rob Westein <robwestein@gmail.com>, 2016-2017
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2019-04-05 08:05+0000\n"
+"PO-Revision-Date: 2020-05-15 06:33+0000\n"
 "Last-Translator: kees kriek <kees538@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/askbot/askbot/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "-"
 
 #: feed.py:36 feed.py:108
 msgid "RSS feed"
-msgstr ""
+msgstr "RSS feed"
 
 #: forms.py:100
 msgid "Wildcard tag must have only one '*' symbol"
@@ -94,14 +94,14 @@ msgstr "De invoer is te lang, maximaal %(length)d tekens toegestaan"
 #: forms.py:346
 #, python-format
 msgid "The input is too long, maximum %(length)d bytes is allowed"
-msgstr ""
+msgstr "De invoer is te lang, maximaal %(length)d bytes zijn toegestaan"
 
 #: forms.py:386
 #, python-format
 msgid "enter > %(length)d character"
 msgid_plural "enter > %(length)d characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "enter > %(length)d character"
+msgstr[1] "voer > %(length)d tekens in"
 
 #: forms.py:433
 #, python-format

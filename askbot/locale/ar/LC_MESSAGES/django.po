@@ -8,19 +8,20 @@
 # Ahmad Khayyat <akhayyat@gmail.com>, 2012
 # AminosAmigos <aminosamigos@gmail.com>, 2012
 # evgeny <evgeny.fadeev@gmail.com>, 2009
-# fahadaaf <fahadaaf@gmail.com>, 2012
+# Fahad Al-Fattani <fahadaaf@gmail.com>, 2012
 # husamfarra <husamfarra@gmail.com>, 2013
 # Khaled Menof <kifcaliph@hotmail.com>, 2012
 # Khaled Menof <kifcaliph@hotmail.com>, 2013
 # Mustafa Albazy <mustafa@albazy.com>, 2013
 # Ratnadeep Debnath <rtnpro@indifex.com>, 2012
+# Usama Akkad <os@uakkad.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-09-23 18:07+0000\n"
-"Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
+"PO-Revision-Date: 2020-08-06 09:46+0000\n"
+"Last-Translator: Usama Akkad <os@uakkad.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/askbot/askbot/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -199,7 +200,7 @@ msgstr "أدخل عدد النقاط للإضافة أو الحذف"
 
 #: forms.py:719
 msgid "Comment"
-msgstr ""
+msgstr "تعليق"
 
 #: forms.py:731 const/__init__.py:497
 msgid "approved"
@@ -282,7 +283,7 @@ msgstr "لا أريد أعطاء بريدي او أستقبال رد:"
 
 #: forms.py:886
 msgid "Message is required"
-msgstr ""
+msgstr "الرسالة مطلوبة"
 
 #: forms.py:892 models/__init__.py:2558
 msgid "Anonymous"
@@ -291,7 +292,7 @@ msgstr "مجهول"
 #: forms.py:902
 msgid ""
 "Either provide email address or mark \"I don't want to give my email\" below"
-msgstr ""
+msgstr "فضلاً ضع بريداً إلكترونياً أو حدد حقل \"لا أريد إعطاء بريدي\" في الأسفل"
 
 #: forms.py:935
 msgid "keep private within your groups"
@@ -327,7 +328,7 @@ msgstr "إضافة التفاصيل"
 
 #: forms.py:1075
 msgid "post anonymously"
-msgstr ""
+msgstr "أكتب كمجهول"
 
 #: forms.py:1096
 msgid ""
@@ -345,7 +346,7 @@ msgstr "التفاصيل"
 
 #: forms.py:1372
 msgid "remove anonymity"
-msgstr ""
+msgstr "أزل التعمية"
 
 #: forms.py:1457
 msgid "Real name"
@@ -435,43 +436,43 @@ msgstr "المواضيع"
 
 #: tasks.py:156
 msgid "make an edit by email"
-msgstr ""
+msgstr "حرر عبر البريد"
 
 #: urls.py:64 urls.py:390 urls.py:396 urls.py:405 urls.py:414
 msgctxt "urls"
 msgid "tags/"
-msgstr ""
+msgstr "وسوم/"
 
 #: urls.py:69 urls.py:75 urls.py:84 urls.py:105 urls.py:114 urls.py:122
 #: urls.py:129
 msgctxt "urls"
 msgid "users/"
-msgstr ""
+msgstr "مستخدمون/"
 
 #: urls.py:76
 msgctxt "urls"
 msgid "by-group/"
-msgstr ""
+msgstr "وفق-مجموعة/"
 
 #: urls.py:84 urls.py:190 urls.py:297 urls.py:416 urls.py:636
 msgctxt "urls"
 msgid "edit/"
-msgstr ""
+msgstr "حرر/"
 
 #: urls.py:106 urls.py:390 urls.py:397 urls.py:406 urls.py:415
 msgctxt "urls"
 msgid "subscriptions/"
-msgstr ""
+msgstr "اشتراكات/"
 
 #: urls.py:115
 msgctxt "urls"
 msgid "unsubscribe/"
-msgstr ""
+msgstr "ألغ_الاشتراك/"
 
 #: urls.py:123
 msgctxt "urls"
 msgid "select_languages/"
-msgstr ""
+msgstr "حدد_اللغة/"
 
 #: urls.py:134
 msgctxt "urls"
@@ -511,7 +512,7 @@ msgstr ""
 #: urls.py:188
 msgctxt "urls"
 msgid "help/"
-msgstr ""
+msgstr "مساعدة/"
 
 #: urls.py:190 urls.py:195
 msgctxt "urls"
@@ -2921,7 +2922,7 @@ msgstr ""
 #: conf/static_settings.py:21
 msgctxt "urls"
 msgid "questions"
-msgstr ""
+msgstr "أسئلة"
 
 #: conf/static_settings.py:30
 msgctxt "urls"
@@ -3414,7 +3415,7 @@ msgstr "تم إختيار هذه الإجابة كصحيحة"
 
 #: conf/words.py:797 conf/words.py:798
 msgid "mark this answer as correct"
-msgstr ""
+msgstr "أشر هذا الجواب كصحيح"
 
 #: conf/words.py:807 conf/words.py:808
 msgid "Login/Signup to Answer"
@@ -3885,7 +3886,7 @@ msgstr "انقر لرؤية أقدم الأسئلة"
 
 #: const/message_keys.py:19
 msgid "by date"
-msgstr ""
+msgstr "التاريخ"
 
 #: const/message_keys.py:20
 msgid "click to see the newest questions"
@@ -3897,7 +3898,7 @@ msgstr "أضغط لمشاهدة أقل الأسئلة تحديثاً"
 
 #: const/message_keys.py:22
 msgid "by activity"
-msgstr ""
+msgstr "النشاط"
 
 #: const/message_keys.py:23
 msgid "click to see the most recently updated questions"
@@ -3909,7 +3910,7 @@ msgstr "انقر لرؤية الأسئلة الأقل إجابات"
 
 #: const/message_keys.py:25
 msgid "by answers"
-msgstr ""
+msgstr "الإجابات"
 
 #: const/message_keys.py:26
 msgid "click to see the most answered questions"
@@ -3921,7 +3922,7 @@ msgstr "أضغط لمشاهدة أقل أسئلة حاصلة على أصوات"
 
 #: const/message_keys.py:28
 msgid "by votes"
-msgstr ""
+msgstr "الأصوات"
 
 #: const/message_keys.py:29
 msgid "click to see most voted questions"
@@ -4620,7 +4621,7 @@ msgstr ""
 
 #: models/__init__.py:950 views/commands.py:221
 msgid "mark or unmark tags"
-msgstr ""
+msgstr "حدد أو أزل تحديد الوسوم"
 
 #: models/__init__.py:958
 msgid "merge duplicate questions"
@@ -5345,7 +5346,7 @@ msgstr[5] ""
 
 #: templates/badges.html:3 templates/badges.html.py:5
 msgid "Badges"
-msgstr ""
+msgstr "شارات"
 
 #: templates/badges.html:9
 msgid ""
@@ -5823,7 +5824,7 @@ msgstr ""
 
 #: templates/macros.html:86
 msgid "this post is marked as community wiki"
-msgstr ""
+msgstr "هذه المشاركة مميزه كويكي مجتمع"
 
 #: templates/macros.html:90
 #, python-format
@@ -6066,7 +6067,7 @@ msgstr ""
 #: templates/user_profile/user_reputation.html:4
 #: templates/user_profile/user_tabs.html:32
 msgid "karma"
-msgstr ""
+msgstr "السمعة"
 
 #: templates/users.html:48
 msgid "recent"
@@ -6117,7 +6118,7 @@ msgstr ""
 #: templates/authopenid/signin.html:98
 #: templates/authopenid/widget_signin.html:88
 msgid "Sign in"
-msgstr ""
+msgstr "سجل الدخول"
 
 #: templates/authopenid/complete.html:21 templates/authopenid/complete.html:30
 msgid "Complete registration"
@@ -6143,7 +6144,7 @@ msgstr ""
 #: templates/authopenid/signup_with_password.html:5
 #: templates/authopenid/signup_with_password.html:68
 msgid "Signup"
-msgstr ""
+msgstr "سجل"
 
 #: templates/authopenid/complete.html:100
 msgid "Already have an account?"
@@ -6475,7 +6476,7 @@ msgstr ""
 
 #: templates/editors/rich_text.html:16
 msgid "Toggle the real time Markdown editor preview"
-msgstr ""
+msgstr "التبديل مع المحرر اللحظي والمُعاين Markdown"
 
 #: templates/email/change_settings_info.html:4
 #, python-format
@@ -6898,7 +6899,7 @@ msgstr ""
 #: templates/group_messaging/senders_list.html:5
 #: templates/user_inbox/base.html:5
 msgid "inbox"
-msgstr ""
+msgstr "الوارد"
 
 #: templates/group_messaging/senders_list.html:9
 msgid "sent"
@@ -7225,7 +7226,7 @@ msgstr ""
 
 #: templates/question/answer_tab_bar.html:9
 msgid "Sort by »"
-msgstr ""
+msgstr "رتب حسب »"
 
 #: templates/question/answer_vote_buttons.html:10
 msgid "(click again to undo)"
@@ -7457,7 +7458,7 @@ msgstr ""
 
 #: templates/user_inbox/responses.html:9
 msgid "mark seen"
-msgstr ""
+msgstr "علّمه كمقروء"
 
 #: templates/user_inbox/responses.html:11
 msgid "select:"
@@ -7808,7 +7809,7 @@ msgstr ""
 #: templates/user_profile/user_recent.html:5
 #: templates/user_profile/user_tabs.html:39
 msgid "activity"
-msgstr ""
+msgstr "النشاط"
 
 #: templates/user_profile/user_recent.html:25
 #: templates/user_profile/user_recent.html:30
@@ -7891,7 +7892,7 @@ msgstr ""
 
 #: templates/widgets/contributors.html:3
 msgid "Contributors"
-msgstr ""
+msgstr "المساهمون"
 
 #: templates/widgets/footer.html:33
 #, python-format
@@ -7904,7 +7905,7 @@ msgstr ""
 
 #: templates/widgets/footer.html:40 templates/widgets/user_navigation.html:20
 msgid "help"
-msgstr ""
+msgstr "مساعدة"
 
 #: templates/widgets/footer.html:42
 msgid "privacy policy"
@@ -7992,7 +7993,7 @@ msgstr ""
 
 #: templates/widgets/markdown_help.html:2
 msgid "Markdown basics"
-msgstr ""
+msgstr "أساسيات Markdown"
 
 #: templates/widgets/markdown_help.html:6
 msgid "*italic*"
@@ -8042,7 +8043,7 @@ msgstr ""
 
 #: templates/widgets/markdown_help.html:38
 msgid "learn more about Markdown"
-msgstr ""
+msgstr "اعرف المزيد عن محرر Markdown"
 
 #: templates/widgets/meta_nav.html:13
 msgid "people & groups"
@@ -8054,7 +8055,7 @@ msgstr ""
 
 #: templates/widgets/meta_nav.html:28
 msgid "badges"
-msgstr ""
+msgstr "شارات"
 
 #: templates/widgets/moderated_image.html:1
 msgid "image awaiting moderation"
@@ -8106,7 +8107,7 @@ msgstr ""
 
 #: templates/widgets/scope_nav.html:20
 msgid "FOLLOWED"
-msgstr ""
+msgstr "متابع"
 
 #: templates/widgets/search_bar.html:20
 msgid "Search or ask your question"
@@ -8114,11 +8115,11 @@ msgstr ""
 
 #: templates/widgets/tag_selector.html:4
 msgid "Interesting tags"
-msgstr ""
+msgstr "وسوم تهمني"
 
 #: templates/widgets/tag_selector.html:22
 msgid "Ignored tags"
-msgstr ""
+msgstr "وسوم مهملة"
 
 #: templates/widgets/tag_selector.html:40
 msgid "Subscribed tags"
@@ -8161,11 +8162,11 @@ msgstr ""
 
 #: templates/widgets/user_long_score_and_badge_summary.html:15
 msgid "badges:"
-msgstr ""
+msgstr "شارات:"
 
 #: templates/widgets/user_navigation.html:11
 msgid "sign out"
-msgstr ""
+msgstr "سجّل الخروج"
 
 #: templates/widgets/user_navigation.html:17
 msgid "settings"
