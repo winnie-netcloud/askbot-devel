@@ -9,18 +9,19 @@
 # NARUHIKO OGASAWARA <naruoga@gmail.com>, 2013
 # OKANO Takayoshi <kano@na.rim.or.jp>, 2013
 # Yuki Shira <shirayuking@gmail.com>, 2013
-# Tomoyuki KATO <inactive+katomo@transifex.com>, 2012-2013
+# e93ed3aa97dec2eb31063731872555fc_1460a05 <71305a0095156d8e18373a5b7cfeb79e_8587>, 2012-2013
 # yasakawa <yos.asakawa@gmail.com>, 2014
 # Kenta Yonekura <yoneken@kicad.jp>, 2014
 # yasakawa <yos.asakawa@gmail.com>, 2014
 # Yuki Shira <shirayuking@gmail.com>, 2013
+# 矢内原 創 <sou@e06.itscom.net>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-09-19 10:36+0000\n"
-"Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
+"PO-Revision-Date: 2020-08-01 00:02+0000\n"
+"Last-Translator: 矢内原 創 <sou@e06.itscom.net>\n"
 "Language-Team: Japanese (http://www.transifex.com/askbot/askbot/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8030,7 +8031,7 @@ msgstr ""
 
 #: templatetags/extra_filters_jinja.py:369
 msgid "no"
-msgstr "メール無し"
+msgstr "0"
 
 #: templatetags/extra_filters_jinja.py:403
 msgid "Visitor"

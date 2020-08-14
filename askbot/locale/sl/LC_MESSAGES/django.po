@@ -4,13 +4,13 @@
 # 
 # Translators:
 # evgeny <evgeny.fadeev@gmail.com>, 2009
-# Martin Srebotnjak <miles@filmsi.net>, 2016-2017
+# Martin Srebotnjak <miles@filmsi.net>, 2016-2017,2019
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2017-10-07 08:55+0000\n"
+"PO-Revision-Date: 2019-12-22 11:23+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian (http://www.transifex.com/askbot/askbot/language/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -3036,11 +3036,11 @@ msgstr "Prag opozorila o preostalih dnevnih glasovanjih"
 
 #: conf/vote_rules.py:51
 msgid "Number of days to allow canceling votes (-1 for no limit)"
-msgstr ""
+msgstr "Število dni, ko je dovoljen preklic glasovanja (-1 za neomejeno)"
 
 #: conf/vote_rules.py:61
 msgid "Number of days required before answering own question"
-msgstr ""
+msgstr "Število dni, zahtevanih pred odgovorom na lastno vprašanje"
 
 #: conf/vote_rules.py:70
 msgid "Number of flags required to automatically hide posts"

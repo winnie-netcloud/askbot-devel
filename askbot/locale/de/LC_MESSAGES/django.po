@@ -13,7 +13,8 @@
 # Edur <edur@justnetwork.eu>, 2012
 # Patrick Marzian <Eidexe@justnetwork.eu>, 2012
 # Patrick Marzian <Eidexe@justnetwork.eu>, 2012
-# hering <inactive+Hering@transifex.com>, 2015
+# evgeny <evgeny.fadeev@gmail.com>, 2020
+# 485dd9ceb0ca1868ae37e73a31054d46_d7c70ce <05bd4fa09cedd1aa53721918b642958b_270620>, 2015
 # jukey <jukey@ju-key.de>, 2016
 # Marco Held <marco.held@virtualfortknox.de>, 2017-2018
 # yeto01 <mathias.ullrich@hotmail.de>, 2012
@@ -27,8 +28,8 @@ msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-29 01:57-0500\n"
-"PO-Revision-Date: 2018-03-27 07:59+0000\n"
-"Last-Translator: Marco Held <marco.held@virtualfortknox.de>\n"
+"PO-Revision-Date: 2020-08-14 21:31+0000\n"
+"Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/askbot/askbot/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7784,7 +7785,7 @@ msgstr "Hilfe"
 
 #: templates/widgets/footer.html:42
 msgid "privacy policy"
-msgstr "Datenschutzrichtlinien"
+msgstr "Datenschutzerklärung"
 
 #: templates/widgets/footer.html:43
 msgid "terms of service"
@@ -8310,7 +8311,7 @@ msgstr "Wir freuen uns auf Ihr Feedback! Gerne auch nächstes Mal :)"
 
 #: views/meta.py:180
 msgid "Privacy policy"
-msgstr "Datenschutzrichtlinien"
+msgstr "Datenschutzerklärung"
 
 #: views/meta.py:267
 msgid "Suggested tags"
