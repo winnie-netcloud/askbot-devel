@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-10 09:16-0600\n"
+"POT-Creation-Date: 2020-08-16 13:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,24 +20,24 @@ msgstr ""
 msgid "Site"
 msgstr ""
 
-#: deps/livesettings/values.py:80
+#: deps/livesettings/values.py:155
 msgid "Main"
 msgstr ""
 
-#: deps/livesettings/values.py:141
+#: deps/livesettings/values.py:216
 msgid "Base Settings"
 msgstr ""
 
-#: deps/livesettings/values.py:257 deps/livesettings/values.py:291
+#: deps/livesettings/values.py:332 deps/livesettings/values.py:366
 msgid "Default value: "
 msgstr ""
 
-#: deps/livesettings/values.py:259
+#: deps/livesettings/values.py:334
 #, python-format
 msgid "Default value: %s"
 msgstr ""
 
-#: deps/livesettings/values.py:765
+#: deps/livesettings/values.py:840
 #, python-format
 msgid "Allowed image file types are %(types)s"
 msgstr ""
