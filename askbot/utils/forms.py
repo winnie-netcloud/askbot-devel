@@ -1,5 +1,6 @@
 import re
 from django import forms
+from django.conf import settings as django_settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -7,14 +8,25 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from askbot.conf import settings as askbot_settings
 from askbot.utils.slug import slugify
-from askbot.utils.functions import split_list, mark_safe_lazy
+from askbot.utils.functions import encode_jwt, decode_jwt, split_list, mark_safe_lazy
 from askbot import const
 #from longerusername import MAX_USERNAME_LENGTH
 import logging
 import urllib
 
+def get_next_url_from_jwt(next_jwt, default=None):
+    """Returns the validated next_url parameter"""
+    try:
+        jwt_data = decode_jwt(next_jwt)
+    except Exception as error:
+        logging.critical(
+            'Error decoding next_url jwt error="%s" token="%s"',
+            unicode(error).encode('utf-8'),
+            unicode(next_jwt).encode('utf-8')
+        )
+        return default or reverse('index')
 
-def clean_next(next_url, default=None):
+    next_url = jwt_data.get('next_url')
     if next_url is None or not next_url.startswith('/'):
         return default or reverse('index')
     if isinstance(next_url, str):
@@ -30,7 +42,15 @@ def get_error_list(form_instance):
     return errors
 
 def get_next_url(request, default=None):
-    return clean_next(request.REQUEST.get('next'), default)
+    """Returns the next url from the jwt token"""
+    return get_next_url_from_jwt(request.REQUEST.get('next'), default)
+
+def get_next_jwt(request, default=None):
+    """Returns jwt token with the validated next_url parameter
+    coming from the request.
+    The point of this is to authenticate the value using the SECRET_KEY.
+    """
+    return encode_jwt({'next_url': get_next_url(request, default)})
 
 def get_db_object_or_404(params):
     """a utility function that returns an object
@@ -79,7 +99,7 @@ class NextUrlField(forms.CharField):
             required = False
         )
     def clean(self,value):
-        return clean_next(value)
+        return get_next_url_from_jwt(value)
 
 login_form_widget_attrs = { 'class': 'required login' }
 

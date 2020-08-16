@@ -47,7 +47,7 @@
             {% include "question/new_answer_form.html" %}
         {% else %}
             <a class="button submit"
-                href="{{settings.LOGIN_URL}}?next={% url question question.id %}"
+               href="{{settings.LOGIN_URL}}?next={{ encode_jwt({'next_url': url('question', question.id)}) }}"
                 >{{ settings.WORDS_LOGIN_SIGNUP_TO_ANSWER|escape }}</a>
         {% endif %}
     {% else %}

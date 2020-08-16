@@ -14,6 +14,7 @@ from jinja2.utils import open_if_exists
 from askbot.conf import settings as askbot_settings
 from askbot.skins import utils
 from askbot.utils.translation import get_language, HAS_ASKBOT_LOCALE_MIDDLEWARE
+from askbot.utils.functions import encode_jwt
 
 from coffin import template
 template.add_to_builtins('askbot.templatetags.extra_filters_jinja')
@@ -145,7 +146,8 @@ def load_skins(language_code):
                                 skin = skin_name,
                                 extensions=['jinja2.ext.i18n',],
                                 globals={'settings': askbot_settings,
-                                    'hasattr': hasattr}
+                                         'hasattr': hasattr,
+                                         'encode_jwt': encode_jwt}
                             )
         skins[skin_code].set_language(language_code)
         #from askbot.templatetags import extra_filters_jinja as filters
@@ -155,7 +157,8 @@ def load_skins(language_code):
 def get_app_dir_env(language_code):
     env = AppDirectoryEnvironment(
                             extensions=['jinja2.ext.i18n',],
-                            globals={'settings': askbot_settings}
+                            globals={'settings': askbot_settings,
+                                     'encode_jwt': encode_jwt}
                         )
     env.set_language(language_code)
     return env

@@ -27,7 +27,8 @@ from askbot.conf import settings as askbot_settings
 from askbot.forms import FeedbackForm
 from askbot.forms import PageField
 from askbot.utils.url_utils import get_login_url
-from askbot.utils.forms import get_next_url
+from askbot.utils.forms import get_next_url, get_next_jwt
+from askbot.utils.functions import encode_jwt
 from askbot.mail.messages import FeedbackEmail
 from askbot.models import get_users_by_role, BadgeData, Award, User, Tag
 from askbot.models import badges as badge_data
@@ -128,8 +129,8 @@ def feedback(request):
         if request.user.is_anonymous():
             message = _('Please sign in or register to send your feedback')
             request.user.message_set.create(message=message)
-            redirect_url = get_login_url() + '?next=' + request.path
-            return HttpResponseRedirect(redirect_url)
+            next_jwt = encode_jwt({'next_url': request.path})
+            return HttpResponseRedirect(get_login_url() + '?next=' + next_jwt)
     elif askbot_settings.FEEDBACK_MODE == 'disabled':
         raise Http404
 
@@ -159,10 +160,8 @@ def feedback(request):
             request.user.message_set.create(message=message)
             return HttpResponseRedirect(get_next_url(request))
     else:
-        form = FeedbackForm(
-                    user=request.user,
-                    initial={'next':get_next_url(request)}
-                )
+        form = FeedbackForm(user=request.user,
+                            initial={'next': get_next_jwt(request)})
 
     data['form'] = form
     return render(request, 'feedback.html', data)

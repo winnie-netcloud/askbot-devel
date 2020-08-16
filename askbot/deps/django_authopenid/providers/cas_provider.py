@@ -1,6 +1,7 @@
 from askbot.deps.django_authopenid.protocols.base import BaseProtocol
 from askbot.conf import settings as askbot_settings
 from askbot.utils.html import site_url
+from askbot.utils.functions import encode_jwt
 from cas import CASClient
 from django.conf import settings as django_settings
 from django.core.urlresolvers import reverse
@@ -18,11 +19,9 @@ class CASLoginProvider(BaseProtocol):
                                         'ASKBOT_CAS_ONE_CLICK_REGISTRATION_ENABLED',
                                         False
                                              )
-        self.client = CASClient(
-                                version=askbot_settings.CAS_PROTOCOL_VERSION,
+        self.client = CASClient(version=askbot_settings.CAS_PROTOCOL_VERSION,
                                 server_url=askbot_settings.CAS_SERVER_URL,
-                                service_url=self.get_service_url(success_redirect_url)
-                               )
+                                service_url=self.get_service_url(success_redirect_url))
 
     def verify_ticket(self, *args, **kwargs):
         return self.client.verify_ticket(*args, **kwargs)
@@ -34,5 +33,6 @@ class CASLoginProvider(BaseProtocol):
     def get_service_url(cls, success_redirect_url):
         service_url = site_url(reverse('user_complete_cas_signin'))
         if success_redirect_url:
-            service_url += '?' + urllib.urlencode({'next': success_redirect_url})
+            next_param_value = encode_jwt({'next_url': success_redirect_url})
+            service_url += '?' + urllib.urlencode({'next': next_param_value})
         return service_url

@@ -41,6 +41,7 @@ from django.views.decorators import csrf
 
 from askbot.utils.slug import slugify
 from askbot.utils.html import sanitize_html
+from askbot.utils.functions import encode_jwt
 from askbot.utils.transaction import defer_celery_task
 from askbot.mail import send_mail
 from askbot.utils.translation import get_language
@@ -65,8 +66,8 @@ from askbot.utils import url_utils
 from askbot.utils.loading import load_module
 from askbot.utils.akismet_utils import akismet_check_spam
 
-def owner_or_moderator_required(f):
-    @functools.wraps(f)
+def owner_or_moderator_required(func):
+    @functools.wraps(func)
     def wrapped_func(request, profile_owner, context):
         if profile_owner == request.user:
             pass
@@ -79,9 +80,9 @@ def owner_or_moderator_required(f):
                 return HttpResponseRedirect(request.path)
         else:
             next_url = request.path + '?' + urllib.urlencode(request.REQUEST)
-            params = '?next=%s' % urllib.quote(next_url)
+            params = '?next=%s' % encode_jwt({'next_url': next_url})
             return HttpResponseRedirect(url_utils.get_login_url() + params)
-        return f(request, profile_owner, context)
+        return func(request, profile_owner, context)
     return wrapped_func
 
 @decorators.ajax_only
