@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 from askbot.conf import settings as askbot_settings
 from askbot.utils import decorators
+from askbot.utils.functions import encode_jwt
 from askbot import models
 from askbot import forms
 
@@ -103,10 +104,8 @@ def ask_widget(request, widget_id):
                 return redirect('ask_by_widget_complete')
             else:
                 request.session['widget_question'] = data_dict
-                next_url = '%s?next=%s' % (
-                        reverse('widget_signin'),
-                        reverse('ask_by_widget', args=(widget.id,))
-                )
+                next_jwt = encode_jwt({'next_url': reverse('ask_by_widget', args=(widget.id,))})
+                next_url = '%s?next=%s' % (reverse('widget_signin'), next_jwt)
                 return redirect(next_url)
     else:
         if 'widget_question' in request.session and \
@@ -119,8 +118,8 @@ def ask_widget(request, widget_id):
                 return redirect('ask_by_widget_complete')
             else:
                 #FIXME: this redirect is temporal need to create the correct view
-                next_url = '%s?next=%s' % (reverse('widget_signin'),
-                                           reverse('ask_by_widget', args=(widget_id,)))
+                next_jwt = encode_jwt({'next_url': reverse('ask_by_widget', args=(widget_id,))})
+                next_url = '%s?next=%s' % (reverse('widget_signin'), next_jwt)
                 return redirect(next_url)
 
         form = forms.AskWidgetForm(

@@ -47,7 +47,7 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.views.decorators import csrf
 from django.utils.encoding import smart_unicode
-from askbot.utils.functions import generate_random_key
+from askbot.utils.functions import generate_random_key, encode_jwt
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
@@ -89,7 +89,7 @@ from askbot.deps.django_authopenid.models import UserAssociation, UserEmailVerif
 from askbot.deps.django_authopenid import forms
 from askbot.deps.django_authopenid.backends import AuthBackend
 import logging
-from askbot.utils.forms import get_next_url
+from askbot.utils.forms import get_next_url, get_next_jwt
 from askbot.utils.http import get_request_info
 from askbot.signals import user_logged_in, user_registered
 
@@ -481,10 +481,12 @@ def signin(request, template_name='authopenid/signin.html'):
         and request.user.is_authenticated():
         return HttpResponseRedirect(next_url)
 
+    next_jwt = encode_jwt({'next_url': next_url})
     if next_url == reverse('user_signin'):
-        next_url = '%(next)s?next=%(next)s' % {'next': next_url}
+        # the sticky signin page
+        next_url = '%(next)s?next=%(next)s' % {'next': next_jwt}
 
-    login_form = forms.LoginForm(initial={'next': next_url})
+    login_form = forms.LoginForm(initial={'next': next_jwt})
 
     #todo: get next url make it sticky if next is 'user_signin'
     if request.method == 'POST':
@@ -629,11 +631,9 @@ def signin(request, template_name='authopenid/signin.html'):
                     sreg_req = sreg.SRegRequest(required=['nickname', 'email'])
                 else:
                     sreg_req = sreg.SRegRequest(optional=['nickname', 'email'])
-                redirect_to = "%s%s?%s" % (
-                        get_url_host(request),
-                        reverse('user_complete_openid_signin'),
-                        urllib.urlencode({'next':next_url})
-                )
+                redirect_to = "%s%s?next=%s" % (get_url_host(request),
+                                                reverse('user_complete_openid_signin'),
+                                                encode_jwt({'next_url': next_url}))
                 return ask_openid(
                             request,
                             login_form.cleaned_data['openid_url'],
@@ -759,7 +759,8 @@ def show_signin_view(
         next_url = get_next_url(request)
 
     if login_form is None:
-        login_form = forms.LoginForm(initial = {'next': next_url})
+        next_jwt = encode_jwt({'next_url': next_url})
+        login_form = forms.LoginForm(initial = {'next': next_jwt})
     if account_recovery_form is None:
         account_recovery_form = forms.AccountRecoveryForm()#initial = initial_data)
 
@@ -980,7 +981,6 @@ def signin_success(request, identity_url, openid_response):
                 )
 
     next_url = get_next_url(request)
-
     request.session['email'] = openid_data.sreg.get('email', '')
     request.session['username'] = openid_data.sreg.get('nickname', '')
 
@@ -1152,7 +1152,7 @@ def register(request, login_provider_name=None,
     register_form = form_class(
                 request=request,
                 initial={
-                    'next': next_url,
+                    'next': encode_jwt({'next_url': next_url}),
                     'username': request.session.get('username', ''),
                     'email': request.session.get('email', ''),
                 }
@@ -1222,7 +1222,8 @@ def register(request, login_provider_name=None,
                 email_verifier.save()
                 send_email_key(email, email_verifier.key,
                                handler_url_name='verify_email_and_register')
-                redirect_url = reverse('verify_email_and_register') + '?next=' + next_url
+                next_jwt = encode_jwt({'next_url': next_url})
+                redirect_url = reverse('verify_email_and_register') + '?next=' + next_jwt
                 return HttpResponseRedirect(redirect_url)
 
     providers = {
@@ -1306,7 +1307,7 @@ def verify_email_and_register(request):
             cleanup_post_register_session(request)
 
             return HttpResponseRedirect(get_next_url(request))
-        except Exception, e:
+        except Exception: #pylint: disable=broad-except
             message = _(
                 'Sorry, registration failed. '
                 'The token can be already used or has expired. Please try again'
@@ -1325,7 +1326,7 @@ def signup_with_password(request):
     """
 
     logging.debug(get_request_info(request))
-    login_form = forms.LoginForm(initial = {'next': get_next_url(request)})
+    login_form = forms.LoginForm(initial = {'next': get_next_jwt(request)})
     #this is safe because second decorator cleans this field
 
     RegisterForm = forms.get_password_registration_form_class()
@@ -1360,11 +1361,11 @@ def signup_with_password(request):
                     handler_url_name='verify_email_and_register'
                 )
                 redirect_url = reverse('verify_email_and_register') + \
-                                '?next=' + get_next_url(request)
+                                '?next=' + get_next_jwt(request)
                 return HttpResponseRedirect(redirect_url)
     else:
         #todo: here we have duplication of get_password_login_provider...
-        form = RegisterForm(initial={'next': get_next_url(request)}, request=request)
+        form = RegisterForm(initial={'next': get_next_jwt(request)}, request=request)
 
     major_login_providers = util.get_enabled_major_login_providers()
     minor_login_providers = util.get_enabled_minor_login_providers()

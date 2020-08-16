@@ -17,6 +17,7 @@ from askbot import exceptions as askbot_exceptions
 from askbot.conf import settings as askbot_settings
 from askbot.utils import url_utils
 from askbot.utils.html import site_url
+from askbot.utils.functions import encode_jwt
 
 
 def auto_now_timestamp(func):
@@ -129,7 +130,7 @@ def check_authorization_to_post(func_or_message):
                 #todo: expand for handling ajax responses
                 if askbot_settings.ALLOW_POSTING_BEFORE_LOGGING_IN == False:
                     request.user.message_set.create(message=unicode(message))
-                    params = 'next=%s' % request.path
+                    params = 'next=%s' % encode_jwt({'next_url': request.path})
                     return HttpResponseRedirect(url_utils.get_login_url() + '?' + params)
             return view_func(request, *args, **kwargs)
         return wrapper
