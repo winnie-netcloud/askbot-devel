@@ -114,8 +114,8 @@
                 //how to do this in js???
                 return month_date;
             } else {
-                var wholeYears = Math.floor(years)
-                return interpolate(ngettxt("%s year ago", "%s years ago"), wholeYears), [wholeYears]);
+                var wholeYears = Math.floor(years);
+                return interpolate(ngettext("%s year ago", "%s years ago", wholeYears), [wholeYears]);
             }
         } else if (days == 2) {
             return gettext("2 days ago");
