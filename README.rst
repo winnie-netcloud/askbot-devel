@@ -1,3 +1,8 @@
+===========================================================
+ATTENTION: master branch is experimental, please read below
+===========================================================
+
+
 ====================================
 Askbot - a Django Q&A forum platform
 ====================================
@@ -20,6 +25,7 @@ Branch `master` - EXPERIMENTAL - supports Django 2.2/Python 3, soon to be releas
 
 NOTE: the `master` branch lacks the file settings.py generator
 use askbot/setup_templates/settings.py.jinja2 as a basis for your settings.py file.
+this is very soon to be resolved.
 
 How to contribute
 =================
