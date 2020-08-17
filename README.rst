@@ -14,9 +14,12 @@ Branch `0.8.x` - transitional version for the upgrade of the database to Django 
 
 Branch `0.9.x` - supports Django 1.7
 
-Branch `master` - supports Django 1.8
+Branch `0.10.x` - supports Django 1.8
 
-Branch `0.11.x` - supports Django 2.2
+Branch `master` - EXPERIMENTAL - supports Django 2.2/Python 3, soon to be released
+
+NOTE: the `master` branch lacks the file settings.py generator
+use askbot/setup_templates/settings.py.jinja2 as a basis for your settings.py file.
 
 How to contribute
 =================
