@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.conf import settings
 from django.urls import resolve
 from askbot.conf import settings as askbot_settings
+from askbot.utils.functions import encode_jwt
 from askbot.utils.views import is_askbot_view
 import urllib.request, urllib.parse, urllib.error
 
@@ -67,7 +68,7 @@ class ForumModeMiddleware(object):
                 )
                 redirect_url = '%s?next=%s' % (
                     settings.LOGIN_URL,
-                    urllib.parse.quote_plus(request.get_full_path())
+                    encode_jwt({'next_url': request.get_full_path()})
                 )
                 return HttpResponseRedirect(redirect_url)
         return None

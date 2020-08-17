@@ -9,8 +9,11 @@ exactly match name of the model used in the project
 """
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
+from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext as _
 from askbot import models
+from askbot.const import TAG_EMAIL_FILTER_FULL_STRATEGY_CHOICES
+from askbot.models.user_profile import USER_PROFILE_PROPERTIES
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -267,6 +270,10 @@ class GroupAdmin(admin.ModelAdmin):
     search_fields = ('name', 'logo_url')
 
 
+class EmailFeedSettingAdmin(admin.ModelAdmin):
+    search_fields = ('subscriber__username', )
+
+
 admin.site.register(models.BadgeData, BadgeDataAdmin)
 admin.site.register(models.Group, GroupAdmin)
 admin.site.register(models.Post, PostAdmin)
@@ -282,3 +289,20 @@ admin.site.register(models.Thread, ThreadAdmin)
 admin.site.register(models.question.ThreadToGroup, ThreadToGroupAdmin)
 admin.site.register(models.QuestionView, QuestionViewAdmin)
 admin.site.register(models.ReplyAddress, ReplyAddressAdmin)
+admin.site.register(models.EmailFeedSetting, EmailFeedSettingAdmin)
+
+
+class MarkedTagInlineAdmin(admin.TabularInline):
+    model = models.MarkedTag
+
+
+UserAdmin.readonly_fields = USER_PROFILE_PROPERTIES
+UserAdmin.fieldsets = UserAdmin.fieldsets + (('User Profile', {'fields': tuple(USER_PROFILE_PROPERTIES)}), )
+UserAdmin.inlines = [MarkedTagInlineAdmin]
+
+
+def user_admin_email_tag_filter_strategy(self, instance):
+    return dict(TAG_EMAIL_FILTER_FULL_STRATEGY_CHOICES)[instance.email_tag_filter_strategy]
+
+
+UserAdmin.email_tag_filter_strategy = user_admin_email_tag_filter_strategy

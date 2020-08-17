@@ -18,14 +18,26 @@
 </div>
 <form style="margin-top: 1em" method="post">{{ csrf_input }}
     <input type="hidden" name="sort" value="manage-account"/>
-    <input type="submit"
-	name="terminate_account"
-	{% if can_terminate_account %}
-            value="{% trans %}Remove account{% endtrans %}"
-	{% else %}
-            value="{% trans %}Ask to remove account{% endtrans %}"
-	{% endif %}
-    />
+    {% if request.user.can_terminate_account(view_user) or request.user.pk == view_user.pk %}
+        <input
+            id="js-remove-account"
+            type="submit"
+            name="terminate_account"
+            {% if request.user.can_terminate_account(view_user) %}
+                value="{% trans %}Remove account{% endtrans %}"
+            {% elif request.user.pk == view_user.pk %}
+                value="{% trans %}Ask to remove account{% endtrans %}"
+            {% endif %}
+        />
+    {% endif %}
+    {% if request.user.can_anonymize_account(view_user) %}
+        <input
+            id="js-anonymize-account"
+            type="submit"
+            name="anonymize_account"
+            value="{% trans %}Anonymize data and disable account{% endtrans %}"
+        />
+    {% endif %}
     {% if exporting %}
     	<span id="exporting">{% trans %}Exporting{% endtrans %}&hellip;</span>
     {% else %}
@@ -34,4 +46,10 @@
             value="{% trans %}Export data{% endtrans %}" />
     {% endif %}
 </form>
+{% endblock %}
+{% block userjs %}
+    <script type="text/javascript">
+        askbot['data']['anonUserName'] = '{{ anon_user_name|escapejs }}';
+    </script>
+    <script type="text/javascript" src="{{ '/js/user/manage_account.js'|media }}"></script>
 {% endblock %}

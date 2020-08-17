@@ -49,7 +49,8 @@
                     href="{{settings.FEEDBACK_SITE_URL}}"
                     target="_blank"
                 {% else %}
-                    href="{{ url('feedback') }}?next={{request.path|escape}}"
+                    {% set next_url=request.path|escape %}
+                    href="{{ url('feedback') }}?next={{ encode_jwt({'next_url': next_url}) }}"
                 {% endif %}
             >
                 {% trans %}give feedback{% endtrans %}

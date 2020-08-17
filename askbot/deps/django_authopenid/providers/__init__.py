@@ -12,5 +12,6 @@ base classes. Currently the only one available is
 """
 from askbot.utils.loading import module_exists
 from . import mediawiki
+from . import discourse
 if module_exists('cas'):
     from . import cas_provider

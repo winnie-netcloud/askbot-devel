@@ -62,9 +62,7 @@ def add_profile_property(cls, name):
     prop = user_profile_property(name)
     cls.add_to_class(name, prop)
 
-
-def add_profile_properties(cls):
-    names = (
+USER_PROFILE_PROPERTIES = (
         'avatar_type',
         'avatar_urls',
         'bronze',
@@ -99,7 +97,10 @@ def add_profile_properties(cls):
         'twitter_handle',
         'website',
     )
-    for name in names:
+
+
+def add_profile_properties(cls):
+    for name in USER_PROFILE_PROPERTIES:
         add_profile_property(cls, name)
 
 
@@ -183,6 +184,33 @@ class UserProfile(models.Model):
     class Meta:
         app_label = 'askbot'
 
+    def anonymize(self):
+        """Deletes personal data"""
+        self.avatar_urls = dict()
+        self.status = 't'
+        self.email_isvalid = False
+        self.email_key = None
+        self.gravatar = ''
+        self.avatar_type = 'n'
+        self.real_name = ''
+        self.website = ''
+        #location field is actually city
+        self.location = ''
+        self.country = None
+        self.show_country = False
+        self.date_of_birth = None
+        #interesting tags and ignored tags are to store wildcard tag selections only
+        self.interesting_tags = ''
+        self.ignored_tags = ''
+        self.subscribed_tags = ''
+        self.email_signature = ''
+        self.show_marked_tags = False
+        self.new_response_count = 0
+        self.seen_response_count = 0
+        self.twitter_access_token = ''
+        self.twitter_handle = ''
+        self.social_sharing_mode = const.SHARE_NOTHING
+
     def get_cache_key(self):
         try:
             # Django <=1.10
@@ -213,6 +241,12 @@ class LocalizedUserProfile(models.Model):
 
     class Meta:
         app_label = 'askbot'
+
+    def anonymize(self):
+        """Removes personal data"""
+        self.about = ''
+        self.reputation = 0
+        self.is_claimed = False
 
     def get_cache_key(self):
         return get_localized_profile_cache_key(self.auth_user, self.language_code)

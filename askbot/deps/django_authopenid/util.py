@@ -2,8 +2,6 @@
 import cgi
 import functools
 import http.client
-import jwt
-import random
 import re
 import urllib.request, urllib.parse, urllib.error
 import urllib.parse
@@ -44,7 +42,11 @@ from .models import Association, Nonce
 
 __all__ = ['OpenID', 'DjangoOpenIDStore', 'from_openid_response']
 
-ALLOWED_LOGIN_TYPES = ('password', 'oauth', 'oauth2', 'openid-direct', 'openid-username', 'wordpress')
+ALLOWED_LOGIN_TYPES = (
+    'password', 'oauth', 'oauth2',
+    'openid-direct', 'openid-username', 'wordpress',
+    'discourse-site'
+)
 
 def email_is_blacklisted(email):
     patterns = askbot_settings.BLACKLISTED_EMAIL_PATTERNS
@@ -546,6 +548,14 @@ def get_enabled_major_login_providers():
             'icon_media_path': 'images/jquery-openid/fedora.gif'
         }
 
+    if askbot_settings.SIGNIN_DISCOURSE_ENABLED:
+        data['discourse'] = {
+            'name': 'discourse',
+            'display_name': 'Discourse',
+            'type': 'discourse',
+            'icon_media_path': 'images/jquery-openid/discourse-button.png'
+        }
+
     if askbot_settings.TWITTER_KEY and askbot_settings.TWITTER_SECRET:
         data['twitter'] = {
             'name': 'twitter',
@@ -926,7 +936,7 @@ class OAuthConnection(object):
         if provider_name == 'mediawiki':
             return providers.mediawiki.Provider()
         else:
-            return super(OAuthConnection, cls).__new__(cls, provider_name)
+            return super(OAuthConnection, cls).__new__(cls)
 
     def __init__(self, provider_name):
         """initializes oauth connection

@@ -13,6 +13,7 @@ import askbot
 from askbot.conf import settings as askbot_settings
 from askbot.skins import utils
 from askbot.skins.askbot_environments import SkinEnvironment
+from askbot.utils.functions import encode_jwt
 from askbot.utils.translation import HAS_ASKBOT_LOCALE_MIDDLEWARE
 from askbot.utils.translation import get_language
 
@@ -63,9 +64,9 @@ def factory(**options):
     # may be used in Askbot. Should think about deprecating its use.
     options["extensions"] = DEFAULT_EXTENSIONS \
                           + list(django_settings.JINJA2_EXTENSIONS)
-    askbot_globals = { 'settings': askbot_settings,
-                       'hasattr' : hasattr
-                     }
+    askbot_globals = {'settings': askbot_settings,
+                      'hasattr' : hasattr,
+                      'encode_jwt': encode_jwt}
 
     mother_of_all_loaders = options.pop('loader')
 

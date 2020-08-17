@@ -94,7 +94,7 @@ class Command(BaseCommand):
     def handle(self, **options):
         if askbot_settings.ENABLE_EMAIL_ALERTS:
             activate_language(django_settings.LANGUAGE_CODE)
-            for user in User.objects.exclude(askbot_profile__status='b').iterator():
+            for user in User.objects.exclude(askbot_profile__status__in=('b', 't')).iterator():
                 try:
                     if email_is_blacklisted(user.email) \
                         and askbot_settings.BLACKLISTED_EMAIL_PATTERNS_MODE == 'strict':

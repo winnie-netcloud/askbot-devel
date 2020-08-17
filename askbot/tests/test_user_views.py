@@ -1,4 +1,5 @@
 from askbot.tests.utils import AskbotTestCase
+from askbot.utils.functions import decode_jwt
 from askbot.views.users import owner_or_moderator_required
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
@@ -28,8 +29,8 @@ class UserViewsTests(AskbotTestCase):
 
         self.assertEqual(parsed_url.path, reverse('user_signin'))
 
-        next = dict(urllib.parse.parse_qsl(parsed_url.query))['next']
-        next_url = urllib.parse.unquote(next)
+        next_jwt = dict(urllib.parse.parse_qsl(parsed_url.query))['next']
+        next_url = decode_jwt(next_jwt).get('next_url')
         parsed_url = urllib.parse.urlparse(next_url)
 
         self.assertEqual(parsed_url.path, request.path)

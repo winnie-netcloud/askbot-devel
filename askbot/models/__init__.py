@@ -24,11 +24,14 @@ from django.utils.translation import override, ungettext
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from django.utils.text import format_lazy
+from django.apps import apps
+from django.db import models
 from django.db.models import Count, Q
 from django.conf import settings as django_settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core import exceptions as django_exceptions
+
 from askbot import exceptions as askbot_exceptions
 from askbot import const
 from askbot.const import message_keys
@@ -78,12 +81,14 @@ from askbot import mail
 from askbot import signals
 from jsonfield import JSONField
 
+
 register_user_signal = partial(signals.register_generic_signal, sender=User)
 
 
 def get_model(model_name):
     """a shortcut for getting model for an askbot app"""
-    return models.get_model('askbot', model_name)
+    return apps.get_model('askbot', model_name)
+
 
 def get_admin():
     """returns admin with the lowest user ID
@@ -317,10 +322,20 @@ def user_calculate_avatar_url(self, size=48):
     return self.get_gravatar_url(size)
 
 
+def user_clear_cached_data(self):
+    """Calls .clear_cached_data() on threads where
+    user contributed any content"""
+    posts = self.posts.all().only('thread_id')
+    for post in posts:
+        if hasattr(post, 'thread_id'):
+            post.thread.clear_cached_data()
+
+
 def user_clear_avatar_urls(self):
     """Assigns avatar urls for each required size.
     """
     self.avatar_urls = {}
+
 
 def user_init_avatar_urls(self):
     """Assigns missing avatar urls,
@@ -497,12 +512,23 @@ def user_has_badge(self, badge):
     return Award.objects.filter(user=self, badge=badge).count() > 0
 
 
+def user_can_anonymize_account(self, user):
+    """`True`, if `self` can anonymize and disable account of `user`"""
+    perm = askbot_settings.WHO_CAN_ANONYMIZE_ACCOUNTS
+    if perm == 'admins':
+        return self.is_administrator()
+    elif self.is_administrator_or_moderator():
+        return perm in ('mods', 'users')
+    elif perm == 'users':
+        return self.pk == user.pk # owner can
+    return False
+
+
 def user_can_create_tags(self):
     """true if user can create tags"""
     if askbot_settings.ENABLE_TAG_MODERATION:
         return self.is_administrator_or_moderator()
-    else:
-        return True
+    return True
 
 
 def user_can_terminate_account(self, user):
@@ -519,8 +545,9 @@ def user_can_terminate_account(self, user):
 def user_can_manage_account(self, user):
     """True, if `self` can see the "manage account" page of `user`"""
     return self.pk == user.pk or \
-           self.has_role('terminate_accounts') or \
-           self.has_role('download_user_data')
+           self.can_terminate_account(user) or \
+           self.has_role('download_user_data') or \
+           self.can_anonymize_account(user)
 
 
 def user_has_role(self, role_name):
@@ -588,7 +615,7 @@ def user_get_social_sharing_status(self, channel):
     else:
         return 'disabled'
 
-def user_get_or_create_fake_user(self, username, email):
+def user_get_or_create_fake_user(self, username, email, status='w'):
     """
     Get's or creates a user, most likely with the purpose
     of posting under that account.
@@ -601,8 +628,10 @@ def user_get_or_create_fake_user(self, username, email):
         user = User()
         user.username = username
         user.email = email
-        user.is_fake = True
         user.set_unusable_password()
+        user.save()
+        user.is_fake = True
+        user.status = status
         user.save()
     return user
 
@@ -615,8 +644,9 @@ def get_or_create_anonymous_user():
         user = User()
         user.username = username
         user.email = askbot_settings.ANONYMOUS_USER_EMAIL
-        user.is_fake = True
         user.set_unusable_password()
+        user.save()
+        user.is_fake = True
         user.save()
     return user
 
@@ -1410,6 +1440,24 @@ def user_assert_can_revoke_old_vote(self, vote):
         raise django_exceptions.PermissionDenied(
             _('sorry, but older votes cannot be revoked')
         )
+
+
+def user_anonymize(self):
+    """Removes personal data and disables account"""
+    self.email = ''
+    self.password = ''
+    self.username = self.get_anonymized_name()
+    self.save()
+    self.askbot_profile.anonymize()
+    self.askbot_profile.save()
+    self.posts.update(is_anonymous=True)
+    revs = PostRevision.objects.filter(author=self)
+    revs.update(is_anonymous=True)
+    self.clear_cached_data()
+    self.notification_subscriptions.update(frequency='n')
+    for prof in self.localized_askbot_profiles.all():
+        prof.anonymize()
+        prof.save()
 
 
 def user_get_localized_profile(self):
@@ -2503,6 +2551,9 @@ def user_is_watched(self):
 def user_is_approved(self):
     return (self.status == 'a')
 
+def user_is_terminated(self):
+    return (self.status == 't')
+
 def user_is_owner_of(self, obj):
     """True if user owns object
     False otherwise
@@ -2511,6 +2562,7 @@ def user_is_owner_of(self, obj):
         return self.pk == obj.author_id
     else:
         raise NotImplementedError()
+
 
 def get_name_of_anonymous_user():
     """Returns name of the anonymous user
@@ -2524,12 +2576,29 @@ def get_name_of_anonymous_user():
     else:
         return _('Anonymous')
 
+
 def user_get_anonymous_name(self):
     """Returns name of anonymous user
     - convinience method for use in the template
     macros that accept user as parameter
     """
     return get_name_of_anonymous_user()
+
+
+def user_get_anonymized_name(self):
+    """Returns name that can be used for anonymized
+    account"""
+    anonymized_name = 'anonymous{}'.format(self.pk)
+    attempt = 0
+
+    if self.username == anonymized_name:
+        return anonymized_name
+
+    while User.objects.filter(username=anonymized_name).exists():
+        seed_name = 'anonymous{}{}'.format(self.pk, attempt)
+        attempt += 1
+    return anonymized_name
+
 
 def user_assign_role_set(self, status):
     """Assigns roles specific to user `status`.
@@ -2658,6 +2727,8 @@ def user_get_status_display(self):
         return _('Blocked User')
     elif self.is_watched():
         return _('New User')
+    elif self.is_terminated():
+        return _('Account terminated')
     else:
         raise ValueError('Unknown user status %s' % self.status)
 
@@ -3502,6 +3573,7 @@ User.add_to_class('can_terminate_account', user_can_terminate_account)
 User.add_to_class('can_manage_account', user_can_manage_account)
 User.add_to_class('calculate_avatar_url', user_calculate_avatar_url)
 User.add_to_class('clear_avatar_urls', user_clear_avatar_urls)
+User.add_to_class('clear_cached_data', user_clear_cached_data)
 User.add_to_class('init_avatar_urls', user_init_avatar_urls)
 User.add_to_class('get_default_avatar_url', user_get_default_avatar_url)
 User.add_to_class('get_gravatar_url', user_get_gravatar_url)
@@ -3517,6 +3589,7 @@ User.add_to_class('get_notifications', user_get_notifications)
 User.add_to_class('strip_email_signature', user_strip_email_signature)
 User.add_to_class('get_groups_membership_info', user_get_groups_membership_info)
 User.add_to_class('get_anonymous_name', user_get_anonymous_name)
+User.add_to_class('get_anonymized_name', user_get_anonymized_name)
 User.add_to_class('get_social_sharing_mode', user_get_social_sharing_mode)
 User.add_to_class('get_social_sharing_status', user_get_social_sharing_status)
 User.add_to_class('get_localized_profile', user_get_localized_profile)
@@ -3568,6 +3641,7 @@ User.add_to_class('is_following_question', user_is_following_question)
 User.add_to_class('mark_tags', user_mark_tags)
 User.add_to_class('merge_duplicate_questions', user_merge_duplicate_questions)
 User.add_to_class('update_response_counts', user_update_response_counts)
+User.add_to_class('can_anonymize_account', user_can_anonymize_account)
 User.add_to_class('can_create_tags', user_can_create_tags)
 User.add_to_class('can_have_strong_url', user_can_have_strong_url)
 User.add_to_class('can_post_by_email', user_can_post_by_email)
@@ -3589,6 +3663,7 @@ User.add_to_class('is_approved', user_is_approved)
 User.add_to_class('is_watched', user_is_watched)
 User.add_to_class('is_suspended', user_is_suspended)
 User.add_to_class('is_blocked', user_is_blocked)
+User.add_to_class('is_terminated', user_is_terminated)
 User.add_to_class('is_owner_of', user_is_owner_of)
 User.add_to_class('has_interesting_wildcard_tags', user_has_interesting_wildcard_tags)
 User.add_to_class('has_ignored_wildcard_tags', user_has_ignored_wildcard_tags)
@@ -3625,6 +3700,7 @@ User.add_to_class(
     user_update_wildcard_tag_selections
 )
 User.add_to_class('approve_post_revision', user_approve_post_revision)
+User.add_to_class('anonymize', user_anonymize)
 User.add_to_class('needs_moderation', user_needs_moderation)
 User.add_to_class('notify_users', user_notify_users)
 User.add_to_class('is_read_only', user_is_read_only)

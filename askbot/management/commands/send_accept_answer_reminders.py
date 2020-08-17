@@ -45,7 +45,7 @@ class Command(BaseCommand):
         #for all users, excluding blocked
         #for each user, select a tag filtered subset
         #format the email reminder and send it
-        for user in models.User.objects.exclude(askbot_profile__status = 'b'):
+        for user in models.User.objects.exclude(askbot_profile__status__in = ('t', 'c')):
             user_questions = questions.filter(author=user)
 
             final_question_list = user_questions.get_questions_needing_reminder(

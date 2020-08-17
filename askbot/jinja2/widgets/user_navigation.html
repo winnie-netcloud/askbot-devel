@@ -8,7 +8,8 @@
     {%- endif -%}
     </span>
     {% if settings.USE_ASKBOT_LOGIN_SYSTEM %}
-         <a href="{{ settings.LOGOUT_URL }}?next={{ settings.LOGOUT_REDIRECT_URL }}">{% trans %}sign out{% endtrans %}</a>
+         {% set next_jwt=encode_jwt({'next_url': settings.LOGOUT_REDIRECT_URL}) %}
+         <a href="{{ settings.LOGOUT_URL }}?next={{ next_jwt }}">{% trans %}sign out{% endtrans %}</a>
     {% endif %}
 {% elif settings.USE_ASKBOT_LOGIN_SYSTEM and not on_login_page %}
     {% include "widgets/login_link.html" %}

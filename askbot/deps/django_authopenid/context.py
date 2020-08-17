@@ -1,5 +1,6 @@
 from .util import get_the_only_login_provider
 from askbot.utils import forms
+from askbot.utils.functions import encode_jwt
 from django.conf import settings as django_settings
 from django.urls import reverse
 from .forms import LoginForm
@@ -22,7 +23,8 @@ def login_context(request):
     """context necessary for the login functionality
     """
     next_url = get_after_login_url(request)
-    login_form = LoginForm(initial={'next': next_url})
+    next_jwt = encode_jwt({'next_url': next_url})
+    login_form = LoginForm(initial={'next': next_jwt})
     return {
         'on_login_page': (request.path == reverse('user_signin')),
         'unique_login_provider': get_the_only_login_provider(),

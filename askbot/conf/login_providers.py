@@ -143,6 +143,32 @@ if module_exists('cas'):
 """
 
 settings.register(
+    livesettings.BooleanValue(
+        LOGIN_PROVIDERS,
+        'SIGNIN_DISCOURSE_ENABLED',
+        default=False,
+        description=_('Enable Discourse login')
+    )
+)
+
+settings.register(
+    livesettings.StringValue(
+        LOGIN_PROVIDERS,
+        'DISCOURSE_SITE_URL',
+        description=_('Base url of your Discourse site')
+    )
+)
+
+settings.register(
+    livesettings.StringValue(
+        LOGIN_PROVIDERS,
+        'DISCOURSE_SSO_SECRET',
+        description=_('Secret key of the Discourse site')
+    )
+)
+
+
+settings.register(
     livesettings.StringValue(
         LOGIN_PROVIDERS,
         'SIGNIN_CUSTOM_OPENID_NAME',

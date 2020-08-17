@@ -1,4 +1,4 @@
-{% extends "two_column_body.html" %}
+{% extends "one_column_body.html" %}
 {% import "macros.html" as macros %}
 {%from "macros.html" import gravatar %}
 <!-- template badge.html -->
@@ -10,13 +10,17 @@
     </p>
     <div>
         {% if badge.awarded_count %}
-        <p style="float:left"><span class="count">{{ badge_recipients|length|intcomma }}</span>
-        <strong>{% trans num_awardees=badge_recipients|length %}user received this badge:{% pluralize %}users received this badge:{% endtrans %}</strong></p>
+        <p style="float:left"><span class="count">{{ badge.awarded_count|intcomma }}</span>
+        <strong>{% trans num_awardees=badge.awarded_count %}user received this badge:{% pluralize %}users received this badge:{% endtrans %}</strong></p>
         {% endif %}
     </div>
     <div class="clean"></div>
     <div id="award-list">
         {{ macros.user_list(badge_recipients) }}
+    </div>
+    <div class="clean"></div>
+    <div class="pager">
+        {{ macros.paginator(paginator_context) }}
     </div>
 {% endblock %}
 <!-- end template badge.html -->

@@ -14,7 +14,7 @@ default_app_config = 'askbot.apps.AskbotConfig'
 #keys are module names used by python imports,
 #values - the package qualifier to use for pip
 REQUIREMENTS = {
-    'appconf': 'django-appconf',
+    'appconf': 'django-appconf==1.0.3',
     'akismet': 'akismet==1.0.1',
     'avatar': 'django-avatar>=4.0',
     'bs4': 'beautifulsoup4<=4.7.1',

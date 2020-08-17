@@ -7,14 +7,14 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{ "/style/openid.css"|media }}"/>
 {% endblock %}
 {% block content %}
-{% if settings.AUTHENTICATION_PAGE_MESSAGE %}
-    <div class="instructions-message">
-        {{ settings.AUTHENTICATION_PAGE_MESSAGE|convert_markdown }}
-    </div>
-{% endif %}
-{% if have_buttons or view_subtype == 'email_sent' %}
-    <h1 class="section-title">{{ page_title }}</h1>
-{% endif %}
+    {% if settings.AUTHENTICATION_PAGE_MESSAGE %}
+        <div class="instructions-message">
+            {{ settings.AUTHENTICATION_PAGE_MESSAGE|convert_markdown }}
+        </div>
+    {% endif %}
+    {% if have_buttons %}
+        <h1 class="section-title">{{ page_title }}</h1>
+    {% endif %}
     {% if not (view_subtype == 'default' and have_buttons) %}
     <p class="js-login-intro">
         {% if view_subtype == 'add_openid' and have_buttons %}
@@ -29,15 +29,12 @@
             {% else %}
                 {% trans %}You don't have a method to log in right now, please add one or more by clicking any of the icons below.{% endtrans %}
             {% endif %}
-        {% elif view_subtype == 'email_sent' %}
-            {% trans %}Please check your email and visit the enclosed link to re-connect to your account{% endtrans %}
         {% endif %}
     </p>
     {% endif %}
     {% if openid_error_message %}
         <p class="warning">{{ openid_error_message }}</p>
     {% endif %}
-    {% if view_subtype != 'email_sent' %}
     <form id="signin-form" method="post" action="{{ settings.LOGIN_URL }}">{{ csrf_input }}
         {# in this branch - the real signin view we display the login icons
             here we hide the local login button only if admin
@@ -175,18 +172,15 @@
         </table>
     </div>
     {% endif %}
-    {% endif %}
-    {% if view_subtype != 'email_sent' %}
-        {% if user.is_anonymous and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
+    {% if user.is_anonymous() and settings.ALLOW_ACCOUNT_RECOVERY_BY_EMAIL %}
         <form id="account-recovery-form" action="{{ url('user_account_recover') }}" method="post">{{ csrf_input }}
             <h2 id='account-recovery-heading'>{% trans %}Having trouble signing in?{% endtrans %}</h2>
             {% if account_recovery_form.email.errors %}
-            <p class="error">{{account_recovery_form.email.errors[0]}}</p>
+                <p class="error">{{account_recovery_form.email.errors[0]}}</p>
             {% endif %}
             <input id="id_email" name="email" type="text" placeholder="{% trans %}Enter your email{% endtrans %}">
             <input type="submit" class="button" value="{% trans %}Recover account{% endtrans %}"/>
         </form>
-        {% endif %}
     {% endif %}
 {% endblock %}
 {% block endjs %}

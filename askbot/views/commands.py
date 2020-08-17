@@ -643,7 +643,7 @@ def set_question_title(request):
 
     user = request.user
     user.edit_question(question, title=title)
-    return {'title': title}
+    return {'title': question.thread.get_title()}
 
 
 @decorators.ajax_only
@@ -1464,6 +1464,7 @@ def translate_url(request):
         translation.activate(lang)
 
         if match.url_name == 'questions' and None in list(match.kwargs.values()):
+            #???
             url = models.get_feed_url(match.kwargs['feed'])
         else:
             try:

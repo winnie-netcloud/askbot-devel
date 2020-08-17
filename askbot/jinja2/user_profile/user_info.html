@@ -57,7 +57,7 @@
                         {% trans %}update profile{% endtrans %}
                     </a>
                     {% if settings.USE_ASKBOT_LOGIN_SYSTEM and request.user.pk == view_user.pk and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
-                        | <a href="{{ settings.LOGIN_URL }}?next={{ settings.LOGIN_URL }}">
+                    | <a href="{{ settings.LOGIN_URL }}?next={{ encode_jwt({'next_url': settings.LOGIN_URL}) }}">
                             {% trans %}manage login methods{% endtrans %}
                         </a>
                     {% endif %}

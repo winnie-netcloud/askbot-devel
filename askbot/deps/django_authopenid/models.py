@@ -86,7 +86,7 @@ class UserPasswordQueue(models.Model):
     """
     model for new password queue.
     """
-    user = models.ForeignKey(User, unique=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     new_password = models.CharField(max_length=30)
     confirm_key = models.CharField(max_length=40)
 
@@ -115,4 +115,4 @@ class UserEmailVerifier(models.Model):
         return now > self.expires_on
 
     def __str__(self):
-        return self.key
+        return str(self.key)

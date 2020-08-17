@@ -1,9 +1,8 @@
+"""/api/v1 views"""
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
 import json
-from django.db.models import Q
-from django.urls import reverse
 from askbot import models
 from askbot.models import User, UserProfile
 from askbot.conf import settings as askbot_settings
@@ -11,27 +10,42 @@ from askbot.search.state_manager import SearchState
 from askbot.utils.html import site_url
 from askbot.utils.functions import get_epoch_str
 
-def get_user_data(user):
+def get_posts_filter(posts_filter=None):
+    """Returns filter for the posts.
+    `posts_filter` can be preset, remaining default values
+    will be initalized by the current function.
+    """
+    posts_filter = posts_filter or {}
+    posts_filter.setdefault('deleted', False)
+    if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
+        posts_filter.setdefault('approved', True)
+    return posts_filter
+
+def get_user_id_info(user_obj):
+    """Returns dict with 'id' and 'username' keys and values"""
+    return {'id': user_obj.id, 'username': user_obj.username}
+
+def get_user_data(user_obj):
     """get common data about the user"""
-    avatar_url = user.get_avatar_url()
-    if not ('gravatar.com' in avatar_url):
+    avatar_url = user_obj.get_avatar_url()
+    if 'gravatar.com' not in avatar_url:
         avatar_url = site_url(avatar_url)
 
     return {
-        'id': user.id,
+        'id': user_obj.id,
         'avatar': avatar_url,
-        'username': user.username,
-        'joined_at': get_epoch_str(user.date_joined),
-        'last_seen_at': get_epoch_str(user.last_seen),
-        'reputation': user.reputation,
-        'gold': user.gold,
-        'silver': user.silver,
-        'bronze': user.bronze,
+        'username': user_obj.username,
+        'joined_at': get_epoch_str(user_obj.date_joined),
+        'last_seen_at': get_epoch_str(user_obj.last_seen),
+        'reputation': user_obj.reputation,
+        'gold': user_obj.gold,
+        'silver': user_obj.silver,
+        'bronze': user_obj.bronze,
     }
 
 def get_question_data(thread):
     """returns data dictionary for a given thread"""
-    question_post = thread._question_post()
+    question_post = thread._question_post() #pylint: disable=protected-access
     datum = {
         'added_at': get_epoch_str(thread.added_at),
         'id': question_post.id,
@@ -46,22 +60,47 @@ def get_question_data(thread):
         'tags': thread.tagnames.strip().split(),
         'url': site_url(thread.get_absolute_url()),
     }
-    datum['author'] = {
-        'id': thread._question_post().author.id,
-        'username': thread._question_post().author.username
-    }
-    datum['last_activity_by'] = {
-        'id': thread.last_activity_by.id,
-        'username': thread.last_activity_by.username
-    }
+    if question_post.last_edited_at:
+        datum['last_edited_at'] = get_epoch_str(question_post.last_edited_at)
+
+    if question_post.last_edited_by:
+        datum['last_edited_by'] = get_user_id_info(question_post.last_edited_by)
+
+    if thread.closed:
+        datum['closed'] = True
+        datum['closed_by'] = get_user_id_info(thread.closed_by)
+        datum['closed_at'] = get_epoch_str(thread.closed_at)
+        datum['closed_reason'] = thread.get_close_reason_display()
+
+    datum['author'] = get_user_id_info(question_post.author)
+    datum['last_activity_by'] = get_user_id_info(thread.last_activity_by)
     return datum
 
-def info(request):
-    '''
-       Returns general data about the forum
-    '''
+def get_answer_data(post):
+    """returns data dictionary for a given answer post"""
+    datum = {
+        'added_at': get_epoch_str(post.added_at),
+        'id': post.id,
+        'score': post.score,
+        'summary': post.summary,
+        'url': site_url(post.get_absolute_url()),
+    }
+    datum['author'] = get_user_id_info(post.author)
+
+    if post.last_edited_at:
+        datum['last_edited_at'] = get_epoch_str(post.last_edited_at)
+
+    if post.last_edited_by:
+        datum['last_edited_by'] = get_user_id_info(post.last_edited_by)
+
+    return datum
+
+def info(request): #pylint: disable=unused-argument
+    """Returns general data about the forum"""
     data = {}
-    posts = models.Post.objects.filter(deleted=False)
+
+    posts_filter = get_posts_filter()
+    posts = models.Post.objects.filter(**posts_filter)
     data['answers'] = posts.filter(post_type='answer').count()
     data['questions'] = posts.filter(post_type='question').count()
     data['comments'] = posts.filter(post_type='comment').count()
@@ -75,13 +114,14 @@ def info(request):
     json_string = json.dumps(data)
     return HttpResponse(json_string, content_type='application/json')
 
-def user(request, user_id):
+def user(request, user_id): #pylint: disable=unused-argument
     '''
        Returns data about one user
     '''
-    user = get_object_or_404(User, pk=user_id)
-    data = get_user_data(user)
-    posts = models.Post.objects.filter(author=user, deleted=False)
+    user_obj = get_object_or_404(User, pk=user_id)
+    data = get_user_data(user_obj)
+    posts_filter = get_posts_filter({'author': user_obj})
+    posts = models.Post.objects.filter(**posts_filter)
     data['answers'] = posts.filter(post_type='answer').count()
     data['questions'] = posts.filter(post_type='question').count()
     data['comments'] = posts.filter(post_type='comment').count()
@@ -90,9 +130,7 @@ def user(request, user_id):
 
 
 def users(request):
-    '''
-       Returns data of the most active or latest users.
-    '''
+    """Returns data of the most active or latest users."""
     allowed_sort_map = { #GET value -> Django query
       'recent'    : '-pk__date_joined',
       'oldest'    : 'pk__date_joined',
@@ -141,20 +179,23 @@ def users(request):
     return HttpResponse(json_string, content_type='application/json')
 
 
-def question(request, question_id):
-    '''
-    Gets a single question
-    '''
+def question(request, question_id): #pylint: disable=unused-argument
+    """Returns info about a question by id"""
     #we retrieve question by post id, b/c that's what is in the url,
     #not thread id (currently)
-    post = get_object_or_404(
-        models.Post, id=question_id,
-        post_type='question', deleted=False
-    )
+    post_filter = get_posts_filter({'id': question_id, 'post_type': 'question'})
+    post = get_object_or_404(models.Post, **post_filter)
     datum = get_question_data(post.thread)
     json_string = json.dumps(datum)
     return HttpResponse(json_string, content_type='application/json')
 
+def answer(request, answer_id): #pylint: disable=unused-argument
+    """Returns info about an answer by id"""
+    post_filter = get_posts_filter({'id': answer_id, 'post_type': 'answer'})
+    post = get_object_or_404(models.Post, **post_filter)
+    datum = get_answer_data(post)
+    json_string = json.dumps(datum)
+    return HttpResponse(json_string, content_type='application/json')
 
 def questions(request):
     """
@@ -171,19 +212,17 @@ def questions(request):
     except (ValueError, TypeError):
         page = None
 
-    search_state = SearchState(
-                scope=request.GET.get('scope', 'all'),
-                sort=request.GET.get('sort', 'activity-desc'),
-                query=request.GET.get('query', None),
-                tags=request.GET.get('tags', None),
-                author=author_id,
-                page=page,
-                user_logged_in=request.user.is_authenticated,
-            )
+    search_state = SearchState(scope=request.GET.get('scope', 'all'),
+                               sort=request.GET.get('sort', 'activity-desc'),
+                               query=request.GET.get('query', None),
+                               tags=request.GET.get('tags', None),
+                               author=author_id,
+                               page=page,
+                               user_logged_in=request.user.is_authenticated())
 
-    qs, meta_data = models.Thread.objects.run_advanced_search(
-                        request_user=request.user, search_state=search_state
-                    )
+    qset, meta_data = models.Thread.objects.run_advanced_search(
+        request_user=request.user, search_state=search_state
+    )
     if meta_data['non_existing_tags']:
         search_state = search_state.remove_tags(meta_data['non_existing_tags'])
 
@@ -192,7 +231,7 @@ def questions(request):
     #qs = qs.exclude(~Q(groups__id=global_group.id))
 
     page_size = askbot_settings.DEFAULT_QUESTIONS_PAGE_SIZE
-    paginator = Paginator(qs, page_size)
+    paginator = Paginator(qset, page_size)
     if paginator.num_pages < search_state.page:
         search_state.page = 1
     page = paginator.page(search_state.page)

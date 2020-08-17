@@ -28,6 +28,10 @@ from askbot.conf import settings as askbot_settings
 from askbot.models import Post
 from askbot.utils.html import site_url
 
+def get_content_filter():
+    if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
+        return {'approved': True}
+    return {}
 
 class RssIndividualQuestionFeed(Feed):
     """rss feed class for particular questions
@@ -47,7 +51,11 @@ class RssIndividualQuestionFeed(Feed):
             raise Http404
         # hack to get the request object into the Feed class
         self.request = request
-        return Post.objects.get_questions().get(id__exact=pk)
+        question = Post.objects.get_questions().get(id__exact = pk)
+        if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
+            if question.approved == False:
+                raise Http404
+        return question
 
     def item_link(self, item):
         """get full url to the item
@@ -70,30 +78,21 @@ class RssIndividualQuestionFeed(Feed):
         """
         chain_elements = list()
         chain_elements.append([item])
+        base_filter = get_content_filter()
+        comment_filter = base_filter.copy()
+        comment_filter['parent'] = item
+        chain_elements.append(Post.objects.get_comments().filter(**comment_filter))
 
-        comments_filter = {'parent': item}
-        if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
-            comments_filter['approved'] = True
-
-        chain_elements.append(
-            Post.objects.get_comments().filter(**comments_filter)
-        )
-
-        answers_filter = {'thread': item.thread}
-        if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
-            answers_filter['approved'] = True
-
-        answers = Post.objects.get_answers().filter(**answers_filter)
+        answer_filter = base_filter.copy()
+        answer_filter['thread'] = item.thread
+        answer_filter['deleted'] = False
+        answers = Post.objects.get_answers().filter(**answer_filter)
 
         for answer in answers:
-            chain_elements.append([answer])
-
-            comments_filter = {'parent': answer}
-            if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
-                comments_filter['approved'] = True
-
-            chain_elements.append(
-                Post.objects.get_comments().filter(**comments_filter))
+            chain_elements.append([answer,])
+            comment_filter = base_filter.copy()
+            comment_filter['parent'] = answer
+            chain_elements.append(Post.objects.get_comments().filter(**comment_filter))
 
         return itertools.chain(*chain_elements)
 
@@ -170,11 +169,10 @@ class RssLastestQuestionsFeed(Feed):
         if not askbot_settings.RSS_ENABLED:
             raise Http404
 
-        # initial filtering
-        filters = {'deleted': False}
+        #initial filtering
+        filters = get_content_filter()
+        filters['deleted'] = False
         filters['language_code'] = get_language()
-        if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
-            filters['approved'] = True
 
         qs = Post.objects.get_questions().filter(**filters)
 

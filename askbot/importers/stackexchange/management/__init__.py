@@ -1,8 +1,7 @@
-import logging
 import threading
 from django.core import management
-from django.core.exceptions import ImproperlyConfigured
 from django.apps import apps
+
 
 class ImporterThread(threading.Thread):
     def __init__(self, dump_file = None):
@@ -11,6 +10,7 @@ class ImporterThread(threading.Thread):
 
     def run(self):
         management.call_command('load_stackexchange', self.dump_file)
+
 
 def is_ready():
     """determines whether the stackexchange app is ready to roll

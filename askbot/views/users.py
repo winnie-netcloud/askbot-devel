@@ -40,6 +40,7 @@ from django.views.decorators import csrf
 
 from askbot.utils.slug import slugify
 from askbot.utils.html import sanitize_html
+from askbot.utils.functions import encode_jwt
 from askbot.utils.transaction import defer_celery_task
 from askbot.mail import send_mail
 from askbot.utils.translation import get_language
@@ -62,8 +63,8 @@ from askbot.utils import url_utils
 from askbot.utils.loading import load_module
 from askbot.utils.akismet_utils import akismet_check_spam
 
-def owner_or_moderator_required(f):
-    @functools.wraps(f)
+def owner_or_moderator_required(func):
+    @functools.wraps(func)
     def wrapped_func(request, profile_owner, context):
         if profile_owner == request.user:
             pass
@@ -75,10 +76,10 @@ def owner_or_moderator_required(f):
                 #as this one should be accessible to all
                 return HttpResponseRedirect(request.path)
         else:
-            next_url = request.path + '?' + urllib.parse.urlencode(getattr(request,request.method))
-            params = '?next=%s' % urllib.parse.quote(next_url)
+            next_url = request.path + '?' + urllib.parse.urlencode(request.REQUEST)
+            params = '?next=%s' % encode_jwt({'next_url': next_url})
             return HttpResponseRedirect(url_utils.get_login_url() + params)
-        return f(request, profile_owner, context)
+        return func(request, profile_owner, context)
     return wrapped_func
 
 @decorators.ajax_only
@@ -122,7 +123,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
         return HttpResponseRedirect(new_url)
 
     users = models.User.objects.exclude(
-                                    askbot_profile__status='b'
+                                    askbot_profile__status__in=('b', 't')
                                 ).exclude(
                                     is_active=False
                                 ).select_related('askbot_profile')
@@ -181,8 +182,8 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
 
     is_paginated = True
 
-    form = forms.ShowUsersForm(getattr(request,request.method))
-    form.full_clean()#always valid
+    form = forms.ShowUsersForm(getattr(request, request.method))
+    form.full_clean() # always valid
     sort_method = form.cleaned_data['sort']
     page = form.cleaned_data['page']
     search_query = form.cleaned_data['query']
@@ -288,6 +289,16 @@ def manage_account(request, subject, context):
                 user_msg = _('Thank you, you will soon hear from the site administrator.')
                 request.user.message_set.create(message=user_msg)
 
+        elif 'anonymize_account' in request.POST:
+            if request.user.can_anonymize_account(subject):
+                subject.anonymize()
+                return HttpResponseRedirect(subject.get_absolute_url())
+            else:
+                msg = _('Sorry, something is not right here...')
+                request.user.message_set.create(message=msg)
+                return HttpResponseRedirect(subject.get_absolute_url())
+
+
         elif 'export_data' in request.POST:
             from askbot.tasks import export_user_data
             if has_todays_backup:
@@ -299,10 +310,10 @@ def manage_account(request, subject, context):
                     exporting = True
 
     #todo: get backup download link -> context
-    context['can_terminate_account'] = request.user.can_terminate_account(subject)
     context['has_todays_backup'] = has_todays_backup
     context['backup_file_names'] = subject.get_backup_file_names()
     context['exporting'] = exporting
+    context['anon_user_name'] = models.get_name_of_anonymous_user()
     return render(request, 'user_profile/user_manage_account.html', context)
 
 @decorators.ajax_only
@@ -532,7 +543,10 @@ def edit_user(request, id):
 
 def user_stats(request, user, context):
     question_filter = {}
-    if request.user != user:
+
+    is_author = (request.user == user)
+    is_mod = request.user.is_authenticated() and request.user.is_administrator_or_moderator()
+    if not (is_mod or is_author):
         question_filter['is_anonymous'] = False
 
     if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
@@ -620,7 +634,6 @@ def user_stats(request, user, context):
 #        tag_ids.add(t['thread__tags'])
 #        if t['thread__tags'] == 11:
 #            print t['thread'], t['id']
-#    import ipdb; ipdb.set_trace()
 
     #
     # Badges/Awards (TODO: refactor into Managers/QuerySets when a pattern emerges; Simplify when we get rid of Question&Answer models)
@@ -1419,6 +1432,15 @@ def user(request, id, slug=None, tab_name=None):
     in the code in any way
     """
     profile_owner = get_object_or_404(models.User, id = id)
+
+    if profile_owner.is_terminated():
+        if request.user.pk == profile_owner.pk:
+            return render(request, 'user_profile/account_terminated.html')
+        if request.user.is_authenticated():
+            if not request.user.is_administrator_or_moderator():
+                raise Http404
+        else:
+            raise Http404
 
     if profile_owner.is_blocked():
         if request.user.is_anonymous \

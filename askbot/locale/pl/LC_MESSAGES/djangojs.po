@@ -4,12 +4,13 @@
 # 
 # Translators:
 # David <dafftu@gmail.com>, 2014
+# Marcin Barylski <marcin.barylski@tas-moto.org>, 2019-2020
 msgid ""
 msgstr ""
 "Project-Id-Version: askbot\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-03 09:49-0600\n"
-"PO-Revision-Date: 2017-09-19 12:24+0000\n"
+"POT-Creation-Date: 2020-08-16 13:08-0500\n"
+"PO-Revision-Date: 2020-08-16 19:55+0000\n"
 "Last-Translator: evgeny <evgeny.fadeev@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/askbot/askbot/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -18,13 +19,17 @@ msgstr ""
 "Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
+#: media/js/editors/folded_editor.js:38 media/js/post.js:4949
+msgid "Sorry, you have only read access"
+msgstr "Przykro mi, masz dostęp tylko do odczytu"
+
 #: media/js/group_messaging.js:132
 msgid "Type a message"
-msgstr ""
+msgstr "Wpisz wiadomość"
 
 #: media/js/group_messaging.js:141
 msgid "Add a recipient"
-msgstr ""
+msgstr "Dodaj odbiorcę"
 
 #: media/js/group_messaging.js:171
 msgid "message sent"
@@ -34,7 +39,7 @@ msgstr "wiadomość wysłana"
 msgid ""
 "Did you mean to send your message to muliple users? Use comma instead of "
 "whitespaces"
-msgstr ""
+msgstr "Czy miałeś na myśli wysłanie wiadomości do wielu użytkowników? Użyj przecinka zamiast białych znaków"
 
 #: media/js/group_messaging.js:191
 msgid "user {{str}} does not exist"
@@ -48,31 +53,77 @@ msgstr[3] "użytkownicy {{str}} nie istnieją"
 msgid "cannot send message to yourself"
 msgstr "nie możesz wysłać wiadomości do siebie"
 
-#: media/js/live_search.js:198
-msgid "To see search results, 2 or more characters may be required"
-msgstr "Aby wyświetlić wyniki wyszukiwania, wpisz 2 lub więcej znaków"
+#: media/js/jquery-openid/jquery.authenticator.js:73
+#, javascript-format
+msgid "Are you sure you want to remove your %s login?"
+msgstr "Czy na pewno chcesz usunąć Twój login %s?"
 
-#: media/js/live_search.js:220
-msgid "Ask Your Question"
-msgstr "Zadaj Swoje Pytanie"
+#: media/js/jquery-openid/jquery.authenticator.js:90
+msgid "Please add one or more login methods."
+msgstr "Dodaj jedną lub więcej metod logowania."
 
-#: media/js/live_search.js:301
-msgid "Sorry, this tag does not exist"
-msgid_plural "Sorry, these tags do not exist"
-msgstr[0] "Ten tag nie istnieje"
-msgstr[1] "Te tagi nie istnieją"
-msgstr[2] "Te tagi nie istnieją"
-msgstr[3] "Te tagi nie istnieją"
+#: media/js/jquery-openid/jquery.authenticator.js:93
+msgid ""
+"You don't have a method to log in right now, please add one or more by "
+"clicking any of the icons below."
+msgstr "Nie masz obecnie żadnej metody logowania, proszę dodaj jedną lub więcej klikaąc jedną z ikon poniżej."
 
-#: media/js/live_search.js:315
-msgid "Search or ask your question"
-msgstr ""
+#: media/js/jquery-openid/jquery.authenticator.js:147
+msgid "enter username"
+msgstr "Wpisz nazwę użytkownika"
+
+#: media/js/jquery-openid/jquery.authenticator.js:149
+msgid "enter username or email"
+msgstr "Podaj nazwę użytkownika lub email"
+
+#: media/js/jquery-openid/jquery.authenticator.js:158
+msgid "enter password"
+msgstr "Podaj hasło"
+
+#: media/js/jquery-openid/jquery.authenticator.js:180
+msgid "passwords do not match"
+msgstr "hasła się różnią"
+
+#: media/js/jquery-openid/jquery.authenticator.js:206
+msgid "Show/change current login methods"
+msgstr "Pokaż/zmień obecne metody logowania"
+
+#: media/js/jquery-openid/jquery.authenticator.js:262
+#, javascript-format
+msgid "Please enter your %s, then proceed"
+msgstr "Podaj swój %s, następnie kontynuuj"
+
+#: media/js/jquery-openid/jquery.authenticator.js:264
+msgid "Connect your %(provider_name)s account to %(site)s"
+msgstr "Połącz swoje konto %(provider_name)s do %(site)s"
+
+#: media/js/jquery-openid/jquery.authenticator.js:362
+#, javascript-format
+msgid "Change your %s password"
+msgstr "Zmień swoje hasło %s"
+
+#: media/js/jquery-openid/jquery.authenticator.js:363
+msgid "Change password"
+msgstr "Zmień hasło"
+
+#: media/js/jquery-openid/jquery.authenticator.js:365
+#, javascript-format
+msgid "Create a password for %s"
+msgstr "Utwórz hasło dla %s"
+
+#: media/js/jquery-openid/jquery.authenticator.js:366
+msgid "Create password"
+msgstr "Utwórz hasło"
+
+#: media/js/jquery-openid/jquery.authenticator.js:377
+msgid "Create a password-protected account"
+msgstr "Stwórz chronione hasłem konto użytkownika"
 
 #: media/js/post.js:28
 msgid "loading..."
 msgstr "wczytywanie..."
 
-#: media/js/post.js:137 media/js/post.js.c:176 media/js/post.js.c:229
+#: media/js/post.js:137 media/js/post.js:176 media/js/post.js:229
 #: media/js/post.js:253
 msgid "enter > %(length)s character"
 msgid_plural "enter > %(length)s characters"
@@ -81,8 +132,8 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: media/js/post.js:155 media/js/post.js.c:218
-#, c-format
+#: media/js/post.js:155 media/js/post.js:218
+#, javascript-format
 msgid "details must have > %s character"
 msgid_plural "details must have > %s characters"
 msgstr[0] "szczegóły muszą mieć > %s znak"
@@ -90,7 +141,7 @@ msgstr[1] "szczegóły muszą mieć > %s znaki"
 msgstr[2] "szczegóły muszą mieć > %s znaków"
 msgstr[3] "szczegóły muszą mieć > %s znaków"
 
-#: media/js/post.js:209 media/js/post.js.c:1457
+#: media/js/post.js:209 media/js/post.js:1457
 msgid "tags cannot be empty"
 msgstr "tagi nie mogą być puste"
 
@@ -110,13 +161,13 @@ msgstr "treść nie może być pusta"
 msgid "Back to the question"
 msgstr "Wróć do pytania"
 
-#: media/js/post.js:382 media/js/post.js.c:426 media/js/post.js.c:512
+#: media/js/post.js:382 media/js/post.js:426 media/js/post.js:512
 msgid "Load preview"
-msgstr ""
+msgstr "Załaduj podgląd"
 
 #: media/js/post.js:420
 msgid "Merge"
-msgstr ""
+msgstr "Scal"
 
 #: media/js/post.js:511 media/js/utils/modal_dialog.js:9
 #: media/js/utils/text_property_editor.js:48
@@ -128,7 +179,7 @@ msgid "draft saved..."
 msgstr "szkic zapisany"
 
 #: media/js/post.js:781
-#, c-format
+#, javascript-format
 msgid "%s follower"
 msgid_plural "%s followers"
 msgstr[0] "%s obserwujący"
@@ -140,7 +191,7 @@ msgstr[3] "%s obserwujących"
 msgid "insufficient privilege"
 msgstr "niewystarczające uprawnienia"
 
-#: media/js/post.js:821 media/js/post.js.c:1606
+#: media/js/post.js:821 media/js/post.js:1606
 msgid "please login"
 msgstr "zaloguj się"
 
@@ -148,7 +199,7 @@ msgstr "zaloguj się"
 msgid "anonymous users cannot subscribe to questions"
 msgstr "anonimowi użytkownicy nie mogą subskrybować pytań"
 
-#: media/js/post.js:825 media/js/post.js.c:1616
+#: media/js/post.js:825 media/js/post.js:1616
 msgid "anonymous users cannot vote"
 msgstr "anonimowi użytkownicy nie mogą głosować"
 
@@ -174,35 +225,35 @@ msgstr "wpis usunięty"
 
 #: media/js/post.js:1047
 msgid "sorry, you cannot %(accept_own_answer)s"
-msgstr ""
+msgstr "przepraszam, nie możesz %(accept_own_answer)s"
 
 #: media/js/post.js:1101
 msgid "remove flag"
 msgstr "usuń znacznik"
 
-#: media/js/post.js:1135 media/js/post.js.c:1166
+#: media/js/post.js:1135 media/js/post.js:1166
 msgid "flag offensive"
 msgstr "oznacz negatywnie"
 
-#: media/js/post.js:1191 media/js/post.js.c:1687
+#: media/js/post.js:1191 media/js/post.js:1687
 msgid "undelete"
 msgstr "odzyskaj"
 
-#: media/js/post.js:1195 media/js/post.js.c:1691
+#: media/js/post.js:1195 media/js/post.js:1691
 msgid "delete"
 msgstr "usuń"
 
-#: media/js/post.js:1397 media/js/post.js.c:1635
+#: media/js/post.js:1397 media/js/post.js:1635
 msgid "sorry, something is not right here"
 msgstr "przepraszam, coś poszło nie tak"
 
 #: media/js/post.js:1865
 msgid "Preview: (hide)"
-msgstr ""
+msgstr "Podgląd: (ukryj)"
 
 #: media/js/post.js:1866
 msgid "Show preview"
-msgstr ""
+msgstr "Pokaż podgląd"
 
 #: media/js/post.js:2283
 msgid "add comment"
@@ -213,26 +264,26 @@ msgid "save comment"
 msgstr "zapisz komentarz"
 
 #: media/js/post.js:2332
-#, c-format
+#, javascript-format
 msgid "enter at least %s characters"
 msgstr "wpisz co najmniej %s znaków"
 
 #: media/js/post.js:2334
-#, c-format
+#, javascript-format
 msgid "enter at least %s more characters"
 msgstr "wpisz co najmniej %s znaków więcej"
 
 #: media/js/post.js:2346
-#, c-format
+#, javascript-format
 msgid "%s characters left"
 msgstr "%s znaków pozostało"
 
 #: media/js/post.js:2348
 msgid "maximum comment length reached"
-msgstr ""
+msgstr "osiągnięto maksymalną długość komentarza"
 
-#: media/js/post.js:2451 media/js/post.js.c:3370 media/js/post.js.c:4921
-#: media/js/user/group_adder_widget.js:17 media/js/utils/editable.js:319
+#: media/js/post.js:2451 media/js/post.js:3370 media/js/post.js:4921
+#: media/js/user/group_adder_widget.js:17 media/js/utils/editable.js:323
 msgid "cancel"
 msgstr "anuluj"
 
@@ -244,7 +295,7 @@ msgstr "drobna zmiana (nie wysyłaj powiadomień)"
 msgid "Are you sure you don't want to post this comment?"
 msgstr "Na pewno nie chcesz publikować tego komentarza?"
 
-#: media/js/post.js:2543 media/jslib/timeago.js:137
+#: media/js/post.js:2543 media/jslib/timeago.js:131
 msgid "just now"
 msgstr "Teraz"
 
@@ -260,8 +311,8 @@ msgstr "potwierdź usunięcie komentarza"
 msgid "please sign in or register to post comments"
 msgstr "zaloguj się lub zarejestruj aby dodawać komentarze"
 
-#: media/js/post.js:3364 media/js/post.js.c:4185 media/js/post.js.c:4378
-#: media/js/utils/editable.js:314
+#: media/js/post.js:3364 media/js/post.js:4185 media/js/post.js:4378
+#: media/js/utils/editable.js:318
 msgid "save"
 msgstr "zapisz"
 
@@ -282,12 +333,12 @@ msgid "add logo"
 msgstr "dodaj logo"
 
 #: media/js/post.js:3736
-#, c-format
+#, javascript-format
 msgid "tag \"%s\" was already added, no need to repeat (press \"escape\" to delete)"
 msgstr "tag \"%s\" został już dodany, nie ma potrzeby ponaiania (wciśnij \"escape\" aby usunąć)"
 
 #: media/js/post.js:3745
-#, c-format
+#, javascript-format
 msgid "a maximum of %s tag is allowed"
 msgid_plural "a maximum of %s tags are allowed"
 msgstr[0] "maksymalnie %s tag dozwolony"
@@ -319,10 +370,6 @@ msgstr "dodaj kategorię"
 msgid "save tags"
 msgstr "zapisz tagi"
 
-#: media/js/post.js:4949 media/js/editors/folded_editor.js:38
-msgid "Sorry, you have only read access"
-msgstr "Przykro mi, masz dostęp tylko do odczytu"
-
 #: media/js/post.js:5022
 msgid "Group name:"
 msgstr "Nazwa grupy:"
@@ -335,100 +382,34 @@ msgstr "Współdzielone z użytkownikami:"
 msgid "Shared with the following groups:"
 msgstr "Współdzielone z grupami:"
 
+#: media/js/searchbar/drop_menu.js:198
+msgid "To see search results, 2 or more characters may be required"
+msgstr "Aby wyświetlić wyniki wyszukiwania, wpisz 2 lub więcej znaków"
+
+#: media/js/searchbar/drop_menu.js:220
+msgid "Ask Your Question"
+msgstr "Zadaj Swoje Pytanie"
+
+#: media/js/searchbar/tag_warning_box.js:50
+msgid "Sorry, this tag does not exist"
+msgid_plural "Sorry, these tags do not exist"
+msgstr[0] "Ten tag nie istnieje"
+msgstr[1] "Te tagi nie istnieją"
+msgstr[2] "Te tagi nie istnieją"
+msgstr[3] "Te tagi nie istnieją"
+
 #: media/js/tag_selector.js:14
 msgid "Tag \"<span></span>\" matches:"
 msgstr "Tag \"<span></span>\" pasuje do:"
 
 #: media/js/tag_selector.js:91
-#, c-format
+#, javascript-format
 msgid "and %s more, not shown..."
 msgstr "i %s więcej, nie pokazywane..."
 
 #: media/js/user.js:50
 msgid "Please <a href=\"%(signin_url)s\">signin</a> to follow %(username)s"
 msgstr "<a href=\"%(signin_url)s\">Zaloguj się</a> aby obserwować %(username)s"
-
-#: media/js/utils.js:206
-msgid "must be shorter than %(max_chars)s character"
-msgid_plural "must be shorter than %(max_chars)s characters"
-msgstr[0] "musi być krótsze niż %(max_chars)s znak"
-msgstr[1] "musi być krótszze niż %(max_chars)s znaków"
-msgstr[2] "musi być krótsze niż %(max_chars)s znaków"
-msgstr[3] "musi być krótsze niż %(max_chars)s znaków"
-
-#: media/js/utils.js:274
-msgid "and"
-msgstr "oraz"
-
-#: media/js/utils.js:292
-msgid "click to close"
-msgstr "kliknij aby zamknąć"
-
-#: media/js/jquery-openid/jquery.authenticator.js:73
-#, c-format
-msgid "Are you sure you want to remove your %s login?"
-msgstr "Czy na pewno chcesz usunąć Twój login %s?"
-
-#: media/js/jquery-openid/jquery.authenticator.js:90
-msgid "Please add one or more login methods."
-msgstr "Dodaj jedną lub więcej metod logowania."
-
-#: media/js/jquery-openid/jquery.authenticator.js:93
-msgid ""
-"You don't have a method to log in right now, please add one or more by "
-"clicking any of the icons below."
-msgstr "Nie masz obecnie żadnej metody logowania, proszę dodaj jedną lub więcej klikaąc jedną z ikon poniżej."
-
-#: media/js/jquery-openid/jquery.authenticator.js:147
-msgid "enter username"
-msgstr ""
-
-#: media/js/jquery-openid/jquery.authenticator.js:149
-msgid "enter username or email"
-msgstr ""
-
-#: media/js/jquery-openid/jquery.authenticator.js:158
-msgid "enter password"
-msgstr ""
-
-#: media/js/jquery-openid/jquery.authenticator.js:180
-msgid "passwords do not match"
-msgstr "hasła się różnią"
-
-#: media/js/jquery-openid/jquery.authenticator.js:206
-msgid "Show/change current login methods"
-msgstr "Pokaż/zmień obecne metody logowania"
-
-#: media/js/jquery-openid/jquery.authenticator.js:262
-#, c-format
-msgid "Please enter your %s, then proceed"
-msgstr "Podaj swój %s, następnie kontynuuj"
-
-#: media/js/jquery-openid/jquery.authenticator.js:264
-msgid "Connect your %(provider_name)s account to %(site)s"
-msgstr "Połącz swoje konto %(provider_name)s do %(site)s"
-
-#: media/js/jquery-openid/jquery.authenticator.js:362
-#, c-format
-msgid "Change your %s password"
-msgstr "Zmień swoje hasło %s"
-
-#: media/js/jquery-openid/jquery.authenticator.js:363
-msgid "Change password"
-msgstr "Zmień hasło"
-
-#: media/js/jquery-openid/jquery.authenticator.js:365
-#, c-format
-msgid "Create a password for %s"
-msgstr "Utwórz hasło dla %s"
-
-#: media/js/jquery-openid/jquery.authenticator.js:366
-msgid "Create password"
-msgstr "Utwórz hasło"
-
-#: media/js/jquery-openid/jquery.authenticator.js:377
-msgid "Create a password-protected account"
-msgstr "Stwórz chronione hasłem konto użytkownika"
 
 #: media/js/user/group_adder_widget.js:12
 msgid "add group"
@@ -437,6 +418,51 @@ msgstr "dodaj grupę"
 #: media/js/user/group_adder_widget.js:92
 msgid "add"
 msgstr "dodaj"
+
+#: media/js/user/manage_account.js:3
+msgid "Anonymize and Disable Account"
+msgstr ""
+
+#: media/js/user/manage_account.js:4
+msgid "Yes, anonymize and disable"
+msgstr ""
+
+#: media/js/user/manage_account.js:13
+#| msgid "Are you sure you don't want to post this comment?"
+msgid "Are you sure you want to anonymize and disable %(user)s's account?"
+msgstr ""
+
+#: media/js/user/manage_account.js:20
+msgid "All posts will remain on the site"
+msgstr ""
+
+#: media/js/user/manage_account.js:22
+msgid "Posts will be attributed to user \"%(anon_user)s\""
+msgstr ""
+
+#: media/js/user/manage_account.js:27
+msgid "All %(user)s's personal info will be deleted"
+msgstr ""
+
+#: media/js/user/manage_account.js:31
+msgid "Account will be unusable"
+msgstr ""
+
+#: media/js/user/manage_account.js:37
+msgid "Remove Account"
+msgstr ""
+
+#: media/js/user/manage_account.js:38
+msgid "Yes, remove account"
+msgstr ""
+
+#: media/js/user/manage_account.js:46
+msgid "All content will be irreversibly deleted."
+msgstr ""
+
+#: media/js/user/manage_account.js:49
+msgid "Consider anonymizing the data instead if the content may be useful."
+msgstr ""
 
 #: media/js/user/manage_reject_reasons_dialog.js:90
 msgid "Looks there are some things to fix:"
@@ -455,13 +481,29 @@ msgid "A reason must be selected to delete one."
 msgstr "Musisz podać powód aby usunąć."
 
 #: media/js/user/post_moderation_controls.js:77
-#: media/js/user/response_notifs.js:30 media/js/user/response_notifs.js.c:107
+#: media/js/user/response_notifs.js:30 media/js/user/response_notifs.js:107
 msgid "Please select at least one item"
 msgstr "Wybierz co najmniej jeden element"
 
 #: media/js/user/post_moderation_controls.js:113
 msgid "Load more items."
-msgstr ""
+msgstr "Załaduj więcej pozycji."
+
+#: media/js/utils.js:206
+msgid "must be shorter than %(max_chars)s character"
+msgid_plural "must be shorter than %(max_chars)s characters"
+msgstr[0] "musi być krótsze niż %(max_chars)s znak"
+msgstr[1] "musi być krótszze niż %(max_chars)s znaków"
+msgstr[2] "musi być krótsze niż %(max_chars)s znaków"
+msgstr[3] "musi być krótsze niż %(max_chars)s znaków"
+
+#: media/js/utils.js:274
+msgid "and"
+msgstr "oraz"
+
+#: media/js/utils.js:292
+msgid "click to close"
+msgstr "kliknij aby zamknąć"
 
 #: media/js/utils/comment_convert_link.js:26
 msgid "convert to answer"
@@ -472,7 +514,7 @@ msgid "click to edit this comment"
 msgstr "kliknij abytować komentarz"
 
 #: media/js/utils/file_upload_dialog.js:138
-#, c-format
+#, javascript-format
 msgid "Uploaded file: %s"
 msgstr "Wysłano plik: %s"
 
@@ -522,12 +564,12 @@ msgid "Ok"
 msgstr "Ok"
 
 #: media/js/utils/paginator.js:115
-#, c-format
+#, javascript-format
 msgid "page %s"
-msgstr ""
+msgstr "strona %s"
 
 #: media/js/utils/tag.js:122
-#, c-format
+#, javascript-format
 msgid "see questions tagged '%s'"
 msgstr "zobacz pytania otagowane '%s'"
 
@@ -539,72 +581,81 @@ msgstr "Zapisz"
 msgid "saved"
 msgstr "zapisano"
 
-#: media/js/utils/toggle.js:88 media/js/utils/toggle.js.c:103
+#: media/js/utils/toggle.js:88 media/js/utils/toggle.js:103
 msgid "enabled"
 msgstr "włączone"
 
-#: media/js/utils/toggle.js:89 media/js/utils/toggle.js.c:104
+#: media/js/utils/toggle.js:89 media/js/utils/toggle.js:104
 msgid "disabled"
 msgstr "wyłączone"
 
-#: media/jslib/timeago.js:90
+#: media/jslib/timeago.js:97
 msgid "Jan"
 msgstr "Sty"
 
-#: media/jslib/timeago.js:91
+#: media/jslib/timeago.js:98
 msgid "Feb"
 msgstr "Lut"
 
-#: media/jslib/timeago.js:92
+#: media/jslib/timeago.js:99
 msgid "Mar"
 msgstr "Mar"
 
-#: media/jslib/timeago.js:93
+#: media/jslib/timeago.js:100
 msgid "Apr"
 msgstr "Kwi"
 
-#: media/jslib/timeago.js:94
+#: media/jslib/timeago.js:101
 msgid "May"
 msgstr "Maj"
 
-#: media/jslib/timeago.js:95
+#: media/jslib/timeago.js:102
 msgid "Jun"
 msgstr "Cze"
 
-#: media/jslib/timeago.js:96
+#: media/jslib/timeago.js:103
 msgid "Jul"
 msgstr "Lip"
 
-#: media/jslib/timeago.js:97
+#: media/jslib/timeago.js:104
 msgid "Aug"
 msgstr "Sie"
 
-#: media/jslib/timeago.js:98
+#: media/jslib/timeago.js:105
 msgid "Sep"
 msgstr "Wrz"
 
-#: media/jslib/timeago.js:99
+#: media/jslib/timeago.js:106
 msgid "Oct"
 msgstr "Paź"
 
-#: media/jslib/timeago.js:100
+#: media/jslib/timeago.js:107
 msgid "Nov"
 msgstr "Lis"
 
-#: media/jslib/timeago.js:101
+#: media/jslib/timeago.js:108
 msgid "Dec"
 msgstr "Gru"
 
-#: media/jslib/timeago.js:113
+#: media/jslib/timeago.js:118
+#, javascript-format
+msgid "%s year ago"
+msgid_plural "%s years ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: media/jslib/timeago.js:121
 msgid "2 days ago"
 msgstr "2 dni temu"
 
-#: media/jslib/timeago.js:115
+#: media/jslib/timeago.js:123
 msgid "yesterday"
 msgstr "wczoraj"
 
-#: media/jslib/timeago.js:120
-#, c-format
+#: media/jslib/timeago.js:126
+#, javascript-format
 msgid "%s hour ago"
 msgid_plural "%s hours ago"
 msgstr[0] "%s godzinę temu"
@@ -612,8 +663,8 @@ msgstr[1] "%s godziny temu"
 msgstr[2] "%s godzin temu"
 msgstr[3] "%s godzin temu"
 
-#: media/jslib/timeago.js:130
-#, c-format
+#: media/jslib/timeago.js:129
+#, javascript-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "%s minutę temu"
@@ -677,7 +728,7 @@ msgstr "pasek poziomy"
 msgid "undo"
 msgstr "cofnij"
 
-#: media/wmd/wmd.js:43 media/wmd/wmd.js.c:1171
+#: media/wmd/wmd.js:43 media/wmd/wmd.js:1171
 msgid "redo"
 msgstr "ponów"
 
@@ -695,11 +746,11 @@ msgstr "wyślij plik załącznika"
 
 #: media/wmd/wmd.js:1686
 msgid "strong text"
-msgstr ""
+msgstr "tekst pogrubiony"
 
 #: media/wmd/wmd.js:1690
 msgid "emphasized text"
-msgstr ""
+msgstr "tekst podkreślony"
 
 #: media/wmd/wmd.js:1844
 msgid "image description"
@@ -713,17 +764,17 @@ msgstr "nazwa pliku"
 msgid "link text"
 msgstr "tekst linku"
 
-#: media/wmd/wmd.js:2284 media/wmd/wmd.js.c:2304
+#: media/wmd/wmd.js:2284 media/wmd/wmd.js:2304
 msgid "enter code here"
-msgstr ""
+msgstr "Wpisz kod tutaj"
 
 #: media/wmd/wmd.js:2398
 msgid "List item"
-msgstr ""
+msgstr "Element listy"
 
 #: media/wmd/wmd.js:2430
 msgid "Heading"
-msgstr ""
+msgstr "Nagłówek"
 
 #~ msgid "%(question)s must have > %(length)s character"
 #~ msgid_plural "%(question)s must have > %(length)s characters"

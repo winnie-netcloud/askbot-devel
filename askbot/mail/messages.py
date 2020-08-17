@@ -2,7 +2,6 @@
 of email messages for various occasions
 """
 import askbot
-import functools
 import logging
 import urllib.request, urllib.parse, urllib.error
 from copy import copy
@@ -15,10 +14,7 @@ from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from askbot import const
 from askbot.conf import settings as askbot_settings
-from askbot.utils import html as html_utils
-from askbot.utils.diff import textDiff as htmldiff
-from askbot.utils.html import (absolutize_urls, sanitize_html, site_link, site_url)
-from askbot.utils.slug import slugify
+from askbot.utils.html import (absolutize_urls, site_link, site_url)
 
 LOG = logging.getLogger(__name__)
 
@@ -703,21 +699,33 @@ class UnansweredQuestionsReminder(BaseEmail):
         }
 
 
-class EmailValidation(BaseEmail):
-    template_path = 'authopenid/email_validation'
-    title = _('Email validation')
-    description = _('Sent when user validates email or recovers account')
-    mock_contexts = ({
-        'key': 'a4umkaeuaousthsth',
-        'handler_url_name': 'user_account_recover',
-    },)
+class AccountActivation(BaseEmail):
+    template_path = 'authopenid/account_activation'
+    title = _('Account activation')
+    description = _('Sent when user creates account, contains email validation link')
+    mock_contexts = ({'key': 'a4umkaeuaousthsth'},)
 
     def process_context(self, context):
-        url_name = context['handler_url_name']
         context.update({
             'site_name': askbot_settings.APP_SHORT_NAME,
             'recipient_user': None,#needed for the Django template
-            'validation_link': site_url(reverse(url_name)) + \
+            'validation_link': site_url(reverse('verify_email_and_register')) + \
+                                '?validation_code=' + context['key']
+        })
+        return context
+
+
+class AccountRecovery(BaseEmail):
+    template_path = 'authopenid/account_recovery'
+    title = _('Account recovery')
+    description = _('Sent when user needs to recover login')
+    mock_contexts = ({'key': 'a4umkaeuaousthsth'},)
+
+    def process_context(self, context):
+        context.update({
+            'site_name': askbot_settings.APP_SHORT_NAME,
+            'recipient_user': None,#needed for the Django template
+            'validation_link': site_url(reverse('user_account_recover')) + \
                                 '?validation_code=' + context['key']
         })
         return context
