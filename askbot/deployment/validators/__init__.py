@@ -2,6 +2,7 @@
 from askbot.deployment.validators.setup_params_validator import SetupParamsValidator
 from askbot.deployment.validators.site_params_validator import SiteParamsValidator
 from askbot.deployment.validators.db_params_validator import DbParamsValidator
+from askbot.deployment.validators.email_params_validator import EmailParamsValidator
 
 class ParamsValidator: #pylint: disable=too-few-public-methods
     """Root parameters validator"""
@@ -19,6 +20,7 @@ class ParamsValidator: #pylint: disable=too-few-public-methods
         validators = (
             SetupParamsValidator,
             DbParamsValidator,
+            EmailParamsValidator,
             SiteParamsValidator
         )
 

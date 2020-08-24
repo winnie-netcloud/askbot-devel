@@ -15,11 +15,11 @@ site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 DEBUG = False   # set to True to enable debugging
 TEMPLATE_DEBUG = False  # keep false when debugging jinja2 templates
 INTERNAL_IPS = ('127.0.0.1',)
-ALLOWED_HOSTS  = ['{{ domain_name }}',] #change this for better security on your site
+ALLOWED_HOSTS  = ['{{ allowed_host }}',] #change this for better security on your site
 
 {{ admins_settings }}
 
-{{ database_settings }}
+{{ databases_settings }}
 
 {{ email_settings }}
 

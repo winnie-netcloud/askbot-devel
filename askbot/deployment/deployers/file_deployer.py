@@ -2,7 +2,7 @@
 import jinja2
 from askbot import get_askbot_module_path
 
-class DeployableFile: #pylint: disable=missing-class-docstring
+class FileDeployer: #pylint: disable=missing-class-docstring
     """Renders a file based on the template and the parameters.
     Subclass must implement/provide at least:
     * .get_file_path() - implement the method
@@ -21,9 +21,9 @@ class DeployableFile: #pylint: disable=missing-class-docstring
         raise NotImplementedError
 
     def get_template_parameters(self): # pylint: disable=no-self-use
-        """Subclass should implement this,
+        """Subclass might implement this,
         return parameters needed for the template"""
-        return dict()
+        return self.params
 
     def get_template(self):
         """Returns string representation of the template"""
@@ -35,9 +35,11 @@ class DeployableFile: #pylint: disable=missing-class-docstring
         fout.write(contents)
         fout.close()
 
+    def render(self):
+        """Returns rendered file content"""
+        tpl_params = self.get_template_parameters()
+        return jinja2.Template(self.get_template()).render(tpl_params)
 
     def deploy(self):
         """Renders the template and writes the file at destination"""
-        tpl_params = self.get_template_parameters()
-        content = jinja2.Template(self.get_template()).render(tpl_params)
-        self.deploy_file(content)
+        self.deploy_file(self.render())

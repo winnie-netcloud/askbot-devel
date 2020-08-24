@@ -73,10 +73,14 @@ class OptionValidator:
     def get_cli_value(self):
         """Validates and returns value as entered via the CLI"""
         value = getattr(self.options, self.option_name)
-        if self.required and not value:
-            raise ValidationError(self.cli_error_messages['missing'])
+        if self.required:
+            if not value:
+                raise ValidationError(self.cli_error_messages['missing'])
 
-        if not value and self.default_value:
+        if not value and (self.default_value is not None):
+            if not self.required:
+                return self.default_value
+
             value = self.default_value
 
         try:

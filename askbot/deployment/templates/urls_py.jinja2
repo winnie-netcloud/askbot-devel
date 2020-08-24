@@ -29,7 +29,6 @@ else:
 
 urlpatterns += [
     url(r'^admin/', admin.site.urls),
-    #(r'^cache/', include('keyedcache.urls')), - broken views disable for now
     #(r'^settings/', include('askbot.deps.livesettings.urls')),
     url(r'^followit/', include('followit.urls')),
     url(r'^tinymce/', include('tinymce.urls')),

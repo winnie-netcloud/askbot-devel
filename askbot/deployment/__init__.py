@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError
 from askbot.deployment import messages
 from askbot.deployment.messages import print_message
 from askbot.deployment import const
-from askbot.deployment import deployables
+from askbot.deployment import deployers
 from askbot.deployment.validators import ParamsValidator
 from askbot.deployment.console import Console
 from askbot.deployment.exceptions import DeploymentError
@@ -46,20 +46,97 @@ class AskbotSetup:
         self.add_setup_args()
         self.add_db_args()
         self.add_site_args()
+        self.add_email_args()
         # these override some of the detailed settings
         self.add_settings_snippet_args()
+
+    def add_email_args(self):
+        """Settings specific to the email setup"""
+        self.parser.add_argument(
+            '--server-email',
+            action='store',
+            dest='server_email',
+            default='',
+            help='Value for the SERVER_EMAIL setting'
+        )
+
+        self.parser.add_argument(
+            '--default-from-email',
+            action='store',
+            dest='default_from_email',
+            default='',
+            help='Value for the DEFAULT_FROM_EMAIL setting'
+        )
+
+        self.parser.add_argument(
+            '--email-host-user',
+            action='store',
+            dest='email_host_user',
+            default='',
+            help='Value for the EMAIL_HOST_USER setting'
+        )
+
+        self.parser.add_argument(
+            '--email-host-password',
+            action='store',
+            dest='email_host_password',
+            default='',
+            help='Value for the EMAIL_HOST_PASSWORD setting'
+        )
+
+        self.parser.add_argument(
+            '--email-subject-prefix',
+            action='store',
+            dest='email_subject_prefix',
+            default='',
+            help='Value for the EMAIL_SUBJECT_PREFIX setting'
+        )
+
+        self.parser.add_argument(
+            '--email-host',
+            action='store',
+            dest='email_host',
+            default='',
+            help='Value for the EMAIL_HOST setting'
+        )
+
+        self.parser.add_argument(
+            '--email-port',
+            action='store',
+            dest='email_port',
+            default='',
+            help='Value for the EMAIL_PORT setting'
+        )
+
+        self.parser.add_argument(
+            '--email-use-tls',
+            action='store_true',
+            default=False,
+            dest='email_use_tls',
+            help='Value for the EMAIL_USE_TLS setting'
+        )
+
+        self.parser.add_argument(
+            '--email-backend',
+            action='store',
+            dest='email_backend',
+            default='django.core.mail.backends.smtp.EmailBackend',
+            help='Value for the EMAIL_BACKEND setting'
+        )
 
     def add_site_args(self):
         """Settings specific to the workings of the site"""
         self.parser.add_argument(
             '--admin-name',
             action='store',
+            dest='admin_name',
             help='Name of the site admin'
         )
 
         self.parser.add_argument(
             '--admin-email',
             action='store',
+            dest='admin_email',
             help='Admin of the site admin'
         )
 
@@ -174,6 +251,18 @@ class AskbotSetup:
             help='Database password'
         )
 
+        self.parser.add_argument(
+            '--db-host',
+            dest='database_host',
+            help='Database host'
+        )
+
+        self.parser.add_argument(
+            '--db-port',
+            dest='database_port',
+            help='Database port'
+        )
+
     def add_setup_args(self):
         """Control the behaviour of this setup procedure"""
         self.parser.add_argument(
@@ -230,28 +319,25 @@ class AskbotSetup:
 
             # make the directories
             force = params['force']
-            deployables.makedir(params['root_dir'], force)
-            deployables.makedir(params['proj_dir'], force)
-            deployables.makedir(params['media_root_dir'], force)
-            deployables.makedir(params['static_root_dir'], force)
+            deployers.makedir(params['root_dir'], force)
+            deployers.makedir(params['proj_dir'], force)
+            deployers.makedir(params['media_root_dir'], force)
+            deployers.makedir(params['static_root_dir'], force)
 
-            # make the manage.py file
-            deployables.ManagePy(params).deploy()
-            # make the settings.py file
-            #deployables.UrlsPy().deploy(params)
-            #deployables.SettingsPy().deploy(params)
-            # make the urls.py file
+            deployers.ManagePy(params).deploy()
+            deployers.UrlsPy(params).deploy()
+            deployers.SettingsPy(params).deploy()
             # print next steps help
             #console.print_postamble(params)
 
         except ValidationError as error:
             if error.messages and len(error.messages) == 1:
-                print(f'\n\n{error.messages[0]}\nAborted')
+                print(f'Error: {error.messages[0]}')
                 sys.exit(1)
             print(f'\n\n{error}\nAborted')
             sys.exit(1)
         except DeploymentError as error:
-            print(f'\n\n{error}\nAborted')
+            print(f'\n\n{error}')
             sys.exit(1)
 
         except KeyboardInterrupt:

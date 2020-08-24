@@ -13,6 +13,10 @@ DATABASE_ENGINE_CHOICES = (
     (3, 'MySQL'),
     (4, 'Oracle')
 )
+DATABASE_ENGINE_CODES = {1: 'django.db.backends.postgresql_psycopg2',
+                         2: 'django.db.backends.sqlite3',
+                         3: 'django.db.backends.mysql',
+                         4: 'django.db.backends.oracle'}
 
 ROOT_DIR_HELP = 'the ' + bold('Root') + \
         ' directory path (relative or absolute).\n' + \

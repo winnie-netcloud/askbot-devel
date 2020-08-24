@@ -1,9 +1,9 @@
 """Class for deploying the manage.py file"""
 import os
-from askbot.deployment.deployables.deployable_file import DeployableFile
+from askbot.deployment.deployers.file_deployer import FileDeployer
 
-class ManagePy(DeployableFile): #pylint: disable=missing-class-docstring
-    template_path = 'deployment/templates/manage.py.jinja2'
+class ManagePy(FileDeployer): #pylint: disable=missing-class-docstring
+    template_path = 'deployment/templates/manage_py.jinja2'
 
     def get_file_path(self):
         """Returns path to the manage.py file"""
