@@ -91,7 +91,7 @@ from askbot.deps.django_authopenid import forms
 from askbot.deps.django_authopenid.backends import AuthBackend
 import logging
 from askbot.utils.forms import get_next_url, get_next_jwt
-from askbot.utils.http import get_request_info
+from askbot.utils.http import get_request_info, get_request_params
 from askbot.signals import user_logged_in, user_registered
 
 
@@ -248,7 +248,7 @@ def complete_discourse_signin(request):
     discourse_login_session = request.session.get('discourse_login')
     nonce = discourse_login_session.get('nonce', None)
     from askbot.deps.django_authopenid.providers import discourse
-    form = discourse.DiscourseSsoForm(request.REQUEST, nonce=nonce)
+    form = discourse.DiscourseSsoForm(get_request_params(request), nonce=nonce)
     next_url = discourse_login_session.get('success_url', reverse('questions'))
     if not form.is_valid():
         # if form is invalid - show login screen with error message
@@ -1502,7 +1502,7 @@ def recover_account(request):
             return render(request, 'authopenid/verify_email.html', data)
         return show_signin_view(request, account_recovery_form=form)
 
-    key = request.REQUEST.get('validation_code', None)
+    key = get_request_params(request).get('validation_code', None)
     return auth_user_by_token(request, key)
 
 def auth_user_by_token(request, key):
@@ -1526,7 +1526,7 @@ def auth_user_by_token(request, key):
 
     user = authenticate(email_key=key, method='email_key')
     if user:
-        if request.user.is_authenticated() and user != request.user:
+        if request.user.is_authenticated and user != request.user:
             logout(request)
         login(request, user)
         from askbot.models import greet_new_user

@@ -5,18 +5,18 @@ DEFAULT_PROJECT_NAME = 'askbot_site'
 DEFAULT_MEDIA_ROOT_SUBDIR = 'upfiles'
 DEFAULT_STATIC_ROOT_SUBDIR = 'static'
 
-SQLITE = 2
+SQLITE = 'sqlite'
 DEFAULT_SQLITE_DB_NAME = 'db.sqlite'
 DATABASE_ENGINE_CHOICES = (
-    (1, 'PostgreSQL'),
+    ('postgresql', 'PostgreSQL'),
     (SQLITE, 'SQLite'),
-    (3, 'MySQL'),
-    (4, 'Oracle')
+    ('mysql', 'MySQL'),
+    ('oracle', 'Oracle')
 )
-DATABASE_ENGINE_CODES = {1: 'django.db.backends.postgresql_psycopg2',
-                         2: 'django.db.backends.sqlite3',
-                         3: 'django.db.backends.mysql',
-                         4: 'django.db.backends.oracle'}
+DATABASE_ENGINE_CODES = {'postgresql': 'django.db.backends.postgresql_psycopg2',
+                         SQLITE: 'django.db.backends.sqlite3',
+                         'mysql': 'django.db.backends.mysql',
+                         'oracle': 'django.db.backends.oracle'}
 
 ROOT_DIR_HELP = 'the ' + bold('Root') + \
         ' directory path (relative or absolute).\n' + \
@@ -31,6 +31,15 @@ MEDIA_ROOT_HELP = 'value of the ' + bold('MEDIA_ROOT') + \
         'This directory is for the user uploaded files.\n ' + \
         'Default is /upfiles within the ' + bold('Root') + ' directory.'
 
+LOG_FILE_PATH_HELP = 'Path to the log file. ' + \
+        'If path is absolute - will be used as is. ' + \
+        'Relative path will be appended to ${ROOT_DIR}.'
+
+MEDIA_ROOT_HELP = 'value of the ' + bold('MEDIA_ROOT') + \
+        ' setting for the settings.py file.\n ' + \
+        'This directory is for the user uploaded files.\n ' + \
+        'Default is /upfiles within the ' + bold('Root') + ' directory.'
+
 DOMAIN_NAME_HELP = 'domain name of your Askbot site. Used for the ' + \
         bold('ALLOWED_DOMAINS') + ' setting.'
 
@@ -39,7 +48,6 @@ LANGUAGE_CODE_HELP = 'two or four letter with a dash language code (e.g. ' + \
         'Value of the ' + bold('LANGUAGE_CODE') + ' setting.\n ' + \
         'Default value is ' + bold('en') + '.'
 
-DATABASE_ENGINE_HELP = 'database engine, type 1 for PostgreSQL, 2 for SQLite, ' + \
-        '3 for MySQL, 4 for Oracle.'
+DATABASE_ENGINE_HELP = 'database engine'
 
 USE_FORCE_PARAMETER = 're-run askbot-setup with a --force parameter'

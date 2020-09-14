@@ -26,6 +26,14 @@ def hide_passwords(data):
 
     return data
 
+def get_request_params(request):
+    """A replacement for removed request.REQUEST"""
+    if request.method == 'GET':
+        return request.GET
+    elif request.method == 'POST':
+        return request.POST
+    return {}
+
 def get_request_info(request):
     """return a reasonable string with the key contents of request object
     this function is intended for the use in logs and debugging
@@ -33,11 +41,7 @@ def get_request_info(request):
     """
     info = 'path: %s\n' % request.get_full_path()
     info += 'method: %s\n' % request.method
-    data = None
-    if request.method == 'GET':
-        data = request.GET
-    elif request.method == 'POST':
-        data = request.POST
+    data = get_request_params(request)
     data = hide_passwords(copy(data))
     info += 'data: %s\n' % str(data)
     info += 'host: %s\n' % request.get_host()

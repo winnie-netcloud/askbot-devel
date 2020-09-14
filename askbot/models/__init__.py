@@ -2495,13 +2495,7 @@ def user_is_administrator(self):
     the admin must be both superuser and staff member
     the latter is because staff membership is required
     to access the live settings"""
-    return self.is_superuser
-
-def user_remove_admin_status(self):
-    self.is_superuser = False
-
-def user_set_admin_status(self):
-    self.is_superuser = True
+    return self.status == 'd'
 
 def user_add_missing_askbot_subscriptions(self):
     from askbot import forms#need to avoid circular dependency
@@ -2651,7 +2645,7 @@ def user_set_status(self, new_status):
     #because this function is not dealing with the site admins
     if new_status == 'd':
         #create a new admin
-        self.set_admin_status()
+        self.is_superuser = True
         self.assign_role_set('administrator')
     else:
         #This was the old method, kept in the else clause when changing
@@ -2659,7 +2653,7 @@ def user_set_status(self, new_status):
         #is not Administrator it will simply remove admin if the user have
         #that permission, it will mostly be false.
         if self.is_administrator():
-            self.remove_admin_status()
+            self.is_superuser = False
 
     #when toggling between blocked and non-blocked status
     #we need to invalidate question page caches, b/c they contain
@@ -2893,14 +2887,15 @@ def user_join_default_groups(self):
     self.edit_group_membership(
         group=Group.objects.get_global_group(),
         user=self,
-        action='add'
+        action='add',
+        force=True
     )
     group_name = format_personal_group_name(self)
     group = Group.objects.get_or_create(
         name=group_name, user=self
     )
     self.edit_group_membership(
-        group=group, user=self, action='add'
+        group=group, user=self, action='add', force=True
     )
 
 
@@ -3496,7 +3491,8 @@ def user_edit_group_membership(self, user=None, group=None,
 
     returns instance of GroupMembership (if action is "add") or None
     """
-    self.assert_can_join_or_leave_group()
+    if not force:
+        self.assert_can_join_or_leave_group()
     if action == 'add':
         #calculate new level
         openness = group.get_openness_level_for_user(user)
@@ -3650,13 +3646,11 @@ User.add_to_class('can_make_group_private_posts', user_can_make_group_private_po
 User.add_to_class('is_administrator', user_is_administrator)
 User.add_to_class('is_administrator_or_moderator', user_is_administrator_or_moderator)
 User.add_to_class('is_admin_or_mod', user_is_administrator_or_moderator) #shorter version
-User.add_to_class('set_admin_status', user_set_admin_status)
 User.add_to_class('edit_group_membership', user_edit_group_membership)
 User.add_to_class('join_group', user_join_group)
 User.add_to_class('join_default_groups', user_join_default_groups)
 User.add_to_class('leave_group', user_leave_group)
 User.add_to_class('is_group_member', user_is_group_member)
-User.add_to_class('remove_admin_status', user_remove_admin_status)
 User.add_to_class('is_moderator', user_is_moderator)
 User.add_to_class('is_post_moderator', user_is_post_moderator)
 User.add_to_class('is_approved', user_is_approved)

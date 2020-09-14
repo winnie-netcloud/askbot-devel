@@ -40,7 +40,7 @@ urlpatterns = [
     ),
     url(
         r'^signin/complete-discourse/',
-        'complete_discourse_signin',
+        OpenidViews.complete_discourse_signin,
         name='user_complete_discourse_signin'
     ),
     url(

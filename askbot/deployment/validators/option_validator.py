@@ -47,22 +47,27 @@ class OptionValidator:
     def get_value_from_console(self):
         """Returns a value entered at the console"""
         default = self.default_value
-        if default:
+        if default is not None:
             return self.console.simple_dialog(self.prompt, default=default)
         return self.console.simple_dialog(self.prompt, required=True)
 
     def get_interactive_value(self):
         """Returns validated value as entered by the user"""
+        has_default = self.default_value is not None
         while True:
             value = self.get_value_from_console()
+            if not value and not self.required and has_default:
+                return self.default_value
             if self.validate_interactive(value):
                 return value
 
     def validate_interactive(self, value):
         """Validates the value for the interactive session"""
-        if self.required and not value:
-            self.console.print_error(self.interactive_error_messages['missing'])
-            return False
+        if not value:
+            if self.required:
+                raise ValidationError(self.cli_error_messages['missing'])
+            if self.default_value is not None:
+                return self.default_value
         try:
             self.validator()(value)
         except ValidationError:
@@ -73,15 +78,11 @@ class OptionValidator:
     def get_cli_value(self):
         """Validates and returns value as entered via the CLI"""
         value = getattr(self.options, self.option_name)
-        if self.required:
-            if not value:
+        if not value:
+            if self.required:
                 raise ValidationError(self.cli_error_messages['missing'])
-
-        if not value and (self.default_value is not None):
-            if not self.required:
+            if self.default_value is not None:
                 return self.default_value
-
-            value = self.default_value
 
         try:
             self.validator()(value)

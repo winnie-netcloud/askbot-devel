@@ -20,8 +20,8 @@ class ParamsValidator: #pylint: disable=too-few-public-methods
         validators = (
             SetupParamsValidator,
             DbParamsValidator,
+            SiteParamsValidator,
             EmailParamsValidator,
-            SiteParamsValidator
         )
 
         for validator_class in validators:

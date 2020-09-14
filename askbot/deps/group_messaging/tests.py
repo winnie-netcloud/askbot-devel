@@ -84,7 +84,7 @@ class GroupMessagingTests(TestCase):
 class ViewsTests(GroupMessagingTests):
 
     def get_view_context(self, view_class, data=None, user=None, method='GET'):
-        spec = ['REQUEST', 'user']
+        spec = ['user']
         assert(method in ('GET', 'POST'))
         spec.append(method)
         request = Mock(spec=spec)

@@ -152,16 +152,15 @@ def simple_dialog(prompt_phrase, required=False, default=None):
         prompt_phrase += ' (required)'
     if default:
         prompt_phrase += f'\nPress ENTER to use {default}.'
+    elif default == '':
+        prompt_phrase += '\nPress ENTER to use empty string (default value).'
 
     while 1:
-
         if required and default:
             raise RuntimeError('provide either `required` or `default')
 
-
         response = input(prompt_phrase + '\n> ').strip()
-
-        if not response and default:
+        if (not response) and (default is not None):
             return default
 
         if response or required is False:

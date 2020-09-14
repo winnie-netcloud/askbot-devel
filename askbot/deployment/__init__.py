@@ -11,8 +11,6 @@ import sys
 from argparse import ArgumentParser
 from django.core.exceptions import ValidationError
 
-from askbot.deployment import messages
-from askbot.deployment.messages import print_message
 from askbot.deployment import const
 from askbot.deployment import deployers
 from askbot.deployment.validators import ParamsValidator
@@ -52,6 +50,13 @@ class AskbotSetup:
 
     def add_email_args(self):
         """Settings specific to the email setup"""
+        self.parser.add_argument(
+            '--email-settings',
+            dest='email_settings',
+            action='store',
+            help='Settings snippet for the email - Python code.'
+        )
+
         self.parser.add_argument(
             '--server-email',
             action='store',
@@ -159,8 +164,16 @@ class AskbotSetup:
             '--timezone', '-t',
             dest='timezone',
             action='store',
-            default='America/Chicago',
+            default='UTC',
             help='Name of the timezone, for example Europe/Berlin'
+        )
+
+        self.parser.add_argument(
+            '--log-file-path',
+            dest='log_file_path',
+            action='store',
+            default='log/askbot_app.log',
+            help=const.LOG_FILE_PATH_HELP
         )
 
     def add_settings_snippet_args(self):
@@ -181,13 +194,6 @@ class AskbotSetup:
             action='store',
             help='Settings snippet for the ADMINS and MANAGERS variables - Python code.'
         )
-        self.parser.add_argument(
-            '--email-settings',
-            dest='email_settings',
-            action='store',
-            help='Settings snippet for the email - Python code.'
-        )
-
         self.parser.add_argument(
             '--language-settings',
             dest='language_settings',
@@ -323,6 +329,7 @@ class AskbotSetup:
             deployers.makedir(params['proj_dir'], force)
             deployers.makedir(params['media_root_dir'], force)
             deployers.makedir(params['static_root_dir'], force)
+            deployers.makedir(os.path.dirname(params['log_file_path']), force)
 
             deployers.ManagePy(params).deploy()
             deployers.UrlsPy(params).deploy()

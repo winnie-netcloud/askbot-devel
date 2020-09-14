@@ -4,6 +4,9 @@ import os.path
 from askbot.deployment import const
 from askbot.deployment.validators.proj_dir_validator import ProjDirValidator
 from askbot.deployment.validators.root_dir_validator import RootDirValidator
+from askbot.deployment.validators.option_validator import OptionValidator
+from askbot.deployment.utils import LogFilePathValidator
+from askbot.utils.console import bold
 
 class SetupParamsValidator:
     #pylint: disable=missing-class-docstring
@@ -24,7 +27,9 @@ class SetupParamsValidator:
             'root_dir': root_dir,
             'proj_dir': ProjDirValidator(self.console, self.parser, root_dir).get_value(),
             'media_root_dir': self.get_valid_dir(root_dir, const.DEFAULT_MEDIA_ROOT_SUBDIR),
-            'static_root_dir': self.get_valid_dir(root_dir, const.DEFAULT_STATIC_ROOT_SUBDIR)
+            'static_root_dir': self.get_valid_dir(root_dir, const.DEFAULT_STATIC_ROOT_SUBDIR),
+            'log_file_path': self.get_log_file_path(root_dir),
+            'logging_settings': self.options.logging_settings,
         }
 
 
@@ -36,3 +41,34 @@ class SetupParamsValidator:
             return os.path.join(root_dir, default_subdir)
 
         return os.path.abspath(raw_value)
+
+
+    def get_log_file_path(self, root_dir):
+        """Returns valid log file path
+        Relative path is interpreted as relative to the ${root_dir}
+        Absolute path will be accepted as is.
+        """
+        if self.options.logging_settings:
+            return None
+
+        raw_path = self.options.log_file_path
+        if os.path.isabs(raw_path):
+            return raw_path
+
+        prompt = 'Enter the ' + bold('path to the log file')
+        default_value = self.parser.get_default('log_file_path')
+
+        validator = OptionValidator(self.console,
+                                    self.parser,
+                                    option_name='log_file_path',
+                                    default_value=default_value,
+                                    prompt=prompt,
+                                    validator=LogFilePathValidator,
+                                    cli_error_messages=\
+                                            {'invalid': 'value of --log-file-path is invalid'},
+                                    interactive_error_messages=\
+                                            {'invalid': 'Path is invalid'})
+        value = validator.get_value()
+        if os.path.isabs(value):
+            return value
+        return os.path.join(root_dir, value)

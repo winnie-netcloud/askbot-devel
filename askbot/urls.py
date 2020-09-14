@@ -16,6 +16,7 @@ from askbot import views
 from askbot.feed import RssLastestQuestionsFeed, RssIndividualQuestionFeed
 from askbot.sitemap import QuestionsSitemap
 from askbot.utils.url_utils import service_url
+import askbot.deps.django_authopenid.urls
 
 admin.autodiscover()
 #update_media_revision()#needs to be run once, so put it here
@@ -719,7 +720,7 @@ if 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS:
     urlpatterns.append(
         url(
             r'^%s' % pgettext('urls', 'account/'),
-            include('askbot.deps.django_authopenid.urls')
+            include(askbot.deps.django_authopenid.urls)
         )
     )
 

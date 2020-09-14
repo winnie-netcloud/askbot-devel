@@ -79,7 +79,7 @@ class WidgetCreatorViewsTests(AskbotTestCase):
         self.client = Client()
         self.user = self.create_user('user1')
         self.user.set_password('testpass')
-        self.user.set_admin_status()
+        self.user.set_status('d')
         self.user.save()
         self.widget = models.AskWidget.objects.create(title='foo widget')
 

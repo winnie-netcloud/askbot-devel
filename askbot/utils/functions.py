@@ -36,7 +36,7 @@ def decode_jwt(data_jwt):
 
 def encode_jwt(data):
     """Encodes dict as jwt with the SECRET_KEY"""
-    return jwt.encode(data, django_settings.SECRET_KEY)
+    return jwt.encode(data, django_settings.SECRET_KEY).decode('utf-8')
 
 
 def is_email_valid(email):

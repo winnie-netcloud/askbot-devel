@@ -9,7 +9,7 @@ class ContentConvertionTests(AskbotTestCase):
     def setUp(self):
         self.u1 = self.create_user(username='user1')
         self.u1.set_password('password')
-        self.u1.set_admin_status()
+        self.u1.set_status('d')
         self.u1.save()
         self.u2 = self.create_user(username='notadmin')
         self.client = Client()
