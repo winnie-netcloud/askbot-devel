@@ -52,7 +52,6 @@ DECLARE
     onerow record;
 BEGIN
     DROP AGGREGATE IF EXISTS concat_tsvectors(tsvector);
-    END LOOP;
     CREATE AGGREGATE concat_tsvectors (
         BASETYPE = tsvector,
         SFUNC = tsv_add,

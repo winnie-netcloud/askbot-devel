@@ -12,9 +12,11 @@ Branch `0.7.x` - is the latest version supporting Django 1.5
 
 Branch `0.8.x` - transitional version for the upgrade of the database to Django 1.7
 
-Branch `0.9.x` - supports Django 1.7
+Branch `0.9.x` supports Django 1.7
 
-Branch `master` supports Django 1.8
+Branch `0.10.x` support Django 1.8
+
+Branch `master` supports Django 2.2
 
 How to contribute
 =================
@@ -38,7 +40,6 @@ License, copyright and trademarks
 =================================
 Askbot software is licensed under GPL, version 3.
 
-Copyright Askbot S.p.A and the project contributors, 2010-2017.
+Copyright Askbot S.p.A and the project contributors, 2010-2020.
 
 "Askbot" is a trademark and service mark registered in the United States, number 4323777.
-

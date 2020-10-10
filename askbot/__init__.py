@@ -7,14 +7,14 @@ basic actions on behalf of the forum application
 import os
 import platform
 
-VERSION = (0, 10, 2)
+VERSION = (0, 10, 3)
 
 default_app_config = 'askbot.apps.AskbotConfig'
 
 #keys are module names used by python imports,
 #values - the package qualifier to use for pip
 REQUIREMENTS = {
-    'appconf': 'django-appconf==1.0.3',
+    'appconf': 'django-appconf<=1.0.3',
     'akismet': 'akismet==1.0.1',
     'avatar': 'django-avatar==2.2.1',
     'bs4': 'beautifulsoup4<=4.4.1',
@@ -31,12 +31,13 @@ REQUIREMENTS = {
     'jsonfield': 'jsonfield<=1.0.3',
     'jwt': 'pyjwt<=1.7.1',
     'keyedcache': 'django-keyedcache<=1.5.1',
+    'markupsafe': 'MarkupSafe<=1.1.1',
     'markdown2': 'markdown2<=2.3.1',
     'mock': 'mock==2.0.0',
     'oauth2': 'oauth2<=1.9.0.post1',
     'openid': 'python-openid<=2.2.5',
     'picklefield': 'django-picklefield==0.3.0',
-    'PIL': 'Pillow<7',
+    'PIL': 'Pillow<=6.2.2',
     'pystache': 'pystache==0.3.1',
     'pytz': 'pytz==2019.3',
     'captcha': 'django-recaptcha>=1.0.3,<=1.0.5',
