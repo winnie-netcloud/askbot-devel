@@ -34,7 +34,6 @@ License, copyright and trademarks
 =================================
 Askbot software is licensed under GPL, version 3.
 
-Copyright Askbot S.p.A and the project contributors, 2010-2013.
+Copyright Askbot S.p.A and the project contributors, 2010-2020.
 
 "Askbot" is a trademark and service mark registered in the United States, number 4323777.
-
