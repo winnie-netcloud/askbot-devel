@@ -47,6 +47,7 @@ setup(
         'Topic :: Communications',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ],
+    long_description_content_type='text/markdown',
     long_description = """This version of Askbot is made to transition from Django 1.5 and 1.6
 version 1.7 and higher.
 
