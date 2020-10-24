@@ -17,15 +17,11 @@ Branch `0.7.x` - is the latest version supporting Django 1.5
 
 Branch `0.8.x` - transitional version for the upgrade of the database to Django 1.7
 
-Branch `0.9.x` - supports Django 1.7
+Branch `0.9.x` supports Django 1.7
 
 Branch `0.10.x` - supports Django 1.8
 
-Branch `master` - EXPERIMENTAL - supports Django 2.2/Python 3, soon to be released
-
-NOTE: the `master` branch lacks the file settings.py generator
-use askbot/setup_templates/settings.py.jinja2 as a basis for your settings.py file.
-this is very soon to be resolved.
+Branch `master` - released as versions 0.11.x - supports Django 2.2/Python 3
 
 How to contribute
 =================
@@ -49,7 +45,6 @@ License, copyright and trademarks
 =================================
 Askbot software is licensed under GPL, version 3.
 
-Copyright Askbot S.p.A and the project contributors, 2010-2019.
+Copyright Askbot S.p.A and the project contributors, 2010-2020.
 
 "Askbot" is a trademark and service mark registered in the United States, number 4323777.
-

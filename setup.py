@@ -5,6 +5,17 @@ from setuptools import setup, find_packages
 import sys
 import askbot
 
+PYTHON_VERSION_INFO = \
+"""
+ERROR: This version of Askbot only works with Python 3,
+       if you need Askbot to work with Python 2, 
+       try versions 0.10.x and earlier.
+"""
+
+if sys.version_info[0] < 3:
+    print(PYTHON_VERSION_INFO)
+    sys.exit(1)
+
 setup(
     name = "askbot",
     version = askbot.get_version(),#remember to manually set this correctly
@@ -35,18 +46,17 @@ setup(
         'Natural Language :: Serbian',
         'Natural Language :: Turkish',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.5',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Programming Language :: JavaScript',
         'Topic :: Communications :: Usenet News',
         'Topic :: Communications :: Email :: Mailing List Servers',
         'Topic :: Communications',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ],
-    long_description = """Askbot will work alone or with other django apps (with some limitations, please see below), Django 1.8, PostgresQL(recommended) and MySQL >5.6
+    long_description_content_type='text/markdown',
+    long_description = """Askbot will work alone or with other django apps (with some limitations, please see below), Django 2.2, PostgresQL(recommended) and MySQL >5.6
 
-    This version of Askbot supports only Django 1.8.
+    This version of Askbot supports only Django 2 and Python 3. Versions 0.10.x and earlier support Python 2.
 
     To upgrade, or select version of Askbot working with earlier versions of Django,
     please follow instructions at
