@@ -43,11 +43,7 @@ def get_error_list(form_instance):
 
 def get_next_url(request, default=None):
     """Returns the next url from the jwt token"""
-    next_jwt = None
-    if request.method == 'GET':
-        next_jwt = request.GET.get('next')
-    elif request.method == 'POST':
-        next_jwt = request.POST.get('next')
+    next_jwt = getattr(request, request.method).get('next')
     if next_jwt:
         return get_next_url_from_jwt(next_jwt, default)
     return default

@@ -188,27 +188,26 @@ def edit_widget(request, model, widget_id):
         form = form_class(request.POST)
         if form.is_valid():
             form_dict = dict.copy(form.cleaned_data)
-            for key in widget.__dict__:
-                if key.endswith('_id'):
-                    form_key = key.split('_id')[0]
-                    if form_dict[form_key]:
-                        form_dict[key] = form_dict[form_key].id
-                    del form_dict[form_key]
-                else:
-                    continue
+
+            id_noid_keys = [(k,k.split('_id')[0]) for k in
+                            widget.__dict__.keys()
+                            if k.endswith('_id')]
+
+            for w_id, wo_id in id_noid_keys:
+                if form_dict[wo_id]:
+                    form_dict[w_id] = form_dict[wo_id].id
+                del form_dict[wo_id]
 
             widget.__dict__.update(form_dict)
             widget.save()
             return redirect('list_widgets', model=model)
     else:
         initial_dict = dict.copy(widget.__dict__)
-        for key in initial_dict:
-            if key.endswith('_id'):
-                new_key = key.split('_id')[0]
-                initial_dict[new_key] = initial_dict[key]
-                del initial_dict[key]
-            else:
-                continue
+        rename_keys = [(k,k.split('_id')[0]) for k in initial_dict.keys()
+                       if k.endswith('_id')]
+        for k_old, k_new in rename_keys:
+            initial_dict[k_new] = initial_dict[k_old]
+            del initial_dict[k_old]
 
         del initial_dict['_state']
         form = form_class(initial=initial_dict)

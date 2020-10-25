@@ -1,4 +1,3 @@
-
 from django.core.management.base import CommandError, BaseCommand
 from django.db import transaction
 from askbot.models import (
@@ -29,11 +28,11 @@ class MergeUsersBaseCommand(BaseCommand):
     help = 'Merge an account and all information from a <user_id> to a <user_id>, deleting the <from_user>'
 
     def add_arguments(self, parser):
-        parser.add_argument('from_user_id',type=int,nargs=1)
-        parser.add_argument('to_user_id',type=int,nargs=1)
+        parser.add_argument('from_user_id', type=int, nargs=1)
+        parser.add_argument('to_user_id', type=int, nargs=1)
 
     def handle(self, *arguments, **options):
-        self.parse_arguments(options['from_user_id'][0],options['to_user_id'][0])
+        self.parse_arguments(options['from_user_id'][0], options['to_user_id'][0])
         self.prepare()
 
         #rel_objs = User._meta.get_all_related_objects()
@@ -65,8 +64,8 @@ class MergeUsersBaseCommand(BaseCommand):
     def parse_arguments(self, *arguments):
         if len(arguments) != 2:
             raise CommandError('Arguments are <from_user_id> to <to_user_id>')
-        self.from_user = User.objects.get(id = arguments[0])
-        self.to_user = User.objects.get(id = arguments[1])
+        self.from_user = User.objects.get(id=arguments[0])
+        self.to_user = User.objects.get(id=arguments[1])
 
     def process_relation(self, rel):
         try:
