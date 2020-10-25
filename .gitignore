@@ -2,6 +2,7 @@
 *.swp
 *.log
 *~
+askbot_site
 fetch
 push
 propagate
