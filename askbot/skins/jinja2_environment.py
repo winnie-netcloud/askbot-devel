@@ -96,6 +96,6 @@ def factory(**options):
     default_sibling = SkinEnvironment.build_sibling_key([
         askbot_settings.ASKBOT_DEFAULT_SKIN,
         get_language()
-        ])
+    ])
 
     return SkinEnvironment.siblings[default_sibling]
