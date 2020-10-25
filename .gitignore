@@ -64,3 +64,4 @@ htmlcov
 node_modules
 bower_components/
 .tox
+coverage_html_report

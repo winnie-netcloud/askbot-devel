@@ -3,6 +3,9 @@ from askbot.models import ReplyAddress
 from askbot.mail.lamson_handlers import PROCESS, VALIDATE_EMAIL, get_parts
 from askbot.mail import extract_user_signature
 from askbot import const
+import sys
+import io
+from unittest.mock import patch, MagicMock, mock_open
 
 
 from askbot.tests.utils import AskbotTestCase
@@ -89,7 +92,10 @@ class ReplyAddressModelTests(AskbotTestCase):
             "user1@domain.com"
         )
         msg['Subject'] = 'test subject'
-        PROCESS(msg, address = addr)
+
+        with patch('sys.stdout', new_callable=io.StringIO):
+            with patch('sys.stderr', new_callable=io.StringIO):
+                PROCESS(msg, address = addr)
         self.assertEqual(self.answer.comments.count(), 2)
         self.assertEqual(self.answer.comments.all().order_by('-pk')[0].text.strip(), "This is a test reply")
 
@@ -167,7 +173,9 @@ class EmailSignatureDetectionTests(AskbotTestCase):
                 signature = 'Yours Truly',
                 response_code = reply_token.address
             )
-        PROCESS(msg, address = reply_token.address)
+        with patch('sys.stdout', new_callable=io.StringIO):
+            with patch('sys.stderr', new_callable=io.StringIO):
+                PROCESS(msg, address = reply_token.address)
 
         signature = self.reload_object(self.u2).email_signature
         self.assertEqual(signature, 'Yours Truly')
@@ -186,10 +194,12 @@ class EmailSignatureDetectionTests(AskbotTestCase):
                 signature = 'Yours Truly',
                 response_code = reply_token.address
             )
-        VALIDATE_EMAIL(
-            msg,
-            address = reply_token.address
-        )
+        with patch('sys.stdout', new_callable=io.StringIO):
+            with patch('sys.stderr', new_callable=io.StringIO):
+                VALIDATE_EMAIL(
+                    msg,
+                    address = reply_token.address
+                )
 
         signature = self.reload_object(self.u2).email_signature
         self.assertEqual(signature, 'Yours Truly')
