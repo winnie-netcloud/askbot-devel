@@ -39,7 +39,7 @@ REQUIREMENTS = {
     'picklefield': 'django-picklefield==0.3.0',
     'PIL': 'Pillow<=6.2.2',
     'pystache': 'pystache==0.3.1',
-    'pytz': 'pytz==2019.3',
+    'pytz': 'pytz<=2020.4',
     'captcha': 'django-recaptcha>=1.0.3,<=1.0.5',
     'cas': 'python-cas==1.1.0',
     'responses': 'responses>=0.9.0',
