@@ -39,7 +39,7 @@ REQUIREMENTS = {
     'PIL': 'Pillow<=6.2.2',
     'jwt': 'pyjwt<=1.7.1',
     'pystache': 'pystache==0.3.1',
-    'pytz': 'pytz<=2016.4',
+    'pytz': 'pytz<=2020.4',
     'captcha': 'django-recaptcha>=1.0.3,<=1.0.5',
     'cas': 'python-cas==1.1.0',
     'responses': 'responses>=0.9.0',
