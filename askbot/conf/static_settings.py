@@ -1,8 +1,12 @@
 from django.conf import settings
-from django.utils.translation import pgettext
 from appconf import AppConf
 import os
 from askbot import const
+
+if settings.ASKBOT_TRANSLATE_URL:
+    from django.utils.translation import pgettext
+else:
+    pgettext = lambda context, value: value
 
 class AskbotStaticSettings(AppConf):
     ALLOWED_UPLOAD_FILE_TYPES = ('.jpg', '.jpeg', '.gif',
