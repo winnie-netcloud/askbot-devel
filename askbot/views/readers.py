@@ -41,6 +41,8 @@ from askbot.forms import ShowTagsForm
 from askbot.forms import ShowQuestionForm
 from askbot.models.post import MockPost
 from askbot.models.tag import Tag
+from askbot.serializers.question_search_serializers import (PjaxQuestionSearchSerializer, 
+                                                            Jinja2QuestionSearchSerializer)
 from askbot.search.state_manager import SearchState, DummySearchState
 from askbot.startup_procedures import domain_is_bad
 from askbot.templatetags import extra_tags
@@ -78,212 +80,26 @@ def questions(request, **kwargs):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    search_state = SearchState(
-                    user_logged_in=request.user.is_authenticated,
-                    **kwargs
-                )
-
-    qs, meta_data = models.Thread.objects.run_advanced_search(
-                        request_user=request.user, search_state=search_state
-                    )
-    if meta_data['non_existing_tags']:
-        search_state = search_state.remove_tags(meta_data['non_existing_tags'])
-
-    paginator = Paginator(qs, search_state.page_size)
-    if paginator.num_pages < search_state.page:
-        search_state.page = 1
-    page = paginator.page(search_state.page)
-    page.object_list = list(page.object_list) # evaluate the queryset
-
-    # INFO: Because for the time being we need question posts and thread authors
-    #       down the pipeline, we have to precache them in thread objects
-    models.Thread.objects.precache_view_data_hack(threads=page.object_list)
-
-    related_tags = Tag.objects.get_related_to_search(
-                        threads=page.object_list,
-                        ignored_tag_names=meta_data.get('ignored_tag_names',[])
-                    )
-    tag_list_type = askbot_settings.TAG_LIST_FORMAT
-    if tag_list_type == 'cloud': #force cloud to sort by name
-        related_tags = sorted(related_tags, key = operator.attrgetter('name'))
-
-    contributors = list(
-        models.Thread.objects.get_thread_contributors(
-                                        thread_list=page.object_list
-                                    ).only(
-                                           'id', 'username',
-                                           'askbot_profile__gravatar'
-                                          )
-                        )
-
-    paginator_context = {
-        'is_paginated' : (paginator.count > search_state.page_size),
-        'pages': paginator.num_pages,
-        'current_page_number': search_state.page,
-        'page_object': page,
-        'base_url' : search_state.query_string(),
-        'page_size' : search_state.page_size,
-    }
-
-    #get url for the rss feed
-    context_feed_url = reverse('latest_questions_feed')
-    # We need to pass the rss feed url based
-    # on the search state to the template.
-    # We use QueryDict to get a querystring
-    # from dicts and arrays. Much cleaner
-    # than parsing and string formating.
-    rss_query_dict = QueryDict("").copy()
-    if search_state.query:
-        # We have search string in session - pass it to
-        # the QueryDict
-        rss_query_dict.update({"q": search_state.query})
-
-    if search_state.tags:
-        # We have tags in session - pass it to the
-        # QueryDict but as a list - we want tags+
-        rss_query_dict.setlist('tags', search_state.tags)
-        context_feed_url += '?' + rss_query_dict.urlencode()
-
-    reset_method_count = len([_f for _f in [search_state.query, search_state.tags, meta_data.get('author_name', None)] if _f])
-
     if request.is_ajax():
-        q_count = paginator.count
+        serializer = PjaxQuestionSearchSerializer(kwargs)
+        return HttpResponse(json.dumps(serializer.data), content_type='application/json')
 
-        #todo: words
-        question_counter = ungettext('%(q_num)s question', '%(q_num)s questions', q_count)
-        question_counter = question_counter % {'q_num': humanize.intcomma(q_count),}
+    serialzer = Jinja2QuestionSearchSerializer(kwargs)
 
-        if q_count > search_state.page_size:
-            paginator_tpl = get_template('main_page/paginator.html')
-            paginator_html = paginator_tpl.render(
-                    {
-                        'context': paginator_context,
-                        'questions_count': q_count,
-                        'page_size' : search_state.page_size,
-                        'search_state': search_state,
-                    },
-                    request
-            )
-        else:
-            paginator_html = ''
+    # notify admin to set the domain name if necessary
+    # todo: move this out to a separate middleware
+    if request.user.is_authenticated and request.user.is_administrator():
+        if domain_is_bad():
+            url = askbot_settings.get_setting_url(('QA_SITE_SETTINGS', 'APP_URL'))
+            msg = _(
+                'Please go to Settings -> %s '
+                'and set the base url for your site to function properly'
+            ) % url
+            request.user.message_set.create(message=msg)
 
-        questions_tpl = get_template('main_page/questions_loop.html')
-        questions_html = questions_tpl.render(
-                {
-                    'threads': page,
-                    'search_state': search_state,
-                    'reset_method_count': reset_method_count,
-                    'request': request
-                },
-                request
-        )
-
-        ajax_data = {
-            'query_data': {
-                'tags': search_state.tags,
-                'sort_order': search_state.sort,
-                'ask_query_string': search_state.ask_query_string(),
-            },
-            'paginator': paginator_html,
-            'question_counter': question_counter,
-            'faces': [],#[extra_tags.gravatar(contributor, 48) for contributor in contributors],
-            'feed_url': context_feed_url,
-            'query_string': search_state.query_string(),
-            'page_size' : search_state.page_size,
-            'questions': questions_html.replace('\n',''),
-            'non_existing_tags': meta_data['non_existing_tags'],
-        }
-
-        related_tags_tpl = get_template('widgets/related_tags.html')
-        related_tags_data = {
-            'tags': related_tags,
-            'tag_list_type': tag_list_type,
-            'query_string': search_state.query_string(),
-            'search_state': search_state,
-            'language_code': translation.get_language(),
-        }
-        if tag_list_type == 'cloud':
-            related_tags_data['font_size'] = extra_tags.get_tag_font_size(related_tags)
-
-        ajax_data['related_tags_html'] = related_tags_tpl.render(
-            related_tags_data, request)
-
-        #here we add and then delete some items
-        #to allow extra context processor to work
-        ajax_data['tags'] = related_tags
-        ajax_data['interesting_tag_names'] = None
-        ajax_data['threads'] = page
-        extra_context = context.get_extra(
-                                    'ASKBOT_QUESTIONS_PAGE_EXTRA_CONTEXT',
-                                    request,
-                                    ajax_data
-                                )
-        del ajax_data['tags']
-        del ajax_data['interesting_tag_names']
-        del ajax_data['threads']
-
-        ajax_data.update(extra_context)
-
-        return HttpResponse(json.dumps(ajax_data), content_type='application/json')
-
-    else: # non-AJAX branch
-
-        template_data = {
-            'active_tab': 'questions',
-            'author_name' : meta_data.get('author_name',None),
-            'contributors' : contributors,
-            'context' : paginator_context,
-            'is_unanswered' : False,#remove this from template
-            'interesting_tag_names': meta_data.get('interesting_tag_names', None),
-            'ignored_tag_names': meta_data.get('ignored_tag_names', None),
-            'subscribed_tag_names': meta_data.get('subscribed_tag_names', None),
-            'language_code': translation.get_language(),
-            'name_of_anonymous_user' : models.get_name_of_anonymous_user(),
-            'page_class': 'main-page',
-            'page_size': search_state.page_size,
-            'query': search_state.query,
-            'threads' : page,
-            'questions_count' : paginator.count,
-            'reset_method_count': reset_method_count,
-            'scope': search_state.scope,
-            'show_sort_by_relevance': conf.should_show_sort_by_relevance(),
-            'search_tags' : search_state.tags,
-            'sort': search_state.sort,
-            'tab_id' : search_state.sort,
-            'tags' : related_tags,
-            'tag_list_type' : tag_list_type,
-            'font_size' : extra_tags.get_tag_font_size(related_tags),
-            'display_tag_filter_strategy_choices': conf.get_tag_display_filter_strategy_choices(),
-            'email_tag_filter_strategy_choices': conf.get_tag_email_filter_strategy_choices(),
-            'query_string': search_state.query_string(),
-            'search_state': search_state,
-            'feed_url': context_feed_url
-        }
-
-        extra_context = context.get_extra(
-                                    'ASKBOT_QUESTIONS_PAGE_EXTRA_CONTEXT',
-                                    request,
-                                    template_data
-                                )
-
-        template_data.update(extra_context)
-        template_data.update(context.get_for_tag_editor())
-
-        #and one more thing:) give admin user heads up about
-        #setting the domain name if they have not done that yet
-        #todo: move this out to a separate middleware
-        if request.user.is_authenticated and request.user.is_administrator():
-            if domain_is_bad():
-                url = askbot_settings.get_setting_url(('QA_SITE_SETTINGS', 'APP_URL'))
-                msg = _(
-                    'Please go to Settings -> %s '
-                    'and set the base url for your site to function properly'
-                ) % url
-                request.user.message_set.create(message=msg)
-
-        return render(request, 'main_page.html', template_data)
-        #print timezone.now() - before
-        #return res
+    return render(request, 'main_page.html', serializer.data)
+    #print timezone.now() - before
+    #return res
 
 
 def get_top_answers(request):

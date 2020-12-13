@@ -492,12 +492,15 @@ class ThreadManager(BaseQuerySetManager):
         return qs.distinct(), meta_data
 
     def precache_view_data_hack(self, threads):
-        # TODO: Re-enable this when we have a good test cases to verify that it works properly.
-        #
-        #       E.g.: - make sure that not precaching give threads never increase # of db queries for the main page
-        #             - make sure that it really works, i.e. stuff for non-cached threads is fetched properly
-        # Precache data only for non-cached threads - only those will be rendered
-        # threads = [thread for thread in threads if not thread.summary_html_cached()]
+        """
+        For each thread populates
+        ._question_cache - the question post fetched with only the needed data
+        ._last_activity_by_cache - last activity user info.
+
+        An optimization idea: precache data only for non-cached threads - 
+        only those will be rendered from scratch.
+        threads = [thread for thread in threads if not thread.summary_html_cached()]
+        """
 
         thread_ids = [obj.id for obj in threads]
         from askbot.models.post import Post
@@ -505,9 +508,11 @@ class ThreadManager(BaseQuerySetManager):
             .filter(post_type='question', thread__id__in=thread_ids)\
             .only('id', 'thread', 'points', 'is_anonymous',
                   'summary', 'post_type', 'deleted')
+
         page_question_map = {}
         for pq in page_questions:
             page_question_map[pq.thread_id] = pq
+
         for thread in threads:
             thread._question_cache = page_question_map[thread.id]
 
@@ -515,6 +520,7 @@ class ThreadManager(BaseQuerySetManager):
             .filter(id__in=[obj.last_activity_by_id for obj in threads])\
             .only('id', 'username', 'askbot_profile__country',
                   'askbot_profile__show_country')
+
         user_map = {}
         for la_user in last_activity_by_users:
             user_map[la_user.id] = la_user
