@@ -6,9 +6,11 @@ By main textual content is meant - text of Questions, Answers and Comments.
 The "read-only" requirement here is not 100% strict, as for example "question" view does
 allow adding new comments via Ajax form post.
 """
+import json
 import logging
-import urllib.request, urllib.parse, urllib.error
-import operator
+import urllib.error
+import urllib.parse
+import urllib.request
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -18,32 +20,24 @@ from django.http import HttpResponseNotAllowed
 from django.http import HttpResponseBadRequest
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.template.loader import get_template
-from django.template import Context, RequestContext
-import json
-from django.utils import timezone
-from django.utils.html import escape
 from django.utils.translation import ugettext as _
-from django.utils.translation import ungettext
 from django.utils import translation
 from django.views.decorators import csrf
 from django.urls import reverse
 from django.core import exceptions as django_exceptions
-from django.contrib.humanize.templatetags import humanize
-from django.http import QueryDict
 from django.conf import settings as django_settings
 
-from askbot import conf, const, exceptions, models, signals
+from askbot import const, exceptions, models, signals
 from askbot.conf import settings as askbot_settings
 from askbot.forms import AnswerForm
-from askbot.forms import GetDataForPostForm
 from askbot.forms import GetUserItemsForm
 from askbot.forms import ShowTagsForm
 from askbot.forms import ShowQuestionForm
 from askbot.models.post import MockPost
 from askbot.models.tag import Tag
-from askbot.serializers.question_search_serializers import (PjaxQuestionSearchSerializer, 
+from askbot.serializers.question_search_serializers import (PjaxQuestionSearchSerializer,
                                                             Jinja2QuestionSearchSerializer)
-from askbot.search.state_manager import SearchState, DummySearchState
+from askbot.search.state_manager import SearchState
 from askbot.startup_procedures import domain_is_bad
 from askbot.templatetags import extra_tags
 from askbot.utils import functions
@@ -58,7 +52,7 @@ import askbot
 
 # used in index page
 #todo: - take these out of const or settings
-from askbot.models import Post, Vote
+from askbot.models import Vote
 
 #refactor? - we have these
 #views that generate a listing of questions in one way or another:
@@ -66,7 +60,7 @@ from askbot.models import Post, Vote
 #should we dry them up?
 #related topics - information drill-down, search refinement
 
-def index(request):#generates front page - shows listing of questions sorted in various ways
+def index(_):#generates front page - shows listing of questions sorted in various ways
     """index view mapped to the root url of the Q&A site
     """
     return HttpResponseRedirect(reverse('questions'))
@@ -81,10 +75,10 @@ def questions(request, **kwargs):
         return HttpResponseNotAllowed(['GET'])
 
     if request.is_ajax():
-        serializer = PjaxQuestionSearchSerializer(kwargs)
+        serializer = PjaxQuestionSearchSerializer(kwargs, context={'request': request})
         return HttpResponse(json.dumps(serializer.data), content_type='application/json')
 
-    serialzer = Jinja2QuestionSearchSerializer(kwargs)
+    serializer = Jinja2QuestionSearchSerializer(kwargs, context={'request': request})
 
     # notify admin to set the domain name if necessary
     # todo: move this out to a separate middleware
@@ -120,8 +114,8 @@ def get_top_answers(request):
         return HttpResponseBadRequest()
 
 def tags(request):#view showing a listing of available tags - plain list
-
-    form = ShowTagsForm(getattr(request,request.method))
+    """Tag list view"""
+    form = ShowTagsForm(getattr(request, request.method))
     form.full_clean() #always valid
     page = form.cleaned_data['page']
     sort_method = form.cleaned_data['sort']
@@ -155,7 +149,7 @@ def tags(request):#view showing a listing of available tags - plain list
         'query' : query,
         'tab_id' : sort_method,
         'keywords' : query,
-        'search_state': SearchState(*[None for x in range(8)])
+        'search_state': SearchState(*[None for _ in range(8)])
     }
 
     if tag_list_type == 'list':
@@ -184,13 +178,13 @@ def tags(request):#view showing a listing of available tags - plain list
     data['tags'] = tags
     data.update(context.get_extra('ASKBOT_TAGS_PAGE_EXTRA_CONTEXT', request, data))
 
-    if request.is_ajax():
-        template = get_template('tags/content.html')
-        json_data = {'success': True, 'html': template.render(data,request)}
-        json_string = json.dumps(json_data)
-        return HttpResponse(json_string, content_type='application/json')
-    else:
+    if not request.is_ajax():
         return render(request, 'tags.html', data)
+
+    template = get_template('tags/content.html')
+    json_data = {'success': True, 'html': template.render(data, request)}
+    json_string = json.dumps(json_data)
+    return HttpResponse(json_string, content_type='application/json')
 
 @csrf.csrf_protect
 def question(request, id):#refactor - long subroutine. display question body, answers and comments
@@ -202,7 +196,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #process url parameters
     #todo: fix inheritance of sort method from questions
     #before = timezone.now()
-    form = ShowQuestionForm(getattr(request,request.method))
+    form = ShowQuestionForm(getattr(request, request.method))
     form.full_clean()#always valid
     show_answer = form.cleaned_data['show_answer']
     show_comment = form.cleaned_data['show_comment']
@@ -213,17 +207,14 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #if the question does not exist - try mapping to old questions
     #and and if it is not found again - then give up
     try:
-        question_post = models.Post.objects.filter(
-                                post_type = 'question',
-                                id = id
-                            ).select_related('thread')[0]
+        question_post = models.Post.objects.filter(post_type='question',
+                                                   id=id).select_related('thread')[0]
     except IndexError:
     # Handle URL mapping - from old Q/A/C/ URLs to the new one
         try:
-            question_post = models.Post.objects.filter(
-                                    post_type='question',
-                                    old_question_id = id
-                                ).select_related('thread')[0]
+            question_post = models.Post.objects.filter(post_type='question',
+                                                       old_question_id=id) \
+                                                      .select_related('thread')[0]
         except IndexError:
             raise Http404
 
@@ -257,7 +248,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     try:
         question_post.assert_is_visible_to(request.user)
     except exceptions.QuestionHidden as error:
-        request.user.message_set.create(message = str(error))
+        request.user.message_set.create(message=str(error))
         return HttpResponseRedirect(reverse('index'))
 
     #redirect if slug in the url is wrong
@@ -293,7 +284,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
                 'Sorry, the comment you are looking for has been '
                 'deleted and is no longer accessible'
             )
-            request.user.message_set.create(message = error_message)
+            request.user.message_set.create(message=error_message)
             return HttpResponseRedirect(question_post.thread.get_absolute_url())
 
         if str(show_comment.thread._question_post().id) != str(id):
@@ -303,11 +294,11 @@ def question(request, id):#refactor - long subroutine. display question body, an
         try:
             show_comment.assert_is_visible_to(request.user)
         except exceptions.AnswerHidden as error:
-            request.user.message_set.create(message = str(error))
+            request.user.message_set.create(message=str(error))
             #use reverse function here because question is not yet loaded
-            return HttpResponseRedirect(reverse('question', kwargs = {'id': id}))
+            return HttpResponseRedirect(reverse('question', kwargs={'id': id}))
         except exceptions.QuestionHidden as error:
-            request.user.message_set.create(message = str(error))
+            request.user.message_set.create(message=str(error))
             return HttpResponseRedirect(reverse('index'))
 
     elif show_answer:
@@ -322,8 +313,8 @@ def question(request, id):#refactor - long subroutine. display question body, an
         try:
             show_post.assert_is_visible_to(request.user)
         except django_exceptions.PermissionDenied as error:
-            request.user.message_set.create(message = str(error))
-            return HttpResponseRedirect(reverse('question', kwargs = {'id': id}))
+            request.user.message_set.create(message=str(error))
+            return HttpResponseRedirect(reverse('question', kwargs={'id': id}))
 
     thread = question_post.thread
 
@@ -339,21 +330,20 @@ def question(request, id):#refactor - long subroutine. display question body, an
             request.user.message_set.create(message=message)
             return HttpResponseRedirect(thread.get_absolute_url())
 
-    logging.debug('answer_sort_method=' + str(answer_sort_method))
+    logging.debug('answer_sort_method=%s', str(answer_sort_method))
 
     #load answers and post id's->athor_id mapping
     #posts are pre-stuffed with the correctly ordered comments
-    question_post, answers, post_to_author, published_answer_ids = thread.get_post_data_for_question_view(
-                                sort_method=answer_sort_method,
-                                user=request.user
-                            )
+    question_post, answers, post_to_author, published_answer_ids = \
+            thread.get_post_data_for_question_view(sort_method=answer_sort_method,
+                                                   user=request.user)
     user_votes = {}
     user_post_id_list = list()
     #todo: cache this query set, but again takes only 3ms!
     if request.user.is_authenticated:
         user_votes = Vote.objects.filter(
                             user=request.user,
-                            voted_post__id__in = list(post_to_author.keys())
+                            voted_post__id__in=list(post_to_author.keys())
                         ).values_list('voted_post_id', 'vote')
         user_votes = dict(user_votes)
         #we can avoid making this query by iterating through
@@ -394,9 +384,9 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #for the user into just one query?
     favorited = thread.has_favorite_by_user(request.user)
 
-    is_cacheable = True
-    if show_page != 1:
-        is_cacheable = False
+    #is_cacheable = True
+    #if show_page != 1:
+    #    is_cacheable = False
     # temporary, until invalidation fix. Got broken with Python 3
     # elif show_comment_position > askbot_settings.MAX_COMMENTS_TO_SHOW:
     #    is_cacheable = False
@@ -405,10 +395,8 @@ def question(request, id):#refactor - long subroutine. display question body, an
     initial = {}
     if request.user.is_authenticated:
         #todo: refactor into methor on thread
-        drafts = models.DraftAnswer.objects.filter(
-                                        author=request.user,
-                                        thread=thread
-                                    )
+        drafts = models.DraftAnswer.objects.filter(author=request.user,
+                                                   thread=thread)
         if drafts.count() > 0:
             initial['text'] = drafts[0].get_text()
 
@@ -450,7 +438,8 @@ def question(request, id):#refactor - long subroutine. display question body, an
         'answer' : answer_form,
         'answers' : page_objects.object_list,
         'answer_count': thread.get_answer_count(request.user),
-        'blank_comment': MockPost(post_type='comment', author=request.user),#data for the js comment template
+        #data for the js comment template
+        'blank_comment': MockPost(post_type='comment', author=request.user),
         'category_tree_data': askbot_settings.CATEGORY_TREE,
         'favorited' : favorited,
         'group_read_only': group_read_only,
@@ -489,7 +478,8 @@ def question(request, id):#refactor - long subroutine. display question body, an
     #print 'generated in ', timezone.now() - before
     #return res
 
-def revisions(request, id, post_type = None):
+def revisions(request, id, post_type=None):
+    """Post revisions view"""
     assert post_type in ('question', 'answer')
     post = get_object_or_404(models.Post, post_type=post_type, id=id)
 
@@ -498,15 +488,15 @@ def revisions(request, id, post_type = None):
             or not request.user.is_administrator_or_moderator():
             raise Http404
 
-    revisions = list(models.PostRevision.objects.filter(post=post))
-    revisions.reverse()
-    for i, revision in enumerate(revisions):
+    post_revisions = list(models.PostRevision.objects.filter(post=post))
+    post_revisions.reverse()
+    for i, revision in enumerate(post_revisions):
         if i == 0:
-            revision.diff = sanitize_html(revisions[i].html)
+            revision.diff = sanitize_html(post_revisions[i].html)
             revision.summary = _('initial version')
         else:
             revision.diff = htmldiff(
-                sanitize_html(revisions[i-1].html),
+                sanitize_html(post_revisions[i-1].html),
                 sanitize_html(revision.html)
             )
 
@@ -514,7 +504,7 @@ def revisions(request, id, post_type = None):
         'page_class':'revisions-page',
         'active_tab':'questions',
         'post': post,
-        'revisions': revisions,
+        'revisions': post_revisions,
     }
     return render(request, 'revisions.html', data)
 
@@ -526,8 +516,8 @@ def get_comment(request):
     via ajax response requires request method get
     and request must be ajax
     """
-    id = int(request.GET['id'])
-    comment = models.Post.objects.get(post_type='comment', id=id)
+    comment_id = int(request.GET['id'])
+    comment = models.Post.objects.get(post_type='comment', id=comment_id)
     request.user.assert_can_edit_comment(comment)
 
     try:
@@ -599,6 +589,7 @@ def get_perms_data(request):
 @ajax_only
 @get_only
 def get_post_html(request):
-    post = models.Post.objects.get(id=request.GET['post_id'])
+    """Returns .html attribute of Post"""
+    post = models.Post.objects.get(pk=request.GET['post_id'])
     post.assert_is_visible_to(request.user)
     return {'post_html': post.html}

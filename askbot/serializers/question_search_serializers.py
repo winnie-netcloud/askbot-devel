@@ -1,25 +1,39 @@
-from django.utlis import translation
+"""Serializers returning data for the list of questions."""
+import operator
+from rest_framework import serializers
+from django.contrib.humanize.templatetags import humanize
+from django.core.paginator import Paginator
+from django.http import QueryDict
+from django.urls import reverse
+from django.utils import translation
+from django.template.loader import get_template
+from askbot import conf, models
+from askbot.conf import settings as askbot_settings
+from askbot.search.state_manager import SearchState
+from askbot.templatetags import extra_tags
+from askbot.views import context
 
 class BaseQuestionSearchSerializer(serializers.Serializer):
+    """Base class for the QuestionSearchSerializers"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(BaseQuestionSearchSerializer, self).__init__(*args, **kwargs)
-        self.request = kwargs['request']
+        self.request = kwargs['context']['request']
         self.user = self.request.user
         self.search_state = SearchState(user_logged_in=self.user.is_authenticated,
-                                        **kwargs)
+                                        **args[0])
         manager = models.Thread.objects
-        qs, meta_data = mmanager.run_advanced_search(request_user=self.user,
-                                                     search_state=search_state)
+        threads, meta_data = manager.run_advanced_search(request_user=self.user,
+                                                     search_state=self.search_state)
         self.meta_data = meta_data
 
         if meta_data['non_existing_tags']:
-            search_state = search_state.remove_tags(meta_data['non_existing_tags'])
+            self.search_state = self.search_state.remove_tags(meta_data['non_existing_tags'])
 
-        self.paginator = Paginator(qs, search_state.page_size)
-        if self.paginator.num_pages < search_state.page:
-            search_state.page = 1
-        self.page = paginator.page(search_state.page)
+        self.paginator = Paginator(threads, self.search_state.page_size)
+        if self.paginator.num_pages < self.search_state.page:
+            self.search_state.page = 1
+        self.page = self.paginator.page(self.search_state.page)
         self.page.object_list = list(self.page.object_list) # evaluate the queryset
 
         # INFO: Because for the time being we need question posts and thread authors
@@ -29,13 +43,13 @@ class BaseQuestionSearchSerializer(serializers.Serializer):
 
     def get_related_tags_data(self):
         """Returns data for the related tags"""
-        related_tags = Tag.objects.get_related_to_search(
+        related_tags = models.Tag.objects.get_related_to_search(
                             threads=self.page.object_list,
-                            ignored_tag_names=self.meta_data.get('ignored_tag_names',[])
+                            ignored_tag_names=self.meta_data.get('ignored_tag_names', [])
                         )
         tag_list_type = askbot_settings.TAG_LIST_FORMAT
         if tag_list_type == 'cloud': #force cloud to sort by name
-            related_tags = sorted(related_tags, key = operator.attrgetter('name'))
+            related_tags = sorted(related_tags, key=operator.attrgetter('name'))
 
         return related_tags
 
@@ -50,6 +64,7 @@ class BaseQuestionSearchSerializer(serializers.Serializer):
 
 
     def get_paginator_context(self):
+        """Returns context necessary to render the questions paginator."""
         return {
             'is_paginated' : (self.paginator.count > self.search_state.page_size),
             'pages': self.paginator.num_pages,
@@ -85,6 +100,7 @@ class BaseQuestionSearchSerializer(serializers.Serializer):
 
 
     def get_reset_method_count(self):
+        """Returns number of search methods used (???)"""
         methods = [self.search_state.query,
                    self.search_state.tags,
                    self.meta_data.get('author_name', None)]
@@ -98,7 +114,7 @@ class PjaxQuestionSearchSerializer(BaseQuestionSearchSerializer):
     """
     def render_paginator_html(self):
         """Returns HTML of the questions paginator"""
-        if self.paginator.count <= search_state.page_size:
+        if self.paginator.count <= self.search_state.page_size:
             return ''
 
         paginator_tpl = get_template('main_page/paginator.html')
@@ -106,7 +122,7 @@ class PjaxQuestionSearchSerializer(BaseQuestionSearchSerializer):
                                      'questions_count': self.paginator.count,
                                      'page_size' : self.search_state.page_size,
                                      'search_state': self.search_state},
-                                    request)
+                                    self.request)
 
 
     def render_questions_html(self):
@@ -115,11 +131,12 @@ class PjaxQuestionSearchSerializer(BaseQuestionSearchSerializer):
         return questions_tpl.render({'threads': self.page,
                                      'search_state': self.search_state,
                                      'reset_method_count': self.get_reset_method_count(),
-                                     'request': request},
-                                    request)
+                                     'request': self.request},
+                                    self.request)
 
 
     def render_related_tags_html(self, related_tags):
+        """Returns HTML for the related tags snippet"""
         related_tags_tpl = get_template('widgets/related_tags.html')
         tag_list_type = askbot_settings.TAG_LIST_FORMAT
         related_tags_data = {
@@ -135,15 +152,15 @@ class PjaxQuestionSearchSerializer(BaseQuestionSearchSerializer):
         return related_tags_tpl.render(related_tags_data, self.request)
 
 
-    def get_humanized_question_count(self, count):
+    def get_humanized_question_count(self):
         """Text for the questions count"""
         count = self.paginator.count
-        #todo: used customized words 
+        #todo: used customized words
         question_counter = translation.ungettext('%(q_num)s question', '%(q_num)s questions', count)
         return question_counter % {'q_num': humanize.intcomma(count),}
 
 
-    def to_representation(self, search_params):
+    def to_representation(self, _):
         """Searches for threads matching the parameters
         and returns instance of page, containing the
         results"""
@@ -157,7 +174,7 @@ class PjaxQuestionSearchSerializer(BaseQuestionSearchSerializer):
             'paginator': self.render_paginator_html(),
             'question_counter': self.get_humanized_question_count(),
             #'faces': [extra_tags.gravatar(contributor, 48) for contributor in contributors],
-            'faces': [], 
+            'faces': [],
             'feed_url': self.get_rss_feed_url(),
             'query_string': self.search_state.query_string(),
             'page_size' : self.search_state.page_size,
@@ -187,14 +204,14 @@ class Jinja2QuestionSearchSerializer(BaseQuestionSearchSerializer):
     """Question search serializer for the responses rendered
     into the Jinja2 templates."""
 
-    def to_representation(self, search_params):
+    def to_representation(self, *args, **kwargs):
         """Searches for threads matching the parameters
         and returns instance of page, containing the
         results"""
         related_tags = self.get_related_tags_data()
         template_data = {
             'active_tab': 'questions',
-            'author_name' : meta_data.get('author_name',None),
+            'author_name' : self.meta_data.get('author_name', None),
             'contributors' : self.get_contributors_data(),
             'context' : self.get_paginator_context(),
             'is_unanswered' : False,#remove this from template
@@ -214,7 +231,7 @@ class Jinja2QuestionSearchSerializer(BaseQuestionSearchSerializer):
             'search_tags' : self.search_state.tags,
             'sort': self.search_state.sort,
             'tab_id' : self.search_state.sort,
-            'tags': self.get_related_tags(page.object_list, meta_data),
+            'tags': self.get_related_tags_data(),
             'tag_list_type' : askbot_settings.TAG_LIST_FORMAT,
             'font_size' : extra_tags.get_tag_font_size(related_tags),
             'display_tag_filter_strategy_choices': conf.get_tag_display_filter_strategy_choices(),
