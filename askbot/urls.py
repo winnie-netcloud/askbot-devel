@@ -38,22 +38,7 @@ QUESTION_PAGE_BASE_URL = settings.ASKBOT_QUESTION_PAGE_BASE_URL
 
 APP_PATH = os.path.dirname(__file__)
 urlpatterns = [
-    url(r'^$', views.readers.index, name='index'),
-    # BEGIN Questions (main page) urls. All this urls work both normally and through ajax
-    url(
-        # Note that all parameters, even if optional, are provided to the view. Non-present ones have None value.
-        (r'^%s' % MAIN_PAGE_BASE_URL.strip('/') +
-            r'(%s)?' % r'/scope:(?P<scope>\w+)' +
-            r'(%s)?' % r'/sort:(?P<sort>[\w\-]+)' +
-            r'(%s)?' % r'/tags:(?P<tags>[\w+.#,-]+)' + # Should match: const.TAG_CHARS + ','; TODO: Is `#` char decoded by the time URLs are processed ??
-            r'(%s)?' % r'/author:(?P<author>\d+)' +
-            r'(%s)?' % r'/page:(?P<page>\d+)' +
-            r'(%s)?' % r'/page-size:(?P<page_size>\d+)' +
-            r'(%s)?' % r'/query:(?P<query>.+)' +  # INFO: query is last, b/c it can contain slash!!!
-        r'/$'),
-        views.readers.questions,
-        name='questions'
-    ),
+    #url(r'^$', views.readers.index, name='index'),
     url(
         r'^%s(?P<id>\d+)/' % QUESTION_PAGE_BASE_URL,
         views.readers.question,
@@ -702,6 +687,13 @@ urlpatterns = [
         {'domain': 'djangojs', 'packages': str.join('+',['askbot'])},
         name='askbot_jsi18n'
     ),
+    service_url(
+        r'^jsi18n_v2/$',
+        I18nViews.JSONCatalog.as_view(),
+        {'packages': str.join('+',['askbot'])},
+        name='askbot_jsi18n_v2'
+
+    ),
     service_url(r'^private-messages/', include('askbot.deps.group_messaging.urls')),
     url(r'^settings/', include('livesettings.urls')),
     url(r'^preview-emails/$', views.emails.list_emails, name='list_emails'),
@@ -712,7 +704,11 @@ urlpatterns = [
     url('^api/v1/users/(?P<user_id>\d+)/$', views.api_v1.user, name='api_v1_user'),
     url('^api/v1/questions/$', views.api_v1.questions, name='api_v1_questions'),
     url('^api/v1/questions/(?P<question_id>\d+)/$', views.api_v1.question, name='api_v1_question'),
-    url('^api/v1/answers/(?P<answer_id>\d+)/$', views.api_v1.answer, name='api_v1_answer'),
+    url('^api/v1/answers/(?P<answer_id>\d+)/$', views.api_v1.answer, name='api_v1_answer')
+]
+
+urlpatterns += [
+    url('api/v2/question-search/', views.api_v2.QuestionSearch.as_view()),
 ]
 
 if 'askbot.deps.django_authopenid' in settings.INSTALLED_APPS:

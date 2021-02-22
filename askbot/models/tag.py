@@ -164,10 +164,13 @@ class TagQuerySet(models.query.QuerySet):
 
     def get_related_to_search(self, threads, ignored_tag_names):
         """Returns at least tag names, along with use counts"""
-        tags = self.filter(threads__in=threads).annotate(local_used_count=models.Count('id')).order_by('-local_used_count', 'name')
+        tags = self.filter(threads__in=threads)
+        tags = tags.annotate(local_used_count=models.Count('id'))
+        tags = tags.order_by('-local_used_count', 'name')
         if ignored_tag_names:
             tags = tags.exclude(name__in=ignored_tag_names)
-        tags = tags.exclude(deleted = True)
+        tags = tags.exclude(deleted=True)
+        tags = tags.only('id', 'name')
         return list(tags[:50])
 
 
@@ -290,7 +293,7 @@ class Tag(models.Model):
         unique_together = ('name', 'language_code')
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def decrement_used_count(self, delta=1):
         if self.used_count >= delta:

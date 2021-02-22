@@ -1,0 +1,54 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-02-21 20:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+# /pages/index.svelte: translator comment
+# /pages/questions/index.svelte: a simple string
+#. route: /
+#. route: /questions
+#: /pages/index.svelte:7 /pages/questions/index.svelte:5
+msgid "hello world"
+msgstr ""
+
+#. route: /questions
+#. route: /questions/:slug1
+#. route: /questions/:slug1/:slug2
+#. route: /questions/:slug1/:slug2/:slug3
+#. route: /questions/:slug1/:slug2/:slug3/:slug4
+#. route: /questions/:slug1/:slug2/:slug3/:slug4/:slug5
+#. route: /questions/:slug1/:slug2/:slug3/:slug4/:slug5/:slug6
+#. route: /questions/:slug1/:slug2/:slug3/:slug4/:slug5/:slug6/:slug7
+#: /pages/questions/_components/TagSearch.svelte:3
+msgid "in TagSearch.svelte"
+msgstr ""
+
+#. route: /questions
+#. route: /questions/:slug1
+#. route: /questions/:slug1/:slug2
+#. route: /questions/:slug1/:slug2/:slug3
+#. route: /questions/:slug1/:slug2/:slug3/:slug4
+#. route: /questions/:slug1/:slug2/:slug3/:slug4/:slug5
+#. route: /questions/:slug1/:slug2/:slug3/:slug4/:slug5/:slug6
+#. route: /questions/:slug1/:slug2/:slug3/:slug4/:slug5/:slug6/:slug7
+#: /pages/questions/_components/MainPage.svelte:18
+msgid "in MainPage.svelte"
+msgstr ""
+

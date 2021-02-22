@@ -58,9 +58,15 @@ def timedelta_total_seconds(time_delta):
     return (time_delta.microseconds + (time_delta.seconds + time_delta.days * 24 * 3600) * 10**6) / 10**6
 
 
+def get_epoch_seconds(date_time):
+    """Returns integer seconds from epoch
+    given the `datetime` object"""
+    return int(time.mktime(date_time.timetuple()))
+
+
 def get_epoch_str(date_time):
     """returns epoch as string to datetime"""
-    return str(int(time.mktime(date_time.timetuple())))
+    return str(get_epoch_seconds(date_time))
 
 
 def get_from_dict_or_object(source, key):

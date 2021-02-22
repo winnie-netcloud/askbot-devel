@@ -2,6 +2,7 @@
 :synopsis: django view functions for the askbot project
 """
 from askbot.views import api_v1
+from askbot.views import api_v2
 from askbot.views import commands
 from askbot.views import emails
 from askbot.views import meta

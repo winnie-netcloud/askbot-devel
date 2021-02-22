@@ -10,6 +10,7 @@ askbot/media/style/.sass-cache/
 .sass-cache
 db
 rebuild-locales.pl
+/askbot/media/svelte
 /src
 /static
 /user_data

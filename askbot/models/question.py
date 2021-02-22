@@ -924,9 +924,22 @@ class Thread(models.Model):
         answer.endorsed_by = actor
         answer.save()
 
+
+    def get_public_last_activity_info(self, visitor=None):
+        """Returns (id, name, timestamp) trio.
+        If the last activity is anonymous, returns None for the user
+        id and the anonymous name.
+        """
+        rev = self.get_latest_revision(user=visitor)
+        if rev.is_anonymous:
+            return None, rev.author.get_anonymous_name(), rev.revised_at
+        return rev.author_id, rev.author.username, rev.revised_at
+
+
     def set_last_activity_info(self, last_activity_at, last_activity_by):
         self.last_activity_at = last_activity_at
         self.last_activity_by = last_activity_by
+
 
     def get_last_activity_info(self):
         post_ids = self.get_answers().values_list('id', flat=True)
@@ -941,6 +954,7 @@ class Thread(models.Model):
             return rev.revised_at, rev.author
         except IndexError:
             return None, None
+
 
     def update_last_activity_info(self):
         timestamp, user = self.get_last_activity_info()
@@ -1302,7 +1316,7 @@ class Thread(models.Model):
         return (question_post, answers, post_to_author, published_answer_ids)
 
     def has_accepted_answer(self):
-        return self.accepted_answer_id is not None
+        return bool(self.accepted_answer_id)
 
     def get_similarity(self, other_thread=None):
         """return number of tags in the other question
@@ -1677,6 +1691,7 @@ class Thread(models.Model):
 
         return last_updated_at, last_updated_by
 
+    #todo: delete - will not use with the Svelte UI
     def get_summary_html(self, search_state=None, visitor=None):
         html = self.get_cached_summary_html(visitor) or self.update_summary_html(visitor)
         # TODO: this work may be pushed onto javascript we post-process tag names
@@ -1698,11 +1713,11 @@ class Thread(models.Model):
                 break
             seq = match.group(0)  # e.g "<<<my-tag>>>"
             tag = match.group(1)  # e.g "my-tag"
-            full_url = search_state.add_tag(tag).full_url()
-            html = html.replace(seq, full_url)
+            html = html.replace(seq, tag)
 
         return html
 
+    #todo: delete - will not use with the Svelte UI
     def get_cached_summary_html(self, visitor=None):
         # TODO: remove this plug by adding cached foreign user group
         # parameter to the key. Now with groups on caching is turned off
@@ -1711,6 +1726,7 @@ class Thread(models.Model):
             return None
         return cache.cache.get(self.get_summary_cache_key())
 
+    #todo: delete - will not use with the Svelte UI
     def update_summary_html(self, visitor=None):
         # TODO: it is quite wrong that visitor is an argument here
         # because we do not include any visitor-related info in the cache key
@@ -1738,6 +1754,7 @@ class Thread(models.Model):
                         timeout=const.LONG_TIME)
         return html
 
+    #todo: delete - will not use with the Svelte UI
     def summary_html_cached(self):
         return self.get_summary_cache_key() in cache.cache
 

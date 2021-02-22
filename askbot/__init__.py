@@ -21,6 +21,7 @@ REQUIREMENTS = {
     'compressor': 'django-compressor>=2.0,<=2.4',
     'django': 'django>=1.11,<3.0',
     'django_countries': 'django-countries>=3.3',
+    'corsheaders': 'django-cors-headers>=3.6.0',
     'django_jinja': 'django-jinja>=2.0',
     'djangorestframework': 'djangorestframework==3.12.2',
     'celery': 'celery>=4.0,<5.0',

@@ -35,10 +35,7 @@ from askbot.forms import ShowTagsForm
 from askbot.forms import ShowQuestionForm
 from askbot.models.post import MockPost
 from askbot.models.tag import Tag
-from askbot.serializers.question_search_serializers import (PjaxQuestionSearchSerializer,
-                                                            Jinja2QuestionSearchSerializer)
 from askbot.search.state_manager import SearchState
-from askbot.startup_procedures import domain_is_bad
 from askbot.templatetags import extra_tags
 from askbot.utils import functions
 from askbot.utils.decorators import anonymous_forbidden, ajax_only, get_only
@@ -59,42 +56,6 @@ from askbot.models import Vote
 #index, unanswered, questions, search, tag
 #should we dry them up?
 #related topics - information drill-down, search refinement
-
-def index(_):#generates front page - shows listing of questions sorted in various ways
-    """index view mapped to the root url of the Q&A site
-    """
-    return HttpResponseRedirect(reverse('questions'))
-
-def questions(request, **kwargs):
-    """
-    List of Questions, Tagged questions, and Unanswered questions.
-    matching search query or user selection
-    """
-    #before = timezone.now()
-    if request.method != 'GET':
-        return HttpResponseNotAllowed(['GET'])
-
-    if request.is_ajax():
-        serializer = PjaxQuestionSearchSerializer(kwargs, context={'request': request})
-        return HttpResponse(json.dumps(serializer.data), content_type='application/json')
-
-    serializer = Jinja2QuestionSearchSerializer(kwargs, context={'request': request})
-
-    # notify admin to set the domain name if necessary
-    # todo: move this out to a separate middleware
-    if request.user.is_authenticated and request.user.is_administrator():
-        if domain_is_bad():
-            url = askbot_settings.get_setting_url(('QA_SITE_SETTINGS', 'APP_URL'))
-            msg = _(
-                'Please go to Settings -> %s '
-                'and set the base url for your site to function properly'
-            ) % url
-            request.user.message_set.create(message=msg)
-
-    return render(request, 'main_page.html', serializer.data)
-    #print timezone.now() - before
-    #return res
-
 
 def get_top_answers(request):
     """returns a snippet of html of users answers"""

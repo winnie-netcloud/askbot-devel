@@ -49,16 +49,6 @@ class AskbotConfigError(ImproperlyConfigured):
             super(AskbotConfigError, self).__init__(msg)
 
 
-def domain_is_bad():
-    from askbot.conf import settings as askbot_settings
-    parsed = urlparse(askbot_settings.APP_URL)
-    if parsed.netloc == '':
-        return True
-    if parsed.scheme not in ('http', 'https'):
-        return True
-    return False
-
-
 def askbot_warning(line):
     """prints a warning with the nice header, but does not quit"""
     print(str(line).encode('utf-8'), file=sys.stderr)

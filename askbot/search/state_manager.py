@@ -142,13 +142,12 @@ class SearchState(object):
         default_page_size = int(askbot_settings.DEFAULT_QUESTIONS_PAGE_SIZE)
         self.page_size = int(page_size) if page_size else default_page_size
 
-        self._questions_url = reverse('questions')
-
     def __str__(self):
         return self.query_string()
 
+    #todo: remove for Svelte
     def full_url(self):
-        return self._questions_url + self.query_string()
+        return self.query_string()
 
     def ask_query_string(self): # TODO: test me
         """returns string to prepopulate title field on the "Ask your question" page"""
@@ -210,6 +209,17 @@ class SearchState(object):
             lst.append('query:' + urllib.parse.quote(smart_str(self.query), safe=self.SAFE_CHARS))
         return '/'.join(lst) + '/'
 
+    def as_dict(self):
+        """Returns dictionary"""
+        return {
+            'scope': self.scope,
+            'sort': self.sort,
+            'tags': self.tags,
+            'author': self.author,
+            'page': self.page,
+            'query': self.query
+        }
+
     def deepcopy(self): # TODO: test me
         "Used to contruct a new SearchState for manipulation, e.g. for adding/removing tags"
         ss = copy.copy(self) #SearchState.get_empty()
@@ -228,9 +238,6 @@ class SearchState(object):
         if ss.query_users:
             ss.query_users = ss.query_users[:]
         #ss.query_title = self.query_title
-
-        #ss._questions_url = self._questions_url
-
         return ss
 
     def add_tag(self, tag):
@@ -281,8 +288,26 @@ class DummySearchState(object): # Used for caching question/thread summaries
         self.tag = tag
         return self
 
+    @property
+    def tags(self):
+        if self.tag:
+            return [self.tag,]
+        return []
+
     def change_scope(self, new_scope):
         return self
 
+    #todo: remove for Svelte
     def full_url(self):
         return '<<<%s>>>' % self.tag
+
+    def as_dict(self):
+        """Returns dictionary"""
+        return {
+            'scope': None,
+            'sort': None,
+            'tags': self.tags,
+            'author': None,
+            'page': None,
+            'query': None
+        }
