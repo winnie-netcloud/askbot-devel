@@ -1,5 +1,6 @@
 {% extends "one_column_body.html" %}
 {% block title %}{% filter trim %}{% trans %}Confirm email address{% endtrans %}{% endfilter %}{% endblock %}
+{% block page_class %}verify-email-page{% block %}
 {% block content %}
     <h1 class="section-title">{% trans %}Confirm email address{% endtrans %}</h1>
     <p style="margin-bottom: .25rem">{% trans %}Validation email sent. Please find it and follow the enclosed link.{% endtrans %}</p>

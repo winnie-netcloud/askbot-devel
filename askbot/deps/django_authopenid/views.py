@@ -182,10 +182,7 @@ def logout(request):
     connect_messages_to_anon_user(request)
 
 def logout_page(request):
-    data = {
-        'page_class': 'meta',
-        'have_federated_login_methods': util.have_enabled_federated_login_methods()
-    }
+    data = {'have_federated_login_methods': util.have_enabled_federated_login_methods()}
     return render(request, 'authopenid/logout.html', data)
 
 def get_url_host(request):
@@ -490,7 +487,7 @@ def complete_oauth1_signin(request):
 
 
 @csrf.csrf_protect
-def signin(request, template_name='authopenid/signin.html'):
+def signin(request):
     """
     signin page. It manages the legacy authentification (user/password)
     and openid authentification
@@ -760,23 +757,18 @@ def signin(request, template_name='authopenid/signin.html'):
     else:
         view_subtype = 'default'
 
-    return show_signin_view(
-                            request,
+    return show_signin_view(request,
                             login_form=login_form,
                             view_subtype=view_subtype,
-                            template_name=template_name
-                           )
+                            template_name=template_name)
 
 @csrf.csrf_protect
-def show_signin_view(
-                request,
-                login_form = None,
-                account_recovery_form = None,
-                account_recovery_message = None,
-                sticky = False,
-                view_subtype = 'default',
-                template_name='authopenid/signin.html'
-            ):
+def show_signin_view(request,
+                     login_form = None,
+                     account_recovery_form = None,
+                     account_recovery_message = None,
+                     sticky = False,
+                     view_subtype = 'default'):
     """url-less utility function that populates
     context of template 'authopenid/signin.html'
     and returns its rendered output
@@ -865,7 +857,6 @@ def show_signin_view(
 
     logging.debug('showing signin view')
     data = {
-        'page_class': 'openid-signin',
         'view_subtype': view_subtype, #add_openid|default
         'page_title': page_title,
         'question': question,
@@ -914,7 +905,7 @@ def show_signin_view(
     data['major_login_providers'] = list(major_login_providers.values())
     data['minor_login_providers'] = list(minor_login_providers.values())
 
-    return render(request, template_name, data)
+    return render(request, 'authopenid/signin.html', data)
 
 @csrf.csrf_protect
 @askbot_decorators.post_only
@@ -1351,9 +1342,7 @@ def verify_email_and_register(request):
             )
             request.user.message_set.create(message=message)
             return HttpResponseRedirect(reverse('index'))
-    else:
-        data = {'page_class': 'validate-email-page'}
-        return render(request, 'authopenid/verify_email.html', data)
+    return render(request, 'authopenid/verify_email.html')
 
 @not_authenticated
 @csrf.csrf_protect
@@ -1408,16 +1397,13 @@ def signup_with_password(request):
 
     context_data = {
         'form': form,
-        'page_class': 'openid-signin',
         'major_login_providers': list(major_login_providers.values()),
         'minor_login_providers': list(minor_login_providers.values()),
         'login_form': login_form
     }
-    return render(
-        request,
-        'authopenid/signup_with_password.html',
-        context_data
-    )
+    return render(request,
+                  'authopenid/signup_with_password.html',
+                  context_data)
 
 @login_required
 def signout(request):
@@ -1498,7 +1484,6 @@ def recover_account(request):
             user = form.cleaned_data['user']
             send_user_new_email_key(user)
             message = _('Please check your email and visit the enclosed link.')
-            data = {'page_class': 'validate-email-page'}
             return render(request, 'authopenid/verify_email.html', data)
         return show_signin_view(request, account_recovery_form=form)
 
@@ -1537,7 +1522,7 @@ def auth_user_by_token(request, key):
 
     data = {
         'account_recovery_form': forms.AccountRecoveryForm(),
-        'message': _('Sorry, this account recovery key has expired or is invalid'),
-        'bad_key': True
+        'bad_key': True,
+        'message': _('Sorry, this account recovery key has expired or is invalid')
     }
     return render(request, 'authopenid/recover_account.html', data)
