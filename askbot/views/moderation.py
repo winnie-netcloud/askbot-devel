@@ -195,12 +195,9 @@ def moderation_queue(request):
 
     queue.sort(key=lambda x: x['timestamp'], reverse=True)
     reject_reasons = models.PostFlagReason.objects.all().order_by('title')
-    data = {
-        'active_tab': 'users',
-        'page_class': 'moderation-queue-page',
-        'post_reject_reasons': reject_reasons,
-        'messages' : queue,
-    }
+    data = {'active_tab': 'users',
+            'post_reject_reasons': reject_reasons,
+            'messages' : queue}
     template = 'moderation/queue.html'
     return render(request, template, data)
 

@@ -1,6 +1,7 @@
 {% extends "two_column_body.html" %}
 <!-- tags.html -->
 {% block title %}{% filter trim %}{% trans %}Tags{% endtrans %}{% endfilter %}{% endblock %}
+{% block page_class %}tags-page{% endblock %}
 {% block content %}
 {% include "tags/content.html" %}
 {% endblock %}

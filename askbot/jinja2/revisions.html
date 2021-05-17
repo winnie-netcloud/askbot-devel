@@ -2,8 +2,9 @@
 {% import "macros.html" as macros %}
 <!-- revisions.html -->
 {% block title %}{% filter trim %}{% trans %}Revision history{% endtrans %}{% endfilter %}{% endblock %}
+{% block page_class %}revisions-page{% endblock %}
 {% block content %}
-<h1 class="section-title">
+<h1>
     {% trans %}Revision history{% endtrans %} [<a href="{{ post.get_absolute_url() }}">{% trans %}back{% endtrans %}</a>]
 </h1>
 <div id="revisions">

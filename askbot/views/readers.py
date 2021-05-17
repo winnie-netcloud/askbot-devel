@@ -239,7 +239,6 @@ def questions(request, **kwargs):
             'subscribed_tag_names': meta_data.get('subscribed_tag_names', None),
             'language_code': translation.get_language(),
             'name_of_anonymous_user' : models.get_name_of_anonymous_user(),
-            'page_class': 'main-page',
             'page_size': search_state.page_size,
             'query': search_state.query,
             'threads' : page,
@@ -334,7 +333,6 @@ def tags(request):#view showing a listing of available tags - plain list
     #3) Start populating the template context.
     data = {
         'active_tab': 'tags',
-        'page_class': 'tags-page',
         'tag_list_type' : tag_list_type,
         'query' : query,
         'tab_id' : sort_method,
@@ -643,7 +641,6 @@ def question(request, id):#refactor - long subroutine. display question body, an
         'long_time': const.LONG_TIME,#"forever" caching
         'new_answer_allowed': new_answer_allowed,
         'oldest_answer_id': thread.get_oldest_answer_id(request.user),
-        'page_class': 'question-page',
         'paginator_context' : paginator_context,
         'previous_answer': previous_answer,
         'published_answer_ids': published_answer_ids,
@@ -694,12 +691,9 @@ def revisions(request, id, post_type = None):
                 sanitize_html(revision.html)
             )
 
-    data = {
-        'page_class':'revisions-page',
-        'active_tab':'questions',
-        'post': post,
-        'revisions': revisions,
-    }
+    data = {'active_tab':'questions',
+            'post': post,
+            'revisions': revisions}
     return render(request, 'revisions.html', data)
 
 @ajax_only
