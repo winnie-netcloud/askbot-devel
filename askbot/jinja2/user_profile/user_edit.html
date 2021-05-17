@@ -2,8 +2,9 @@
 {% import "macros.html" as macros %}
 <!-- user_edit.html -->
 {% block title %}{% filter trim %}{% trans %}Edit user profile{% endtrans %}{% endfilter %}{% endblock %}
+{% block page_class %}edit-user-profile-page{% endblock %}
 {% block content %}
-<h1 class="section-title">
+<h1>
     {{ view_user.username|escape }} - {% trans %}edit profile{% endtrans %}
 </h1>
 <div class='avatar'>

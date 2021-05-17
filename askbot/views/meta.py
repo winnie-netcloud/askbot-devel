@@ -39,26 +39,18 @@ from askbot.utils import functions
 from askbot.utils.markup import markdown_input_converter
 import re
 
-def generic_view(request, template=None, page_class=None, context=None):
+def generic_view(request, template=None, context=None):
     """this may be not necessary, since it is just a rewrite of render"""
     if request is None:  # a plug for strange import errors in django startup
         return render_to_response('django_error.html')
-    context = context or {}
-    context['page_class'] = page_class
     return render(request, template, context)
 
-def markdown_flatpage(request, page_class=None, setting_name=None):
+def markdown_flatpage(request, setting_name=None):
     value = getattr(askbot_settings, setting_name)
     content = markdown_input_converter(value)
-    context = {
-        'content': content,
-        'title': askbot_settings.get_description(setting_name)
-    }
-    return generic_view(
-        request, template='askbot_flatpage.html',
-        page_class=page_class, context=context
-    )
-
+    context = {'content': content,
+               'title': askbot_settings.get_description(setting_name)}
+    return generic_view(request, template='askbot_flatpage.html', context=context)
 
 PUBLIC_VARIABLES = ('CUSTOM_CSS', 'CUSTOM_JS')
 
@@ -77,7 +69,7 @@ def about(request, template='static_page.html'):
     title = _('About %(site)s') % {'site': askbot_settings.APP_SHORT_NAME}
     data = {
         'title': title,
-        'page_class': 'meta',
+        'page_class': 'meta-page about-page',
         'content': askbot_settings.FORUM_ABOUT
     }
     return render(request, template, data)
@@ -93,7 +85,7 @@ def help(request):
         data = {
             'title': _('Help'),
             'content': askbot_settings.FORUM_HELP,
-            'page_class': 'meta',
+            'page_class': 'meta-page help-page',
             'active_tab': 'help',
         }
         return render(request, 'static_page.html', data)
@@ -101,7 +93,6 @@ def help(request):
         data = {
             'active_tab': 'help',
             'app_name': askbot_settings.APP_SHORT_NAME,
-            'page_class': 'meta'
         }
         return render(request, 'help_static.html', data)
 
@@ -110,7 +101,7 @@ def faq(request):
         data = {
             'title': _('FAQ'),
             'content': askbot_settings.FORUM_FAQ,
-            'page_class': 'meta',
+            'page_class': 'meta-page faq-page',
             'active_tab': 'faq',
         }
         return render(request, 'static_page.html', data)
@@ -118,7 +109,6 @@ def faq(request):
         data = {
             'gravatar_faq_url': reverse('faq') + '#gravatar',
             'ask_question_url': reverse('ask'),
-            'page_class': 'meta',
             'active_tab': 'faq',
         }
         return render(request, 'faq_static.html', data)
@@ -134,7 +124,6 @@ def feedback(request):
     elif askbot_settings.FEEDBACK_MODE == 'disabled':
         raise Http404
 
-    data = {'page_class': 'meta'}
     form = None
 
     if request.method == "POST":
@@ -170,7 +159,7 @@ feedback.CANCEL_MESSAGE=ugettext_lazy('We look forward to hearing your feedback!
 def privacy(request):
     data = {
         'title': _('Privacy policy'),
-        'page_class': 'meta',
+        'page_class': 'meta-page privacy-page',
         'content': askbot_settings.FORUM_PRIVACY
     }
     return render(request, 'static_page.html', data)
@@ -192,12 +181,9 @@ def badges(request):#user status/reputation system
                                 'badge_id', flat=True
                             ).distinct()
 
-    data = {
-        'active_tab': 'badges',
-        'badges' : badges,
-        'page_class': 'meta',
-        'my_badge_ids' : my_badge_ids
-    }
+    data = {'active_tab': 'badges',
+            'badges' : badges,
+            'my_badge_ids' : my_badge_ids}
     return render(request, 'badges.html', data)
 
 def badge(request, id):
@@ -234,7 +220,6 @@ def badge(request, id):
         'active_tab': 'badges',
         'badge_recipients': badge_recipients,
         'badge' : badge,
-        'page_class': 'meta',
         'paginator_context': paginator_context
     }
     return render(request, 'badge.html', data)
@@ -273,7 +258,6 @@ def list_suggested_tags(request):
         'tags': page.object_list,
         'active_tab': 'tags',
         'tab_id': 'suggested',
-        'page_class': 'moderate-tags-page',
         'page_title': _('Suggested tags'),
         'paginator_context' : paginator_context,
     }

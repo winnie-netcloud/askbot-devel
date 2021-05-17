@@ -321,7 +321,6 @@ def ask(request):#view used to ask a new question
 
     data = {
         'active_tab': 'ask',
-        'page_class': 'ask-page',
         'form' : form,
         'editor_is_folded': editor_is_folded,
         'mandatory_tags': models.tag.get_mandatory_tags(),
@@ -500,7 +499,6 @@ def edit_question(request, id):
                                 )
 
         data = {
-            'page_class': 'edit-question-page',
             'active_tab': 'questions',
             'question': question,
             'revision': revision,
@@ -601,7 +599,6 @@ def edit_answer(request, id):
                 form.initial['post_privately'] = answer.is_private()
 
         data = {
-            'page_class': 'edit-answer-page',
             'active_tab': 'questions',
             'answer': answer,
             'revision': revision,

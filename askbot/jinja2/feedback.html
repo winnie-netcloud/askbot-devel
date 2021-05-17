@@ -2,8 +2,9 @@
 {% import "macros.html" as macros %}
 <!-- template feedback.html -->
 {% block title %}{% filter trim %}{% trans %}Feedback{% endtrans %}{% endfilter %}{% endblock %}
+{% block page_class %}feedback-page{% endblock %}
 {% block content %}
-<h1 class="section-title">{% trans %}Give us your feedback!{% endtrans %}</h1>
+<h1>{% trans %}Give us your feedback!{% endtrans %}</h1>
 {% if form.errors %}
 <span class="error">
   {{form.errors.__all__}}

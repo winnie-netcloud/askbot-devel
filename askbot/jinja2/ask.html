@@ -5,6 +5,7 @@
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" href="{{"/wmd/wmd.css"|media}}" />
 {% endblock %}
+{% block page_class %}ask-page{% endblock %}
 {# main contents of ask form is in the template input_bar #}
 {% block sidebar %}
     {% if settings.EDITOR_TYPE == 'markdown' %}

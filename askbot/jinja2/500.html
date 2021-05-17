@@ -1,6 +1,7 @@
 {% extends "two_column_body.html" %}
 <!-- template 500.html -->
 {% block title %}{% filter trim %}{% trans %}Internal server error{% endtrans %}{% endfilter %}{% endblock %}
+{% block page_class %}error-page error-500-page{% endblock %}
 {% block content %}
 <h1>{% trans %}Internal server error{% endtrans %}</h1>
 <p>

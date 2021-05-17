@@ -5,6 +5,7 @@
 {% block forestyle %}
     <link rel="stylesheet" type="text/css" href="{{"/wmd/wmd.css"|media}}" />
 {% endblock %}
+{% block page_class %}edit-question-page{% endblock %}
 {% block content %}
 <div class="section-title">{{ settings.WORDS_EDIT_QUESTION|escape }} [<a href="{{ question.get_absolute_url() }}">{% trans %}back{% endtrans %}</a>]</div>
 <form id="fmedit" action="{{ url('edit_question',  question.id ) }}" method="post" >{{ csrf_input }}

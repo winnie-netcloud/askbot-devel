@@ -251,7 +251,6 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
         'group': group,
         'group_email_moderation_enabled': group_email_moderation_enabled,
         'group_openness_choices': group_openness_choices,
-        'page_class': 'users-page',
         'paginator_context' : paginator_context,
         'search_query' : search_query,
         'tab_id' : sort_method,
@@ -444,7 +443,6 @@ def user_moderate(request, subject, context):
                                     )
     data = {
         'active_tab': 'users',
-        'page_class': 'user-profile-page',
         'tab_name': 'moderation',
         'page_title': _('moderate user'),
         'change_user_status_form': user_status_form,
@@ -535,7 +533,6 @@ def edit_user(request, id):
 
     data = {
         'active_tab': 'users',
-        'page_class': 'user-profile-edit-page',
         'form' : form,
         'marked_tags_setting': askbot_settings.MARKED_TAGS_ARE_PUBLIC_WHEN,
         'support_custom_avatars': ('avatar' in django_settings.INSTALLED_APPS),
@@ -708,7 +705,6 @@ def user_stats(request, user, context):
 
     data = {
         'active_tab':'users',
-        'page_class': 'user-profile-page',
         'support_custom_avatars': ('avatar' in django_settings.INSTALLED_APPS),
         'show_moderation_warning': show_moderation_warning,
         'show_profile_info': show_profile_info,
@@ -897,7 +893,6 @@ def user_recent(request, user, context):
 
     data = {
         'active_tab': 'users',
-        'page_class': 'user-profile-page',
         'tab_name' : 'recent',
         'page_title' : _('profile - recent activity'),
         'activities' : activities
@@ -928,7 +923,6 @@ def show_group_join_requests(request, user, context):
     data = {
         'active_tab':'users',
         'inbox_section': 'group-join-requests',
-        'page_class': 'user-profile-page',
         'tab_name' : 'join_requests',
         'page_title' : _('profile - moderation'),
         'groups_dict': groups_dict,
@@ -978,7 +972,6 @@ def user_responses(request, user, context):
         data = {
             'inbox_threads_count': context['threads_count'],#a hackfor the inbox count
             'active_tab':'users',
-            'page_class': 'user-profile-page',
             'tab_name' : 'inbox',
             'inbox_section': section,
             'page_title' : _('profile - messages')
@@ -1075,7 +1068,6 @@ def user_responses(request, user, context):
 
     data = {
         'active_tab':'users',
-        'page_class': 'user-profile-page',
         'tab_name' : 'inbox',
         'inbox_section': section,
         'page_title' : _('profile - responses'),
@@ -1118,7 +1110,6 @@ def user_votes(request, user, context):
 
     data = {
         'active_tab':'users',
-        'page_class': 'user-profile-page',
         'tab_name' : 'votes',
         'page_title' : _('profile - votes'),
         'votes' : votes[:const.USER_VIEW_DATA_SIZE]
@@ -1172,7 +1163,6 @@ def user_reputation(request, user, context):
 
     data = {
         'active_tab':'users',
-        'page_class': 'user-profile-page',
         'tab_name': 'reputation',
         'page_title': _("Profile - User's Karma"),
         'latest_rep_changes': reputes[:100],
@@ -1209,7 +1199,6 @@ def user_favorites(request, user, context):
 
     data = {
         'active_tab':'users',
-        'page_class': 'user-profile-page',
         'tab_name' : 'favorites',
         'page_title' : _('profile - favorites'),
         'questions' : questions,
@@ -1276,7 +1265,6 @@ def user_select_languages(request, id=None, slug=None):
             'view_user': user,
             'languages_form': form,
             'tab_name': 'langs',
-            'page_class': 'user-profile-page',
         }
         return render(request, 'user_profile/user_languages.html', data)
 
@@ -1371,7 +1359,6 @@ def user_email_subscriptions(request, user, context):
     data = {
         'active_tab': 'users',
         'subscribed_tag_names': user.get_marked_tag_names('subscribed'),
-        'page_class': 'user-profile-page',
         'tab_name': 'email_subscriptions',
         'page_title': _('profile - email subscriptions'),
         'email_feeds_form': email_feeds_form,
@@ -1523,6 +1510,5 @@ def groups(request, id = None, slug = None):
         'user_can_add_groups': user_can_add_groups,
         'active_tab': 'groups',#todo vars active_tab and tab_name are too similar
         'tab_name': scope,
-        'page_class': 'groups-page'
     }
     return render(request, 'groups.html', data)
