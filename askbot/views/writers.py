@@ -333,6 +333,7 @@ def ask(request):#view used to ask a new question
 
 @login_required
 @csrf.csrf_protect
+@decorators.ajax_only
 def retag_question(request, id):
     """retag question view
     """
@@ -340,59 +341,42 @@ def retag_question(request, id):
 
     try:
         request.user.assert_can_retag_question(question)
-        if request.method == 'POST':
-            form = forms.RetagQuestionForm(question, request.POST)
+        form = forms.RetagQuestionForm(question, request.POST)
 
-            if form.is_valid():
-                if form.has_changed():
-                    text = question.get_text_content(tags=form.cleaned_data['tags'])
-                    if akismet_check_spam(text, request):
-                        message = _('Spam was detected on your post, sorry if it was a mistake')
-                        raise exceptions.PermissionDenied(message)
+        if form.is_valid():
+            if form.has_changed():
+                text = question.get_text_content(tags=form.cleaned_data['tags'])
+                if akismet_check_spam(text, request):
+                    message = _('Spam was detected on your post, sorry if it was a mistake')
+                    raise exceptions.PermissionDenied(message)
 
-                    request.user.retag_question(question=question, tags=form.cleaned_data['tags'])
-                if request.is_ajax():
-                    response_data = {
-                        'success': True,
-                        'new_tags': question.thread.tagnames
-                    }
+                request.user.retag_question(question=question, tags=form.cleaned_data['tags'])
 
-                    if request.user.message_set.count() > 0:
-                        #todo: here we will possibly junk messages
-                        message = request.user.get_and_delete_messages()[-1]
-                        response_data['message'] = message
-
-                    data = json.dumps(response_data)
-                    return HttpResponse(data, content_type="application/json")
-                else:
-                    return HttpResponseRedirect(question.get_absolute_url())
-            elif request.is_ajax():
-                response_data = {
-                    'message': format_errors(form.errors['tags']),
-                    'success': False
-                }
-                data = json.dumps(response_data)
-                return HttpResponse(data, content_type="application/json")
-        else:
-            form = forms.RetagQuestionForm(question)
-
-        data = {
-            'active_tab': 'questions',
-            'question': question,
-            'form' : form,
-        }
-        return render(request, 'question_retag.html', data)
-    except exceptions.PermissionDenied as e:
-        if request.is_ajax():
             response_data = {
-                'message': str(e),
+                'success': True,
+                'new_tags': question.thread.tagnames
+            }
+            if request.user.message_set.count() > 0:
+                #todo: here we will possibly junk messages
+                message = request.user.get_and_delete_messages()[-1]
+                response_data['message'] = message
+
+            data = json.dumps(response_data)
+            return HttpResponse(data, content_type="application/json")
+        else:
+            response_data = {
+                'message': format_errors(form.errors['tags']),
                 'success': False
             }
             data = json.dumps(response_data)
             return HttpResponse(data, content_type="application/json")
-        else:
-            request.user.message_set.create(message = str(e))
-            return HttpResponseRedirect(question.get_absolute_url())
+    except exceptions.PermissionDenied as e:
+        response_data = {
+            'message': str(e),
+            'success': False
+        }
+        data = json.dumps(response_data)
+        return HttpResponse(data, content_type="application/json")
 
 @login_required
 @csrf.csrf_protect

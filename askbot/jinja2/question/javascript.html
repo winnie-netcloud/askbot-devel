@@ -21,7 +21,6 @@
 {% endif %}
 {% compress js %}
 <script type="text/javascript" src="{{ '/jslib/editor.js'|media }}"></script>
-<script type="text/javascript" src="{{ '/bootstrap/js/bootstrap.js'|media }}"></script>
 {% if settings.EDITOR_TYPE == 'markdown' %}
     {% include "meta/markdown_javascript.html" %}
 {% endif %}

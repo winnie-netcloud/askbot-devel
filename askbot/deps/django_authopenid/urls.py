@@ -17,12 +17,6 @@ urlpatterns = [
     url(r'^yadis.xrdf$', OpenidViews.xrdf, name='yadis_xrdf'),
      # manage account registration
     url(r'^%s$' % pgettext('urls', 'signin/'), OpenidViews.signin, name='user_signin'),
-    url(
-        r'^%s%s$' % (pgettext('urls', 'widget/'), pgettext('urls', 'signin/')),
-        OpenidViews.signin,
-        {'template_name': 'authopenid/widget_signin.html'},
-        name='widget_signin'
-    ),
     url(r'^%s$' % pgettext('urls', 'signout/'), OpenidViews.signout, name='user_signout'),
     #this view is "complete-openid" signin
     url(
