@@ -1,0 +1,15 @@
+{
+  "name": "askbot-media",
+  "version": "1.0.0",
+  "description": "Media for the Askbot's server side rendered templates",
+  "main": "index.js",
+  "author": "Askbot, S.p.A.",
+  "license": "GPL v3",
+  "dependencies": {
+    "normalize.css": "^8.0.1",
+    "sass": "^1.34.0"
+  },
+  "scripts": {
+    "build": "sass ./sass/style.scss ./css/style.css --watch"
+  }
+}

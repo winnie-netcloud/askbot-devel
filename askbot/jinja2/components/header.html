@@ -1,0 +1,21 @@
+<!-- template header.html -->
+<header class="{% if settings.SHOW_LOGO %}with-logo{% else %}without-logo{% endif %}">
+  <div class="content-wrapper">
+    {% include "components/user_nav.html" %}
+    {% if settings.MULTILINGUAL %}
+      {% include "components/language_nav.html" %}
+    {% endif %}
+    {% if settings.SHOW_LOGO %}
+      {% include "components/logo.html" %}
+    {% endif %}
+    {% include "components/meta_nav.html" %}
+  </div>
+  {% if settings.READ_ONLY_MODE_ENABLED %}
+    <div class="content-wrapper">
+      <div class="read-only-message">
+        {{ settings.READ_ONLY_MESSAGE }}
+      </div>
+    </div>
+  {% endif %}
+</header>
+<!-- end template header.html -->

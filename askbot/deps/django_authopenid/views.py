@@ -759,8 +759,7 @@ def signin(request):
 
     return show_signin_view(request,
                             login_form=login_form,
-                            view_subtype=view_subtype,
-                            template_name=template_name)
+                            view_subtype=view_subtype)
 
 @csrf.csrf_protect
 def show_signin_view(request,

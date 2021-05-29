@@ -1,6 +1,6 @@
 {% compress css %}
-    <link href="{{ '/style/style.css'|media }}" rel="stylesheet" type="text/css" />
-    {% set extra_css = '/style/extra.css'|media(ignore_missing=True) %}
+    <link href="{{ '/css/style.css'|media }}" rel="stylesheet" type="text/css" />
+    {% set extra_css = '/css/extra.css'|media(ignore_missing=True) %}
     {% if extra_css %}
         <link href="{{ extra_css }}" rel="stylesheet" type="text/css" />
     {% endif %}

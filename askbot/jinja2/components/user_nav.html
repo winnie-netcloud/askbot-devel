@@ -1,0 +1,11 @@
+<nav class="user-nav">
+  {%- if request.user.is_authenticated -%}
+    {% include "components/logged_in_user_info.html" %}
+    {% if settings.USE_ASKBOT_LOGIN_SYSTEM %}
+       {% set next_jwt=encode_jwt({'next_url': settings.LOGOUT_REDIRECT_URL}) %}
+       <a class="logout-link" href="{{ settings.LOGOUT_URL }}?next={{ next_jwt }}">{% trans %}sign out{% endtrans %}</a>
+    {% endif %}
+  {% elif settings.USE_ASKBOT_LOGIN_SYSTEM and not on_login_page %}
+    {% include "components/login_link.html" %}
+  {% endif %}
+</nav>

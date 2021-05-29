@@ -1,0 +1,12 @@
+.content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.two-col main {
+  display: flex;
+  & > :last-child {
+    width: 200px;
+  }
+}

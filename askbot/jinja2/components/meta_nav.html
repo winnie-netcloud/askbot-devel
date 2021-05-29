@@ -1,0 +1,33 @@
+<nav class="meta-nav">
+  <a href="{{ url('tags') }}"
+    class="tags-page-link {% if active_tab == 'tags' %} active{% endif %}"
+  >
+    {% trans %}tags{% endtrans %}
+  </a>
+  {% if settings.GROUPS_ENABLED %}
+    <span class="dropdown groups-dropdown">
+      <a class="groups-page-link{% if active_tab == 'groups' %} active{% endif %}"
+        href="{{ url('groups') }}" data-target="#"
+      >
+        {% trans %}people & groups{% endtrans %}
+      </a>
+    </span>
+  {%else%}
+    <a href="{{ url('users') }}"
+      class="users-page-link{% if active_tab == 'users' %} active{% endif %}"
+    >
+      {% trans %}users{% endtrans %}
+    </a>
+  {% endif %}
+  {% if settings.BADGES_MODE == 'public' %}
+    <a
+      href="{{ url('badges') }}"
+      class="badges-page-link{% if active_tab == 'badges' %} active{% endif %}"
+    >
+      {% trans %}badges{% endtrans %}
+    </a>
+  {% endif %}
+  {% if request.user.is_authenticated and request.user.is_administrator() %}
+    <a class="settings-link" href="{{ url('satchmo_site_settings') }}">{% trans %}settings{% endtrans %}</a>
+  {% endif %}
+</nav>
