@@ -1,5 +1,7 @@
 {% import "macros.html" as macros %}
 <div class="logged-in-user-info">
+  <span class="far fa-envelope"></span>
+  <span class="fab fa-facebook-f"></span>
   <a class="profile-link" href="{{ request.user.get_absolute_url() }}">{{ request.user.username|escape }}</a>
   {{ macros.inbox_link(request.user) }}
   {{ macros.moderation_items_link(request.user, moderation_items) }}

@@ -4,9 +4,12 @@
   padding: 0 1rem;
 }
 
-.two-col main {
+.col-with-sidebar {
   display: flex;
-  & > :last-child {
-    width: 200px;
+  & > :first-child {
+    flex-grow: 1;
+  }
+  & > :nth-child(2) {
+    width: 250px;
   }
 }
