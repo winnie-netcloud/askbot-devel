@@ -1,8 +1,7 @@
-@use '../node_modules/normalize.css/normalize.css';
-@use './colors.scss';
 @use './base.scss';
-@use '../fa-5.15.3/scss/fontawesome.scss';
-@use '../fa-5.15.3/scss/solid.scss';
-@use '../fa-5.15.3/scss/regular.scss';
-@use '../fa-5.15.3/scss/brands.scss';
+@use './colors.scss';
 @use './layout.scss';
+@use './icons.scss';
+@use './buttons.scss';
+@use './components/system_messages.scss';
+@use './components/header.scss';

@@ -389,11 +389,11 @@ var notify = (function () {
         show: function (html, autohide) {
             if (html) {
                 $('body').addClass('user-messages');
-                var par = $('<p class="notification"></p>');
+                var par = $('<p class="js-system-message"></p>');
                 par.html(html);
-                $('.notify').prepend(par);
+                $('.js-system-messages').prepend(par);
             }
-            $('.notify').fadeIn('slow');
+            $('.js-system-messages').fadeIn('slow');
             visible = true;
             if (autohide) {
                 setTimeout(
@@ -406,7 +406,7 @@ var notify = (function () {
             }
         },
         clear: function () {
-            $('.notify').empty();
+            $('.js-system-messages').empty();
         },
         close: function (doPostback) {
             if (doPostback) {
@@ -415,7 +415,7 @@ var notify = (function () {
                     { formdata: 'required' }
                 );
             }
-            $('.notify').fadeOut('fast');
+            $('.js-system-messages').fadeOut('fast');
             $('body').removeClass('user-messages');
             visible = false;
         },

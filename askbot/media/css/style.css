@@ -370,13 +370,54 @@ body {
   font-size: 16px;
 }
 
+:root {
+  --bronze-badge-color: hsl(30, 91%, 46%);
+  --silver-badge-color: hsl(0, 0%, 80%);
+  --gold-badge-color: hsl(46, 100%, 50%);
+  --header-bg-color: hsl(60, 19%, 7%);
+  --header-link-color: hsl(74, 57%, 74%);
+  --header-link-color-hover: white;
+  --system-messages-bg-color: hsl(50, 87%, 69%);
+  --system-messages-border-color: hsl(50, 100%, 88%);
+  --danger-color: hsl(0, 79%, 47%);
+  --danger-light-color: hsl(0, 79%, 60%);
+  --transition-color: color 0.1s ease-in-out;
+}
+
+.content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.col-with-sidebar {
+  display: flex;
+}
+.col-with-sidebar > :first-child {
+  flex-grow: 1;
+}
+.col-with-sidebar > :nth-child(2) {
+  width: 250px;
+}
+
 /*!
  * Font Awesome Free 5.15.3 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 .fa,
 .fas,
+.with-times-icon::before,
+.with-bronze-badge-icon::before,
+.with-silver-badge-icon::before,
+.with-gold-badge-icon::before,
+.with-tags-icon::before,
+.with-users-icon::before,
+.with-badges-icon::before,
+.with-settings-icon::before,
+.inbox-icon::before,
+.moderation-queue-icon::before,
 .far,
+.inbox-icon-with-new-messages::before,
 .fal,
 .fad,
 .fab {
@@ -386,6 +427,21 @@ body {
   font-style: normal;
   font-variant: normal;
   text-rendering: auto;
+  line-height: 1;
+}
+
+.with-times-icon::before, .with-bronze-badge-icon::before,
+.with-silver-badge-icon::before,
+.with-gold-badge-icon::before, .with-tags-icon::before,
+.with-users-icon::before,
+.with-badges-icon::before,
+.with-settings-icon::before, .inbox-icon-with-new-messages::before, .inbox-icon::before, .moderation-queue-icon::before {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
   line-height: 1;
 }
 
@@ -481,14 +537,36 @@ body {
 
 .fa.fa-pull-left,
 .fas.fa-pull-left,
+.fa-pull-left.with-times-icon::before,
+.fa-pull-left.with-bronze-badge-icon::before,
+.fa-pull-left.with-silver-badge-icon::before,
+.fa-pull-left.with-gold-badge-icon::before,
+.fa-pull-left.with-tags-icon::before,
+.fa-pull-left.with-users-icon::before,
+.fa-pull-left.with-badges-icon::before,
+.fa-pull-left.with-settings-icon::before,
+.fa-pull-left.inbox-icon::before,
+.fa-pull-left.moderation-queue-icon::before,
 .far.fa-pull-left,
+.fa-pull-left.inbox-icon-with-new-messages::before,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
   margin-right: 0.3em;
 }
 .fa.fa-pull-right,
 .fas.fa-pull-right,
+.fa-pull-right.with-times-icon::before,
+.fa-pull-right.with-bronze-badge-icon::before,
+.fa-pull-right.with-silver-badge-icon::before,
+.fa-pull-right.with-gold-badge-icon::before,
+.fa-pull-right.with-tags-icon::before,
+.fa-pull-right.with-users-icon::before,
+.fa-pull-right.with-badges-icon::before,
+.fa-pull-right.with-settings-icon::before,
+.fa-pull-right.inbox-icon::before,
+.fa-pull-right.moderation-queue-icon::before,
 .far.fa-pull-right,
+.fa-pull-right.inbox-icon-with-new-messages::before,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
   margin-left: 0.3em;
@@ -6449,7 +6527,17 @@ readers do not read off random characters that represent icons */
   src: url("../fa-5.15.3/webfonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../fa-5.15.3/webfonts/fa-solid-900.woff2") format("woff2"), url("../fa-5.15.3/webfonts/fa-solid-900.woff") format("woff"), url("../fa-5.15.3/webfonts/fa-solid-900.ttf") format("truetype"), url("../fa-5.15.3/webfonts/fa-solid-900.svg#fontawesome") format("svg");
 }
 .fa,
-.fas {
+.fas,
+.with-times-icon::before,
+.with-bronze-badge-icon::before,
+.with-silver-badge-icon::before,
+.with-gold-badge-icon::before,
+.with-tags-icon::before,
+.with-users-icon::before,
+.with-badges-icon::before,
+.with-settings-icon::before,
+.inbox-icon::before,
+.moderation-queue-icon::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
 }
@@ -6466,7 +6554,7 @@ readers do not read off random characters that represent icons */
   src: url("../fa-5.15.3/webfonts/fa-regular-400.eot");
   src: url("../fa-5.15.3/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("../fa-5.15.3/webfonts/fa-regular-400.woff2") format("woff2"), url("../fa-5.15.3/webfonts/fa-regular-400.woff") format("woff"), url("../fa-5.15.3/webfonts/fa-regular-400.ttf") format("truetype"), url("../fa-5.15.3/webfonts/fa-regular-400.svg#fontawesome") format("svg");
 }
-.far {
+.far, .inbox-icon-with-new-messages::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 400;
 }
@@ -6488,20 +6576,128 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
-.content-wrapper {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1rem;
+.moderation-queue-icon::before {
+  content: "";
 }
 
-.col-with-sidebar {
+.inbox-icon::before {
+  content: "";
+}
+
+.inbox-icon-with-new-messages::before {
+  content: "";
+}
+
+.with-tags-icon::before {
+  content: "";
+}
+
+.with-users-icon::before {
+  content: "";
+}
+
+.with-badges-icon::before {
+  content: "";
+}
+
+.with-settings-icon::before {
+  content: "";
+  margin-right: 0.125rem;
+}
+
+.with-bronze-badge-icon::before,
+.with-silver-badge-icon::before,
+.with-gold-badge-icon::before {
+  font-size: 0.825rem;
+  margin-right: 0.125rem;
+}
+
+.with-bronze-badge-icon::before {
+  color: var(--bronze-badge-color);
+  content: "";
+}
+
+.with-silver-badge-icon::before {
+  color: var(--silver-badge-color);
+  content: "";
+}
+
+.with-gold-badge-icon::before {
+  color: var(--gold-badge-color);
+  content: "";
+}
+
+.with-times-icon::before {
+  content: "";
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.js-system-messages {
+  background: var(--system-messages-bg-color);
+}
+.js-system-messages .remove-messages-container {
+  height: 0;
+  position: relative;
+}
+.js-system-messages .remove-system-messages-btn {
+  color: var(--danger-color);
+  font-weight: bold;
+  position: absolute;
+  right: 1rem;
+  top: 0.375rem;
+  transition: var(--color-transition);
+}
+.js-system-messages .remove-system-messages-btn:hover {
+  color: var(--danger-light-color);
+  transition: var(--color-transition);
+}
+
+.js-system-message {
+  border-bottom: 1px solid var(--system-messages-border-color);
+  line-height: 1.25em;
+  padding: 0.3rem 0 0.45rem;
+}
+.js-system-message a, .js-system-message a:active {
+  color: var(--danger-color);
+  transition: var(--color-transition);
+}
+.js-system-message a:hover, .js-system-message a:active:hover {
+  color: var(--danger-light-color);
+  transition: var(--color-transition);
+}
+
+header {
+  background: var(--header-bg-color);
+  height: 2.5rem;
+  color: var(--header-link-color);
+}
+header a, header a:active, header a:visited {
+  color: var(--header-link-color);
+  text-decoration: none;
+  transition: var(--transition-color);
+}
+header a:hover {
+  color: var(--header-link-color-hover);
+  transition: var(--transition-color);
+}
+
+header .content-wrapper {
+  align-items: center;
   display: flex;
+  height: 100%;
+  justify-content: space-between;
 }
-.col-with-sidebar > :first-child {
-  flex-grow: 1;
+
+.meta-nav,
+.user-nav {
+  padding-bottom: 0.125rem;
 }
-.col-with-sidebar > :nth-child(2) {
-  width: 250px;
+
+.meta-nav a {
+  margin-left: 0.75rem;
 }
 
 /*# sourceMappingURL=style.css.map */

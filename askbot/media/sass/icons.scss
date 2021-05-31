@@ -1,0 +1,81 @@
+@import '../fa-5.15.3/scss/fontawesome.scss';
+@import '../fa-5.15.3/scss/solid.scss';
+@import '../fa-5.15.3/scss/regular.scss';
+@import '../fa-5.15.3/scss/brands.scss';
+
+.moderation-queue-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-exclamation-triangle);
+}
+
+.inbox-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-envelope);
+}
+
+.inbox-icon-with-new-messages::before {
+  @extend %fa-icon;
+  @extend .far;
+  content: fa-content($fa-var-envelope);
+}
+
+.with-tags-icon,
+.with-users-icon,
+.with-badges-icon,
+.with-settings-icon {
+  &::before {
+    @extend %fa-icon;
+    @extend .fas;
+  }
+}
+
+.with-tags-icon::before {
+  content: fa-content($fa-var-tags);
+}
+
+.with-users-icon::before {
+  content: fa-content($fa-var-users);
+}
+
+.with-badges-icon::before {
+  content: fa-content($fa-var-crown);
+}
+
+.with-settings-icon::before {
+  content: fa-content($fa-var-cog);
+  margin-right: 0.125rem;
+}
+
+.with-bronze-badge-icon,
+.with-silver-badge-icon,
+.with-gold-badge-icon {
+  &::before {
+    font-size: 0.825rem;
+    margin-right: 0.125rem;
+    @extend %fa-icon;
+    @extend .fas;
+  }
+}
+
+.with-bronze-badge-icon::before {
+  color: var(--bronze-badge-color);
+  content: fa-content($fa-var-circle);
+}
+
+.with-silver-badge-icon::before {
+  color: var(--silver-badge-color);
+  content: fa-content($fa-var-circle);
+}
+
+.with-gold-badge-icon::before {
+  color: var(--gold-badge-color);
+  content: fa-content($fa-var-circle);
+}
+
+.with-times-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-times-circle);
+}

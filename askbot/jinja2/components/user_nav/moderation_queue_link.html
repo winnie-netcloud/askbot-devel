@@ -1,0 +1,15 @@
+    {% if moderation_items %}
+      <a href="{{ url('moderation_queue') }}"
+        {% if moderation_items['new_count'] > 0 %}
+          class="moderation-queue-icon-with-alert"
+          {% if moderation_items['seen_count'] > 0 %}
+            title="{% trans new=moderation_items['new_count'], seen=moderation_items['seen_count']%}{{new}} new flagged posts and {{seen}} previous{% endtrans %}"
+          {% else %}
+            title="{% trans new=moderation_items['new_count'] %}{{new}} new flagged posts{% endtrans %}"
+          {% endif %}
+        {% elif moderation_items['seen_count'] > 0 %}
+          class="moderation-queue-icon"
+          title="{% trans seen=moderation_items['seen_count'] %}{{seen}} flagged posts{% endtrans %}"
+        {% endif %}
+      ></a>
+    {% endif %}

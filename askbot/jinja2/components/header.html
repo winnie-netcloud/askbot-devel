@@ -1,7 +1,7 @@
 <!-- template header.html -->
 <header class="{% if settings.SHOW_LOGO %}with-logo{% else %}without-logo{% endif %}">
   <div class="content-wrapper">
-    {% include "components/user_nav.html" %}
+    {% include "components/user_nav/index.html" %}
     {% if settings.MULTILINGUAL %}
       {% include "components/language_nav.html" %}
     {% endif %}

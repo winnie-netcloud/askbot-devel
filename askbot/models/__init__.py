@@ -680,8 +680,7 @@ def user_is_read_only(self):
     """True if user is allowed to change content on the site"""
     if askbot_settings.GROUPS_ENABLED:
         return bool(self.get_groups().filter(read_only=True).count())
-    else:
-        return False
+    return False
 
 def user_get_notifications(self, notification_types=None, **kwargs):
     """returns query set of activity audit status objects"""

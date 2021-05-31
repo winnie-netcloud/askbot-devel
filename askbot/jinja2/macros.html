@@ -714,19 +714,6 @@ for the purposes of the AJAX comment editor #}
     {% endfilter %}
 {%- endmacro -%}
 
-
-{%- macro inbox_link(user) -%}
-    {% if user.new_response_count %}
-    <a id='ab-responses' href="{{user.get_absolute_url()}}?sort=inbox&section=forum">
-        <img
-            alt="{% trans username=user.username|escape %}responses for {{username}}{% endtrans %}"
-            src="{{ "/images/mail-envelope-full.png"|media }}"
-            title="{% trans response_count=user.new_response_count %}you have {{response_count}} new response{% pluralize %}you have {{response_count}} new responses{% endtrans %}"
-        />
-    </a>
-    {% endif %}
-{%- endmacro -%}
-
 {%- macro moderation_items_link(user, moderation_items) -%}
     {% if moderation_items %}
         <a id="ab-responses" href="{{ url('moderation_queue') }}">
