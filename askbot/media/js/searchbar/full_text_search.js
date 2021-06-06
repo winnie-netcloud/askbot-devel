@@ -193,6 +193,7 @@ FullTextSearch.prototype.renderTitleSearchResult = function (data) {
     }
     menu.setData(data);
     menu.render();
+    $('.js-search-bar').addClass('js-with-drop-menu');
     menu.show();
 };
 
@@ -270,17 +271,18 @@ FullTextSearch.prototype.reset = function () {
     this._element.val('');
     this._element.focus();
     this._xButton.hide();
+    $('.js-search-bar').removeClass('js-with-drop-menu');
 };
 
 FullTextSearch.prototype.refreshXButton = function () {
     if (this.getSearchQuery().length > 0) {
-        if (this._query.hasClass('searchInput')) {
-            $('#searchBar').addClass('cancelable');
+        if (this._query.hasClass('js-search-input')) {
+            $('.js-search-bar').addClass('js-cancelable');
             this._xButton.show();
         }
     } else {
         this._xButton.hide();
-        $('#searchBar').removeClass('cancelable');
+        $('.js-search-bar').removeClass('js-cancelable');
     }
 };
 
@@ -441,10 +443,8 @@ FullTextSearch.prototype.makeKeyDownHandler = function () {
         var keyCode = getKeyCode(e);
 
         if (keyCode === 27) {//escape key
-            if (dropMenu.isOpen() === false) {
-                me.reset();
-                return false;
-            }
+            me.reset();
+            return false;
         } else if (keyCode === 13) {
             if (me.getFullTextSearchEnabled()) {
                 formSubmitHandler(e);
@@ -462,12 +462,14 @@ FullTextSearch.prototype.makeKeyDownHandler = function () {
                 if (keyCode !== 8 && keyCode !== 48) {//del and backspace
                     /* we get here if we were expanding the query
                        past the minimum length to trigger search */
+                    $('.js-search-bar').addClass('js-with-drop-menu');
                     dropMenu.show();
                     dropMenu.showWaitIcon();
                     dropMenu.showHeader();
                 } else {
                     //close drop menu if we were deleting the query
                     dropMenu.reset();
+                    $('.js-search-bar').removeClass('js-with-drop-menu');
                 }
             }
         }
@@ -491,7 +493,7 @@ FullTextSearch.prototype.makeFormSubmitHandler = function () {
 FullTextSearch.prototype.decorate = function (element) {
     this._element = element;/* this is a bit artificial we don't use _element */
     this._query = element;
-    this._xButton = $('input[name=reset_query]');
+    this._xButton = $('.js-cancel-search-btn');
     this._prevText = this.getSearchQuery();
     this._tag_warning_box = new TagWarningBox();
 
@@ -500,7 +502,7 @@ FullTextSearch.prototype.decorate = function (element) {
     dropMenu.setAskHandler(this.makeAskHandler());
     dropMenu.setAskButtonEnabled(this._askButtonEnabled);
     this._dropMenu = dropMenu;
-    $('div.search-bar').append(this._dropMenu.getElement());
+    $('.js-search-bar').append(this._dropMenu.getElement());
 
     $(element).click(function (e) { return false; });
     $(document).click(function () { dropMenu.reset(); });

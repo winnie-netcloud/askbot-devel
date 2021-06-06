@@ -1,0 +1,46 @@
+:root {
+  --bronze-badge-color: hsl(30, 91%, 46%);
+  --silver-badge-color: hsl(0, 0%, 80%);
+  --gold-badge-color: hsl(46, 100%, 50%);
+  --header-link-color: hsl(74, 57%, 74%);
+  --header-link-color-hover: white;
+  --system-messages-bg-color: hsl(50, 87%, 69%);
+  --system-messages-border-color: hsl(50, 100%, 88%);
+  --danger-color: hsl(0, 79%, 47%);
+  --danger-light-color: hsl(0, 79%, 60%);
+  --transition-duration: 0.1s;
+  --transition-timing-function: steps(2, jump-end);
+  --transition-color: color var(--transition-duration) var(--transition-timing-function);
+  --transition-bg-color: background-color var(--transition-duration) var(--transition-timing-function);
+  --transition-border-color: border-color var(--transition-duration) var(--transition-timing-function);
+
+  --bg-color: white;
+  --fg-color: hsl(0, 0%, 21%);
+  --layout-max-width: 1100px;
+  --layout-sidebar-width: 202px;
+  --layout-horizontal-padding: 0.75rem;
+
+  --input-horizontal-padding: 0.5rem;
+  --input-border-radius: 6px;
+  --input-border-style: solid;
+  --input-border-width: 1px;
+  --input-bg-color: var(--bg-color);
+
+  --header-height: 2.5rem; //login link, meta nav: tags, users, badges links
+  --header-bg-color: hsl(60, 19%, 7%);
+
+  --ask-btn-bg-color: hsl(199, 75%, 62%);
+  --ask-btn-hover-bg-color: hsl(199, 70%, 57%);
+  --ask-btn-border-color: hsl(199, 62%, 52%);
+  --ask-btn-hover-border-color: hsl(199, 62%, 45%);
+  --ask-btn-text-color: var(--bg-color);
+  --forum-header-height: 2.5rem; //search bar and ask button
+  --forum-header-bg-color: hsl(60, 15%, 90%);
+  --forum-header-fg-color: hsl(60, 0%, 48%); //icons, text on buttons
+  --forum-header-fg-hover-color: hsl(60, 0%, 35%); //icons, text on buttons
+  --forum-header-input-border-color: hsl(60, 16%, 75%);
+  --search-bar-vertical-margin: 0.25rem;
+  --search-btn-bg-color: hsl(60, 15%, 95%);
+  --search-btn-hover-bg-color: hsl(60, 15%, 90%);
+  --search-drop-menu-bg-color: var(--bg-color);
+}

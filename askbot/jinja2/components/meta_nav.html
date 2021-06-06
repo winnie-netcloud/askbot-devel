@@ -1,12 +1,12 @@
 <nav class="meta-nav">
   <a href="{{ url('tags') }}"
-    class="with-tags-icon{% if active_tab == 'tags' %} active{% endif %}"
+    class="with-tags-icon{% if active_tab == 'tags' %} selected{% endif %}"
   >
     {% trans %}tags{% endtrans %}
   </a>
   {% if settings.GROUPS_ENABLED %}
     <span class="dropdown groups-dropdown">
-      <a class="with-groups-icon{% if active_tab == 'groups' %} active{% endif %}"
+      <a class="with-groups-icon{% if active_tab == 'groups' %} selected{% endif %}"
         href="{{ url('groups') }}" data-target="#"
       >
         {% trans %}people & groups{% endtrans %}
@@ -14,7 +14,7 @@
     </span>
   {%else%}
     <a href="{{ url('users') }}"
-      class="with-users-icon{% if active_tab == 'users' %} active{% endif %}"
+      class="with-users-icon{% if active_tab == 'users' %} selected{% endif %}"
     >
       {% trans %}users{% endtrans %}
     </a>
@@ -22,7 +22,7 @@
   {% if settings.BADGES_MODE == 'public' %}
     <a
       href="{{ url('badges') }}"
-      class="with-badges-icon{% if active_tab == 'badges' %} active{% endif %}"
+      class="with-badges-icon{% if active_tab == 'badges' %} selected{% endif %}"
     >
       {% trans %}badges{% endtrans %}
     </a>

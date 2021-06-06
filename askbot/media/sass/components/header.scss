@@ -1,13 +1,14 @@
 header {
   background: var(--header-bg-color);
-  height: 2.5rem;
+  height: var(--header-height);
   color: var(--header-link-color);
   a, a:active, a:visited {
     color: var(--header-link-color);
     text-decoration: none;
     transition: var(--transition-color);
   }
-  a:hover {
+  a:hover,
+  a.selected {
     color: var(--header-link-color-hover);
     transition: var(--transition-color);
   }

@@ -188,7 +188,7 @@ SearchDropMenu.prototype.showHeader = function () {
 
 SearchDropMenu.prototype.createDom = function () {
     this._element = this.makeElement('div');
-    this._element.addClass('search-drop-menu');
+    this._element.addClass('js-search-drop-menu');
     this._element.hide();
 
     if (askbot.data.languageCode === 'ja') {
@@ -216,7 +216,7 @@ SearchDropMenu.prototype.createDom = function () {
     if (this._askButtonEnabled) {
         footer.addClass('footer');
         var button = this.makeElement('button');
-        button.addClass('submit btn btn-default');
+        button.addClass('submit btn ask-btn');
         button.html(gettext('Ask Your Question'));
         footer.append(button);
         var handler = this._askHandler;

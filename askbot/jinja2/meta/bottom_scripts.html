@@ -123,7 +123,7 @@
         // focus input on the search bar endcomment
         var activeTab = askbot['data']['activeTab'];
         if (inArray(activeTab, ['users', 'questions', 'tags', 'badges'])) {
-            var searchInput = $('#keywords');
+            var searchInput = $('.js-search-input');
         } else if (activeTab === 'ask') {
             var searchInput = $('#id_title');
         } else {

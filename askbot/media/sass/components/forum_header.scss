@@ -1,0 +1,159 @@
+.forum-header {
+  --search-bar-height: calc(var(--forum-header-height) - 2 * var(--search-bar-vertical-margin));
+  height: var(--forum-header-height);
+  background: var(--forum-header-bg-color);
+  position: sticky;
+  top: 0;
+  .with-home-icon {
+    color: var(--forum-header-fg-color);
+    font-size: 1.25rem;
+    line-height: var(--forum-header-height);
+    width: 2rem;
+    transition: var(--transition-color);
+    &:hover {
+      color: var(--forum-header-fg-hover-color);
+      transition: var(--transition-color);
+    }
+  }
+}
+
+.scope-nav {
+  align-items: center;
+  display: flex;
+  margin-left: 0.125rem;
+  a, a:active, a:visited {
+    color: var(--forum-header-fg-color);
+    line-height: var(--forum-header-height);
+    margin-right: 0.5rem;
+    position: relative;
+    text-decoration: none;
+    transition: var(--transition-color);
+    &:hover {
+      color: var(--forum-header-fg-hover-color);
+      transition: var(--transition-color);
+    }
+  }
+}
+
+.search-form {
+  flex-grow: 1;
+}
+
+.js-search-bar {
+  display: flex;
+  height: var(--search-bar-height);
+  justify-content: flex-start;
+  margin: var(--search-bar-vertical-margin) 0;
+  position: relative;
+  input[type="text"] {
+    border-color: var(--forum-header-input-border-color);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    padding: var(--input-horizontal-padding);
+    outline: none;
+    width: 100%;
+    &:hover::placeholder {
+      color: var(--forum-header-fg-hover-color);
+    }
+  }
+}
+
+.search-bar-col {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.js-cancel-search-btn {
+  color: var(--fg-color);
+  border-color: var(--forum-header-input-border-color);
+  background-color: var(--bg-color);
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  width: var(--search-bar-height);
+}
+
+.search-btn {
+  border-color: var(--forum-header-input-border-color);
+  background: var(--search-btn-bg-color);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  color: var(--forum-header-fg-color);
+  min-width: var(--search-bar-height);
+  width: var(--search-bar-height);
+  transition: var(--transition-color), var(--transition-bg-color);
+  &:hover {
+    background: var(--search-btn-hover-bg-color);
+    color: var(--forum-header-fg-hover-color);
+    transition: var(--transition-color), var(--transition-bg-color);
+  }
+}
+
+.js-with-drop-menu {
+  input[type="text"] {
+    border-bottom-left-radius: 0;
+  }
+  .search-btn {
+    border-bottom-right-radius: 0;
+  }
+}
+
+.js-search-drop-menu {
+  background: var(--search-drop-menu-bg-color);
+  border: var(--input-border-width) var(--input-border-style) var(--forum-header-input-border-color);
+  border-top: none;
+  border-bottom-left-radius: var(--input-border-radius);
+  border-bottom-right-radius: var(--input-border-radius);
+  min-width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: var(--search-bar-height);
+  ul:not(.empty) {
+    overflow-y: scroll;
+    li {
+      padding: 0.25rem var(--input-horizontal-padding);
+      a {
+        color: black;
+        text-decoration: none;
+      }
+      &:hover,
+      &.selected {
+        background: var(--ask-btn-bg-color);
+        a {
+          color: var(--bg-color);
+        }
+      }
+    }
+  }
+  .footer {
+    background: var(--search-drop-menu-bg-color);
+    padding: var(--input-horizontal-padding) 0;
+    text-align: center;
+  }
+  .ask-btn {
+    margin: 0 auto;
+  }
+  .wait-icon-box {
+    margin: 0.5rem 0;
+    text-align: center;
+  }
+}
+
+.ask-btn {
+  align-items: center;
+  background: var(--ask-btn-bg-color);
+  border-color: var(--ask-btn-border-color);
+  color: var(--ask-btn-text-color);
+  display: flex;
+  height: var(--search-bar-height);
+  justify-content: center;
+  margin: var(--search-bar-vertical-margin) 0;
+  text-decoration: none;
+  transition: var(--transition-border-color), var(--transition-bg-color);
+  &:hover {
+    background: var(--ask-btn-hover-bg-color);
+    border-color: var(--ask-btn-hover-border-color);
+    transition: var(--transition-color), var(--transition-bg-color);
+  }
+}

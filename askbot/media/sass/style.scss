@@ -1,7 +1,8 @@
 @use './base.scss';
-@use './colors.scss';
+@use './variables.scss';
 @use './layout.scss';
 @use './icons.scss';
 @use './buttons.scss';
 @use './components/system_messages.scss';
 @use './components/header.scss';
+@use './components/forum_header.scss';

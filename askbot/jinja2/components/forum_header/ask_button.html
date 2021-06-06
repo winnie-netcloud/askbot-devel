@@ -1,0 +1,12 @@
+{% if settings.ASK_BUTTON_ENABLED and active_tab != "ask" %}
+  {% if not search_state %}  {#  get empty SearchState() if there's none #}
+    {% set search_state=search_state|get_empty_search_state %}
+  {% endif %}
+  <a class="btn ask-btn"
+    href="{{ search_state.full_ask_url() }}{% if group %}{% if '?' in search_state.full_ask_url() %}&amp;{% else %}?{% endif %}group_id={{ group.id }}{% endif %}"
+  >{% if group %}
+    {{ settings.WORDS_ASK_THE_GROUP|escape }}
+  {% else %}
+    {{ settings.WORDS_ASK_YOUR_QUESTION|escape }}
+  {% endif %}</a>
+{% endif %}

@@ -77,5 +77,32 @@
 .with-times-icon::before {
   @extend %fa-icon;
   @extend .fas;
+  content: fa-content($fa-var-times);
+}
+
+.with-times-circle-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
   content: fa-content($fa-var-times-circle);
+}
+
+.with-home-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-home);
+}
+
+.with-search-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-search);
+}
+
+.with-selected-scope-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-caret-up);
+  position: absolute;
+  bottom: -5px;
+  left: calc(50% - 5px);
 }

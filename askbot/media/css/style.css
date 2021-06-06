@@ -338,6 +338,10 @@ template {
   display: none;
 }
 
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 html, body,
 h1, h2, h3, h4, h5, h6,
 a, p, span,
@@ -368,36 +372,81 @@ tr, th, td {
 body {
   font-family: "Source Sans Pro", Arial, sans-serif;
   font-size: 16px;
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+}
+
+input {
+  background-color: var(--input-bg-color);
+  color: var(--fg-color);
+}
+
+button,
+input,
+.btn {
+  border-radius: var(--input-border-radius);
+  border-width: var(--input-border-width);
+  border-style: var(--input-border-style);
 }
 
 :root {
   --bronze-badge-color: hsl(30, 91%, 46%);
   --silver-badge-color: hsl(0, 0%, 80%);
   --gold-badge-color: hsl(46, 100%, 50%);
-  --header-bg-color: hsl(60, 19%, 7%);
   --header-link-color: hsl(74, 57%, 74%);
   --header-link-color-hover: white;
   --system-messages-bg-color: hsl(50, 87%, 69%);
   --system-messages-border-color: hsl(50, 100%, 88%);
   --danger-color: hsl(0, 79%, 47%);
   --danger-light-color: hsl(0, 79%, 60%);
-  --transition-color: color 0.1s ease-in-out;
+  --transition-duration: 0.1s;
+  --transition-timing-function: steps(2, jump-end);
+  --transition-color: color var(--transition-duration) var(--transition-timing-function);
+  --transition-bg-color: background-color var(--transition-duration) var(--transition-timing-function);
+  --transition-border-color: border-color var(--transition-duration) var(--transition-timing-function);
+  --bg-color: white;
+  --fg-color: hsl(0, 0%, 21%);
+  --layout-max-width: 1100px;
+  --layout-sidebar-width: 202px;
+  --layout-horizontal-padding: 0.75rem;
+  --input-horizontal-padding: 0.5rem;
+  --input-border-radius: 6px;
+  --input-border-style: solid;
+  --input-border-width: 1px;
+  --input-bg-color: var(--bg-color);
+  --header-height: 2.5rem;
+  --header-bg-color: hsl(60, 19%, 7%);
+  --ask-btn-bg-color: hsl(199, 75%, 62%);
+  --ask-btn-hover-bg-color: hsl(199, 70%, 57%);
+  --ask-btn-border-color: hsl(199, 62%, 52%);
+  --ask-btn-hover-border-color: hsl(199, 62%, 45%);
+  --ask-btn-text-color: var(--bg-color);
+  --forum-header-height: 2.5rem;
+  --forum-header-bg-color: hsl(60, 15%, 90%);
+  --forum-header-fg-color: hsl(60, 0%, 48%);
+  --forum-header-fg-hover-color: hsl(60, 0%, 35%);
+  --forum-header-input-border-color: hsl(60, 16%, 75%);
+  --search-bar-vertical-margin: 0.25rem;
+  --search-btn-bg-color: hsl(60, 15%, 95%);
+  --search-btn-hover-bg-color: hsl(60, 15%, 90%);
+  --search-drop-menu-bg-color: var(--bg-color);
 }
 
 .content-wrapper {
-  max-width: 1100px;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--layout-horizontal-padding);
 }
 
 .col-with-sidebar {
   display: flex;
 }
 .col-with-sidebar > :first-child {
-  flex-grow: 1;
+  padding-right: var(--layout-horizontal-padding);
+  width: calc(100% - var(--layout-sidebar-width));
 }
 .col-with-sidebar > :nth-child(2) {
-  width: 250px;
+  width: var(--layout-sidebar-width);
 }
 
 /*!
@@ -406,6 +455,10 @@ body {
  */
 .fa,
 .fas,
+.with-selected-scope-icon::before,
+.with-search-icon::before,
+.with-home-icon::before,
+.with-times-circle-icon::before,
 .with-times-icon::before,
 .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
@@ -430,7 +483,7 @@ body {
   line-height: 1;
 }
 
-.with-times-icon::before, .with-bronze-badge-icon::before,
+.with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
 .with-gold-badge-icon::before, .with-tags-icon::before,
 .with-users-icon::before,
@@ -537,6 +590,10 @@ body {
 
 .fa.fa-pull-left,
 .fas.fa-pull-left,
+.fa-pull-left.with-selected-scope-icon::before,
+.fa-pull-left.with-search-icon::before,
+.fa-pull-left.with-home-icon::before,
+.fa-pull-left.with-times-circle-icon::before,
 .fa-pull-left.with-times-icon::before,
 .fa-pull-left.with-bronze-badge-icon::before,
 .fa-pull-left.with-silver-badge-icon::before,
@@ -555,6 +612,10 @@ body {
 }
 .fa.fa-pull-right,
 .fas.fa-pull-right,
+.fa-pull-right.with-selected-scope-icon::before,
+.fa-pull-right.with-search-icon::before,
+.fa-pull-right.with-home-icon::before,
+.fa-pull-right.with-times-circle-icon::before,
 .fa-pull-right.with-times-icon::before,
 .fa-pull-right.with-bronze-badge-icon::before,
 .fa-pull-right.with-silver-badge-icon::before,
@@ -6528,6 +6589,10 @@ readers do not read off random characters that represent icons */
 }
 .fa,
 .fas,
+.with-selected-scope-icon::before,
+.with-search-icon::before,
+.with-home-icon::before,
+.with-times-circle-icon::before,
 .with-times-icon::before,
 .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
@@ -6628,7 +6693,26 @@ readers do not read off random characters that represent icons */
 }
 
 .with-times-icon::before {
+  content: "";
+}
+
+.with-times-circle-icon::before {
   content: "";
+}
+
+.with-home-icon::before {
+  content: "";
+}
+
+.with-search-icon::before {
+  content: "";
+}
+
+.with-selected-scope-icon::before {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: calc(50% - 5px);
 }
 
 .btn {
@@ -6644,15 +6728,16 @@ readers do not read off random characters that represent icons */
 }
 .js-system-messages .remove-system-messages-btn {
   color: var(--danger-color);
+  border: none;
   font-weight: bold;
   position: absolute;
   right: 1rem;
   top: 0.375rem;
-  transition: var(--color-transition);
+  transition: var(--transition-color);
 }
 .js-system-messages .remove-system-messages-btn:hover {
   color: var(--danger-light-color);
-  transition: var(--color-transition);
+  transition: var(--transition-color);
 }
 
 .js-system-message {
@@ -6671,7 +6756,7 @@ readers do not read off random characters that represent icons */
 
 header {
   background: var(--header-bg-color);
-  height: 2.5rem;
+  height: var(--header-height);
   color: var(--header-link-color);
 }
 header a, header a:active, header a:visited {
@@ -6679,7 +6764,8 @@ header a, header a:active, header a:visited {
   text-decoration: none;
   transition: var(--transition-color);
 }
-header a:hover {
+header a:hover,
+header a.selected {
   color: var(--header-link-color-hover);
   transition: var(--transition-color);
 }
@@ -6698,6 +6784,163 @@ header .content-wrapper {
 
 .meta-nav a {
   margin-left: 0.75rem;
+}
+
+.forum-header {
+  --search-bar-height: calc(var(--forum-header-height) - 2 * var(--search-bar-vertical-margin));
+  height: var(--forum-header-height);
+  background: var(--forum-header-bg-color);
+  position: sticky;
+  top: 0;
+}
+.forum-header .with-home-icon {
+  color: var(--forum-header-fg-color);
+  font-size: 1.25rem;
+  line-height: var(--forum-header-height);
+  width: 2rem;
+  transition: var(--transition-color);
+}
+.forum-header .with-home-icon:hover {
+  color: var(--forum-header-fg-hover-color);
+  transition: var(--transition-color);
+}
+
+.scope-nav {
+  align-items: center;
+  display: flex;
+  margin-left: 0.125rem;
+}
+.scope-nav a, .scope-nav a:active, .scope-nav a:visited {
+  color: var(--forum-header-fg-color);
+  line-height: var(--forum-header-height);
+  margin-right: 0.5rem;
+  position: relative;
+  text-decoration: none;
+  transition: var(--transition-color);
+}
+.scope-nav a:hover, .scope-nav a:active:hover, .scope-nav a:visited:hover {
+  color: var(--forum-header-fg-hover-color);
+  transition: var(--transition-color);
+}
+
+.search-form {
+  flex-grow: 1;
+}
+
+.js-search-bar {
+  display: flex;
+  height: var(--search-bar-height);
+  justify-content: flex-start;
+  margin: var(--search-bar-vertical-margin) 0;
+  position: relative;
+}
+.js-search-bar input[type=text] {
+  border-color: var(--forum-header-input-border-color);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+  padding: var(--input-horizontal-padding);
+  outline: none;
+  width: 100%;
+}
+.js-search-bar input[type=text]:hover::placeholder {
+  color: var(--forum-header-fg-hover-color);
+}
+
+.search-bar-col {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.js-cancel-search-btn {
+  color: var(--fg-color);
+  border-color: var(--forum-header-input-border-color);
+  background-color: var(--bg-color);
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  width: var(--search-bar-height);
+}
+
+.search-btn {
+  border-color: var(--forum-header-input-border-color);
+  background: var(--search-btn-bg-color);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  color: var(--forum-header-fg-color);
+  min-width: var(--search-bar-height);
+  width: var(--search-bar-height);
+  transition: var(--transition-color), var(--transition-bg-color);
+}
+.search-btn:hover {
+  background: var(--search-btn-hover-bg-color);
+  color: var(--forum-header-fg-hover-color);
+  transition: var(--transition-color), var(--transition-bg-color);
+}
+
+.js-with-drop-menu input[type=text] {
+  border-bottom-left-radius: 0;
+}
+.js-with-drop-menu .search-btn {
+  border-bottom-right-radius: 0;
+}
+
+.js-search-drop-menu {
+  background: var(--search-drop-menu-bg-color);
+  border: var(--input-border-width) var(--input-border-style) var(--forum-header-input-border-color);
+  border-top: none;
+  border-bottom-left-radius: var(--input-border-radius);
+  border-bottom-right-radius: var(--input-border-radius);
+  min-width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: var(--search-bar-height);
+}
+.js-search-drop-menu ul:not(.empty) {
+  overflow-y: scroll;
+}
+.js-search-drop-menu ul:not(.empty) li {
+  padding: 0.25rem var(--input-horizontal-padding);
+}
+.js-search-drop-menu ul:not(.empty) li a {
+  color: black;
+  text-decoration: none;
+}
+.js-search-drop-menu ul:not(.empty) li:hover, .js-search-drop-menu ul:not(.empty) li.selected {
+  background: var(--ask-btn-bg-color);
+}
+.js-search-drop-menu ul:not(.empty) li:hover a, .js-search-drop-menu ul:not(.empty) li.selected a {
+  color: var(--bg-color);
+}
+.js-search-drop-menu .footer {
+  background: var(--search-drop-menu-bg-color);
+  padding: var(--input-horizontal-padding) 0;
+  text-align: center;
+}
+.js-search-drop-menu .ask-btn {
+  margin: 0 auto;
+}
+.js-search-drop-menu .wait-icon-box {
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.ask-btn {
+  align-items: center;
+  background: var(--ask-btn-bg-color);
+  border-color: var(--ask-btn-border-color);
+  color: var(--ask-btn-text-color);
+  display: flex;
+  height: var(--search-bar-height);
+  justify-content: center;
+  margin: var(--search-bar-vertical-margin) 0;
+  text-decoration: none;
+  transition: var(--transition-border-color), var(--transition-bg-color);
+}
+.ask-btn:hover {
+  background: var(--ask-btn-hover-bg-color);
+  border-color: var(--ask-btn-hover-border-color);
+  transition: var(--transition-color), var(--transition-bg-color);
 }
 
 /*# sourceMappingURL=style.css.map */

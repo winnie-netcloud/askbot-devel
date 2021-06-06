@@ -1,5 +1,9 @@
 @use '../node_modules/normalize.css/normalize.css';
 
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 html, body,
 h1, h2, h3, h4, h5, h6,
 a, p, span,
@@ -22,12 +26,27 @@ fieldset, form, label, legend,
 table, caption,
 tbody, tfoot, thead,
 tr, th, td {
-    margin: 0;
-    padding: 0;
-    border: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 body {
   font-family: 'Source Sans Pro', Arial, sans-serif;
   font-size: 16px;
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+}
+
+input {
+  background-color: var(--input-bg-color);
+  color: var(--fg-color);
+}
+
+button,
+input,
+.btn {
+  border-radius: var(--input-border-radius);
+  border-width: var(--input-border-width);
+  border-style: var(--input-border-style);
 }
