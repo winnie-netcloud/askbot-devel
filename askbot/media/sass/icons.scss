@@ -106,3 +106,10 @@
   bottom: -5px;
   left: calc(50% - 5px);
 }
+
+.with-rss-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-rss);
+  transform: scale(-1, 1);
+}

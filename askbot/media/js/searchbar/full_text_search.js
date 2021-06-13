@@ -50,8 +50,8 @@ FullTextSearch.prototype.renderTagWarning = function (tag_list) {
     }
     var tagWarningBox = this._tag_warning_box;
     tagWarningBox.clear();
-    $.each(tag_list, function (idx, tag_name) {
-        tagWarningBox.addTag(tag_name);
+    $.each(tag_list, function (idx, tagName) {
+        tagWarningBox.addTag(tagName);
     });
     tagWarningBox.showWarning();
 };
@@ -146,9 +146,7 @@ FullTextSearch.prototype.sendFullTextSearchQuery = function (query_text) {
          * query now - and we support relevance search
          * - then switch to it
          */
-        searchUrl = QSutils.patch_query_string(
-                        searchUrl, 'sort:relevance-desc'
-                    );
+        searchUrl = QSutils.patch_query_string(searchUrl, 'sort:relevance-desc');
     }
     this._prevText = this.updateQueryString(query_text);
 
@@ -197,33 +195,38 @@ FullTextSearch.prototype.renderTitleSearchResult = function (data) {
     menu.show();
 };
 
+FullTextSearch.prototype.renderQuestionListHeader = function (data) {
+    var header = $('.js-question-list-header');
+    header.find('.js-question-list-title').replaceWith(data.question_list_title);
+    if (data.feed_url) {
+        header.find('a.js-rss-link').attr('href', data.feed_url);
+    }
+    this.renderSearchTags(data.query_data.tags, data.query_string);
+};
+
 FullTextSearch.prototype.renderFullTextSearchResult = function (data) {
     if (data.questions.length === 0) {
         return;
     }
 
+    this.renderQuestionListHeader();
+
     $('#pager').toggle(data.paginator !== '').html(data.paginator);
-    $('#questionCount').html(data.question_counter);
-    this.renderSearchTags(data.query_data.tags, data.query_string);
+
     if (data.faces.length > 0) {
         $('#contrib-users > a').remove();
         $('#contrib-users').append(data.faces.join(''));
     }
+
     this.renderRelatedTags(data.related_tags_html);
     this.renderRelevanceSortTab(data.query_string);
     this.renderTagWarning(data.non_existing_tags);
-    this.setActiveSortTab(
-        data.query_data.sort_order,
-        data.query_string
-    );
-    if (data.feed_url) {
-        // Change RSS URL
-        $('#ContentLeft a.rss:first').attr('href', data.feed_url);
-    }
+
+    this.setActiveSortTab(data.query_data.sort_order, data.query_string);
 
     // Patch scope selectors
     var baseUrl = this._baseUrl;
-    $('#scopeWrapper > a.scope-selector').each(function (index) {
+    $('a.js-scope-link').each(function (index) {
         var old_qs = $(this).attr('href').replace(baseUrl, '');
         var scope = QSutils.get_query_string_selector_value(old_qs, 'scope');
         qs = QSutils.patch_query_string(data.query_string, 'scope:' + scope);
@@ -231,7 +234,7 @@ FullTextSearch.prototype.renderFullTextSearchResult = function (data) {
     });
 
     // Patch "Ask your question"
-    var askButton = $('#askButton');
+    var askButton = $('a.js-ask-btn');
     var askHrefBase = askButton.attr('href').split('?')[0];
     askButton.attr(
         'href',
@@ -303,47 +306,34 @@ FullTextSearch.prototype.renderRelatedTags = function (tags_html) {
     $('.js-related-tags').html(tags_html);
 };
 
-FullTextSearch.prototype.renderSearchTags = function (tags, query_string) {
-    var search_tags = $('#searchTags');
-    search_tags.empty();
+FullTextSearch.prototype.renderSearchTags = function (tags, queryString) {
+    var searchTags = $('.js-search-tags ul');
+    searchTags.empty();
     var me = this;
     if (tags.length === 0) {
-        $('#listSearchTags').hide();
-        $('#search-tips').hide();//wrong - if there are search users
+        $('.js-search-tags').fadeOut();
     } else {
-        $('#listSearchTags').show();
-        $('#search-tips').show();
-        $.each(tags, function (idx, tag_name) {
+        $('.js-search-tags').fadeIn();
+        $.each(tags, function (idx, tagName) {
             var el;
             var tag = new Tag();
-            tag.setName(tag_name);
+            tag.setName(tagName);
             tag.setLinkable(false);
             tag.setDeletable(true);
             tag.setDeleteHandler(
                 function () {
-                    me.removeSearchTag(tag_name, query_string);
+                    me.removeSearchTag(tagName, queryString);
                 }
             );
             el = tag.getElement();
             // test if the Tag gets appended to a list
-            if (search_tags.prop('tagName') === 'UL') {
+            if (searchTags.prop('tagName') === 'UL') {
                 // wrap returns original element
                 el = el.wrap('<li></li>').parent();
             }
-            search_tags.append(el);
+            searchTags.append(el);
         });
     }
-};
-
-FullTextSearch.prototype.createRelevanceTab = function (query_string) {
-    var relevance_tab = $('<a></a>');
-    href = this._baseUrl + QSutils.patch_query_string(query_string, 'sort:relevance-desc');
-    relevance_tab.attr('href', href);
-    relevance_tab.attr('id', 'by_relevance');
-    relevance_tab.html(
-        '<span>' + askbot.data.sortButtonData.relevance.label + '</span>'
-    );
-    return relevance_tab;
 };
 
 FullTextSearch.prototype.removeSearchTag = function (tag) {
@@ -353,62 +343,55 @@ FullTextSearch.prototype.removeSearchTag = function (tag) {
     this.sendFullTextSearchQuery();
 };
 
-FullTextSearch.prototype.setActiveSortTab = function (sort_method, query_string) {
-    var tabs = $('#sort_tabs > a');
-    tabs.attr('class', 'off');
+FullTextSearch.prototype.setActiveSortTab = function (sortMethod, queryString) {
+    var tabs = $('.js-questions-sort-nav > a');
+    tabs.removeClass('js-selected js-with-sort-descending-icon js-with-sort-ascending-icon');
     var baseUrl = this._baseUrl;
+    var tooltip;
     tabs.each(function (index, element) {
         var tab = $(element);
-        if (tab.attr('id')) {
-            var tab_name = tab.attr('id').replace(/^by_/, '');
-            if (tab_name in askbot.data.sortButtonData) {
-                href = baseUrl + QSutils.patch_query_string(
-                                        query_string,
-                                        'sort:' + tab_name + '-desc'
-                                    );
-                tab.attr('href', href);
-                tab.attr(
-                    'title',
-                    askbot.data.sortButtonData[tab_name].desc_tooltip
-                );
-                tab.html(
-                    askbot.data.sortButtonData[tab_name].label
-                );
-            }
+        var sortBy = tab.data('sortBy');
+        if (sortBy in askbot.data.sortButtonData) {
+            href = baseUrl + QSutils.patch_query_string(
+                                    queryString,
+                                    'sort:' + sortBy + '-desc'
+                                );
+            tab.attr('href', href);
+            tooltip = askbot.data.sortButtonData[sortBy].desc_tooltip
+            tab.attr('title', tooltip);
+            tab.html(askbot.data.sortButtonData[sortBy].label);
         }
     });
-    var bits = sort_method.split('-', 2);
-    var name = bits[0];
+    var bits = sortMethod.split('-', 2);
+    var sortBy = bits[0];
     var sense = bits[1];//sense of sort
+    var activeTab = $('js-sort-by-' + sortBy);
+    if (sense === 'asc') {
+      activeTab.addClass('js-selected js-with-sort-ascending-icon');
+    }
+    if (sense === 'desc') {
+      activeTab.addClass('js-selected js-with-sort-descending-icon');
+    }
     var antisense = (sense === 'asc' ? 'desc' : 'asc');
-    var arrow = (sense === 'asc' ? ' &#9650;' : ' &#9660;');
-    var active_tab = $('#by_' + name);
-    active_tab.attr('class', 'on');
-    active_tab.attr(
-        'title',
-        askbot.data.sortButtonData[name][antisense + '_tooltip']
-    );
-    active_tab.html(
-        askbot.data.sortButtonData[name].label + arrow
-    );
+    var antisenseTooltip = askbot.data.sortButtonData[sortBy][antisense + '_tooltip']
+    activeTab.attr('title', antisenseTooltip);
 };
 
 FullTextSearch.prototype.renderRelevanceSortTab = function (query_string) {
-    if (askbot.settings.showSortByRelevance === false) {
-        return;
+  if (!askbot.settings.showSortByRelevance) {
+    return;
+  }
+  var ance_tab = $('.js-sort-by-relevance');
+  var prevText = this._prevText;
+  if (prevText && prevText.length > 0) {
+    if (relevanceTab.length === 0) {
+      relevanceTab.fadeIn();
     }
-    var relevance_tab = $('#by_relevance');
-    var prevText = this._prevText;
-    if (prevText && prevText.length > 0) {
-        if (relevance_tab.length === 0) {
-            relevance_tab = this.createRelevanceTab(query_string);
-            $('#sort_tabs>span').after(relevance_tab);
-        }
-    } else {
-        if (relevance_tab.length > 0) {
-            relevance_tab.remove();
-        }
+  } else {
+    if (relevanceTab.length > 0) {
+      relevanceTab.fadeOut();
     }
+  }
 };
 
 FullTextSearch.prototype.makeAskHandler = function () {

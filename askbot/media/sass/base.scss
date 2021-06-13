@@ -34,12 +34,12 @@ tr, th, td {
 body {
   font-family: 'Source Sans Pro', Arial, sans-serif;
   font-size: 16px;
-  background-color: var(--bg-color);
+  background: var(--bg-color);
   color: var(--fg-color);
 }
 
 input {
-  background-color: var(--input-bg-color);
+  background: var(--input-bg-color);
   color: var(--fg-color);
 }
 

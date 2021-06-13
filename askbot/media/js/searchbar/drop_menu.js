@@ -31,6 +31,9 @@ SearchDropMenu.prototype.setAskButtonEnabled = function (isEnabled) {
  */
 SearchDropMenu.prototype.render = function () {
     var list = this._resultsList;
+    var items = list.find('li');
+    items.off('mouseenter');
+    items.off('mouseleave');
     list.empty();
     var me = this;
     $.each(this._data, function (idx, item) {
@@ -40,6 +43,15 @@ SearchDropMenu.prototype.render = function () {
         link.html(item.title);
         listItem.append(link);
         list.append(listItem);
+        listItem.on('mouseenter', function () {
+          list.find('li').removeClass('selected');
+          listItem.addClass('selected');
+          me.setSelectedItemIndex(idx + 1);
+        });
+        listItem.on('mouseleave', function () {
+          listItem.removeClass('selected');
+          me.setSelectedItemIndex(0);
+        });
     });
     if (this._data.length === 0) {
         list.addClass('empty');
@@ -95,6 +107,10 @@ SearchDropMenu.prototype.getItem = function (idx) {
 
 SearchDropMenu.prototype.getItemCount = function () {
     return this._resultsList.find('li').length;
+};
+
+SearchDropMenu.prototype.setSelectedItemIndex = function(idx) {
+    return this._selectedItemIndex = idx;
 };
 
 SearchDropMenu.prototype.getSelectedItemIndex = function () {
@@ -250,6 +266,6 @@ SearchDropMenu.prototype.hide = function () {
 SearchDropMenu.prototype.reset = function () {
     this._data = undefined;
     this._resultsList.empty();
-    this._selectedItemIndex = 0;
+    this.setSelectedItemIndex(0);
     this._element.hide();
 };

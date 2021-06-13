@@ -149,10 +149,6 @@ def questions(request, **kwargs):
     if request.is_ajax():
         q_count = paginator.count
 
-        #todo: words
-        question_counter = ungettext('%(q_num)s question', '%(q_num)s questions', q_count)
-        question_counter = question_counter % {'q_num': humanize.intcomma(q_count),}
-
         if q_count > search_state.page_size:
             paginator_tpl = get_template('main_page/paginator.html')
             paginator_html = paginator_tpl.render(
@@ -168,15 +164,14 @@ def questions(request, **kwargs):
             paginator_html = ''
 
         questions_tpl = get_template('main_page/questions_loop.html')
-        questions_html = questions_tpl.render(
-                {
-                    'threads': page,
-                    'search_state': search_state,
-                    'reset_method_count': reset_method_count,
-                    'request': request
-                },
-                request
-        )
+        questions_html = questions_tpl.render({'threads': page,
+                                               'search_state': search_state,
+                                               'reset_method_count': reset_method_count,
+                                               'request': request},
+                                              request)
+
+        question_list_title_tpl = get_template('main_page/paginator.html')
+        question_list_title = question_list_title_tpl.render({'questions_count': q_count})
 
         ajax_data = {
             'query_data': {
@@ -185,7 +180,7 @@ def questions(request, **kwargs):
                 'ask_query_string': search_state.ask_query_string(),
             },
             'paginator': paginator_html,
-            'question_counter': question_counter,
+            'question_list_title': question_list_title,
             'faces': [],#[extra_tags.gravatar(contributor, 48) for contributor in contributors],
             'feed_url': context_feed_url,
             'query_string': search_state.query_string(),
@@ -280,7 +275,7 @@ def questions(request, **kwargs):
                 ) % url
                 request.user.message_set.create(message=msg)
 
-        return render(request, 'main_page.html', template_data)
+        return render(request, 'main_page/index.html', template_data)
         #print timezone.now() - before
         #return res
 
