@@ -476,6 +476,7 @@ FullTextSearch.prototype.makeFormSubmitHandler = function () {
   return function (evt) {
     // if user clicks the button the s(h)e probably wants page reload,
     // so provide that experience but first update the query string
+    debugger
     me.updateQueryString();
     var searchUrl = me.getSearchUrl();
     evt.preventDefault();
@@ -547,5 +548,5 @@ FullTextSearch.prototype.decorate = function (element) {
   this.hydrateTextSearchInput();
   this.hydrateTagSearchInput();
 
-  $('.js-search-form').submit(me.makeFormSubmitHandler());
+  $('.js-search-btn').on('click', this.makeFormSubmitHandler());
 };

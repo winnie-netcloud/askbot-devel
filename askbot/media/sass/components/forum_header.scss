@@ -74,7 +74,7 @@
   width: var(--search-bar-height);
 }
 
-.search-btn {
+.js-search-btn {
   border-color: var(--forum-header-input-border-color);
   background: var(--search-btn-bg-color);
   border-top-left-radius: 0;
@@ -94,7 +94,7 @@
   input[type="text"] {
     border-bottom-left-radius: 0;
   }
-  .search-btn {
+  .js-search-btn {
     border-bottom-right-radius: 0;
   }
 }

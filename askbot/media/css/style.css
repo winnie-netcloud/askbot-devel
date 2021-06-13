@@ -6871,7 +6871,7 @@ header .content-wrapper {
   width: var(--search-bar-height);
 }
 
-.search-btn {
+.js-search-btn {
   border-color: var(--forum-header-input-border-color);
   background: var(--search-btn-bg-color);
   border-top-left-radius: 0;
@@ -6881,7 +6881,7 @@ header .content-wrapper {
   width: var(--search-bar-height);
   transition: var(--transition-color), var(--transition-bg-color);
 }
-.search-btn:hover {
+.js-search-btn:hover {
   background: var(--search-btn-hover-bg-color);
   color: var(--forum-header-fg-hover-color);
   transition: var(--transition-color), var(--transition-bg-color);
@@ -6890,7 +6890,7 @@ header .content-wrapper {
 .js-with-drop-menu input[type=text] {
   border-bottom-left-radius: 0;
 }
-.js-with-drop-menu .search-btn {
+.js-with-drop-menu .js-search-btn {
   border-bottom-right-radius: 0;
 }
 
