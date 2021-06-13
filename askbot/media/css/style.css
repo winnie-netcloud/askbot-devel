@@ -6832,7 +6832,7 @@ header .content-wrapper {
   transition: var(--transition-color);
 }
 
-.search-form {
+.js-search-form {
   flex-grow: 1;
 }
 

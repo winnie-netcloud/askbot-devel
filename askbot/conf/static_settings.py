@@ -42,6 +42,7 @@ class AskbotStaticSettings(AppConf):
     SELF_TEST = True # if true - run startup self-test
     TRANSLATE_URL = True # set true to localize urls
     USER_DATA_EXPORT_DIR = const.DEFAULT_USER_DATA_EXPORT_DIR
+    USE_LOCAL_FONTS = False
     WHITELISTED_IPS = tuple() # a tuple of whitelisted ips for moderation
 
     class Meta:

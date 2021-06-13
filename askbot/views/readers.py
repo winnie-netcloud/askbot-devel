@@ -170,7 +170,7 @@ def questions(request, **kwargs):
                                                'request': request},
                                               request)
 
-        question_list_title_tpl = get_template('main_page/paginator.html')
+        question_list_title_tpl = get_template('main_page/question_list_title.html')
         question_list_title = question_list_title_tpl.render({'questions_count': q_count})
 
         ajax_data = {
