@@ -1,0 +1,36 @@
+.components--sort-nav {
+  align-items: center;
+  background: var(--sort-nav-bg);
+  border-radius: var(--input-border-radius);
+  display: flex;
+  height: var(--sort-nav-height);
+  overflow: hidden;
+  span {
+    cursor: default;
+  }
+  span, a, a:active {
+    color: var(--sort-nav-fg-color);
+  }
+  a {
+    text-decoration: none;
+    transition: var(--transition-color), var(--transition-bg-color);
+  }
+  a.js-selected {
+    color: var(--sort-nav-selected-fg-color);
+  }
+  a:hover {
+    color: var(--sort-nav-selected-fg-color);
+    background: var(--sort-nav-hover-bg);
+    transition: var(--transition-color), var(--transition-bg-color);
+  }
+  span, a {
+    border-right: var(--input-border-width) var(--input-border-style) var(--sort-nav-sep-color);
+    display: block;
+    font-size: 0.925rem;
+    height: var(--sort-nav-height);
+    padding: 0.125rem 0.5rem 0;
+  }
+  a:last-of-type {
+    border: none;
+  }
+}

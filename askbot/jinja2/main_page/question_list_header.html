@@ -1,15 +1,19 @@
 {% import "macros.html" as macros %}
 {% cache 0 "scope_sort_tabs" search_tags request.user author_name scope sort query context.page language_code %}
 <div class="js-question-list-header">
-  {% include "main_page/question_list_title.html" %}
-  {% include "main_page/questions_sort_nav.html" %}
-  {% if settings.RSS_ENABLED %}
-    <a class="rss-link with-rss-icon" href="{{ feed_url }}"
-      title="{% trans %}subscribe to the feed{% endtrans %}"
-    >
-      {% trans %}RSS{% endtrans %}
-    </a>
-  {% endif %}
+  <div class="question-list-header-top">
+    {% include "main_page/question_list_title.html" %}
+    <div class="question-list-header-top-controls">
+      {% include "main_page/questions_sort_nav.html" %}
+      {% if settings.RSS_ENABLED %}
+        <a class="js-rss-link with-rss-icon" href="{{ feed_url }}"
+          title="{% trans %}subscribe to the feed{% endtrans %}"
+        >
+          {% trans %}RSS{% endtrans %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
   <div class="js-search-tags" {% if not search_tags %}style="display: none;"{% endif %}>
       <span class="search-tags-label">{% trans %}Tagged{% endtrans %}</span>
       {{ macros.tag_list_widget(search_tags,

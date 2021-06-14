@@ -430,6 +430,13 @@ input,
   --search-btn-bg-color: hsl(60, 15%, 95%);
   --search-btn-hover-bg-color: hsl(60, 15%, 90%);
   --search-drop-menu-bg-color: var(--bg-color);
+  --sort-nav-bg: var(--search-btn-bg-color);
+  --sort-nav-hover-bg: hsl(0, 0%, 85%);
+  --sort-nav-selected-fg-color: var(--fg-color);
+  --sort-nav-fg-color: var(--forum-header-fg-color);
+  --sort-nav-height: 1.5rem;
+  --sort-nav-sep-color: hsl(60, 16%, 80%);
+  --rss-color: hsl(28, 100%, 50%);
 }
 
 .content-wrapper {
@@ -455,6 +462,8 @@ input,
  */
 .fa,
 .fas,
+.js-with-sort-ascending-icon::before,
+.js-with-sort-descending-icon::before,
 .with-rss-icon::before,
 .with-selected-scope-icon::before,
 .with-search-icon::before,
@@ -484,7 +493,7 @@ input,
   line-height: 1;
 }
 
-.with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-times-icon::before, .with-bronze-badge-icon::before,
+.js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
 .with-gold-badge-icon::before, .with-tags-icon::before,
 .with-users-icon::before,
@@ -591,6 +600,8 @@ input,
 
 .fa.fa-pull-left,
 .fas.fa-pull-left,
+.fa-pull-left.js-with-sort-ascending-icon::before,
+.fa-pull-left.js-with-sort-descending-icon::before,
 .fa-pull-left.with-rss-icon::before,
 .fa-pull-left.with-selected-scope-icon::before,
 .fa-pull-left.with-search-icon::before,
@@ -614,6 +625,8 @@ input,
 }
 .fa.fa-pull-right,
 .fas.fa-pull-right,
+.fa-pull-right.js-with-sort-ascending-icon::before,
+.fa-pull-right.js-with-sort-descending-icon::before,
 .fa-pull-right.with-rss-icon::before,
 .fa-pull-right.with-selected-scope-icon::before,
 .fa-pull-right.with-search-icon::before,
@@ -6592,6 +6605,8 @@ readers do not read off random characters that represent icons */
 }
 .fa,
 .fas,
+.js-with-sort-ascending-icon::before,
+.js-with-sort-descending-icon::before,
 .with-rss-icon::before,
 .with-selected-scope-icon::before,
 .with-search-icon::before,
@@ -6719,9 +6734,39 @@ readers do not read off random characters that represent icons */
   left: calc(50% - 5px);
 }
 
+.with-rss-icon {
+  color: var(--rss-color);
+  font-size: 0.925rem;
+  padding: 0.15rem 0.75rem 0 0;
+  position: relative;
+  text-decoration: none;
+}
 .with-rss-icon::before {
   content: "";
-  transform: scale(-1, 1);
+  font-size: 0.712rem;
+  position: absolute;
+  right: 0;
+  top: 0.3625rem;
+}
+
+.js-with-sort-descending-icon,
+.js-with-sort-ascending-icon {
+  padding-right: 1.25rem !important;
+  position: relative;
+}
+.js-with-sort-descending-icon::before,
+.js-with-sort-ascending-icon::before {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.3625rem;
+}
+
+.js-with-sort-descending-icon::before {
+  content: "";
+}
+
+.js-with-sort-ascending-icon::before {
+  content: "";
 }
 
 .btn {
@@ -6950,6 +6995,65 @@ header .content-wrapper {
   background: var(--ask-btn-hover-bg-color);
   border-color: var(--ask-btn-hover-border-color);
   transition: var(--transition-color), var(--transition-bg-color);
+}
+
+.components--sort-nav {
+  align-items: center;
+  background: var(--sort-nav-bg);
+  border-radius: var(--input-border-radius);
+  display: flex;
+  height: var(--sort-nav-height);
+  overflow: hidden;
+}
+.components--sort-nav span {
+  cursor: default;
+}
+.components--sort-nav span, .components--sort-nav a, .components--sort-nav a:active {
+  color: var(--sort-nav-fg-color);
+}
+.components--sort-nav a {
+  text-decoration: none;
+  transition: var(--transition-color), var(--transition-bg-color);
+}
+.components--sort-nav a.js-selected {
+  color: var(--sort-nav-selected-fg-color);
+}
+.components--sort-nav a:hover {
+  color: var(--sort-nav-selected-fg-color);
+  background: var(--sort-nav-hover-bg);
+  transition: var(--transition-color), var(--transition-bg-color);
+}
+.components--sort-nav span, .components--sort-nav a {
+  border-right: var(--input-border-width) var(--input-border-style) var(--sort-nav-sep-color);
+  display: block;
+  font-size: 0.925rem;
+  height: var(--sort-nav-height);
+  padding: 0.125rem 0.5rem 0;
+}
+.components--sort-nav a:last-of-type {
+  border: none;
+}
+
+.js-question-list-header {
+  margin-top: 0.25rem;
+}
+
+.question-list-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.question-list-header-top-controls {
+  display: flex;
+}
+
+.js-question-list-title {
+  font-size: 1.5rem;
+}
+
+.js-rss-link {
+  margin-left: 0.25rem;
 }
 
 /*# sourceMappingURL=style.css.map */

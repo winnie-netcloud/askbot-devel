@@ -43,4 +43,13 @@
   --search-btn-bg-color: hsl(60, 15%, 95%);
   --search-btn-hover-bg-color: hsl(60, 15%, 90%);
   --search-drop-menu-bg-color: var(--bg-color);
+
+  --sort-nav-bg: var(--search-btn-bg-color);
+  --sort-nav-hover-bg: hsl(0, 0%, 85%);
+  --sort-nav-selected-fg-color: var(--fg-color);
+  --sort-nav-fg-color: var(--forum-header-fg-color);
+  --sort-nav-height: 1.5rem;
+  --sort-nav-sep-color: hsl(60, 16%, 80%);
+
+  --rss-color: hsl(28, 100%, 50%);
 }
