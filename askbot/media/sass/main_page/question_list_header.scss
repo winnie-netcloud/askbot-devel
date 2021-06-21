@@ -11,6 +11,7 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 0.125rem;
 }
 
 .question-list-header-top-controls,
@@ -31,4 +32,10 @@
 
 .js-rss-link {
   margin-left: 0.25rem;
+}
+
+.js-search-tags .tags {
+  display: flex;
+  gap: 0 0.5rem;
+  flex-wrap: wrap;
 }

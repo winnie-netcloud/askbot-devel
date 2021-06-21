@@ -15,10 +15,10 @@
     </div>
   </div>
   <div class="js-search-tags" {% if not search_tags %}style="display: none;"{% endif %}>
-      <span class="search-tags-label">{% trans %}Tagged{% endtrans %}</span>
       {{ macros.tag_list_widget(search_tags,
                                 id='searchTags',
                                 deletable=True,
+                                label=gettext('Tagged'),
                                 make_links=False,
                                 search_state=search_state)}}
       {#%- if author_name %}{% trans %}author: {{author_name}}{% endtrans %} {% endif %#}

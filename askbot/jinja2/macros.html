@@ -159,6 +159,7 @@
         tags,
         id=None,
         deletable=False,
+        label=None,
         make_links=True,
         search_state=None,
         css_class=None,
@@ -167,6 +168,9 @@
 -%}
 <ul class="tags{% if css_class %} {{css_class}}{% endif %}">
     {% if tags %}
+      {% if label %}
+        <li class="search-tags-label">{{ label }}</li>
+      {% endif %}
         {% for tag in tags %}
         <li>
             {{ tag_widget(
@@ -292,9 +296,9 @@
                 {{ tag|escape|replace('*', '&#10045;') }}
             {%- endif -%}
         </{% if is_link %}a{% else %}span{% endif %}>
-        {% if deletable %}
+        {%- if deletable -%}
             <span class="js-delete-icon">&times;</span>
-        {% endif %}
+        {%- endif %}
         {% if extra_content %}
         <span class="js-tag-extra-content">{{ extra_content }}</span>
         {% endif %}

@@ -8,6 +8,7 @@
   --system-messages-border-color: hsl(50, 100%, 88%);
   --danger-color: hsl(0, 79%, 47%);
   --danger-light-color: hsl(0, 79%, 60%);
+  --danger-dark-color: hsl(0, 80%, 42%);
   --transition-duration: 0.1s;
   --transition-timing-function: steps(2, jump-end);
   --transition-color: color var(--transition-duration) var(--transition-timing-function);
@@ -50,6 +51,15 @@
   --sort-nav-fg-color: var(--forum-header-fg-color);
   --sort-nav-height: 1.5rem;
   --sort-nav-sep-color: hsl(60, 16%, 80%);
+
+  --tag-bg: var(--search-btn-bg-color);
+  --tag-fg-color: var(--forum-header-fg-color);
+  --tag-border-color: var(--sort-nav-sep-color);
+  --tag-height: 22px;
+  --tag-delete-btn-bg: var(--sort-nav-sep-color);
+  --tag-delete-btn-hover-bg: var(--danger-dark-color);
+  --tag-delete-btn-fg-color: var(--forum-header-fg-color);
+  --tag-delete-btn-fg-hover-color: var(--bg-color);
 
   --rss-color: hsl(28, 100%, 50%);
 }
