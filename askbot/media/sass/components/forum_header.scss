@@ -4,6 +4,7 @@
   background: var(--forum-header-bg-color);
   position: sticky;
   top: 0;
+  z-index: 1;
   .with-home-icon {
     color: var(--forum-header-fg-color);
     font-size: 1.25rem;
