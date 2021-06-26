@@ -10,6 +10,6 @@
     "sass": "^1.34.0"
   },
   "scripts": {
-    "build": "sass ./sass/style.scss ./css/style.css --watch"
+    "sass": "sass ./sass/style.scss ./css/style.css --watch"
   }
 }

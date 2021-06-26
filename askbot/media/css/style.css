@@ -440,6 +440,7 @@ input,
   --tag-bg: var(--search-btn-bg-color);
   --tag-fg-color: var(--forum-header-fg-color);
   --tag-border-color: var(--sort-nav-sep-color);
+  --tag-font-size: 0.875rem;
   --tag-height: 22px;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
   --tag-delete-btn-hover-bg: var(--danger-dark-color);
@@ -6822,16 +6823,21 @@ readers do not read off random characters that represent icons */
 }
 
 .js-tag {
-  display: inline-block;
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
   height: var(--tag-height);
 }
 .js-tag .js-tag-name {
   background: var(--tag-bg);
   border: var(--input-border-width) var(--input-border-style) var(--tag-border-color);
   color: var(--tag-fg-color);
+  cursor: pointer;
   display: inline-block;
+  font-size: var(--tag-font-size);
   height: 100%;
-  padding: 0 0.25rem;
+  padding: 0.0625rem 0.25rem 0;
+  text-decoration: none;
 }
 
 .js-tag.js-deletable-tag .js-tag-name {
@@ -6843,6 +6849,7 @@ readers do not read off random characters that represent icons */
   border-bottom-right-radius: var(--input-border-radius);
   border-top-right-radius: var(--input-border-radius);
   border: var(--input-border-width) var(--input-border-style) var(--tag-delete-btn-bg);
+  color: var(--bg-color);
   cursor: pointer;
   display: inline-block;
   height: 100%;
@@ -7121,7 +7128,7 @@ header .content-wrapper {
 
 .js-search-tags .tags {
   display: flex;
-  gap: 0 0.5rem;
+  gap: 0 0.3625rem;
   flex-wrap: wrap;
 }
 
