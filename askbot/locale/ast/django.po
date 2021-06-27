@@ -5984,19 +5984,19 @@ msgstr ""
 msgid "please try provide enough details"
 msgstr ""
 
-#: skins/default/templates/widgets/question_summary.html:12
+#: skins/default/templates/questions/question_summary.html:12
 msgid "view"
 msgid_plural "views"
 msgstr[0] ""
 msgstr[1] ""
 
-#: skins/default/templates/widgets/question_summary.html:29
+#: skins/default/templates/questions/question_summary.html:29
 msgid "answer"
 msgid_plural "answers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: skins/default/templates/widgets/question_summary.html:40
+#: skins/default/templates/questions/question_summary.html:40
 msgid "vote"
 msgid_plural "votes"
 msgstr[0] ""

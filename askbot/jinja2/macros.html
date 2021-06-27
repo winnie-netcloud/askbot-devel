@@ -324,10 +324,6 @@
     {% endfor %}
 {%- endmacro -%}
 
-{%- macro question_summary(thread, question, extra_class=None, search_state=None, visitor = None) -%}
-{%include "widgets/question_summary.html" %}
-{%- endmacro -%}
-
 {# Warning! Any changes to the comment markup here must be duplicated in post.js
 for the purposes of the AJAX comment editor #}
 

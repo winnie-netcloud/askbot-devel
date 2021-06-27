@@ -334,7 +334,7 @@ class ThreadRenderLowLevelCachingTests(AskbotTestCase):
             'search_state': ss,
             'visitor': None
         }
-        proper_html = get_template('widgets/question_summary.html').render(Context(context))
+        proper_html = get_template('questions/question_summary.html').render(Context(context))
         self.assertEqual(test_html, proper_html)
 
         # Make double-check that all tags are included
@@ -360,7 +360,7 @@ class ThreadRenderLowLevelCachingTests(AskbotTestCase):
         ss = ss.add_tag('mini-mini')
         context['search_state'] = ss
         test_html = thread.get_summary_html(search_state=ss)
-        proper_html = get_template('widgets/question_summary.html').render(Context(context))
+        proper_html = get_template('questions/question_summary.html').render(Context(context))
 
         self.assertEqual(test_html, proper_html)
 
@@ -392,7 +392,7 @@ class ThreadRenderLowLevelCachingTests(AskbotTestCase):
             'search_state': DummySearchState(),
             'visitor': None
         }
-        html = get_template('widgets/question_summary.html').render(Context(context))
+        html = get_template('questions/question_summary.html').render(Context(context))
         filled_html = html.replace('<<<tag1>>>', SearchState.get_empty().add_tag('tag1').full_url())\
                           .replace('<<<tag2>>>', SearchState.get_empty().add_tag('tag2').full_url())\
                           .replace('<<<tag3>>>', SearchState.get_empty().add_tag('tag3').full_url())
@@ -461,7 +461,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
             'visitor': None
         }
         return get_template(
-            'widgets/question_summary.html'
+            'questions/question_summary.html'
         ).render(Context(context))
 
     def test_post_question(self):
