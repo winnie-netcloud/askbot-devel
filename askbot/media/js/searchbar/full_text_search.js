@@ -8,7 +8,7 @@ var FullTextSearch = function () {
   WrappedElement.call(this);
   this._running = false;
   this._baseUrl = askbot.urls.questions;
-  this._q_list_sel = 'questions';//id of question listing div
+  this._qListId = 'js-questions';//id of question listing div
   /** @todo: the questions/ needs translation... */
   this._searchUrl = '/scope:all/sort:activity-desc/page:1/';
   this._askButtonEnabled = true;
@@ -242,15 +242,15 @@ FullTextSearch.prototype.renderFullTextSearchResult = function (data) {
 
   this._query.focus();
 
-  var old_list = $('#' + this._q_list_sel);
+  var old_list = $('#' + this._qListId);
   var new_list = $('<div></div>').hide().html(data.questions);
   new_list.find('.timeago').timeago();
 
-  var q_list_sel = this._q_list_sel;
+  var qListId = this._qListId;
   old_list.stop(true).after(new_list).fadeOut(200, function () {
     //show new div with a fadeIn effect
     old_list.remove();
-    new_list.attr('id', q_list_sel);
+    new_list.attr('id', qListId);
     new_list.fadeIn(400);
   });
 };

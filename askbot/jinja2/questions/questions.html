@@ -1,5 +1,5 @@
 {% import "macros.html" as macros %}
-<div id="questions">
+<div id="js-questions">
   {% for thread in threads.object_list %}
       {{ thread.get_summary_html(search_state=search_state, visitor = request.user) }}
   {% endfor %}
