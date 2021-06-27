@@ -2,7 +2,7 @@
 {% cache 0 "scope_sort_tabs" search_tags request.user author_name scope sort query context.page language_code %}
 <div class="js-questions-header">
   <div class="questions-header-top">
-    {% include "questions/question_list_title.html" %}
+    {% include "questions/questions_title.html" %}
     <div class="questions-header-top-controls">
       {% include "questions/questions_sort_nav.html" %}
       {% if settings.RSS_ENABLED %}

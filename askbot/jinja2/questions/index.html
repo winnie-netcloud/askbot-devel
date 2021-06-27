@@ -7,7 +7,7 @@
 {% block title %}{% filter trim %}{% trans %}Questions{% endtrans %}{% endfilter %}{% endblock %}
 {% block page_class %}questions-page{% endblock %}
 {% block content %}
-    {% include "questions/question_list_header.html" %}
+    {% include "questions/questions_header.html" %}
     {% if questions_count > 0 %}
         {% include "questions/questions_loop.html" %}
         {% include "questions/paginator.html" %}

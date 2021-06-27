@@ -524,6 +524,8 @@ FullTextSearch.prototype.renderSearchDropMenu = function () {
   dropMenu.setAskButtonEnabled(this._askButtonEnabled);
   this._dropMenu = dropMenu;
   $('.js-search-bar').append(this._dropMenu.getElement());
+  $(this._element).click(function (e) { return false; });
+  $(document).click(function () { dropMenu.reset(); });
 };
 
 FullTextSearch.prototype.decorate = function (element) {
@@ -534,9 +536,6 @@ FullTextSearch.prototype.decorate = function (element) {
   this._tag_warning_box = new TagWarningBox();
 
   this.renderSearchDropMenu();
-
-  $(element).click(function (e) { return false; });
-  $(document).click(function () { dropMenu.reset(); });
 
   //the tag search input is optional in askbot
   $('#ab-tag-search').parent().before(
