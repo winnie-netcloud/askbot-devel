@@ -693,7 +693,7 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 
-{%- macro paginator_main_page(p, position, search_state) -%} {# p is paginator context dictionary #}
+{%- macro paginator_questions(p, position, search_state) -%} {# p is paginator context dictionary #}
     {% filter trim %}
         {% if p.is_paginated %}
             <div class="paginator" style="float:{{position}}">

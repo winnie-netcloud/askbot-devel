@@ -1,6 +1,10 @@
 {# todo: add tips to widen selection #}
 <p class="evenMore" style="padding-top:30px;text-align:center;">
-    {% trans %}Oops, looks like there is nothing here yet!{% endtrans %}
+  {% trans %}Oops, looks like there is nothing here yet!{% endtrans %}
+  {#<div class="evenMore">
+      {% trans %}Did not find what you were looking for?{% endtrans %}
+      <a href="{{ url('ask') }}">{{ settings.WORDS_ASK_YOUR_QUESTION|escape }}</a>
+  </div>#}
 </p>
 {% if search_state.query or search_state.tags or search_state.author %}
 <p class="evenMore" style="text-align:center">

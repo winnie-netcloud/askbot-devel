@@ -2,21 +2,21 @@
 {% import "macros.html" as macros %}
 <!-- questions.html -->
 {% block forejs %}
-  {% include "main_page/custom_head_javascript.html" ignore missing %}
+  {% include "questions/custom_head_javascript.html" ignore missing %}
 {% endblock %}
 {% block title %}{% filter trim %}{% trans %}Questions{% endtrans %}{% endfilter %}{% endblock %}
 {% block page_class %}questions-page{% endblock %}
 {% block content %}
+    {% include "questions/question_list_header.html" %}
     {% if questions_count > 0 %}
-        {% include "main_page/question_list_header.html" %}
-        <div id="question-list">
-            {% include "main_page/questions_loop.html" %}
-        </div>
-        {% include "main_page/paginator.html" %}
+        {% include "questions/questions_loop.html" %}
+        {% include "questions/paginator.html" %}
+    {% else %}
+      {% include "questions/nothing_found.html" %}
     {% endif %}
 {% endblock %}
 {% block sidebar %}
-    {% include "main_page/sidebar.html" %}
+    {% include "questions/sidebar.html" %}
 {% endblock %}
 {% block js_templates %}
     {{ macros.tag_widget('dummy', deletable=True) }}
@@ -26,7 +26,7 @@
         {# cant cache this #}
         askbot['settings']['showSortByRelevance'] = {{ show_sort_by_relevance|as_js_bool }};
     </script>
-    {% include "main_page/javascript.html" %}
-    {% include "main_page/custom_javascript.html" ignore missing %}
+    {% include "questions/javascript.html" %}
+    {% include "questions/custom_javascript.html" ignore missing %}
 {% endblock %}
 <!-- end questions.html -->

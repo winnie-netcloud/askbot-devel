@@ -1,7 +1,7 @@
 <nav class="js-questions-sort-nav components--sort-nav">
   <span class="components--sort-nav--label">{% trans %}Sort by{% endtrans %}</span>
   {% if show_sort_by_relevance %}
-    {% include "main_page/questions_sort_by_relevance.html" %}
+    {% include "questions/questions_sort_by_relevance.html" %}
   {% endif %}
 
   {{ macros.reversible_sort_button(sort_by='age',

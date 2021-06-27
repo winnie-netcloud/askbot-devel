@@ -11,7 +11,7 @@
 {% endif %}
 
 {% if settings.TAG_SEARCH_INPUT_ENABLED %}
-    {% include "main_page/tag_search.html" %}
+    {% include "questions/tag_search.html" %}
 {% endif %}
 
 {% if request.user.is_authenticated and settings.SIDEBAR_MAIN_SHOW_TAG_SELECTOR %}

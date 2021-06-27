@@ -150,7 +150,7 @@ def questions(request, **kwargs):
         q_count = paginator.count
 
         if q_count > search_state.page_size:
-            paginator_tpl = get_template('main_page/paginator.html')
+            paginator_tpl = get_template('questions/paginator.html')
             paginator_html = paginator_tpl.render(
                     {
                         'context': paginator_context,
@@ -163,14 +163,14 @@ def questions(request, **kwargs):
         else:
             paginator_html = ''
 
-        questions_tpl = get_template('main_page/questions_loop.html')
+        questions_tpl = get_template('questions/questions_loop.html')
         questions_html = questions_tpl.render({'threads': page,
                                                'search_state': search_state,
                                                'reset_method_count': reset_method_count,
                                                'request': request},
                                               request)
 
-        question_list_title_tpl = get_template('main_page/question_list_title.html')
+        question_list_title_tpl = get_template('questions/question_list_title.html')
         question_list_title = question_list_title_tpl.render({'questions_count': q_count})
 
         ajax_data = {
@@ -275,7 +275,7 @@ def questions(request, **kwargs):
                 ) % url
                 request.user.message_set.create(message=msg)
 
-        return render(request, 'main_page/index.html', template_data)
+        return render(request, 'questions/index.html', template_data)
         #print timezone.now() - before
         #return res
 
