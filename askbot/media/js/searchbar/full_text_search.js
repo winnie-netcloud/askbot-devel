@@ -8,7 +8,7 @@ var FullTextSearch = function () {
   WrappedElement.call(this);
   this._running = false;
   this._baseUrl = askbot.urls.questions;
-  this._q_list_sel = 'question-list';//id of question listing div
+  this._q_list_sel = 'questions';//id of question listing div
   /** @todo: the questions/ needs translation... */
   this._searchUrl = '/scope:all/sort:activity-desc/page:1/';
   this._askButtonEnabled = true;
@@ -195,8 +195,8 @@ FullTextSearch.prototype.renderTitleSearchResult = function (data) {
 };
 
 FullTextSearch.prototype.renderQuestionListHeader = function (data) {
-  var header = $('.js-question-list-header');
-  header.find('.js-question-list-title').replaceWith(data.question_list_title);
+  var header = $('.js-questions-header');
+  header.find('.js-questions-title').replaceWith(data.question_list_title);
   if (data.feed_url) {
     header.find('a.js-rss-link').attr('href', data.feed_url);
   }

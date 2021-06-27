@@ -7090,7 +7090,7 @@ header .content-wrapper {
   border: none;
 }
 
-.js-question-list-header {
+.js-questions-header {
   background: var(--bg-color);
   padding-top: 0.3625rem;
   position: sticky;
@@ -7098,7 +7098,7 @@ header .content-wrapper {
   z-index: 1;
 }
 
-.question-list-header-top {
+.questions-header-top {
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -7106,16 +7106,16 @@ header .content-wrapper {
   margin-bottom: 0.125rem;
 }
 
-.question-list-header-top-controls,
-.js-question-list-title {
+.questions-header-top-controls,
+.js-questions-title {
   margin-bottom: 0.25rem;
 }
 
-.question-list-header-top-controls {
+.questions-header-top-controls {
   display: flex;
 }
 
-.js-question-list-title {
+.js-questions-title {
   font-size: 1.25rem;
   margin-right: 1rem;
   position: relative;
