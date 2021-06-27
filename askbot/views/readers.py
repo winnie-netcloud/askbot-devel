@@ -163,7 +163,7 @@ def questions(request, **kwargs):
         else:
             paginator_html = ''
 
-        questions_tpl = get_template('questions/questions_loop.html')
+        questions_tpl = get_template('questions/questions.html')
         questions_html = questions_tpl.render({'threads': page,
                                                'search_state': search_state,
                                                'reset_method_count': reset_method_count,

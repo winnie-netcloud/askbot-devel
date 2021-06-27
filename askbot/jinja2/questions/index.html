@@ -9,7 +9,7 @@
 {% block content %}
     {% include "questions/questions_header.html" %}
     {% if questions_count > 0 %}
-        {% include "questions/questions_loop.html" %}
+        {% include "questions/questions.html" %}
         {% include "questions/paginator.html" %}
     {% else %}
       {% include "questions/nothing_found.html" %}
