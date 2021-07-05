@@ -418,7 +418,7 @@ input,
   --layout-horizontal-padding: 0.75rem;
   --small-font-size: 0.875rem;
   --extra-small-font-size: 0.75rem;
-  --larger-font-size: 19px;
+  --larger-font-size: 1.125rem;
   --input-horizontal-padding: 0.5rem;
   --input-border-radius: var(--border-radius);
   --input-border-style: var(--border-style);
@@ -7126,7 +7126,7 @@ header .content-wrapper {
 
 .js-questions-title {
   font-weight: normal;
-  font-size: 1rem;
+  font-size: var(--larger-font-size);
   margin-right: 1rem;
   position: relative;
   top: -2px;
@@ -7144,11 +7144,12 @@ header .content-wrapper {
 }
 
 .search-tags-label {
+  font-size: var(--larger-font-size);
   padding-top: 1px;
 }
 
 .js-search-tags {
-  margin: 0.125rem 0 -0.25rem;
+  margin: 0.125rem 0 0;
 }
 .js-search-tags .tags {
   display: flex;
@@ -7164,7 +7165,7 @@ header .content-wrapper {
   margin-bottom: 0.25rem;
 }
 .question-summary h2 {
-  font-size: 1rem;
+  font-size: var(--larger-font-size);
   font-weight: normal;
   line-height: 1.25rem;
   margin: 0 0 0.75rem;
