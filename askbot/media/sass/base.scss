@@ -38,6 +38,11 @@ body {
   color: var(--fg-color);
 }
 
+abbr {
+  display: none;
+  text-decoration: none !important;
+}
+
 input {
   background: var(--input-bg-color);
   color: var(--fg-color);

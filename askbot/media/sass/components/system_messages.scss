@@ -20,9 +20,9 @@
 }
 
 .js-system-message {
-  border-bottom: 1px solid var(--system-messages-border-color);
+  border-bottom: var(--border-width) solid var(--system-messages-border-color);
   line-height: 1.25em;
-  padding: 0.3rem 0 0.45rem;
+  padding: 0.5rem 0 calc(0.5rem - var(--border-width));
   a, a:active {
     color: var(--danger-color);
     transition: var(--color-transition);

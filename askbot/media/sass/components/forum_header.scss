@@ -25,6 +25,7 @@
   a, a:active, a:visited {
     color: var(--forum-header-fg-color);
     line-height: var(--forum-header-height);
+    font-size: var(--scope-nav-font-size);
     margin-right: 0.5rem;
     position: relative;
     text-decoration: none;
@@ -63,6 +64,7 @@
 .search-bar-col {
   display: flex;
   justify-content: flex-start;
+  padding-right: 0 !important;
 }
 
 .js-cancel-search-btn {
@@ -80,6 +82,7 @@
   background: var(--search-btn-bg-color);
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  border-right: none;
   color: var(--forum-header-fg-color);
   min-width: var(--search-bar-height);
   width: var(--search-bar-height);
@@ -147,6 +150,7 @@
   border-color: var(--ask-btn-border-color);
   color: var(--ask-btn-text-color);
   display: flex;
+  font-size: var(--ask-btn-font-size);
   height: var(--search-bar-height);
   justify-content: center;
   margin: var(--search-bar-vertical-margin) 0;

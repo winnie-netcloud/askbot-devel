@@ -1,0 +1,98 @@
+.question-summary {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 0.25rem;
+  position: relative;
+  margin-bottom: 0.25rem;
+  h2 {
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: 1.25rem;
+    margin: 0 0 0.75rem;
+    a, a:active {
+      color: var(--fg-color);
+      text-decoration: none;
+    }
+  }
+}
+
+.question-summary-sep {
+  border-bottom: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
+  bottom: 0;
+  height: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.question-summary-title-tags {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.question-summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tags-gap);
+  position: relative;
+  top: -0.25rem;
+}
+
+.question-summary-user-info {
+  font-size: var(--extra-small-font-size);
+  padding-top: 1px;
+  text-align: right;
+  white-space: nowrap;
+  height: 1rem;
+  a, a:active, a:visited {
+    color: var(--fg-color);
+    font-weight: bold;
+    text-decoration: none;
+  }
+}
+
+.question-summary-stats {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 2.25rem;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+.question-views-count,
+.question-answers-count,
+.question-votes-count {
+  text-align: center;
+  border: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
+  height: 100%;
+  width: 3rem;
+
+  .item-count {
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+
+  .item-name {
+    font-size: var(--extra-small-font-size);
+    color: var(--fg-color);
+    line-height: 8px;
+  }
+}
+
+.question-views-count {
+  background: linear-gradient(to top, hsl(180, 25%, 90%), var(--bg-color));
+  color: hsl(191, 38%, 25%);
+}
+
+.question-answers-count {
+  background: linear-gradient(to top, hsl(60, 70%, 91%), var(--bg-color));
+  color: hsl(40, 80%, 59%);
+}
+
+.question-votes-count {
+  background: linear-gradient(to top, hsl(10, 29%, 92%), var(--bg-color));
+  color: hsl(18, 100%, 41%);
+}

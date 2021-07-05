@@ -109,18 +109,14 @@
 
 .with-rss-icon {
   color: var(--rss-color);
-  font-size: 0.925rem;
-  padding: 0.15rem 0.75rem 0 0;
   position: relative;
   text-decoration: none;
   &::before {
     @extend %fa-icon;
     @extend .fas;
     content: fa-content($fa-var-rss);
-    font-size: 0.712rem;
     position: absolute;
     right: 0;
-    top: 0.3625rem;
   }
 }
 
@@ -130,7 +126,6 @@
   position: relative;
   &::before {
     position: absolute;
-    top: 0.25rem;
     right: 0.3625rem;
   }
 }

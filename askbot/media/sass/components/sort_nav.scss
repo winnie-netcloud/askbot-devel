@@ -1,9 +1,9 @@
 .components--sort-nav {
   align-items: center;
   background: var(--sort-nav-bg);
-  border-radius: var(--input-border-radius);
-  display: flex;
+  border-radius: var(--border-radius);
   height: var(--sort-nav-height);
+  display: flex;
   overflow: hidden;
   span {
     cursor: default;
@@ -25,10 +25,11 @@
   }
   span, a {
     border-right: var(--input-border-width) var(--input-border-style) var(--sort-nav-sep-color);
-    display: block;
-    font-size: 0.925rem;
-    height: var(--sort-nav-height);
-    padding: 0.125rem 0.5rem 0;
+    display: flex;
+    align-items: center;
+    font-size: var(--small-font-size);
+    height: 100%;
+    padding: 0 0.5rem 2px;
   }
   a:last-of-type {
     border: none;

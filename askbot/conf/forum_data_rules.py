@@ -72,6 +72,15 @@ settings.register(
 settings.register(
     livesettings.BooleanValue(
         FORUM_DATA_RULES,
+        'QUESTION_SUMMARY_SHOW_ZERO_COUNTS',
+        default=True,
+        description=_('Show zero (votes, answers, view) counts in the question lists')
+    )
+)
+
+settings.register(
+    livesettings.BooleanValue(
+        FORUM_DATA_RULES,
         'WIKI_ON',
         default=True,
         description=_('Check to enable community wiki feature')
