@@ -141,3 +141,15 @@
   @extend .fas;
   content: fa-content($fa-var-caret-down);
 }
+
+.with-bars-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-bars);
+}
+
+.with-globe-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-globe-europe);
+}

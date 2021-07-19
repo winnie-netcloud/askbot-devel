@@ -9,6 +9,10 @@
 {% endblock %}
 {% block page_class %}user-profile-page{% endblock %}
 {% block content %}
+    {% if settings.USE_ASKBOT_LOGIN_SYSTEM %}
+       {% set next_jwt=encode_jwt({'next_url': settings.LOGOUT_REDIRECT_URL}) %}
+       <a class="logout-link" href="{{ settings.LOGOUT_URL }}?next={{ next_jwt }}">{% trans %}sign out{% endtrans %}</a>
+    {% endif %}
     <h1 class="section-title">
         {% filter trim %}
         {% trans username=view_user.username|escape %}{{username}}'s profile{% endtrans %} - {% block profilesection %}{% endblock %}

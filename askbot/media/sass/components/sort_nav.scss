@@ -5,6 +5,7 @@
   height: var(--sort-nav-height);
   display: flex;
   overflow: hidden;
+  white-space: nowrap;
   span {
     cursor: default;
   }

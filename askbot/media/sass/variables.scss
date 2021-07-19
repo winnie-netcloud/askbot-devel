@@ -40,7 +40,7 @@
   --forum-header-bg-color: hsla(60, 15%, 90%, var(--debug-transparency));
   --forum-header-fg-color: hsl(60, 0%, 48%); //icons, text on buttons
   --forum-header-fg-hover-color: hsl(60, 0%, 35%); //icons, text on buttons
-  --forum-header-font-size: 1rem;
+  --forum-header-font-size: var(--small-font-size);
   --forum-header-input-border-color: hsl(60, 16%, 75%);
 
   --ask-btn-bg-color: hsla(199, 75%, 62%, var(--debug-transparency));
@@ -50,6 +50,7 @@
   --ask-btn-font-size: var(--forum-header-font-size);
   --ask-btn-text-color: var(--bg-color);
   --search-bar-vertical-margin: 0px;
+  --search-bar-font-size: var(--forum-header-font-size);
   --search-btn-bg-color: hsla(60, 15%, 95%, var(--debug-transparency));
   --search-btn-hover-bg-color: hsl(60, 15%, 90%);
   --search-drop-menu-bg-color: var(--bg-color);
@@ -65,7 +66,7 @@
   --tag-fg-color: var(--forum-header-fg-color);
   --tag-border-color: var(--sort-nav-sep-color);
   --tag-font-size: var(--small-font-size);
-  --tag-height: 24px;
+  --tag-height: 1.25rem;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
   --tag-delete-btn-hover-bg: var(--danger-dark-color);
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);

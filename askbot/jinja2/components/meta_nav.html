@@ -1,33 +1,34 @@
-<nav class="meta-nav">
-  <a href="{{ url('tags') }}"
-    class="with-tags-icon{% if active_tab == 'tags' %} selected{% endif %}"
-  >
-    {% trans %}tags{% endtrans %}
-  </a>
-  {% if settings.GROUPS_ENABLED %}
-    <span class="dropdown groups-dropdown">
-      <a class="with-groups-icon{% if active_tab == 'groups' %} selected{% endif %}"
-        href="{{ url('groups') }}" data-target="#"
+<nav class="meta-nav js-dropdown-menu">
+  <div class="meta-nav-trigger with-bars-icon js-dropdown-trigger"></div>
+  <ul class="js-dropdown-target">
+    <li>
+      <a href="{{ url('tags') }}"
+        class="with-tags-icon{% if active_tab == 'tags' %} selected{% endif %}"
       >
-        {% trans %}people & groups{% endtrans %}
+        {% trans %}tags{% endtrans %}
       </a>
-    </span>
-  {%else%}
-    <a href="{{ url('users') }}"
-      class="with-users-icon{% if active_tab == 'users' %} selected{% endif %}"
-    >
-      {% trans %}users{% endtrans %}
-    </a>
-  {% endif %}
-  {% if settings.BADGES_MODE == 'public' %}
-    <a
-      href="{{ url('badges') }}"
-      class="with-badges-icon{% if active_tab == 'badges' %} selected{% endif %}"
-    >
-      {% trans %}badges{% endtrans %}
-    </a>
-  {% endif %}
-  {% if request.user.is_authenticated and request.user.is_administrator() %}
-    <a class="with-settings-icon" href="{{ url('satchmo_site_settings') }}">{% trans %}settings{% endtrans %}</a>
-  {% endif %}
+    </li>
+    <li>
+      <a href="{{ url('users') }}"
+        class="with-users-icon{% if active_tab == 'users' %} selected{% endif %}"
+      >
+        {% trans %}users{% endtrans %}
+      </a>
+    </li>
+    {% if settings.BADGES_MODE == 'public' %}
+    <li>
+      <a
+        href="{{ url('badges') }}"
+        class="with-badges-icon{% if active_tab == 'badges' %} selected{% endif %}"
+      >
+        {% trans %}badges{% endtrans %}
+      </a>
+    </li>
+    {% endif %}
+    {% if request.user.is_authenticated and request.user.is_administrator() %}
+    <li>
+      <a class="with-settings-icon" href="{{ url('satchmo_site_settings') }}">{% trans %}settings{% endtrans %}</a>
+    </li>
+    {% endif %}
+  </ul>
 </nav>

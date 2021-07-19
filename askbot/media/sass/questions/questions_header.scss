@@ -13,6 +13,9 @@
   flex-wrap: wrap;
   margin: 0 calc(-1 * var(--layout-horizontal-padding)) 0.125rem calc(-1 * var(--layout-horizontal-padding));
   padding: 0 var(--layout-horizontal-padding);
+  @media(max-width: 675px) {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .questions-header-top-controls {
@@ -24,7 +27,10 @@
   font-size: var(--larger-font-size);
   margin-right: 1rem;
   position: relative;
-  top: -2px;
+  top: 2px;
+  @media(max-width: 675px) {
+    display: none;
+  }
 }
 
 .js-rss-link {

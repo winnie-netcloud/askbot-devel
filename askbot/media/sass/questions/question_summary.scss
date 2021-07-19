@@ -1,8 +1,8 @@
 .question-summary {
+  border-bottom: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
   display: flex;
   gap: 1rem;
-  padding-bottom: 0.25rem;
-  position: relative;
+  padding-bottom: calc(0.25rem - var(--border-width));
   margin-bottom: 0.25rem;
   h2 {
     font-size: var(--larger-font-size);
@@ -14,14 +14,6 @@
       text-decoration: none;
     }
   }
-}
-
-.question-summary-sep {
-  border-bottom: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
-  bottom: 0;
-  height: 0;
-  position: absolute;
-  width: 100%;
 }
 
 .question-summary-title-tags {

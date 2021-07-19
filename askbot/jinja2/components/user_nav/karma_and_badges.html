@@ -5,11 +5,11 @@
     href="{{user.get_absolute_url()}}?sort=reputation"
     data-fetch-data-url="{{ url('get_perms_data') }}"
     data-url="{{ url('get_perms_data') }}"
-  >{% trans %}karma:{% endtrans %} {{ user.get_localized_profile().get_reputation() }}</a>{%- if settings.BADGES_MODE == 'public' and have_badges %}, {% endif -%}
+  >{{ user.get_localized_profile().get_reputation() }}</a>
   {%- endif -%}
   {%- if settings.BADGES_MODE == 'public' and have_badges -%}
     <a class="badges" href="{{ user.get_absolute_url() }}#badges"
-    ><span title="{{ user.get_badge_summary() }}">{% trans %}badges:{% endtrans %}
+    ><span title="{{ user.get_badge_summary() }}">
         {% if user.gold %}
         <span class="with-gold-badge-icon">{{user.gold}}</span>
         {% endif %}

@@ -1,0 +1,6 @@
+.js-dropdown-target {
+  display: none !important;
+  &.js-dropdown-active {
+    display: block !important;
+  }
+}

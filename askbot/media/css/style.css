@@ -431,7 +431,7 @@ input,
   --forum-header-bg-color: hsla(60, 15%, 90%, var(--debug-transparency));
   --forum-header-fg-color: hsl(60, 0%, 48%);
   --forum-header-fg-hover-color: hsl(60, 0%, 35%);
-  --forum-header-font-size: 1rem;
+  --forum-header-font-size: var(--small-font-size);
   --forum-header-input-border-color: hsl(60, 16%, 75%);
   --ask-btn-bg-color: hsla(199, 75%, 62%, var(--debug-transparency));
   --ask-btn-hover-bg-color: hsl(199, 70%, 57%);
@@ -440,6 +440,7 @@ input,
   --ask-btn-font-size: var(--forum-header-font-size);
   --ask-btn-text-color: var(--bg-color);
   --search-bar-vertical-margin: 0px;
+  --search-bar-font-size: var(--forum-header-font-size);
   --search-btn-bg-color: hsla(60, 15%, 95%, var(--debug-transparency));
   --search-btn-hover-bg-color: hsl(60, 15%, 90%);
   --search-drop-menu-bg-color: var(--bg-color);
@@ -453,7 +454,7 @@ input,
   --tag-fg-color: var(--forum-header-fg-color);
   --tag-border-color: var(--sort-nav-sep-color);
   --tag-font-size: var(--small-font-size);
-  --tag-height: 24px;
+  --tag-height: 1.25rem;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
   --tag-delete-btn-hover-bg: var(--danger-dark-color);
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
@@ -485,6 +486,8 @@ input,
  */
 .fa,
 .fas,
+.with-globe-icon::before,
+.with-bars-icon::before,
 .js-with-sort-ascending-icon::before,
 .js-with-sort-descending-icon::before,
 .with-rss-icon::before,
@@ -516,7 +519,7 @@ input,
   line-height: 1;
 }
 
-.js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-times-icon::before, .with-bronze-badge-icon::before,
+.with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
 .with-gold-badge-icon::before, .with-tags-icon::before,
 .with-users-icon::before,
@@ -623,6 +626,8 @@ input,
 
 .fa.fa-pull-left,
 .fas.fa-pull-left,
+.fa-pull-left.with-globe-icon::before,
+.fa-pull-left.with-bars-icon::before,
 .fa-pull-left.js-with-sort-ascending-icon::before,
 .fa-pull-left.js-with-sort-descending-icon::before,
 .fa-pull-left.with-rss-icon::before,
@@ -648,6 +653,8 @@ input,
 }
 .fa.fa-pull-right,
 .fas.fa-pull-right,
+.fa-pull-right.with-globe-icon::before,
+.fa-pull-right.with-bars-icon::before,
 .fa-pull-right.js-with-sort-ascending-icon::before,
 .fa-pull-right.js-with-sort-descending-icon::before,
 .fa-pull-right.with-rss-icon::before,
@@ -6628,6 +6635,8 @@ readers do not read off random characters that represent icons */
 }
 .fa,
 .fas,
+.with-globe-icon::before,
+.with-bars-icon::before,
 .js-with-sort-ascending-icon::before,
 .js-with-sort-descending-icon::before,
 .with-rss-icon::before,
@@ -6787,6 +6796,14 @@ readers do not read off random characters that represent icons */
   content: "";
 }
 
+.with-bars-icon::before {
+  content: "";
+}
+
+.with-globe-icon::before {
+  content: "";
+}
+
 .btn {
   cursor: pointer;
 }
@@ -6803,8 +6820,8 @@ readers do not read off random characters that represent icons */
   border: none;
   font-weight: bold;
   position: absolute;
-  right: 1rem;
-  top: 0.375rem;
+  right: 0.8rem;
+  top: 0.5rem;
   transition: var(--transition-color);
 }
 .js-system-messages .remove-system-messages-btn:hover {
@@ -6816,6 +6833,9 @@ readers do not read off random characters that represent icons */
   border-bottom: var(--border-width) solid var(--system-messages-border-color);
   line-height: 1.25em;
   padding: 0.5rem 0 calc(0.5rem - var(--border-width));
+}
+.js-system-message:nth-child(2) {
+  padding-right: 2rem;
 }
 .js-system-message a, .js-system-message a:active {
   color: var(--danger-color);
@@ -6844,7 +6864,7 @@ readers do not read off random characters that represent icons */
   display: inline-block;
   font-size: var(--tag-font-size);
   height: 100%;
-  padding: 0.125rem 0.25rem 0;
+  padding: 0 0.25rem;
   text-decoration: none;
 }
 
@@ -6871,10 +6891,39 @@ readers do not read off random characters that represent icons */
   transition: var(--transition-bg-color), var(--transition-border-color), var(--transition-color);
 }
 
+.language-nav {
+  position: relative;
+  padding-left: 0.5rem;
+  border-left: var(--border-width) var(--border-style) var(--bg-color);
+}
+.language-nav .current-language {
+  cursor: pointer;
+}
+.language-nav .current-language::before {
+  margin-right: 0.25rem;
+}
+.language-nav ul {
+  background: var(--header-bg-color);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  left: 1rem;
+  list-style: none;
+  padding: 0.75rem;
+  position: absolute;
+  top: calc(var(--header-height) / 2);
+  z-index: 10;
+}
+.language-nav li:last-child {
+  margin: 0;
+}
+.language-nav li {
+  margin-bottom: 0.5rem;
+}
+
 header {
   background: var(--header-bg-color);
-  height: var(--header-height);
   color: var(--header-link-color);
+  height: var(--header-height);
 }
 header a, header a:active, header a:visited {
   color: var(--header-link-color);
@@ -6892,17 +6941,97 @@ header .content-wrapper {
   display: flex;
   height: 100%;
   justify-content: space-between;
+  position: relative;
+}
+
+.header-block1 {
+  align-items: center;
+  display: flex;
+}
+
+header.with-logo .user-nav > :first-child {
+  border-left: 1px solid var(--bg-color);
+  margin-left: 0.5rem;
+  padding-left: calc(0.5rem - 2px);
 }
 
 .meta-nav,
 .user-nav {
   padding-bottom: 0.125rem;
+  white-space: nowrap;
+}
+
+.user-nav .badges,
+.user-nav .inbox-icon,
+.user-nav .login-link,
+.user-nav .profile-link,
+.user-nav .read-only-label {
+  margin-right: 0.5rem;
+}
+
+.meta-nav {
+  height: var(--header-height);
+  position: relative;
 }
 
 .meta-nav a {
   margin-left: 0.75rem;
 }
 
+.meta-nav-trigger {
+  cursor: pointer;
+  display: none;
+}
+
+.meta-nav ul {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  list-style: none;
+}
+
+@media (max-width: 700px) {
+  .meta-nav {
+    min-width: 4rem;
+  }
+
+  .meta-nav-trigger {
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    right: 0.3625rem;
+    top: 0.5rem;
+  }
+
+  .meta-nav ul {
+    background: var(--header-bg-color);
+    flex-direction: column;
+    height: auto;
+    padding: 1rem 0.75rem 0.75rem 0.625rem;
+    position: absolute;
+    right: -0.5rem;
+    top: calc(var(--header-height) - 0.75rem);
+    z-index: 100;
+  }
+  .meta-nav ul a {
+    margin: 0 0 0.5rem;
+    width: 100%;
+  }
+  .meta-nav ul a:last-child {
+    margin: 0;
+  }
+  .meta-nav ul a::before {
+    width: 1.25rem;
+  }
+
+  .meta-nav li {
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+  .meta-nav li:last-child {
+    margin: 0;
+  }
+}
 .forum-header {
   --search-bar-height: calc(var(--forum-header-height) - 2 * var(--search-bar-vertical-margin));
   height: var(--forum-header-height);
@@ -6958,6 +7087,7 @@ header .content-wrapper {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: none;
+  font-size: var(--search-bar-font-size);
   padding: var(--input-horizontal-padding);
   outline: none;
   width: 100%;
@@ -7065,6 +7195,13 @@ header .content-wrapper {
   transition: var(--transition-color), var(--transition-bg-color);
 }
 
+.js-dropdown-target {
+  display: none !important;
+}
+.js-dropdown-target.js-dropdown-active {
+  display: block !important;
+}
+
 .components--sort-nav {
   align-items: center;
   background: var(--sort-nav-bg);
@@ -7072,6 +7209,7 @@ header .content-wrapper {
   height: var(--sort-nav-height);
   display: flex;
   overflow: hidden;
+  white-space: nowrap;
 }
 .components--sort-nav span {
   cursor: default;
@@ -7119,6 +7257,11 @@ header .content-wrapper {
   margin: 0 calc(-1 * var(--layout-horizontal-padding)) 0.125rem calc(-1 * var(--layout-horizontal-padding));
   padding: 0 var(--layout-horizontal-padding);
 }
+@media (max-width: 675px) {
+  .questions-header-top {
+    margin-bottom: 0.5rem;
+  }
+}
 
 .questions-header-top-controls {
   display: flex;
@@ -7129,7 +7272,12 @@ header .content-wrapper {
   font-size: var(--larger-font-size);
   margin-right: 1rem;
   position: relative;
-  top: -2px;
+  top: 2px;
+}
+@media (max-width: 675px) {
+  .js-questions-title {
+    display: none;
+  }
 }
 
 .js-rss-link {
@@ -7158,10 +7306,10 @@ header .content-wrapper {
 }
 
 .question-summary {
+  border-bottom: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
   display: flex;
   gap: 1rem;
-  padding-bottom: 0.25rem;
-  position: relative;
+  padding-bottom: calc(0.25rem - var(--border-width));
   margin-bottom: 0.25rem;
 }
 .question-summary h2 {
@@ -7173,14 +7321,6 @@ header .content-wrapper {
 .question-summary h2 a, .question-summary h2 a:active {
   color: var(--fg-color);
   text-decoration: none;
-}
-
-.question-summary-sep {
-  border-bottom: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
-  bottom: 0;
-  height: 0;
-  position: absolute;
-  width: 100%;
 }
 
 .question-summary-title-tags {

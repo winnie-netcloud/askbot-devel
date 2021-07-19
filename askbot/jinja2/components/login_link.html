@@ -17,7 +17,7 @@
   </form>
 {% else %}
   {% set next_url=request.path|clean_login_url|escape %}
-  <a class="login-page-link"
+  <a class="login-link"
      href="{{ settings.LOGIN_URL }}?next={{ encode_jwt({'next_url': next_url}) }}"
   >
     {% trans %}Sign in{% endtrans %}

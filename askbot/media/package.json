@@ -11,5 +11,8 @@
   },
   "scripts": {
     "sass": "sass ./sass/style.scss ./css/style.css --watch"
+  },
+  "devDependencies": {
+    "eslint": "^7.31.0"
   }
 }
