@@ -1,4 +1,6 @@
 @use 'language_nav.scss';
+@use 'meta_nav.scss';
+@use 'user_nav.scss';
 
 header {
   background: var(--header-bg-color);
@@ -27,88 +29,4 @@ header .content-wrapper {
 .header-block1 {
   align-items: center;
   display: flex;
-}
-
-header.with-logo .user-nav > :first-child {
-  border-left: 1px solid var(--bg-color);
-  margin-left: 0.5rem;
-  padding-left: calc(0.5rem - 2px);
-}
-
-
-.meta-nav,
-.user-nav {
-  padding-bottom: 0.125rem;
-  white-space: nowrap;
-}
-
-.user-nav {
-  .badges,
-  .inbox-icon,
-  .login-link,
-  .profile-link,
-  .read-only-label {
-    margin-right: 0.5rem;
-  }
-}
-
-.meta-nav {
-  height: var(--header-height);
-  position: relative;
-}
-
-.meta-nav a {
-  margin-left: 0.75rem;
-}
-
-.meta-nav-trigger {
-  cursor: pointer;
-  display: none;
-}
-
-.meta-nav ul {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  list-style: none;
-}
-
-@media(max-width: 700px) {
-  .meta-nav {
-    min-width: 4rem;
-  }
-  .meta-nav-trigger {
-    cursor: pointer;
-    display: block;
-    position: absolute;
-    right: 0.3625rem;
-    top: 0.5rem;
-  }
-  .meta-nav ul {
-    background: var(--header-bg-color);
-    flex-direction: column;
-    height: auto;
-    padding: 1rem 0.75rem 0.75rem 0.625rem;
-    position: absolute;
-    right: -0.5rem;
-    top: calc(var(--header-height) - 0.75rem);
-    z-index: 100;
-    a {
-      margin: 0 0 0.5rem;
-      width: 100%;
-      &:last-child {
-        margin: 0;
-      }
-      &::before {
-        width: 1.25rem;
-      }
-    }
-  }
-  .meta-nav li {
-    margin-bottom: 0.5rem;
-    width: 100%;
-    &:last-child {
-      margin: 0;
-    }
-  }
 }

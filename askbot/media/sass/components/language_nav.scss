@@ -1,10 +1,13 @@
 .language-nav {
+  padding-bottom: var(--header-navs-padding-bottom);
   position:relative;
-  padding-left: 0.5rem;
-  border-left: var(--border-width) var(--border-style) var(--bg-color);
+  white-space: nowrap;
 
   .current-language {
     cursor: pointer;
+    display: inline;
+    padding-left: 0.5rem;
+    border-left: var(--border-width) var(--border-style) var(--bg-color);
   }
 
   .current-language::before {
