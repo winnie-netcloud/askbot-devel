@@ -166,12 +166,13 @@
         truncate_long_tags=False
     )
 -%}
-<ul class="tags{% if css_class %} {{css_class}}{% endif %}">
+  <ul class="tags{% if css_class %} {{css_class}}{% endif %}">
     {% if tags %}
       {% if label %}
         <li class="search-tags-label">{{ label }}</li>
       {% endif %}
-        {% for tag in tags %}
+      {%- for tag in tags -%}
+        {% filter trim %}
         <li>
             {{ tag_widget(
                 tag,
@@ -181,9 +182,10 @@
                 truncate_long_tag=False
             )}}
         </li>
-        {% endfor %}
+        {% endfilter %}
+      {%- endfor -%}
     {% endif %}
-</ul>
+  </ul>
 {%- endmacro -%}
 
 {%- macro user_group_link(group) -%}

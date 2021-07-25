@@ -1,12 +1,9 @@
 {% from "macros.html" import user_country_flag, tag_list_widget, timeago, user_primary_group %}
 <div class="question-summary">
-  <div class="question-summary-title-tags">
-    <h2><a href="{{ question.get_absolute_url(thread=thread) }}">{{thread.get_title()|escape}}</a></h2>
-    {{ tag_list_widget(thread.get_tag_names(), search_state=search_state, css_class="question-summary-tags") }}
-  </div>
   <div class="question-summary-stats-user">
     {% include "questions/question_summary_stats.html" %}
     {% include "questions/question_summary_user_info.html" %}
   </div>
-  <div class="question-summary-sep"></div> {# border-bottom breaks the vertical rythm #}
+  <h2><a href="{{ question.get_absolute_url(thread=thread) }}">{{thread.get_title()|escape}}</a></h2>
+  {{ tag_list_widget(thread.get_tag_names(), search_state=search_state, css_class="question-summary-tags") }}
 </div>
