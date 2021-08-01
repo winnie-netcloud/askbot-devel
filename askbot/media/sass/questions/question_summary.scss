@@ -1,12 +1,11 @@
 .question-summary {
   border-bottom: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
   margin-bottom: 0.25rem;
-  min-height: 3.75rem;
   h2 {
     display: block;
     font-size: var(--larger-font-size);
     font-weight: normal;
-    line-height: 1.25rem;
+    line-height: 1em;
     margin: 0 0 0.75rem;
     a, a:active {
       color: var(--fg-color);

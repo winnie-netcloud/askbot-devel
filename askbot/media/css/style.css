@@ -7317,13 +7317,12 @@ header .content-wrapper {
 .question-summary {
   border-bottom: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
   margin-bottom: 0.25rem;
-  min-height: 3.75rem;
 }
 .question-summary h2 {
   display: block;
   font-size: var(--larger-font-size);
   font-weight: normal;
-  line-height: 1.25rem;
+  line-height: 1em;
   margin: 0 0 0.75rem;
 }
 .question-summary h2 a, .question-summary h2 a:active {
