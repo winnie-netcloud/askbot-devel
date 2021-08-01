@@ -8,6 +8,7 @@ push
 propagate
 askbot_app
 askbot/media/style/.sass-cache/
+askbot/media/svelte/node_modules
 .sass-cache
 db
 rebuild-locales.pl
