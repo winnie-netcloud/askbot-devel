@@ -1909,6 +1909,7 @@ var WMD = function (opts) {
     this._enabled_buttons = 'bold italic link blockquote code ' +
         'image attachment ol ul heading hr';
     this._previewerEnabled = true;
+    this._previewerId = undefined;
 };
 inherits(WMD, SimpleEditor);
 
@@ -1943,65 +1944,84 @@ WMD.prototype.getEditorElement = function () {
     return this._editor;
 };
 
+WMD.prototype.getPreviewerId = function () {
+  return this._previewerId;
+};
+
 WMD.prototype.createDom = function () {
-    this._element = this.makeElement('div');
-    var clearfix = this.makeElement('div').addClass('clearfix');
-    this._element.append(clearfix);
+  this._element = this.makeElement('div');
+  var clearfix = this.makeElement('div').addClass('clearfix');
+  this._element.append(clearfix);
 
-    var wmd_container = this.makeElement('div');
-    wmd_container.addClass('wmd-container');
-    this._editor = wmd_container;
+  var wmd_container = this.makeElement('div');
+  wmd_container.addClass('wmd-container');
+  this._editor = wmd_container;
 
-    this._element.append(wmd_container);
+  this._element.append(wmd_container);
 
-    var wmd_buttons = this.makeElement('div')
-                        .attr('id', this.makeId('wmd-button-bar'))
-                        .addClass('wmd-panel');
-    wmd_container.append(wmd_buttons);
+  var wmd_buttons = this.makeElement('div')
+                      .attr('id', this.makeId('wmd-button-bar'))
+                      .addClass('wmd-panel');
+  wmd_container.append(wmd_buttons);
 
-    var editor = this.makeElement('textarea')
-                        .attr('id', this.makeId('editor'));
-    addExtraCssClasses(editor, 'editorClasses');
-    if (this._textareaName) {
-        editor.attr('name', this._textareaName);
-    }
+  var editor = this.makeElement('textarea')
+                      .attr('id', this.makeId('editor'));
+  addExtraCssClasses(editor, 'editorClasses');
+  if (this._textareaName) {
+    editor.attr('name', this._textareaName);
+  }
 
-    wmd_container.append(editor);
-    this._textarea = editor;
+  wmd_container.append(editor);
+  this._textarea = editor;
 
-    var mirror = this.makeElement('pre').addClass('mirror');
-    wmd_container.append(mirror);
-    this._mirror = mirror;
-    $(editor).on('change paste keyup keydown', this.getAutoResizeHandler());
+  var mirror = this.makeElement('pre').addClass('mirror');
+  wmd_container.append(mirror);
+  this._mirror = mirror;
+  $(editor).on('change paste keyup keydown', this.getAutoResizeHandler());
 
+  if (this._text) {
+      editor.val(this._text);
+  }
 
-    if (this._text) {
-        editor.val(this._text);
-    }
+  this._previewerId = this.makeId('previewer');
+  var previewer = this.makeElement('div')
+                      .attr('id', this._previewerId)
+                      .addClass('wmd-preview');
+  this._previewer = previewer;
 
-    var previewer = this.makeElement('div')
-                        .attr('id', this.makeId('previewer'))
-                        .addClass('wmd-preview');
-    this._previewer = previewer;
+  if (askbot.settings.mathjaxEnabled) {
+    var me = this;
+    $(editor).on('paste change', function () {
+      runMathJax(me.getPreviewerId());
+    })
+  }
 
-    var toggle = new WMDExpanderToggle(this);
-    this._previewerToggle = toggle;
-    wmd_container.append(toggle.getElement());
+  var toggle = new WMDExpanderToggle(this);
+  this._previewerToggle = toggle;
+  wmd_container.append(toggle.getElement());
 
-    wmd_container.append(previewer);
+  wmd_container.append(previewer);
 
-    if (this._previewerEnabled === false) {
-        previewer.hide();
-        this._previewerToggle.hide();
-    }
+  if (this._previewerEnabled === false) {
+      previewer.hide();
+      this._previewerToggle.hide();
+  }
 };
 
 WMD.prototype.decorate = function (element) {
-    this._element = element;
-    this._textarea = element.find('textarea');
-    this._previewer = element.find('.wmd-preview');
-    this._mirror = element.find('.mirror');
-    this._textarea.on('change paste keyup keydown', this.getAutoResizeHandler());
+  this._element = element;
+  this._textarea = element.find('textarea');
+  this._previewer = element.find('.wmd-preview');
+  this._previewerId = this._previewer.attr('id');
+  this._mirror = element.find('.mirror');
+  this._textarea.on('change paste keyup keydown', this.getAutoResizeHandler());
+  if (askbot.settings.mathjaxEnabled) {
+    var me = this;
+    this._textarea.on('change paste', function () {
+      alert('whoa!');
+      runMathJax(me.getPreviewerId());
+    })
+  }
 };
 
 WMD.prototype.start = function () {
@@ -2065,6 +2085,7 @@ TinyMCE.prototype.start = function () {
 };
 TinyMCE.prototype.setPreviewerEnabled = function () {};
 TinyMCE.prototype.setHighlight = function () {};
+TinyMCE.prototype.getPreviewerId = function () { return undefined };
 
 TinyMCE.prototype.putCursorAtEnd = function () {
     var ed = tinyMCE.activeEditor;
@@ -3250,6 +3271,10 @@ TagWikiEditor.prototype.setPreviewerEnabled = function (state) {
     if (this.isEditorLoaded()) {
         this._editor.setPreviewerEnabled(this._previewerEnabled);
     }
+};
+
+TagWikiEditor.prototype.getPreviewerId = function () {
+  return this._editor.getPreviewerId()
 };
 
 TagWikiEditor.prototype.setContent = function (content) {

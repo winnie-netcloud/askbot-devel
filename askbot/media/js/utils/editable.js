@@ -32,7 +32,7 @@ Editable.prototype.setContent = function(content){
     this._content.empty();
     this._content.append(content);
     if (askbot.settings.mathjaxEnabled) {
-        runMathJax();
+        runMathJax(this._element.attr('id'));
     }
 };
 

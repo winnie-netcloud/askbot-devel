@@ -114,10 +114,14 @@ var copyAltToTitle = function (sel) {
     sel.attr('title', sel.attr('alt'));
 };
 
-var runMathJax = function () {
-    if (typeof MathJax != 'undefined') {
-        MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+var runMathJax = function (containerId) {
+  if (typeof MathJax != 'undefined') {
+    var mathJaxParams = ['Typeset', MathJax.Hub];
+    if (containerId) {
+      mathJaxParams.push(containerId)
     }
+    MathJax.Hub.Queue(mathJaxParams);
+  }
 };
 
 /**
