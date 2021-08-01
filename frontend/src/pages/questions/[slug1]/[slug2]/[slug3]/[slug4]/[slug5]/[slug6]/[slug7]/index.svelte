@@ -1,4 +1,4 @@
 <script>
-  import MainPage from '../../../../../../../_components/MainPage.svelte'
+  import QuestionsPage from '../../../../../../../_components/QuestionsPage.svelte'
 </script>
-<MainPage />
+<QuestionsPage />

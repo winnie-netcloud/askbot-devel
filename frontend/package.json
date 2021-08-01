@@ -29,6 +29,7 @@
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@roxi/routify": "^2.5.1-next-major",
     "cross-env": "^7.0.2",
+    "fa-svelte": "^3.1.0",
     "fs-extra": "^9.0.1",
     "nollup": "^0.13.13",
     "npm-run-all": "^4.1.5",
@@ -65,5 +66,8 @@
       "/example/modal/basic/4"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "node-fetch": "^2.6.1"
+  }
 }

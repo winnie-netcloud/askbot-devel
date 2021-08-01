@@ -3,6 +3,8 @@
   import { fade } from 'svelte/transition'
   import userStore from '../stores/userStore.js'
 
+  const gettext = global?.gettext || window?.gettext
+
   metatags.title = 'Log in'
 
   let API_HOST = 'http://localhost.askbot.com:8000'

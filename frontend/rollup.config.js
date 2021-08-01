@@ -6,10 +6,12 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import { copySync, removeSync } from 'fs-extra'
 import { spassr } from 'spassr'
+import fetch from 'node-fetch'
 import getConfig from '@roxi/routify/lib/utils/config'
 import autoPreprocess from 'svelte-preprocess'
 import postcssImport from 'postcss-import'
 import { injectManifest } from 'rollup-plugin-workbox'
+import i18nCatalog from './src/stores/i18nStore'
 
 
 const { distDir } = getConfig() // use Routify's distDir for SSOT
@@ -31,16 +33,24 @@ const serve = () => ({
       script: `${buildDir}/main.js`,
     }
     const ssrOptions = {
-      /*
-      beforeEval: async (params) => { await new Promise((resolve) => {
-        console.log(params)
-        console.log('aha')
-        resolve('hoho')
-      })},
+      /**
+      beforeEval: (props) => {
+        console.log('props are', props)
+      },
       */
       inlineDynamicImports: true,
       dev: true
     }
+    /** this works, but can't access gettext in the components for SSR
+    const response = await fetch("http://localhost.askbot.com:8000/s/jsi18n/")
+    const djangoI18n = await response.text()
+    const loadI18n = function () {
+      eval(djangoI18n)
+    }
+    const boundedI18nLoader = loadI18n.bind(global)
+    boundedI18nLoader()
+    console.log('global', global)
+    */
     spassr({ ...options, port: 5000 })
     spassr({ ...options, ssr: true, port: 5005, ssrOptions })
   }

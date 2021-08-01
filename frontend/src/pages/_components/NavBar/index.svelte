@@ -31,7 +31,6 @@
 </style>
 
 <nav>
-  <a href='/'>Home</a>
   <a href='/questions/'>Questions</a>
   {#if user?.token }
     <a href='/' on:click={logout}>Logout</a>

@@ -3,7 +3,6 @@
   import { API_BASE_URL } from '../../../config'
   import { getCanonicalUrl, getSearchParams } from '../_lib/urlUtils'
   import { onMount } from 'svelte'
-  import { gettext } from 'django-i18n'
   import Headline from './Headline.svelte'
   import Contributors from './Contributors.svelte'
   import TabBar from './TabBar.svelte'
@@ -13,9 +12,7 @@
   import RelatedTags from './RelatedTags.svelte'
   import DisplaySettingAsHtml from '../../_components/DisplaySettingAsHtml.svelte'
   import Paginator from '../../_components/Paginator.svelte'
-  import Questions from './Questions.svelte'
-
-  gettext('in MainPage.svelte')
+  import Threads from './Threads.svelte'
 
   $: searchParams = getSearchParams($params)
 
@@ -38,27 +35,25 @@
 
 </script>
 
-<div>
-  <div class="main-column">
-    <div class="header">
-      <Headline count={data.num_threads} />
-      <TabBar {data} />
-      <SearchTags tags={searchParams.tags} />
-    </div>
-    <Questions threads={data.threads} />
-    <Paginator
-      numPages={data.num_pages}
-      page={data.page}
-      urlParams={searchParams}
-      urlBuilder={getCanonicalUrl}
-    />
+<main>
+  <div class="q-list-header">
+    <Headline count={data.num_threads} />
+    <TabBar {data} />
+    <SearchTags tags={searchParams.tags} />
   </div>
-  <aside>
-    <DisplaySettingAsHtml setting='SIDEBAR_MAIN_HEADER' />
-    <Contributors contributors={data.contributors} />
-    <TagSearch />
-    <TagSelector />
-    <RelatedTags />
-    <DisplaySettingAsHtml setting='SIDEBAR_MAIN_FOOTER' />
-  </aside>
-</div>
+  <Threads threads={data.threads} />
+  <Paginator
+    numPages={data.num_pages}
+    page={data.page}
+    urlParams={searchParams}
+    urlBuilder={getCanonicalUrl}
+  />
+</main>
+<aside>
+  <DisplaySettingAsHtml setting='SIDEBAR_MAIN_HEADER' />
+  <Contributors contributors={data.contributors} />
+  <TagSearch />
+  <TagSelector />
+  <RelatedTags />
+  <DisplaySettingAsHtml setting='SIDEBAR_MAIN_FOOTER' />
+</aside>
