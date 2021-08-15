@@ -13,4 +13,7 @@
   & > :nth-child(2) {
     width: var(--layout-sidebar-width);
   }
+  aside {
+    padding-top: 0.3625rem;
+  }
 }

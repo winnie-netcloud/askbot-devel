@@ -1,0 +1,18 @@
+.input-with-button {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-items: stretch;
+
+  input[type="text"] {
+    flex-grow: 1;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button,
+  input[type="submit"],
+  input[type="button"] {
+    border-left: none;
+  }
+}

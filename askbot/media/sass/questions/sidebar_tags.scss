@@ -1,0 +1,8 @@
+.sidebar-box {
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--tags-gap);
+    margin-bottom: var(--tags-gap);
+  }
+}

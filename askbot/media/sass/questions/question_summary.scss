@@ -48,7 +48,7 @@
 .question-summary-stats {
   display: flex;
   flex-wrap: nowrap;
-  height: 2.25rem;
+  height: var(--question-summary-stats-height);
   gap: 0.5rem;
   justify-content: flex-end;
   text-align: center;
@@ -60,7 +60,8 @@
   text-align: center;
   border: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
   height: 100%;
-  width: 3rem;
+  width: var(--question-summary-count-box-width);
+  padding: var(--question-summary-count-box-padding);
 
   .item-count {
     font-weight: bold;

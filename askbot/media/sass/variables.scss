@@ -20,31 +20,35 @@
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
 
   --fg-color: hsl(0, 0%, 21%);
-  --layout-max-width: 1100px;
-  --layout-sidebar-width: 202px;
+  --layout-max-width: 960px;
+  --layout-sidebar-width: 204px;
   --layout-horizontal-padding: 0.75rem;
+  --font-size: 1rem;
   --small-font-size: 0.875rem;
   --extra-small-font-size: 0.75rem;
-  --larger-font-size: 1.125rem;
+  --larger-font-size: 1.25rem;
 
+  --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
   --input-border-radius: var(--border-radius);
   --input-border-style: var(--border-style);
   --input-border-width: var(--border-width);
+  --input-border-color: hsl(60, 16%, 75%);
   --input-bg-color: var(--bg-color);
+  --input-font-size: 1rem;
 
-  --header-height: 2.25rem; //login link, meta nav: tags, users, badges links
+  --header-height: 2.75rem; //login link, meta nav: tags, users, badges links
   --header-bg-color: hsla(60, 19%, 7%, var(--debug-transparency));
   --header-navs-padding-bottom: 0.125rem;
 
   --scope-nav-font-size: var(--forum-header-font-size);
 
-  --forum-header-height: 2.25rem; //search bar and ask button
+  --forum-header-height: var(--header-height); //search bar and ask button
   --forum-header-bg-color: hsla(60, 15%, 90%, var(--debug-transparency));
   --forum-header-fg-color: hsl(60, 0%, 48%); //icons, text on buttons
   --forum-header-fg-hover-color: hsl(60, 0%, 35%); //icons, text on buttons
-  --forum-header-font-size: var(--small-font-size);
-  --forum-header-input-border-color: hsl(60, 16%, 75%);
+  --forum-header-font-size: var(--font-size);
+  --forum-header-input-border-color: var(--input-border-color);
 
   --meta-nav-dropdown-breakpoint: #{sass_variables.$meta_nav_dropdown_breakpoint};
 
@@ -59,6 +63,11 @@
   --search-btn-bg-color: hsla(60, 15%, 95%, var(--debug-transparency));
   --search-btn-hover-bg-color: hsl(60, 15%, 90%);
   --search-drop-menu-bg-color: var(--bg-color);
+  --search-input-height: 100%;
+
+  --sidebar-heading-font-size: var(--larger-font-size);
+  --sidebar-heading-font-weight: bold;
+  --sidebar-heading-font-style: normal;
 
   --sort-nav-bg: var(--search-btn-bg-color);
   --sort-nav-hover-bg: hsl(0, 0%, 85%);
@@ -67,16 +76,21 @@
   --sort-nav-height: 2rem;
   --sort-nav-sep-color: hsl(60, 16%, 80%);
 
+  --question-summary-count-box-padding: 0.125rem 0 0 0;
+  --question-summary-count-box-width: 3rem;
+  --question-summary-stats-gap: 0.5rem;
+  --question-summary-stats-height: 2.5rem;
+
   --tag-bg: var(--search-btn-bg-color);
   --tag-fg-color: var(--forum-header-fg-color);
   --tag-border-color: var(--sort-nav-sep-color);
-  --tag-font-size: var(--small-font-size);
-  --tag-height: 1.25rem;
+  --tag-font-size: var(--font-size);
+  --tag-height: 1.5rem;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
   --tag-delete-btn-hover-bg: var(--danger-dark-color);
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
   --tag-delete-btn-fg-hover-color: var(--bg-color);
-  --tags-gap: 0.25rem;
+  --tags-gap: 0.3625rem;
 
   --rss-color: hsl(28, 100%, 50%);
 }

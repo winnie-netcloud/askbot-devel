@@ -51,7 +51,17 @@ input {
 button,
 input,
 .btn {
+  border-color: var(--input-border-color);
   border-radius: var(--input-border-radius);
   border-width: var(--input-border-width);
   border-style: var(--input-border-style);
+}
+
+input[type="text"],
+input[type="submit"],
+button,
+.btn {
+  height: var(--input-height);
+  font-size: var(--input-font-size);
+  padding: 0 var(--input-horizontal-padding);
 }

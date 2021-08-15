@@ -389,9 +389,19 @@ input {
 button,
 input,
 .btn {
+  border-color: var(--input-border-color);
   border-radius: var(--input-border-radius);
   border-width: var(--input-border-width);
   border-style: var(--input-border-style);
+}
+
+input[type=text],
+input[type=submit],
+button,
+.btn {
+  height: var(--input-height);
+  font-size: var(--input-font-size);
+  padding: 0 var(--input-horizontal-padding);
 }
 
 :root {
@@ -413,27 +423,31 @@ input,
   --border-radius: 0;
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
   --fg-color: hsl(0, 0%, 21%);
-  --layout-max-width: 1100px;
-  --layout-sidebar-width: 202px;
+  --layout-max-width: 960px;
+  --layout-sidebar-width: 204px;
   --layout-horizontal-padding: 0.75rem;
+  --font-size: 1rem;
   --small-font-size: 0.875rem;
   --extra-small-font-size: 0.75rem;
-  --larger-font-size: 1.125rem;
+  --larger-font-size: 1.25rem;
+  --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
   --input-border-radius: var(--border-radius);
   --input-border-style: var(--border-style);
   --input-border-width: var(--border-width);
+  --input-border-color: hsl(60, 16%, 75%);
   --input-bg-color: var(--bg-color);
-  --header-height: 2.25rem;
+  --input-font-size: 1rem;
+  --header-height: 2.75rem;
   --header-bg-color: hsla(60, 19%, 7%, var(--debug-transparency));
   --header-navs-padding-bottom: 0.125rem;
   --scope-nav-font-size: var(--forum-header-font-size);
-  --forum-header-height: 2.25rem;
+  --forum-header-height: var(--header-height);
   --forum-header-bg-color: hsla(60, 15%, 90%, var(--debug-transparency));
   --forum-header-fg-color: hsl(60, 0%, 48%);
   --forum-header-fg-hover-color: hsl(60, 0%, 35%);
-  --forum-header-font-size: var(--small-font-size);
-  --forum-header-input-border-color: hsl(60, 16%, 75%);
+  --forum-header-font-size: var(--font-size);
+  --forum-header-input-border-color: var(--input-border-color);
   --meta-nav-dropdown-breakpoint: 700px;
   --ask-btn-bg-color: hsla(199, 75%, 62%, var(--debug-transparency));
   --ask-btn-hover-bg-color: hsl(199, 70%, 57%);
@@ -446,22 +460,30 @@ input,
   --search-btn-bg-color: hsla(60, 15%, 95%, var(--debug-transparency));
   --search-btn-hover-bg-color: hsl(60, 15%, 90%);
   --search-drop-menu-bg-color: var(--bg-color);
+  --search-input-height: 100%;
+  --sidebar-heading-font-size: var(--larger-font-size);
+  --sidebar-heading-font-weight: bold;
+  --sidebar-heading-font-style: normal;
   --sort-nav-bg: var(--search-btn-bg-color);
   --sort-nav-hover-bg: hsl(0, 0%, 85%);
   --sort-nav-selected-fg-color: var(--fg-color);
   --sort-nav-fg-color: var(--forum-header-fg-color);
   --sort-nav-height: 2rem;
   --sort-nav-sep-color: hsl(60, 16%, 80%);
+  --question-summary-count-box-padding: 0.125rem 0 0 0;
+  --question-summary-count-box-width: 3rem;
+  --question-summary-stats-gap: 0.5rem;
+  --question-summary-stats-height: 2.5rem;
   --tag-bg: var(--search-btn-bg-color);
   --tag-fg-color: var(--forum-header-fg-color);
   --tag-border-color: var(--sort-nav-sep-color);
-  --tag-font-size: var(--small-font-size);
-  --tag-height: 1.25rem;
+  --tag-font-size: var(--font-size);
+  --tag-height: 1.5rem;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
   --tag-delete-btn-hover-bg: var(--danger-dark-color);
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
   --tag-delete-btn-fg-hover-color: var(--bg-color);
-  --tags-gap: 0.25rem;
+  --tags-gap: 0.3625rem;
   --rss-color: hsl(28, 100%, 50%);
 }
 
@@ -480,6 +502,9 @@ input,
 }
 .col-with-sidebar > :nth-child(2) {
   width: var(--layout-sidebar-width);
+}
+.col-with-sidebar aside {
+  padding-top: 0.3625rem;
 }
 
 /*!
@@ -6810,6 +6835,15 @@ readers do not read off random characters that represent icons */
   cursor: pointer;
 }
 
+.radio-button-choice {
+  align-items: center;
+  display: flex;
+  margin-bottom: 0.125rem;
+}
+.radio-button-choice input[type=radio] {
+  margin: 0.25rem 0.25rem 0 0;
+}
+
 .js-system-messages {
   background: var(--system-messages-bg-color);
 }
@@ -6868,6 +6902,7 @@ readers do not read off random characters that represent icons */
   height: 100%;
   padding: 0 0.25rem;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .js-tag.js-deletable-tag .js-tag-name {
@@ -7094,7 +7129,8 @@ header .content-wrapper {
   border-bottom-right-radius: 0;
   border-right: none;
   font-size: var(--search-bar-font-size);
-  padding: var(--input-horizontal-padding);
+  height: var(--search-input-height);
+  padding: 0 calc(2 * var(--input-horizontal-padding));
   outline: none;
   width: 100%;
 }
@@ -7115,6 +7151,7 @@ header .content-wrapper {
   border-left: none;
   border-right: none;
   border-radius: 0;
+  height: var(--search-input-height);
   width: var(--search-bar-height);
 }
 
@@ -7125,6 +7162,7 @@ header .content-wrapper {
   border-bottom-left-radius: 0;
   border-right: none;
   color: var(--forum-header-fg-color);
+  height: var(--search-input-height);
   min-width: var(--search-bar-height);
   width: var(--search-bar-height);
   transition: var(--transition-color), var(--transition-bg-color);
@@ -7192,6 +7230,7 @@ header .content-wrapper {
   height: var(--search-bar-height);
   justify-content: center;
   margin: var(--search-bar-vertical-margin) 0;
+  padding: 0 calc(4 * var(--input-horizontal-padding));
   text-decoration: none;
   transition: var(--transition-border-color), var(--transition-bg-color);
 }
@@ -7209,6 +7248,23 @@ header .content-wrapper {
 }
 .js-dropdown-menu .js-dropdown-target.js-dropdown-active {
   display: block !important;
+}
+
+.input-with-button {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-items: stretch;
+}
+.input-with-button input[type=text] {
+  flex-grow: 1;
+}
+.input-with-button input[type=text]:focus {
+  outline: none;
+}
+.input-with-button button,
+.input-with-button input[type=submit],
+.input-with-button input[type=button] {
+  border-left: none;
 }
 
 .components--sort-nav {
@@ -7248,6 +7304,17 @@ header .content-wrapper {
 }
 .components--sort-nav a:last-of-type {
   border: none;
+}
+
+.sidebar-box {
+  margin-bottom: 0.75rem;
+}
+.sidebar-box h2 {
+  font-size: var(--sidebar-heading-font-size);
+  font-weight: var(--sidebar-heading-font-weight);
+  font-style: var(--sidebar-heading-font-style);
+  line-height: 1em;
+  margin-bottom: 0.3625rem;
 }
 
 .js-questions-header {
@@ -7364,7 +7431,7 @@ header .content-wrapper {
 .question-summary-stats {
   display: flex;
   flex-wrap: nowrap;
-  height: 2.25rem;
+  height: var(--question-summary-stats-height);
   gap: 0.5rem;
   justify-content: flex-end;
   text-align: center;
@@ -7376,7 +7443,8 @@ header .content-wrapper {
   text-align: center;
   border: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
   height: 100%;
-  width: 3rem;
+  width: var(--question-summary-count-box-width);
+  padding: var(--question-summary-count-box-padding);
 }
 .question-views-count .item-count,
 .question-answers-count .item-count,
@@ -7405,6 +7473,28 @@ header .content-wrapper {
 .question-votes-count {
   background: linear-gradient(to top, #f1e7e5, var(--bg-color));
   color: #d13f00;
+}
+
+.contrib-avatars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+}
+.contrib-avatars .js-avatar-box,
+.contrib-avatars .js-avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.sidebar-box.tag-filter-sidebar-box h2 {
+  margin-bottom: 0.125rem;
+}
+
+.sidebar-box .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tags-gap);
+  margin-bottom: var(--tags-gap);
 }
 
 /*# sourceMappingURL=style.css.map */

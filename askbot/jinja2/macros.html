@@ -309,21 +309,21 @@
 {%- endmacro -%}
 
 {%- macro radio_select(name = None, value = None, choices = None) -%}
-    {% for choice in choices %}
-        <p class="choice">
-            {% set id = "id_" ~ name ~ "_" ~ choice[0] %}
-            <input
-                id="{{ id }}"
-                name="{{ name }}"
-                value="{{ choice[0] }}"
-                type="radio"
-                {% if value == choice[0] %}
-                checked="checked"
-                {% endif %}
-            />
-            <label for="{{ id }}">{{ choice[1] }}</label>
-        </p>
-    {% endfor %}
+  {% for choice in choices %}
+    {% set id = "id_" ~ name ~ "_" ~ choice[0] %}
+    <label class="radio-button-choice" for="{{ id }}">
+      <input
+        id="{{ id }}"
+        name="{{ name }}"
+        value="{{ choice[0] }}"
+        type="radio"
+        {% if value == choice[0] %}
+        checked="checked"
+        {% endif %}
+      />
+      {{ choice[1] }}
+    </label>
+  {% endfor %}
 {%- endmacro -%}
 
 {# Warning! Any changes to the comment markup here must be duplicated in post.js
@@ -598,13 +598,11 @@ for the purposes of the AJAX comment editor #}
 {#todo: rename this to avatar #}
 {%- macro gravatar(user, size) -%}
 {% filter trim %}
-<a class="js-avatar-box"
-    href="{{ user.get_absolute_url() }}"
-><img class="js-avatar gravatar"
-    width="{{size}}" height="{{size}}"
+<a class="js-avatar-box" href="{{ user.get_absolute_url() }}"
+  ><img class="js-avatar gravatar"
     src="{{ user.get_avatar_url(size) }}"
-    title="{{user.username|escape}}"
-    alt="{% trans username=user.username|escape %}{{username}} gravatar image{% endtrans %}"
+    alt="{{user.username|escape}}"
+  
 /></a>
 {% endfilter %}
 {%- endmacro -%}

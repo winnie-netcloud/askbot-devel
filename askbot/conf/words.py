@@ -473,7 +473,7 @@ settings.register(
     values.StringValue(
         WORDS,
         'WORDS_SHOW_ONLY_QUESTIONS_FROM',
-        default=_('Show only questions from'),
+        default=_('Show questions from'),
         description=_('Show only questions from'),
         localized=True
     )

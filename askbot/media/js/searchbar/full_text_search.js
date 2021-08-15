@@ -213,8 +213,8 @@ FullTextSearch.prototype.renderFullTextSearchResult = function (data) {
   $('#pager').toggle(data.paginator !== '').html(data.paginator);
 
   if (data.faces.length > 0) {
-    $('#contrib-users > a').remove();
-    $('#contrib-users').append(data.faces.join(''));
+    $('#js-contrib-avatars > a').remove();
+    $('#js-contrib-avatars').append(data.faces.join(''));
   }
 
   this.renderRelatedTags(data.related_tags_html);
