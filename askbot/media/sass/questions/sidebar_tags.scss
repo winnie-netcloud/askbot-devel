@@ -3,6 +3,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--tags-gap);
+  }
+  .tags.has-tags {
     margin-bottom: var(--tags-gap);
   }
 }

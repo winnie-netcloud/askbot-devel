@@ -376,6 +376,17 @@ body {
   color: var(--fg-color);
 }
 
+a,
+a:active {
+  color: var(--link-color);
+  transition: color var(--transition-timing) var(--transition-function);
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  transition: color var(--transition-timing) var(--transition-function);
+}
+
 abbr {
   display: none;
   text-decoration: none !important;
@@ -395,6 +406,42 @@ input,
   border-style: var(--input-border-style);
 }
 
+button,
+input[type=button],
+input[type=reset],
+input[type=submit],
+.btn {
+  background: var(--btn-bg);
+  border-color: var(--btn-border-color);
+  border-radius: var(--input-border-radius);
+  border-width: var(--input-border-width);
+  border-style: var(--input-border-style);
+  color: var(--btn-text-color);
+  font-size: var(--input-font-size);
+  transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
+}
+button:hover,
+input[type=button]:hover,
+input[type=reset]:hover,
+input[type=submit]:hover,
+.btn:hover {
+  background: var(--btn-hover-bg);
+  border-color: var(--btn-hover-border-color);
+  transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
+}
+
+.btn.btn-muted {
+  background: var(--btn-muted-bg);
+  border-color: var(--btn-muted-border-color);
+  color: var(--btn-muted-text-color);
+  transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
+}
+.btn.btn-muted:hover {
+  background: var(--btn-muted-hover-bg);
+  border-color: var(--btn-muted-hover-border-color);
+  transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
+}
+
 input[type=text],
 input[type=submit],
 button,
@@ -402,6 +449,10 @@ button,
   height: var(--input-height);
   font-size: var(--input-font-size);
   padding: 0 var(--input-horizontal-padding);
+}
+
+.small-font {
+  font-size: var(--small-font-size);
 }
 
 :root {
@@ -422,6 +473,18 @@ button,
   --border-style: solid;
   --border-radius: 0;
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
+  --btn-text-color: var(--bg-color);
+  --btn-bg: hsla(199, 75%, 62%, var(--debug-transparency));
+  --btn-hover-bg: hsl(199, 70%, 57%);
+  --btn-border-color: hsl(199, 62%, 52%);
+  --btn-hover-border-color: hsl(199, 62%, 45%);
+  --btn-font-size: var(--input-font-size);
+  --btn-text-color: var(--bg-color);
+  --btn-muted-bg: hsl(0, 0%, 73%, var(--debug-transparency));
+  --btn-muted-border-color: hsl(0, 0%, 65%);
+  --btn-muted-text-color: var(--bg-color);
+  --btn-muted-hover-bg: hsl(0, 0%, 65%, var(--debug-transparency));
+  --btn-muted-hover-border-color: hsl(0, 0%, 58%);
   --fg-color: hsl(0, 0%, 21%);
   --layout-max-width: 960px;
   --layout-sidebar-width: 204px;
@@ -448,6 +511,8 @@ button,
   --forum-header-fg-hover-color: hsl(60, 0%, 35%);
   --forum-header-font-size: var(--font-size);
   --forum-header-input-border-color: var(--input-border-color);
+  --link-color: hsl(199, 80%, 40%);
+  --link-hover-color: hsl(199, 80%, 30%);
   --meta-nav-dropdown-breakpoint: 700px;
   --ask-btn-bg-color: hsla(199, 75%, 62%, var(--debug-transparency));
   --ask-btn-hover-bg-color: hsl(199, 70%, 57%);
@@ -6853,6 +6918,7 @@ readers do not read off random characters that represent icons */
 }
 .js-system-messages .remove-system-messages-btn {
   color: var(--danger-color);
+  background: none;
   border: none;
   font-weight: bold;
   position: absolute;
@@ -7253,10 +7319,10 @@ header .content-wrapper {
 .input-with-button {
   display: flex;
   flex-wrap: nowrap;
-  justify-items: stretch;
+  width: 100%;
 }
 .input-with-button input[type=text] {
-  flex-grow: 1;
+  width: 100%;
 }
 .input-with-button input[type=text]:focus {
   outline: none;
@@ -7494,6 +7560,8 @@ header .content-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: var(--tags-gap);
+}
+.sidebar-box .tags.has-tags {
   margin-bottom: var(--tags-gap);
 }
 

@@ -166,7 +166,7 @@
         truncate_long_tags=False
     )
 -%}
-  <ul class="tags{% if css_class %} {{css_class}}{% endif %}">
+  <ul class="tags{% if tags %} has-tags{% endif %}{% if css_class %} {{css_class}}{% endif %}">
     {% if tags %}
       {% if label %}
         <li class="search-tags-label">{{ label }}</li>

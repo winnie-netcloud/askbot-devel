@@ -38,6 +38,17 @@ body {
   color: var(--fg-color);
 }
 
+a,
+a:active {
+  color: var(--link-color);
+  transition: color var(--transition-timing) var(--transition-function);
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  transition: color var(--transition-timing) var(--transition-function);
+}
+
 abbr {
   display: none;
   text-decoration: none !important;
@@ -57,6 +68,48 @@ input,
   border-style: var(--input-border-style);
 }
 
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+.btn {
+  background: var(--btn-bg);
+  border-color: var(--btn-border-color);
+  border-radius: var(--input-border-radius);
+  border-width: var(--input-border-width);
+  border-style: var(--input-border-style);
+  color: var(--btn-text-color);
+  font-size: var(--input-font-size);
+  transition: color var(--transition-timing) var(--transition-function),
+    background var(--transition-timing) var(--transition-function),
+    var(--transition-timing) var(--transition-function);
+
+  &:hover {
+    background: var(--btn-hover-bg);
+    border-color: var(--btn-hover-border-color);
+    transition: color var(--transition-timing) var(--transition-function),
+      background var(--transition-timing) var(--transition-function),
+      var(--transition-timing) var(--transition-function);
+  }
+}
+
+.btn.btn-muted {
+  background: var(--btn-muted-bg);
+  border-color: var(--btn-muted-border-color);
+  color: var(--btn-muted-text-color);
+  transition: color var(--transition-timing) var(--transition-function),
+    background var(--transition-timing) var(--transition-function),
+    var(--transition-timing) var(--transition-function);
+
+  &:hover {
+    background: var(--btn-muted-hover-bg);
+    border-color: var(--btn-muted-hover-border-color);
+    transition: color var(--transition-timing) var(--transition-function),
+      background var(--transition-timing) var(--transition-function),
+      var(--transition-timing) var(--transition-function);
+  }
+}
+
 input[type="text"],
 input[type="submit"],
 button,
@@ -64,4 +117,8 @@ button,
   height: var(--input-height);
   font-size: var(--input-font-size);
   padding: 0 var(--input-horizontal-padding);
+}
+
+.small-font {
+  font-size: var(--small-font-size);
 }

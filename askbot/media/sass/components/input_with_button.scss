@@ -1,10 +1,10 @@
 .input-with-button {
   display: flex;
   flex-wrap: nowrap;
-  justify-items: stretch;
+  width: 100%;
 
   input[type="text"] {
-    flex-grow: 1;
+    width: 100%;
     &:focus {
       outline: none;
     }
