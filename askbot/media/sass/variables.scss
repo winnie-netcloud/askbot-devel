@@ -102,8 +102,8 @@
   --tag-bg: var(--search-btn-bg-color);
   --tag-fg-color: var(--forum-header-fg-color);
   --tag-border-color: var(--sort-nav-sep-color);
-  --tag-font-size: var(--font-size);
-  --tag-height: 1.5rem;
+  --tag-font-size: var(--small-font-size);
+  --tag-height: 1.25rem;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
   --tag-delete-btn-hover-bg: var(--danger-dark-color);
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
@@ -111,4 +111,6 @@
   --tags-gap: 0.3625rem;
 
   --rss-color: hsl(28, 100%, 50%);
+
+  --autocompleter-hover-bg: hsla(199, 75%, 62%, var(--debug-transparency));
 }

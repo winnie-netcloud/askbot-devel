@@ -19,6 +19,16 @@
     text-decoration: none;
     white-space: nowrap;
   }
+  .js-tag-extra-content {
+    font-size: var(--tag-font-size);
+    padding-bottom: 0.125rem;
+  }
+}
+
+.js-related-tags {
+  .js-tag {
+    margin-right: calc(0.5 * var(--tags-gap));
+  }
 }
 
 .js-tag.js-deletable-tag {

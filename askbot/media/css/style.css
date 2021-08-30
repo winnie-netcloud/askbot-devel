@@ -542,14 +542,15 @@ button,
   --tag-bg: var(--search-btn-bg-color);
   --tag-fg-color: var(--forum-header-fg-color);
   --tag-border-color: var(--sort-nav-sep-color);
-  --tag-font-size: var(--font-size);
-  --tag-height: 1.5rem;
+  --tag-font-size: var(--small-font-size);
+  --tag-height: 1.25rem;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
   --tag-delete-btn-hover-bg: var(--danger-dark-color);
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
   --tag-delete-btn-fg-hover-color: var(--bg-color);
   --tags-gap: 0.3625rem;
   --rss-color: hsl(28, 100%, 50%);
+  --autocompleter-hover-bg: hsla(199, 75%, 62%, var(--debug-transparency));
 }
 
 .content-wrapper {
@@ -6900,6 +6901,31 @@ readers do not read off random characters that represent icons */
   cursor: pointer;
 }
 
+.js-ac-results {
+  background: var(--input-bg-color);
+  border-bottom-left-radius: var(--input-border-radius);
+  border-bottom-right-radius: var(--input-border-radius);
+  border-style: var(--input-border-style);
+  border-color: var(--input-border-color);
+  border-width: var(--input-border-width);
+  border-top: none;
+  width: 100%;
+}
+.js-ac-results ul {
+  list-style: none;
+}
+.js-ac-results li {
+  cursor: pointer;
+  color: var(--fg-color);
+  padding: 0.25rem 0.5rem;
+  transition: color var(--transition-duration) var(--transition-timing-function), background var(--transition-duration) var(--transition-timing-function);
+}
+.js-ac-results li:hover {
+  background: var(--autocompleter-hover-bg);
+  color: var(--input-bg-color);
+  transition: color var(--transition-duration) var(--transition-timing-function), background var(--transition-duration) var(--transition-timing-function);
+}
+
 .radio-button-choice {
   align-items: center;
   display: flex;
@@ -6917,13 +6943,13 @@ readers do not read off random characters that represent icons */
   position: relative;
 }
 .js-system-messages .remove-system-messages-btn {
-  color: var(--danger-color);
   background: none;
   border: none;
+  color: var(--danger-color);
   font-weight: bold;
   position: absolute;
-  right: 0.8rem;
-  top: 0.5rem;
+  right: 0.5rem;
+  top: 0.575rem;
   transition: var(--transition-color);
 }
 .js-system-messages .remove-system-messages-btn:hover {
@@ -6936,7 +6962,7 @@ readers do not read off random characters that represent icons */
   line-height: 1.25em;
   padding: 0.5rem 0 calc(0.5rem - var(--border-width));
 }
-.js-system-message:nth-child(2) {
+.js-system-message:nth-child(2) > .content-wrapper {
   padding-right: 2rem;
 }
 .js-system-message a, .js-system-message a:active {
@@ -6969,6 +6995,14 @@ readers do not read off random characters that represent icons */
   padding: 0 0.25rem;
   text-decoration: none;
   white-space: nowrap;
+}
+.js-tag .js-tag-extra-content {
+  font-size: var(--tag-font-size);
+  padding-bottom: 0.125rem;
+}
+
+.js-related-tags .js-tag {
+  margin-right: calc(0.5 * var(--tags-gap));
 }
 
 .js-tag.js-deletable-tag .js-tag-name {
@@ -7059,7 +7093,7 @@ readers do not read off random characters that represent icons */
     display: block;
     position: absolute;
     right: 0.3625rem;
-    top: 0.5rem;
+    top: 0.75rem;
   }
 
   .js-meta-nav ul {
@@ -7433,13 +7467,15 @@ header .content-wrapper {
   font-size: 0.65rem;
 }
 
-.search-tags-label {
+.js-search-tags-label {
   font-size: var(--larger-font-size);
   padding-top: 1px;
+  position: relative;
+  top: -0.25rem;
 }
 
 .js-search-tags {
-  margin: 0.125rem 0 0;
+  margin: 0.625rem 0 0;
 }
 .js-search-tags .tags {
   display: flex;
@@ -7466,7 +7502,6 @@ header .content-wrapper {
 .question-summary-tags {
   display: block;
   flex-wrap: wrap;
-  line-height: 1rem;
   position: relative;
   top: -0.125rem;
 }
@@ -7561,7 +7596,7 @@ header .content-wrapper {
   flex-wrap: wrap;
   gap: var(--tags-gap);
 }
-.sidebar-box .tags.has-tags {
+.sidebar-box .tags.js-has-tags {
   margin-bottom: var(--tags-gap);
 }
 

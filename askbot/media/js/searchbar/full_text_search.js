@@ -307,12 +307,14 @@ FullTextSearch.prototype.renderRelatedTags = function (tags_html) {
 
 FullTextSearch.prototype.renderSearchTags = function (tags, queryString) {
   var searchTags = $('.js-search-tags ul');
-  searchTags.empty();
   var me = this;
   if (tags.length === 0) {
-    $('.js-search-tags').fadeOut();
+    $('.js-search-tags').fadeOut(function () {
+      searchTags.find(':not(.js-search-tags-label)').remove();
+    });
   } else {
     $('.js-search-tags').fadeIn();
+    searchTags.find(':not(.js-search-tags-label)').remove();
     $.each(tags, function (idx, tagName) {
       var el;
       var tag = new Tag();

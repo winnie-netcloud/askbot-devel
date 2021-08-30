@@ -49,6 +49,7 @@ TagDetailBox.prototype.addTag = function (tag) {
     var li = this.makeElement('li');
     li.append(tag.getElement());
     this._tag_list_element.append(li);
+    this._tag_list_element.addClass('js-has-tags');
 };
 
 TagDetailBox.prototype.loadTags = function (wildcard, callback) {
@@ -149,9 +150,13 @@ function pickedTags() {
         var deleteTagLocally = function () {
             var tag = from_target[tagname];
             var li = tag.parent();
+            var ul = li.parent();
             from_target[tagname].remove();
             if (li.prop('tagName') === 'LI') {
                 li.remove();
+            }
+            if (ul.find('li').length === 0) {
+              ul.removeClass('js-has-tags');
             }
             delete from_target[tagname];
         };
@@ -257,6 +262,7 @@ function pickedTags() {
             var li = $('<li></li>');//assumption that we have a list
             li.append(tag_element);
             to_tag_container.append(li);
+            to_tag_container.addClass('js-has-tags');
             to_target[tag_name] = tag_element;
         });
     };

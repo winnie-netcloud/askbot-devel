@@ -1,6 +1,6 @@
 <div class="question-summary-stats">
   {% if thread.view_count or settings.QUESTION_SUMMARY_SHOW_ZERO_COUNTS %}
-    <div class="question-views-count{% if thread.view_count == 0 -%} zero-count{% endif %}">
+    <div class="question-views-count{% if thread.view_count == 0 %} zero-count{% endif %}">
       <div class="item-count">{{ thread.view_count|humanize_counter }}</div>
       <div class="item-name">{% trans cnt=thread.view_count %}view{% pluralize %}views{% endtrans %}</div>
     </div>
