@@ -78,6 +78,10 @@
   border-radius: 0;
   height: var(--search-input-height);
   width: var(--search-bar-height);
+  &:hover {
+    background-color: var(--bg-color);
+    border-color: var(--forum-header-input-border-color);
+  }
 }
 
 .js-search-btn {
@@ -93,6 +97,7 @@
   transition: var(--transition-color), var(--transition-bg-color);
   &:hover {
     background: var(--search-btn-hover-bg-color);
+    border-color: var(--forum-header-input-border-color);
     color: var(--forum-header-fg-hover-color);
     transition: var(--transition-color), var(--transition-bg-color);
   }
@@ -152,7 +157,7 @@
   align-items: center;
   background: var(--ask-btn-bg-color);
   border-color: var(--ask-btn-border-color);
-  color: var(--ask-btn-text-color);
+  color: var(--ask-btn-fg-color);
   display: flex;
   font-size: var(--ask-btn-font-size);
   height: var(--search-bar-height);
@@ -164,6 +169,7 @@
   &:hover {
     background: var(--ask-btn-hover-bg-color);
     border-color: var(--ask-btn-hover-border-color);
+    color: var(--ask-btn-fg-color);
     transition: var(--transition-color), var(--transition-bg-color);
   }
 }

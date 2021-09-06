@@ -45,7 +45,7 @@
             {% endblock %}
         </div>
         {% if settings.FOOTER_MODE == 'default' %}
-            {% include "widgets/footer.html" %}
+            {% include "components/footer.html" %}
         {% elif settings.FOOTER_MODE == 'customize' %}
             {{ settings.CUSTOM_FOOTER }}
         {% endif %}

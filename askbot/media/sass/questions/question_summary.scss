@@ -12,6 +12,10 @@
       text-decoration: none;
     }
   }
+  &:last-child {
+    border: none;
+    margin-bottom: 0;
+  }
 }
 
 .question-summary-tags {

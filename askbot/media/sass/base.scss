@@ -78,7 +78,7 @@ input[type="submit"],
   border-radius: var(--input-border-radius);
   border-width: var(--input-border-width);
   border-style: var(--input-border-style);
-  color: var(--btn-text-color);
+  color: var(--btn-fg-color);
   font-size: var(--input-font-size);
   transition: color var(--transition-timing) var(--transition-function),
     background var(--transition-timing) var(--transition-function),
@@ -96,7 +96,7 @@ input[type="submit"],
 .btn.btn-muted {
   background: var(--btn-muted-bg);
   border-color: var(--btn-muted-border-color);
-  color: var(--btn-muted-text-color);
+  color: var(--btn-muted-fg-color);
   transition: color var(--transition-timing) var(--transition-function),
     background var(--transition-timing) var(--transition-function),
     var(--transition-timing) var(--transition-function);

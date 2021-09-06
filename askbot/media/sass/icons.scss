@@ -108,7 +108,6 @@
 }
 
 .with-rss-icon {
-  color: var(--rss-color);
   position: relative;
   text-decoration: none;
   &::before {
@@ -152,4 +151,22 @@
   @extend %fa-icon;
   @extend .fas;
   content: fa-content($fa-var-globe-europe);
+}
+
+.with-ellipsis-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-ellipsis-h);
+}
+
+.with-caret-left-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-caret-left);
+}
+
+.with-caret-right-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-caret-right);
 }

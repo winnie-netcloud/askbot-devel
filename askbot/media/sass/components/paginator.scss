@@ -1,0 +1,47 @@
+.paginator {
+  display: flex;
+  font-size: var(--paginator-font-size);
+  margin: var(--paginator-margin);
+}
+
+.page,
+.next-page,
+.prev-page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paginator-fg-color);
+  background: var(--paginator-bg);
+  height: var(--paginator-page-height);
+  min-width: var(--paginator-page-height);
+  margin: var(--paginator-page-margin);
+  line-height: var(--paginator-font-size);
+  padding: var(--paginator-page-padding);
+  text-align: center;
+  text-decoration: none !important;
+  transition: color var(--transition-params),
+    background var(--transition-params);
+}
+
+.page.current-page,
+.page:hover,
+.next-page:hover,
+.prev-page:hover {
+  color: var(--paginator-current-fg-color);
+  background: var(--paginator-current-bg);
+  transition: color var(--transition-params),
+    background var(--transition-params);
+}
+
+.prev-page,
+.next-page {
+  font-size: var(--font-size);
+}
+
+.prev-page {
+  padding: var(--paginator-prev-page-padding);
+}
+
+.next-page {
+  padding: var(--paginator-next-page-padding);
+}

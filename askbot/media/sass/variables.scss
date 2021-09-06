@@ -14,22 +14,23 @@
   --danger-dark-color: hsl(0, 80%, 42%);
   --transition-duration: 0.1s;
   --transition-timing-function: steps(2, jump-end);
+  --transition-params: var(--transition-duration) var(--transition-timing-function);
   --border-width: 1px;
   --border-style: solid;
   --border-radius: 0;
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
+  --semi-transparent-bg-color: rgba(255, 255, 255, 0.9);
 
-  --btn-text-color: var(--bg-color);
+  --btn-fg-color: var(--bg-color);
   --btn-bg: hsla(199, 75%, 62%, var(--debug-transparency));
   --btn-hover-bg: hsl(199, 70%, 57%);
   --btn-border-color: hsl(199, 62%, 52%);
   --btn-hover-border-color: hsl(199, 62%, 45%);
   --btn-font-size: var(--input-font-size);
-  --btn-text-color: var(--bg-color);
 
   --btn-muted-bg: hsl(0, 0%, 73%, var(--debug-transparency));
   --btn-muted-border-color: hsl(0, 0%, 65%);
-  --btn-muted-text-color: var(--bg-color);
+  --btn-muted-fg-color: var(--bg-color);
 
   --btn-muted-hover-bg: hsl(0, 0%, 65%, var(--debug-transparency));
   --btn-muted-hover-border-color: hsl(0, 0%, 58%);
@@ -65,6 +66,10 @@
   --forum-header-font-size: var(--font-size);
   --forum-header-input-border-color: var(--input-border-color);
 
+  --footer-bg: var(--forum-header-bg-color);
+  --footer-padding: 1rem 0;
+  --footer-row-margin: 0 0 0.25rem;
+
   --link-color: hsl(199, 80%, 40%);
   --link-hover-color: hsl(199, 80%, 30%);
 
@@ -75,7 +80,20 @@
   --ask-btn-border-color: hsl(199, 62%, 52%);
   --ask-btn-hover-border-color: hsl(199, 62%, 45%);
   --ask-btn-font-size: var(--forum-header-font-size);
-  --ask-btn-text-color: var(--bg-color);
+  --ask-btn-fg-color: var(--bg-color);
+
+  --paginator-font-size: var(--larger-font-size);
+  --paginator-fg-color: var(--forum-header-fg-color);
+  --paginator-bg: unset;
+  --paginator-current-fg-color: var(--bg-color);
+  --paginator-current-bg: var(--forum-header-fg-color);
+  --paginator-page-height: calc(var(--paginator-font-size) + 0.125rem);
+  --paginator-margin: 0 0 1rem;
+  --paginator-page-margin: 0 1px;
+  --paginator-page-padding: 0 0.25rem 1px;
+  --paginator-next-page-padding: 1px 0 0 0.125rem;
+  --paginator-prev-page-padding: 1px 0.125rem 0 0;
+
   --search-bar-vertical-margin: 0px;
   --search-bar-font-size: var(--forum-header-font-size);
   --search-btn-bg-color: hsla(60, 15%, 95%, var(--debug-transparency));
@@ -111,6 +129,7 @@
   --tags-gap: 0.3625rem;
 
   --rss-color: hsl(28, 100%, 50%);
+  --rss-hover-color: hsl(0, 100%, 50%);
 
   --autocompleter-hover-bg: hsla(199, 75%, 62%, var(--debug-transparency));
 }

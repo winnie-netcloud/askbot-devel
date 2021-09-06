@@ -7,6 +7,7 @@ import json
 from django.conf import settings
 from django.middleware import csrf
 from django.urls import reverse
+from django.utils import timezone
 
 import askbot
 from askbot import api
@@ -111,6 +112,7 @@ def application_settings(request):
         'settings': my_settings,
         'moderation_items': api.get_info_on_moderation_items(request.user),
         'need_scope_links': need_scope_links,
+        'now': timezone.now(),
         'noscript_url': const.DEPENDENCY_URLS['noscript'],
     }
 

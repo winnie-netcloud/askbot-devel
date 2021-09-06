@@ -689,41 +689,61 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 
-{%- macro paginator_questions(p, position, search_state) -%} {# p is paginator context dictionary #}
-    {% filter trim %}
-        {% if p.is_paginated %}
-            <div class="paginator" style="float:{{position}}">
-                {% if p.has_previous %}
-                    <span class="prev"><a href="{{ search_state.change_page(p.previous).full_url() }}" title="{% trans %}previous{% endtrans %}">
-                        &laquo; {% trans %}previous{% endtrans %}</a></span>
-                {% endif %}
-                {% if not p.in_leading_range %}
-                    {% for num in p.pages_outside_trailing_range %}
-                        <span class="page"><a href="{{ search_state.change_page(num).full_url() }}" >{{ num }}</a></span>
-                    {% endfor %}
-                    ...
-                {% endif %}
-
-                {% for num in p.page_numbers %}
-                    {% if num == p.page and p.pages != 1%}
-                        <span class="curr page" title="{% trans %}current page{% endtrans %}"><a>{{ num }}</a></span>
-                    {% else %}
-                        <span class="page"><a href="{{ search_state.change_page(num).full_url() }}" title="{% trans %}page {{num}}{% endtrans %}">{{ num }}</a></span>
-                    {% endif %}
-                {% endfor %}
-
-                {% if not p.in_trailing_range %}
-                    ...
-                    {% for num in p.pages_outside_leading_range|reverse %}
-                        <span class="page"><a href="{{ search_state.change_page(num).full_url() }}" title="{% trans %}page {{ num }}{% endtrans %}">{{ num }}</a></span>
-                    {% endfor %}
-                {% endif %}
-                {% if p.has_next %}
-                    <span class="next"><a href="{{ search_state.change_page(p.next).full_url() }}" title="{% trans %}next page{% endtrans %}">{% trans %}next page{% endtrans %} &raquo;</a></span>
-                {% endif %}
-            </div>
+{%- macro paginator_questions(p, search_state) -%} {# p is paginator context dictionary #}
+  {% filter trim %}
+    {% if p.is_paginated %}
+      <div class='paginator'>
+        {% if p.has_previous %}
+          <a class='with-caret-left-icon prev-page'
+            href='{{ search_state.change_page(p.previous).full_url() }}'
+            aria-label='{% trans %}previous{% endtrans %}'
+          ></a>
         {% endif %}
-    {% endfilter %}
+        {% if not p.in_leading_range %}
+          {% for num in p.pages_outside_trailing_range %}
+            <a class='page'
+              href='{{ search_state.change_page(num).full_url() }}'
+              aria-label='{% trans num=p.pages %}page {{ num }}{% endtrans %}'
+            >
+              {{ num }}
+            </a>
+          {% endfor %}
+          <span class='with-ellipsis-h-icon'></span>
+        {% endif %}
+
+        {% for num in p.page_numbers %}
+          {% if num == p.page and p.pages != 1%}
+            <a class='current-page page'>{{ num }}</a>
+          {% else %}
+            <a class='page'
+              href="{{ search_state.change_page(num).full_url() }}"
+              aria-label='{% trans num=p.pages %}page {{ num }}{% endtrans %}'
+            >
+              {{ num }}
+            </a>
+          {% endif %}
+        {% endfor %}
+
+        {% if not p.in_trailing_range %}
+          <span class='with-ellipsis-h-icon'></span>
+          {% for num in p.pages_outside_leading_range|reverse %}
+            <a class='page'
+              href='{{ search_state.change_page(num).full_url() }}'
+              aria-label='{% trans num=p.pages %}page {{ num }}{% endtrans %}'
+            >
+              {{ num }}
+            </a>
+          {% endfor %}
+        {% endif %}
+        {% if p.has_next %}
+          <a class='with-caret-right-icon next-page'
+            href="{{ search_state.change_page(p.next).full_url() }}"
+            aria-label="{% trans %}next page{% endtrans %}"
+          ></a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endfilter %}
 {%- endmacro -%}
 
 {%- macro moderation_items_link(user, moderation_items) -%}

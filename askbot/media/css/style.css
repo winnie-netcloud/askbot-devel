@@ -416,7 +416,7 @@ input[type=submit],
   border-radius: var(--input-border-radius);
   border-width: var(--input-border-width);
   border-style: var(--input-border-style);
-  color: var(--btn-text-color);
+  color: var(--btn-fg-color);
   font-size: var(--input-font-size);
   transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
 }
@@ -433,7 +433,7 @@ input[type=submit]:hover,
 .btn.btn-muted {
   background: var(--btn-muted-bg);
   border-color: var(--btn-muted-border-color);
-  color: var(--btn-muted-text-color);
+  color: var(--btn-muted-fg-color);
   transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
 }
 .btn.btn-muted:hover {
@@ -469,20 +469,21 @@ button,
   --danger-dark-color: hsl(0, 80%, 42%);
   --transition-duration: 0.1s;
   --transition-timing-function: steps(2, jump-end);
+  --transition-params: var(--transition-duration) var(--transition-timing-function);
   --border-width: 1px;
   --border-style: solid;
   --border-radius: 0;
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
-  --btn-text-color: var(--bg-color);
+  --semi-transparent-bg-color: rgba(255, 255, 255, 0.9);
+  --btn-fg-color: var(--bg-color);
   --btn-bg: hsla(199, 75%, 62%, var(--debug-transparency));
   --btn-hover-bg: hsl(199, 70%, 57%);
   --btn-border-color: hsl(199, 62%, 52%);
   --btn-hover-border-color: hsl(199, 62%, 45%);
   --btn-font-size: var(--input-font-size);
-  --btn-text-color: var(--bg-color);
   --btn-muted-bg: hsl(0, 0%, 73%, var(--debug-transparency));
   --btn-muted-border-color: hsl(0, 0%, 65%);
-  --btn-muted-text-color: var(--bg-color);
+  --btn-muted-fg-color: var(--bg-color);
   --btn-muted-hover-bg: hsl(0, 0%, 65%, var(--debug-transparency));
   --btn-muted-hover-border-color: hsl(0, 0%, 58%);
   --fg-color: hsl(0, 0%, 21%);
@@ -511,6 +512,9 @@ button,
   --forum-header-fg-hover-color: hsl(60, 0%, 35%);
   --forum-header-font-size: var(--font-size);
   --forum-header-input-border-color: var(--input-border-color);
+  --footer-bg: var(--forum-header-bg-color);
+  --footer-padding: 1rem 0;
+  --footer-row-margin: 0 0 0.25rem;
   --link-color: hsl(199, 80%, 40%);
   --link-hover-color: hsl(199, 80%, 30%);
   --meta-nav-dropdown-breakpoint: 700px;
@@ -519,7 +523,18 @@ button,
   --ask-btn-border-color: hsl(199, 62%, 52%);
   --ask-btn-hover-border-color: hsl(199, 62%, 45%);
   --ask-btn-font-size: var(--forum-header-font-size);
-  --ask-btn-text-color: var(--bg-color);
+  --ask-btn-fg-color: var(--bg-color);
+  --paginator-font-size: var(--larger-font-size);
+  --paginator-fg-color: var(--forum-header-fg-color);
+  --paginator-bg: unset;
+  --paginator-current-fg-color: var(--bg-color);
+  --paginator-current-bg: var(--forum-header-fg-color);
+  --paginator-page-height: calc(var(--paginator-font-size) + 0.125rem);
+  --paginator-margin: 0 0 1rem;
+  --paginator-page-margin: 0 1px;
+  --paginator-page-padding: 0 0.25rem 1px;
+  --paginator-next-page-padding: 1px 0 0 0.125rem;
+  --paginator-prev-page-padding: 1px 0.125rem 0 0;
   --search-bar-vertical-margin: 0px;
   --search-bar-font-size: var(--forum-header-font-size);
   --search-btn-bg-color: hsla(60, 15%, 95%, var(--debug-transparency));
@@ -550,6 +565,7 @@ button,
   --tag-delete-btn-fg-hover-color: var(--bg-color);
   --tags-gap: 0.3625rem;
   --rss-color: hsl(28, 100%, 50%);
+  --rss-hover-color: hsl(0, 100%, 50%);
   --autocompleter-hover-bg: hsla(199, 75%, 62%, var(--debug-transparency));
 }
 
@@ -579,6 +595,9 @@ button,
  */
 .fa,
 .fas,
+.with-caret-right-icon::before,
+.with-caret-left-icon::before,
+.with-ellipsis-icon::before,
 .with-globe-icon::before,
 .with-bars-icon::before,
 .js-with-sort-ascending-icon::before,
@@ -612,7 +631,7 @@ button,
   line-height: 1;
 }
 
-.with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-times-icon::before, .with-bronze-badge-icon::before,
+.with-caret-right-icon::before, .with-caret-left-icon::before, .with-ellipsis-icon::before, .with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
 .with-gold-badge-icon::before, .with-tags-icon::before,
 .with-users-icon::before,
@@ -719,6 +738,9 @@ button,
 
 .fa.fa-pull-left,
 .fas.fa-pull-left,
+.fa-pull-left.with-caret-right-icon::before,
+.fa-pull-left.with-caret-left-icon::before,
+.fa-pull-left.with-ellipsis-icon::before,
 .fa-pull-left.with-globe-icon::before,
 .fa-pull-left.with-bars-icon::before,
 .fa-pull-left.js-with-sort-ascending-icon::before,
@@ -746,6 +768,9 @@ button,
 }
 .fa.fa-pull-right,
 .fas.fa-pull-right,
+.fa-pull-right.with-caret-right-icon::before,
+.fa-pull-right.with-caret-left-icon::before,
+.fa-pull-right.with-ellipsis-icon::before,
 .fa-pull-right.with-globe-icon::before,
 .fa-pull-right.with-bars-icon::before,
 .fa-pull-right.js-with-sort-ascending-icon::before,
@@ -6728,6 +6753,9 @@ readers do not read off random characters that represent icons */
 }
 .fa,
 .fas,
+.with-caret-right-icon::before,
+.with-caret-left-icon::before,
+.with-ellipsis-icon::before,
 .with-globe-icon::before,
 .with-bars-icon::before,
 .js-with-sort-ascending-icon::before,
@@ -6860,7 +6888,6 @@ readers do not read off random characters that represent icons */
 }
 
 .with-rss-icon {
-  color: var(--rss-color);
   position: relative;
   text-decoration: none;
 }
@@ -6897,6 +6924,18 @@ readers do not read off random characters that represent icons */
   content: "";
 }
 
+.with-ellipsis-icon::before {
+  content: "";
+}
+
+.with-caret-left-icon::before {
+  content: "";
+}
+
+.with-caret-right-icon::before {
+  content: "";
+}
+
 .btn {
   cursor: pointer;
 }
@@ -6924,6 +6963,52 @@ readers do not read off random characters that represent icons */
   background: var(--autocompleter-hover-bg);
   color: var(--input-bg-color);
   transition: color var(--transition-duration) var(--transition-timing-function), background var(--transition-duration) var(--transition-timing-function);
+}
+
+.paginator {
+  display: flex;
+  font-size: var(--paginator-font-size);
+  margin: var(--paginator-margin);
+}
+
+.page,
+.next-page,
+.prev-page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paginator-fg-color);
+  background: var(--paginator-bg);
+  height: var(--paginator-page-height);
+  min-width: var(--paginator-page-height);
+  margin: var(--paginator-page-margin);
+  line-height: var(--paginator-font-size);
+  padding: var(--paginator-page-padding);
+  text-align: center;
+  text-decoration: none !important;
+  transition: color var(--transition-params), background var(--transition-params);
+}
+
+.page.current-page,
+.page:hover,
+.next-page:hover,
+.prev-page:hover {
+  color: var(--paginator-current-fg-color);
+  background: var(--paginator-current-bg);
+  transition: color var(--transition-params), background var(--transition-params);
+}
+
+.prev-page,
+.next-page {
+  font-size: var(--font-size);
+}
+
+.prev-page {
+  padding: var(--paginator-prev-page-padding);
+}
+
+.next-page {
+  padding: var(--paginator-next-page-padding);
 }
 
 .radio-button-choice {
@@ -7091,9 +7176,16 @@ readers do not read off random characters that represent icons */
   .meta-nav-trigger {
     cursor: pointer;
     display: block;
+    height: var(--header-height);
     position: absolute;
+    right: 0;
+    top: 0;
+    width: var(--header-height);
+  }
+  .meta-nav-trigger::before {
+    position: absolute;
+    top: calc(0.5 * var(--header-height) - 0.5rem);
     right: 0.3625rem;
-    top: 0.75rem;
   }
 
   .js-meta-nav ul {
@@ -7171,6 +7263,21 @@ header .content-wrapper {
 .header-block1 {
   align-items: center;
   display: flex;
+}
+
+footer {
+  background: var(--footer-bg);
+  color: var(--footer-fg-color);
+  padding: var(--footer-padding);
+}
+footer .footer-row {
+  margin: var(--footer-row-margin);
+}
+footer .footer-row:last-child {
+  margin-bottom: 0;
+}
+footer a {
+  text-decoration: none;
 }
 
 .forum-header {
@@ -7254,6 +7361,10 @@ header .content-wrapper {
   height: var(--search-input-height);
   width: var(--search-bar-height);
 }
+.js-cancel-search-btn:hover {
+  background-color: var(--bg-color);
+  border-color: var(--forum-header-input-border-color);
+}
 
 .js-search-btn {
   border-color: var(--forum-header-input-border-color);
@@ -7269,6 +7380,7 @@ header .content-wrapper {
 }
 .js-search-btn:hover {
   background: var(--search-btn-hover-bg-color);
+  border-color: var(--forum-header-input-border-color);
   color: var(--forum-header-fg-hover-color);
   transition: var(--transition-color), var(--transition-bg-color);
 }
@@ -7324,7 +7436,7 @@ header .content-wrapper {
   align-items: center;
   background: var(--ask-btn-bg-color);
   border-color: var(--ask-btn-border-color);
-  color: var(--ask-btn-text-color);
+  color: var(--ask-btn-fg-color);
   display: flex;
   font-size: var(--ask-btn-font-size);
   height: var(--search-bar-height);
@@ -7337,6 +7449,7 @@ header .content-wrapper {
 .ask-btn:hover {
   background: var(--ask-btn-hover-bg-color);
   border-color: var(--ask-btn-hover-border-color);
+  color: var(--ask-btn-fg-color);
   transition: var(--transition-color), var(--transition-bg-color);
 }
 
@@ -7417,24 +7530,41 @@ header .content-wrapper {
   margin-bottom: 0.3625rem;
 }
 
+#js-questions {
+  margin-bottom: 0.5rem;
+}
+
 .js-questions-header {
-  background: var(--bg-color);
   margin-bottom: 0.5rem;
   position: sticky;
   top: var(--forum-header-height);
   z-index: 1;
 }
 
-.questions-header-top {
+.js-questions-header-top {
   align-items: center;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin: 0 calc(-1 * var(--layout-horizontal-padding)) 0.125rem calc(-1 * var(--layout-horizontal-padding));
+  margin: 0 calc(-1 * var(--layout-horizontal-padding)) 0.125rem;
   padding: 0 var(--layout-horizontal-padding);
+  position: relative;
 }
-@media (max-width: 675px) {
-  .questions-header-top {
+.js-questions-header-top.js-scrolled::after {
+  --shadow-height: 0.3625rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0));
+  border-top: 1px solid #e6e6e6;
+  border-bottom-left-radius: calc(2 * var(--shadow-height));
+  border-bottom-right-radius: calc(2 * var(--shadow-height));
+  bottom: calc(-1 * var(--shadow-height));
+  left: calc(0.5 * var(--layout-horizontal-padding));
+  content: "";
+  height: var(--shadow-height);
+  position: absolute;
+  width: calc(100% - var(--layout-horizontal-padding));
+}
+@media (max-width: 690px) {
+  .js-questions-header-top {
     margin-bottom: 0.5rem;
   }
 }
@@ -7444,13 +7574,14 @@ header .content-wrapper {
 }
 
 .js-questions-title {
+  background: var(--semi-transparent-bg-color);
+  flex-grow: 1;
   font-weight: normal;
   font-size: var(--larger-font-size);
-  margin-right: 1rem;
-  position: relative;
-  top: 2px;
+  height: var(--sort-nav-height);
+  padding: 3px 1rem 0 0;
 }
-@media (max-width: 675px) {
+@media (max-width: 690px) {
   .js-questions-title {
     display: none;
   }
@@ -7458,10 +7589,16 @@ header .content-wrapper {
 
 .js-rss-link {
   align-items: center;
+  color: var(--rss-color);
   display: flex;
   font-size: var(--small-font-size);
-  margin-left: 0.25rem;
-  padding: 0 0.75rem 2px 0;
+  padding: 0 0.75rem 2px 0.25rem;
+  background: var(--semi-transparent-bg-color);
+  transition: color var(--transition-params);
+}
+.js-rss-link:hover {
+  color: var(--rss-hover-color);
+  transition: color var(--transition-params);
 }
 .js-rss-link::before {
   font-size: 0.65rem;
@@ -7497,6 +7634,10 @@ header .content-wrapper {
 .question-summary h2 a, .question-summary h2 a:active {
   color: var(--fg-color);
   text-decoration: none;
+}
+.question-summary:last-child {
+  border: none;
+  margin-bottom: 0;
 }
 
 .question-summary-tags {

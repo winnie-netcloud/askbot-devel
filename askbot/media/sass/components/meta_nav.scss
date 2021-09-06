@@ -30,9 +30,16 @@
   .meta-nav-trigger {
     cursor: pointer;
     display: block;
+    height: var(--header-height);
     position: absolute;
-    right: 0.3625rem;
-    top: 0.75rem;
+    right: 0;
+    top: 0;
+    width: var(--header-height);
+    &::before {
+      position: absolute;
+      top: calc(0.5 * var(--header-height) - 0.5rem);
+      right: 0.3625rem;
+    }
   }
   .js-meta-nav ul {
     background: var(--header-bg-color);
