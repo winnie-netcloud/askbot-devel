@@ -12,6 +12,7 @@
           {% trans %}RSS{% endtrans %}
         </a>
       {% endif %}
+      {% include "components/toggle_sidebar_button.html" %}
     </div>
   </div>
   <div class="js-search-tags" {% if not search_tags %}style="display: none;"{% endif %}>

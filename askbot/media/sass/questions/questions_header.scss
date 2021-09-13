@@ -1,3 +1,5 @@
+@use '../sass_variables.scss';
+
 .js-questions-header {
   margin-bottom: 0.5rem;
   position: sticky;
@@ -35,6 +37,9 @@
 
 .questions-header-top-controls {
   display: flex;
+  @media (max-width: #{sass_variables.$sidebar_breakpoint}) {
+    width: 100%;
+  }
 }
 
 .js-questions-title {
@@ -63,6 +68,11 @@
   }
   &::before {
     font-size: 0.65rem;
+    position: absolute;
+    left: 2.75em;
+  }
+  @media (max-width: #{sass_variables.$sidebar_breakpoint}) {
+    flex-grow: 1;
   }
 }
 

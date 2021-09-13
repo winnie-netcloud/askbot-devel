@@ -82,7 +82,7 @@
   --ask-btn-font-size: var(--forum-header-font-size);
   --ask-btn-fg-color: var(--bg-color);
 
-  --paginator-font-size: var(--larger-font-size);
+  --paginator-font-size: 1.125rem;
   --paginator-fg-color: var(--forum-header-fg-color);
   --paginator-bg: unset;
   --paginator-current-fg-color: var(--bg-color);
@@ -90,7 +90,7 @@
   --paginator-page-height: calc(var(--paginator-font-size) + 0.125rem);
   --paginator-margin: 0 0 1rem;
   --paginator-page-margin: 0 1px;
-  --paginator-page-padding: 0 0.25rem 1px;
+  --paginator-page-padding: 0 0.25rem;
   --paginator-next-page-padding: 1px 0 0 0.125rem;
   --paginator-prev-page-padding: 1px 0.125rem 0 0;
 

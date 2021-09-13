@@ -114,8 +114,6 @@
     @extend %fa-icon;
     @extend .fas;
     content: fa-content($fa-var-rss);
-    position: absolute;
-    right: 0;
   }
 }
 
@@ -169,4 +167,22 @@
   @extend %fa-icon;
   @extend .fas;
   content: fa-content($fa-var-caret-right);
+}
+
+.with-comment-icon::before {
+  @extend %fa-icon;
+  @extend .far;
+  content: fa-content($fa-var-comment);
+}
+
+.with-plus-icon::before {
+  @extend %fa-icon;
+  @extend .far;
+  content: fa-content($fa-var-comment);
+}
+
+.with-arrow-left-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-arrow-left);
 }
