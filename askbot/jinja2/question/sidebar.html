@@ -1,10 +1,10 @@
 {% import "macros.html" as macros %}
 {% if 'SIDEBAR_QUESTION_HEADER'|show_block_to(request.user) %}
-<div class="box">
+<div class="sidebar-box">
     {{ settings.SIDEBAR_QUESTION_HEADER }}
 </div>
 {% endif %}
-<div class="box vote-buttons">
+<div class="sidebar-box vote-buttons">
   <h2>{{ settings.WORDS_QUESTION_TOOLS|escape }}</h2>
     <button class="js-follow-question button large"
         data-is-on="{{ favorited|as_js_bool }}"
@@ -29,7 +29,7 @@
     </div>
     <div class="notify-sidebar">
         {% if settings.RSS_ENABLED %}
-        <p class="rss">
+        <p class="rss with-rss-icon">
             <a
                 href="{{ url('individual_question_feed',  question.id ) }}"
                 title="{% trans %}subscribe to the rss feed{% endtrans %}"
@@ -39,9 +39,8 @@
     </div>
 </div>
 
-<div class="clearfix"></div>
 {% if settings.GROUPS_ENABLED %}
-<div class="box sharing-widget">
+<div class="sidebar-box sharing-widget">
     {% if thread.is_private() %}
         <h2>{% trans %}Invite{% endtrans %}</h2>
         <p style="margin: 16px 0">{{ settings.WORDS_INVITE_OTHERS_TO_HELP_ANSWER_THIS_QUESTION|escape }}</p>
@@ -131,7 +130,7 @@
 {% endif %}
 
 {% if settings.SIDEBAR_QUESTION_SHOW_META %}
-<div class="box statsWidget">
+<div class="sidebar-box statsWidget">
     <div class="clearfix"></div>
     <h2>{% trans %}Stats{% endtrans %}</h2>
     <p>
@@ -148,7 +147,7 @@
 
 {% if similar_threads.data() and settings.SIDEBAR_QUESTION_SHOW_RELATED %}
     {#% cache 1800 "related_questions" related_questions question.id language_code %#}
-    <div class="box">
+    <div class="sidebar-box">
       <h2>{{ settings.WORDS_RELATED_QUESTIONS|escape }}</h2>
         <div class="questions-related">
             {% for thread_dict in similar_threads.data() %}
@@ -162,7 +161,7 @@
 {% endif %}
 
 {% if 'SIDEBAR_QUESTION_FOOTER'|show_block_to(request.user) %}
-    <div class="box">
+    <div class="sidebar-box">
         {{ settings.SIDEBAR_QUESTION_FOOTER }}
     </div>
 {% endif %}

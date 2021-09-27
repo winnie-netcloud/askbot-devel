@@ -1,0 +1,335 @@
+<script type="text/javascript">
+  askbot['data']['userIsThreadModerator'] = {{ user_is_thread_moderator|as_js_bool }};
+  askbot['data']['oldestAnswerId'] = {% if oldest_answer_id %}{{ oldest_answer_id }}{% else %}-1{% endif %};
+  askbot['data']['threadIsClosed'] = {{ thread.closed|as_js_bool }};
+  askbot['settings']['readOnlyModeEnabled'] = {{ settings.READ_ONLY_MODE_ENABLED|as_js_bool }};
+  (function(){
+
+    var data = askbot['data'];
+    if (data['userIsAuthenticated']){
+      var votes = {};
+      {% for post_id in user_votes %}
+        votes['{{post_id}}'] = {{user_votes[post_id]}};
+      {% endfor %}
+      data['user_votes'] = votes;
+      var posts = {};
+      {% for post_id in user_post_id_list %}
+        posts['{{post_id}}'] = 1;
+      {% endfor %}
+      data['user_posts'] = posts;
+    }
+
+    var hasClass = function(node, selector) {
+      var classes = (" " + node.className + " ").split(' ');
+      for (var i = 0; i < classes.length; i++) {
+        if (classes[i] === selector) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    var findClosestParentByClassName = function(node, className) {
+      if (hasClass(node, className)) {
+        return node;
+      }
+      if (node.nodeName === 'BODY') {
+        return false;
+      } else {
+        return findClosestParentByClassName(node.parentNode, className);
+      }
+    };
+
+    var findChildrenByClassName = function(node, className) {
+      var nodes = [];
+      var walk = function(node) {
+        if (hasClass(node, className)) {
+          nodes.push(node);
+        }
+        if (node.childNodes) {
+          for (var i=0; i < node.childNodes.length; i++) {
+            walk(node.childNodes[i]);
+          }
+        }
+      };
+      walk(node);
+      return nodes;
+    };
+
+    var getTextContent = function(node) {
+      var text = node.innerText || node.textContent;
+      return (text === undefined) ? '' : text;
+    };
+
+    var findChildByAttribute = function(node, attrName, attrVal) {
+      var children = node.childNodes;
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+        if (child.getAttribute(attrName) === attrVal) {
+          return child;
+        }
+      };
+      return null;
+    };
+
+    var postIsComment = function(postId) {
+      return !!document.getElementById('comment-' + postId);
+    };
+
+    var getPost = function(postId) {
+      return document.getElementById('post-id-' + postId);
+    }
+
+    var postIsQuestion = function(postId) {
+      var content = getPost(postId);
+      if (content) {
+        if (hasClass(content, 'js-comment')) {
+          return false;
+        }
+        if (findClosestParentByClassName(content, 'js-question')) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    var removeNode = function(node) {
+      node.parentNode.removeChild(node);
+    };
+
+    var trim = function(text) {
+      return text.replace(/^\s+|\s+$/g, '');
+    };
+
+
+    var isAuthorOfPost = function(post_id) {
+      var data = askbot['data'];
+      return (data['user_posts'] && data['user_posts'][post_id]);
+    };
+
+
+    function renderVoteButtons(post_type, post_id){
+      var upvote_btn = document.getElementById(
+        post_type + '-img-upvote-' + post_id
+      );
+      var downvote_btn = document.getElementById(
+        post_type + '-img-downvote-' + post_id
+      );
+      var data = askbot['data'];
+      if (data['userIsAuthenticated']){
+        if (post_id in data['user_votes']){
+          var vote = data['user_votes'][post_id];
+          if (vote == -1){
+            var btn = downvote_btn;
+          } else if (vote == 1){
+            var btn = upvote_btn;
+          } else {
+            return;
+          }
+          if (post_type == 'comment'){
+            btn.className = btn.className + ' upvoted';
+          } else {
+            btn.className = btn.className + ' on';
+          }
+        }
+      }
+    }
+
+    function hideConvertAnswerList(post_id){
+      var id1 = 'post-' + post_id + '-convert';//for repost as Q comment
+      var repostAsQuestionComment = document.getElementById(id1);
+      var id2 = 'post-' + post_id + '-repost-as-comment-under-previous-answer';
+      var repostAsPrevAnsComment = document.getElementById(id2);
+      var extraOptsList = repostAsQuestionComment.parentNode;
+      var extraOpts = extraOptsList.parentNode;
+
+      var data = askbot['data'];
+      var isAuthenticated = data['userIsAuthenticated'];
+      var isMod = data['userIsAdminOrMod'];
+      if (isAuthenticated && (isMod || isAuthorOfPost(post_id))) {
+        //still may need to hide because answer may be too long
+        var answer_container = getPost(post_id);
+        var answerBody = findChildrenByClassName(answer_container, 'post-body')[0];
+        //todo: this is not reliable
+        var answerBodyNodes = answerBody.childNodes;
+        var answerElement = answerBodyNodes[answerBodyNodes.length - 1];
+        if (trim(getTextContent(answerElement)).length > askbot['data']['maxCommentLength']) {
+          repostAsQuestionComment.parentNode.removeChild(repostAsQuestionComment);
+          repostAsPrevAnsComment.parentNode.removeChild(repostAsPrevAnsComment);
+        } else if (parseInt(post_id) === data['oldestAnswerId']) {
+          repostAsPrevAnsComment.parentNode.removeChild(repostAsPrevAnsComment);
+        }
+      } else {
+        repostAsQuestionComment.parentNode.removeChild(repostAsQuestionComment);
+        repostAsPrevAnsComment.parentNode.removeChild(repostAsPrevAnsComment);
+      }
+
+      //if the whole control is empty - remove it
+      if (extraOptsList.getElementsByTagName('li').length === 0) {
+        extraOpts.parentNode.removeChild(extraOpts);
+      }
+    }
+
+    function hidePublishAnswerLink(postId) {
+      if (data['userIsThreadModerator'] === false) {
+        //hide publish/unpublish answer links
+        var answerId = 'post-' + postId + '-publish';
+        var pubBtn = document.getElementById(answerId);
+        if (pubBtn) {
+          removeNode(pubBtn);
+        }
+      }
+    }
+
+    function removeAllControls(post_id) {
+      var deleteBtn = document.getElementById('post-' + post_id + '-delete');
+      var controls = deleteBtn.parentNode;
+      if (controls.className == 'comment-content') {
+        removeNode(deleteBtn);
+        var convertLinks = findChildrenByClassName(controls, 'convert-comment');
+        if (convertLinks.length) {
+          removeNode(convertLinks[0]);
+        }
+        var editLinks = findChildrenByClassName(controls, 'edit');
+        if (editLinks.length) {
+          removeNode(editLinks[0]);
+        }
+      } else {
+        var buttons = controls.childNodes;
+        var numButtons = buttons.length;
+        for (var i = numButtons - 1; i >= 0; i--) {
+          removeNode(buttons[i]);
+        }
+      }
+    };
+
+    function renderPostControls(post_id, is_wiki){
+      //in this case remove all post controls
+      if (askbot['settings']['readOnlyModeEnabled'] === true) {
+        removeAllControls(post_id);
+        return;
+      }
+
+      var deleteBtn = document.getElementById('post-' + post_id + '-delete');
+      var controls = deleteBtn.parentNode;
+      var mergeBtn = findChildrenByClassName(controls, 'question-merge');
+      if (mergeBtn.length === 1 && data['userIsThreadModerator'] === false) {
+        removeNode(mergeBtn[0]);
+      }
+
+      if (data['userIsAdminOrMod']) {
+        return; //all remaining functions stay on
+      }
+
+      {% if settings.COMMENTING_CLOSED_QUESTIONS_ENABLED == False %}
+      if (data['threadIsClosed']) {
+        var buttons = findChildrenByClassName(document, 'js-open-editor-btn');
+        for (var i = 0; i < buttons.length; i++) {
+          removeNode(buttons[0]);
+        }
+      }
+      {% endif %}
+
+      if (isAuthorOfPost(post_id)) {
+        if (postIsQuestion(post_id) && {{ answers|length }}) {
+          if (data['userReputation'] < {{ settings.MIN_REP_TO_DELETE_OWN_QUESTIONS }}) {
+            if (!data['userIsAdminOrMod']) {
+              removeNode(deleteBtn);
+            }
+          }
+        }
+        //todo: remove edit button from older comments
+        return;
+      }
+
+      if (//maybe remove "delete" button
+        (data['userReputation'] <
+        {{settings.MIN_REP_TO_DELETE_OTHERS_POSTS}}) || data['userIsReadOnly']
+      ) {
+        removeNode(deleteBtn);
+      }
+
+      var canFlagPosts = data['userReputation'] >= {{ settings.MIN_REP_TO_FLAG_OFFENSIVE }};
+      var flags = findChildrenByClassName(controls, 'question-flag');
+      if (flags.length > 0 && !canFlagPosts) {
+        for (var i = 0; i < flags.length; i++) {
+          removeNode(flags[i]);
+        }
+      }
+      var closeBtn = findChildrenByClassName(controls, 'question-close');
+
+      if ( closeBtn.length === 1 && (
+        (data['userReputation'] < {{ settings.MIN_REP_TO_CLOSE_OTHERS_QUESTIONS }}) ||
+        data['userIsReadOnly']
+      )) {
+        removeNode(closeBtn[0]);
+      }
+
+      var enoughRep = (data['userReputation'] >= {{settings.MIN_REP_TO_EDIT_OTHERS_POSTS}} ||
+        (is_wiki && data['userReputation'] >= {{ settings.MIN_REP_TO_EDIT_WIKI }}));
+
+      //maybe remove "edit" button
+      if (!enoughRep || data['userIsReadOnly']){
+        var editBtns = findChildrenByClassName(getPost(post_id), 'js-edit');
+        var numBtns = editBtns.length;
+        for (var i=0; i<numBtns; i++) {
+          removeNode(editBtns[i]);
+        }
+      }
+
+      //maybe remove retag button
+      if (
+        !isAuthorOfPost(post_id) &&
+        postIsQuestion(post_id) &&
+        ((data['userReputation'] <
+        {{settings.MIN_REP_TO_RETAG_OTHERS_QUESTIONS}}) ||
+        data['userIsReadOnly'])
+      ){
+        var retagBtn = document.getElementById('retag');
+        if (retagBtn) removeNode(retagBtn);
+      }
+    }
+
+    function renderAddAnswerButton(){
+      var add_answer_btn = document.getElementById('add-answer-btn');
+      var valueAttr = '';
+      if (askbot['data']['userIsAuthenticated']){
+        if (askbot['data']['userId'] == {{question.author_id}}){
+          add_answer_btn.className += ' answer-own-question';
+          valueAttr = '{{ settings.WORDS_ANSWER_YOUR_OWN_QUESTION|escapejs }}';
+        } else {
+          valueAttr = '{{ settings.WORDS_POST_YOUR_ANSWER|escapejs }}';
+        }
+      } else {
+        valueAttr = '{{ gettext("Login/Signup to Post")|escapejs }}';
+      }
+      add_answer_btn.setAttribute('value', valueAttr);
+    }
+
+    function hideConvertLinks() {
+      var isAuthenticated = data['userIsAuthenticated'];
+      var isMod = data['userIsAdminOrMod'];
+      if (isAuthenticated && isMod) {
+        return;
+      }
+      var convertForms = findChildrenByClassName(document, 'convert-comment');
+      for (var i = 0; i < convertForms.length; i++) {
+        //get comment id
+        var form = convertForms[i];
+        var idInput = findChildByAttribute(form, 'name', 'comment_id');
+        var commentId = idInput.getAttribute('value');
+        if (!isAuthorOfPost(commentId)) {
+          form.setAttribute('style', 'display:none;');
+        }
+      }
+    }
+
+    askbot['functions'] = askbot['functions'] || {};
+    askbot['functions']['renderPostVoteButtons'] = renderVoteButtons;
+    askbot['functions']['renderPostControls'] = renderPostControls;
+    askbot['functions']['renderAddAnswerButton'] = renderAddAnswerButton;
+    askbot['functions']['hideConvertLinks'] = hideConvertLinks;
+    askbot['functions']['hideConvertAnswerLinks'] = hideConvertAnswerList;
+    askbot['functions']['hidePublishAnswerLink'] = hidePublishAnswerLink;
+  })();
+</script>

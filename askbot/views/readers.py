@@ -661,7 +661,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     extra = context.get_extra('ASKBOT_QUESTION_PAGE_EXTRA_CONTEXT', request, data)
     data.update(extra)
 
-    return render(request, 'question.html', data)
+    return render(request, 'question/index.html', data)
     #print 'generated in ', timezone.now() - before
     #return res
 
