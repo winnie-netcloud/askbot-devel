@@ -622,72 +622,69 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {%- macro paginator(p, position='left', anchor='') -%}{# p is paginator context dictionary #}
-{% filter trim %}
+  {% filter trim %}
     {% if p.is_paginated %}
-        <div
-            class="paginator"
-            style="float:{{ position }}"
-            data-num-pages="{{ p.pages }}"
-        >
-        <span class="prev"
-            {% if not p.has_previous %}style="display: none"{% endif %}
-        ><a href="{{p.base_url}}page={{ p.previous }}{{ anchor }}"
-            title="{% trans %}previous{% endtrans %}"
-        >&laquo; {% trans %}previous{% endtrans %}</a></span>
+      <div class="paginator" data-num-pages="{{ p.pages }}">
+        <a class="js-prev-page prev-page with-caret-left-icon"
+          {% if not p.has_previous %}
+            style="display: none"
+          {% endif %}
+          href="{{p.base_url}}page={{ p.previous }}{{ anchor }}"
+          aria-label="{% trans %}previous{% endtrans %}"
+        ></a>
 
-        <span class="first-page-nav"
-            {% if p.in_leading_range %}style="display: none"{% endif %}
+        <span class="js-first-page-block"
+          {% if p.in_leading_range %}style="display: none"{% endif %}
         >
-            <span class="page first-page"
-                data-page="1"
-            >
-                <a href="{{p.base_url}}page={{1}}{{ anchor }}" >1</a>
-            </span>
-            <span class="leading-sep">...</span>
+          <a class="page"
+            href="{{p.base_url}}page={{1}}{{ anchor }}"
+            aria-label="{% trans %}first{% endtrans %}"
+            data-page="1"
+          >1</a>
+          <span class="with-ellipsis-h-icon"></span>
         </span>
 
-        <span class="main-pages-nav">
         {% for num in p.page_numbers %}
-            {% if num == p.page %}
-                <span class="curr page"
-                    data-page="{{ num }}"
-                    title="{% trans %}current page{% endtrans %}"
-                ><a>{{ num }}</a></span>
-            {% else %}
-                <span class="page"
-                    data-page="{{ num }}"
-                ><a href="{{p.base_url}}page={{ num }}{{ anchor }}"
-                    title="{% trans %}page {{num}}{% endtrans %}"
-                >{{ num }}</a></span>
-            {% endif %}
+          {% if num == p.page %}
+            <a class="current-page page"
+              data-page="{{ num }}"
+              aria-label="{% trans %}current page{% endtrans %}"
+            >
+              {{ num }}
+            </a>
+          {% else %}
+            <a class="page"
+              href="{{p.base_url}}page={{ num }}{{ anchor }}"
+              data-page="{{ num }}"
+              aria-label="{% trans %}page {{num}}{% endtrans %}"
+            >
+              {{ num }}
+            </a>
+          {% endif %}
         {% endfor %}
-        </span>
 
-        {# the "last page" navigation #}
-        <span class="last-page-nav"
-            {% if p.in_trailing_range %}style="display: none"{% endif %}
+        <span class="js-last-page-block"
+          {% if p.in_trailing_range %}style="display: none"{% endif %}
         >
-            <span class="trailing-sep">...</span>
-            <span class="page last-page" data-page="{{ p.pages }}">
-                <a href="{{ p.base_url }}page={{ p.pages }}{{ anchor }}"
-                    title="{% trans num=p.pages %}page {{ num }}{% endtrans %}"
-                >{{ p.pages }}</a>
-            </span>
+          <span class="with-ellipsis-h-icon"></span>
+          <a href="{{ p.base_url }}page={{ p.pages }}{{ anchor }}"
+            class"page"
+            data-page="{{p.pages}}"
+            aria-label="{% trans num=p.pages %}page {{ num }}{% endtrans %}"
+          >
+            {{ p.pages }}
+          </a>
         </span>
 
-        {# "next" nav link #}
-        <span class="next"
-            {% if not p.has_next %}style="display: none"{% endif %}
-        ><a href="{{p.base_url}}page={{ p.next }}{{ anchor }}"
-                title="{% trans %}next page{% endtrans %}"
-        >{% trans %}next{% endtrans %} &raquo;</a>
-        </span>
-
-    </div>
+        <a class="js-next-page next-page"
+          {% if not p.has_next %}style="display: none"{% endif %}
+          href="{{p.base_url}}page={{ p.next }}{{ anchor }}"
+          aria-label="{% trans %}next page{% endtrans %}"
+        ></a>
+      </div>
     {% endif %}
-{% endfilter %}
+  {% endfilter %}
 {%- endmacro -%}
-
 
 {%- macro paginator_questions(p, search_state) -%} {# p is paginator context dictionary #}
   {% filter trim %}
