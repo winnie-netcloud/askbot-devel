@@ -80,7 +80,7 @@ class DbParamsValidator: #pylint: disable=missing-class-docstring
             if not cli_value:
                 return const.DATABASE_ENGINE_CODES[const.SQLITE]
             if cli_value not in choices:
-                raise ValidationError('Invaild choice for the --db-engine parameter')
+                raise ValidationError('Invalid choice for the --db-engine parameter')
 
         num_choices = [(str(idx + 1), item) for (idx, item) in enumerate(choices)]
 
