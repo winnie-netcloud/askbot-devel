@@ -262,3 +262,6 @@ def list_suggested_tags(request):
         'paginator_context' : paginator_context,
     }
     return render(request, 'list_suggested_tags.html', data)
+
+def colors(request):
+    return render(request, 'colors.html')

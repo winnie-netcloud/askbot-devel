@@ -16,9 +16,12 @@
 @use './components/input_with_button.scss';
 @use './components/sort_nav.scss';
 @use './components/sidebar_box.scss';
+@use './components/vote_buttons.scss';
+@use './components/share_buttons.scss';
 @use './questions/index.scss';
 @use './questions/questions_header.scss';
 @use './questions/question_summary.scss';
 @use './questions/sidebar_contributors.scss';
 @use './questions/sidebar_tag_filters.scss';
 @use './questions/sidebar_tags.scss';
+@use './question/post.scss';

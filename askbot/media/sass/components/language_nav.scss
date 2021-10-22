@@ -7,7 +7,7 @@
     cursor: pointer;
     display: inline;
     padding-left: 0.5rem;
-    border-left: var(--border-width) var(--border-style) var(--bg-color);
+    border-left: var(--border-width) var(--border-style) var(--header-link-color);
   }
 
   .current-language::before {

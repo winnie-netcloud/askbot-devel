@@ -1,7 +1,7 @@
-{%- macro share(site = None, site_label = None, icon = False) -%}
-    <a class="{{ site }}-share{% if icon == True %} icon{% endif %}"
-        title="{% trans %}Share this content on {{site}}{% endtrans %}"
-    >{% if icon == False %}{% if site_label %}{{ site_label }}{% else %}{{ site }}{% endif %}{% endif %}</a>
+{%- macro share(site = None) -%}
+  <a class="js-{{ site }}-share with-{{site}}-icon share-btn"
+    title="{% trans %}Share this content on {{site}}{% endtrans %}"
+  ></a>
 {%- endmacro -%}
 
 {%- macro inbox_message_snippet(message) -%}
@@ -37,21 +37,16 @@
 {%- endmacro -%}
 
 {%- macro post_vote_buttons(post = None) -%}
-<div id="{{post.post_type}}-img-upvote-{{ post.id }}"
-    class="{{post.post_type}}-img-upvote post-vote upvote">
-</div>
-<div
-    id="{{post.post_type}}-vote-number-{{ post.id }}"
-    class="vote-number"
+<div class="js-post-vote-btn-group">
+  <div class="js-post-vote-btn js-post-upvote-btn with-upvote-icon" data-post-id="{{post.id}}"></div>
+  <div class="js-post-vote-number"
     title="{% trans %}current number of votes{% endtrans %}"
->{{ post.score }}</div>
-<div
-    id="{{post.post_type}}-img-downvote-{{ post.id }}"
-    class="{{post.post_type}}-img-downvote post-vote downvote">
+  >{{ post.score }}</div>
+  <div class="js-post-vote-btn js-post-downvote-btn with-downvote-icon" data-post-id="{{post.id}}"></div>
+  <script type="text/javascript">
+      askbot['functions']['renderPostVoteButtons']('{{post.post_type}}', '{{post.id}}');
+  </script>
 </div>
-<script type="text/javascript">
-    askbot['functions']['renderPostVoteButtons']('{{post.post_type}}', '{{post.id}}');
-</script>
 {%- endmacro -%}
 
 {%- macro post_contributor_avatar_and_credentials(revision) -%}

@@ -28,7 +28,10 @@
 <script type="text/javascript" src="{{ '/jslib/prettify.js'|media }}"></script>
 <script type="text/javascript" src="{{ '/js/utils/toggle.js'|media }}"></script>
 <script type="text/javascript" src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
-<script type="text/javascript" src="{{ '/js/post.js'|media }}"></script>
+<script src="{{ '/js/post.js'|media }}"></script>
+<script src="{{ '/js/pages/question/social_sharing.js'|media }}"></script>
+<script src="{{ '/js/pages/question/vote.js'|media }}"></script>
+<script src="{{ '/js/pages/question/post_vote.js'|media }}"></script>
 <script type="text/javascript" src="{{ '/js/utils/editable.js'|media }}"></script>
 <script type="text/javascript" src="{{ '/js/forms/form.js'|media }}"></script>
 <script type="text/javascript" src="{{ '/js/editors/folded_editor.js'|media }}"></script>
@@ -51,11 +54,12 @@
         $("#" + askbot['data']['answersSortTab']).attr('className',"on");
 
         Vote.init(
-            askbot['data']['questionId'],
-            askbot['data']['threadSlug'],
-            askbot['data']['questionAuthorId'],
-            askbot['data']['userId']
+          askbot['data']['questionId'],
+          askbot['data']['threadSlug'],
+          askbot['data']['questionAuthorId'],
+          askbot['data']['userId']
         );
+        PostVote.init();
 
         if ((askbot['data']['threadIsClosed'] === false) && askbot['data']['userIsAuthenticated']) {
             initEditor();

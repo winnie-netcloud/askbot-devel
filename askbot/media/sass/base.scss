@@ -39,14 +39,27 @@ body {
 }
 
 a,
-a:active {
+a:active,
+.btn-link {
   color: var(--link-color);
   transition: color var(--transition-timing) var(--transition-function);
 }
 
-a:hover {
-  color: var(--link-hover-color);
-  transition: color var(--transition-timing) var(--transition-function);
+.btn-link {
+  background: var(--bg-color);
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  text-decoration: underline;
+  padding: 0;
+}
+
+a,
+.btn-link {
+  &:hover {
+    color: var(--link-hover-color);
+    transition: color var(--transition-timing) var(--transition-function);
+  }
 }
 
 abbr {
@@ -59,7 +72,6 @@ input {
   color: var(--fg-color);
 }
 
-button,
 input,
 .btn {
   border-color: var(--input-border-color);
@@ -68,10 +80,6 @@ input,
   border-style: var(--input-border-style);
 }
 
-button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"],
 .btn {
   background: var(--btn-bg);
   border-color: var(--btn-border-color);
@@ -111,8 +119,6 @@ input[type="submit"],
 }
 
 input[type="text"],
-input[type="submit"],
-button,
 .btn {
   height: var(--input-height);
   font-size: var(--input-font-size);

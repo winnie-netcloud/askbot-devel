@@ -186,3 +186,33 @@
   @extend .fas;
   content: fa-content($fa-var-arrow-left);
 }
+
+.with-upvote-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-caret-up);
+}
+
+.with-downvote-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-caret-down);
+}
+
+.with-facebook-icon::before {
+  @extend %fa-icon;
+  @extend .fab;
+  content: fa-content($fa-var-facebook-square);
+}
+
+.with-linkedin-icon::before {
+  @extend %fa-icon;
+  @extend .fab;
+  content: fa-content($fa-var-linkedin);
+}
+
+.with-twitter-icon::before {
+  @extend %fa-icon;
+  @extend .fab;
+  content: fa-content($fa-var-twitter);
+}

@@ -10,7 +10,7 @@
                 position: $('.badge-ctnr').index(item)
             }
             $.ajax({
-                type: 'post',
+                type: 'POST',
                 dataType: 'json',
                 url: askbot.urls.reorderBadges,
                 data: postData

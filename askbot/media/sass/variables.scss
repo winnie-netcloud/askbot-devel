@@ -1,68 +1,64 @@
 @use "./sass_variables.scss";
+@use "./colors.scss";
 
 :root {
-  --debug-transparency: 1;
-  --bronze-badge-color: hsl(30, 91%, 46%);
-  --silver-badge-color: hsl(0, 0%, 80%);
-  --gold-badge-color: hsl(46, 100%, 50%);
-  --header-link-color: hsl(74, 57%, 74%);
+  --header-link-color: var(--clr-neutral-80);
   --header-link-color-hover: white;
-  --system-messages-bg-color: hsla(50, 87%, 69%, var(--debug-transparency));
-  --system-messages-border-color: hsl(50, 100%, 88%);
-  --danger-color: hsl(0, 79%, 47%);
-  --danger-light-color: hsl(0, 79%, 60%);
-  --danger-dark-color: hsl(0, 80%, 42%);
+  --system-messages-bg-color: var(--clr-highlight-70);
+  --system-messages-border-color: var(--clr-highlight-90);
   --transition-duration: 0.1s;
   --transition-timing-function: steps(2, jump-end);
   --transition-params: var(--transition-duration) var(--transition-timing-function);
   --border-width: 1px;
   --border-style: solid;
-  --border-radius: 0;
+  --border-radius: 0px;
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
   --semi-transparent-bg-color: rgba(255, 255, 255, 0.9);
 
   --btn-fg-color: var(--bg-color);
-  --btn-bg: hsla(199, 75%, 62%, var(--debug-transparency));
-  --btn-hover-bg: hsl(199, 70%, 57%);
-  --btn-border-color: hsl(199, 62%, 52%);
-  --btn-hover-border-color: hsl(199, 62%, 45%);
+  --btn-bg: var(--clr-ok-65);
+  --btn-hover-bg: var(--clr-ok-60);
+  --btn-border-color: var(--clr-ok-50);
+  --btn-hover-border-color: var(--clr-ok-45);
   --btn-font-size: var(--input-font-size);
 
-  --btn-muted-bg: hsl(0, 0%, 73%, var(--debug-transparency));
-  --btn-muted-border-color: hsl(0, 0%, 65%);
+  --btn-muted-bg: var(--clr-neutral-70);
+  --btn-muted-border-color: var(--clr-neutral-65);
   --btn-muted-fg-color: var(--bg-color);
 
-  --btn-muted-hover-bg: hsl(0, 0%, 65%, var(--debug-transparency));
-  --btn-muted-hover-border-color: hsl(0, 0%, 58%);
+  --btn-muted-hover-bg: var(--clr-neutral-65);
+  --btn-muted-hover-border-color: var(--clr-neutral-60);
 
-  --fg-color: hsl(0, 0%, 21%);
+  --fg-color: var(--clr-neutral-20);
   --layout-max-width: 960px;
   --layout-sidebar-width: 204px;
   --layout-horizontal-padding: 0.75rem;
-  --font-size: 1rem;
-  --small-font-size: 0.875rem;
+
   --extra-small-font-size: 0.75rem;
-  --larger-font-size: 1.25rem;
+  --small-font-size: 0.875rem;
+  --font-size: 1rem;
+  --large-font-size: 1.25rem;
+  --extra-large-font-size: 1.5rem;
 
   --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
   --input-border-radius: var(--border-radius);
   --input-border-style: var(--border-style);
   --input-border-width: var(--border-width);
-  --input-border-color: hsl(60, 16%, 75%);
+  --input-border-color: var(--clr-highlight-pale-75);
   --input-bg-color: var(--bg-color);
   --input-font-size: 1rem;
 
   --header-height: 2.75rem; //login link, meta nav: tags, users, badges links
-  --header-bg-color: hsla(60, 19%, 7%, var(--debug-transparency));
+  --header-bg-color: var(--clr-neutral-10);
   --header-navs-padding-bottom: 0.125rem;
 
   --scope-nav-font-size: var(--forum-header-font-size);
 
   --forum-header-height: var(--header-height); //search bar and ask button
-  --forum-header-bg-color: hsla(60, 15%, 90%, var(--debug-transparency));
-  --forum-header-fg-color: hsl(60, 0%, 48%); //icons, text on buttons
-  --forum-header-fg-hover-color: hsl(60, 0%, 35%); //icons, text on buttons
+  --forum-header-bg-color: var(--clr-highlight-pale-90);
+  --forum-header-fg-color: var(--clr-neutral-50); //icons, text on buttons
+  --forum-header-fg-hover-color: var(--clr-neutral-35); //icons, text on buttons
   --forum-header-font-size: var(--font-size);
   --forum-header-input-border-color: var(--input-border-color);
 
@@ -70,15 +66,15 @@
   --footer-padding: 1rem 0;
   --footer-row-margin: 0 0 0.25rem;
 
-  --link-color: hsl(199, 80%, 40%);
-  --link-hover-color: hsl(199, 80%, 30%);
+  --link-color: var(--clr-ok-40);
+  --link-hover-color: var(--clr-ok-30);
 
   --meta-nav-dropdown-breakpoint: #{sass_variables.$meta_nav_dropdown_breakpoint};
 
-  --ask-btn-bg-color: hsla(199, 75%, 62%, var(--debug-transparency));
-  --ask-btn-hover-bg-color: hsl(199, 70%, 57%);
-  --ask-btn-border-color: hsl(199, 62%, 52%);
-  --ask-btn-hover-border-color: hsl(199, 62%, 45%);
+  --ask-btn-bg-color: var(--clr-ok-65);
+  --ask-btn-hover-bg-color: var(--clr-ok-60);
+  --ask-btn-border-color: var(--clr-ok-50);
+  --ask-btn-hover-border-color: var(--clr-ok-45);
   --ask-btn-font-size: var(--forum-header-font-size);
   --ask-btn-fg-color: var(--bg-color);
 
@@ -96,21 +92,21 @@
 
   --search-bar-vertical-margin: 0px;
   --search-bar-font-size: var(--forum-header-font-size);
-  --search-btn-bg-color: hsla(60, 15%, 95%, var(--debug-transparency));
-  --search-btn-hover-bg-color: hsl(60, 15%, 90%);
+  --search-btn-bg-color: var(--clr-highlight-pale-95);
+  --search-btn-hover-bg-color: var(--clr-highlight-pale-90);
   --search-drop-menu-bg-color: var(--bg-color);
   --search-input-height: 100%;
 
-  --sidebar-heading-font-size: var(--larger-font-size);
+  --sidebar-heading-font-size: var(--large-font-size);
   --sidebar-heading-font-weight: bold;
   --sidebar-heading-font-style: normal;
 
   --sort-nav-bg: var(--search-btn-bg-color);
-  --sort-nav-hover-bg: hsl(0, 0%, 85%);
+  --sort-nav-hover-bg: vac(--clr-neutral-85);
   --sort-nav-selected-fg-color: var(--fg-color);
   --sort-nav-fg-color: var(--forum-header-fg-color);
   --sort-nav-height: 2rem;
-  --sort-nav-sep-color: hsl(60, 16%, 80%);
+  --sort-nav-sep-color: var(--clr-highlight-pale-80);
 
   --question-summary-count-box-padding: 0.125rem 0 0 0;
   --question-summary-count-box-width: 3rem;
@@ -123,13 +119,23 @@
   --tag-font-size: var(--small-font-size);
   --tag-height: 1.25rem;
   --tag-delete-btn-bg: var(--sort-nav-sep-color);
-  --tag-delete-btn-hover-bg: var(--danger-dark-color);
+  --tag-delete-btn-hover-bg: var(--clr-danger);
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
   --tag-delete-btn-fg-hover-color: var(--bg-color);
   --tags-gap: 0.3625rem;
 
-  --rss-color: hsl(28, 100%, 50%);
-  --rss-hover-color: hsl(0, 100%, 50%);
+  --autocompleter-hover-bg: var(--clr-ok-65);
 
-  --autocompleter-hover-bg: hsla(199, 75%, 62%, var(--debug-transparency));
+  --post-vote-controls-width: 2rem;
+  --post-vote-controls-margin: 0 0.625rem 0 0;
+  --post-vote-btn-width: 1rem;
+  --post-vote-btn-height: 1rem;
+  --post-vote-btn-group-margin: 0.25rem 0 0.5rem;
+  --post-vote-btn-inactive-color: hsl(60, 0%, 48%);
+  --post-votes-font-size: 1rem;
+  --post-share-button-width: 1rem;
+  --post-padding: 0.5rem 0 0;
+
+  --question-detail-title-font-size: var(--extra-large-font-size);
+  --question-detail-title-margin: 0 0 0.5rem;
 }

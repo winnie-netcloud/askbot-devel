@@ -7,14 +7,14 @@
   .remove-system-messages-btn {
     background: none;
     border: none;
-    color: var(--danger-color);
+    color: var(--clr-danger-dark);
     font-weight: bold;
     position: absolute;
     right: 0.5rem;
     top: 0.575rem;
     transition: var(--transition-color);
     &:hover {
-      color: var(--danger-light-color);
+      color: var(--clr-danger);
       transition: var(--transition-color);
     }
   }
@@ -28,10 +28,10 @@
     padding-right: 2rem;
   }
   a, a:active {
-    color: var(--danger-color);
+    color: var(--clr-danger-dark);
     transition: var(--color-transition);
     &:hover {
-      color: var(--danger-light-color);
+      color: var(--clr-danger);
       transition: var(--color-transition);
     }
   }

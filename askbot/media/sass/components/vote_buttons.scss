@@ -1,0 +1,25 @@
+.js-post-vote-btn-group {
+  text-align: center;
+  margin: var(--post-vote-btn-group-margin);
+}
+
+.js-post-vote-btn {
+  font-size: calc(1.5 * var(--post-vote-btn-width));
+  width: var(--post-vote-btn-width);
+  height: var(--post-vote-btn-height);
+  cursor: pointer;
+  color: var(--post-vote-btn-inactive-color);
+  &::before {
+    display: flex;
+    align-items: center;
+    width: var(--post-vote-btn-width);
+    height: var(--post-vote-btn-height);
+  }
+  &:hover {
+    color: var(--post-vote-btn-inactive-hover-color);
+  }
+}
+
+.js-post-vote-number {
+  font-size: var(--post-votes-font-size);
+}

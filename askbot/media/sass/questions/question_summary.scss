@@ -3,7 +3,7 @@
   margin-bottom: 0.25rem;
   h2 {
     display: block;
-    font-size: var(--larger-font-size);
+    font-size: var(--large-font-size);
     font-weight: normal;
     line-height: 1em;
     margin: 0 0 0.75rem;
@@ -79,16 +79,16 @@
 }
 
 .question-views-count {
-  background: linear-gradient(to top, hsl(180, 25%, 90%), var(--bg-color));
-  color: hsl(191, 38%, 25%);
+  background: linear-gradient(to top, var(--clr-ok-pale), var(--bg-color));
+  color: var(--clr-ok-40);
 }
 
 .question-answers-count {
-  background: linear-gradient(to top, hsl(60, 70%, 91%), var(--bg-color));
-  color: hsl(40, 80%, 59%);
+  background: linear-gradient(to top, var(--clr-highlight-pale), var(--bg-color));
+  color: var(--answers-count-color);
 }
 
 .question-votes-count {
-  background: linear-gradient(to top, hsl(10, 29%, 92%), var(--bg-color));
-  color: hsl(18, 100%, 41%);
+  background: linear-gradient(to top, var(--clr-danger-pale), var(--bg-color));
+  color: var(--clr-danger);
 }

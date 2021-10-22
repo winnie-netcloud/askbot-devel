@@ -19,7 +19,7 @@
   &.js-scrolled::after {
     --shadow-height: 0.3625rem;
     background: linear-gradient(to bottom, hsl(0 0 0 / 0.04), hsl(0 0 0 / 0));
-    border-top: 1px solid hsl(0, 0%, 90%);
+    border-top: 1px solid var(--crl-neutral-90);
     border-bottom-left-radius: calc(2 * var(--shadow-height));
     border-bottom-right-radius: calc(2 * var(--shadow-height));
     bottom: calc(-1 * var(--shadow-height));
@@ -46,7 +46,7 @@
   background: var(--semi-transparent-bg-color);
   flex-grow: 1;
   font-weight: normal;
-  font-size: var(--larger-font-size);
+  font-size: var(--large-font-size);
   height: var(--sort-nav-height);
   padding: 3px 1rem 0 0;
   @media(max-width: 690px) {
@@ -56,14 +56,14 @@
 
 .js-rss-link {
   align-items: center;
-  color: var(--rss-color);
+  color: var(--rss-link-color);
   display: flex;
   font-size: var(--small-font-size);
   padding: 0 0.75rem 2px 0.25rem;
   background: var(--semi-transparent-bg-color);
   transition: color var(--transition-params);
   &:hover {
-    color: var(--rss-hover-color);
+    color: var(--rss-link-hover-color);
     transition: color var(--transition-params);
   }
   &::before {
@@ -77,7 +77,7 @@
 }
 
 .js-search-tags-label {
-  font-size: var(--larger-font-size);
+  font-size: var(--large-font-size);
   padding-top: 1px;
   position: relative;
   top: -0.25rem;

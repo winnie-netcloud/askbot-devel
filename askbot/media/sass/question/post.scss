@@ -1,0 +1,31 @@
+.post {
+  display: flex;
+  padding: var(--post-padding);
+  h1 {
+    font-size: var(--question-detail-title-font-size);
+    margin: var(--question-detail-title-margin);
+    .js-editable-content,
+    .js-editable-controls,
+    .js-edit {
+      display: inline;
+    }
+    .js-edit {
+      color: hsl(60, 0%, 48%);
+      font-size: var(--large-font-size);
+      text-decoration-thickness: 1px;
+      &:hover {
+      }
+    }
+  }
+}
+
+.post-vote-controls {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: var(--post-vote-controls-margin);
+  width: var(--post-vote-controls-width);
+}
+
+.post-content {
+}
