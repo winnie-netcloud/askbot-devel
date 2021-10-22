@@ -1,10 +1,8 @@
 .sidebar-box {
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--tags-gap);
-  }
-  .tags.js-has-tags {
-    margin-bottom: var(--tags-gap);
+  ul.tags {
+    li {
+      display: inline-block;
+      margin: 0 var(--tags-gap) var(--tags-gap) 0;
+    }
   }
 }

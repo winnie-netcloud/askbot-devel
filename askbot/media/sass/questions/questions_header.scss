@@ -16,6 +16,7 @@
   padding: 0 var(--layout-horizontal-padding);
   position:relative;
 
+  /* removed b/c it interferes with the .js-search-tags
   &.js-scrolled::after {
     --shadow-height: 0.3625rem;
     background: linear-gradient(to bottom, hsl(0 0 0 / 0.04), hsl(0 0 0 / 0));
@@ -29,6 +30,7 @@
     position: absolute;
     width: calc(100% - var(--layout-horizontal-padding));
   }
+  */
 
   @media(max-width: 690px) {
     margin-bottom: 0.5rem;
@@ -78,16 +80,20 @@
 
 .js-search-tags-label {
   font-size: var(--large-font-size);
-  padding-top: 1px;
   position: relative;
-  top: -0.25rem;
+  top: 0.125rem;
 }
 
 .js-search-tags {
-  margin: 0.625rem 0 0;
-  .tags {
-    display: flex;
-    gap: 0 var(--tags-gap);
-    flex-wrap: wrap;
+  background: var(--semi-transparent-bg-color);
+  display: inline-block;
+  margin: -0.125rem 0 0.25rem;
+  padding: 0.25rem 0;
+  ul.tags {
+    display: block;
+    li {
+      display: inline-block;
+      margin: 0 var(--tags-gap) 0 0;
+    }
   }
 }
