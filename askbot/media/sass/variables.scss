@@ -34,6 +34,7 @@
   --layout-sidebar-width: 205px;
   --layout-horizontal-padding: 0.75rem;
 
+  --2extra-small-font-size: 10px;
   --extra-small-font-size: 0.75rem;
   --small-font-size: 0.875rem;
   --font-size: 1rem;
@@ -48,6 +49,12 @@
   --input-border-color: var(--clr-highlight-pale-75);
   --input-bg-color: var(--bg-color);
   --input-font-size: 1rem;
+
+  --error-popup-padding: 1rem 1rem 1.3625rem;
+  --error-popup-border-radius: var(--border-radius);
+  --error-popup-bg: var(--clr-danger-dark);
+  --error-popup-color: var(--bg-color);
+  --error-popup-font-size: var(--font-size);
 
   --header-height: 2.75rem; //login link, meta nav: tags, users, badges links
   --header-bg-color: var(--clr-neutral-10);
@@ -126,8 +133,8 @@
 
   --autocompleter-hover-bg: var(--clr-ok-65);
 
-  --post-vote-controls-width: 2rem;
-  --post-vote-controls-margin: 0 0.625rem 0 0;
+  --post-vote-controls-width: 1.25rem;
+  --post-vote-controls-margin: 0 0.75rem 0 3px;
   --post-vote-btn-width: 1rem;
   --post-vote-btn-height: 1rem;
   --post-vote-btn-group-margin: 0.25rem 0 0.5rem;
@@ -136,6 +143,18 @@
   --post-share-button-width: 1rem;
   --post-padding: 0.5rem 0 0;
 
+  --post-update-info-details-color: var(--clr-neutral-40);
+  --post-update-info-details-hover-color: var(--clr-neutral-20);
+
+  --reputation-badge-font-size: var(--2extra-small-font-size);
+  --reputation-badge-color: var(--bg-color);
+  --reputation-badge-bg: var(--clr-neutral-60);
+  --reputation-badge-height: 0.75rem;
+  --reputation-badge-line-height: 0.75rem;
+  --reputation-badge-padding: 0 0.25rem;
+  --reputation-badge-border-radius: calc(0.5 * var(--reputation-badge-height));
+  --reputation-badge-box-shadow: 0 0 0 1px var(--bg-color);
+
   --question-detail-title-font-size: var(--extra-large-font-size);
-  --question-detail-title-margin: 0 0 0.5rem;
+  --question-detail-title-margin: 0 0 0.3625rem;
 }

@@ -28,4 +28,8 @@
 }
 
 .post-content {
+  flex-grow: 1;
+  .js-editable-content {
+    margin-bottom: 0.75rem;
+  }
 }

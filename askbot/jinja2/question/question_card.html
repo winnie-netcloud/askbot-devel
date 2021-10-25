@@ -22,16 +22,7 @@
       </div>
     </h1>
     {% include "question/question_tags.html" %}
-
     <div class="post-body">
-      <div class="js-editable-hide-post-body-{{ question.pk }}">
-        <div class="post-update-info-container">
-          {% include "question/question_author_info.html" %}
-        </div>
-        {% if question.needs_moderation() %}
-          <p class="moderated">{% trans %}This post is awaiting moderation, please do not repost the same content!{% endtrans %}</p>
-        {% endif %}
-      </div>
       <div class="js-editable"
         id="js-post-body-{{ question.pk }}"
         data-get-text-url="{{ url('get_post_body') }}?post_id={{ question.pk }}"
@@ -43,6 +34,12 @@
         data-validator="askbot.validators.questionDetailsValidator"
       >
         <div class="js-editable-content">{{ question.summary }}</div>
+        <div class="js-editable-hide-post-body-{{ question.pk }}">
+          {{ macros.post_last_updater_and_creator_info(question) }}
+          {% if question.needs_moderation() %}
+            <div class="moderated">{% trans %}This post is awaiting moderation, please do not repost the same content!{% endtrans %}</div>
+          {% endif %}
+        </div>
         <div class="js-editable-controls"></div>
       </div>
     </div>

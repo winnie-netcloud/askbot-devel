@@ -1,6 +1,11 @@
 .js-post-vote-btn-group {
+  position: relative;
   text-align: center;
   margin: var(--post-vote-btn-group-margin);
+  .js-error-popup {
+    left: calc(1.5 * var(--post-vote-btn-width));
+    top: 0;
+  }
 }
 
 .js-post-vote-btn {

@@ -1,21 +1,18 @@
+/* global fixedEncodeURIComponent, askbot, copyAltToTitle, setupButtonEventHandlers */
 ( 
   function SocialSharing () {
     var SERVICE_DATA = {
       //url - template for the sharing service url, params are for the popup
-      identica: {
-        url: 'http://identi.ca/notice/new?status_textarea={TEXT}%20{URL}',
-        params: 'width=820, height=526,toolbar=1,status=1,resizable=1,scrollbars=1'
-      },
       twitter: {
-        url: 'http://twitter.com/share?url={URL}&ref=twitbtn&text={TEXT}',
+        url: 'https://twitter.com/share?url={URL}&ref=twitbtn&text={TEXT}',
         params: 'width=820,height=526,toolbar=1,status=1,resizable=1,scrollbars=1'
       },
       facebook: {
-        url: 'http://www.facebook.com/sharer.php?u={URL}&ref=fbshare&t={TEXT}',
+        url: 'https://www.facebook.com/sharer.php?u={URL}&ref=fbshare&t={TEXT}',
         params: 'width=630,height=436,toolbar=1,status=1,resizable=1,scrollbars=1'
       },
       linkedin: {
-        url: 'http://www.linkedin.com/shareArticle?mini=true&url={URL}&title={TEXT}',
+        url: 'https://www.linkedin.com/sharing/share-offsite?url={URL}',
         params: 'width=630,height=436,toolbar=1,status=1,resizable=1,scrollbars=1'
       }
     };
@@ -33,31 +30,26 @@
         }
         return false;
       }
-    };
+    }
 
-    return {
-      init: function () {
-        URL = window.location.href;
-        var urlBits = URL.split('/');
-        URL = urlBits.slice(0, -2).join('/') + '/';
-        TEXT = encodeURIComponent($('h1 > a').text());
-        var hashtag = encodeURIComponent(askbot.settings.sharingSuffixText);
-        TEXT = TEXT.substr(0, 134 - URL.length - hashtag.length);
-        TEXT = TEXT + '... ' + hashtag;
-        var fb = $('.js-facebook-share');
-        var tw = $('.js-twitter-share');
-        var ln = $('.js-linkedin-share');
-        var ica = $('.js-identica-share');
-        copyAltToTitle(fb);
-        copyAltToTitle(tw);
-        copyAltToTitle(ln);
-        copyAltToTitle(ica);
-        setupButtonEventHandlers(fb, function () { share_page('facebook'); });
-        setupButtonEventHandlers(tw, function () { share_page('twitter'); });
-        setupButtonEventHandlers(ln, function () { share_page('linkedin'); });
-        setupButtonEventHandlers(ica, function () { share_page('identica'); });
-      }
-    };
+    function init () {
+      URL = window.location.href;
+      var urlBits = URL.split('/');
+      URL = fixedEncodeURIComponent(urlBits.slice(0, -2).join('/') + '/');
+      TEXT = fixedEncodeURIComponent($('h1 > a').text());
+      var hashtag = fixedEncodeURIComponent(askbot.settings.sharingSuffixText);
+      TEXT = TEXT.substr(0, 134 - URL.length - hashtag.length);
+      TEXT = TEXT + '... ' + hashtag;
+      var fb = $('.js-facebook-share');
+      var tw = $('.js-twitter-share');
+      var ln = $('.js-linkedin-share');
+      copyAltToTitle(fb);
+      copyAltToTitle(tw);
+      copyAltToTitle(ln);
+      setupButtonEventHandlers(fb, function () { sharePage('facebook'); });
+      setupButtonEventHandlers(tw, function () { sharePage('twitter'); });
+      setupButtonEventHandlers(ln, function () { sharePage('linkedin'); });
+    }
+    init();
   }
-  SocialSharing.init();
 )();

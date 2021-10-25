@@ -10,15 +10,15 @@ var PostVote = (function () {
   };
 
   function updateBtnIcon(undo, button) {
-    var wasActive = button.hasClass('js-active');
+    var wasActive = $(button).hasClass('js-active');
     if (undo) {
-      var btnGroup = button.closest('.js-post-vote-btn-group');
+      var btnGroup = $(button).closest('.js-post-vote-btn-group');
       btnGroup.find('.js-post-vote-btn').removeClass('js-active');
     }
     if (wasActive) {
-      button.removeClass('js-active');
+      $(button).removeClass('js-active');
     } else {
-      button.addClass('js-active');
+      $(button).addClass('js-active');
     }
   }
 
@@ -74,13 +74,13 @@ var PostVote = (function () {
   }
 
   function getVoteType(button) {
-
     var cls = button.attr('class');
-    if (cls.includes('question')) {
+    var postType = button.data('postType');
+    if (postType.includes('question')) {
       if (cls.includes('upvote')) return VoteTypes.questionUpVote;
       if (cls.includes('downvote')) return VoteTypes.questionDownVote;
     } 
-    if (cls.includes('answer')) {
+    if (postType.includes('answer')) {
       if (cls.includes('upvote')) return VoteTypes.answerUpVote;
       if (cls.includes('downvote')) return VoteTypes.answerDownVote;
     }
@@ -89,8 +89,8 @@ var PostVote = (function () {
 
   function vote(button) {
     if (!askbot.data.userId) {
-      var pleaseLogin = ' <a href="' + askbot.urls.user_signin + '">' + gettext('please login') + '</a>';
-      var voteAnonymousMessage = gettext('anonymous users cannot vote') + pleaseLogin;
+      var pleaseLogin = '<p><a href="' + askbot.urls.user_signin + '">' + gettext('please login') + '</a></p>';
+      var voteAnonymousMessage = '<p>' + gettext('anonymous users cannot vote') + '</p>' + pleaseLogin;
       showMessage(
         button,
         voteAnonymousMessage.replace('{{QuestionID}}', askbot.data.questionId)
@@ -103,7 +103,7 @@ var PostVote = (function () {
 
   return {
     init: function () {
-      $('js-post-vote-btn')
+      $('.js-post-vote-btn')
         .unbind('click')
         .click(function (evt) { vote($(evt.target)) });
     }

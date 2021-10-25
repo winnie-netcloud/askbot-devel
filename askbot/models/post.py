@@ -3,7 +3,6 @@ import operator
 import logging
 
 from django.contrib.sitemaps import ping_google
-from django.utils import html
 from django.conf import settings as django_settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -26,14 +25,14 @@ from askbot import signals
 from askbot.utils.loading import load_plugin, load_function
 from askbot.utils.slug import slugify
 from askbot import const
-from askbot.models.tag import Tag, MarkedTag
+from askbot.models.tag import MarkedTag
 from askbot.models.tag import tags_match_some_wildcard
 from askbot.models.fields import LanguageCodeField
 from askbot.conf import settings as askbot_settings
 from askbot import exceptions
 from askbot.utils import markup
 from askbot.utils.html import (get_word_count, has_moderated_tags,
-                               moderate_tags, sanitize_html, strip_tags,
+                               moderate_tags, sanitize_html,
                                site_url)
 from askbot.utils.transaction import defer_celery_task
 from askbot.models.base import (AnonymousContent, BaseQuerySetManager,
@@ -41,7 +40,7 @@ from askbot.models.base import (AnonymousContent, BaseQuerySetManager,
 
 # TODO: maybe merge askbot.utils.markup and forum.utils.html
 from askbot.utils.diff import textDiff as htmldiff
-from askbot.search import mysql
+#from askbot.search import mysql
 
 
 def default_html_moderator(post):
@@ -654,7 +653,11 @@ class Post(models.Model):
     def get_latest_revision_diff(self, ins_start=None, ins_end=None,
                                  del_start=None, del_end=None):
         # returns formatted html diff of the latest two revisions
-        revisions = self.revisions.order_by('-id')[:2]
+        revisions = self.revisions.exclude(revision=0).order_by('-id')
+        if revisions.count() < 2:
+            return ''
+
+        revisions = revisions[:2]
         return htmldiff(sanitize_html(revisions[1].html),
                         sanitize_html(revisions[0].html),
                         ins_start=ins_start,
@@ -1512,7 +1515,7 @@ class Post(models.Model):
     def get_latest_revision(self):
         if hasattr(self, '_last_rev_cache'):
             return self._last_rev_cache
-        rev = self.revisions.order_by('-revision')[0]
+        rev = self.revisions.exclude(revision=0).order_by('-revision')[0]
         self.cache_latest_revision(rev)
         return rev
 #       # TODO: remove this method
@@ -1521,11 +1524,12 @@ class Post(models.Model):
     def get_earliest_revision(self):
         if hasattr(self, '_first_rev_cache'):
             return self._first_rev_cache
-        rev = self.revisions.order_by('revision')[0]
+        rev = self.revisions.exclude(revision=0).order_by('revision')[0]
         setattr(self, '_first_rev_cache', rev)
         return rev
 
     def get_latest_revision_number(self):
+        """Returns order number of the latest revision"""
         try:
             return self.get_latest_revision().revision
         except IndexError:
@@ -2186,8 +2190,7 @@ class PostRevision(models.Model):
         """
         if self.post.revisions.count() == 1:
             if self.revision == 0:
-                # call below hides post from the display to the
-                # general public
+                # call below hides post from the display to the general public
                 self.post.set_is_approved(False)
             activity_type = const.TYPE_ACTIVITY_MODERATED_NEW_POST
         else:
@@ -2247,12 +2250,11 @@ class PostRevision(models.Model):
         schedule = askbot_settings.SELF_NOTIFY_EMAILED_POST_AUTHOR_WHEN
         if schedule == const.NEVER:
             return False
-        elif schedule == const.FOR_FIRST_REVISION:
+        if schedule == const.FOR_FIRST_REVISION:
             return self.revision == 1
-        elif schedule == const.FOR_ANY_REVISION:
+        if schedule == const.FOR_ANY_REVISION:
             return True
-        else:
-            raise ValueError()
+        raise ValueError()
 
     def __str__(self):
         return '%s - revision %s of %s' % (self.post.post_type, self.revision,
@@ -2290,14 +2292,31 @@ class PostRevision(models.Model):
 
         return url
 
+    def get_action_label(self):
+        if self.revision == 0:
+            return _('proposed an edit')
+        if self.revision == 1:
+            if self.post.post_type == 'question':
+                return html_utils.escape(askbot_settings.WORDS_ASKED)
+            if self.post.post_type == 'answer':
+                return html_utils.escape(askbot_settings.WORDS_ANSWERED)
+            return _('posted')
+        return _('updated')
+
     def get_question_title(self):
         # INFO: ack-grepping shows that it's only used for Questions,
         #       so there's no code for Answers
         return self.question.thread.title
 
     def get_origin_post(self):
-        """same as Post.get_origin_post()"""
+        """Same as Post.get_origin_post()"""
         return self.post.get_origin_post()
+
+    def get_original_post_author(self):
+        """Returns original author of the post"""
+        if self.post.post_type in ('question', 'answer'):
+            return self.post.author
+        return None
 
     @property
     def html(self, **kwargs):

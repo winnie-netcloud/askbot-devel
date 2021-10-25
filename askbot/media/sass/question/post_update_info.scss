@@ -1,0 +1,49 @@
+.post-update-info-container {
+  display: flex;
+  margin: 0 0 0.5rem 0;
+}
+
+.post-update-info {
+  border-radius: 0.25rem;
+  display: flex;
+  margin-right: 0.5rem;
+  min-width: 11rem;
+  padding: 0.3625rem;
+  background: var(--clr-neutral-95);
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.post-update-info-avatar {
+  margin-right: 0.25rem;
+  .js-avatar-box {
+    position: relative;
+  }
+  .js-avatar {
+    border-radius: 50%;
+  }
+  .reputation-badge {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 0;
+  }
+}
+
+.post-update-info-details {
+  display: flex;
+  font-size: var(--small-font-size);
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0.125rem 0;
+  a,
+  a:active,
+  a:visited {
+    color: var(--post-update-info-details-color);
+    text-decoration: none;
+    &:hover {
+      color: var(--post-update-info-details-hover-color);
+    }
+  }
+}

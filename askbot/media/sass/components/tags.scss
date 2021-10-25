@@ -1,5 +1,9 @@
-.tags {
+ul.tags {
   list-style: none;
+  li {
+    display: inline-block;
+    margin: 0 var(--tags-gap) var(--tags-gap) 0;
+  }
 }
 
 .js-tag {

@@ -89,11 +89,7 @@
   display: inline-block;
   margin: -0.125rem 0 0.25rem;
   padding: 0.25rem 0;
-  ul.tags {
-    display: block;
-    li {
-      display: inline-block;
-      margin: 0 var(--tags-gap) 0 0;
-    }
+  li {
+    margin-bottom: 0;
   }
 }

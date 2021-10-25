@@ -1,3 +1,5 @@
+/* global askbot, jQuery, ngettext, gettext, interpolate, MathJax */
+
 /**
  * attention - this function needs to be retired
  * as it cannot accurately give url to the media file
@@ -5,6 +7,14 @@
 var mediaUrl = function (resource) {
     return askbot.settings.static_url + 'default' + '/' + resource;
 };
+
+
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
+}
+
 
 /** todo: look up available alternatives
  * this makes assumption that url is path?param1=value1&param2=value2...
@@ -288,25 +298,26 @@ var inArray = function (item, itemsList) {
 };
 
 var showMessage = function (element, msg, where) {
-    var div = $('<div class="vote-notification"><h3>' + msg + '</h3>(' +
-    gettext('click to close') + ')</div>');
-    where = where || 'parent';
+  var div = $('<div class="js-error-popup">' + msg + 
+              '<p class="js-error-popup-hint">(' + gettext('click to close') + ')</p>' +
+              '</div>');
+  where = where || 'parent';
 
-    div.click(function (event) {
-        if (event.target.nodeName === 'A') {
-            return true;
-        }
-        $('.vote-notification').fadeOut('fast', function () { $(this).remove(); });
-        return false;
-    });
-
-    if (where === 'parent') {
-        element.parent().append(div);
-    } else {
-        element.after(div);
+  div.click(function (event) {
+    if (event.target.nodeName === 'A') {
+      return true;
     }
+    $('.js-error-popup').fadeOut('fast', function () { $(this).remove(); });
+    return false;
+  });
 
-    div.fadeIn('fast');
+  if (where === 'parent') {
+    element.parent().append(div);
+  } else {
+    element.after(div);
+  }
+
+  div.fadeIn('fast');
 };
 
 //outer html hack - https://github.com/brandonaaron/jquery-outerhtml/

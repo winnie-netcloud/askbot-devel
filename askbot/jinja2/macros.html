@@ -7,7 +7,7 @@
 {%- macro inbox_message_snippet(message) -%}
 <div class="message-details" data-message-id="{{ message.id }}">
     <input type="checkbox" />
-    {{ gravatar(message.user, 16) }}
+    {{ gravatar(message.user, 16, hide_rep=True) }}
     <a class="username" href="{{ message.user.get_absolute_url() }}">{{ message.user.username|escape }}</a>
     <a class="forum-post-link" href="{{ message.url }}">{{ message.message_type }}</a>
     ({{ timeago(message.timestamp) }})
@@ -23,7 +23,7 @@
 {%- macro moderation_queue_message(message) -%}
 <div class="message-details" data-message-id="{{ message.id }}">
     <input type="checkbox" />
-    {{ gravatar(message.user, 16) }}
+    {{ gravatar(message.user, 16, hide_rep=True) }}
     <a class="username" href="{{ message.user.get_absolute_url() }}">{{ message.user.username|escape }}</a> |
     {% if message['memo_type'] == 'edit' %}
         {{ mailto_link(message.user.email) }} |
@@ -38,95 +38,85 @@
 
 {%- macro post_vote_buttons(post = None) -%}
 <div class="js-post-vote-btn-group">
-  <div class="js-post-vote-btn js-post-upvote-btn with-upvote-icon" data-post-id="{{post.id}}"></div>
+  <div class="js-post-vote-btn js-post-upvote-btn with-upvote-icon"
+    data-post-id="{{post.id}}"
+    data-post-type="{{post.post_type}}"
+  ></div>
   <div class="js-post-vote-number"
-    title="{% trans %}current number of votes{% endtrans %}"
-  >{{ post.score }}</div>
-  <div class="js-post-vote-btn js-post-downvote-btn with-downvote-icon" data-post-id="{{post.id}}"></div>
+    title="{% trans count=post.score %}{{ count }} vote{% pluralize %}{{ count }} votes{% endtrans %}"
+  >{{ post.score|humanize_counter }}</div>
+  <div class="js-post-vote-btn js-post-downvote-btn with-downvote-icon"
+    data-post-id="{{post.id}}"
+    data-post-type="{{post.post_type}}"
+  >
+  </div>
   <script type="text/javascript">
       askbot['functions']['renderPostVoteButtons']('{{post.post_type}}', '{{post.id}}');
   </script>
 </div>
 {%- endmacro -%}
 
-{%- macro post_contributor_avatar_and_credentials(revision) -%}
-    {% if revision.is_anonymous %}
-        <img alt="{% trans %}anonymous user{% endtrans %}" src="{{ '/images/anon.png'|media }} " class="gravatar" width="32" height="32" />
-        <p>{{ revision.author.get_anonymous_name() }}</p>
-    {% else %}
-        {{ user_card(revision.author) }}
-    {% endif %}
-    {% if settings.GROUPS_ENABLED %}
-        {{ user_primary_group(revision.author) }}
-    {% endif %}
-{%- endmacro -%}
-
 {%- macro post_last_updater_and_creator_info(post) -%}
+  <div class='post-update-info-container'>
     {% if post.wiki %}
-    <div class='post-update-info'>
-        <p>
-           {%- if post.post_type == 'question' -%}
-               {% set action_performed=settings.WORDS_ASKED|escape %}
-           {% elif post.post_type == 'answer' %}
-               {% set action_performed=settings.WORDS_ANSWERED|escape %}
-           {% else %}
-               {%- set action_performed=gettext('posted') %}
-           {% endif %}
-           <strong>{{ timeago(post.added_at, action_performed=action_performed) }}</strong>
-        </p>
-        <img width="35" height="35"
-            src="{{'/images/wiki.png'|media}}"
-            alt="{% trans %}this post is marked as community wiki{% endtrans %}"
-            style="float:left"
-        />
-        {% set wiki_min_rep = settings.MIN_REP_TO_EDIT_WIKI %}
-        <p class="tip">{% trans %}This post is a wiki.
-        Anyone with karma &gt;{{wiki_min_rep}} is welcome to improve it.{% endtrans %}</p>
-    </div>
+      <div class='post-update-info'>
+        <div class="with-wiki-icon"></div>
+        <div>
+          {% set last_rev = post.get_latest_revision() %}
+          <div>{{ timeago(post.added_at, action_performed=last_rev.get_action_label()) }}</div>
+          {% set wiki_min_rep = settings.MIN_REP_TO_EDIT_WIKI %}
+          <div class="tip">{% trans %}This post is a wiki.
+          Anyone with karma &gt;{{wiki_min_rep}} is welcome to improve it.{% endtrans %}</div>
+        </div>
+      </div>
     {% else %}
-        {% set first_rev = post.get_earliest_revision() %}
-        {% set last_rev = post.get_latest_revision() %}
-        {{ post_contributor_info(first_rev, "original_author") }}
-        {% if first_rev != last_rev %}
-            {{ post_contributor_info(last_rev, "last_updater") }}
-        {% endif %}
+      {% set first_rev = post.get_earliest_revision() %}
+      {% set last_rev = post.get_latest_revision() %}
+      {{ post_contributor_info(first_rev, last_rev) }}
+      {% if first_rev != last_rev and first_rev.author_id != last_rev.author_id %}
+        {{ post_contributor_info(last_rev) }}
+      {% endif %}
     {% endif %}
+  </div>
 {%- endmacro -%}
 
-{%- macro post_contributor_info(revision, contributor_type) -%}
-<div class='post-update-info'>
-{% if contributor_type=="original_author" %}
+{%- macro post_revision_link(revision) -%}
+  <a class="post-revision-link"
     {% if revision.post.post_type == 'question' %}
-        {% set action_label = settings.WORDS_ASKED|escape %}
-    {% elif revision.post.post_type == 'answer' %}
-        {% set action_label = settings.WORDS_ANSWERED|escape %}
+      href="{{ url('question_revisions',  revision.post.id ) }}"
     {% else %}
-        {% set action_label = gettext('posted') %}
+      href="{{ url('answer_revisions',  revision.post.id ) }}"
     {% endif %}
-{% else %}
-    {% set action_label = gettext('updated') %}
-{% endif %}
-    {% if revision.post.post_type in ('question', 'answer') %}
-        {% set original_author = revision.post.author %}
-    {% else %}
-        {% set original_author = None %}
-    {% endif %}
-    <p style="line-height:12px;">
-        <a
-        {% if revision.post.post_type == 'question' %}
-            href="{{ url('question_revisions',  revision.post.id ) }}"
-        {% else %}
-            href="{{ url('answer_revisions',  revision.post.id ) }}"
+  >{{ timeago(revision.revised_at, action_performed=revision.get_action_label()) }}</a>
+{%- endmacro -%}
+
+{%- macro post_contributor_info(revision, last_revision=None) -%}
+<div class='post-update-info'>
+  <div class='post-update-info-avatar'>
+  {% if revision.is_anonymous %}
+    {{ anon_avatar(32) }}
+  {% else %}
+    {{ gravatar(revision.author, 32) }}
+  {% endif %}
+  </div>
+  <div class='post-update-info-details'>
+    <div class='post-update-info-author-name'>
+      {% if revision.is_anonymous %}
+        {{ settings.NAME_OF_ANONYMOUS_USER }}
+      {% else %}
+        <a href="{{ revision.author.get_absolute_url() }}">{{ revision.author.username }}</a>
+        {% if settings.GROUPS_ENABLED %}
+          {{ user_primary_group(revision.author) }}
         {% endif %}
-        ><strong>{{ timeago(revision.revised_at, action_performed=action_label) }}</strong></a>
-    </p>
-    {% set show_user_info = (contributor_type == 'original_author' or
-        (contributor_type == 'last_updater' and
-        original_author != revision.author ))
-    %}
-    {% if show_user_info %}
-        {{ post_contributor_avatar_and_credentials(revision) }}
-    {% endif %}
+      {% endif %}
+    </div>
+    <div class='post-update-info-revision-links'>
+      {{ post_revision_link(revision) }}
+      {%- if revision != last_revision and revision.author_id == last_revision.author_id -%},
+        {{ post_revision_link(last_revision) }}
+      {% endif %}
+    </div>
+  </div>
 </div>
 {%- endmacro -%}
 
@@ -377,17 +367,10 @@ for the purposes of the AJAX comment editor #}
             <div class="comment-controls">
                 {# important - the same number for avatar size must be in question/javascript.html #}
                 {% if hasattr(comment.author, 'is_terminated') and comment.author.is_terminated() %} {#comment.author.is_terminated() %#}
-                    <span class="js-avatar-box">
-                        <img class="gravatar"
-                            alt="{% trans %}anonymous user{% endtrans %}"
-                            src="{{ '/images/anon.png'|media }}"
-                            width="16"
-                            height="16"
-                        />
-                    </span>
+                    {{ anon_avatar(16) }}
                     <span class="author">{{ comment.author.get_anonymous_name() }}</span>
                 {% else %}
-                    {{ gravatar(comment.author, 16) }}
+                    {{ gravatar(comment.author, 16, hide_rep=True) }}
                     <a class="author" href="{{ comment.author.get_profile_url() }}">
                         {{ comment.author.username|escape }}
                     </a>
@@ -583,7 +566,7 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {% macro user_card(user) %}
-    {% include "widgets/user_card.html" %}
+  {% include "widgets/user_card.html" %}
 {% endmacro %}
 
 {%- macro user_list(users) -%}
@@ -591,15 +574,33 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {#todo: rename this to avatar #}
-{%- macro gravatar(user, size) -%}
+{%- macro gravatar(user, size, hide_rep=False) -%}
 {% filter trim %}
-<a class="js-avatar-box" href="{{ user.get_absolute_url() }}"
-  ><img class="js-avatar gravatar"
+<a class="js-avatar-box" href="{{ user.get_absolute_url() }}">
+  <img class="js-avatar gravatar"
     src="{{ user.get_avatar_url(size) }}"
     alt="{{user.username|escape}}"
-  
-/></a>
+    width="{{ size }}"
+    height="{{ size }}"
+  />
+  {% if hide_rep == False and settings.KARMA_MODE == 'public' %}
+    <div class="reputation-badge">
+      {{ user.reputation|humanize_counter }}
+    </div>
+  {% endif %}
+</a>
 {% endfilter %}
+{%- endmacro -%}
+
+{%- macro anon_avatar(size) -%}
+  <span class="js-avatar-box">
+    <img class="js-avatar gravatar"
+      alt="{% trans %}anonymous user{% endtrans %}"
+      src="{{ '/images/anon.png'|media }}"
+      width="{{ size }}"
+      height="{{ size }}"
+    />
+  </span>
 {%- endmacro -%}
 
 {%- macro user_website_link(user, max_display_length=25, force_show=False) -%}
@@ -762,18 +763,18 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {%- macro timeago(datetime_object, action_performed=None) -%}
-    {% set when='<abbr class="timeago" title="'
+    {%- set when='<abbr class="timeago" title="'
                 ~ datetime_object.replace(microsecond=0)|add_tz_offset
                 ~ '">'
                 ~ datetime_object.replace(microsecond=0)|add_tz_offset
                 ~ '</abbr>'
-    %}
-    {% if action_performed %}
+    -%}
+    {%- if action_performed -%}
         {# action and time can be reversed, depending on language #}
         {% trans %}{{ action_performed }} {{ when }}{% endtrans %}
-    {% else %}
+    {%- else -%}
         {{ when }}
-    {% endif %}
+    {%- endif -%}
 {%- endmacro -%}
 
 {% macro one_shot_form_js(form=None, submit_button=None) %}

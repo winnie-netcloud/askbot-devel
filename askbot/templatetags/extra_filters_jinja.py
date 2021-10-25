@@ -367,8 +367,8 @@ def can_see_offensive_flags(user, post):
 register.filter('can_see_offensive_flags', can_see_offensive_flags)
 
 @register.filter
-def humanize_counter(number):
-    if number == 0:
+def humanize_counter(number, humanize_zero=False):
+    if humanize_zero and number == 0:
         return _('no')
     elif number >= 1000:
         number = number/1000

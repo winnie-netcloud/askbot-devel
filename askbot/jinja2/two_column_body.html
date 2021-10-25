@@ -14,7 +14,7 @@
 <script>
   (function() {
     var toggleBtn = document.getElementsByClassName('js-toggle-sidebar-button')[0];
-    toggleBtn.addEventListener('click', function() {
+    toggleBtn && toggleBtn.addEventListener('click', function() {
       var sidebar = document.getElementsByClassName('js-sidebar-col')[0];
       sidebar.classList.toggle('js-visible');
       toggleBtn.classList.toggle('js-active')

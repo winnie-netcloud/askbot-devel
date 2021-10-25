@@ -4291,6 +4291,7 @@ $(document).ready(function () {
     var askButton = new AskButton();
     askButton.decorate($('#askButton'));
 
+    /* temp disable modal dialog
     if (askbot.data.userIsThreadModerator) {
         var mergeQuestions = new MergeQuestionsDialog();
         $('body').append(mergeQuestions.getElement());
@@ -4298,5 +4299,5 @@ $(document).ready(function () {
         setupButtonEventHandlers(mergeBtn, function () {
             mergeQuestions.show();
         });
-    }
+    }*/
 });
