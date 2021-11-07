@@ -100,19 +100,23 @@
     {% endif %}
 {% endblock %}
 {% block endjs %}
-    {{ super() }}
-    <script type="text/javascript">
-        askbot['urls']['join_or_leave_group'] = '{{ url('join_or_leave_group') }}';
-        $(document).ready(function(){
-            setup_badge_details_toggle();
-            $.each($('.group-join-btn'), function(idx, elem){
-                var group_join_btn = new GroupJoinButton();
-                group_join_btn.decorate($(elem));
-            });
-        });
-    </script>
-    {% compress js %}
-    <script type='text/javascript' src='{{ "/js/tag_selector.js"|media }}'></script>
-    {% endcompress %}
+  {{ super() }}
+  {% compress js %}
+  <script src='{{ "/js/tag_selector.js"|media }}'></script>
+  <script src='{{ "/js/utils/simple_control.js"|media }}'></script>
+  <script src='{{ "/js/utils/toggle.js"|media }}'></script>
+  <script src='{{ "/js/utils/ajax_toggle.js"|media }}'></script>
+  <script src='{{ "/js/utils/group_join_button.js"|media }}'></script>
+  {% endcompress %}
+  <script type="text/javascript">
+    askbot['urls']['join_or_leave_group'] = '{{ url('join_or_leave_group') }}';
+    $(document).ready(function(){
+      setup_badge_details_toggle();
+      $.each($('.group-join-btn'), function(idx, elem){
+        var groupJoinBtn = new GroupJoinButton();
+        groupJoinBtn.decorate($(elem));
+      });
+    });
+  </script>
 {% endblock %}
 <!-- end user_stats.html -->

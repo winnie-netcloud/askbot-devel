@@ -299,13 +299,8 @@ class PostManager(BaseQuerySetManager):
         qs = Post.objects.get_comments().filter(parent__in=for_posts)\
             .select_related('author')
 
-        comments_reversed = askbot_settings.COMMENTS_REVERSED
-
         if visitor.is_anonymous:
-            if comments_reversed:
-                comments = list(qs.order_by('-added_at'))
-            else:
-                comments = list(qs.order_by('added_at'))
+            comments = list(qs.order_by('added_at'))
         else:
             upvoted_by_user = list(qs.filter(votes__user=visitor).distinct())
             not_upvoted_by_user = list(qs.exclude(votes__user=visitor).distinct())
@@ -314,7 +309,7 @@ class PostManager(BaseQuerySetManager):
                 c.upvoted_by_user = 1  # numeric value to maintain compatibility with previous version of this code
 
             comments = upvoted_by_user + not_upvoted_by_user
-            comments.sort(key=operator.attrgetter('added_at'), reverse=comments_reversed)
+            comments.sort(key=operator.attrgetter('added_at'))
 
         post_map = defaultdict(list)
         for cm in comments:
@@ -1092,7 +1087,7 @@ class Post(models.Model):
         new_count = get_word_count(truncated)
         orig_count = get_word_count(self.html)
         if new_count + 1 < orig_count:
-            expander = '<span class="expander"> <a>(' + _('more') + ')</a></span>'
+            expander = '<span class="js-expander"> <a>(' + _('more') + ')</a></span>'
             if truncated.endswith('</p>'):
                 # better put expander inside the paragraph
                 snippet = truncated[:-4] + expander + '</p>'
@@ -1101,7 +1096,7 @@ class Post(models.Model):
             # it is important to have div here, so that we can make
             # the expander work
             from askbot.utils.html import sanitize_html
-            return sanitize_html('<div class="snippet">' + snippet + '</div>')
+            return sanitize_html('<div class="js-snippet">' + snippet + '</div>')
         else:
             return self.html
 

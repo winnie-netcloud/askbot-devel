@@ -1276,67 +1276,6 @@ class RevisionForm(forms.Form):
         self.fields['revision'].initial = latest_revision.revision
 
 
-class EditQuestionForm(PostAsSomeoneForm, PostPrivatelyForm):
-    summary = SummaryField()
-    wiki = WikiField()
-    suppress_email = SuppressEmailField()
-
-    # TODO: this is odd that this form takes question as an argument
-    def __init__(self, *args, **kwargs):
-        """populate EditQuestionForm with initial data"""
-        self.question = kwargs.pop('question')
-        self.user = kwargs.get('user')#preserve for superclass
-        revision = kwargs.pop('revision')
-        super(EditQuestionForm, self).__init__(*args, **kwargs)
-        # it is important to add this field dynamically
-        self.fields['text'] = QuestionEditorField(user=self.user)
-        self.fields['title'] = TitleField()
-        self.fields['title'].initial = revision.title
-        self.fields['text'].initial = revision.text
-        self.fields['text'].label = _('Details')
-        self.fields['tags'] = TagNamesField()
-        self.fields['tags'].initial = revision.tagnames
-        self.fields['wiki'].initial = self.question.wiki
-        # hide the reveal identity field
-        if self.can_edit_anonymously():
-            self.fields['reveal_identity'] = forms.BooleanField(
-                    label=_('remove anonymity'), required=False,)
-
-        if askbot.is_multilingual():
-            self.fields['language'] = LanguageField()
-
-        if should_use_recaptcha(self.user):
-            self.fields['recaptcha'] = AskbotReCaptchaField()
-
-    def clean(self):
-        edit_anonymously = not self.cleaned_data.get('reveal_identity', True)
-        self.cleaned_data['edit_anonymously'] = edit_anonymously
-        return self.cleaned_data
-
-    def has_changed(self):
-        if super(EditQuestionForm, self).has_changed():
-            return True
-
-        if askbot_settings.GROUPS_ENABLED:
-            was_private = self.question.is_private()
-            if was_private != self.cleaned_data['post_privately']:
-                return True
-
-        if askbot.is_multilingual():
-            old_language = self.question.thread.language_code
-            if old_language != self.cleaned_data['language']:
-                return True
-        else:
-            return False
-
-    def can_edit_anonymously(self):
-        """determines if the user cat keep editing the question
-        anonymously"""
-        return (askbot_settings.ALLOW_ASK_ANONYMOUSLY and
-                self.question.is_anonymous and
-                self.user.is_owner_of(self.question))
-
-
 class EditAnswerForm(PostAsSomeoneForm, PostPrivatelyForm):
     summary = SummaryField()
     wiki = WikiField()
@@ -1356,7 +1295,6 @@ class EditAnswerForm(PostAsSomeoneForm, PostPrivatelyForm):
             self.fields['recaptcha'] = AskbotReCaptchaField()
 
     def has_changed(self):
-        # TODO: this function is almost copy/paste of EditQuestionForm.has_changed()
         if super(EditAnswerForm, self).has_changed():
             return True
         if askbot_settings.GROUPS_ENABLED:

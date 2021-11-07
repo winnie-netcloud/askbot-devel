@@ -1085,8 +1085,6 @@ class Thread(models.Model):
 
         post_data = self.get_cached_post_data(user=user, sort_method=sort_method)
         if user.is_anonymous:
-            if askbot_settings.COMMENTS_REVERSED:
-                reverse_comments(post_data)
             return post_data
 
         if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation' and user.is_watched():
@@ -1149,8 +1147,6 @@ class Thread(models.Model):
                             post_data[0] = post
                             all_posts.append(post)
 
-        if askbot_settings.COMMENTS_REVERSED:
-            reverse_comments(post_data)
         return post_data
 
     def get_cached_post_data(self, user=None, sort_method=None):

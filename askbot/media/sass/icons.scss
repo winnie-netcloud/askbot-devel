@@ -3,7 +3,7 @@
 @import '../fa-5.15.3/scss/regular.scss';
 @import '../fa-5.15.3/scss/brands.scss';
 
-.moderation-queue-icon::before {
+.with-warning-icon::before {
   @extend %fa-icon;
   @extend .fas;
   content: fa-content($fa-var-exclamation-triangle);
@@ -74,10 +74,13 @@
   content: fa-content($fa-var-circle);
 }
 
-.with-times-icon::before {
-  @extend %fa-icon;
-  @extend .fas;
-  content: fa-content($fa-var-times);
+.with-delete-icon,
+.with-times-icon {
+  &::before {
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-times);
+  }
 }
 
 .with-times-circle-icon::before {
@@ -193,6 +196,7 @@
   content: fa-content($fa-var-caret-up);
 }
 
+.with-caret-down-icon::before,
 .with-downvote-icon::before {
   @extend %fa-icon;
   @extend .fas;
@@ -215,4 +219,52 @@
   @extend %fa-icon;
   @extend .fab;
   content: fa-content($fa-var-twitter);
+}
+
+.with-edit-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-pencil-alt);
+}
+
+.with-flag-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-flag);
+}
+
+.with-close-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-lock);
+}
+
+.with-merge-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-code-branch);
+}
+
+.with-comment-upvote-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-arrow-up);
+}
+
+.with-convert-post-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-retweet);
+}
+
+.with-link-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-link);
+}
+
+.with-accept-answer-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-check-circle);
 }

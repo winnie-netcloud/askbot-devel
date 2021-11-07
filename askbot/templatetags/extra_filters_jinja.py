@@ -151,8 +151,8 @@ def truncate_html_post(post_html):
     """truncates html if it is longer than 100 words"""
     post_html = Truncator(post_html).words(5, truncate=' ...', html=True)
     post_html = '<div class="truncated-post">' + post_html
-    post_html += '<span class="expander">(<a>' + _('more') + '</a>)</span>'
-    post_html += '<div class="clearfix"></div></div>'
+    post_html += '<span class="js-expander">(<a>' + _('more') + '</a>)</span>'
+    post_html += '</div>'
     return post_html
 
 @register.filter

@@ -1,0 +1,73 @@
+.js-post-comments {
+  margin: var(--post-comments-margin);
+}
+
+.js-post-comments:not(.js-empty) {
+  .comments-list-controls {
+    margin-left: var(--comment-votes-width);
+  }
+}
+
+.js-comments-list {
+  margin: var(--comments-list-margin);
+}
+
+.comments-list-controls {
+  display: inline-block;
+}
+
+.js-comment {
+  display: flex;
+}
+
+.comment-votes {
+  width: var(--comment-votes-width);
+}
+
+
+.js-comments-list-title {
+  margin: var(--comments-list-title-margin);
+  font-size: var(--comments-list-title-font-size);
+}
+
+.js-comments-list .js-comment {
+  margin: var(--comment-margin);
+}
+
+.comment-controls {
+  .js-avatar-box {
+    vertical-align: middle;
+  }
+  .action-link::before {
+    font-size: var(--post-controls-icon-size);
+    margin: var(--post-controls-icon-margin);
+  }
+}
+
+.js-comment-upvote-btn {
+  &::before {
+    font-size: 0.75rem;
+    color: var(--comment-upvote-btn-color);
+    transition: color var(--transition-params);
+    cursor: pointer;
+    padding: var(--comment-upvote-btn-icon-padding);
+  }
+  &:hover::before {
+    color: var(--comment-upvote-btn-hover-color);
+    transition: color var(--transition-params);
+  }
+  &.js-active::before {
+    color: var(--comment-upvote-active-btn-color);
+    &:hover {
+      color: var(--comment-upvote-active-btn-hover-color);
+    }
+  }
+}
+
+form.repost-comment-as-answer {
+  display: inline-block;
+}
+
+.js-comment-edit-btn {
+  margin-right: 0.125rem;
+}

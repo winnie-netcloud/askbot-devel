@@ -148,7 +148,9 @@
         make_links=True,
         search_state=None,
         css_class=None,
-        truncate_long_tags=False
+        truncate_long_tags=False,
+        question_id=None,
+        with_edit_link=False
     )
 -%}
   <ul class="tags{% if tags %} js-has-tags{% endif %}{% if css_class %} {{css_class}}{% endif %}">
@@ -169,6 +171,17 @@
         </li>
         {% endfilter %}
       {%- endfor -%}
+      {% if with_edit_link %}
+        <li>
+          <span class="action-link js-question-retag" data-question-id="{{ question_id }}">
+            {% if tags|length > 0 %}
+              {% trans %}retag{% endtrans %}
+            {% else %}
+              {% trans %}add tags{% endtrans %}
+            {% endif %}
+          </span>
+        </li>
+      {% endif %}
     {% endif %}
   </ul>
 {%- endmacro -%}
@@ -315,22 +328,9 @@
 for the purposes of the AJAX comment editor #}
 
 {%- macro comments_widget_buttons(post = None, max_comments = None) -%}
-    {% if post.comment_count > max_comments %}
-        {% if settings.COMMENTS_REVERSED == False %}
-            <a class="hidden js-open-editor-btn">{% trans %}add a comment{% endtrans %}</a>
-        {% endif %}
-        <a class="js-load-comments-btn">
-            {% if settings.COMMENTS_REVERSED %}
-                {% trans %}load older comments{% endtrans %}
-            {% else %}
-                {% trans %}see more comments{% endtrans %}
-            {% endif %}
-        </a>
-    {% else %}
-        {% if settings.COMMENTS_REVERSED == False %}
-            <a class="js-open-editor-btn">{% trans %}add a comment{% endtrans %}</a>
-        {% endif %}
-    {% endif %}
+  {% set more_comments = post.comment_count > max_comments %}
+  <a class="js-add-comment-btn action-link {% if more_comments %}js-hidden{% endif %}">{% trans %}add a comment{% endtrans %}</a>
+  <a class="js-load-comments-btn action-link {% if not more_comments %}js-hidden{% endif %}">{% trans %}see more comments{% endtrans %}</a>
 {%- endmacro -%}
 
 {%- macro csrf_middleware_token(csrf_token) -%}
@@ -340,112 +340,96 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {%- macro comment_widget(comment, csrf_token=None) -%}
-    {# Warning! Any changes to the comment markup must be duplicated in post.js
-       for the purposes of the AJAX comment editor #}
-    <div id="post-id-{{ comment.id }}" class="comment js-comment" data-post-id="{{ comment.id }}">
-        <div class="comment-votes">
-            <div
-                id="comment-img-upvote-{{ comment.id }}"
-                class="upvote js-score"
-            >{% if comment.score > 0 %}{{ comment.score }}{% endif %}</div>
-            {% if comment.id %}
-            <script type="text/javascript">
-                askbot['functions']['renderPostVoteButtons']('comment', '{{ comment.id }}');
-            </script>
-            {% endif %}
-        </div>
-        <div class="comment-content">
-            <div id="post-{{ comment.id }}-delete" class="comment-delete">
-                <span class="js-delete-icon" title="{% trans %}delete this comment{% endtrans %}"></span>
-            </div>
-            {% if comment.needs_moderation() %}
-                <p class="moderated">{% trans %}This post is awaiting moderation, please do not repost the same content!{% endtrans %}</p>
-            {% endif %}
-            <div class="comment-body">
-                {{ comment.summary }}
-            </div>
-            <div class="comment-controls">
-                {# important - the same number for avatar size must be in question/javascript.html #}
-                {% if hasattr(comment.author, 'is_terminated') and comment.author.is_terminated() %} {#comment.author.is_terminated() %#}
-                    {{ anon_avatar(16) }}
-                    <span class="author">{{ comment.author.get_anonymous_name() }}</span>
-                {% else %}
-                    {{ gravatar(comment.author, 16, hide_rep=True) }}
-                    <a class="author" href="{{ comment.author.get_profile_url() }}">
-                        {{ comment.author.username|escape }}
-                    </a>
-                {% endif %}
-                <span class="age">&nbsp;({{ timeago(comment.added_at) }})</span>
-                <a
-                    id="post-{{ comment.id }}-edit"
-                    class="js-edit"
-                >{% trans %}edit{% endtrans %}</a>
-                <form
-                    action="{{ url('comment_to_answer') }}"
-                    method="POST"
-                    accept-charset="utf-8"
-                    class='convert-comment'
-                >
-                    {{ csrf_input }}
-                    <input type="hidden" value="{{ comment.id }}" name="comment_id">
-                    <input type="submit" value="{% trans %}convert to answer{% endtrans %}">
-                </form>
-            </div>
-        </div>
+  <div class="js-comment" data-post-id="{{ comment.id }}">
+    <div class="comment-votes">
+      <div class="js-comment-upvote-btn js-score with-comment-upvote-icon"
+        title="{% trans %}upvote comment{% endtrans %}"
+      >{% if comment.score > 0 %}{{ comment.score }}{% endif %}</div>
+      {% if comment.id %}
+      <script type="text/javascript">
+        askbot['functions']['renderPostVoteButtons']('comment', '{{ comment.id }}');
+      </script>
+      {% endif %}
     </div>
-    {% if comment.id %}
-    <script type="text/javascript">
-        askbot['functions']['hideConvertLinks']();
-        askbot['functions']['renderPostControls']('{{ comment.id }}');
-    </script>
-    {% endif %}
+    <div class="comment-content">
+      {% if comment.needs_moderation() %}
+        {% include "components/post_awaiting_moderation.html" %}
+      {% endif %}
+      <div class="js-comment-body">
+        {{ comment.summary }}
+      </div>
+      <div class="comment-controls">
+        {# important - the same number for avatar size must be in question/javascript.html #}
+        {% if hasattr(comment.author, 'is_terminated') and comment.author.is_terminated() %}
+          {{ anon_avatar(16) }}
+          <span class="js-comment-author">{{ comment.author.get_anonymous_name() }}</span>
+        {% else %}
+          {{ gravatar(comment.author, 16, hide_rep=True) }}
+          <a class="js-comment-author" href="{{ comment.author.get_profile_url() }}"
+          >{{comment.author.username|escape}}</a>
+        {% endif %}
+        <span class="comment-age">({{ timeago(comment.added_at) }})</span>
+        <span class="action-link js-comment-edit-btn">{% trans %}edit{% endtrans %}</span>
+        <div class="js-dropdown-menu toolbar-dropdown-menu action-link">
+          <div class="js-dropdown-trigger with-caret-down-icon">{% trans %}more{% endtrans %}</div>
+          <ul class="js-dropdown-target">
+            <li>
+              <span class="action-link js-comment-delete-btn"
+                title="{% trans %}delete this comment{% endtrans %}">delete</span>
+            </li>
+            <li>
+              <form class="repost-comment-as-answer" action="{{ url('comment_to_answer') }}" method="POST" accept-charset="utf-8">
+                {{ csrf_input }}
+                <input type="hidden" value="{{ comment.id }}" name="comment_id">
+                <input class="action-link js-comment-convert-btn with-convert-post-icon" type="submit" value="{% trans %}convert to answer{% endtrans %}">
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if comment.id %}
+  <script type="text/javascript">
+      askbot['functions']['hideConvertLinks']();
+      askbot['functions']['renderPostControls']('{{ comment.id }}');
+  </script>
+  {% endif %}
 {%- endmacro -%}
 
-{%- macro post_comments_widget(
-        post=None,
-        show_post=None,
-        show_comment=None,
-        show_comment_position=None,
-        user=None,
-        max_comments=None,
-        csrf_token=None
-    )
--%}
-    {% filter trim %}
-    {% if show_post == post and show_comment and show_comment_position > max_comments %}
-        {% set comments = post.get_cached_comments()[:show_comment_position] %}
-    {% else %}
-        {% set comments = post.get_cached_comments()[:max_comments] %}
-    {% endif %}
-    {% set comments_count = comments|length %}
-    {% if comments_count > 0 or settings.COMMENTS_REVERSED %}
-        <h2 class="comment-title">{% trans %}Comments{% endtrans %}</h2>
-        <div class="clean"></div>
-    {% endif %}
-    <div class="comments{% if comments_count == 0 %} empty{% endif %} ordering-{% if settings.COMMENTS_REVERSED %}reversed{% else %}forward{% endif %}"
-        data-parent-post-type="{{ post.post_type }}"
-        data-parent-post-id="{{ post.id }}"
-    >
-        {% if settings.COMMENTS_REVERSED %}
-            <div class="js-open-editor-btn new-comment-box">
-                {% set prompt=gettext('add a comment...') %}
-                {% include "widgets/mock_editor.html" %}
-            </div>
-        {% endif %}
-        <div class="content">
-            {% for comment in comments %}
-                {{ comment_widget(comment, csrf_token) }}
-            {% endfor %}
-        </div>
-        <div class="controls">
-            {% if show_post == post and show_comment and show_comment_position > max_comments %}
-                {{ comments_widget_buttons(post=post, max_comments=show_comment_position) }}
-            {% else %}
-                {{ comments_widget_buttons(post=post, max_comments=max_comments) }}
-            {% endif %}
-        </div>
+{%- macro post_comments(
+  post=None,
+  show_post=None,
+  show_comment=None,
+  show_comment_position=None,
+  user=None,
+  max_comments=None,
+  csrf_token=None
+) -%}
+  {% if show_post == post and show_comment and show_comment_position > max_comments %}
+    {% set comments = post.get_cached_comments()[:show_comment_position] %}
+  {% else %}
+    {% set comments = post.get_cached_comments()[:max_comments] %}
+  {% endif %}
+  {% set comments_count = comments|length %}
+  <div class="js-post-comments {% if comments_count == 0 %}js-empty{% endif %}"
+    data-post-id="{{ post.pk }}"
+    data-post-type="{{ post.post_type }}">
+    <h2 class="js-comments-list-title {% if comments_count == 0 %}js-hidden{% endif %}"
+    >{% trans %}Comments{% endtrans %}</h2>
+    <div class="js-comments-list">
+      {% for comment in comments %}
+        {{ comment_widget(comment, csrf_token) }}
+      {% endfor %}
     </div>
-    {% endfilter %}
+    <div class="comments-list-controls">
+      {% if show_post == post and show_comment and show_comment_position > max_comments %}
+        {{ comments_widget_buttons(post=post, max_comments=show_comment_position) }}
+      {% else %}
+        {{ comments_widget_buttons(post=post, max_comments=max_comments) }}
+      {% endif %}
+    </div>
+  </div>
 {%- endmacro -%}
 
 {%- macro reversible_sort_button(
@@ -524,10 +508,6 @@ for the purposes of the AJAX comment editor #}
             delay: 10
     });
     tagAc.decorate($("{{ id }}"));
-{%- endmacro -%}
-
-{%- macro answer_classes(answer, question) -%}
- {% if answer.endorsed %}accepted-answer{% endif %} {% if answer.author_id==question.author_id %} answered-by-owner{% endif %} {% if answer.deleted %}deleted{% endif -%}
 {%- endmacro -%}
 
 {%- macro user_long_score_and_badge_summary(user) -%}

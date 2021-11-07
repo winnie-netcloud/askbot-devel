@@ -1,3 +1,4 @@
+/* global getSuperClass, inherits, Form, FoldedEditor */
 var AnswerForm = function () {
     Form.call(this);
 };
@@ -16,7 +17,7 @@ AnswerForm.prototype.getAfterOpenHandler = function () {
 AnswerForm.prototype.decorate = function (element) {
     this._element = element;
     /* todo: move folded editor inside the answer form! */
-    var editorBox = element.closest('.folded-editor');
+    var editorBox = element.closest('.js-folded-editor');
     if (editorBox.length) {
         var foldedEditor = new FoldedEditor();
         foldedEditor.decorate(editorBox);

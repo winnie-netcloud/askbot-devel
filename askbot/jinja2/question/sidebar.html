@@ -93,10 +93,9 @@
             {% endif -%}
             {%- if sharing_info['more_users_count'] > 0 %}
                 {% trans %}and{% endtrans %}
-                <a
-                    class="see-related-users"
-                    data-url="{{ url('get_thread_shared_users') }}"
-                    data-thread-id="{{ thread.id }}"
+                <a class="js-see-related-users"
+                  data-url="{{ url('get_thread_shared_users') }}"
+                  data-thread-id="{{ thread.id }}"
                 >{% trans
                         more_count=sharing_info['more_users_count']
                     %}{{ more_count }} more{% endtrans %}
@@ -113,10 +112,9 @@
                 {%- endfor -%}
                 {% if sharing_info['more_groups_count'] > 0 %}
                     {% trans %}and{% endtrans %}
-                    <a
-                        class="see-related-groups"
-                        data-url="{{ url('get_thread_shared_groups') }}"
-                        data-thread-id="{{ thread.id }}"
+                    <a class="js-see-related-groups"
+                      data-url="{{ url('get_thread_shared_groups') }}"
+                      data-thread-id="{{ thread.id }}"
                     >{% trans more_count=sharing_info['more_groups_count'] %}{{ more_count }} more{% endtrans %}
                     </a>
                 {% endif %}

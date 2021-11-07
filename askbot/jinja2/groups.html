@@ -46,11 +46,11 @@
 {% endblock %}
 {% block endjs %}
     {% compress js %}
-    <script type="text/javascript" src="{{ '/jslib/jquery.validate.min.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/jslib/prettify.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/utils/toggle.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/post.js'|media }}"></script>
+    <script src="{{ '/jslib/jquery.validate.min.js'|media }}"></script>
+    <script src="{{ '/jslib/prettify.js'|media }}"></script>
+    <script src="{{ '/js/utils/toggle.js'|media }}"></script>
+    <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
+    <script src="{{ '/js/utils/group_join_button.js'|media }}"></script>
     {% endcompress %}
     {% if request.user.is_authenticated %}
     <script type="text/javascript">

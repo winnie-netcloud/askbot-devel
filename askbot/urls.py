@@ -302,11 +302,6 @@ urlpatterns = [
         views.writers.ask,
         name='ask'
     ),
-    url(
-        r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'edit/')),
-        views.writers.edit_question,
-        name='edit_question'
-    ),
     service_url(  # this url is both regular and ajax
         r'^%s(?P<id>\d+)/%s$' % (MAIN_PAGE_BASE_URL, pgettext('urls', 'retag/')),
         views.writers.retag_question,

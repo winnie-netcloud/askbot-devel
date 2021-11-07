@@ -1,3 +1,4 @@
+/* global getSuperClass, inherits, setupButtonEventHandlers, Form, FoldedEditor */
 var AskForm = function () {
     Form.call(this);
 };
@@ -14,7 +15,7 @@ AskForm.prototype.getOpenEditorHandler = function (editor, openLink) {
 AskForm.prototype.decorate = function (element) {
     getSuperClass(AskForm).decorate.call(this, element);
     var openLink = element.find('.js-question-body-trigger');
-    var editorElement = element.find('.folded-editor');
+    var editorElement = element.find('.js-folded-editor');
 
     if (openLink.length && editorElement.length) {
         var editor = new FoldedEditor();

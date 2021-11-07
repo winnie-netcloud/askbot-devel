@@ -44,30 +44,33 @@
         {% include "editors/tinymce_scripts.html" %}
     {% endif %}
     {% compress js %}
-    <script type='text/javascript' src="{{ '/jslib/jquery.form.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/response_notifs.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/notifs_group.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/decline_and_explain_menu.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/post_moderation_controls.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/manage_reject_reasons_dialog.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/user_group.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/groups_container.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/group_adder_widget.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/user_groups_editor.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/tweeting.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/user_questions_paginator.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/user_answer_paginator.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user/download_data.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/user.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/jslib/jquery.validate.min.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/jslib/prettify.js'|media }}"></script>
+    <script src="{{ '/jslib/jquery.form.js'|media }}"></script>
+    <script src="{{ '/js/user/response_notifs.js'|media }}"></script>
+    <script src="{{ '/js/user/notifs_group.js'|media }}"></script>
+    <script src="{{ '/js/user/decline_and_explain_menu.js'|media }}"></script>
+    <script src="{{ '/js/user/post_moderation_controls.js'|media }}"></script>
+    <script src="{{ '/js/user/manage_reject_reasons_dialog.js'|media }}"></script>
+    <script src="{{ '/js/user/user_group.js'|media }}"></script>
+    <script src="{{ '/js/user/groups_container.js'|media }}"></script>
+    <script src="{{ '/js/user/group_adder_widget.js'|media }}"></script>
+    <script src="{{ '/js/user/user_groups_editor.js'|media }}"></script>
+    <script src="{{ '/js/user/tweeting.js'|media }}"></script>
+    <script src="{{ '/js/user/user_questions_paginator.js'|media }}"></script>
+    <script src="{{ '/js/user/user_answer_paginator.js'|media }}"></script>
+    <script src="{{ '/js/user/download_data.js'|media }}"></script>
+    <script src="{{ '/js/user.js'|media }}"></script>
+    <script src="{{ '/jslib/jquery.validate.min.js'|media }}"></script>
+    <script src="{{ '/jslib/prettify.js'|media }}"></script>
     {% include "meta/markdown_javascript.html" %}
-    <script type="text/javascript" src="{{ '/jslib/editor.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/utils/toggle.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/utils/unordered_list.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/post.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/utils/editable.js'|media }}"></script>
+    <script src="{{ '/jslib/editor.js'|media }}"></script>
+    <script src="{{ '/js/utils/toggle.js'|media }}"></script>
+    <script src="{{ '/js/utils/unordered_list.js'|media }}"></script>
+    <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
+    <script src="{{ '/js/editors/wmd_expander_toggle.js'|media }}"></script>
+    <script src="{{ '/js/editors/wmd.js'|media }}"></script>
+    <script src="{{ '/js/editors/simple_editor.js'|media }}"></script>
+    <script src="{{ '/js/editors/tinymce.js'|media }}"></script>
+    <script src="{{ '/js/utils/editable.js'|media }}"></script>
     {% endcompress %}
     {% block userjs %}
     {% endblock %}

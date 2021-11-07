@@ -3,12 +3,12 @@
 {% include "question/question_card.html" %}
 
 {% if answers %}
-  {% include "question/answer_tab_bar.html" %}
-  {{ macros.paginator(paginator_context, anchor='#sort-top') }}
+
+  {% include "question/answers_sort_nav.html" %}
 
   {% if settings.SHOW_ACCEPTED_ANSWER_FIRST == False %}
     {% if thread.has_accepted_answer() and answers and thread.accepted_answer != answers[0] %}
-      <a class="best-answer-link" href="{{ thread.accepted_answer.get_absolute_url() }}">
+      <a class="accepted-answer-link" href="{{ thread.accepted_answer.get_absolute_url() }}">
         {% trans %}See the accepted answer{% endtrans %}
       </a>
     {% endif %}
@@ -22,9 +22,11 @@
   {% endfor %}
 
   {{ macros.paginator(paginator_context, anchor='#sort-bottom') }}
-{% elif settings.QUESTION_PAGE_ALWAYS_SHOW_ANSWER_BANNER %}
-  {% if 'QUESTION_PAGE_ANSWER_BANNER'|show_block_to(request.user) %}
-    <div class="banner">{{ settings.QUESTION_PAGE_ANSWER_BANNER|safe }}</div>
+
+  {% if settings.QUESTION_PAGE_ALWAYS_SHOW_ANSWER_BANNER %}
+    {% if 'QUESTION_PAGE_ANSWER_BANNER'|show_block_to(request.user) %}
+      <div class="banner">{{ settings.QUESTION_PAGE_ANSWER_BANNER|safe }}</div>
+    {% endif %}
   {% endif %}
 {% endif %}
 
@@ -38,15 +40,10 @@
       >{{ settings.WORDS_LOGIN_SIGNUP_TO_ANSWER|escape }}</a>
     {% endif %}
   {% else %}
-    {# TODO: make this button open in-place answer editor, if answer is on the same page #}
-    <a
-      class="button submit"
-      href="{{ url('edit_answer',  previous_answer.id ) }}"
-    >{{ settings.WORDS_EDIT_YOUR_PREVIOUS_ANSWER|escape }}</a>
-    <span>{{ settings.WORDS_ONLY_ONE_ANSWER_PER_USER_IS_ALLOWED|escape }}</span>
-    <div class="invisible">
-      {# hidden because we still need js from the tinymce widget #}
-      {% include "question/new_answer_form.html" %}
+    {% include "question/new_answer_form_title.html" %}
+    <div class="info-box">
+      <div class="mb-2">{{ settings.WORDS_ONLY_ONE_ANSWER_PER_USER_IS_ALLOWED|escape }}</div>
+      <a class="btn" href="{{ url('edit_answer',  previous_answer.id ) }}">{{ settings.WORDS_EDIT_YOUR_PREVIOUS_ANSWER|escape }}</a>
     </div>
   {% endif %}
 {% endif %}

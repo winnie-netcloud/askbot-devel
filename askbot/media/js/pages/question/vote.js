@@ -1,3 +1,4 @@
+/* global askbot, gettext, interpolate, showMessage */
 /**
  * legacy Vote class
  * handles all sorts of vote-like operations
@@ -9,12 +10,10 @@ var Vote = (function () {
     var questionSlug;
     // The object we operate on actually. It can be a question or an answer.
     var postId;
-    var questionAuthorId;
     var currentUserId;
     var answerContainerIdPrefix = 'post-id-';
     var voteContainerId = 'js-vote-buttons';
     var imgIdPrefixAccept = 'answer-img-accept-';
-    var imgIdPrefixQuestionVotedown = 'question-img-downvote-';
     var imgIdPrefixAnswerVoteup = 'answer-img-upvote-';
     var imgIdPrefixAnswerVotedown = 'answer-img-downvote-';
     var voteNumberClass = 'vote-number';
@@ -24,8 +23,6 @@ var Vote = (function () {
     var offensiveIdPrefixAnswerFlag = 'answer-offensive-flag-';
     var removeOffensiveIdPrefixAnswerFlag = 'answer-offensive-remove-flag-';
     var removeAllOffensiveIdPrefixAnswerFlag = 'answer-offensive-remove-all-flag-';
-    var offensiveClassFlag = 'offensive-flag';
-    var questionControlsId = 'question-controls';
     var removeAnswerLinkIdPrefix = 'answer-delete-link-';
     var questionSubscribeUpdates = 'question-subscribe-updates';
     var questionSubscribeSidebar = 'question-subscribe-sidebar';
@@ -203,27 +200,27 @@ var Vote = (function () {
             Vote.vote($(event.target), VoteType.answerDownVote);
         });
 
-        getOffensiveQuestionFlag().unbind('click').click(function (event) {
+        getOffensiveQuestionFlag().unbind('click').click(function () {
             Vote.offensive(this, VoteType.offensiveQuestion);
         });
 
-        getRemoveOffensiveQuestionFlag().unbind('click').click(function (event) {
+        getRemoveOffensiveQuestionFlag().unbind('click').click(function () {
             Vote.remove_offensive(this, VoteType.removeOffensiveQuestion);
         });
 
-        getRemoveAllOffensiveQuestionFlag().unbind('click').click(function (event) {
+        getRemoveAllOffensiveQuestionFlag().unbind('click').click(function () {
             Vote.remove_all_offensive(this, VoteType.removeAllOffensiveQuestion);
         });
 
-        getOffensiveAnswerFlags().unbind('click').click(function (event) {
+        getOffensiveAnswerFlags().unbind('click').click(function () {
             Vote.offensive(this, VoteType.offensiveAnswer);
         });
 
-        getRemoveOffensiveAnswerFlag().unbind('click').click(function (event) {
+        getRemoveOffensiveAnswerFlag().unbind('click').click(function () {
             Vote.remove_offensive(this, VoteType.removeOffensiveAnswer);
         });
 
-        getRemoveAllOffensiveAnswerFlag().unbind('click').click(function (event) {
+        getRemoveAllOffensiveAnswerFlag().unbind('click').click(function () {
             Vote.remove_all_offensive(this, VoteType.removeAllOffensiveAnswer);
         });
 
@@ -248,7 +245,7 @@ var Vote = (function () {
             }
         });
 
-        getremoveAnswersLinks().unbind('click').click(function (event) {
+        getremoveAnswersLinks().unbind('click').click(function () {
             Vote.remove(this, VoteType.removeAnswer);
         });
     };
@@ -285,12 +282,12 @@ var Vote = (function () {
             );
             showMessage(object, message);
         } else if (data.status == '1') {
-            $('#' + answerContainerIdPrefix + postId).removeClass('accepted-answer');
+            $('#' + answerContainerIdPrefix + postId).removeClass('js-accepted-answer');
             object.trigger('askbot.unacceptAnswer', [object, data]);
         } else if (data.success == '1') {
             var answers = ('div[id^="' + answerContainerIdPrefix + '"]');
-            $(answers).removeClass('accepted-answer');
-            $('#' + answerContainerIdPrefix + postId).addClass('accepted-answer');
+            $(answers).removeClass('js-accepted-answer');
+            $('#' + answerContainerIdPrefix + postId).addClass('js-accepted-answer');
             object.trigger('askbot.acceptAnswer', [object, data]);
         } else {
             showMessage(object, data.message);
@@ -315,11 +312,11 @@ var Vote = (function () {
             var obj_id = $(object).attr('id');
             $(object).attr('id', obj_id.replace('flag-', 'remove-flag-'));
 
-            getRemoveOffensiveQuestionFlag().unbind('click').click(function (event) {
+            getRemoveOffensiveQuestionFlag().unbind('click').click(function () {
                 Vote.remove_offensive(this, VoteType.removeOffensiveQuestion);
             });
 
-            getRemoveOffensiveAnswerFlag().unbind('click').click(function (event) {
+            getRemoveOffensiveAnswerFlag().unbind('click').click(function () {
                 Vote.remove_offensive(this, VoteType.removeOffensiveAnswer);
             });
         } else {
@@ -349,11 +346,11 @@ var Vote = (function () {
             var obj_id = $(object).attr('id');
             $(object).attr('id', obj_id.replace('remove-flag-', 'flag-'));
 
-            getOffensiveQuestionFlag().unbind('click').click(function (event) {
+            getOffensiveQuestionFlag().unbind('click').click(function () {
                 Vote.offensive(this, VoteType.offensiveQuestion);
             });
 
-            getOffensiveAnswerFlags().unbind('click').click(function (event) {
+            getOffensiveAnswerFlags().unbind('click').click(function () {
                 Vote.offensive(this, VoteType.offensiveAnswer);
             });
         } else {
@@ -382,11 +379,11 @@ var Vote = (function () {
             $(object).next('span.sep').remove();
             $(object).remove();
 
-            getOffensiveQuestionFlag().unbind('click').click(function (event) {
+            getOffensiveQuestionFlag().unbind('click').click(function () {
                 Vote.offensive(this, VoteType.offensiveQuestion);
             });
 
-            getOffensiveAnswerFlags().unbind('click').click(function (event) {
+            getOffensiveAnswerFlags().unbind('click').click(function () {
                 Vote.offensive(this, VoteType.offensiveAnswer);
             });
         } else {
@@ -400,11 +397,11 @@ var Vote = (function () {
         /*jshint eqeqeq:false */
         if (data.success == '1') {
             if (removeActionType == 'delete') {
-                postNode.addClass('deleted');
+                postNode.addClass('js-deleted-post');
                 postRemoveLink.innerHTML = gettext('undelete');
                 showMessage(object, deletedMessage);
             } else if (removeActionType == 'undelete') {
-                postNode.removeClass('deleted');
+                postNode.removeClass('js-deleted-post');
                 postRemoveLink.innerHTML = gettext('delete');
                 showMessage(object, recoveredMessage);
             }
@@ -537,7 +534,7 @@ var Vote = (function () {
             var do_proceed = false;
             postNode = $('#post-id-' + postId);
             postRemoveLink = object;
-            if (postNode.hasClass('deleted')) {
+            if (postNode.hasClass('js-deleted-post')) {
                 removeActionType = 'undelete';
                 do_proceed = true;
             } else {

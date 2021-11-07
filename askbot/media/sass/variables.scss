@@ -12,14 +12,16 @@
   --border-width: 1px;
   --border-style: solid;
   --border-radius: 0px;
+  --box-shadow: 0 0 0.25rem var(--clr-neutral-80);
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
   --semi-transparent-bg-color: rgba(255, 255, 255, 0.9);
+  --text-decoration-thickness: 1px;
 
   --btn-fg-color: var(--bg-color);
-  --btn-bg: var(--clr-ok-65);
-  --btn-hover-bg: var(--clr-ok-60);
-  --btn-border-color: var(--clr-ok-50);
-  --btn-hover-border-color: var(--clr-ok-45);
+  --btn-bg: var(--clr-blue-65);
+  --btn-hover-bg: var(--clr-blue-60);
+  --btn-border-color: var(--clr-blue-50);
+  --btn-hover-border-color: var(--clr-blue-45);
   --btn-font-size: var(--input-font-size);
 
   --btn-muted-bg: var(--clr-neutral-70);
@@ -34,12 +36,15 @@
   --layout-sidebar-width: 205px;
   --layout-horizontal-padding: 0.75rem;
 
-  --2extra-small-font-size: 10px;
+  --font-size: 16px; //base font size must be in pixels
+  --2extra-small-font-size: 0.625rem;
   --extra-small-font-size: 0.75rem;
   --small-font-size: 0.875rem;
-  --font-size: 1rem;
   --large-font-size: 1.25rem;
   --extra-large-font-size: 1.5rem;
+
+  --action-link-color: var(--clr-neutral-50);
+  --action-link-hover-color: var(--clr-neutral-20);
 
   --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
@@ -73,15 +78,15 @@
   --footer-padding: 1rem 0;
   --footer-row-margin: 0 0 0.25rem;
 
-  --link-color: var(--clr-ok-40);
-  --link-hover-color: var(--clr-ok-30);
+  --link-color: var(--clr-blue-40);
+  --link-hover-color: var(--clr-blue-30);
 
   --meta-nav-dropdown-breakpoint: #{sass_variables.$meta_nav_dropdown_breakpoint};
 
-  --ask-btn-bg-color: var(--clr-ok-65);
-  --ask-btn-hover-bg-color: var(--clr-ok-60);
-  --ask-btn-border-color: var(--clr-ok-50);
-  --ask-btn-hover-border-color: var(--clr-ok-45);
+  --ask-btn-bg-color: var(--clr-blue-65);
+  --ask-btn-hover-bg-color: var(--clr-blue-60);
+  --ask-btn-border-color: var(--clr-blue-50);
+  --ask-btn-hover-border-color: var(--clr-blue-45);
   --ask-btn-font-size: var(--forum-header-font-size);
   --ask-btn-fg-color: var(--bg-color);
 
@@ -131,20 +136,25 @@
   --tag-delete-btn-fg-hover-color: var(--bg-color);
   --tags-gap: 0.3625rem;
 
-  --autocompleter-hover-bg: var(--clr-ok-65);
+  --autocompleter-hover-bg: var(--clr-blue-65);
 
   --post-vote-controls-width: 1.25rem;
   --post-vote-controls-margin: 0 0.75rem 0 3px;
   --post-vote-btn-width: 1rem;
   --post-vote-btn-height: 1rem;
   --post-vote-btn-group-margin: 0.25rem 0 0.5rem;
-  --post-vote-btn-inactive-color: hsl(60, 0%, 48%);
+  --post-vote-btn-inactive-color: var(--clr-neutral-50);
+  --post-vote-btn-inactive-hover-color: var(--clr-neutral-20);
   --post-votes-font-size: 1rem;
   --post-share-button-width: 1rem;
-  --post-padding: 0.5rem 0 0;
 
   --post-update-info-details-color: var(--clr-neutral-40);
   --post-update-info-details-hover-color: var(--clr-neutral-20);
+  --post-update-info-container-margin: 0 0 0.5rem;
+  --post-controls-icon-size: 0.75rem;
+  --post-controls-icon-margin: 0 0.125rem 0 0;
+  --post-body-margin: 0 0 0.5rem;
+  --post-controls-margin: 0 0 0.75rem;
 
   --reputation-badge-font-size: var(--2extra-small-font-size);
   --reputation-badge-color: var(--bg-color);
@@ -157,4 +167,47 @@
 
   --question-detail-title-font-size: var(--extra-large-font-size);
   --question-detail-title-margin: 0 0 0.3625rem;
+  --question-padding: 0.5rem 0 0;
+  --question-margin: 0 0 1rem;
+
+  --answer-margin: 0 0 1rem;
+  --accept-answer-btn-size: 0.875rem;
+  --accept-answer-btn-margin: -0.25rem 0 0;
+  --accept-answer-btn-inactive-color: var(--clr-neutral-50);
+  --accept-answer-btn-inactive-hover-color: var(--clr-green-50);
+  --accept-answer-btn-active-color: var(--clr-green-50);
+  --accept-answer-btn-active-hover-color: var(--clr-danger);
+
+  --rss-link-color: var(--clr-orange);
+  --rss-link-hover-color: var(--clr-danger);
+
+  --toolbar-dropdown-menu-padding-left: 0.5rem;
+  --toolbar-dropdown-menu-padding: 0.25rem 0.5rem 0.5rem var(--toolbar-dropdown-menu-padding-left);
+  --toolbar-dropdown-menu-border-color: var(--clr-neutral-70);
+  --toolbar-dropdown-menu-border: var(--border-width) var(--border-style) var(--toolbar-dropdown-menu-border-color);
+  --toolbar-dropdown-menu-border-radius: 0.25rem;
+  --toolbar-dropdown-menu-box-shadow: var(--box-shadow);
+
+  --post-comments-margin: 0 0 0.5rem;
+  --comments-list-margin: 0 0 0.75rem;
+  --comments-list-title-margin: 0 0 0.5rem;
+  --comments-list-title-font-size: 1.125rem;
+  --comment-margin: 0 0 0.5rem;
+  --comment-votes-width: 1.5rem;
+  --comment-upvote-btn-color: var(--clr-neutral-75);
+  --comment-upvote-btn-hover-color: var(--clr-danger);
+  --comment-upvote-active-btn-color: var(--clr-orange);
+  --comment-upvote-active-btn-hover-color: var(--clr-danger);
+  --comment-upvote-btn-icon-padding: 0 0 0 0.125rem;
+
+  --info-box-bg: var(--clr-highlight-pale);
+  --info-box-border-radius: var(--border-radius);
+  --info-box-border: var(--border-width) var(--border-style) var(--clr-neutral-60);
+  --info-box-box-shadow: var(--box-shadow);
+  --info-box-color: var(--fg-color);
+  --info-box-font-size: 1rem;
+  --info-box-padding: 0.5rem 0.75rem 0.75rem;
+  --info-box-margin: 0 0 1rem;
+
+  --new-answer-form-title-margin: 0 0 0.75rem;
 }

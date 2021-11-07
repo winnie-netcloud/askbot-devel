@@ -34,14 +34,6 @@
                             <span>{{ revision.summary|escape }}</span>
                         </div>
                     {% endif %}
-                    {% if request.user|can_edit_post(post) %}
-                        {% if post.post_type == 'answer' %}
-                            <a href="{{ url('edit_answer',  post.id ) }}?revision={{ revision.revision }}">{% trans %}edit{% endtrans %}</a>
-                        {% endif %}
-                        {% if post.post_type == 'question' %}
-                            <a href="{{ url('edit_question',  post.id ) }}?revision={{ revision.revision }}">{% trans %}edit{% endtrans %}</a>
-                        {% endif %}
-                    {% endif %}
                 </td>
                 <td align="right">
                     <div class="revision-mark" >
@@ -72,7 +64,6 @@
     <script type="text/javascript" src="{{ '/jslib/prettify.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/utils/toggle.js'|media }}"></script>
     <script type="text/javascript" src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
-    <script type="text/javascript" src="{{ '/js/post.js'|media }}"></script>
     {% endcompress %}
     <script type="text/javascript">
     //todo - take this out into .js file
@@ -81,7 +72,6 @@
             var revId = this.id.substr(11);
             toggleRev(revId);
         });
-        lanai.highlightSyntax();
     });
 
     function toggleRev(id) {

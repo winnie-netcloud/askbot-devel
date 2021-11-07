@@ -1,6 +1,6 @@
 .post-update-info-container {
   display: flex;
-  margin: 0 0 0.5rem 0;
+  margin: var(--post-update-info-container-margin);
 }
 
 .post-update-info {
@@ -17,18 +17,6 @@
 
 .post-update-info-avatar {
   margin-right: 0.25rem;
-  .js-avatar-box {
-    position: relative;
-  }
-  .js-avatar {
-    border-radius: 50%;
-  }
-  .reputation-badge {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-    bottom: 0;
-  }
 }
 
 .post-update-info-details {

@@ -14,6 +14,7 @@
   height: var(--post-vote-btn-height);
   cursor: pointer;
   color: var(--post-vote-btn-inactive-color);
+  transition: color var(--transition-params);
   &::before {
     display: flex;
     align-items: center;

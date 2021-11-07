@@ -1,3 +1,4 @@
+/* global gettext, inherits, SimpleControl */
 var EditLink = function () {
     SimpleControl.call(this);
 };
@@ -11,7 +12,7 @@ EditLink.prototype.createDom = function () {
 
 EditLink.prototype.decorate = function (element) {
     this._element = element;
-    this._element.attr('title', gettext('click to edit this comment'));
+    this._element.attr('title', gettext('click to edit'));
     this._element.html(gettext('edit'));
     this.setHandlerInternal();
 };
