@@ -28,7 +28,7 @@ var PostVote = (function () {
   }
 
   function handleVoted(button, voteType, data) {
-    if (data.success === '0') {
+    if (data.success === 0) {
       showMessage(button, data.message);
       return;
     } else {

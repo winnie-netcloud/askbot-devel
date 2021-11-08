@@ -387,6 +387,10 @@ a:active,
   text-decoration-thickness: var(--text-decoration-thickness);
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--heading-font-weight);
+}
+
 .btn-link {
   background: var(--bg-color);
   border: none;
@@ -564,6 +568,8 @@ input[type=text],
   --bg-color: rgba(255, 255, 255, var(--debug-transparency));
   --semi-transparent-bg-color: rgba(255, 255, 255, 0.9);
   --text-decoration-thickness: 1px;
+  --avatar-size: 2rem;
+  --avatar-size-compact: 1rem;
   --btn-fg-color: var(--bg-color);
   --btn-bg: var(--clr-blue-65);
   --btn-hover-bg: var(--clr-blue-60);
@@ -587,6 +593,8 @@ input[type=text],
   --extra-large-font-size: 1.5rem;
   --action-link-color: var(--clr-neutral-50);
   --action-link-hover-color: var(--clr-neutral-20);
+  --editor-padding: 0.125rem 0.25rem;
+  --heading-font-weight: bold;
   --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
   --input-border-radius: var(--border-radius);
@@ -674,7 +682,8 @@ input[type=text],
   --post-share-button-width: 1rem;
   --post-update-info-details-color: var(--clr-neutral-40);
   --post-update-info-details-hover-color: var(--clr-neutral-20);
-  --post-update-info-container-margin: 0 0 0.5rem;
+  --post-update-info-container-margin: 0;
+  --post-update-info-margin: 0 0.5rem 0.5rem 0;
   --post-controls-icon-size: 0.75rem;
   --post-controls-icon-margin: 0 0.125rem 0 0;
   --post-body-margin: 0 0 0.5rem;
@@ -7318,6 +7327,8 @@ input[type=reset] input[type=button].action-link {
 
 .js-avatar {
   border-radius: 50%;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
 }
 
 .reputation-badge {
@@ -8219,6 +8230,19 @@ form.repost-comment-as-answer {
   margin-right: 0.125rem;
 }
 
+.js-editable .js-editable-controls .btn {
+  margin-right: 0.5rem;
+  padding-bottom: 0.125rem;
+}
+
+.js-simple-editor textarea {
+  border-radius: var(--border-radius);
+  box-shadow: var(--editor-box-shadow);
+  padding: var(--editor-padding);
+  width: 100%;
+  outline: none;
+}
+
 #js-questions {
   margin-bottom: 0.5rem;
 }
@@ -8469,6 +8493,9 @@ form.repost-comment-as-answer {
   font-size: var(--large-font-size);
   text-decoration-thickness: var(--text-decoration-thickness);
 }
+.js-post.js-question h1 textarea {
+  font-weight: var(--heading-font-weight);
+}
 
 .js-post.js-answer {
   margin: var(--answer-margin);
@@ -8531,13 +8558,14 @@ form.repost-comment-as-answer {
 
 .post-update-info-container {
   display: flex;
+  flex-wrap: wrap;
   margin: var(--post-update-info-container-margin);
 }
 
 .post-update-info {
   border-radius: 0.25rem;
   display: flex;
-  margin-right: 0.5rem;
+  margin: var(--post-update-info-margin);
   min-width: 11rem;
   padding: 0.3625rem;
   background: var(--clr-neutral-95);
@@ -8545,9 +8573,28 @@ form.repost-comment-as-answer {
 .post-update-info:last-child {
   margin-right: 0;
 }
+@media (max-width: 414px) {
+  .post-update-info {
+    align-items: center;
+    margin-right: 0;
+    width: 100%;
+  }
+}
 
 .post-update-info-avatar {
   margin-right: 0.25rem;
+}
+@media (max-width: 414px) {
+  .post-update-info-avatar {
+    height: var(--avatar-size-compact);
+  }
+  .post-update-info-avatar .js-avatar {
+    height: var(--avatar-size-compact);
+    width: var(--avatar-size-compact);
+  }
+  .post-update-info-avatar .reputation-badge {
+    display: none;
+  }
 }
 
 .post-update-info-details {
@@ -8567,6 +8614,16 @@ form.repost-comment-as-answer {
 .post-update-info-details a:active:hover,
 .post-update-info-details a:visited:hover {
   color: var(--post-update-info-details-hover-color);
+}
+@media (max-width: 414px) {
+  .post-update-info-details {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  .post-update-info-details .post-update-info-author-name {
+    margin-right: 0.25rem;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

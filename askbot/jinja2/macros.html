@@ -38,20 +38,22 @@
 
 {%- macro post_vote_buttons(post = None) -%}
 <div class="js-post-vote-btn-group">
-  <div class="js-post-vote-btn js-post-upvote-btn with-upvote-icon"
+  <div id="js-post-upvote-btn-{{ post.id }}"
+    class="js-post-vote-btn js-post-upvote-btn with-upvote-icon"
     data-post-id="{{post.id}}"
     data-post-type="{{post.post_type}}"
   ></div>
   <div class="js-post-vote-number"
     title="{% trans count=post.score %}{{ count }} vote{% pluralize %}{{ count }} votes{% endtrans %}"
   >{{ post.score|humanize_counter }}</div>
-  <div class="js-post-vote-btn js-post-downvote-btn with-downvote-icon"
+  <div id="js-post-downvote-btn-{{ post.id }}"
+    class="js-post-vote-btn js-post-downvote-btn with-downvote-icon"
     data-post-id="{{post.id}}"
     data-post-type="{{post.post_type}}"
   >
   </div>
   <script type="text/javascript">
-      askbot['functions']['renderPostVoteButtons']('{{post.post_type}}', '{{post.id}}');
+      askbot['functions']['renderPostVoteButtons']('{{post.id}}');
   </script>
 </div>
 {%- endmacro -%}
@@ -342,12 +344,13 @@ for the purposes of the AJAX comment editor #}
 {%- macro comment_widget(comment, csrf_token=None) -%}
   <div class="js-comment" data-post-id="{{ comment.id }}">
     <div class="comment-votes">
-      <div class="js-comment-upvote-btn js-score with-comment-upvote-icon"
+      <div id="js-post-upvote-btn-{{comment.id}}"
+        class="js-comment-upvote-btn js-score with-comment-upvote-icon"
         title="{% trans %}upvote comment{% endtrans %}"
       >{% if comment.score > 0 %}{{ comment.score }}{% endif %}</div>
       {% if comment.id %}
       <script type="text/javascript">
-        askbot['functions']['renderPostVoteButtons']('comment', '{{ comment.id }}');
+        askbot['functions']['renderPostVoteButtons']('{{ comment.id }}');
       </script>
       {% endif %}
     </div>

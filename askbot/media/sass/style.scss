@@ -25,6 +25,8 @@
 @use './components/toolbar_dropdown_menu.scss';
 @use './components/vote_buttons.scss';
 @use './components/comments.scss';
+@use './components/editors/editable.scss';
+@use './components/editors/simple_editor.scss';
 @use './questions/index.scss';
 @use './questions/questions_header.scss';
 @use './questions/question_summary.scss';

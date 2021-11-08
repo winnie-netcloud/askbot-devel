@@ -17,6 +17,9 @@
   --semi-transparent-bg-color: rgba(255, 255, 255, 0.9);
   --text-decoration-thickness: 1px;
 
+  --avatar-size: 2rem;
+  --avatar-size-compact: 1rem;
+
   --btn-fg-color: var(--bg-color);
   --btn-bg: var(--clr-blue-65);
   --btn-hover-bg: var(--clr-blue-60);
@@ -45,6 +48,10 @@
 
   --action-link-color: var(--clr-neutral-50);
   --action-link-hover-color: var(--clr-neutral-20);
+
+  --editor-padding: 0.125rem 0.25rem;
+
+  --heading-font-weight: bold;
 
   --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
@@ -150,7 +157,8 @@
 
   --post-update-info-details-color: var(--clr-neutral-40);
   --post-update-info-details-hover-color: var(--clr-neutral-20);
-  --post-update-info-container-margin: 0 0 0.5rem;
+  --post-update-info-container-margin: 0;
+  --post-update-info-margin: 0 0.5rem 0.5rem 0;
   --post-controls-icon-size: 0.75rem;
   --post-controls-icon-margin: 0 0.125rem 0 0;
   --post-body-margin: 0 0 0.5rem;

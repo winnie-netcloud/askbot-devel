@@ -107,29 +107,18 @@
       return (data['user_posts'] && data['user_posts'][post_id]);
     };
 
-
-    function renderVoteButtons(post_type, post_id){
-      var upvote_btn = document.getElementById(
-        post_type + '-img-upvote-' + post_id
-      );
-      var downvote_btn = document.getElementById(
-        post_type + '-img-downvote-' + post_id
-      );
+    function renderVoteButtons(postId){
       var data = askbot['data'];
       if (data['userIsAuthenticated']){
-        if (post_id in data['user_votes']){
-          var vote = data['user_votes'][post_id];
-          if (vote == -1){
-            var btn = downvote_btn;
-          } else if (vote == 1){
-            var btn = upvote_btn;
-          } else {
-            return;
-          }
-          if (post_type == 'comment'){
-            btn.className = btn.className + ' upvoted';
-          } else {
-            btn.className = btn.className + ' on';
+        if (postId in data['user_votes']){
+          var vote = data['user_votes'][parseInt(postId)];
+          if (vote === -1){
+            var downvoteBtn = document.getElementById('js-post-downvote-btn-' + postId);
+            downvoteBtn.className += ' js-active';
+          } 
+          if (vote === 1){
+            var upvoteBtn = document.getElementById('js-post-upvote-btn-' + postId);
+            upvoteBtn.className += ' js-active';
           }
         }
       }

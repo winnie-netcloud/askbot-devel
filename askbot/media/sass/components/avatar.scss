@@ -4,6 +4,8 @@
 }
 .js-avatar {
   border-radius: 50%;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
 }
 .reputation-badge {
   position: absolute;

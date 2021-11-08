@@ -49,6 +49,10 @@ a:active,
   text-decoration-thickness: var(--text-decoration-thickness);
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--heading-font-weight);
+}
+
 .btn-link {
   background: var(--bg-color);
   border: none;

@@ -17,6 +17,9 @@
       font-size: var(--large-font-size);
       text-decoration-thickness: var(--text-decoration-thickness);
     }
+    textarea {
+      font-weight: var(--heading-font-weight);
+    }
   }
 }
 

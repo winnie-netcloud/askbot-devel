@@ -64,22 +64,19 @@ def process_vote(user = None, vote_direction = None, post = None):
             'Sorry, anonymous users cannot vote'
         ))
 
-    user.assert_can_vote_for_post(post = post, direction = vote_direction)
     vote = user.get_old_vote_for_post(post)
     response_data = {}
-    if vote != None:
+    if vote:
         user.assert_can_revoke_old_vote(vote)
         score_delta = vote.cancel()
         response_data['count'] = post.points + score_delta
         post.points = response_data['count'] #assign here too for correctness
         response_data['status'] = 1 #this means "cancel"
     else:
-        #this is a new vote
+        user.assert_can_vote_for_post(post=post, direction=vote_direction)
         votes_left = user.get_unused_votes_today()
         if votes_left <= 0:
-            raise exceptions.PermissionDenied(
-                            _('Sorry you ran out of votes for today')
-                        )
+            raise exceptions.PermissionDenied(_('Sorry you ran out of votes for today'))
 
         votes_left -= 1
         if votes_left <= \
@@ -184,8 +181,7 @@ def vote(request):
 
             post.thread.update_summary_html()
         elif vote_type in const.VOTE_TYPES_VOTING:
-            response_data = process_vote(
-                user=user, vote_direction=vote_args[1], post=post)
+            response_data = process_vote(user=user, vote_direction=vote_args[1], post=post)
 
             if vote_args[0] == 'question':
                 post.thread.update_summary_html()

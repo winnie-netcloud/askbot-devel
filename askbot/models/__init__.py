@@ -872,11 +872,7 @@ def user_assert_can_accept_best_answer(self, answer=None):
     assert getattr(answer, 'post_type', '') == 'answer'
     self.assert_can_unaccept_best_answer(answer)
 
-def user_assert_can_vote_for_post(
-                                self,
-                                post = None,
-                                direction = None,
-                            ):
+def user_assert_can_vote_for_post(self, post=None, direction=None):
     """raises exceptions.PermissionDenied exception
     if user can't in fact upvote
 

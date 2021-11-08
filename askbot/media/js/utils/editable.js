@@ -316,12 +316,14 @@ Editable.prototype.decorate = function(element){
   this._hideables = $('.js-editable-hide-' + this._id);
 
   var saveBtn = this.makeElement('button');
+  saveBtn.addClass('btn');
   //saveBtn.addClass('btn btn-primary');
   saveBtn.html(gettext('save'));
   formControls.append(saveBtn);
   this._saveBtn = saveBtn;
 
   var cancelBtn = this.makeElement('button');
+  cancelBtn.addClass('btn');
   cancelBtn.html(gettext('cancel'));
   //cancelBtn.addClass('btn');
   formControls.append(cancelBtn);
