@@ -1,0 +1,11 @@
+.wmd-preview {
+  background: var(--wmd-previewer-background) !important;
+  padding: var(--wmd-previewer-padding);
+  margin: var(--wmd-previewer-margin);
+}
+
+.wmd-previewer-toggle {
+  cursor: pointer;
+  padding: var(--wmd-previewer-toggle-padding);
+  margin: var(--wmd-previewer-toggle-margin);
+}

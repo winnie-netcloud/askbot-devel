@@ -205,7 +205,7 @@
   if (askbot.data.userIsThreadModerator) {
       var mergeQuestions = new MergeQuestionsDialog();
       $('body').append(mergeQuestions.getElement());
-      var mergeBtn = $('.question-merge');
+      var mergeBtn = $('.js-question-merge-btn');
       setupButtonEventHandlers(mergeBtn, function () {
           mergeQuestions.show();
       });

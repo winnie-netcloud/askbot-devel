@@ -233,6 +233,20 @@
   content: fa-content($fa-var-flag);
 }
 
+.with-flag-icon.js-post-unflag {
+  position: relative;
+  &::after {
+    position: absolute;
+    left: -0.125rem;
+    top: 0.25rem;
+    font-size: 0.75rem;
+    transform: rotate(30deg);
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-slash);
+  }
+}
+
 .with-close-icon::before {
   @extend %fa-icon;
   @extend .fas;

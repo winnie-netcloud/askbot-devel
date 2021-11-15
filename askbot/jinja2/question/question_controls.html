@@ -1,38 +1,27 @@
-<div class="js-question-controls post-controls">
+{% import "macros.html" as macros %}
+<div id="js-post-controls-{{ question.id }}" class="js-question-controls post-controls">
   <span id="js-edit-btn-post-body-{{ question.pk }}"
     class="action-link js-edit with-edit-icon"
   >{% trans %}edit{% endtrans %}</span>
-  {% if question.offensive_flag_count > 0 %}
-    <span
-        id="question-offensive-remove-flag-{{ question.id }}"
-        class="action-link offensive-flag question-flag with-flag-icon"
-        title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
-    >
-      {% trans %}remove flag{% endtrans %}
-    </span>
-    <span
-        id="question-offensive-flag-{{ question.id }}" class="action-link offensive-flag question-flag with-flag-icon"
-        title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
-    >
-        {% trans %}flag offensive{% endtrans %} ({{ question.offensive_flag_count }})
-    </span>
-  {% else %}
-    <span
-      id="question-offensive-flag-{{ question.id }}" class="action-link offensive-flag question-flag with-flag-icon"
-      title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
-    >
-      {% trans %}flag offensive{% endtrans %}
-    </span>
-  {% endif %}
+  {{ macros.post_flag_buttons(question) }}
   {% if thread.closed %}
-    <a class="action-link question-close with-close-icon" href="{{ url('reopen',  question.id ) }}">{% trans %}reopen{% endtrans %}</a>
+    <a id="js-question-close-btn-{{question.id}}"
+      class="action-link with-close-icon"
+      href="{{ url('reopen',  question.id ) }}"
+    >{% trans %}reopen{% endtrans %}</a>
   {% else %}
-    <a class="action-link question-close with-close-icon" href="{{ url('close',  question.id ) }}">{% trans %}close{% endtrans %}</a>
+    <a id="js-question-close-btn-{{question.id}}"
+      class="action-link with-close-icon"
+      href="{{ url('close',  question.id ) }}"
+    >{% trans %}close{% endtrans %}</a>
   {% endif %}
-  <a class="action-link question-merge with-merge-icon">{% trans %}merge{% endtrans %}</a>
+  <a 
+    id="js-question-merge-btn-{{question.id}}"
+    class="action-link js-question-merge-btn with-merge-icon"
+  >{% trans %}merge{% endtrans %}</a>
   <a
-    id="post-{{question.id}}-delete"
-    class="action-link question-delete with-delete-icon"
+    id="js-post-delete-btn-{{question.id}}"
+    class="action-link js-question-delete-btn with-delete-icon"
   >{% if question.deleted %}{% trans %}undelete{% endtrans %}{% else %}{% trans %}delete{% endtrans %}{% endif %}</a>
   <script type="text/javascript">
     askbot['functions']['renderPostControls']('{{question.id}}'{{ ', true' if question.wiki }});

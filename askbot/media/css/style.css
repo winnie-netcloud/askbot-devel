@@ -735,6 +735,11 @@ input[type=text],
   --info-box-padding: 0.5rem 0.75rem 0.75rem;
   --info-box-margin: 0 0 1rem;
   --new-answer-form-title-margin: 0 0 0.75rem;
+  --wmd-previewer-padding: 0.25rem 0.25rem;
+  --wmd-previewer-margin: 0 0 0.5rem;
+  --wmd-previewer-background: var(--clr-neutral-95);
+  --wmd-previewer-toggle-padding: 0 0 0.5rem;
+  --wmd-previewer-toggle-margin: 0;
 }
 
 .js-toggle-sidebar-button {
@@ -822,6 +827,7 @@ input[type=text],
 .with-comment-upvote-icon::before,
 .with-merge-icon::before,
 .with-close-icon::before,
+.with-flag-icon.js-post-unflag::after,
 .with-flag-icon::before,
 .with-edit-icon::before,
 .with-caret-down-icon::before,
@@ -870,7 +876,7 @@ input[type=text],
   line-height: 1;
 }
 
-.with-accept-answer-icon::before, .with-link-icon::before, .with-convert-post-icon::before, .with-comment-upvote-icon::before, .with-merge-icon::before, .with-close-icon::before, .with-flag-icon::before, .with-edit-icon::before, .with-twitter-icon::before, .with-linkedin-icon::before, .with-facebook-icon::before, .with-caret-down-icon::before,
+.with-accept-answer-icon::before, .with-link-icon::before, .with-convert-post-icon::before, .with-comment-upvote-icon::before, .with-merge-icon::before, .with-close-icon::before, .with-flag-icon.js-post-unflag::after, .with-flag-icon::before, .with-edit-icon::before, .with-twitter-icon::before, .with-linkedin-icon::before, .with-facebook-icon::before, .with-caret-down-icon::before,
 .with-downvote-icon::before, .with-upvote-icon::before, .with-arrow-left-icon::before, .with-plus-icon::before, .with-comment-icon::before, .with-caret-right-icon::before, .with-caret-left-icon::before, .with-ellipsis-icon::before, .with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-delete-icon::before,
 .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
@@ -985,6 +991,7 @@ input[type=text],
 .fa-pull-left.with-comment-upvote-icon::before,
 .fa-pull-left.with-merge-icon::before,
 .fa-pull-left.with-close-icon::before,
+.fa-pull-left.with-flag-icon.js-post-unflag::after,
 .fa-pull-left.with-flag-icon::before,
 .fa-pull-left.with-edit-icon::before,
 .fa-pull-left.with-caret-down-icon::before,
@@ -1033,6 +1040,7 @@ input[type=text],
 .fa-pull-right.with-comment-upvote-icon::before,
 .fa-pull-right.with-merge-icon::before,
 .fa-pull-right.with-close-icon::before,
+.fa-pull-right.with-flag-icon.js-post-unflag::after,
 .fa-pull-right.with-flag-icon::before,
 .fa-pull-right.with-edit-icon::before,
 .fa-pull-right.with-caret-down-icon::before,
@@ -7036,6 +7044,7 @@ readers do not read off random characters that represent icons */
 .with-comment-upvote-icon::before,
 .with-merge-icon::before,
 .with-close-icon::before,
+.with-flag-icon.js-post-unflag::after,
 .with-flag-icon::before,
 .with-edit-icon::before,
 .with-caret-down-icon::before,
@@ -7264,6 +7273,18 @@ readers do not read off random characters that represent icons */
 
 .with-flag-icon::before {
   content: "";
+}
+
+.with-flag-icon.js-post-unflag {
+  position: relative;
+}
+.with-flag-icon.js-post-unflag::after {
+  position: absolute;
+  left: -0.125rem;
+  top: 0.25rem;
+  font-size: 0.75rem;
+  transform: rotate(30deg);
+  content: "";
 }
 
 .with-close-icon::before {
@@ -8196,10 +8217,10 @@ ul.tags li {
   margin: var(--comment-margin);
 }
 
-.comment-controls .js-avatar-box {
+.js-comment-controls .js-avatar-box {
   vertical-align: middle;
 }
-.comment-controls .action-link::before {
+.js-comment-controls .action-link::before {
   font-size: var(--post-controls-icon-size);
   margin: var(--post-controls-icon-margin);
 }
@@ -8235,12 +8256,26 @@ form.repost-comment-as-answer {
   padding-bottom: 0.125rem;
 }
 
-.js-simple-editor textarea {
+.js-editable textarea {
   border-radius: var(--border-radius);
   box-shadow: var(--editor-box-shadow);
   padding: var(--editor-padding);
   width: 100%;
   outline: none;
+  overflow: hidden;
+  resize: vertical;
+}
+
+.wmd-preview {
+  background: var(--wmd-previewer-background) !important;
+  padding: var(--wmd-previewer-padding);
+  margin: var(--wmd-previewer-margin);
+}
+
+.wmd-previewer-toggle {
+  cursor: pointer;
+  padding: var(--wmd-previewer-toggle-padding);
+  margin: var(--wmd-previewer-toggle-margin);
 }
 
 #js-questions {

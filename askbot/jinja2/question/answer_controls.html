@@ -1,37 +1,16 @@
-<div class="js-answer-controls post-controls">
+{% import "macros.html" as macros %}
+<div id="js-post-controls-{{answer.id}}" class="js-answer-controls post-controls">
   <span class="action-link with-edit-icon js-edit">
     {% trans %}edit{% endtrans %}
   </span>
-  {% if answer.offensive_flag_count > 0 %}
-    <span id="answer-offensive-flag-{{ answer.id }}"
-      class="action-link offensive-flag with-flag-icon"
-      title="{% trans %}remove offensive flag{% endtrans %}"
-    >
-      {% trans %}remove flag{% endtrans %}
-    </span>
-    <span
-      id="answer-offensive-flag-{{ answer.id }}"
-      class="action-link offensive-flag with-flag-icon"
-      title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
-    >
-      {% trans %}flag offensive{% endtrans %} ({{ answer.offensive_flag_count }})
-    </span>
-  {% else %}
-    <span
-        id="answer-offensive-flag-{{ answer.id }}"
-        class="action-link offensive-flag with-flag-icon"
-        title="{% trans %}report as offensive (i.e containing spam, advertising, malicious text, etc.){% endtrans %}"
-    >
-      {% trans %}flag offensive{% endtrans %}
-    </span>
-  {% endif %}
-  <span id='post-{{answer.id}}-delete' class="action-link delete-post with-delete-icon">
+  {{ macros.post_flag_buttons(answer) }}
+  <span id='js-post-delete-btn-{{answer.id}}' class="action-link with-delete-icon">
     {% if answer.deleted %}{% trans %}undelete{% endtrans %}{% else %}{% trans %}delete{% endtrans %}{% endif %}
   </span>
   {% if thread.is_moderated() %}
     {% set is_published=(answer.id in published_answer_ids) %}
     <span
-      id="post-{{answer.id}}-publish"
+      id="js-post-publish-btn-{{answer.id}}"
       class="action-link {% if is_published %}answer-unpublish with-published-icon{% else %}answer-publish with-private-icon{% endif %}"
     >
       {% if is_published %}
@@ -41,11 +20,10 @@
       {% endif %}
     </span>
   {% endif %}
-  <a  class="action-link with-link-icon"
-      href="{{ answer.get_absolute_url(question_post=question) }}"
-      title="{% trans %}permanent link{% endtrans %}">
-      {% trans %}link{% endtrans %}
-  </a>
+  <a class="action-link with-link-icon"
+    href="{{ answer.get_absolute_url(question_post=question) }}"
+    title="{% trans %}permanent link{% endtrans %}"
+  >{% trans %}link{% endtrans %}</a>
   <div class="js-dropdown-menu toolbar-dropdown-menu action-link">
     <div class="js-dropdown-trigger with-caret-down-icon">{% trans %}more{% endtrans %}</div>
     <ul class="js-dropdown-target">

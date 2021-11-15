@@ -1,4 +1,4 @@
-<div class="js-post js-question" data-post-id="{{ question.id }}">
+<div id="js-post-{{ question.id }}" class="js-post js-question" data-post-id="{{ question.id }}">
   <div class="post-vote-controls">
     {{ macros.post_vote_buttons(post=question) }}
     {% include "question/share_buttons.html" %}

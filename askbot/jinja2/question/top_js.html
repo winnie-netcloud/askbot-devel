@@ -19,7 +19,7 @@
       data['user_posts'] = posts;
     }
 
-    var hasClass = function(node, selector) {
+    function hasClass (node, selector) {
       var classes = (" " + node.className + " ").split(' ');
       for (var i = 0; i < classes.length; i++) {
         if (classes[i] === selector) {
@@ -72,28 +72,25 @@
       return null;
     };
 
-    var postIsComment = function(postId) {
-      return !!document.getElementById('comment-' + postId);
-    };
-
-    var getPost = function(postId) {
-      return document.getElementById('post-id-' + postId);
+    function isReadOnly() {
+      var isUserReadOnly = data['userIsReadOnly'];
+      var isModeReadOnly = askbot['settings']['readOnlyModeEnabled'];
+      return isUserReadOnly && isModeReadOnly
     }
 
-    var postIsQuestion = function(postId) {
-      var content = getPost(postId);
-      if (content) {
-        if (hasClass(content, 'js-comment')) {
-          return false;
-        }
-        if (findClosestParentByClassName(content, 'js-question')) {
-          return true;
-        }
-      }
-      return false;
+    function getPost (postId) {
+      return document.getElementById('js-post-' + postId);
+    }
+
+    function postIsComment (postId) {
+      return hasClass(getPost(postId), 'js-comment');
+    }
+
+    function postIsQuestion(postId) {
+      return hasClass(getPost(postId), 'js-question');
     };
 
-    var removeNode = function(node) {
+    function removeNode(node) {
       node.parentNode.removeChild(node);
     };
 
@@ -124,7 +121,7 @@
       }
     }
 
-    function hideConvertAnswerList(post_id){
+    function hideConvertAnswerLinks(post_id){
       var id1 = 'post-' + post_id + '-convert';//for repost as Q comment
       var repostAsQuestionComment = document.getElementById(id1);
       var id2 = 'post-' + post_id + '-repost-as-comment-under-previous-answer';
@@ -170,40 +167,100 @@
       }
     }
 
-    function removeAllControls(post_id) {
-      var deleteBtn = document.getElementById('post-' + post_id + '-delete');
-      var controls = deleteBtn.parentNode;
-      if (controls.className == 'comment-content') {
-        removeNode(deleteBtn);
-        var convertLinks = findChildrenByClassName(controls, 'convert-comment');
-        if (convertLinks.length) {
-          removeNode(convertLinks[0]);
-        }
-        var editLinks = findChildrenByClassName(controls, 'edit');
-        if (editLinks.length) {
-          removeNode(editLinks[0]);
-        }
+    function removeCommentControls(postId) {
+      var post = document.getElementById('js-post-' + postId);
+      var editLinks = findChildrenByClassName(post, 'js-comment-edit-btn');
+      removeNode(editLinks[0])
+      var moreControls = findChildrenByClassName(post, 'js-dropdown-menu');
+      removeNode(moreControls[0])
+    }
+
+    function removeAllControls(postId) {
+      if (postIsComment(postId)) {
+        removeCommentControls(postId);
       } else {
+        var controls = document.getElementById('js-post-controls-' + postId);
         var buttons = controls.childNodes;
-        var numButtons = buttons.length;
-        for (var i = numButtons - 1; i >= 0; i--) {
+        for (var i=buttons.length - 1; i >= 0; i--) {
           removeNode(buttons[i]);
         }
       }
-    };
+    }
 
-    function renderPostControls(post_id, is_wiki){
-      //in this case remove all post controls
-      if (askbot['settings']['readOnlyModeEnabled'] === true) {
-        removeAllControls(post_id);
+    function maybeRemoveDeleteBtn(postId) {
+      var deleteBtn = document.getElementById('js-post-delete-btn-' + postId);
+      if (isAuthorOfPost(postId)) {
+        if (postIsQuestion(postId) && {{ answers|length }}) {
+          if (data['userReputation'] < {{ settings.MIN_REP_TO_DELETE_OWN_QUESTIONS }}) {
+            if (!data['userIsAdminOrMod']) {
+              removeNode(deleteBtn);
+            }
+          }
+        }
+        //todo: remove edit button from older comments
         return;
       }
 
-      var deleteBtn = document.getElementById('post-' + post_id + '-delete');
-      var controls = deleteBtn.parentNode;
-      var mergeBtn = findChildrenByClassName(controls, 'question-merge');
-      if (mergeBtn.length === 1 && data['userIsThreadModerator'] === false) {
-        removeNode(mergeBtn[0]);
+      var userRep = data['userReputation']
+      if (isReadOnly() || userRep < {{settings.MIN_REP_TO_DELETE_OTHERS_POSTS}}) {
+        removeNode(deleteBtn);
+      }
+    }
+
+    function maybeRemoveCloseBtn(postId) {
+      var closeBtn = document.getElementById('js-question-close-btn-' + postId);
+      if (!closeBtn) return;
+      var userRep = data['userReputation'];
+      var minRep = {{ settings.MIN_REP_TO_CLOSE_OTHERS_QUESTIONS }};
+      if (isReadOnly() || userRep < minRep) {
+        removeNode(closeBtn[0]);
+      }
+    }
+
+    function maybeRemoveFlagBtns(postId) {
+      var flagBtn = document.getElementById('js-post-flag-btn-' + postId);
+      var unflagBtn = document.getElementById('js-post-unflag-btn-' + postId);
+      if (!(flagBtn || postUnflagBtn)) return
+      var userRep = data['userReputation'];
+      var minRep = {{ settings.MIN_REP_TO_FLAG_OFFENSIVE }};
+      if (userRep >= minRep) return
+      flagBtn && removeNode(flagBtn);
+      unflagBtn && removeNode(unflagBtn);
+    }
+
+    function maybeRemoveEditBtns(postId) {
+      var enoughRep = (data['userReputation'] >= {{settings.MIN_REP_TO_EDIT_OTHERS_POSTS}} ||
+        (iswiki && data['userReputation'] >= {{ settings.MIN_REP_TO_EDIT_WIKI }}));
+
+      //maybe remove "edit" button
+      if (!enoughRep || data['userIsReadOnly']){
+        var editBtns = findChildrenByClassName(getPost(post_id), 'js-edit');
+        var numBtns = editBtns.length;
+        for (var i=0; i<numBtns; i++) {
+          removeNode(editBtns[i]);
+        }
+      }
+    }
+
+    function maybeRemoveRetagBtn(postId) {
+      //maybe remove retag button
+      var retagBtn = document.getElementById('js-question-retag-btn-' + postId);
+      if (!retagBtn) return;
+      var isAuthor = isAuthorOfPost(postId);
+      var hasRep = data['userReputation'] < {{settings.MIN_REP_TO_RETAG_OTHERS_QUESTIONS}};
+      if (isReadOnly() || (!isAuthor() && hasRep)) removeNode(retagBtn);
+    }
+
+    function renderPostControls(postId, isWiki){
+      //in this case remove all post controls
+      if (askbot['settings']['readOnlyModeEnabled'] === true) {
+        removeAllControls(postId);
+        return;
+      }
+
+      var mergeBtn = document.getElementById('js-question-merge-btn-' + postId);
+      if (mergeBtn && data['userIsThreadModerator'] === false) {
+        removeNode(mergeBtn);
       }
 
       if (data['userIsAdminOrMod']) {
@@ -219,64 +276,11 @@
       }
       {% endif %}
 
-      if (isAuthorOfPost(post_id)) {
-        if (postIsQuestion(post_id) && {{ answers|length }}) {
-          if (data['userReputation'] < {{ settings.MIN_REP_TO_DELETE_OWN_QUESTIONS }}) {
-            if (!data['userIsAdminOrMod']) {
-              removeNode(deleteBtn);
-            }
-          }
-        }
-        //todo: remove edit button from older comments
-        return;
-      }
-
-      if (//maybe remove "delete" button
-        (data['userReputation'] <
-        {{settings.MIN_REP_TO_DELETE_OTHERS_POSTS}}) || data['userIsReadOnly']
-      ) {
-        removeNode(deleteBtn);
-      }
-
-      var canFlagPosts = data['userReputation'] >= {{ settings.MIN_REP_TO_FLAG_OFFENSIVE }};
-      var flags = findChildrenByClassName(controls, 'question-flag');
-      if (flags.length > 0 && !canFlagPosts) {
-        for (var i = 0; i < flags.length; i++) {
-          removeNode(flags[i]);
-        }
-      }
-      var closeBtn = findChildrenByClassName(controls, 'question-close');
-
-      if ( closeBtn.length === 1 && (
-        (data['userReputation'] < {{ settings.MIN_REP_TO_CLOSE_OTHERS_QUESTIONS }}) ||
-        data['userIsReadOnly']
-      )) {
-        removeNode(closeBtn[0]);
-      }
-
-      var enoughRep = (data['userReputation'] >= {{settings.MIN_REP_TO_EDIT_OTHERS_POSTS}} ||
-        (is_wiki && data['userReputation'] >= {{ settings.MIN_REP_TO_EDIT_WIKI }}));
-
-      //maybe remove "edit" button
-      if (!enoughRep || data['userIsReadOnly']){
-        var editBtns = findChildrenByClassName(getPost(post_id), 'js-edit');
-        var numBtns = editBtns.length;
-        for (var i=0; i<numBtns; i++) {
-          removeNode(editBtns[i]);
-        }
-      }
-
-      //maybe remove retag button
-      if (
-        !isAuthorOfPost(post_id) &&
-        postIsQuestion(post_id) &&
-        ((data['userReputation'] <
-        {{settings.MIN_REP_TO_RETAG_OTHERS_QUESTIONS}}) ||
-        data['userIsReadOnly'])
-      ){
-        var retagBtn = document.getElementById('retag');
-        if (retagBtn) removeNode(retagBtn);
-      }
+      maybeRemoveDeleteBtn(postId);
+      maybeRemoveFlagBtn(postId);
+      maybeRemoveCloseBtn(postId);
+      maybeRemoveEditBtns(postId);
+      if (postId === {{ question.id }}) maybeRemoveRetagBtn(postId);
     }
 
     function renderAddAnswerButton(){
@@ -318,7 +322,7 @@
     askbot['functions']['renderPostControls'] = renderPostControls;
     askbot['functions']['renderAddAnswerButton'] = renderAddAnswerButton;
     askbot['functions']['hideConvertLinks'] = hideConvertLinks;
-    askbot['functions']['hideConvertAnswerLinks'] = hideConvertAnswerList;
+    askbot['functions']['hideConvertAnswerLinks'] = hideConvertAnswerLinks;
     askbot['functions']['hidePublishAnswerLink'] = hidePublishAnswerLink;
   })();
 </script>

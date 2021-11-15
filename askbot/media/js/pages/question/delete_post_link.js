@@ -71,6 +71,6 @@
       //confusingly .question-delete matches the answers too need rename
       var post_id = element.id.split('-').pop();
       deleter.setPostId(post_id);
-      deleter.decorate($(element).find('.question-delete'));
+      deleter.decorate($(element).find('.js-question-delete'));
   });
 })();
