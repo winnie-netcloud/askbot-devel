@@ -6,7 +6,7 @@
   {{ macros.post_flag_buttons(question) }}
   {% if thread.closed %}
     <a id="js-question-close-btn-{{question.id}}"
-      class="action-link with-close-icon"
+      class="action-link with-reopen-icon js-post-reopen"
       href="{{ url('reopen',  question.id ) }}"
     >{% trans %}reopen{% endtrans %}</a>
   {% else %}

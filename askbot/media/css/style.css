@@ -415,6 +415,9 @@ input {
   background: var(--input-bg-color);
   color: var(--fg-color);
 }
+input:focus {
+  outline: none;
+}
 
 input,
 .btn {
@@ -670,6 +673,7 @@ input[type=text],
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
   --tag-delete-btn-fg-hover-color: var(--bg-color);
   --tags-gap: 0.3625rem;
+  --tags-input-margin: 0 0 0.5rem;
   --autocompleter-hover-bg: var(--clr-blue-65);
   --post-vote-controls-width: 1.25rem;
   --post-vote-controls-margin: 0 0.75rem 0 3px;
@@ -735,11 +739,26 @@ input[type=text],
   --info-box-padding: 0.5rem 0.75rem 0.75rem;
   --info-box-margin: 0 0 1rem;
   --new-answer-form-title-margin: 0 0 0.75rem;
-  --wmd-previewer-padding: 0.25rem 0.25rem;
+  --wmd-margin: 0.5rem 0 0;
+  --wmd-previewer-padding: 0.5rem;
   --wmd-previewer-margin: 0 0 0.5rem;
   --wmd-previewer-background: var(--clr-neutral-95);
   --wmd-previewer-toggle-padding: 0 0 0.5rem;
   --wmd-previewer-toggle-margin: 0;
+  --wmd-button-size: 1.5rem;
+  --wmd-button-margin: 0 0.125rem;
+  --wmd-button-color: var(--fg-color);
+  --wmd-button-bg: transparent;
+  --wmd-button-hover-color: var(--bg-color);
+  --wmd-button-hover-bg: var(--clr-neutral-50);
+  --wmd-button-row-padding: 0 0 0.25rem;
+  --wmd-button-row-margin: 0 -0.125rem;
+  --wmd-spacer-width: var(--border-width);
+  --wmd-spacer-height: 1.25rem;
+  --wmd-spacer-margin: 0 0.25rem;
+  --wmd-spacer-background: var(--clr-neutral-50);
+  --wmd-previewer-block-margin: 0 0 0.5rem;
+  --wmd-previewer-list-padding: 0 0 0 1.5rem;
 }
 
 .js-toggle-sidebar-button {
@@ -821,11 +840,27 @@ input[type=text],
  */
 .fa,
 .fas,
+.wmd-button-bar .wmd-help-button::before,
+.wmd-button-bar .wmd-redo-button::before,
+.wmd-button-bar .wmd-undo-button::before,
+.wmd-button-bar .wmd-hr-button::before,
+.wmd-button-bar .wmd-heading-button::before,
+.wmd-button-bar .wmd-ulist-button::before,
+.wmd-button-bar .wmd-olist-button::before,
+.wmd-button-bar .wmd-attachment-button::before,
+.wmd-button-bar .wmd-image-button::before,
+.wmd-button-bar .wmd-code-button::before,
+.wmd-button-bar .wmd-quote-button::before,
+.wmd-button-bar .wmd-link-button::before,
+.wmd-button-bar .wmd-italic-button::before,
+.wmd-button-bar .wmd-bold-button::before,
 .with-accept-answer-icon::before,
 .with-link-icon::before,
 .with-convert-post-icon::before,
 .with-comment-upvote-icon::before,
 .with-merge-icon::before,
+.with-reopen-icon::after,
+.with-reopen-icon::before,
 .with-close-icon::before,
 .with-flag-icon.js-post-unflag::after,
 .with-flag-icon::before,
@@ -876,12 +911,11 @@ input[type=text],
   line-height: 1;
 }
 
-.with-accept-answer-icon::before, .with-link-icon::before, .with-convert-post-icon::before, .with-comment-upvote-icon::before, .with-merge-icon::before, .with-close-icon::before, .with-flag-icon.js-post-unflag::after, .with-flag-icon::before, .with-edit-icon::before, .with-twitter-icon::before, .with-linkedin-icon::before, .with-facebook-icon::before, .with-caret-down-icon::before,
+.wmd-button-bar .wmd-help-button::before, .wmd-button-bar .wmd-redo-button::before, .wmd-button-bar .wmd-undo-button::before, .wmd-button-bar .wmd-hr-button::before, .wmd-button-bar .wmd-heading-button::before, .wmd-button-bar .wmd-ulist-button::before, .wmd-button-bar .wmd-olist-button::before, .wmd-button-bar .wmd-attachment-button::before, .wmd-button-bar .wmd-image-button::before, .wmd-button-bar .wmd-code-button::before, .wmd-button-bar .wmd-quote-button::before, .wmd-button-bar .wmd-link-button::before, .wmd-button-bar .wmd-italic-button::before, .wmd-button-bar .wmd-bold-button::before, .with-accept-answer-icon::before, .with-link-icon::before, .with-convert-post-icon::before, .with-comment-upvote-icon::before, .with-merge-icon::before, .with-reopen-icon::after, .with-reopen-icon::before, .with-close-icon::before, .with-flag-icon.js-post-unflag::after, .with-flag-icon::before, .with-edit-icon::before, .with-twitter-icon::before, .with-linkedin-icon::before, .with-facebook-icon::before, .with-caret-down-icon::before,
 .with-downvote-icon::before, .with-upvote-icon::before, .with-arrow-left-icon::before, .with-plus-icon::before, .with-comment-icon::before, .with-caret-right-icon::before, .with-caret-left-icon::before, .with-ellipsis-icon::before, .with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-delete-icon::before,
 .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
-.with-gold-badge-icon::before, .with-tags-icon::before,
-.with-users-icon::before,
+.with-gold-badge-icon::before, .with-tags-icon::before, .with-users-icon::before,
 .with-badges-icon::before,
 .with-settings-icon::before, .inbox-icon-with-new-messages::before, .inbox-icon::before, .with-warning-icon::before {
   -webkit-font-smoothing: antialiased;
@@ -985,11 +1019,27 @@ input[type=text],
 
 .fa.fa-pull-left,
 .fas.fa-pull-left,
+.wmd-button-bar .fa-pull-left.wmd-help-button::before,
+.wmd-button-bar .fa-pull-left.wmd-redo-button::before,
+.wmd-button-bar .fa-pull-left.wmd-undo-button::before,
+.wmd-button-bar .fa-pull-left.wmd-hr-button::before,
+.wmd-button-bar .fa-pull-left.wmd-heading-button::before,
+.wmd-button-bar .fa-pull-left.wmd-ulist-button::before,
+.wmd-button-bar .fa-pull-left.wmd-olist-button::before,
+.wmd-button-bar .fa-pull-left.wmd-attachment-button::before,
+.wmd-button-bar .fa-pull-left.wmd-image-button::before,
+.wmd-button-bar .fa-pull-left.wmd-code-button::before,
+.wmd-button-bar .fa-pull-left.wmd-quote-button::before,
+.wmd-button-bar .fa-pull-left.wmd-link-button::before,
+.wmd-button-bar .fa-pull-left.wmd-italic-button::before,
+.wmd-button-bar .fa-pull-left.wmd-bold-button::before,
 .fa-pull-left.with-accept-answer-icon::before,
 .fa-pull-left.with-link-icon::before,
 .fa-pull-left.with-convert-post-icon::before,
 .fa-pull-left.with-comment-upvote-icon::before,
 .fa-pull-left.with-merge-icon::before,
+.fa-pull-left.with-reopen-icon::after,
+.fa-pull-left.with-reopen-icon::before,
 .fa-pull-left.with-close-icon::before,
 .fa-pull-left.with-flag-icon.js-post-unflag::after,
 .fa-pull-left.with-flag-icon::before,
@@ -1034,11 +1084,27 @@ input[type=text],
 }
 .fa.fa-pull-right,
 .fas.fa-pull-right,
+.wmd-button-bar .fa-pull-right.wmd-help-button::before,
+.wmd-button-bar .fa-pull-right.wmd-redo-button::before,
+.wmd-button-bar .fa-pull-right.wmd-undo-button::before,
+.wmd-button-bar .fa-pull-right.wmd-hr-button::before,
+.wmd-button-bar .fa-pull-right.wmd-heading-button::before,
+.wmd-button-bar .fa-pull-right.wmd-ulist-button::before,
+.wmd-button-bar .fa-pull-right.wmd-olist-button::before,
+.wmd-button-bar .fa-pull-right.wmd-attachment-button::before,
+.wmd-button-bar .fa-pull-right.wmd-image-button::before,
+.wmd-button-bar .fa-pull-right.wmd-code-button::before,
+.wmd-button-bar .fa-pull-right.wmd-quote-button::before,
+.wmd-button-bar .fa-pull-right.wmd-link-button::before,
+.wmd-button-bar .fa-pull-right.wmd-italic-button::before,
+.wmd-button-bar .fa-pull-right.wmd-bold-button::before,
 .fa-pull-right.with-accept-answer-icon::before,
 .fa-pull-right.with-link-icon::before,
 .fa-pull-right.with-convert-post-icon::before,
 .fa-pull-right.with-comment-upvote-icon::before,
 .fa-pull-right.with-merge-icon::before,
+.fa-pull-right.with-reopen-icon::after,
+.fa-pull-right.with-reopen-icon::before,
 .fa-pull-right.with-close-icon::before,
 .fa-pull-right.with-flag-icon.js-post-unflag::after,
 .fa-pull-right.with-flag-icon::before,
@@ -7038,11 +7104,27 @@ readers do not read off random characters that represent icons */
 }
 .fa,
 .fas,
+.wmd-button-bar .wmd-help-button::before,
+.wmd-button-bar .wmd-redo-button::before,
+.wmd-button-bar .wmd-undo-button::before,
+.wmd-button-bar .wmd-hr-button::before,
+.wmd-button-bar .wmd-heading-button::before,
+.wmd-button-bar .wmd-ulist-button::before,
+.wmd-button-bar .wmd-olist-button::before,
+.wmd-button-bar .wmd-attachment-button::before,
+.wmd-button-bar .wmd-image-button::before,
+.wmd-button-bar .wmd-code-button::before,
+.wmd-button-bar .wmd-quote-button::before,
+.wmd-button-bar .wmd-link-button::before,
+.wmd-button-bar .wmd-italic-button::before,
+.wmd-button-bar .wmd-bold-button::before,
 .with-accept-answer-icon::before,
 .with-link-icon::before,
 .with-convert-post-icon::before,
 .with-comment-upvote-icon::before,
 .with-merge-icon::before,
+.with-reopen-icon::after,
+.with-reopen-icon::before,
 .with-close-icon::before,
 .with-flag-icon.js-post-unflag::after,
 .with-flag-icon::before,
@@ -7291,6 +7373,21 @@ readers do not read off random characters that represent icons */
   content: "";
 }
 
+.with-reopen-icon {
+  position: relative;
+}
+.with-reopen-icon::before {
+  content: "";
+}
+.with-reopen-icon::after {
+  position: absolute;
+  left: -2.15px;
+  top: 4.5px;
+  font-size: 0.75rem;
+  transform: rotate(30deg);
+  content: "";
+}
+
 .with-merge-icon::before {
   content: "";
 }
@@ -7311,6 +7408,64 @@ readers do not read off random characters that represent icons */
   content: "";
 }
 
+/* wmd editor button icons */
+.wmd-button-bar .wmd-bold-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-italic-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-link-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-quote-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-code-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-image-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-attachment-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-olist-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-ulist-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-heading-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-hr-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-undo-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-redo-button::before {
+  content: "";
+}
+
+.wmd-button-bar .wmd-help-button::before {
+  content: "";
+}
+
+/* end wmd icons */
 .btn {
   cursor: pointer;
 }
@@ -8120,6 +8275,10 @@ ul.tags li {
   transition: var(--transition-bg-color), var(--transition-border-color), var(--transition-color);
 }
 
+.js-retag-btn.with-tags-icon::before {
+  font-size: 0.75rem;
+}
+
 .toolbar-dropdown-menu {
   display: inline-block;
   position: relative;
@@ -8266,16 +8425,124 @@ form.repost-comment-as-answer {
   resize: vertical;
 }
 
-.wmd-preview {
-  background: var(--wmd-previewer-background) !important;
-  padding: var(--wmd-previewer-padding);
-  margin: var(--wmd-previewer-margin);
+.wmd-container {
+  margin: var(--wmd-margin);
+}
+
+.wmd-input {
+  height: 500px;
+  background-color: Gainsboro;
+  border: 1px solid DarkGray;
+  margin-top: -20px;
+}
+
+.wmd-output {
+  background-color: Pink;
+}
+
+.wmd-button-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: var(--wmd-button-row-margin);
+  padding: var(--wmd-button-row-padding);
+}
+
+.wmd-spacer {
+  width: var(--wmd-spacer-width);
+  height: var(--wmd-spacer-height);
+  margin: var(--wmd-spacer-margin);
+  background: var(--wmd-spacer-background);
+  display: inline-block;
+  list-style: none;
+}
+
+.wmd-button {
+  cursor: pointer;
+  width: var(--wmd-button-size);
+  height: var(--wmd-button-size);
+  margin: var(--wmd-button-margin);
+  display: inline-block;
+  list-style: none;
+}
+
+.wmd-button::before {
+  align-items: center;
+  color: var(--wmd-button-color);
+  background: var(--wmd-button-bg);
+  display: flex !important;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  transition: color var(--transition-params), background var(--transition-params);
+}
+
+.wmd-button:hover::before {
+  transition: color var(--transition-params), background var(--transition-params);
+  color: var(--wmd-button-hover-color);
+  background: var(--wmd-button-hover-bg);
+}
+
+.wmd-prompt-background {
+  background-color: Black;
+}
+
+.wmd-prompt-dialog {
+  border: 1px solid #999999;
+  background-color: #F5F5F5;
+}
+
+.wmd-prompt-dialog > div {
+  font-size: 1em;
+  font-family: arial, helvetica, sans-serif;
+}
+
+.wmd-prompt-dialog > form > input[type=text] {
+  border: 1px solid #999999;
+  color: black;
+}
+
+.wmd-prompt-dialog > form > input[type=button] {
+  border: 1px solid #888888;
+  font-family: trebuchet MS, helvetica, sans-serif;
+  font-size: 1em;
+  font-weight: bold;
 }
 
 .wmd-previewer-toggle {
   cursor: pointer;
-  padding: var(--wmd-previewer-toggle-padding);
-  margin: var(--wmd-previewer-toggle-margin);
+  padding: var(--wmd-preview-toggle-padding);
+  margin: var(--wmd-preview-toggle-margin);
+}
+
+.wmd-preview,
+.js-editable-content {
+  padding: var(--wmd-preview-padding);
+  margin: var(--wmd-preview-margin);
+}
+.wmd-preview ul, .wmd-preview ol,
+.js-editable-content ul,
+.js-editable-content ol {
+  padding: var(--wmd-preview-list-padding);
+}
+.wmd-preview ul, .wmd-preview ol, .wmd-preview p, .wmd-preview pre,
+.js-editable-content ul,
+.js-editable-content ol,
+.js-editable-content p,
+.js-editable-content pre {
+  margin: var(--wmd-preview-block-margin);
+}
+.wmd-preview > :last-child,
+.js-editable-content > :last-child {
+  margin-bottom: 0;
+}
+
+.js-editable-content {
+  padding-left: 0;
+}
+
+.wmd-preview {
+  background: var(--wmd-preview-background) !important;
 }
 
 #js-questions {
@@ -8589,6 +8856,15 @@ form.repost-comment-as-answer {
 .js-accept-answer-btn.js-active:hover::before {
   color: var(--accept-answer-btn-active-hover-color);
   transition: color var(--transition-params);
+}
+
+.js-post-unflag::before,
+.js-post-reopen::before {
+  color: var(--clr-neutral-60);
+}
+
+.js-tags-input {
+  margin: var(--tags-input-margin);
 }
 
 .post-update-info-container {

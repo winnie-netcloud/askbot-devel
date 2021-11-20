@@ -6,9 +6,6 @@
 {% import "macros.html" as macros %}
 <!-- users.html -->
 {% block title %}{% filter trim %}{% trans %}Users{% endtrans %}{% endfilter %}{% endblock %}
-{% block forestyle %}
-  <link rel="stylesheet" type="text/css" href="{{ '/wmd/wmd.css'|media }}" />
-{% endblock %}
 {% block page_class %}users-page{% endblock %}
 {% block content %}
 <div id="content-header">

@@ -81,3 +81,12 @@
     transition: color var(--transition-params);
   }
 }
+
+.js-post-unflag::before,
+.js-post-reopen::before {
+  color: var(--clr-neutral-60);
+}
+
+.js-tags-input {
+  margin: var(--tags-input-margin);
+}

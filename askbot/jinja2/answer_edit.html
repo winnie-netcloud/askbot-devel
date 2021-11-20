@@ -2,9 +2,6 @@
 {% import "macros.html" as macros %}
 <!-- template answer_edit.html -->
 {% block title %}{% filter trim %}{{ settings.WORDS_EDIT_ANSWER|escape }}{% endfilter %}{% endblock %}
-{% block forestyle %}
-  <link rel="stylesheet" type="text/css" href="{{ '/wmd/wmd.css'|media }}" />
-{% endblock %}
 {% block page_class %}edit-answer-page{% endblock %}
 {% block content %}
 <div class="section-title">

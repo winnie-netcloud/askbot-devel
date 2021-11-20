@@ -2,9 +2,6 @@
 {% import "macros.html" as macros %}
 <!-- template ask.html -->
 {% block title %}{% filter trim %}{% trans %}Ask Your Question{% endtrans %}{% endfilter %}{% endblock %}
-{% block forestyle %}
-  <link rel="stylesheet" type="text/css" href="{{"/wmd/wmd.css"|media}}" />
-{% endblock %}
 {% block page_class %}ask-page{% endblock %}
 {# main contents of ask form is in the template input_bar #}
 {% block sidebar %}

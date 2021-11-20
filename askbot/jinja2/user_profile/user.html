@@ -1,12 +1,6 @@
 {% extends "one_column_body.html" %}
 <!-- user.html -->
 {% block title %}{% filter trim %}{{ page_title }}{% endfilter %}{% endblock %}
-{% block forestyle %}
-<style type="text/css">
-    .history-table td { padding: 5px; }
-</style>
-<link rel="stylesheet" type="text/css" href="{{ '/wmd/wmd.css'|media }}" />
-{% endblock %}
 {% block page_class %}user-profile-page{% endblock %}
 {% block content %}
     {% if settings.USE_ASKBOT_LOGIN_SYSTEM %}

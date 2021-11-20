@@ -142,6 +142,8 @@
   --tag-delete-btn-fg-color: var(--forum-header-fg-color);
   --tag-delete-btn-fg-hover-color: var(--bg-color);
   --tags-gap: 0.3625rem;
+  --tags-input-margin: 0 0 0.5rem;
+
 
   --autocompleter-hover-bg: var(--clr-blue-65);
 
@@ -219,9 +221,24 @@
 
   --new-answer-form-title-margin: 0 0 0.75rem;
 
-  --wmd-previewer-padding: 0.25rem 0.25rem;;
+  --wmd-margin: 0.5rem 0 0;
+  --wmd-previewer-padding: 0.5rem;
   --wmd-previewer-margin: 0 0 0.5rem;
   --wmd-previewer-background: var(--clr-neutral-95);
   --wmd-previewer-toggle-padding: 0 0 0.5rem;
   --wmd-previewer-toggle-margin: 0;
+  --wmd-button-size: 1.5rem;
+  --wmd-button-margin: 0 0.125rem;
+  --wmd-button-color: var(--fg-color);
+  --wmd-button-bg: transparent;
+  --wmd-button-hover-color: var(--bg-color);
+  --wmd-button-hover-bg: var(--clr-neutral-50);
+  --wmd-button-row-padding: 0 0 0.25rem;
+  --wmd-button-row-margin: 0 -0.125rem;
+	--wmd-spacer-width: var(--border-width);
+	--wmd-spacer-height: 1.25rem;
+  --wmd-spacer-margin: 0 0.25rem;
+	--wmd-spacer-background: var(--clr-neutral-50);
+  --wmd-previewer-block-margin: 0 0 0.5rem;
+  --wmd-previewer-list-padding: 0 0 0 1.5rem;
 }

@@ -5,16 +5,14 @@
   </div>
   <div class="post-content{% if question.deleted %} js-post-deleted{% endif %}">
     {% include "question/title.html" %}
-    <div class="question-tags">
-      {{
-        macros.tag_list_widget(
-          tags=thread.get_tag_names(),
-          css_class='tags',
-          with_edit_link=True,
-          question_id=question.pk
-        )
-      }}
-    </div>
+    {{
+      macros.tag_list_widget(
+        tags=thread.get_tag_names(),
+        css_class='tags js-question-tags',
+        with_edit_link=True,
+        question_id=question.pk
+      )
+    }}
     <div class="post-body">
       <div class="js-editable"
         id="js-post-body-{{ question.pk }}"

@@ -164,17 +164,17 @@
 {%- endmacro -%}
 
 {%- macro tag_list_widget(
-        tags,
-        id=None,
-        deletable=False,
-        label=None,
-        make_links=True,
-        search_state=None,
-        css_class=None,
-        truncate_long_tags=False,
-        question_id=None,
-        with_edit_link=False
-    )
+  tags,
+  id=None,
+  deletable=False,
+  label=None,
+  make_links=True,
+  search_state=None,
+  css_class=None,
+  truncate_long_tags=False,
+  question_id=None,
+  with_edit_link=False
+)
 -%}
   <ul class="tags{% if tags %} js-has-tags{% endif %}{% if css_class %} {{css_class}}{% endif %}">
     {% if tags %}
@@ -194,17 +194,22 @@
         </li>
         {% endfilter %}
       {%- endfor -%}
-      {% if with_edit_link %}
-        <li>
-          <span id="js-question-retag-btn-{{ question_id }}" class="action-link" data-question-id="{{ question_id }}">
-            {% if tags|length > 0 %}
-              {% trans %}retag{% endtrans %}
-            {% else %}
-              {% trans %}add tags{% endtrans %}
-            {% endif %}
-          </span>
-        </li>
-      {% endif %}
+    {% endif %}
+    {% if with_edit_link %}
+      <li class="js-retag-btn-ctr">
+        <span
+          class="js-retag-btn action-link {% if not tags %}js-hidden{% endif %}"
+          data-question-id="{{ question_id }}"
+        >
+          {% trans %}retag{% endtrans %}
+        </span>
+        <span
+          class="js-retag-btn action-link {% if tags %}js-hidden{% endif %} with-tags-icon"
+          data-question-id="{{ question_id }}"
+        >
+          {% trans %}add tags{% endtrans %}
+        </span>
+      </li>
     {% endif %}
   </ul>
 {%- endmacro -%}

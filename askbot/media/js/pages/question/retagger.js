@@ -1,83 +1,25 @@
-/* global askbot, addExtraCssClasses, AutoCompleter, gettext, Tag, getUniqueWords, notify, showMessage */
+/* global askbot, AutoCompleter, gettext, Tag, WrappedElement, getUniqueWords, inherits, notify, showMessage */
 (function () {
-  var oldTagsHtml = '';
-  var tagInput = null;
-  var tagsList = null;
-  var retagLink = null;
-
-  function restoreEventHandlers() {
-    $(document).unbind('click', cancelRetag);
+  var RetagForm = function () {
+    WrappedElement.call(this);
+    this._onCompleted = null;
+    this._onCanceled = null;
   }
+  inherits(RetagForm, WrappedElement);
 
-  function cancelRetag() {
-    tagsList.html(oldTagsHtml);
-    tagsList.removeClass('post-retag');
-    tagsList.addClass('post-tags');
-    restoreEventHandlers();
-    initRetagger();
-  }
+  RetagForm.prototype.setOnCompleted = function (callback) {
+    this._onCompleted = callback;
+  };
 
-  function drawNewTags (new_tags) {
-    tagsList.empty();
-    if (new_tags === '') {
-      return;
-    }
-    new_tags = new_tags.split(/\s+/);
-    $.each(new_tags, function (index, name) {
-      var tag = new Tag();
-      tag.setName(name);
-      var li = $('<li></li>');
-      tagsList.append(li);
-      li.append(tag.getElement());
-    });
-  }
+  RetagForm.prototype.setOnCanceled = function (callback) {
+    this._onCanceled = callback;
+  };
 
-  function doRetag() {
-    $.ajax({
-      type: 'POST',
-      url: askbot.urls.retag,
-      dataType: 'json',
-      data: { tags: getUniqueWords(tagInput.val()).join(' ') },
-      success: function (json) {
-        if (json.success) {
-          var new_tags = getUniqueWords(json.new_tags);
-          oldTagsHtml = '';
-          cancelRetag();
-          drawNewTags(new_tags.join(' '));
-          if (json.message) {
-            notify.show(json.message);
-          }
-        } else {
-          cancelRetag();
-          showMessage(tagsList, json.message);
-        }
-      },
-      error: function () {
-        showMessage(tagsList, gettext('sorry, something is not right here'));
-        cancelRetag();
-      }
-    });
-    return false;
-  }
+  RetagForm.prototype.getInputElement = function () {
+    return this._element.find('input');
+  };
 
-  function setupInputEventHandlers(input) {
-    input.keydown(function (e) {
-      if ((e.which && e.which === 27) || (e.keyCode && e.keyCode === 27)) {
-        cancelRetag();
-      }
-    });
-    $(document).unbind('click', cancelRetag).click(cancelRetag);
-    input.closest('form').click(function (e) {
-      e.stopPropagation();
-    });
-  }
-
-  function createRetagForm(old_tags_string) {
-    var div = $('<form method="post"></form>');
-    tagInput = $('<input id="retag_tags" type="text" autocomplete="off" name="tags" size="30"/>');
-    addExtraCssClasses(tagInput, 'textInputClasses');
-    //var tagLabel = $('<label for="retag_tags" class="error"></label>');
-    //populate input
+  RetagForm.prototype.initAutoCompleter = function () {
     var tagAc = new AutoCompleter({
       url: askbot.urls.get_tag_list,
       minChars: 1,
@@ -86,23 +28,79 @@
       maxCacheLength: 100,
       delay: 10
     });
-    tagAc.decorate(tagInput);
-    tagAc._results.on('click', function (e) {
-      //click on results should not trigger cancelRetag
-      e.stopPropagation();
+    tagAc.decorate($(this._element).find('input'));
+    tagAc._results.on('click', function (evt) {
+      evt.stopPropagation();
     });
-    tagInput.val(old_tags_string);
-    div.append(tagInput);
-    //div.append(tagLabel);
-    setupInputEventHandlers(tagInput);
+  };
 
-    //button = $('<input type="submit" />');
-    //button.val(gettext('save tags'));
-    //div.append(button);
-    //setupButtonEventHandlers(button);
-    $(document).trigger('askbot.afterCreateRetagForm', [div]);
+  RetagForm.prototype.setupCancelInputEventHandlers = function () {
+    var me = this;
+    this.getInputElement().keydown(function (evt) {
+      if (evt.which === 27 || evt.keyCode === 27) {
+        me._onCanceled();
+      }
+    });
+    // close editor on click outside of the editor
+    $(document).unbind('click', this._onCanceled).click(this._onCanceled);
+    // capture click on form
+    this._element.click(function (evt) { evt.stopPropagation(); });
+  };
 
-    div.validate({//copy-paste from utils.js
+  RetagForm.prototype.showAndFocus = function (tagsList) {
+    this._element.show();
+    var input = this.getInputElement();
+    input.val(tagsList.join(' '));
+    input.focus();
+    this.initAutoCompleter();
+    this.setupCancelInputEventHandlers();
+  }
+
+  RetagForm.prototype.clearAndHide = function () {
+    var input = this.getInputElement();
+    input.val('');
+    this._element.hide();
+  };
+
+  RetagForm.prototype.retag = function () {
+    var me = this;
+    var tagsList = getUniqueWords(me.getInputElement().val())
+    $.ajax({
+      type: 'POST',
+      url: askbot.urls.retag,
+      dataType: 'json',
+      data: { tags: tagsList.join(' ') },
+      success: function (json) {
+        if (json.success) {
+          if (json.new_tags) {
+            var newTags = getUniqueWords(json.new_tags);
+            me._onCompleted(newTags);
+          } else {
+            me._onCompleted([]);
+          }
+          if (json.message) {
+            notify.show(json.message);
+          }
+        } else {
+          me._onCanceled();
+          showMessage(tagsList, json.message);
+        }
+      },
+      error: function () {
+        showMessage(tagsList, gettext('sorry, something is not right here'));
+        me._onCanceled();
+      }
+    });
+    return false;
+  }
+
+  RetagForm.prototype.createDom = function () {
+    var form = $('<form method="post"></form>');
+    var tagInput = $('<input class="js-tags-input" type="text" autocomplete="off" name="tags" size="30"/>');
+    form.append(tagInput);
+    this._element = form;
+    var me = this;
+    form.validate({
       rules: {
         tags: {
           required: askbot.settings.tagsAreRequired,
@@ -119,70 +117,104 @@
           limit_tag_length: askbot.messages.maxTagLength
         }
       },
-      submitHandler: doRetag,
-      errorClass: 'retag-error'
+      submitHandler: function () {
+        me.retag()
+      },
+      errorClass: 'js-retag-error'
     });
-
-    $(document).trigger('askbot.afterSetupValidationRetagForm', [div]);
-    return div;
   }
 
-  function getTagsAsString(tags_div) {
-    var links = tags_div.find('.js-tag-name');
-    var tags_str = '';
-    links.each(function (index, element) {
-      if (index === 0) {
-        //this is pretty bad - we should use Tag.getName()
-        tags_str = $(element).data('tagName');
-      } else {
-        tags_str += ' ' + $(element).data('tagName');
-      }
+  var QuestionTags = function() {
+    WrappedElement.call(this);
+    this._retagForm = undefined;
+  }
+  inherits(QuestionTags, WrappedElement);
+
+  QuestionTags.prototype.addTag = function (tagName) {
+    var tag = new Tag();
+    tag.setName(tagName);
+    tag.setLinkable(true);
+    var li = this.makeElement('li');
+    li.append(tag.getElement());
+    var retagBtnCtr = $('.js-retag-btn-ctr');
+    retagBtnCtr.before(li);
+  };
+
+  QuestionTags.prototype.setTags = function (tagsList) {
+    var tagLiElements = this._element.find('> :not(.js-retag-btn-ctr)');
+    tagLiElements.remove();
+    if (tagsList.length === 0) {
+      $('.js-retag-btn.with-tags-icon').removeClass('js-hidden');
+      $('.js-retag-btn:not(.with-tags-icon)').addClass('js-hidden');
+      return;
+    } else {
+      $('.js-retag-btn.with-tags-icon').addClass('js-hidden');
+      $('.js-retag-btn:not(.with-tags-icon)').removeClass('js-hidden');
+    }
+    var me = this;
+    $.each(tagsList, function (_, tagName) {
+      me.addTag(tagName);
     });
-    return tags_str;
+  };
+
+  QuestionTags.prototype.initRetagForm = function () {
+    var me = this;
+    var retagForm = new RetagForm()
+    this._retagForm = retagForm;
+    retagForm.setOnCompleted(function (newTagsList) {
+      me.setTags(newTagsList)
+      retagForm.clearAndHide();
+      me.show();
+    });
+    retagForm.setOnCanceled(function () {
+      retagForm.clearAndHide();
+      me.show();
+    });
+    var retagFormElement = retagForm.getElement();
+    $(this._element).after(retagFormElement);
+  };
+
+  QuestionTags.prototype.getTagsList = function () {
+    var tags = this._element.find('.js-tag-name');
+    var tagsList = [];
+    tags.each(function (_, item) {
+      tagsList.push($(item).html());
+    });
+    return tagsList;
   }
 
-  function noopHandler () {
-    tagInput.focus();
-    tagInput.focus();
-    return false;
-  }
+  QuestionTags.prototype.startRetagging = function () {
+    if (!this._retagForm) this.initRetagForm();
+    this._retagForm.showAndFocus(this.getTagsList());
+    this.hide();
+  };
 
-  function deactivateRetagLink () {
-    retagLink.unbind('click').click(noopHandler);
-    retagLink.unbind('keypress').keypress(noopHandler);
-  }
+  QuestionTags.prototype.show = function () { 
+    this._element.show()
+  };
 
-  function startRetag () {
-    tagsList = $('#question-tags');
-    oldTagsHtml = tagsList.html();//save to restore on cancel
-    var old_tags_string = getTagsAsString(tagsList);
-    var retag_form = createRetagForm(old_tags_string);
-    tagsList.html('');
-    tagsList.append(retag_form);
-    tagsList.removeClass('post-tags');
-    tagsList.addClass('post-retag');
-    tagInput.focus();
-    deactivateRetagLink();
-    return false;
-  }
+  QuestionTags.prototype.hide = function () {
+    this._element.hide();
+  };
 
-  function setupClickAndEnterHandler (element, callback) {
-    element.unbind('click').click(callback);
-    element.unbind('keypress').keypress(function (e) {
+  QuestionTags.prototype.decorate = function(element) {
+    this._element = element;
+    var retagBtn = element.find('.js-retag-btn');
+    var me = this;
+    retagBtn.unbind('click').click(function(evt) {
+      me.startRetagging();
+      evt.stopPropagation();
+    });
+    retagBtn.unbind('keypress').keypress(function (e) {
       if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
-        callback();
+        me.startRetagging();
       }
     });
-  }
-
-  function initRetagger() {
-    retagLink = $('#retag');
-    setupClickAndEnterHandler(retagLink, startRetag);
-  }
+  };
 
   if (askbot.settings.tagSource === 'user-input') {
-    initRetagger()
+    var qTags = new QuestionTags();
+    qTags.decorate($('.js-question-tags'));
   }
+
 })();
-
-

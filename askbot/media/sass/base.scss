@@ -78,6 +78,9 @@ abbr {
 input {
   background: var(--input-bg-color);
   color: var(--fg-color);
+  &:focus {
+    outline: none;
+  }
 }
 
 input,
