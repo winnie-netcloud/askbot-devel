@@ -27,6 +27,9 @@
 @use './components/comments.scss';
 @use './components/editors/editable.scss';
 @use './components/editors/wmd.scss';
+@use './components/highlight.min.css';
+@use './components/jquery.modal.scss';
+@use './components/timeago.scss';
 @use './questions/index.scss';
 @use './questions/questions_header.scss';
 @use './questions/question_summary.scss';
@@ -36,3 +39,4 @@
 @use './question/new_answer_form.scss';
 @use './question/post.scss';
 @use './question/post_update_info.scss';
+@use './question/merge_questions_modal.scss';

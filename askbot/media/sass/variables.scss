@@ -222,11 +222,6 @@
   --new-answer-form-title-margin: 0 0 0.75rem;
 
   --wmd-margin: 0.5rem 0 0;
-  --wmd-previewer-padding: 0.5rem;
-  --wmd-previewer-margin: 0 0 0.5rem;
-  --wmd-previewer-background: var(--clr-neutral-95);
-  --wmd-previewer-toggle-padding: 0 0 0.5rem;
-  --wmd-previewer-toggle-margin: 0;
   --wmd-button-size: 1.5rem;
   --wmd-button-margin: 0 0.125rem;
   --wmd-button-color: var(--fg-color);
@@ -239,6 +234,13 @@
 	--wmd-spacer-height: 1.25rem;
   --wmd-spacer-margin: 0 0.25rem;
 	--wmd-spacer-background: var(--clr-neutral-50);
-  --wmd-previewer-block-margin: 0 0 0.5rem;
-  --wmd-previewer-list-padding: 0 0 0 1.5rem;
+  --wmd-preview-block-margin: 0 0 0.5rem;
+  --wmd-preview-list-padding: 0 0 0 1.5rem;
+  --wmd-preview-padding: 0.5rem;
+  --wmd-preview-margin: 0 0 0.5rem;
+  --wmd-preview-background: var(--bg-color);
+  --wmd-preview-border: var(--border-width) var(--border-style) var(--clr-neutral-80);
+  --wmd-preview-toggle-padding: 0 0 0.5rem;
+  --wmd-preview-toggle-margin: 0;
+  --pre-padding: 0.5rem;
 }

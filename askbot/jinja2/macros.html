@@ -5,23 +5,13 @@
 {%- endmacro -%}
 
 {%- macro post_flag_buttons(post) -%}
-  {% if post.offensive_flag_count > 0 %}
-    <span
-      id="js-post-flag-{{ post.id }}"
-      class="action-link with-flag-icon"
-    >
-      {% trans %}flag offensive{% endtrans %} ({{ post.offensive_flag_count }})
-    </span>
-  {% endif %}
-  <span
-    id="js-post-{% if post.offensive_flag_count > 0 %}unflag{% else %}flag{% endif %}-{{ post.id }}"
-    class="action-link with-flag-icon {% if post.offensive_flag_count > 0 %}js-post-unflag{% endif %}"
-  >
-    {% if post.offensive_flag_count > 0 %}
-      {% trans %}remove flag{% endtrans %}
-    {% else %}
-      {% trans %}flag offensive{% endtrans %}
-    {% endif %}
+  <span class="action-link with-flag-icon js-post-flag-btn">
+    {% trans %}flag offensive{% endtrans %}
+    <span class="js-post-flag-count {% if post.offensive_flag_count == 0 %}js-hidden{% endif %}"
+    >{{ post.offensive_flag_count }}</span>
+  </span>
+  <span class="action-link with-flag-icon js-post-unflag-btn {% if post.offensive_flag_count == 0 %}js-hidden{% endif %}">
+    {% trans %}remove flag{% endtrans %}
   </span>
 {%- endmacro -%}
 
@@ -772,7 +762,7 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {%- macro timeago(datetime_object, action_performed=None) -%}
-    {%- set when='<abbr class="timeago" title="'
+    {%- set when='<abbr class="js-timeago" title="'
                 ~ datetime_object.replace(microsecond=0)|add_tz_offset
                 ~ '">'
                 ~ datetime_object.replace(microsecond=0)|add_tz_offset

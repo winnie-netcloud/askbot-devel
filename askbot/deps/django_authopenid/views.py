@@ -88,15 +88,12 @@ from askbot import forms as askbot_forms
 from askbot.deps.django_authopenid import util
 from askbot.deps.django_authopenid.models import UserAssociation, UserEmailVerifier
 from askbot.deps.django_authopenid import forms
+from askbot.deps.django_authopenid import protocols
 from askbot.deps.django_authopenid.backends import AuthBackend
 import logging
 from askbot.utils.forms import get_next_url, get_next_jwt
 from askbot.utils.http import get_request_info, get_request_params
 from askbot.signals import user_logged_in, user_registered
-
-
-def get_next_url_from_session(session):
-    return session.pop('next_url', None) or reverse('index')
 
 
 def create_authenticated_user_account(
@@ -273,7 +270,7 @@ def complete_discourse_signin(request):
 
 
 def complete_oauth2_signin(request):
-    next_url = get_next_url_from_session(request.session)
+    next_url = util.get_next_url_from_session(request.session)
 
     if 'error' in request.GET:
         return HttpResponseRedirect(reverse('index'))
@@ -373,7 +370,7 @@ def complete_oauth2_signin(request):
 
 def complete_cas_signin(request):
     from askbot.deps.django_authopenid.providers.cas_provider import CASLoginProvider
-    next_url = get_next_url_from_session(request.session)
+    next_url = util.get_next_url_from_session(request.session)
     provider = CASLoginProvider(success_redirect_url=next_url)
     cas_login_url = provider.get_login_url()
 
@@ -430,7 +427,7 @@ def complete_cas_signin(request):
 
 
 def complete_oauth1_signin(request):
-    next_url = get_next_url_from_session(request.session)
+    next_url = util.get_next_url_from_session(request.session)
 
     if 'denied' in request.GET:
         return HttpResponseRedirect(next_url)
@@ -718,6 +715,17 @@ def signin(request):
                             'or use another provider'
                         ) % {'provider': provider_name}
                     request.user.message_set.create(message=msg)
+
+            elif login_form.cleaned_data['login_type'] == 'oidc':
+                csrf_token = generate_random_key(length=32)
+                request.session['auth_csrf_token'] = csrf_token
+                request.session['provider_name'] = provider_name
+                request.session['next_url'] = next_url
+                oidc = protocols.get_protocol(provider_name)
+                redirect_url = site_url(reverse('user_complete_oidc_signin'))
+                oidc_auth_url = oidc.get_authentication_url(redirect_url, csrf_token=csrf_token)
+                return HttpResponseRedirect(oidc_auth_url)
+                
 
             elif login_form.cleaned_data['login_type'] == 'wordpress_site':
                 #here wordpress_site means for a self hosted wordpress blog not a wordpress.com blog
@@ -1483,7 +1491,7 @@ def recover_account(request):
             user = form.cleaned_data['user']
             send_user_new_email_key(user)
             message = _('Please check your email and visit the enclosed link.')
-            return render(request, 'authopenid/verify_email.html', data)
+            return render(request, 'authopenid/verify_email.html')
         return show_signin_view(request, account_recovery_form=form)
 
     key = get_request_params(request).get('validation_code', None)

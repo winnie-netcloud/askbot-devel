@@ -12,7 +12,7 @@
     function enableDevGrid() {
       var doc = window.document.documentElement;
       doc.style.setProperty('--debug-transparency', '0.5');
-      doc.style.setProperty('background-size', '100% 0.25rem');
+      doc.style.setProperty('background-size', '100% 0.5rem');
       doc.style.setProperty('background-image', 'linear-gradient(#ccc 1px, transparent .05em)');
       doc.style.setProperty('background-position-y', '-1px');
     }
@@ -31,7 +31,7 @@
     }
 
     function handleKeyDown(evt) {
-      if (evt.keyCode == 27) toggleDevGrid();
+      if (evt.keyCode == 27 && evt.shiftKey ) toggleDevGrid();
     }
 
     if (window.localStorage.getItem('enableDevGrid')) {

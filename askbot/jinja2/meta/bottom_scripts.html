@@ -65,7 +65,8 @@
 {# everything below until the custom js and google analytics is compressable #}
 <form name="scroll-pos-form"><input id="scroll-mem" type="text" style="display: none;"/></form>
 {% compress js %}
-  <script src="{{ '/jslib/jquery-1.7.2.min.js'|media }}"></script>
+  <script src="{{ '/jslib/jquery-3.6.0.min.js'|media }}"></script>
+  <script src="{{ '/jslib/jquery.modal.min.js'|media }}"></script>
   <script src="{{ '/jslib/timeago.js'|media }}"></script>
   <!-- History.js -->
   <script src="{{ '/jslib/jquery.history.js'|media }}"></script>

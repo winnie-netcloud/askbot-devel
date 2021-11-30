@@ -41,6 +41,11 @@ body {
   color: var(--fg-color);
 }
 
+pre {
+  overflow-x: scroll;
+  padding: var(--pre-padding);
+}
+
 a,
 a:active,
 .btn-link {
@@ -165,4 +170,8 @@ input[type="text"],
 
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+.js-inline-block {
+  display: inline-block !important;
 }

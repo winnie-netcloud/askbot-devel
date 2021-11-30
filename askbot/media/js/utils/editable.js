@@ -1,4 +1,4 @@
-﻿/* global askbot, gettext, getObjectByPath, inherits, parseUrl, runMathJax, showMessage,
+﻿/* global askbot, gettext, getObjectByPath, inherits, parseUrl, runMathJax, showMessage, highlightAll,
  stripTags, getAskbotMarkdownConverter,
  setupButtonEventHandlers, SimpleEditor, TinyMCE, WrappedElement, WMD */
 /**
@@ -34,6 +34,7 @@ Editable.prototype.setPreviewerEnabled = function(state){
 Editable.prototype.setContent = function(content){
   this._content.empty();
   this._content.append(content);
+  highlightAll();
   if (askbot.settings.mathjaxEnabled) {
     runMathJax();
   }

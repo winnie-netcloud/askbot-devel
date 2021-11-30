@@ -200,30 +200,6 @@ var Vote = (function () {
             Vote.vote($(event.target), VoteType.answerDownVote);
         });
 
-        getOffensiveQuestionFlag().unbind('click').click(function () {
-            Vote.offensive(this, VoteType.offensiveQuestion);
-        });
-
-        getRemoveOffensiveQuestionFlag().unbind('click').click(function () {
-            Vote.remove_offensive(this, VoteType.removeOffensiveQuestion);
-        });
-
-        getRemoveAllOffensiveQuestionFlag().unbind('click').click(function () {
-            Vote.remove_all_offensive(this, VoteType.removeAllOffensiveQuestion);
-        });
-
-        getOffensiveAnswerFlags().unbind('click').click(function () {
-            Vote.offensive(this, VoteType.offensiveAnswer);
-        });
-
-        getRemoveOffensiveAnswerFlag().unbind('click').click(function () {
-            Vote.remove_offensive(this, VoteType.removeOffensiveAnswer);
-        });
-
-        getRemoveAllOffensiveAnswerFlag().unbind('click').click(function () {
-            Vote.remove_all_offensive(this, VoteType.removeAllOffensiveAnswer);
-        });
-
         getquestionSubscribeUpdatesCheckbox().unbind('click').click(function (event) {
             //despeluchar esto
             if (this.checked) {

@@ -156,6 +156,7 @@ def vote(request):
                 _('Sorry, but anonymous users cannot perform this action.'))
 
         vote_type = request.POST.get('type')
+
         if (vote_type not in const.VOTE_TYPES
                 or vote_type == const.VOTE_FAVORITE):
             # TODO: Favoriting a question is not handled!

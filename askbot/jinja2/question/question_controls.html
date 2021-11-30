@@ -1,5 +1,5 @@
 {% import "macros.html" as macros %}
-<div id="js-post-controls-{{ question.id }}" class="js-question-controls post-controls">
+<div id="js-post-controls-{{ question.id }}" class="js-question-controls js-post-controls" data-post-id="{{ question.id }}">
   <span id="js-edit-btn-post-body-{{ question.pk }}"
     class="action-link js-edit with-edit-icon"
   >{% trans %}edit{% endtrans %}</span>

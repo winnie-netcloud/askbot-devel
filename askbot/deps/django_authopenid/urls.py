@@ -11,6 +11,7 @@ else:
     pgettext = lambda context, value: value
 
 from askbot.deps.django_authopenid import views as OpenidViews
+from askbot.deps.django_authopenid.protocols.oidc.views import complete_oidc_signin
 
 urlpatterns = [
     # yadis rdf
@@ -41,6 +42,11 @@ urlpatterns = [
         r'^signin/complete-oauth2/',
         OpenidViews.complete_oauth2_signin,
         name='user_complete_oauth2_signin'
+    ),
+    url(
+        r'^signin/complete-oidc/',
+        complete_oidc_signin,
+        name='user_complete_oidc_signin'
     ),
     url(r'^%s$' % pgettext('urls', 'register/'), OpenidViews.register, name='user_register'),
     url(
