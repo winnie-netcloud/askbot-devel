@@ -25,8 +25,7 @@ ModalDialog.prototype.show = function () {
 };
 
 ModalDialog.prototype.hide = function () {
-    this._element.modal('hide');
-    $('.jquery-modal.blocker').hide();
+    $.modal.close();
 };
 
 ModalDialog.prototype.setClass = function (cls) {

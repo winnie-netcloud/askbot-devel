@@ -166,9 +166,12 @@
 {% block userjs %}
     <script type='text/javascript'>
         (function () {
-            var search = new FullTextSearch();
-            askbot['controllers'] = askbot['controllers'] || {};
-            askbot['controllers']['fullTextSearch'] = search;
+            {% if not settings.SEARCH_FRONTEND_SRC_URL %}
+                var search = new FullTextSearch();
+                askbot['controllers'] = askbot['controllers'] || {};
+                askbot['controllers']['fullTextSearch'] = search;
+            {% endif %}
+
             askbot['urls']['mark_subscribed_tag'] = '{{ url('mark_subscribed_tag') }}';
             askbot['urls']['unmark_tag'] = '{{ url('unmark_tag') }}';
             askbot['settings']['tag_editor'] = '{{ tag_editor_settings|escapejs }}';

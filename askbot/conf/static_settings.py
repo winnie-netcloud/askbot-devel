@@ -43,6 +43,8 @@ class AskbotStaticSettings(AppConf):
     TRANSLATE_URL = True # set true to localize urls
     USER_DATA_EXPORT_DIR = const.DEFAULT_USER_DATA_EXPORT_DIR
     USE_LOCAL_FONTS = False
+    SEARCH_FRONTEND_SRC_URL = None
+    SEARCH_FRONTEND_CSS_URL = None
     WHITELISTED_IPS = tuple() # a tuple of whitelisted ips for moderation
 
     class Meta:

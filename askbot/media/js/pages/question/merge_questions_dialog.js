@@ -144,7 +144,6 @@
   };
 
   MergeQuestionsDialog.prototype.createDom = function () {
-    //make content
     var content = this.makeElement('div');
     var search = $("<div class='js-merge-questions-search'></div>");
     content.append(search);

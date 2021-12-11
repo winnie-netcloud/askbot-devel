@@ -1,5 +1,8 @@
 {% compress css %}
     <link href="{{ '/css/style.css'|media }}" rel="stylesheet" type="text/css" />
+    {% if settings.SEARCH_FRONTEND_CSS_URL %}
+      <link href="{{ settings.SEARCH_FRONTEND_CSS_URL }}" rel="stylesheet" type="text/css" />
+    {% endif %}
     {% set extra_css = '/css/extra.css'|media(ignore_missing=True) %}
     {% if extra_css %}
         <link href="{{ extra_css }}" rel="stylesheet" type="text/css" />

@@ -115,7 +115,11 @@
   <!-- End Utils.js -->
   <script src="{{ '/js/searchbar/drop_menu.js'|media }}"></script>
   <script src="{{ '/js/searchbar/tag_warning_box.js'|media }}"></script>
-  <script src="{{ '/js/searchbar/full_text_search.js'|media }}"></script>
+  {% if settings.SEARCH_FRONTEND_SRC_URL %}
+    <script src="{{settings.SEARCH_FRONTEND_SRC_URL}}"</script>
+  {% else %}
+    <script src="{{ '/js/searchbar/full_text_search.js'|media }}"></script>
+  {% endif %}
   <script src="{{ '/js/searchbar/tag_search.js'|media }}"></script>
   <script src="{{ '/js/utils/ask_button.js'|media }}"></script>
 {% endcompress %}
@@ -140,18 +144,22 @@
       putCursorAtEnd(searchInput);
     }
 
-    var haveFullTextSearchTab = inArray(activeTab, ['questions', 'badges', 'ask']);
-    var haveUserProfilePage = $('body').hasClass('user-profile-page');
-    if ((haveUserProfilePage || haveFullTextSearchTab) && searchInput && searchInput.length) {
-      var search = new FullTextSearch();
-      askbot['controllers'] = askbot['controllers'] || {};
-      askbot['controllers']['fullTextSearch'] = search;
-      search.setSearchUrl(askbot['data']['searchUrl']);
-      if (activeTab === 'ask') {
-        search.setAskButtonEnabled(false);
+    {% if not settings.SEARCH_FRONTEND_SRC_URL %}
+      var haveFullTextSearchTab = inArray(activeTab, ['questions', 'badges', 'ask']);
+      var haveUserProfilePage = $('body').hasClass('user-profile-page');
+      if ((haveUserProfilePage || haveFullTextSearchTab) && searchInput && searchInput.length) {
+        var search = new FullTextSearch();
+        askbot['controllers'] = askbot['controllers'] || {};
+        askbot['controllers']['fullTextSearch'] = search;
+        search.setSearchUrl(askbot['data']['searchUrl']);
+        if (activeTab === 'ask') {
+          search.setAskButtonEnabled(false);
+        }
+        search.decorate(searchInput);
       }
-      search.decorate(searchInput);
-    } else if (activeTab === 'tags') {
+    {% endif %}
+
+    if (activeTab === 'tags') {
       var search = new TagSearch();
       search.decorate(searchInput);
     }
@@ -170,6 +178,7 @@
       showPermsTrigger.decorate(userRep);
     }
   });
+
   if (askbot['data']['haveFlashNotifications']) {
     $('#validate_email_alert').click(function(){notify.close(true)})
     notify.show();

@@ -7694,6 +7694,7 @@ footer a {
 }
 
 .js-search-bar {
+  background: var(--bg-color);
   display: flex;
   height: var(--search-bar-height);
   justify-content: flex-start;
