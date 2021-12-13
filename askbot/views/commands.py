@@ -106,7 +106,7 @@ def process_vote(user = None, vote_direction = None, post = None):
 
 
 @csrf.csrf_protect
-def vote(request):
+def legacy_vote_view(request):
     """
     TODO: This subroutine needs serious refactoring it's too long and is
           hard to understand.

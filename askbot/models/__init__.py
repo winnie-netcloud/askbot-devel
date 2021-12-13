@@ -1340,6 +1340,9 @@ def user_assert_can_follow_question(self, question=None):
 def user_assert_can_remove_flag_offensive(self, post=None):
     assert(post is not None)
 
+    if self.is_administrator_or_moderator():
+        return
+
     non_existing_flagging_error_message = _('cannot remove non-existing flag')
 
     if self.get_flags_for_post(post).count() < 1:
@@ -2526,7 +2529,7 @@ def user_is_post_moderator(self, post):
         return False
 
 def user_is_administrator_or_moderator(self):
-    return (self.is_administrator() or self.is_moderator())
+    return self.is_administrator() or self.is_moderator()
 
 def user_is_suspended(self):
     return (self.status == 's')
@@ -3336,9 +3339,9 @@ def flag_post(
         for flag in all_flags:
             auth.onUnFlaggedItem(post, flag.user, timestamp=timestamp)
 
-    elif cancel:#todo: can't unflag?
+    elif cancel:
         if force == False:
-            user.assert_can_remove_flag_offensive(post = post)
+            user.assert_can_remove_flag_offensive(post=post)
         auth.onUnFlaggedItem(post, user, timestamp=timestamp)
 
     else:
@@ -4074,20 +4077,6 @@ def record_flag_offensive(instance, mark_by, **kwargs):
 #                                    )
     activity.add_recipients(instance.get_moderators())
 
-def remove_flag_offensive(instance, mark_by, **kwargs):
-    "Remove flagging activity"
-    content_type = ContentType.objects.get_for_model(instance)
-
-    activity = Activity.objects.filter(
-                    user=mark_by,
-                    content_type = content_type,
-                    object_id = instance.id,
-                    activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE,
-                    question=instance.get_origin_post()
-                )
-    activity.delete()
-
-
 def record_update_tags(thread, tags, user, timestamp, **kwargs):
     """
     This function sends award badges signal on each updated tag
@@ -4501,11 +4490,6 @@ signals.flag_offensive.connect(
     record_flag_offensive,
     sender=Post,
     dispatch_uid='record_flag_offensive_on_post_flag'
-)
-signals.remove_flag_offensive.connect(
-    remove_flag_offensive,
-    sender=Post,
-    dispatch_uid='remove_flag_offensive_on_post_unflag'
 )
 signals.tags_updated.connect(
     record_update_tags,

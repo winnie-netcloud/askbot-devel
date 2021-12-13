@@ -650,6 +650,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
         'user_is_thread_moderator': thread.has_moderator(request.user),
         'user_votes': user_votes,
         'user_post_id_list': user_post_id_list,
+        'user_flag_counts_by_post_id': thread.get_flag_counts_by_post_id(request.user),
         'user_can_post_comment': user_can_post_comment,#in general
     }
     #shared with ...

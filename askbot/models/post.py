@@ -640,6 +640,25 @@ class Post(models.Model):
     def is_reject_reason(self):
         return self.post_type == 'reject_reason'
 
+    def get_flag_activity_object(self, user):
+        """Returns flag activity object, preferrably initialized by the user,
+        If user is admin or mod, return any flag object.
+        Raises an exception, if object does not exist.
+        """
+        from askbot.models import Activity
+        try:
+            return Activity.objects.get(object_id=self.pk,
+                                        content_type=ContentType.objects.get_for_model(self),
+                                        user_id=user.pk,
+                                        activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE)
+        except Activity.DoesNotExist:
+            if not user.is_administrator_or_moderator:
+                raise
+
+            return Activity.objects.get(object_id=self.pk,
+                                        content_type=ContentType.objects.get_for_model(self),
+                                        activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE)
+
     def get_last_edited_date(self):
         """returns date of last edit or date of creation
         if there were no edits"""

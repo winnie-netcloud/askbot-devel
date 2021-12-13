@@ -18,11 +18,7 @@ from askbot import models
 from askbot import const
 from askbot.conf import settings as askbot_settings
 
-class DBApiTests(AskbotTestCase):
-    """tests methods on User object,
-    that were added for askbot
-    """
-
+class DBApiTestsBase(AskbotTestCase):
     def setUp(self):
         self.create_user()
         self.create_user(username = 'other_user')
@@ -35,11 +31,14 @@ class DBApiTests(AskbotTestCase):
         if question is None:
             question = self.question
 
-        self.answer = super(DBApiTests, self).post_answer(
-                                                user = user,
-                                                question = question,
-                                            )
+        self.answer = super().post_answer(user=user, question=question)
         return self.answer
+
+
+class DBApiTests(DBApiTestsBase):
+    """tests methods on User object,
+    that were added for askbot
+    """
 
     def assert_post_is_deleted(self, post):
         self.assertTrue(post.deleted == True)
@@ -56,23 +55,6 @@ class DBApiTests(AskbotTestCase):
         self.assertEqual(
             models.Tag.objects.filter(name='').count(),
             0
-        )
-
-    def test_flag_question(self):
-        self.user.set_status('m')
-        self.user.flag_post(self.question)
-        self.assertEqual(
-            self.user.get_flags().count(),
-            1
-        )
-
-    def test_flag_answer(self):
-        self.post_answer()
-        self.user.set_status('m')
-        self.user.flag_post(self.answer)
-        self.assertEqual(
-            self.user.get_flags().count(),
-            1
         )
 
     def ask_anonymous_question(self):
@@ -688,6 +670,7 @@ class GroupTests(AskbotTestCase):
         self.assertEqual(acts[0].recipients.count(), 1)
         recipient = acts[0].recipients.all()[0]
         self.assertEqual(recipient, mod)
+
 
 class LinkPostingTests(AskbotTestCase):
 

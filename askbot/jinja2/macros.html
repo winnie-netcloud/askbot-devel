@@ -5,12 +5,12 @@
 {%- endmacro -%}
 
 {%- macro post_flag_buttons(post) -%}
-  <span class="action-link with-flag-icon js-post-flag-btn">
+  <span id="js-post-flag-btn-{{post.id}}" class="action-link with-flag-icon js-post-flag-btn">
     {% trans %}flag offensive{% endtrans %}
     <span class="js-post-flag-count {% if post.offensive_flag_count == 0 %}js-hidden{% endif %}"
     >{{ post.offensive_flag_count }}</span>
   </span>
-  <span class="action-link with-flag-icon js-post-unflag-btn {% if post.offensive_flag_count == 0 %}js-hidden{% endif %}">
+  <span id="js-post-unflag-btn-{{post.id}}" class="action-link with-flag-icon js-post-unflag-btn {% if post.offensive_flag_count == 0 %}js-hidden{% endif %}">
     {% trans %}remove flag{% endtrans %}
   </span>
 {%- endmacro -%}

@@ -17,12 +17,6 @@ var Vote = (function () {
     var imgIdPrefixAnswerVoteup = 'answer-img-upvote-';
     var imgIdPrefixAnswerVotedown = 'answer-img-downvote-';
     var voteNumberClass = 'vote-number';
-    var offensiveIdPrefixQuestionFlag = 'question-offensive-flag-';
-    var removeOffensiveIdPrefixQuestionFlag = 'question-offensive-remove-flag-';
-    var removeAllOffensiveIdPrefixQuestionFlag = 'question-offensive-remove-all-flag-';
-    var offensiveIdPrefixAnswerFlag = 'answer-offensive-flag-';
-    var removeOffensiveIdPrefixAnswerFlag = 'answer-offensive-remove-flag-';
-    var removeAllOffensiveIdPrefixAnswerFlag = 'answer-offensive-remove-all-flag-';
     var removeAnswerLinkIdPrefix = 'answer-delete-link-';
     var questionSubscribeUpdates = 'question-subscribe-updates';
     var questionSubscribeSidebar = 'question-subscribe-sidebar';
@@ -35,7 +29,6 @@ var Vote = (function () {
     var subscribeAnonymousMessage = gettext('anonymous users cannot subscribe to questions') + pleaseLogin;
     var voteAnonymousMessage = gettext('anonymous users cannot vote') + pleaseLogin;
     //there were a couple of more messages...
-    var offensiveAnonymousMessage = gettext('anonymous users cannot flag offensive posts') + pleaseLogin;
     var removeConfirmation = gettext('confirm delete');
     var removeAnonymousMessage = gettext('anonymous users cannot delete/undelete') + pleaseLogin;
     var recoveredMessage = gettext('post recovered');
@@ -48,12 +41,6 @@ var Vote = (function () {
         answerDownVote:6,
 
         acceptAnswer: 0,
-        offensiveQuestion: 7,
-        removeOffensiveQuestion: 7.5,
-        removeAllOffensiveQuestion: 7.6,
-        offensiveAnswer: 8,
-        removeOffensiveAnswer: 8.5,
-        removeAllOffensiveAnswer: 8.6,
         removeQuestion: 9,//deprecate
         removeAnswer: 10,//deprecate
         questionSubscribeUpdates: 11,
@@ -128,36 +115,6 @@ var Vote = (function () {
         /*jshint eqeqeq:true */
     };
 
-
-    var getOffensiveQuestionFlag = function () {
-        var offensiveQuestionFlag = 'span[id^="' + offensiveIdPrefixQuestionFlag + '"]';
-        return $(offensiveQuestionFlag);
-    };
-
-    var getRemoveOffensiveQuestionFlag = function () {
-        var removeOffensiveQuestionFlag = 'span[id^="' + removeOffensiveIdPrefixQuestionFlag + '"]';
-        return $(removeOffensiveQuestionFlag);
-    };
-
-    var getRemoveAllOffensiveQuestionFlag = function () {
-        var removeAllOffensiveQuestionFlag = 'span[id^="' + removeAllOffensiveIdPrefixQuestionFlag + '"]';
-        return $(removeAllOffensiveQuestionFlag);
-    };
-
-    var getOffensiveAnswerFlags = function () {
-        var offensiveQuestionFlag = 'span[id^="' + offensiveIdPrefixAnswerFlag + '"]';
-        return $(offensiveQuestionFlag);
-    };
-
-    var getRemoveOffensiveAnswerFlag = function () {
-        var removeOffensiveAnswerFlag = 'span[id^="' + removeOffensiveIdPrefixAnswerFlag + '"]';
-        return $(removeOffensiveAnswerFlag);
-    };
-
-    var getRemoveAllOffensiveAnswerFlag = function () {
-        var removeAllOffensiveAnswerFlag = 'span[id^="' + removeAllOffensiveIdPrefixAnswerFlag + '"]';
-        return $(removeAllOffensiveAnswerFlag);
-    };
 
     var getquestionSubscribeUpdatesCheckbox = function () {
         return $('#' + questionSubscribeUpdates);
@@ -271,104 +228,6 @@ var Vote = (function () {
         /*jshint eqeqeq:true */
     };
 
-    var callback_offensive = function (object, voteType, data) {
-        /*jshint eqeqeq:false */
-        //todo: transfer proper translations of these from i18n.js
-        //to django.po files
-        //_('anonymous users cannot flag offensive posts') + pleaseLogin;
-        if (data.success == '1') {
-            if (data.count > 0) {
-                $(object).children('span[class="darkred"]').text('(' + data.count + ')');
-            } else {
-                $(object).children('span[class="darkred"]').text('');
-            }
-
-            // Change the link text and rebind events
-            $(object).find('.question-flag').html(gettext('remove flag'));
-            var obj_id = $(object).attr('id');
-            $(object).attr('id', obj_id.replace('flag-', 'remove-flag-'));
-
-            getRemoveOffensiveQuestionFlag().unbind('click').click(function () {
-                Vote.remove_offensive(this, VoteType.removeOffensiveQuestion);
-            });
-
-            getRemoveOffensiveAnswerFlag().unbind('click').click(function () {
-                Vote.remove_offensive(this, VoteType.removeOffensiveAnswer);
-            });
-        } else {
-            object = $(object);
-            showMessage(object, data.message);
-        }
-        /*jshint eqeqeq:true */
-    };
-
-    var callback_remove_offensive = function (object, voteType, data) {
-        /*jshint eqeqeq:false */
-        //todo: transfer proper translations of these from i18n.js
-        //to django.po files
-        //_('anonymous users cannot flag offensive posts') + pleaseLogin;
-        if (data.success == '1') {
-            if (data.count > 0) {
-                $(object).children('span[class="darkred"]').text('(' + data.count + ')');
-            } else {
-                $(object).children('span[class="darkred"]').text('');
-                // Remove "remove all flags link" since there are no more flags to remove
-                var remove_all = $(object).siblings('span.offensive-flag[id*="-offensive-remove-all-flag-"]');
-                $(remove_all).next('span.sep').remove();
-                $(remove_all).remove();
-            }
-            // Change the link text and rebind events
-            $(object).find('.question-flag').html(gettext('flag offensive'));
-            var obj_id = $(object).attr('id');
-            $(object).attr('id', obj_id.replace('remove-flag-', 'flag-'));
-
-            getOffensiveQuestionFlag().unbind('click').click(function () {
-                Vote.offensive(this, VoteType.offensiveQuestion);
-            });
-
-            getOffensiveAnswerFlags().unbind('click').click(function () {
-                Vote.offensive(this, VoteType.offensiveAnswer);
-            });
-        } else {
-            object = $(object);
-            showMessage(object, data.message);
-        }
-        /*jshint eqeqeq:true */
-    };
-
-    var callback_remove_all_offensive = function (object, voteType, data) {
-        /*jshint eqeqeq:false */
-        //todo: transfer proper translations of these from i18n.js
-        //to django.po files
-        //_('anonymous users cannot flag offensive posts') + pleaseLogin;
-        if (data.success == '1') {
-            if (data.count > 0) {
-                $(object).children('span[class="darkred"]').text('(' + data.count + ')');
-            } else {
-                $(object).children('span[class="darkred"]').text('');
-            }
-            // remove the link. All flags are gone
-            var remove_own = $(object).siblings('span.offensive-flag[id*="-offensive-remove-flag-"]');
-            $(remove_own).find('.question-flag').html(gettext('flag offensive'));
-            $(remove_own).attr('id', $(remove_own).attr('id').replace('remove-flag-', 'flag-'));
-
-            $(object).next('span.sep').remove();
-            $(object).remove();
-
-            getOffensiveQuestionFlag().unbind('click').click(function () {
-                Vote.offensive(this, VoteType.offensiveQuestion);
-            });
-
-            getOffensiveAnswerFlags().unbind('click').click(function () {
-                Vote.offensive(this, VoteType.offensiveAnswer);
-            });
-        } else {
-            object = $(object);
-            showMessage(object, data.message);
-        }
-        /*jshint eqeqeq:true */
-    };
-
     var callback_remove = function (object, voteType, data) {
         /*jshint eqeqeq:false */
         if (data.success == '1') {
@@ -434,59 +293,6 @@ var Vote = (function () {
             }
 
             submit(object, voteType, callback_vote);
-        },
-        //flag offensive
-        offensive: function (object, voteType) {
-            if (!currentUserId || currentUserId.toUpperCase() === 'NONE') {
-                showMessage(
-                    $(object),
-                    offensiveAnonymousMessage.replace(
-                            '{{QuestionID}}',
-                            questionId
-                        ).replace(
-                            '{{questionSlug}}',
-                            questionSlug
-                        )
-                );
-                return false;
-            }
-            postId = object.id.substr(object.id.lastIndexOf('-') + 1);
-            submit(object, voteType, callback_offensive);
-        },
-        //remove flag offensive
-        remove_offensive: function (object, voteType) {
-            if (!currentUserId || currentUserId.toUpperCase() === 'NONE') {
-                showMessage(
-                    $(object),
-                    offensiveAnonymousMessage.replace(
-                            '{{QuestionID}}',
-                            questionId
-                        ).replace(
-                            '{{questionSlug}}',
-                            questionSlug
-                        )
-                );
-                return false;
-            }
-            postId = object.id.substr(object.id.lastIndexOf('-') + 1);
-            submit(object, voteType, callback_remove_offensive);
-        },
-        remove_all_offensive: function (object, voteType) {
-            if (!currentUserId || currentUserId.toUpperCase() === 'NONE') {
-                showMessage(
-                    $(object),
-                    offensiveAnonymousMessage.replace(
-                            '{{QuestionID}}',
-                            questionId
-                        ).replace(
-                            '{{questionSlug}}',
-                            questionSlug
-                        )
-                );
-                return false;
-            }
-            postId = object.id.substr(object.id.lastIndexOf('-') + 1);
-            submit(object, voteType, callback_remove_all_offensive);
         },
         //delete question or answer (comments are deleted separately)
         remove: function (object, voteType) {

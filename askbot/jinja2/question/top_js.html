@@ -17,6 +17,8 @@
         posts['{{post_id}}'] = 1;
       {% endfor %}
       data['user_posts'] = posts;
+
+      data['user_flag_counts_by_post_id'] = {{ user_flag_counts_by_post_id|as_json }};
     }
 
     function hasClass (node, selector) {
@@ -218,14 +220,10 @@
     }
 
     function maybeRemoveFlagBtns(postId) {
-      var flagBtn = document.getElementById('js-post-flag-btn-' + postId);
+      if (data['userIsAdminOrMod']) return;
+      if (data['user_flag_counts_by_post_id'][postId]) return;
       var unflagBtn = document.getElementById('js-post-unflag-btn-' + postId);
-      if (!(flagBtn || postUnflagBtn)) return
-      var userRep = data['userReputation'];
-      var minRep = {{ settings.MIN_REP_TO_FLAG_OFFENSIVE }};
-      if (userRep >= minRep) return
-      flagBtn && removeNode(flagBtn);
-      unflagBtn && removeNode(unflagBtn);
+      if (unflagBtn) unflagBtn.className += ' js-hidden';
     }
 
     function maybeRemoveEditBtns(postId) {

@@ -1,3 +1,4 @@
+import collections
 import datetime
 import logging
 import operator
@@ -8,6 +9,7 @@ from django.conf import settings as django_settings
 from django.db import models
 from django.db.models import F, Q
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.core import cache  # import cache, not from cache import cache, to be able to monkey-patch cache.cache in test cases
 from django.core import exceptions as django_exceptions
 from django.template.loader import get_template
@@ -26,7 +28,7 @@ from askbot.models.tag import filter_accepted_tags, filter_suggested_tags
 from askbot.models.tag import separate_unused_tags
 from askbot.models.base import BaseQuerySetManager
 from askbot.models.base import DraftContent, AnonymousContent
-from askbot.models.user import Group, PERSONAL_GROUP_NAME_PREFIX
+from askbot.models.user import Activity, Group, PERSONAL_GROUP_NAME_PREFIX
 from askbot.models.fields import LanguageCodeField
 from askbot import signals
 from askbot import const
@@ -733,6 +735,23 @@ class Thread(models.Model):
         """give the ids to all the answers for the user"""
         answers = self.get_answers(user=user)
         return [answer.id for answer in answers]
+
+    def get_flag_counts_by_post_id(self, user):
+        """Returns a dictionary post_id -> flag_count"""
+        if user.is_anonymous:
+            return {}
+
+        from askbot.models import Post
+        post_ids = Post.objects.filter(thread_id=self.pk).only('pk')
+        flags = Activity.objects.filter(object_id__in=post_ids,
+                                        content_type=ContentType.objects.get_for_model(Post),
+                                        user_id=user.pk,
+                                        activity_type=const.TYPE_ACTIVITY_MARK_OFFENSIVE)
+        flags = flags.only('pk', 'object_id')
+        result = collections.defaultdict(int)
+        for flag in flags:
+            result[flag.object_id] += 1
+        return dict(result)
 
     def get_latest_revision(self, user=None):
         # TODO: add denormalized field to Thread model

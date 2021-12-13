@@ -64,36 +64,61 @@
       if (data.count > 0) {
         this._flagCounter.html(data.count);
         this._flagCounter.removeClass('js-hidden');
-        this._unflagBtn.removeClass('js-hidden');
       } else {
         this._flagCounter.html('');
         this._flagCounter.addClass('js-hidden');
-        this._unflagBtn.addClass('js-hidden');
       }
+      this.updateUnflagButtonVisibility(data.count);
     } else {
       showMessage($(this._flagBtn), data.message);
     }
-  }
+  };
+
+  PostFlagger.prototype.updateUnflagButtonVisibility = function (flagCount) {
+    if (askbot.data.userIsAdminOrMod) {
+      if (flagCount > 0) {
+        this._unflagBtn.removeClass('js-hidden');
+      } else {
+        this._unflagBtn.addClass('js-hidden');
+      }
+    } else { // for regular user show if this post was flagged by the user
+      var flagCountsByPostId = askbot.data.user_flag_counts_by_post_id;
+      var postId = this._postId;
+      if (flagCountsByPostId[postId.toString()]) {
+        this._unflagBtn.removeClass('js-hidden');
+      } else {
+        this._unflagBtn.addClass('js-hidden');
+      }
+    }
+  };
 
   PostFlagger.prototype.makeStartFlagHandler = function() {
     var me = this;
+    var postId = this._postId;
     return function () {
       if (!askbot.data.userId) {
         showMessage(me._flagButton, CANNOT_FLAG_MESSAGE);
         return false;
       }
-      me.callApi('flag', function(data) { me.finishFlagHandler(data); });
+      me.callApi('flag', function(data) {
+        askbot.data.user_flag_counts_by_post_id[postId.toString()] = 1;
+        me.finishFlagHandler(data);
+      });
     }
   };
 
   PostFlagger.prototype.makeStartUnflagHandler = function() {
     var me = this;
+    var postId = this._postId;
     return function () {
       if (!askbot.data.userId) {
         showMessage(me._unflagButton, CANNOT_UNFLAG_MESSAGE);
         return false;
       }
-      me.callApi('unflag', function(data) { me.finishFlagHandler(data) });
+      me.callApi('unflag', function(data) {
+        askbot.data.user_flag_counts_by_post_id[postId.toString()] = 0;
+        me.finishFlagHandler(data)
+      });
     }
   };
 

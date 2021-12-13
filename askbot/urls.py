@@ -327,9 +327,9 @@ urlpatterns = [
         views.commands.merge_questions,
         name='merge_questions'
     ),
-    service_url(  # ajax only
+    service_url(# ajax only
         r'^vote$',
-        views.commands.vote,
+        views.commands.legacy_vote_view,
         name='vote'
     ),
     url(
