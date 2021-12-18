@@ -75,7 +75,7 @@ SimpleEditor.prototype.getAutoResizeHandler = function() {
         mirror.text(text);
         var height = mirror.height();
         var lineHeight = parseInt(textarea.css('line-height'));
-        height = lineHeight * Math.max(Math.ceil(height/lineHeight), minLines);
+        height = lineHeight * Math.max(Math.round(height/lineHeight), minLines);
         textarea.css('height', height + 8);
     }
 };
@@ -85,7 +85,7 @@ SimpleEditor.prototype.setMirrorStyle = function() {
     var textarea = this._textarea;
     var mirrorCss = {
         'position': 'absolute',
-        'top': '-999em',
+        'left': '-999rem',
         'padding': textarea.css('padding'),
         'margin': textarea.css('margin'),
         'white-space': textarea.css('white-space'),
