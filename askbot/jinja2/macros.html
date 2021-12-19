@@ -361,7 +361,7 @@ for the purposes of the AJAX comment editor #}
   <div id="js-post-{{comment.id}}" class="js-comment" data-post-id="{{ comment.id }}">
     <div class="comment-votes">
       <div id="js-post-upvote-btn-{{comment.id}}"
-        class="js-comment-upvote-btn js-score with-comment-upvote-icon"
+        class="js-post-upvote-btn js-score with-comment-upvote-icon"
         title="{% trans %}upvote comment{% endtrans %}"
       >{% if comment.score > 0 %}{{ comment.score }}{% endif %}</div>
       {% if comment.id %}
@@ -377,7 +377,7 @@ for the purposes of the AJAX comment editor #}
       <div class="js-comment-body">
         {{ comment.summary }}
       </div>
-      <div class="comment-controls">
+      <div class="js-comment-controls">
         {# important - the same number for avatar size must be in question/javascript.html #}
         {% if hasattr(comment.author, 'is_terminated') and comment.author.is_terminated() %}
           {{ anon_avatar(16) }}

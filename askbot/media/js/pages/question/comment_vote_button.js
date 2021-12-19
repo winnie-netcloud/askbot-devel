@@ -25,9 +25,7 @@ inherits(CommentVoteButton, SimpleControl);
  */
 CommentVoteButton.prototype.setScore = function (score) {
     this._score = score;
-    if (this._element) {
-        this._element.html(score || '');
-    }
+    if (this._element) this._element.html(score || '');
     this._element.trigger('askbot.afterSetScore', [this, score]);
 };
 /**
@@ -35,18 +33,16 @@ CommentVoteButton.prototype.setScore = function (score) {
  */
 CommentVoteButton.prototype.setVoted = function (voted) {
     this._voted = voted;
-    if (this._element && voted) {
-        this._element.addClass('upvoted');
-    } else if (this._element) {
-        this._element.removeClass('upvoted');
-    }
+    if (!this._element) return;
+    if (voted) this._element.addClass('js-active');
+    if (!voted) this._element.removeClass('js-active');
 };
 
 CommentVoteButton.prototype.getVoteHandler = function () {
     var me = this;
     var comment = this._comment;
     return function () {
-        var cancelVote =  me._voted ? true: false;
+        var cancelVote =  !!me._voted;
         var post_id = me._comment.getId();
         var data = {
             cancel_vote: cancelVote,
@@ -73,23 +69,7 @@ CommentVoteButton.prototype.getVoteHandler = function () {
 CommentVoteButton.prototype.decorate = function (element) {
     this._element = element;
     this.setHandler(this.getVoteHandler());
-
-    element = this._element;
-    var comment = this._comment;
-    /* can't call comment.getElement() here due
-     * an issue in the getElement() of comment
-     * so use an "illegal" access to comment._element here
-     */
-    comment._element.mouseenter(function () {
-        //outside height may not be known
-        //var height = comment.getElement().height();
-        //element.height(height);
-        element.addClass('hover');
-    });
-    comment._element.mouseleave(function () {
-        element.removeClass('hover');
-    });
-
+    this._voted = !!askbot.data.user_votes[this._comment.getId()];
 };
 
 CommentVoteButton.prototype.createDom = function () {
@@ -97,9 +77,8 @@ CommentVoteButton.prototype.createDom = function () {
     if (this._score > 0) {
         this._element.html(this._score);
     }
-    this._element.addClass('upvote');
     if (this._voted) {
-        this._element.addClass('upvoted');
+        this._element.addClass('js-active');
     }
     this.decorate(this._element);
 };

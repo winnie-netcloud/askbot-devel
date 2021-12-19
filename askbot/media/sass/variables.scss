@@ -154,6 +154,8 @@
   --post-vote-btn-group-margin: 0.25rem 0 0.5rem;
   --post-vote-btn-inactive-color: var(--clr-neutral-50);
   --post-vote-btn-inactive-hover-color: var(--clr-neutral-20);
+  --post-upvote-btn-active-color: var(--clr-orange);
+  --post-downvote-btn-active-color: var(--clr-orange);
   --post-votes-font-size: 1rem;
   --post-share-button-width: 1rem;
 
@@ -202,13 +204,15 @@
   --comments-list-margin: 0 0 0.75rem;
   --comments-list-title-margin: 0 0 0.5rem;
   --comments-list-title-font-size: 1.125rem;
+  --comment-avatar-size: 1rem;
   --comment-margin: 0 0 0.5rem;
-  --comment-votes-width: 1.5rem;
+  --comment-votes-width: 1.75rem;
+  --comment-votes-font-size: 0.875rem;
   --comment-upvote-btn-color: var(--clr-neutral-75);
   --comment-upvote-btn-hover-color: var(--clr-danger);
   --comment-upvote-active-btn-color: var(--clr-orange);
   --comment-upvote-active-btn-hover-color: var(--clr-danger);
-  --comment-upvote-btn-icon-padding: 0 0 0 0.125rem;
+  --comment-upvote-btn-icon-padding: 5px 0 0 0;
 
   --info-box-bg: var(--clr-highlight-pale);
   --info-box-border-radius: var(--border-radius);

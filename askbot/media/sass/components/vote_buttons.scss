@@ -26,6 +26,14 @@
   }
 }
 
+.js-post-upvote-btn.js-active {
+  color: var(--post-upvote-btn-active-color);
+}
+
+.js-post-downvote-btn.js-active {
+  color: var(--post-downvote-btn-active-color);
+}
+
 .js-post-vote-number {
   font-size: var(--post-votes-font-size);
 }

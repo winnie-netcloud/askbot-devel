@@ -204,5 +204,4 @@
       var comments = new PostCommentsWidget();
       comments.decorate($(element));
   });
-
 })();

@@ -88,7 +88,7 @@ Comment.prototype.decorate = function (element) {
     }
 
     var vote = new CommentVoteButton(this);
-    vote.decorate(this._element.find('.js-comment-upvote-btn'));
+    vote.decorate(this._element.find('.js-post-upvote-btn'));
     this._voteButton = vote;
 
     this._userLink = this._element.find('.js-comment-author');

@@ -38,28 +38,43 @@
   .js-avatar-box {
     vertical-align: middle;
   }
+  .js-avatar {
+    height: var(--comment-avatar-size);
+    width: var(--comment-avatar-size);
+  }
   .action-link::before {
     font-size: var(--post-controls-icon-size);
     margin: var(--post-controls-icon-margin);
   }
 }
 
-.js-comment-upvote-btn {
+.js-comment .js-post-upvote-btn {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+  font-size: var(--comment-votes-font-size);
   &::before {
     font-size: 0.75rem;
     color: var(--comment-upvote-btn-color);
     transition: color var(--transition-params);
-    cursor: pointer;
     padding: var(--comment-upvote-btn-icon-padding);
   }
   &:hover::before {
     color: var(--comment-upvote-btn-hover-color);
     transition: color var(--transition-params);
   }
+  &.js-active {
+    color: var(--comment-upvote-active-btn-color);
+    transition: color var(--transition-params);
+  }
   &.js-active::before {
     color: var(--comment-upvote-active-btn-color);
+    transition: color var(--transition-params);
     &:hover {
       color: var(--comment-upvote-active-btn-hover-color);
+      transition: color var(--transition-params);
     }
   }
 }

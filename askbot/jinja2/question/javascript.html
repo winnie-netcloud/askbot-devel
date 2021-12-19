@@ -2,7 +2,7 @@
   {% include "editors/tinymce_scripts.html" %}
 {% endif %}
 {% compress js %}
-  <script type="text/javascript" src="{{ '/jslib/editor.js'|media }}"></script>
+  <script src="{{ '/jslib/editor.js'|media }}"></script>
   <script src="{{ '/jslib/jquery.validate.min.js'|media }}"></script>
   <script src="{{ '/jslib/highlight.min.js'|media }}"></script>
   <script src="{{ '/js/utils/toggle.js'|media }}"></script>
@@ -11,11 +11,12 @@
   <script src="{{ '/js/validators/question_validators.js'|media }}"></script>
   <script src="{{ '/js/validators/tag_validators.js'|media }}"></script>
   <script src="{{ '/js/validators/answer_validators.js'|media }}"></script>
-  <script src="{{ '/js/pages/question/retagger.js'|media }}"</script>
-  <script src="{{ '/js/pages/question/edit_comment_form.js'|media }}"</script>
-  <script src="{{ '/js/pages/question/comment_vote_button.js'|media }}"</script>
-  <script src="{{ '/js/pages/question/comment.js'|media }}"</script>
+  <script src="{{ '/js/pages/question/retagger.js'|media }}"></script>
+  <script src="{{ '/js/pages/question/comment.js'|media }}"></script>
+  <script src="{{ '/js/pages/question/edit_comment_form.js'|media }}"></script>
+  <script src="{{ '/js/pages/question/comment_vote_button.js'|media }}"></script>
   <script src="{{ '/js/pages/question/social_sharing.js'|media }}"></script>
+  <script src="{{ '/js/pages/question/post_comments_widget.js'|media }}"></script>
   <script src="{{ '/js/pages/question/vote.js'|media }}"></script>
   <script src="{{ '/js/pages/question/flag_offensive.js'|media }}"></script>
   <script src="{{ '/js/pages/question/post_vote.js'|media }}"></script>

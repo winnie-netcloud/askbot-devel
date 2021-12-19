@@ -691,6 +691,8 @@ input[type=text],
   --post-vote-btn-group-margin: 0.25rem 0 0.5rem;
   --post-vote-btn-inactive-color: var(--clr-neutral-50);
   --post-vote-btn-inactive-hover-color: var(--clr-neutral-20);
+  --post-upvote-btn-active-color: var(--clr-orange);
+  --post-downvote-btn-active-color: var(--clr-orange);
   --post-votes-font-size: 1rem;
   --post-share-button-width: 1rem;
   --post-update-info-details-color: var(--clr-neutral-40);
@@ -732,13 +734,15 @@ input[type=text],
   --comments-list-margin: 0 0 0.75rem;
   --comments-list-title-margin: 0 0 0.5rem;
   --comments-list-title-font-size: 1.125rem;
+  --comment-avatar-size: 1rem;
   --comment-margin: 0 0 0.5rem;
-  --comment-votes-width: 1.5rem;
+  --comment-votes-width: 1.75rem;
+  --comment-votes-font-size: 0.875rem;
   --comment-upvote-btn-color: var(--clr-neutral-75);
   --comment-upvote-btn-hover-color: var(--clr-danger);
   --comment-upvote-active-btn-color: var(--clr-orange);
   --comment-upvote-active-btn-hover-color: var(--clr-danger);
-  --comment-upvote-btn-icon-padding: 0 0 0 0.125rem;
+  --comment-upvote-btn-icon-padding: 5px 0 0 0;
   --info-box-bg: var(--clr-highlight-pale);
   --info-box-border-radius: var(--border-radius);
   --info-box-border: var(--border-width) var(--border-style) var(--clr-neutral-60);
@@ -8351,6 +8355,14 @@ ul.tags li {
   color: var(--post-vote-btn-inactive-hover-color);
 }
 
+.js-post-upvote-btn.js-active {
+  color: var(--post-upvote-btn-active-color);
+}
+
+.js-post-downvote-btn.js-active {
+  color: var(--post-downvote-btn-active-color);
+}
+
 .js-post-vote-number {
   font-size: var(--post-votes-font-size);
 }
@@ -8391,27 +8403,44 @@ ul.tags li {
 .js-comment-controls .js-avatar-box {
   vertical-align: middle;
 }
+.js-comment-controls .js-avatar {
+  height: var(--comment-avatar-size);
+  width: var(--comment-avatar-size);
+}
 .js-comment-controls .action-link::before {
   font-size: var(--post-controls-icon-size);
   margin: var(--post-controls-icon-margin);
 }
 
-.js-comment-upvote-btn::before {
+.js-comment .js-post-upvote-btn {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+  font-size: var(--comment-votes-font-size);
+}
+.js-comment .js-post-upvote-btn::before {
   font-size: 0.75rem;
   color: var(--comment-upvote-btn-color);
   transition: color var(--transition-params);
-  cursor: pointer;
   padding: var(--comment-upvote-btn-icon-padding);
 }
-.js-comment-upvote-btn:hover::before {
+.js-comment .js-post-upvote-btn:hover::before {
   color: var(--comment-upvote-btn-hover-color);
   transition: color var(--transition-params);
 }
-.js-comment-upvote-btn.js-active::before {
+.js-comment .js-post-upvote-btn.js-active {
   color: var(--comment-upvote-active-btn-color);
+  transition: color var(--transition-params);
 }
-.js-comment-upvote-btn.js-active::before:hover {
+.js-comment .js-post-upvote-btn.js-active::before {
+  color: var(--comment-upvote-active-btn-color);
+  transition: color var(--transition-params);
+}
+.js-comment .js-post-upvote-btn.js-active::before:hover {
   color: var(--comment-upvote-active-btn-hover-color);
+  transition: color var(--transition-params);
 }
 
 form.repost-comment-as-answer {
@@ -9010,6 +9039,9 @@ code.hljs {
 .js-post.js-question h1 .js-editable-controls,
 .js-post.js-question h1 .js-edit {
   display: inline;
+}
+.js-post.js-question h1 .js-editable-content {
+  padding-right: 0;
 }
 .js-post.js-question h1 .js-edit {
   font-size: var(--large-font-size);
