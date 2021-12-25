@@ -22,6 +22,7 @@
 
 .comment-votes {
   width: var(--comment-votes-width);
+  min-width: var(--comment-votes-width);
 }
 
 
@@ -37,6 +38,7 @@
 .js-comment-controls {
   .js-avatar-box {
     vertical-align: middle;
+    margin-right: 0.125rem;
   }
   .js-avatar {
     height: var(--comment-avatar-size);
@@ -85,4 +87,38 @@ form.repost-comment-as-answer {
 
 .js-comment-edit-btn {
   margin-right: 0.125rem;
+}
+
+.js-comment-author {
+  text-decoration: none;
+}
+
+.js-post-comment-form {
+  padding-left: var(--comment-votes-width);
+  margin: 0.75rem 0;
+  .js-simple-editor {
+    display: flex;
+  }
+  textarea {
+    border-radius: var(--border-radius);
+    margin-bottom: 0.25rem;
+    outline: none;
+    width: 100%;
+  }
+}
+
+.js-edit-comment-controls {
+  margin-bottom: 0.5rem;
+  .btn {
+    margin-right: 0.5rem;
+  }
+}
+
+.js-minor-edit {
+  align-items: center;
+  display: flex;
+  margin-top: 0.25rem;
+  > :first-child {
+    margin-right: 0.25rem;
+  }
 }

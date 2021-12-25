@@ -34,9 +34,8 @@ EditCommentForm.prototype.getEditor = function () {
 EditCommentForm.prototype.getEditorType = function () {
     if (askbot.settings.commentsEditorType === 'rich-text') {
         return askbot.settings.editorType;
-    } else {
-        return 'plain-text';
     }
+    return 'plain-text';
 };
 
 EditCommentForm.prototype.startTinyMCEEditor = function () {
@@ -278,7 +277,7 @@ EditCommentForm.prototype.detach = function () {
 
 EditCommentForm.prototype.createDom = function () {
     this._element = $('<form></form>');
-    this._element.attr('class', 'post-comments');
+    this._element.attr('class', 'js-post-comment-form');
 
     var div = $('<div></div>');
     this._element.append(div);
@@ -291,24 +290,25 @@ EditCommentForm.prototype.createDom = function () {
      */
 
     this._controlsBox = this.makeElement('div');
-    this._controlsBox.addClass('edit-comment-buttons');
+    this._controlsBox.addClass('js-edit-comment-controls');
     div.append(this._controlsBox);
 
-    this._text_counter = $('<span></span>').attr('class', 'counter');
-    this._controlsBox.append(this._text_counter);
-
-    this._submit_btn = $('<button></button>');
+    this._submit_btn = $('<button class="btn"></button>');
     addExtraCssClasses(this._submit_btn, 'primaryButtonClasses');
     this._controlsBox.append(this._submit_btn);
-    this._cancel_btn = $('<button class="cancel"></button>');
+    this._cancel_btn = $('<button class="btn btn-muted"></button>');
     addExtraCssClasses(this._cancel_btn, 'cancelButtonClasses');
     this._cancel_btn.html(gettext('cancel'));
     this._controlsBox.append(this._cancel_btn);
 
+    this._text_counter = $('<span></span>').attr('class', 'js-comment-length-counter');
+    this._controlsBox.append(this._text_counter);
+
+
     //if email alerts are enabled, add a checkbox "suppress_email"
     if (askbot.settings.enableEmailAlerts === true) {
         this._minorEditBox = this.makeElement('div');
-        this._minorEditBox.addClass('checkbox');
+        this._minorEditBox.addClass('js-minor-edit');
         this._controlsBox.append(this._minorEditBox);
         var checkBox = this.makeElement('input');
         checkBox.attr('type', 'checkbox');
