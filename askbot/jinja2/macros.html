@@ -432,8 +432,8 @@ for the purposes of the AJAX comment editor #}
   {% endif %}
   {% set comments_count = comments|length %}
   <div class="js-post-comments {% if comments_count == 0 %}js-empty{% endif %}"
-    data-post-id="{{ post.pk }}"
-    data-post-type="{{ post.post_type }}">
+    data-parent-post-id="{{ post.pk }}"
+    data-parent-post-type="{{ post.post_type }}">
     <h2 class="js-comments-list-title {% if comments_count == 0 %}js-hidden{% endif %}"
     >{% trans %}Comments{% endtrans %}</h2>
     <div class="js-comments-list">

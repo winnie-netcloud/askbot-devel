@@ -47,7 +47,7 @@ Comment.prototype.decorate = function (element) {
 
     this._contentBox = this._element.find('.js-comment-content');
 
-    var timestamp = this._element.find('.timeago');
+    var timestamp = this._element.find('.js-timeago');
     this._dateElement = timestamp;
     this._data.comment_added_at = timestamp.attr('title');
     var userLink = this._element.find('.js-comment-author');
@@ -69,7 +69,7 @@ Comment.prototype.decorate = function (element) {
     var edit_link = this._element.find('.js-comment-edit-btn');
     if (edit_link.length > 0) {
         this._editable = true;
-        this._edit_link = new EditLink();
+        this._edit_link = new EditLink('action-link js-comment-edit-btn');
         this._edit_link.setHandler(this.getEditHandler());
         this._edit_link.decorate(edit_link);
     }
@@ -94,6 +94,12 @@ Comment.prototype.decorate = function (element) {
     this._userLink = this._element.find('.js-comment-author');
 
     this._element.trigger('askbot.afterCommentDecorate', [this]);
+
+    var menuElement = this._element.find('.js-dropdown-menu');
+    if (!menuElement.hasClass('js-mounted')) {
+      var menu = new DropdownMenu();
+      menu.decorate(menuElement);
+    }
 };
 
 Comment.prototype.setDraftStatus = function () {
@@ -192,7 +198,7 @@ Comment.prototype.setContent = function (data) {
     // 8) possibly add edit link
     if (this._editable) {
         var oldEditLink = this._edit_link;
-        this._edit_link = new EditLink();
+        this._edit_link = new EditLink('action-link js-comment-edit-btn');
         this._edit_link.setHandler(this.getEditHandler());
         oldEditLink.getElement().replaceWith(this._edit_link.getElement());
         oldEditLink.dispose();

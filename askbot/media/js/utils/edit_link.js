@@ -1,12 +1,15 @@
 /* global gettext, inherits, SimpleControl */
-var EditLink = function () {
+var EditLink = function (className) {
     SimpleControl.call(this);
+    this.className = className
 };
 inherits(EditLink, SimpleControl);
 
 EditLink.prototype.createDom = function () {
     var element = $('<a></a>');
-    element.addClass('edit js-edit');
+    if (this.className) {
+      element.addClass(this.className);
+    }
     this.decorate(element);
 };
 

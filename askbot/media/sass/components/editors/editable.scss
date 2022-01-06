@@ -2,15 +2,3 @@
   margin-right: 0.5rem;
   padding-bottom: 0.125rem;
 }
-
-.js-editable {
-  textarea {
-    border-radius: var(--border-radius);
-    box-shadow: var(--editor-box-shadow);
-    padding: var(--editor-padding);
-    width: 100%;
-    outline: none;
-    overflow: hidden;
-    resize: vertical;
-  }
-}

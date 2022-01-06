@@ -160,52 +160,40 @@ EditCommentForm.prototype.attachTo = function (comment, mode) {
 };
 
 EditCommentForm.prototype.getCounterUpdater = function () {
-    //returns event handler
-    var counter = this._text_counter;
-    var editor = this._editor;
-    var handler = function () {
-        var maxCommentLength = askbot.data.maxCommentLength;
-        var length = editor.getText().length;
-        var length1 = maxCommentLength - 100;
+  //returns event handler
+  var counter = this._text_counter;
+  var editor = this._editor;
+  var handler = function () {
+    var commentLength = editor.getText().length;
+    var minLength = askbot.settings.minCommentBodyLength;
 
-        if (length1 < 0) {
-            length1 = Math.round(0.7 * maxCommentLength);
-        }
-        var length2 = maxCommentLength - 30;
-        if (length2 < 0) {
-            length2 = Math.round(0.9 * maxCommentLength);
-        }
+    if (commentLength === 0) {
+      counter.html(interpolate(gettext('enter at least %s characters'), [minLength]));
+      counter.attr('class', 'js-comment-length-counter js-comment-length-counter-too-short');
+    } else if (commentLength < minLength) {
+      counter.html(interpolate(gettext('enter at least %s more characters'), [minLength - commentLength]));
+      counter.attr('class', 'js-comment-length-counter js-comment-length-counter-too-short');
+    } else {
+      var maxLength = askbot.data.maxCommentLength;
+      if (commentLength > Math.round(0.9 * maxLength)) {
+        counter.attr('class', 'js-comment-length-counter js-comment-length-counter-too-long');
+      } else if (commentLength > Math.round(0.7 * maxLength)) {
+        counter.attr('class', 'js-comment-length-counter js-comment-length-counter-almost-too-long');
+      } else {
+        counter.attr('class', 'js-comment-length-counter');
+      }
 
-        /* todo make smooth color transition, from gray to red
-         * or rather - from start color to end color */
-        var color = 'maroon';
-        var chars = askbot.settings.minCommentBodyLength;
-        var feedback = '';
-        if (length === 0) {
-            feedback = interpolate(gettext('enter at least %s characters'), [chars]);
-        } else if (length < chars) {
-            feedback = interpolate(gettext('enter at least %s more characters'), [chars - length]);
-        } else {
-            if (length > length2) {
-                color = '#f00';
-            } else if (length > length1) {
-                color = '#f60';
-            } else {
-                color = '#999';
-            }
-            chars = maxCommentLength - length;
-            feedback = '';
-            if (chars > 0) {
-                feedback = interpolate(gettext('%s characters left'), [chars]);
-            } else {
-                feedback = gettext('maximum comment length reached');
-            }
-        }
-        counter.html(feedback);
-        counter.css('color', color);
-        return true;
-    };
-    return handler;
+      var charsLeft = maxLength - commentLength;
+
+      if (charsLeft > 0) {
+        counter.html(interpolate(gettext('%s characters left'), [charsLeft]));
+      } else {
+        counter.html(gettext('maximum comment length reached'));
+      }
+    }
+    return true;
+  };
+  return handler;
 };
 
 EditCommentForm.prototype.getCommentTruncator = function () {

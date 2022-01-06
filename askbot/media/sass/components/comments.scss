@@ -122,3 +122,16 @@ form.repost-comment-as-answer {
     margin-right: 0.25rem;
   }
 }
+
+.js-comment-length-counter {
+  transition: color var(--transition-params);
+}
+
+.js-comment-length-counter-too-short,
+.js-comment-length-counter-too-long {
+  color: var(--clr-danger);
+}
+
+.js-comment-length-counter-almost-too-long {
+  color: var(--clr-orange);
+}

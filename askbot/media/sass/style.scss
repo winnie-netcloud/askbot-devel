@@ -25,8 +25,10 @@
 @use './components/toolbar_dropdown_menu.scss';
 @use './components/vote_buttons.scss';
 @use './components/comments.scss';
+@use './components/editors/base_editor.scss';
 @use './components/editors/editable.scss';
 @use './components/editors/wmd.scss';
+@use './components/editors/folded_editor.scss';
 @use './components/highlight.min.css';
 @use './components/jquery.modal.scss';
 @use './components/timeago.scss';

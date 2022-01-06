@@ -31,7 +31,7 @@ DropdownMenu.prototype.decorate = function(elem) {
 };
 
 (function() {
-  $('.js-dropdown-menu').each(function(_, elem) {
+  $(".js-dropdown-menu:not('.js-mounted')").each(function(_, elem) {
     var menu = new DropdownMenu();
     menu.decorate($(elem));
   })

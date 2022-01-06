@@ -23,9 +23,26 @@
   }
   .action-link {
     display: block;
-    margin: 0.25rem 0;
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+  li {
+    padding: var(--toolbar-dropdown-menu-item-padding);
+    color: var(--fg-color) !important;
+    input {
+      background: transparent;
+      color: var(--fg-color);
+      transition: none;
+    }
+    &:hover {
+      color: var(--bg-color) !important;
+      background: var(--toolbar-dropdown-menu-item-hover-bg);
+      input {
+        background: transparent;
+        color: var(--bg-color);
+        transition: none;
+      }
     }
   }
 }
