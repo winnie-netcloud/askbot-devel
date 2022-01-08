@@ -1,7 +1,7 @@
 <a name="{{ answer.id }}"></a>
 {% if answer.old_answer_id %}<a name="{{ answer.old_answer_id }}"></a>{% endif %}
 <div id="js-post-{{ answer.id }}"
-  class="js-post js-answer {% if answer.endorsed %}js-accepted-answser{% endif %} {% if answer.deleted %}js-post-deleted{% endif %}" 
+  class="js-post js-answer {% if answer.endorsed %}js-accepted-answer{% endif %} {% if answer.deleted %}js-post-deleted{% endif %}" 
   data-post-id="{{ answer.id }}"
 >
   <div class="post-vote-controls">
