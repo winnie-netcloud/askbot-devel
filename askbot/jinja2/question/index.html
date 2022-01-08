@@ -31,6 +31,7 @@
 {% block js_templates %}
   {{ comment_widget(blank_comment) }}
   {% include "editors/simple.html" %}
+  {% include "components/bent_arrow.html" %}
   {{ tag_widget('none', deletable=True) }}
 {% endblock %}
 {% block endjs %}

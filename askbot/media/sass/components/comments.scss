@@ -12,10 +12,6 @@
   margin: var(--comments-list-margin);
 }
 
-.comments-list-controls {
-  display: inline-block;
-}
-
 .js-comment {
   display: flex;
 }
@@ -95,7 +91,13 @@ form.repost-comment-as-answer {
 
 .js-post-comment-form {
   padding-left: var(--comment-votes-width);
+  position: relative;
   margin: 0.75rem 0;
+  .bent-arrow {
+    position: absolute;
+    left: 0.5rem;
+    top: 1.45rem;
+  }
   .js-simple-editor {
     display: flex;
   }

@@ -50,14 +50,27 @@
       comment.decorate(element);
     });
     this._comments = comments;
+
+    this._commentsTitle = element.find('.js-comments-list-title');
+    $(document).on('askbot.afterEditCommentFormCancel', this.getCloseEditorHandler());
+  };
+
+  PostCommentsWidget.prototype.getCloseEditorHandler = function () {
+    var me = this;
+    return function () {
+      if (me._comments.length === 0) {
+        me._element.addClass('js-empty');
+        me._commentsTitle.addClass('js-hidden');
+      }
+    }
   };
 
   PostCommentsWidget.prototype.handleDeletedComment = function () {
     /* if the widget does not have any comments, set
     the 'js-empty' class on the widget element */
-    if (this._cbox.children('.comment').length === 0) {
+    if (this._cbox.children('.js-comment').length === 0) {
       if (this._commentsReversed === false) {
-        this._element.find('.js-comments-list-title').hide();
+        this._commentsTitle.addClass('js-hidden');
       }
       this._element.addClass('js-empty');
     }
@@ -80,16 +93,15 @@
   };
 
   PostCommentsWidget.prototype.hideOpenEditorButton = function () {
-    this._openEditorButton.hide();
     this._openEditorButton.addClass('js-hidden');
   };
 
   PostCommentsWidget.prototype.showOpenEditorButton = function () {
-    this._openEditorButton.show();
     this._openEditorButton.removeClass('js-hidden');
   };
 
   PostCommentsWidget.prototype.startNewComment = function () {
+    this._commentsTitle.removeClass('js-hidden');
     //find comment template, clone it's dom
     var comment = new Comment(this);
     var commentElem = getTemplate('.js-comment');

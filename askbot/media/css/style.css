@@ -913,7 +913,6 @@ input[type=text],
 .inbox-icon::before,
 .with-warning-icon::before,
 .far,
-.with-plus-icon::before,
 .with-comment-icon::before,
 .inbox-icon-with-new-messages::before,
 .fal,
@@ -932,7 +931,7 @@ input[type=text],
 }
 
 .wmd-button-bar .wmd-help-button::before, .wmd-button-bar .wmd-redo-button::before, .wmd-button-bar .wmd-undo-button::before, .wmd-button-bar .wmd-hr-button::before, .wmd-button-bar .wmd-heading-button::before, .wmd-button-bar .wmd-ulist-button::before, .wmd-button-bar .wmd-olist-button::before, .wmd-button-bar .wmd-attachment-button::before, .wmd-button-bar .wmd-image-button::before, .wmd-button-bar .wmd-code-button::before, .wmd-button-bar .wmd-quote-button::before, .wmd-button-bar .wmd-link-button::before, .wmd-button-bar .wmd-italic-button::before, .wmd-button-bar .wmd-bold-button::before, .with-accept-answer-icon::before, .with-link-icon::before, .with-convert-post-icon::before, .with-comment-upvote-icon::before, .with-merge-icon::before, .with-reopen-icon::after, .with-reopen-icon::before, .with-close-icon::before, .with-flag-icon.js-post-unflag-btn::after, .with-flag-icon::before, .with-edit-icon::before, .with-twitter-icon::before, .with-linkedin-icon::before, .with-facebook-icon::before, .with-caret-down-icon::before,
-.with-downvote-icon::before, .with-upvote-icon::before, .with-arrow-left-icon::before, .with-plus-icon::before, .with-comment-icon::before, .with-caret-right-icon::before, .with-caret-left-icon::before, .with-ellipsis-icon::before, .with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-delete-icon::before,
+.with-downvote-icon::before, .with-upvote-icon::before, .with-arrow-left-icon::before, .with-comment-icon::before, .with-caret-right-icon::before, .with-caret-left-icon::before, .with-ellipsis-icon::before, .with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-delete-icon::before,
 .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
 .with-gold-badge-icon::before, .with-tags-icon::before, .with-users-icon::before,
@@ -1092,7 +1091,6 @@ input[type=text],
 .fa-pull-left.inbox-icon::before,
 .fa-pull-left.with-warning-icon::before,
 .far.fa-pull-left,
-.fa-pull-left.with-plus-icon::before,
 .fa-pull-left.with-comment-icon::before,
 .fa-pull-left.inbox-icon-with-new-messages::before,
 .fal.fa-pull-left,
@@ -1157,7 +1155,6 @@ input[type=text],
 .fa-pull-right.inbox-icon::before,
 .fa-pull-right.with-warning-icon::before,
 .far.fa-pull-right,
-.fa-pull-right.with-plus-icon::before,
 .fa-pull-right.with-comment-icon::before,
 .fa-pull-right.inbox-icon-with-new-messages::before,
 .fal.fa-pull-right,
@@ -7192,7 +7189,7 @@ readers do not read off random characters that represent icons */
   src: url("../fa-5.15.3/webfonts/fa-regular-400.eot");
   src: url("../fa-5.15.3/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("../fa-5.15.3/webfonts/fa-regular-400.woff2") format("woff2"), url("../fa-5.15.3/webfonts/fa-regular-400.woff") format("woff"), url("../fa-5.15.3/webfonts/fa-regular-400.ttf") format("truetype"), url("../fa-5.15.3/webfonts/fa-regular-400.svg#fontawesome") format("svg");
 }
-.far, .with-plus-icon::before, .with-comment-icon::before, .inbox-icon-with-new-messages::before {
+.far, .with-comment-icon::before, .inbox-icon-with-new-messages::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 400;
 }
@@ -7337,10 +7334,6 @@ readers do not read off random characters that represent icons */
 }
 
 .with-comment-icon::before {
-  content: "";
-}
-
-.with-plus-icon::before {
   content: "";
 }
 
@@ -8401,10 +8394,6 @@ ul.tags li {
   margin: var(--comments-list-margin);
 }
 
-.comments-list-controls {
-  display: inline-block;
-}
-
 .js-comment {
   display: flex;
 }
@@ -8481,7 +8470,13 @@ form.repost-comment-as-answer {
 
 .js-post-comment-form {
   padding-left: var(--comment-votes-width);
+  position: relative;
   margin: 0.75rem 0;
+}
+.js-post-comment-form .bent-arrow {
+  position: absolute;
+  left: 0.5rem;
+  top: 1.45rem;
 }
 .js-post-comment-form .js-simple-editor {
   display: flex;
@@ -8891,6 +8886,38 @@ code.hljs {
 }
 .js-timeago {
   display: none;
+}
+
+.bent-arrow {
+  --height: 0.5rem;
+  --width: 0.575rem;
+  --border-width: 2px;
+  --tip-length: 7px;
+  --tip-translate-y: 4.625px;
+  --radius: 6px;
+  --color: var(--comment-upvote-btn-color);
+  height: var(--height);
+  width: var(--width);
+}
+
+.bent-arrow-borders {
+  height: var(--height);
+  width: var(--width);
+  border-left: var(--border-width) solid var(--color);
+  border-bottom: var(--border-width) solid var(--color);
+  border-bottom-left-radius: var(--radius);
+  position: relative;
+}
+
+.bent-arrow-tip {
+  position: absolute;
+  width: var(--tip-length);
+  height: var(--tip-length);
+  right: 0;
+  bottom: 0;
+  transform: translateY(var(--tip-translate-y)) rotate(315deg);
+  border-right: var(--border-width) solid var(--color);
+  border-bottom: var(--border-width) solid var(--color);
 }
 
 #js-questions {

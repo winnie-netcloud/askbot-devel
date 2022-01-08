@@ -230,24 +230,27 @@ EditCommentForm.prototype.canCancel = function () {
 };
 
 EditCommentForm.prototype.getCancelHandler = function () {
-    var me = this;
-    return function (evt) {
-        if (me.canCancel()) {
-            var widget = me.getCommentsWidget();
-            widget.handleDeletedComment();
-            me.detach();
-            evt.preventDefault();
-            $(document).trigger('askbot.afterEditCommentFormCancel', [me]);
-        }
-        return false;
-    };
+  var me = this;
+  return function (evt) {
+    if (me.canCancel()) {
+      var widget = me.getCommentsWidget();
+      widget.handleDeletedComment();
+      me.detach();
+      evt.preventDefault();
+      $(document).trigger('askbot.afterEditCommentFormCancel', [me]);
+    }
+    return false;
+  };
 };
 
 EditCommentForm.prototype.detach = function () {
     if (this._comment === null) {
         return;
     }
-    this._comment.getContainerWidget().showOpenEditorButton();
+    var postCommentsWidget = this._comment.getContainerWidget();
+    if (postCommentsWidget.canAddComment()) {
+        postCommentsWidget.showOpenEditorButton();
+    }
     if (this._comment.isBlank()) {
         this._comment.dispose();
     } else {
@@ -266,6 +269,8 @@ EditCommentForm.prototype.detach = function () {
 EditCommentForm.prototype.createDom = function () {
     this._element = $('<form></form>');
     this._element.attr('class', 'js-post-comment-form');
+    this._arrow = getTemplate('.bent-arrow');
+    this._element.append(this._arrow);
 
     var div = $('<div></div>');
     this._element.append(div);
