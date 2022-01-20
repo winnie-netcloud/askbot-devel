@@ -1,0 +1,38 @@
+.js-category-selector {
+  height: 12rem;
+  margin-bottom: 0.5rem;
+  table-layout: fixed;
+  width: 100%;
+  tbody td {
+    border: 1px solid black;
+    width: calc(33.3333% - 4px);
+    vertical-align: top;
+  }
+  th {
+    text-align: left;
+  }
+  ul {
+    list-style: none;
+  }
+  li {
+    cursor: pointer;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding: 0 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &.js-active {
+      color: white;
+      background: var(--clr-neutral-60);
+    }
+  }
+}
+
+.js-save-category-btn {
+  margin-right: 0.5rem;
+}
+
+.js-new-tags-input {
+  margin-bottom: 0.5rem;
+}

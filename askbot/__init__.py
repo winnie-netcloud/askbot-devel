@@ -43,7 +43,7 @@ REQUIREMENTS = {
     'requirements': 'requirements-parser>=0.2.0',
     'robots': 'django-robots>=3.1',
     'regex': 'regex',
-    'tinymce': 'django-tinymce>=2.8.0',
+    'tinymce': 'django-tinymce==2.8.0',
     'unidecode': 'unidecode'
 }
 

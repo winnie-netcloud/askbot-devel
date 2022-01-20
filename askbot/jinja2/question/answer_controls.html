@@ -24,7 +24,7 @@
     href="{{ answer.get_absolute_url(question_post=question) }}"
     title="{% trans %}permanent link{% endtrans %}"
   >{% trans %}link{% endtrans %}</a>
-  <div class="js-dropdown-menu toolbar-dropdown-menu action-link">
+  <div class="js-dropdown-menu js-toolbar-dropdown-menu action-link">
     <div class="js-dropdown-trigger with-caret-down-icon">{% trans %}more{% endtrans %}</div>
     <ul class="js-dropdown-target">
       <li id='post-{{answer.id}}-convert'>

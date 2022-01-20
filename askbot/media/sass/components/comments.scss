@@ -47,7 +47,6 @@
 }
 
 .js-comment .js-post-upvote-btn {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,10 +57,6 @@
     color: var(--comment-upvote-btn-color);
     transition: color var(--transition-params);
     padding: var(--comment-upvote-btn-icon-padding);
-  }
-  &:hover::before {
-    color: var(--comment-upvote-btn-hover-color);
-    transition: color var(--transition-params);
   }
   &.js-active {
     color: var(--comment-upvote-active-btn-color);
@@ -74,6 +69,18 @@
       color: var(--comment-upvote-active-btn-hover-color);
       transition: color var(--transition-params);
     }
+  }
+}
+
+body:not(.anon) .js-comment .js-post-upvote-btn {
+  cursor: pointer;
+  &:hover::before {
+    color: var(--comment-upvote-btn-hover-color);
+    transition: color var(--transition-params);
+  }
+  &.js-active::before:hover {
+    color: var(--comment-upvote-active-btn-hover-color);
+    transition: color var(--transition-params);
   }
 }
 

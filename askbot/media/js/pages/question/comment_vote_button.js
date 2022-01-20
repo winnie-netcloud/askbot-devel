@@ -66,10 +66,16 @@ CommentVoteButton.prototype.getVoteHandler = function () {
     };
 };
 
+CommentVoteButton.prototype.getUserVote = function () {
+  var userVotes = askbot.data.user_votes;
+  if (!userVotes) return 0;
+  return userVotes[this._comment.getId()];
+};
+
 CommentVoteButton.prototype.decorate = function (element) {
     this._element = element;
     this.setHandler(this.getVoteHandler());
-    this._voted = !!askbot.data.user_votes[this._comment.getId()];
+    this._voted = !!this.getUserVote();
 };
 
 CommentVoteButton.prototype.createDom = function () {

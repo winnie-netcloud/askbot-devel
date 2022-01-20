@@ -388,8 +388,8 @@ for the purposes of the AJAX comment editor #}
           >{{comment.author.username|escape}}</a>
         {% endif %}
         <span class="comment-age">({{ timeago(comment.added_at) }})</span>
-        <span class="action-link js-comment-edit-btn">{% trans %}edit{% endtrans %}</span>
-        <div class="js-dropdown-menu toolbar-dropdown-menu action-link">
+        <span class="action-link js-comment-edit-btn js-edit">{% trans %}edit{% endtrans %}</span>
+        <div class="js-dropdown-menu js-toolbar-dropdown-menu action-link">
           <div class="js-dropdown-trigger with-caret-down-icon">{% trans %}more{% endtrans %}</div>
           <ul class="js-dropdown-target">
             <li>
@@ -410,8 +410,8 @@ for the purposes of the AJAX comment editor #}
   </div>
   {% if comment.id %}
   <script type="text/javascript">
-      askbot['functions']['hideConvertLinks']();
-      askbot['functions']['renderPostControls']('{{ comment.id }}');
+      askbot.functions.hideConvertLinks();
+      askbot.functions.renderPostControls('{{ comment.id }}', false);
   </script>
   {% endif %}
 {%- endmacro -%}

@@ -59,7 +59,7 @@ CategorySelectorLoader.prototype.getOnLoadHandler = function () {
         //append loaded html to dom
         var editor = $('<div>' + html + '</div>');
         me.setEditor(editor);
-        $('#question-tags').after(editor);
+        $('.js-question-tags').after(editor);
 
         var selector = askbot.functions.initCategoryTree();
         me.setCategorySelector(selector);
@@ -155,19 +155,20 @@ CategorySelectorLoader.prototype.getCancelHandler = function () {
 
 CategorySelectorLoader.prototype.decorate = function (element) {
     this._element = element;
-    this._display_tags_container = $('#question-tags');
+    this._display_tags_container = $('.js-question-tags');
     this._question_body = $('.question .post-body');
     this._question_controls = $('.js-question-controls');
 
     this._editor_buttons = this.makeElement('div');
     this._done_button = this.makeElement('button');
+    this._done_button.addClass('btn js-save-category-btn');
     this._done_button.html(gettext('save tags'));
     this._editor_buttons.append(this._done_button);
 
     this._cancel_button = this.makeElement('button');
+    this._cancel_button.addClass('btn btn-muted');
     this._cancel_button.html(gettext('cancel'));
     this._editor_buttons.append(this._cancel_button);
-    this._editor_buttons.find('button').addClass('submit');
     this._editor_buttons.addClass('retagger-buttons');
 
     //done button

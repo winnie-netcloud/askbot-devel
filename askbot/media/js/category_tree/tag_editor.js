@@ -300,7 +300,7 @@ TagEditor.prototype.decorate = function (element) {
         tag.setDeleteHandler(me.getTagDeleteHandler(tag));
     });
 
-    var visible_tags_input = element.find('.new-tags-input');
+    var visible_tags_input = element.find('.js-new-tags-input');
     this._visible_tags_input = visible_tags_input;
     this.saveHeight();
 

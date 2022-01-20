@@ -12,7 +12,7 @@
   catSelectorLoader.decorate($('.js-retag-btn'));
   askbot['functions'] = askbot['functions'] || {};
   askbot['functions']['initCategoryTree'] = function(){
-    var sel_elems = $('.category-selector');
+    var sel_elems = $('.js-category-selector');
     if (sel_elems.length > 0) {
       var selector = new CategorySelector();
       selector.setData(JSON.parse('{{ category_tree_data|escapejs }}'));

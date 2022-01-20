@@ -42,7 +42,7 @@ EditCommentForm.prototype.startTinyMCEEditor = function () {
     var editorId = this.makeId('comment-editor');
     var opts = {
         mode: 'exact',
-        content_css: mediaUrl('media/style/tinymce/comments-content.css'),
+        content_css: mediaUrl('media/css/tinymce/comments-content.css'),
         elements: editorId,
         theme: 'advanced',
         theme_advanced_toolbar_location: 'top',

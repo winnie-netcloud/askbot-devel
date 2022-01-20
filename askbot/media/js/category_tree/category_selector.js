@@ -101,7 +101,7 @@ CategorySelector.prototype.populateCategoryLevel = function (source_path) {
         var category_object = item[2];
         selector.addItemObject(category_object);
         if (category_subtree.length > 0) {
-            category_object.addCssClass('tree');
+            category_object.addCssClass('js-subtree');
         }
     });
 
@@ -205,28 +205,28 @@ CategorySelector.prototype.decorate = function (element) {
     var selector0 = new CategorySelectBox();
     selector0.setLevel(0);
     selector0.setCategoryTree(this);
-    selector0.decorate(element.find('.cat-col-0'));
+    selector0.decorate(element.find('.js-cat-col-0'));
     selector0.setSelectHandler(this.getSelectHandler(0));
     this._selectors.push(selector0);
 
     var selector1 = new CategorySelectBox();
     selector1.setLevel(1);
     selector1.setCategoryTree(this);
-    selector1.decorate(element.find('.cat-col-1'));
+    selector1.decorate(element.find('.js-cat-col-1'));
     selector1.setSelectHandler(this.getSelectHandler(1));
     this._selectors.push(selector1);
 
     var selector2 = new CategorySelectBox();
     selector2.setLevel(2);
     selector2.setCategoryTree(this);
-    selector2.decorate(element.find('.cat-col-2'));
+    selector2.decorate(element.find('.js-cat-col-2'));
     selector2.setSelectHandler(this.getSelectHandler(2));
     this._selectors.push(selector2);
 
     if (askbot.data.userIsAdminOrMod) {
         var editor_toggle = new CategoryEditorToggle();
         editor_toggle.setCategorySelector(this);
-        var toggle_element = $('.category-editor-toggle');
+        var toggle_element = $('.js-category-editor-toggle');
         toggle_element.show();
         editor_toggle.decorate(toggle_element);
         this._editor_toggle = editor_toggle;

@@ -8293,19 +8293,19 @@ ul.tags li {
   font-size: 0.75rem;
 }
 
-.toolbar-dropdown-menu {
+.js-toolbar-dropdown-menu {
   display: inline-block;
   position: relative;
 }
-.toolbar-dropdown-menu .js-dropdown-trigger {
+.js-toolbar-dropdown-menu .js-dropdown-trigger {
   padding-right: 0.75rem;
 }
-.toolbar-dropdown-menu .js-dropdown-trigger::before {
+.js-toolbar-dropdown-menu .js-dropdown-trigger::before {
   position: absolute;
   right: 0;
   top: 0.125rem;
 }
-.toolbar-dropdown-menu .js-dropdown-target {
+.js-toolbar-dropdown-menu .js-dropdown-target {
   position: absolute;
   background: var(--bg-color);
   border-radius: var(--toolbar-dropdown-menu-border-radius);
@@ -8317,26 +8317,26 @@ ul.tags li {
   padding: var(--toolbar-dropdown-menu-padding);
   z-index: 10000;
 }
-.toolbar-dropdown-menu .action-link {
+.js-toolbar-dropdown-menu .action-link {
   display: block;
 }
-.toolbar-dropdown-menu .action-link:last-child {
+.js-toolbar-dropdown-menu .action-link:last-child {
   margin-bottom: 0;
 }
-.toolbar-dropdown-menu li {
+.js-toolbar-dropdown-menu li {
   padding: var(--toolbar-dropdown-menu-item-padding);
   color: var(--fg-color) !important;
 }
-.toolbar-dropdown-menu li input {
+.js-toolbar-dropdown-menu li input {
   background: transparent;
   color: var(--fg-color);
   transition: none;
 }
-.toolbar-dropdown-menu li:hover {
+.js-toolbar-dropdown-menu li:hover {
   color: var(--bg-color) !important;
   background: var(--toolbar-dropdown-menu-item-hover-bg);
 }
-.toolbar-dropdown-menu li:hover input {
+.js-toolbar-dropdown-menu li:hover input {
   background: transparent;
   color: var(--bg-color);
   transition: none;
@@ -8426,7 +8426,6 @@ ul.tags li {
 }
 
 .js-comment .js-post-upvote-btn {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8439,10 +8438,6 @@ ul.tags li {
   transition: color var(--transition-params);
   padding: var(--comment-upvote-btn-icon-padding);
 }
-.js-comment .js-post-upvote-btn:hover::before {
-  color: var(--comment-upvote-btn-hover-color);
-  transition: color var(--transition-params);
-}
 .js-comment .js-post-upvote-btn.js-active {
   color: var(--comment-upvote-active-btn-color);
   transition: color var(--transition-params);
@@ -8452,6 +8447,18 @@ ul.tags li {
   transition: color var(--transition-params);
 }
 .js-comment .js-post-upvote-btn.js-active::before:hover {
+  color: var(--comment-upvote-active-btn-hover-color);
+  transition: color var(--transition-params);
+}
+
+body:not(.anon) .js-comment .js-post-upvote-btn {
+  cursor: pointer;
+}
+body:not(.anon) .js-comment .js-post-upvote-btn:hover::before {
+  color: var(--comment-upvote-btn-hover-color);
+  transition: color var(--transition-params);
+}
+body:not(.anon) .js-comment .js-post-upvote-btn.js-active::before:hover {
   color: var(--comment-upvote-active-btn-hover-color);
   transition: color var(--transition-params);
 }
@@ -8918,6 +8925,45 @@ code.hljs {
   transform: translateY(var(--tip-translate-y)) rotate(315deg);
   border-right: var(--border-width) solid var(--color);
   border-bottom: var(--border-width) solid var(--color);
+}
+
+.js-category-selector {
+  height: 12rem;
+  margin-bottom: 0.5rem;
+  table-layout: fixed;
+  width: 100%;
+}
+.js-category-selector tbody td {
+  border: 1px solid black;
+  width: calc(33.3333% - 4px);
+  vertical-align: top;
+}
+.js-category-selector th {
+  text-align: left;
+}
+.js-category-selector ul {
+  list-style: none;
+}
+.js-category-selector li {
+  cursor: pointer;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.js-category-selector li.js-active {
+  color: white;
+  background: var(--clr-neutral-60);
+}
+
+.js-save-category-btn {
+  margin-right: 0.5rem;
+}
+
+.js-new-tags-input {
+  margin-bottom: 0.5rem;
 }
 
 #js-questions {
