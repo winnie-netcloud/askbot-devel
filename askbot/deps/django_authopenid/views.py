@@ -514,9 +514,10 @@ def signin(request, template_name='authopenid/signin.html'):
         return HttpResponseRedirect(next_url)
 
     next_jwt = encode_jwt({'next_url': next_url})
+
     if next_url == reverse('user_signin'):
         # the sticky signin page
-        next_url = '%(next)s?next=%(next)s' % {'next': next_jwt}
+        next_url = '%(next_url)s?next=%(next_jwt)s' % {'next_url': next_url, 'next_jwt': next_jwt}
 
     login_form = forms.LoginForm(initial={'next': next_jwt})
 
