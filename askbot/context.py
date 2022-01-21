@@ -20,6 +20,7 @@ from askbot.utils.html import site_url
 from askbot.utils.translation import get_language
 
 def make_group_list():
+    """Returns list of dictionaries with keys 'name' and 'link'"""
     if not askbot_settings.GROUPS_ENABLED:
         return []
     # calculate context needed to list all the groups
@@ -43,7 +44,7 @@ def make_group_list():
     groups_data.insert(0, {'id': global_group.id, 'name': global_group.name})
 
     # build group_list for the context
-    group_list = list()
+    group_list = []
     for group in groups_data:
         link = _get_group_url(group)
         group_list.append({'name': group['name'], 'link': link})
@@ -51,15 +52,6 @@ def make_group_list():
 
 def application_settings(request):
     """The context processor function"""
-    # if not request.path.startswith('/' + settings.ASKBOT_URL):
-    #     #todo: this is a really ugly hack, will only work
-    #     #when askbot is installed not at the home page.
-    #     #this will not work for the
-    #     #heavy modders of askbot, because their custom pages
-    #     #will not receive the askbot settings in the context
-    #     #to solve this properly we should probably explicitly
-    #     #add settings to the context per page
-    #     return {}
     my_settings = askbot_settings.as_dict()
     my_settings['LANGUAGE_CODE'] = getattr(request, 'LANGUAGE_CODE', settings.LANGUAGE_CODE)
     my_settings['LANGUAGE_MODE'] = askbot.get_lang_mode()
@@ -68,6 +60,7 @@ def application_settings(request):
     my_settings['ALLOWED_UPLOAD_FILE_TYPES'] = settings.ASKBOT_ALLOWED_UPLOAD_FILE_TYPES
     my_settings['ASKBOT_URL'] = settings.ASKBOT_URL
     my_settings['STATIC_URL'] = settings.STATIC_URL
+    my_settings['STATIC_ROOT'] = settings.STATIC_ROOT
     my_settings['IP_MODERATION_ENABLED'] = getattr(settings, 'ASKBOT_IP_MODERATION_ENABLED', False)
     my_settings['USE_LOCAL_FONTS'] = getattr(settings, 'ASKBOT_USE_LOCAL_FONTS', False)
     my_settings['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
@@ -80,7 +73,7 @@ def application_settings(request):
     if my_settings['EDITOR_TYPE'] == 'tinymce':
         tinymce_plugins = settings.TINYMCE_DEFAULT_CONFIG.get('plugins', '').split(',')
         my_settings['TINYMCE_PLUGINS'] = [v.strip() for v in tinymce_plugins]
-        my_settings['TINYMCE_EDITOR_DESELECTOR'] = settings.TINYMCE_DEFAULT_CONFIG['editor_deselector']
+        my_settings['TINYMCE_EDITOR_DESELECTOR'] = settings.TINYMCE_DEFAULT_CONFIG['editor_deselector'] #pylint: disable=line-too-long
         my_settings['TINYMCE_CONFIG_JSON'] = json.dumps(settings.TINYMCE_DEFAULT_CONFIG)
     else:
         my_settings['TINYMCE_PLUGINS'] = []
