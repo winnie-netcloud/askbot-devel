@@ -55,15 +55,7 @@
   $(document).ready(function(){
     $("#js-answers-sort-" + askbot['data']['answersSortTab']).attr('className',"js-active");
 
-    Vote.init(
-      askbot['data']['questionId'],
-      askbot['data']['threadSlug'],
-      askbot['data']['questionAuthorId'],
-      askbot['data']['userId']
-    );
-    PostVote.init();
-
-    if ((askbot['data']['threadIsClosed'] === false) && askbot['data']['userIsAuthenticated']) {
+    if ((askbot['data']['threadIsClosed'] === false) {
       initEditor();
     }
 

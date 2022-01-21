@@ -42,6 +42,7 @@ from askbot.utils.forms import format_errors
 from askbot.utils.functions import diff_date
 from askbot.utils import url_utils
 from askbot.utils.file_utils import store_file
+from askbot.utils.functions import encode_jwt
 from askbot.utils.loading import load_module
 from askbot.views import context
 from askbot.templatetags import extra_filters_jinja as template_filters
@@ -557,7 +558,10 @@ def answer(request, id, form_class=forms.AnswerForm):#process a new answer
                     session_key=request.session.session_key,
                     ip_addr=request.META.get('REMOTE_ADDR'),
                 )
-                return HttpResponseRedirect(url_utils.get_login_url())
+                # in this case automatically show newest answer on top, due to
+                # the limitation that we don't know the final answer url
+                next_jwt = encode_jwt({'next_url': question.get_absolute_url() + '?sort=latest#sort-top'})
+                return HttpResponseRedirect(url_utils.get_login_url() + '?next=' + next_jwt)
 
     #TODO: look into an issue here is that backend form validation errors
     # won't be displayed, we are fully relying on the prevalidation

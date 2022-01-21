@@ -6,6 +6,6 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         users = User.objects.all()
         count = users.count()
-        message = 'Ading users to global and personal groups'
+        message = 'Adding users to global and personal groups'
         for user in ProgressBar(users.iterator(), count, message):
             user.join_default_groups()
