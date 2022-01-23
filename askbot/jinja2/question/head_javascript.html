@@ -270,7 +270,7 @@
       }
 
       var mergeBtn = document.getElementById('js-question-merge-btn-' + postId);
-      if (mergeBtn && data['userIsThreadModerator'] === false) {
+      if (mergeBtn && data.userIsThreadModerator === false) {
         removeNode(mergeBtn);
       }
 

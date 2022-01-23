@@ -55,7 +55,7 @@
   $(document).ready(function(){
     $("#js-answers-sort-" + askbot['data']['answersSortTab']).attr('className',"js-active");
 
-    if ((askbot['data']['threadIsClosed'] === false) {
+    if (askbot['data']['threadIsClosed'] === false) {
       initEditor();
     }
 

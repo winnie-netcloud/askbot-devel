@@ -21,7 +21,8 @@
   >{% trans %}merge{% endtrans %}</a>
   <a
     id="js-post-delete-btn-{{question.id}}"
-    class="action-link js-question-delete-btn with-delete-icon"
+    class="action-link js-post-delete-btn with-delete-icon"
+    data-post-id="{{question.id}}"
   >{% if question.deleted %}{% trans %}undelete{% endtrans %}{% else %}{% trans %}delete{% endtrans %}{% endif %}</a>
   <script type="text/javascript">
     askbot['functions']['renderPostControls']('{{question.id}}'{{ ', true' if question.wiki }});

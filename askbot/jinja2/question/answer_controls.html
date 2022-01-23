@@ -4,7 +4,11 @@
     {% trans %}edit{% endtrans %}
   </span>
   {{ macros.post_flag_buttons(answer) }}
-  <span id='js-post-delete-btn-{{answer.id}}' class="action-link with-delete-icon">
+  <span
+    id='js-post-delete-btn-{{answer.id}}'
+    class="action-link js-post-delete-btn with-delete-icon"
+    data-post-id="{{answer.id}}"
+  >
     {% if answer.deleted %}{% trans %}undelete{% endtrans %}{% else %}{% trans %}delete{% endtrans %}{% endif %}
   </span>
   {% if thread.is_moderated() %}
