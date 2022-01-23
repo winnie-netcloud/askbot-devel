@@ -1,6 +1,6 @@
 {% import "macros.html" as macros %}
 <div id="js-post-controls-{{answer.id}}" class="js-answer-controls js-post-controls" data-post-id="{{answer.id}}">
-  <span class="action-link with-edit-icon js-edit">
+  <span id="js-edit-btn-post-body-{{answer.id}}" class="action-link with-edit-icon js-edit">
     {% trans %}edit{% endtrans %}
   </span>
   {{ macros.post_flag_buttons(answer) }}
