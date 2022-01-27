@@ -1041,9 +1041,7 @@ def finalize_generic_signin(
 
     if 'in_recovery' in request.session:
         del request.session['in_recovery']
-        redirect_url = getattr(django_settings, 'LOGIN_REDIRECT_URL', None)
-        if redirect_url is None:
-            redirect_url = reverse('questions')
+        redirect_url = getattr(django_settings, 'LOGIN_REDIRECT_URL', reverse('questions'))
 
     if request.user.is_authenticated:
         #this branch is for adding a new association

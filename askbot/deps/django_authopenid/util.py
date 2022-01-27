@@ -284,6 +284,12 @@ class LoginMethod(object):
                 '%s.NAME must be a string of ASCII letters and digits only'
             )
 
+        self.trust_email = getattr(self.mod, 'TRUST_EMAIL', False)
+        if not isinstance(self.trust_email, bool):
+            raise ImproperlyConfigured(
+                '%s.TRUST_EMAIL must be True or False' % self.mod_path
+            )
+
         self.display_name = getattr(self.mod, 'DISPLAY_NAME', None)
         if self.display_name is None or not isinstance(self.display_name, str):
             raise ImproperlyConfigured(
@@ -360,8 +366,8 @@ class LoginMethod(object):
             'get_user_id_function', 'openid_endpoint', 'tooltip_text',
             'check_password', 'auth_endpoint', 'token_endpoint',
             'resource_endpoint', 'response_parser', 'token_transport',
-            'oidc_provider_url', 'oidc_client_id', 'oidc_client_secret',
-            'oidc_audience'
+            'trust_email', 'oidc_provider_url', 'oidc_client_id',
+            'oidc_client_secret', 'oidc_audience'
         )
         #some parameters in the class have different names from those
         #in the dictionary

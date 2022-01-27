@@ -2,7 +2,7 @@
 {% import "macros.html" as macros %}
 <!-- template ask.html -->
 {% block title %}{% filter trim %}{% trans %}Ask Your Question{% endtrans %}{% endfilter %}{% endblock %}
-{% block page_class %}ask-page{% endblock %}
+{% block layout_class %}{{ super() }} ask-page{% endblock %}
 {# main contents of ask form is in the template input_bar #}
 {% block sidebar %}
   {% if settings.EDITOR_TYPE == 'markdown' %}
@@ -20,6 +20,7 @@
   <script src="{{ '/jslib/editor.js'|media }}"></script>
   <script src="{{ '/jslib/jquery.validate.js'|media }}"></script>
   <script src="{{ '/jslib/highlight.min.js'|media }}"></script>
+  <script src="{{ '/js/editors/simple_editor.js'|media }}"></script>
   <script src="{{ '/js/utils/toggle.js'|media }}"></script>
   <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
   <script src="{{ '/js/utils/draft_post.js'|media }}"></script>
@@ -28,6 +29,7 @@
   <script src="{{ '/js/editors/wmd.js'|media }}"></script>
   <script src="{{ '/js/editors/tinymce.js'|media }}"></script>
   <script src="{{ '/js/editors/folded_editor.js'|media }}"></script>
+  <script src="{{ '/js/validators/question_validators.js'|media }}"></script>
   <script src="{{ '/js/forms/form.js'|media }}"></script>
   <script src="{{ '/js/forms/ask_form.js'|media }}"></script>
   <script src="{{ '/js/utils/proxy_user_inputs.js'|media }}"></script>

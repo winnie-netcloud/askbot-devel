@@ -1,0 +1,13 @@
+.ask-page .forum-header .content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  font-size: var(--large-font-size);
+}
+
+.question-instructions {
+  ul {
+    list-style: disc;
+    padding: 0.5rem 0 0.5rem 1.5rem;
+  }
+}

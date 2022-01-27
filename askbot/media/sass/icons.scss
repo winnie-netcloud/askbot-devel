@@ -297,6 +297,26 @@
   content: fa-content($fa-var-check-circle);
 }
 
+.with-bullhorn-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-bullhorn);
+}
+
+.with-slashed-icon {
+  position: relative;
+  &::after {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    font-size: 0.75rem;
+    transform: rotate(30deg);
+    @extend %fa-icon;
+    @extend .fas;
+    content: fa-content($fa-var-slash);
+  }
+}
+
 /* wmd editor button icons */
 .wmd-button-bar .wmd-bold-button::before {
   @extend %fa-icon;

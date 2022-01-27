@@ -1,10 +1,10 @@
 /* global askbot, setupButtonEventHandlers, showMessage */
 $(document).ready(function () {
   //todo: convert to "control" class
-  var publishBtns = $('.answer-publish, .answer-unpublish');
+  var publishBtns = $('.js-answer-publish, .js-answer-unpublish');
   publishBtns.each(function (idx, btn) {
     setupButtonEventHandlers($(btn), function () {
-      var answerId = $(btn).data('answerId');
+      var answerId = $(btn).data('postId');
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -14,7 +14,7 @@ $(document).ready(function () {
           if (data.success) {
             window.location.reload(true);
           } else {
-            showMessage($(btn), data.message);
+            showMessage($(btn), data.message, $(btn));
           }
         }
       });

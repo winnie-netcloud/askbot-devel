@@ -21,12 +21,14 @@ class OidcProtocol:
                  client_id=None,
                  client_secret=None,
                  provider_url=None,
+                 trust_email=False,
                  audience=None):
         self.protocol_type = 'oidc'
         self.audience = audience
         self.client_id = client_id
         self.client_secret = client_secret
         self.provider_url = provider_url
+        self.trust_email = trust_email
         discovery = self.load_discovery_data()
         self.authenticate_url = discovery['authorization_endpoint']
         self.jwks_url = discovery['jwks_uri']

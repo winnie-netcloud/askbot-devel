@@ -8,9 +8,10 @@ def get_protocol(provider_name):
 
     protocol_type = params['type']
     if protocol_type == 'oidc':
-        return OidcProtocol(client_id=params['oidc_client_id'],
+        return OidcProtocol(audience=params['oidc_audience'],
+                            client_id=params['oidc_client_id'],
                             client_secret=params['oidc_client_secret'],
                             provider_url=params['oidc_provider_url'],
-                            audience=params['oidc_audience'])
+                            trust_email=params['trust_email'])
 
     raise NotImplementedError(f'Not implemented for  protocol {protocol_type}')

@@ -15,7 +15,8 @@
     {% set is_published=(answer.id in published_answer_ids) %}
     <span
       id="js-post-publish-btn-{{answer.id}}"
-      class="action-link {% if is_published %}answer-unpublish with-published-icon{% else %}answer-publish with-private-icon{% endif %}"
+      class="action-link {% if is_published %}js-answer-unpublish with-bullhorn-icon with-slashed-icon{% else %}js-answer-publish with-bullhorn-icon{% endif %}"
+      data-post-id={{answer.id}}
     >
       {% if is_published %}
         {% trans %}unpublish{% endtrans %}</a>

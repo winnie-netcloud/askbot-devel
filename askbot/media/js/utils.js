@@ -314,7 +314,7 @@ var showMessage = function (element, msg, where) {
   if (where === 'parent') {
     element.parent().append(div);
   } else {
-    element.after(div);
+    element.append(div);
   }
 
   div.fadeIn('fast');

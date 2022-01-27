@@ -1,8 +1,10 @@
 """Views for the OpenID Connect - OIDC protocol"""
 from django.contrib.auth import authenticate
 from django.http import HttpResponseBadRequest
+from django.utils import timezone
 from django.urls import reverse
 from askbot.deps.django_authopenid import util
+from askbot.deps.django_authopenid.models import UserAssociation
 from askbot.deps.django_authopenid.views import finalize_generic_signin
 from askbot.deps.django_authopenid.protocols import get_protocol
 from askbot.utils.html import site_url
@@ -42,11 +44,23 @@ def complete_oidc_signin(request): #pylint: disable=too-many-return-statements
 
     user_id = oidc.get_user_id(id_token)
 
+    email = oidc.get_email(id_token)
+
     user = authenticate(user_identifier=user_id,
                         provider_name=provider_name,
                         method='identifier')
 
-    request.session['email'] = oidc.get_email(id_token)
+    if not user and email and oidc.trust_email:
+        user = authenticate(method='email', email=email)
+        if user:
+            UserAssociation(
+                user=user,
+                provider_name=provider_name,
+                openid_url=user_id,
+                last_used_timestamp=timezone.now()
+            ).save()
+
+    request.session['email'] = email
     request.session['username'] = oidc.get_username(id_token)
 
     return finalize_generic_signin(request=request,
