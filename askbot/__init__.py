@@ -45,7 +45,7 @@ REQUIREMENTS = {
     'responses': 'responses>=0.9.0',
     'requirements': 'requirements-parser==0.1.0',
     'robots': 'django-robots==1.1',
-    'regex': 'regex',
+    'regex': 'regex<=2021.3.17',
     'sanction': 'sanction==0.3.1',
     'simplejson': 'simplejson<=3.8.2',
     'six': 'six==1.10.0',
