@@ -1523,13 +1523,13 @@ ul#searchTags {
 }
 .paginator .prev,
 .paginator .next {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 .paginator .page a,
 .paginator .page a:visited,
 .paginator .curr {
-  padding: 0 .25em;
-  margin: 0em .15em 0 0;
+  padding: 0 0.25em;
+  margin: 0em 0.15em 0 0;
 }
 .paginator .curr {
   /*background-color: #8ebcc7;*/
@@ -1555,7 +1555,7 @@ ul#searchTags {
 }
 .paginator .text {
   color: #777;
-  padding: .3em;
+  padding: 0.3em;
 }
 .paginator .paginator-container-left {
   padding: 5px 0 10px 0;
@@ -1670,7 +1670,7 @@ ul.js-related-tags li {
 .js-tag-name {
   cursor: pointer;
   background: #f3f6f6;
-  border: #fff 1px solid ;
+  border: #fff 1px solid;
   border-top: #fff 2px solid;
   outline: #cfdbdb 1px solid !important;
   -webkit-box-shadow: 0px 0px 5px #d3d6d7;
@@ -3291,8 +3291,41 @@ tr.mceLast {
 .reject-reason-title {
   margin-bottom: 12px;
 }
+.moderation-queue-page .moderation-header {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  background: white;
+  padding: 0.25rem 0;
+}
 .moderation-queue-page .re {
   width: 810px;
+}
+.moderation-queue-page .tools {
+  display: flex;
+  margin-top: 0.5rem;
+  justify-content: flex-start;
+}
+.moderation-queue-page .tools .buttons > :last-child {
+  margin-right: 0;
+}
+.moderation-queue-page .js-approve-block,
+.moderation-queue-page .js-decline-block {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.625rem 0.25rem 0.25rem 0.25rem;
+  position: relative;
+  margin: 0 0.5rem 0 0;
+}
+.moderation-queue-page .js-approve-block .js-label,
+.moderation-queue-page .js-decline-block .js-label {
+  cursor: default;
+  position: absolute;
+  padding: 0 0.5rem;
+  background: white;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .moderation-queue-page .post-moderation-controls {
   float: left;
@@ -3317,6 +3350,11 @@ tr.mceLast {
 }
 .moderation-queue-page .message {
   margin: 12px 0;
+  transition: background 0.2s ease-in-out;
+}
+.moderation-queue-page .message.js-selected {
+  background: #fff8c6;
+  transition: background 0.2s ease-in-out;
 }
 .moderation-queue-page .select-items {
   margin-bottom: 10px;
@@ -4618,7 +4656,7 @@ textarea.tipped-input {
   padding: 0 6px;
 }
 .category-selector input[type="text"] {
-  width: calc(30%);
+  width: calc(100% - 70px);
   padding: 0 5px;
   margin: 3px 0 3px -3px;
   height: 24px;
@@ -4911,9 +4949,9 @@ td.setting-input textarea {
   border: 1px solid WindowFrame;
   background-color: #fff;
   overflow: hidden;
-  -webkit-box-shadow: 0px  1px 1px #A7A7A7;
-  -moz-box-shadow: 0px  1px 1px #BFBFBF;
-  box-shadow: 0px  1px 1px #BFBFBF;
+  -webkit-box-shadow: 0px 1px 1px #A7A7A7;
+  -moz-box-shadow: 0px 1px 1px #BFBFBF;
+  box-shadow: 0px 1px 1px #BFBFBF;
 }
 .acResults ul {
   width: 100%;

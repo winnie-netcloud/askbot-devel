@@ -3470,8 +3470,42 @@ tr.mceLast {
 }
 
 .moderation-queue-page {
+    .moderation-header {
+      position: sticky;
+      position: -webkit-sticky;
+      top: 0;
+      background: white;
+      padding: 0.25rem 0;
+    }
     .re {
         width: 810px;
+    }
+    .tools {
+      display: flex;
+      margin-top: 0.5rem;
+      justify-content: flex-start;
+      .buttons {
+        & > :last-child {
+          margin-right: 0;
+        }
+      }
+    }
+    .js-approve-block,
+    .js-decline-block {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 0.625rem 0.25rem 0.25rem 0.25rem;
+      position: relative;
+      margin: 0 0.5rem 0 0;
+      .js-label {
+        cursor: default;
+        position: absolute;
+        padding: 0 0.5rem;
+        background: white;
+        top: -0.75rem;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
     .post-moderation-controls {
         float: left;
@@ -3497,7 +3531,12 @@ tr.mceLast {
         margin-bottom: 14px;
     }
     .message {
-        margin: 12px 0;
+      margin: 12px 0;
+      transition: background 0.2s ease-in-out;
+    }
+    .message.js-selected {
+      background: #fff39a;
+      transition: background 0.2s ease-in-out;
     }
     .select-items {
         margin-bottom: 10px;
