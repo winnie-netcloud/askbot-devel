@@ -57,11 +57,14 @@
     <div class="action-status"><span></span></div>
     <div class="messages">
     {% for message in messages %}
-        <div
-            class="message{% if message.is_new %} highlight new{% else %} seen{% endif %}"
-            data-message-id="{{ message.id }}"
-        >
-            {{ macros.moderation_queue_message(message) }}
+        <div class="js-message-container">
+            <div
+                class="message{% if message.is_new %} highlight new{% else %} seen{% endif %}"
+                data-message-id="{{ message.id }}"
+            >
+                {{ macros.moderation_queue_message(message) }}
+            </div>
+            <div class="js-expander">expand</div>
         </div>
     {% endfor %}
     </div>
