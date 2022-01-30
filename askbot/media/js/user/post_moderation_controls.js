@@ -28,9 +28,10 @@ PostModerationControls.prototype.removeEntries = function (entryIds) {
   for (var i = 0; i < entryIds.length; i++) {
     var id = entryIds[i];
     var elem = this._element.find('.message[data-message-id="' + id + '"]');
-    if (elem.length) {
-      elem.fadeOut('fast', function () {
-        elem.remove();
+    var msgCtr = elem.closest('.js-message-container');
+    if (msgCtr.length) {
+      msgCtr.fadeOut('fast', function () {
+        msgCtr.remove();
       });
     }
   }
@@ -77,7 +78,6 @@ PostModerationControls.prototype.getModHandler = function (action, items, optRea
         selectedEditIds = me.getVisibleEditIds();
       }
     }
-    debugger;
     //@todo: implement undo
     var postData = {
       'edit_ids': selectedEditIds,//revision ids
