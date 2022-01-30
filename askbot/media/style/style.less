@@ -3476,6 +3476,7 @@ tr.mceLast {
       top: 0;
       background: white;
       padding: 0.25rem 0;
+      z-index: 1;
     }
     .re {
         width: 810px;
@@ -3528,15 +3529,38 @@ tr.mceLast {
         background: transparent;
     }
     .messages {
-        margin-bottom: 14px;
+      margin-bottom: 14px;
+      z-index: 0;
+    }
+    .js-message-container {
+      position: relative;
+      .js-expander {
+        border-radius: 1rem;
+        border: 1px solid #ccc;
+        bottom: 0;
+        cursor: pointer;
+        display: none;
+        left: 50%;
+        background: white;
+        box-shadow: 0 0 0 0.25rem white;
+        padding: 0 0.25rem;
+        position: absolute;
+        transform: translate(-50%, 50%);
+      }
     }
     .message {
-      margin: 12px 0;
-      max-height: 7rem;
+      border-bottom: 1px solid #ccc;
+      margin: 12px 0 24px;
+      max-height: 3rem;
       overflow: hidden;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid #ccc;
       transition: background 0.2s ease-in-out;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .message.js-expanded {
+      max-height: unset;
     }
     .message.js-selected {
       background: #fff39a;

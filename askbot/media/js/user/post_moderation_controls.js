@@ -220,6 +220,26 @@ PostModerationControls.prototype.setupIntersectionObserver = function () {
   }
 };
 
+PostModerationControls.prototype.setupMessageExpanders = function () {
+  var msgCtrs = $('.js-message-container');
+  var me = this;
+  msgCtrs.each(function(_, item) {
+    var msg = $(item).find('.message');
+    if (msg.prop('scrollHeight') <= msg.prop('clientHeight')) return;
+
+    var expander = $(item).find('.js-expander');
+    expander.show();
+    expander.click(function() {
+      msg.toggleClass('js-expanded')
+      if (msg.hasClass('js-expanded')) {
+        expander.text(gettext('collapse'));
+      } else {
+        expander.text(gettext('expand'));
+      }
+    });
+  });
+};
+
 PostModerationControls.prototype.decorate = function (element) {
   this._element = element;
   this._notification = element.find('.action-status span');
@@ -249,6 +269,8 @@ PostModerationControls.prototype.decorate = function (element) {
   //delete posts, block users and ips
   button = element.find('.decline-block-users-ips');
   setupButtonEventHandlers(button, this.getModHandler('block', ['posts', 'users', 'ips']));
+
+  this.setupMessageExpanders();
 
   this.setupIntersectionObserver();
 };
