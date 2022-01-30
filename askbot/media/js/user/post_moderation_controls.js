@@ -225,7 +225,7 @@ PostModerationControls.prototype.setupMessageExpanders = function () {
   var me = this;
   msgCtrs.each(function(_, item) {
     var msg = $(item).find('.message');
-    if (msg.prop('scrollHeight') <= msg.prop('clientHeight')) return;
+    if (msg.prop('scrollHeight') <= msg.prop('clientHeight') + 7) return;
 
     var expander = $(item).find('.js-expander');
     expander.show();
