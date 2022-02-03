@@ -34,7 +34,7 @@
 @use './components/timeago.scss';
 @use './components/bent_arrow.scss';
 @use './components/category_selector.scss';
-@use './ask.scss';
+@use './components/proxy_author_inputs.scss';
 @use './questions/index.scss';
 @use './questions/questions_header.scss';
 @use './questions/question_summary.scss';
@@ -45,3 +45,5 @@
 @use './question/post.scss';
 @use './question/post_update_info.scss';
 @use './question/merge_questions_modal.scss';
+@use './question/sidebar.scss';
+@use './ask.scss';

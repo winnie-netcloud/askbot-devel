@@ -33,7 +33,7 @@
             {{ macros.checkbox_in_div(answer.post_privately) }}
           {% endif %}
           {% set post_form=answer %}
-          {% include "widgets/proxy_author_fields.html" %}
+          {% include "components/proxy_author_inputs.html" %}
         </div>
         {% if answer.recaptcha %}
           <div>{{ macros.form_field_with_errors(answer.recaptcha) }}</div>

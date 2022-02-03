@@ -11,7 +11,7 @@ $(document).ready(function() {
     }
   };
 
-  var followBtn = $('.js-follow-question');
+  var followBtn = $('.js-follow-question-btn');
   if (followBtn.length) {
     var toggle = new AjaxToggle();
     toggle.setPostData({'question_id': askbot.data.questionId });

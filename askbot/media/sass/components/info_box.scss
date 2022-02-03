@@ -8,3 +8,10 @@
   padding: var(--info-box-padding);
   margin: var(--info-box-margin);
 }
+
+.info-box {
+  ul {
+    list-style: disc;
+    padding-left: 1rem;
+  }
+}

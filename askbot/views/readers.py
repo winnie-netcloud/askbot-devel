@@ -595,7 +595,7 @@ def question(request, id):#refactor - long subroutine. display question body, an
     else:
         answer_form_class = AnswerForm
 
-    answer_form = answer_form_class(initial=initial, user=request.user)
+    answer_form = answer_form_class(initial=initial, user=request.user, label_suffix='')
 
     user_can_post_comment = (
         request.user.is_authenticated \

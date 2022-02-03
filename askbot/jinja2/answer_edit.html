@@ -28,7 +28,7 @@
         {{ macros.checkbox_in_div(form.post_privately) }}
       {% endif %}
       {% set post_form=form %}
-      {% include "widgets/proxy_author_fields.html" %}
+      {% include "components/proxy_author_inputs.html" %}
     </div>
     {% if form.recaptcha %}
       <div>{{ macros.form_field_with_errors(form.recaptcha) }}</div>
@@ -61,7 +61,7 @@
     <script src="{{ '/jslib/highlight.min.js'|media }}"></script>
     <script src="{{ '/js/utils/toggle.js'|media }}"></script>
     <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
-    <script src="{{ '/js/utils/proxy_user_inputs.js'|media }}"></script>
+    <script src="{{ '/js/utils/proxy_author_inputs.js'|media }}"></script>
   {% endcompress %}
   {% if settings.EDITOR_TYPE == 'markdown' %}
     {% compress js %}

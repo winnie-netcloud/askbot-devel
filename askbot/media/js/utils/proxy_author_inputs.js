@@ -1,7 +1,13 @@
 /* global AutoCompleter, askbot */
-$(document).ready(function () {
-  var proxyUserNameInput = $('#id_post_author_username');
-  var proxyUserEmailInput = $('#id_post_author_email');
+var ProxyAuthorInputs = function () {
+  WrappedElement.call(this);
+};
+inherits(ProxyAuthorInputs, WrappedElement);
+
+ProxyAuthorInputs.prototype.decorate = function(element) {
+  this._element = element;
+  var proxyUserNameInput = element.find('#js-post-author-username');
+  var proxyUserEmailInput = element.find('#js-post-author-email');
   if (proxyUserNameInput.length === 1) {
     var userSelectHandler = function (data) {
       proxyUserEmailInput.val(data.data[0]);
@@ -17,4 +23,4 @@ $(document).ready(function () {
     });
     fakeUserAc.decorate(proxyUserNameInput);
   }
-});
+};

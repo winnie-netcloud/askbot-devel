@@ -215,7 +215,7 @@ def ask(request):#view used to ask a new question
         return HttpResponseRedirect(reverse('index'))
 
     if request.method == 'POST':
-        form = forms.AskForm(request.POST, user=request.user)
+        form = forms.AskForm(request.POST, user=request.user, label_suffix='')
         if form.is_valid():
             timestamp = timezone.now()
             title = form.cleaned_data['title']
@@ -330,7 +330,7 @@ def ask(request):#view used to ask a new question
         'tag_names': forms.split_tags(form.initial['tags'])
     }
     data.update(context.get_for_tag_editor())
-    return render(request, 'ask.html', data)
+    return render(request, 'ask/index.html', data)
 
 @login_required
 @csrf.csrf_protect
