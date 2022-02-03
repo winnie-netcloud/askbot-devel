@@ -66,7 +66,7 @@ urlpatterns = [
     ),
     url(
         r'^%s$' % pgettext('urls', 'users/'),
-        views.users.show_users,
+        views.users.users_list,
         name='users'
     ),
     url(
@@ -74,7 +74,7 @@ urlpatterns = [
                                             pgettext('urls', 'users/'),
                                             pgettext('urls', 'by-group/')
                                         ),
-        views.users.show_users,
+        views.users.users_list,
         kwargs={'by_group': True},
         name='users_by_group'
     ),

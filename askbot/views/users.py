@@ -114,7 +114,7 @@ def delete_notifications(request):
     memo_set.delete()
     request.user.update_response_counts()
 
-def show_users(request, by_group=False, group_id=None, group_slug=None):
+def users_list(request, by_group=False, group_id=None, group_slug=None):
     """Users view, including listing of users by group"""
     if askbot_settings.GROUPS_ENABLED and not by_group:
         default_group = models.Group.objects.get_global_group()
@@ -261,7 +261,7 @@ def show_users(request, by_group=False, group_id=None, group_slug=None):
         'users' : users_page,
     }
 
-    return render(request, 'users.html', data)
+    return render(request, 'users/index.html', data)
 
 @csrf.csrf_protect
 def manage_account(request, subject, context):

@@ -19,13 +19,9 @@
             </li>
             {% endfor %}
         </ul>
-        <div class="clean"></div>
-        <div class="pager">
-            {{ macros.paginator(paginator_context) }}
-        </div>
+        {{ macros.paginator(paginator_context) }}
     {% endif %}
 {% else %}
-    <div class="clearfix"></div>
     {% if not tags %}
         <span>{% trans %}Nothing found{% endtrans %}</span>
     {% endif %}

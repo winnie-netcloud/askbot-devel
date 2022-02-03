@@ -1,0 +1,33 @@
+.users-page {
+  .user-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    li {
+      margin: 0 1rem 1rem 0;
+    }
+  }
+  .user-card {
+    display: flex;
+    overflow: hidden;
+    width: 12rem; 
+    .js-avatar-box {
+      margin-right: 0.5rem;
+    }
+    .user-info {
+      font-size: var(--small-font-size);
+    }
+    a, a:visited {
+      text-decoration: none;
+      color: var(--fg-color);
+    }
+  }
+  .user-name-and-country {
+    white-space: nowrap;
+  }
+  .user-website-link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+

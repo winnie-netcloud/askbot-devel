@@ -603,17 +603,17 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {%- macro user_website_link(user, max_display_length=25, force_show=False) -%}
-    {% if user.website and (force_show or (not (user.is_blocked() or user.is_watched()))) %}
-        <a
-            href="{{user.website|escape}}"
-            title="{% trans username=user.username|escape, url=user.website|escape %}{{username}}'s website is {{url}}{% endtrans %}"
-            {% if user.can_have_strong_url() == False %}
-            rel="nofollow"
-            {% endif %}
-        >
-        {{user.website|truncate(length=max_display_length, killwords=True, end='...')}}
-        </a>
-    {% endif %}
+  {% if user.website and (force_show or (not (user.is_blocked() or user.is_watched()))) %}
+    <a href="{{user.website|escape}}"
+      class="user-website-link"
+      title="{% trans username=user.username|escape, url=user.website|escape %}{{username}}'s website is {{url}}{% endtrans %}"
+      {% if user.can_have_strong_url() == False %}
+      rel="nofollow"
+      {% endif %}
+    >
+    {{user.website|truncate(length=max_display_length, killwords=True, end='...')}}
+    </a>
+  {% endif %}
 {%- endmacro -%}
 
 {%- macro paginator(p, position='left', anchor='') -%}{# p is paginator context dictionary #}
@@ -663,7 +663,7 @@ for the purposes of the AJAX comment editor #}
         >
           <span class="with-ellipsis-h-icon"></span>
           <a href="{{ p.base_url }}page={{ p.pages }}{{ anchor }}"
-            class"page"
+            class="page"
             data-page="{{p.pages}}"
             aria-label="{% trans num=p.pages %}page {{ num }}{% endtrans %}"
           >
@@ -671,7 +671,7 @@ for the purposes of the AJAX comment editor #}
           </a>
         </span>
 
-        <a class="js-next-page next-page"
+        <a class="js-next-page next-page with-caret-right-icon"
           {% if not p.has_next %}style="display: none"{% endif %}
           href="{{p.base_url}}page={{ p.next }}{{ anchor }}"
           aria-label="{% trans %}next page{% endtrans %}"

@@ -1,0 +1,9 @@
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  h1 {
+    font-size: var(--large-font-size);
+    padding-top: 0.125rem;
+  }
+}

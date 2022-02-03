@@ -594,7 +594,7 @@ input[type=text],
   --btn-muted-hover-bg: var(--clr-neutral-65);
   --btn-muted-hover-border-color: var(--clr-neutral-60);
   --fg-color: var(--clr-neutral-20);
-  --layout-max-width: 960px;
+  --layout-max-width: 1100px;
   --layout-sidebar-width: 205px;
   --layout-horizontal-padding: 0.75rem;
   --font-size: 16px;
@@ -9023,6 +9023,16 @@ code.hljs {
   font-size: var(--small-font-size);
 }
 
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.title-row h1 {
+  font-size: var(--large-font-size);
+  padding-top: 0.125rem;
+}
+
 #js-questions {
   margin-bottom: 0.5rem;
 }
@@ -9545,6 +9555,47 @@ code.hljs {
 }
 .ask-page .proxy-author-inputs {
   margin-bottom: 1rem;
+}
+
+.tags-page .tags {
+  margin-bottom: 0.75rem;
+}
+.tags-page .tags li {
+  margin-bottom: calc(1.5 * var(--tags-gap));
+}
+.tags-page .js-tag-name {
+  margin-right: 0.25rem;
+}
+
+.users-page .user-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.users-page .user-list li {
+  margin: 0 1rem 1rem 0;
+}
+.users-page .user-card {
+  display: flex;
+  overflow: hidden;
+  width: 12rem;
+}
+.users-page .user-card .js-avatar-box {
+  margin-right: 0.5rem;
+}
+.users-page .user-card .user-info {
+  font-size: var(--small-font-size);
+}
+.users-page .user-card a, .users-page .user-card a:visited {
+  text-decoration: none;
+  color: var(--fg-color);
+}
+.users-page .user-name-and-country {
+  white-space: nowrap;
+}
+.users-page .user-website-link {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /*# sourceMappingURL=style.css.map */

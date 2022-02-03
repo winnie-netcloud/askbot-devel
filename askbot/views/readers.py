@@ -367,7 +367,7 @@ def tags(request):#view showing a listing of available tags - plain list
         json_string = json.dumps(json_data)
         return HttpResponse(json_string, content_type='application/json')
     else:
-        return render(request, 'tags.html', data)
+        return render(request, 'tags/index.html', data)
 
 @csrf.csrf_protect
 def question(request, id):#refactor - long subroutine. display question body, answers and comments
