@@ -293,7 +293,7 @@ def get_thread_shared_users(request):
     data = {
         'users': users,
     }
-    html = render_into_skin_as_string('widgets/user_list.html', data, request)
+    html = render_into_skin_as_string('components/users_list.html', data, request)
     re_data = json.dumps({
         'html': html,
         'users_count': users.count(),

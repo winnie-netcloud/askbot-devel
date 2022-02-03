@@ -565,11 +565,11 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {% macro user_card(user) %}
-  {% include "widgets/user_card.html" %}
+  {% include "components/user_card.html" %}
 {% endmacro %}
 
-{%- macro user_list(users) -%}
-    {% include "widgets/user_list.html" %}
+{%- macro users_list(users) -%}
+    {% include "components/users_list.html" %}
 {%- endmacro -%}
 
 {#todo: rename this to avatar #}
@@ -611,7 +611,7 @@ for the purposes of the AJAX comment editor #}
       rel="nofollow"
       {% endif %}
     >
-    {{user.website|truncate(length=max_display_length, killwords=True, end='...')}}
+    {{user.website|strip_website_url|truncate(length=max_display_length, killwords=True, end='...')}}
     </a>
   {% endif %}
 {%- endmacro -%}

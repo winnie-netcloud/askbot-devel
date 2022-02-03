@@ -474,3 +474,11 @@ def url(viewname, *args, **kwargs):
         except NoReverseMatch:
                 raise
     return url
+
+@register.filter
+def strip_website_url(url):
+    if url.startswith('https://'):
+        url = url.lstrip('https://')
+    elif url.startswith('http://'):
+        url =  url.lstrip('http://')
+    return url.rstrip('/')

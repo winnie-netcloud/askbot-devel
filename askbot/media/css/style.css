@@ -9567,20 +9567,23 @@ code.hljs {
   margin-right: 0.25rem;
 }
 
-.users-page .user-list {
+.users-page .users-list {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
 }
-.users-page .user-list li {
-  margin: 0 1rem 1rem 0;
+.users-page .users-list li {
+  margin: 0 1rem 0.75rem 0;
 }
 .users-page .user-card {
   display: flex;
+  align-items: center;
   overflow: hidden;
   width: 12rem;
+  height: 3.25rem;
 }
 .users-page .user-card .js-avatar-box {
+  height: 2.25rem;
   margin-right: 0.5rem;
 }
 .users-page .user-card .user-info {
@@ -9590,10 +9593,26 @@ code.hljs {
   text-decoration: none;
   color: var(--fg-color);
 }
+.users-page .user-card .with-gold-badge-icon::before,
+.users-page .user-card .with-silver-badge-icon::before,
+.users-page .user-card .with-bronze-badge-icon::before {
+  font-size: var(--2extra-small-font-size);
+}
 .users-page .user-name-and-country {
   white-space: nowrap;
 }
+.users-page .user-name-and-country > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+.users-page .user-name-link {
+  max-width: calc(12rem - 2.25rem - 0.5rem - 1rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .users-page .user-website-link {
+  display: inline-block;
+  max-width: calc(12rem - 2.75rem);
   overflow: hidden;
   text-overflow: ellipsis;
 }

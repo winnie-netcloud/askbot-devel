@@ -1,6 +1,6 @@
 {% import "macros.html" as macros %}
 {% if users %}
-<ul class="user-list">
+<ul class="users-list">
     {% for user in users %}
     <li>{{ macros.user_card(user) }}</li>
     {% endfor %}

@@ -15,7 +15,7 @@
   {% if not users.object_list %}
     <div>{% trans %}No users found.{% endtrans %}</div>
   {% else %}
-    {{ macros.user_list(users.object_list) }}
+    {{ macros.users_list(users.object_list) }}
   {% endif %}
   {{ macros.paginator(paginator_context) }}
 {% endblock %}
