@@ -56,7 +56,7 @@ FullTextSearch.prototype.renderTagWarning = function (tag_list) {
 };
 
 FullTextSearch.prototype.runTagSearch = function () {
-  var search_tags = $('#ab-tag-search').val().split(/\s+/);
+  var search_tags = $('#js-tag-search-input').val().split(/\s+/);
   if (search_tags.length === 0) {
     return;
   }
@@ -70,7 +70,7 @@ FullTextSearch.prototype.runTagSearch = function () {
     dataType: 'json',
     success: function (data, text_status, xhr) {
       me.renderFullTextSearchResult(data, text_status, xhr);
-      $('#ab-tag-search').val('');
+      $('#js-tag-search-input').val('');
     }
   });
   this.updateHistory(url);
@@ -93,7 +93,7 @@ FullTextSearch.prototype.updateHistory = function (url) {
 
 FullTextSearch.prototype.hydrateTagSearchInput = function () {
   //the autocomplete is set up in tag_selector.js
-  var button = $('#ab-tag-search-add');
+  var button = $('#js-tag-search-btn');
   if (button.length === 0) {//may be absent
     return;
   }
@@ -108,7 +108,7 @@ FullTextSearch.prototype.hydrateTagSearchInput = function () {
     onItemSelect: function () { me.runTagSearch(); },
     delay: 10
   });
-  ac.decorate($('#ab-tag-search'));
+  ac.decorate($('#js-tag-search-input'));
   setupButtonEventHandlers(
     button,
     function () { me.runTagSearch(); }
@@ -539,7 +539,7 @@ FullTextSearch.prototype.decorate = function (element) {
   this.renderSearchDropMenu();
 
   //the tag search input is optional in askbot
-  $('#ab-tag-search').parent().before(
+  $('#js-tag-search-input').parent().before(
     this._tag_warning_box.getElement()
   );
 
