@@ -9125,6 +9125,16 @@ code.hljs {
   margin: 0 1rem 0.75rem 0;
 }
 
+.badges-page .sidebar-box h2, .badges-page .sidebar-box p,
+.badge-detail-page .sidebar-box h2,
+.badge-detail-page .sidebar-box p {
+  margin-bottom: 1rem;
+}
+.badges-page .sidebar-box .badge,
+.badge-detail-page .sidebar-box .badge {
+  margin-bottom: 0.5rem;
+}
+
 #js-questions {
   margin-bottom: 0.5rem;
 }
@@ -9688,7 +9698,7 @@ a.badge-page-link {
   margin-right: 0.125rem;
 }
 .js-badges-list td {
-  padding: 0.125rem 0;
+  padding: 0.125rem 0 0.25rem;
 }
 
 .badge {
@@ -9712,14 +9722,12 @@ a.badge-page-link {
 .badges-page table {
   margin: 0.5rem 0;
 }
-.badges-page .sidebar-box h2, .badges-page .sidebar-box p {
-  margin-bottom: 1rem;
-}
-.badges-page .sidebar-box .badge {
-  margin-bottom: 0.5rem;
-}
 
 .badge-detail-page h1 {
+  margin-bottom: 0.5rem;
+}
+.badge-detail-page main h2 {
+  font-size: var(--large-font-size);
   margin-bottom: 0.5rem;
 }
 .badge-detail-page .badge {
@@ -9728,9 +9736,7 @@ a.badge-page-link {
 .badge-detail-page .badge-awarded-for {
   text-transform: lowercase;
 }
-.badge-detail-page .badge-info {
-  margin-bottom: 0.5rem;
-}
+.badge-detail-page .badge-info,
 .badge-detail-page .badge-recipients-info {
   margin-bottom: 1rem;
 }
