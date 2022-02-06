@@ -36,6 +36,8 @@
 @use './components/category_selector.scss';
 @use './components/proxy_author_inputs.scss';
 @use './components/title_row.scss';
+@use './components/user_card.scss';
+@use './components/users_list.scss';
 @use './questions/index.scss';
 @use './questions/questions_header.scss';
 @use './questions/question_summary.scss';
@@ -51,3 +53,4 @@
 @use './tags_page.scss';
 @use './users.scss';
 @use './badges.scss';
+@use './badge_detail.scss';
