@@ -150,7 +150,7 @@ urlpatterns = [
         name='badges'
     ),
     url(
-        r'^%s(?P<id>\d+)//*' % pgettext('urls', 'badges/'),
+        r'^%s(?P<badge_id>\d+)//*' % pgettext('urls', 'badges/'),
         views.meta.badge_page,
         name='badge'
     ),

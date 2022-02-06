@@ -704,8 +704,8 @@ settings.register(
     values.StringValue(
         WORDS,
         'WORDS_COMMUNITY_GIVES_YOU_AWARDS',
-        default=_('Community gives you awards for your questions, answers and votes'),
-        description=_('Community gives you awards for your questions, answers and votes'),
+        default=_('Community gives you awards for your questions, answers and votes.'),
+        description=_('Community gives you awards for your questions, answers and votes.'),
         localized=True
     )
 )

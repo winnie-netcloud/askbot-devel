@@ -317,6 +317,12 @@
   }
 }
 
+.with-check-icon::before {
+  @extend %fa-icon;
+  @extend .fas;
+  content: fa-content($fa-var-check);
+}
+
 /* wmd editor button icons */
 .wmd-button-bar .wmd-bold-button::before {
   @extend %fa-icon;

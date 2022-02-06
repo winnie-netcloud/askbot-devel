@@ -185,6 +185,11 @@ input[type="text"],
   margin-bottom: 0.5rem;
 }
 
+h1 {
+  font-size: var(--extra-large-font-size);
+  margin: 0.25rem 0;
+}
+
 input[type="checkbox"],
 input[type="button"],
 input[type="submit"],

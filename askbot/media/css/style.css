@@ -515,6 +515,11 @@ input[type=text],
   margin-bottom: 0.5rem;
 }
 
+h1 {
+  font-size: var(--extra-large-font-size);
+  margin: 0.25rem 0;
+}
+
 input[type=checkbox],
 input[type=button],
 input[type=submit],
@@ -534,7 +539,7 @@ option {
   --highlight-hue: 50;
   --clr-neutral-10: hsla(var(--neutral-hue), var(--neutral-saturation), 10%, var(--debug-transparency));
   --clr-neutral-20: hsla(var(--neutral-hue), var(--neutral-saturation), 20%, var(--debug-transparency));
-  --clr-neutral-35: hsla(var(--neutral-hue), var(--neutral-saturation), 35%, var(--debug-transparency));
+  --clr-neutral-30: hsla(var(--neutral-hue), var(--neutral-saturation), 30%, var(--debug-transparency));
   --clr-neutral-35: hsla(var(--neutral-hue), var(--neutral-saturation), 35%, var(--debug-transparency));
   --clr-neutral-40: hsla(var(--neutral-hue), var(--neutral-saturation), 40%, var(--debug-transparency));
   --clr-neutral-50: hsla(var(--neutral-hue), var(--neutral-saturation), 50%, var(--debug-transparency));
@@ -801,6 +806,12 @@ option {
   --wmd-preview-toggle-padding: 0 0 0.5rem;
   --wmd-preview-toggle-margin: 0;
   --pre-padding: 0.5rem;
+  --badge-text-color: white;
+  --badge-bg: var(--clr-neutral-30);
+  --badge-height: 2rem;
+  --badge-padding: 0.125rem 0.5rem;
+  --badge-border: none;
+  --badge-border-radius: 0.25rem;
 }
 
 .js-toggle-sidebar-button {
@@ -896,6 +907,7 @@ option {
 .wmd-button-bar .wmd-link-button::before,
 .wmd-button-bar .wmd-italic-button::before,
 .wmd-button-bar .wmd-bold-button::before,
+.with-check-icon::before,
 .with-slashed-icon::after,
 .with-bullhorn-icon::before,
 .with-accept-answer-icon::before,
@@ -954,7 +966,7 @@ option {
   line-height: 1;
 }
 
-.wmd-button-bar .wmd-help-button::before, .wmd-button-bar .wmd-redo-button::before, .wmd-button-bar .wmd-undo-button::before, .wmd-button-bar .wmd-hr-button::before, .wmd-button-bar .wmd-heading-button::before, .wmd-button-bar .wmd-ulist-button::before, .wmd-button-bar .wmd-olist-button::before, .wmd-button-bar .wmd-attachment-button::before, .wmd-button-bar .wmd-image-button::before, .wmd-button-bar .wmd-code-button::before, .wmd-button-bar .wmd-quote-button::before, .wmd-button-bar .wmd-link-button::before, .wmd-button-bar .wmd-italic-button::before, .wmd-button-bar .wmd-bold-button::before, .with-slashed-icon::after, .with-bullhorn-icon::before, .with-accept-answer-icon::before, .with-link-icon::before, .with-convert-post-icon::before, .with-comment-upvote-icon::before, .with-merge-icon::before, .with-reopen-icon::after, .with-reopen-icon::before, .with-close-icon::before, .with-flag-icon.js-post-unflag-btn::after, .with-flag-icon::before, .with-edit-icon::before, .with-twitter-icon::before, .with-linkedin-icon::before, .with-facebook-icon::before, .with-caret-down-icon::before,
+.wmd-button-bar .wmd-help-button::before, .wmd-button-bar .wmd-redo-button::before, .wmd-button-bar .wmd-undo-button::before, .wmd-button-bar .wmd-hr-button::before, .wmd-button-bar .wmd-heading-button::before, .wmd-button-bar .wmd-ulist-button::before, .wmd-button-bar .wmd-olist-button::before, .wmd-button-bar .wmd-attachment-button::before, .wmd-button-bar .wmd-image-button::before, .wmd-button-bar .wmd-code-button::before, .wmd-button-bar .wmd-quote-button::before, .wmd-button-bar .wmd-link-button::before, .wmd-button-bar .wmd-italic-button::before, .wmd-button-bar .wmd-bold-button::before, .with-check-icon::before, .with-slashed-icon::after, .with-bullhorn-icon::before, .with-accept-answer-icon::before, .with-link-icon::before, .with-convert-post-icon::before, .with-comment-upvote-icon::before, .with-merge-icon::before, .with-reopen-icon::after, .with-reopen-icon::before, .with-close-icon::before, .with-flag-icon.js-post-unflag-btn::after, .with-flag-icon::before, .with-edit-icon::before, .with-twitter-icon::before, .with-linkedin-icon::before, .with-facebook-icon::before, .with-caret-down-icon::before,
 .with-downvote-icon::before, .with-upvote-icon::before, .with-arrow-left-icon::before, .with-comment-icon::before, .with-caret-right-icon::before, .with-caret-left-icon::before, .with-ellipsis-icon::before, .with-globe-icon::before, .with-bars-icon::before, .js-with-sort-ascending-icon::before, .js-with-sort-descending-icon::before, .with-rss-icon::before, .with-selected-scope-icon::before, .with-search-icon::before, .with-home-icon::before, .with-times-circle-icon::before, .with-delete-icon::before,
 .with-times-icon::before, .with-bronze-badge-icon::before,
 .with-silver-badge-icon::before,
@@ -1076,6 +1088,7 @@ option {
 .wmd-button-bar .fa-pull-left.wmd-link-button::before,
 .wmd-button-bar .fa-pull-left.wmd-italic-button::before,
 .wmd-button-bar .fa-pull-left.wmd-bold-button::before,
+.fa-pull-left.with-check-icon::before,
 .fa-pull-left.with-slashed-icon::after,
 .fa-pull-left.with-bullhorn-icon::before,
 .fa-pull-left.with-accept-answer-icon::before,
@@ -1142,6 +1155,7 @@ option {
 .wmd-button-bar .fa-pull-right.wmd-link-button::before,
 .wmd-button-bar .fa-pull-right.wmd-italic-button::before,
 .wmd-button-bar .fa-pull-right.wmd-bold-button::before,
+.fa-pull-right.with-check-icon::before,
 .fa-pull-right.with-slashed-icon::after,
 .fa-pull-right.with-bullhorn-icon::before,
 .fa-pull-right.with-accept-answer-icon::before,
@@ -7163,6 +7177,7 @@ readers do not read off random characters that represent icons */
 .wmd-button-bar .wmd-link-button::before,
 .wmd-button-bar .wmd-italic-button::before,
 .wmd-button-bar .wmd-bold-button::before,
+.with-check-icon::before,
 .with-slashed-icon::after,
 .with-bullhorn-icon::before,
 .with-accept-answer-icon::before,
@@ -7465,6 +7480,10 @@ readers do not read off random characters that represent icons */
   font-size: 0.75rem;
   transform: rotate(30deg);
   content: "";
+}
+
+.with-check-icon::before {
+  content: "";
 }
 
 /* wmd editor button icons */
@@ -9650,6 +9669,53 @@ code.hljs {
 }
 .js-group-settings .row.with-checkbox input[type=checkbox] {
   margin: 1px 0.25rem 0 0;
+}
+
+a.badge-page-link {
+  text-decoration: none;
+}
+
+.js-badges-list .with-times-icon::before {
+  font-size: 0.875rem;
+  margin-right: 1px;
+}
+.js-badges-list .with-check-icon {
+  color: var(--clr-green-40);
+  margin-right: 0.25rem;
+}
+.js-badges-list .badge {
+  margin-right: 0.125rem;
+}
+.js-badges-list td {
+  padding: 0.125rem 0;
+}
+
+.badge {
+  align-items: center;
+  background: var(--badge-bg);
+  border-radius: var(--badge-border-radius);
+  border: var(--badge-border);
+  color: var(--badge-text-color);
+  display: inline-flex;
+  height: var(--badge-height);
+  padding: var(--badge-padding);
+  white-space: nowrap;
+}
+.badge::before {
+  margin-right: 0.25rem;
+}
+
+.badges-page p {
+  margin: 0 0 0.25rem;
+}
+.badges-page table {
+  margin: 0.5rem 0;
+}
+.badges-page .sidebar-box h2, .badges-page .sidebar-box p {
+  margin-bottom: 1rem;
+}
+.badges-page .sidebar-box .badge {
+  margin-bottom: 0.5rem;
 }
 
 /*# sourceMappingURL=style.css.map */

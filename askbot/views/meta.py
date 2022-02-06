@@ -174,7 +174,7 @@ def badges_page(request):#user status/reputation system
     data = {'active_tab': 'badges',
             'badges' : badges,
             'my_badge_ids' : my_badge_ids}
-    return render(request, 'badges.html', data)
+    return render(request, 'badges/index.html', data)
 
 def badge_page(request, badge_id):
     badge = get_object_or_404(BadgeData, id=badge_id)
@@ -201,7 +201,7 @@ def badge_page(request, badge_id):
         'pages': objects_list.num_pages,
         'current_page_number': page,
         'page_object': badge_recipients,
-        'base_url' : reverse('badge', kwargs={'id': badge.id}) + '?'
+        'base_url' : reverse('badge', kwargs={'badge_id': badge.id}) + '?'
     }
     paginator_context = functions.setup_paginator(paginator_data)
 
