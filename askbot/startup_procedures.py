@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 from django.db import connection
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
-from django.utils import timezone, six
+from django.utils import timezone
 from askbot.utils.loading import load_module
 from askbot.utils.functions import enumerate_string_list
 from askbot.utils.url_utils import urls_equal
@@ -102,7 +102,7 @@ def test_askbot_url():
     url = django_settings.ASKBOT_URL
     if url != '':
 
-        if not isinstance(url, six.string_types):
+        if not isinstance(url, str):
             msg = 'setting ASKBOT_URL must be of string or unicode type'
             raise AskbotConfigError(msg)
 
@@ -1008,8 +1008,8 @@ def test_versions():
 
     dj_ver = django.VERSION
     upgrade_msg = 'About upgrades, please read http://askbot.org/doc/upgrade.html'
-    if dj_ver < (2, 2) or dj_ver >= (2, 3):
-        errors.append('This version of Askbot supports only django 2.2 ' + upgrade_msg)
+    if dj_ver < (2, 2) or dj_ver >= (4, 0):
+        errors.append('This version of Askbot supports django 2.2 - 3.2 ' + upgrade_msg)
     elif py_ver[:3] < (3, 6, 0):
         errors.append('Askbot requires Python 3.6')
 
@@ -1040,7 +1040,7 @@ and for making posts by email"""
     test_celery()
     test_compressor()
     test_custom_user_profile_tab()
-    test_group_messaging()
+    #test_group_messaging()
     test_haystack()
     test_jinja2()
     #test_longerusername()

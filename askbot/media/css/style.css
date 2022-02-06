@@ -388,6 +388,7 @@ a,
 a:active,
 .btn-link {
   color: var(--link-color);
+  cursor: pointer;
   transition: color var(--transition-params);
   text-decoration-thickness: var(--text-decoration-thickness);
 }
@@ -405,6 +406,10 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
 }
 
+.btn-link,
+.a {
+  cursor: pointer;
+}
 .btn-link:hover,
 .a:hover {
   color: var(--link-hover-color);
@@ -416,11 +421,13 @@ abbr {
   text-decoration: none !important;
 }
 
-input {
+input,
+select {
   background: var(--input-bg-color);
   color: var(--fg-color);
 }
-input:focus {
+input:focus,
+select:focus {
   outline: none;
 }
 
@@ -439,6 +446,7 @@ input,
   border-width: var(--input-border-width);
   border-style: var(--input-border-style);
   color: var(--btn-fg-color);
+  cursor: pointer;
   font-size: var(--input-font-size);
   transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
 }
@@ -500,6 +508,20 @@ input[type=text],
 
 .js-inline-block {
   display: inline-block !important;
+}
+
+.row {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input[type=checkbox],
+input[type=button],
+input[type=submit],
+input[type=reset],
+select,
+option {
+  cursor: pointer;
 }
 
 :root {
@@ -9615,6 +9637,19 @@ code.hljs {
   max-width: calc(12rem - 2.75rem);
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.js-group-settings label[for=group-openness-selector] {
+  display: block;
+  margin-bottom: 0.125rem;
+}
+.js-group-settings .row.with-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.js-group-settings .row.with-checkbox input[type=checkbox] {
+  margin: 1px 0.25rem 0 0;
 }
 
 /*# sourceMappingURL=style.css.map */

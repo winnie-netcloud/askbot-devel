@@ -146,12 +146,12 @@ urlpatterns = [
     ),
     url(
         r'^%s$' % pgettext('urls', 'badges/'),
-        views.meta.badges,
+        views.meta.badges_page,
         name='badges'
     ),
     url(
         r'^%s(?P<id>\d+)//*' % pgettext('urls', 'badges/'),
-        views.meta.badge,
+        views.meta.badge_page,
         name='badge'
     ),
     url(
@@ -194,7 +194,7 @@ urlpatterns = [
         kwargs={'setting_name': 'TERMS', 'page_class': 'terms-page'},
         name='terms'
     ),
-    url(r'^%s$' % pgettext('urls', 'help/'), views.meta.help, name='help'),
+    url(r'^%s$' % pgettext('urls', 'help/'), views.meta.help_page, name='help'),
     service_url(
         r'^%s(?P<id>\d+)/%s$' % (pgettext('urls', 'answers/'), pgettext('urls', 'edit/')),
         views.writers.edit_answer,

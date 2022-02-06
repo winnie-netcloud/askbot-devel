@@ -23,7 +23,7 @@
 {% block sidebar %}
   {% if group %}
     {# this widget takes variables: group, user_can_join_group, user_is_group_member #}
-    {% include "widgets/group_info.html" %}
+    {% include "users/group_settings.html" %}
   {% endif %}
 {% endblock %}
 
@@ -40,18 +40,19 @@
   </script>
   {% compress js %}
     <script type="text/javascript" src="{{ '/jslib/editor.js'|media }}"></script>
+    <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
     {% include "meta/markdown_javascript.html" %}
     <script src="{{ '/jslib/jquery.validate.min.js'|media }}"></script>
     <script src="{{ '/jslib/highlight.min.js'|media }}"></script>
     <script src="{{ '/js/utils/toggle.js'|media }}"></script>
     <script src="{{ '/js/utils/image_changer.js'|media }}"></script>
     <script src="{{ '/js/utils/dropdown_select.js'|media }}"></script>
+    <script src="{{ '/js/editors/simple_editor.js'|media }}"></script>
     <script src="{{ '/js/utils/text_property_editor.js'|media }}"></script>
-    <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
     <script src="{{ '/js/editors/wmd.js'|media }}"></script>
     <script src="{{ '/js/editors/tinymce.js'|media }}"></script>
-    <script src="{{ '/js/editors/tag_wiki_editor.js'|media }}"></script>
-    <script src="{{ '/js/editors/user_group_profile_editor.js'|media }}"></script>
+    <script src="{{ '/js/editors/object_description_editor.js'|media }}"></script>
+    <script src="{{ '/js/editors/group_settings_editor.js'|media }}"></script>
     <script src="{{ '/js/utils/group_join_button.js'|media }}"></script>
   {% endcompress %}
   <script type="text/javascript">
@@ -86,8 +87,8 @@
           };
           Attacklab.wmd();
           Attacklab.wmdBase();
-          var group_editor = new UserGroupProfileEditor();
-          group_editor.decorate($('#group-wiki-{{group.id}}'));
+          var groupSettings = new GroupSettingsEditor();
+          groupSettings.decorate($('.js-group-settings'));
         }
       });
     {% endif %}

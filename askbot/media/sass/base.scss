@@ -50,6 +50,7 @@ a,
 a:active,
 .btn-link {
   color: var(--link-color);
+  cursor: pointer;
   transition: color var(--transition-params);
   text-decoration-thickness: var(--text-decoration-thickness);
 }
@@ -69,6 +70,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-link,
 .a {
+  cursor: pointer;
   &:hover {
     color: var(--link-hover-color);
     transition: color var(--transition-params);
@@ -80,7 +82,8 @@ abbr {
   text-decoration: none !important;
 }
 
-input {
+input,
+select {
   background: var(--input-bg-color);
   color: var(--fg-color);
   &:focus {
@@ -103,6 +106,7 @@ input,
   border-width: var(--input-border-width);
   border-style: var(--input-border-style);
   color: var(--btn-fg-color);
+  cursor: pointer;
   font-size: var(--input-font-size);
   transition: color var(--transition-timing) var(--transition-function),
     background var(--transition-timing) var(--transition-function),
@@ -174,4 +178,18 @@ input[type="text"],
 
 .js-inline-block {
   display: inline-block !important;
+}
+
+.row {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input[type="checkbox"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select,
+option {
+  cursor: pointer;
 }
