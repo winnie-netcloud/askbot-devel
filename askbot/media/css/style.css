@@ -9741,4 +9741,36 @@ a.badge-page-link {
   margin-bottom: 1rem;
 }
 
+.revisions-page .revisions-list {
+  margin-top: 1rem;
+}
+.revisions-page .js-revision {
+  margin: 0 0 1rem;
+}
+.revisions-page .revision-number {
+  margin-right: 1rem;
+}
+.revisions-page .revision-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: var(--large-font-size);
+  color: var(--clr-neutral-30);
+}
+.revisions-page .with-caret-right-icon::before {
+  transition: transform 0.25s ease;
+  margin-right: 0.25rem;
+}
+.revisions-page .js-revision.js-active .with-caret-right-icon::before {
+  transform: rotate(90deg);
+}
+.revisions-page .js-revision-body {
+  padding-top: 0.5rem;
+  display: none;
+}
+.revisions-page .post-update-info {
+  display: inline-flex;
+  margin: 0;
+}
+
 /*# sourceMappingURL=style.css.map */

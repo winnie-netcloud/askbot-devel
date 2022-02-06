@@ -117,7 +117,7 @@
       {% if revision.is_anonymous %}
         {{ settings.NAME_OF_ANONYMOUS_USER }}
       {% else %}
-        <a href="{{ revision.author.get_absolute_url() }}">{{ revision.author.username }}</a>
+        <a class="user-name-link" href="{{ revision.author.get_absolute_url() }}">{{ revision.author.username }}</a>
         {% if settings.GROUPS_ENABLED %}
           {{ user_primary_group(revision.author) }}
         {% endif %}

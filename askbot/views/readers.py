@@ -676,7 +676,6 @@ def revisions(request, id, post_type = None):
             raise Http404
 
     revisions = list(models.PostRevision.objects.filter(post=post))
-    revisions.reverse()
     for i, revision in enumerate(revisions):
         if i == 0:
             revision.diff = sanitize_html(revisions[i].html)
