@@ -9135,6 +9135,18 @@ code.hljs {
   margin-bottom: 0.5rem;
 }
 
+.error-page main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+}
+.error-page main h1 {
+  margin: 0 0 0.5rem;
+}
+
 #js-questions {
   margin-bottom: 0.5rem;
 }
