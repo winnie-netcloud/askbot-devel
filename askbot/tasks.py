@@ -63,7 +63,7 @@ logger = get_task_logger(__name__)
 # TODO: Make exceptions raised inside record_post_update_celery_task() ...
 #       ... propagate upwards to test runner, if only CELERY_TASK_ALWAYS_EAGER = True
 #       (i.e. if Celery tasks are not deferred but executed straight away)
-@shared_task
+@shared_task(ignore_result=True)
 def tweet_new_post_task(post_id):
     try:
         twitter = Twitter()
@@ -91,7 +91,7 @@ def tweet_new_post_task(post_id):
         twitter.tweet(tweet_text, access_token=token)
 
 
-@shared_task
+@shared_task(ignore_result=True)
 def submit_spam_posts(post_ids):
     posts = Post.objects.filter(pk__in=post_ids)
     # todo: save user agent in the revisions, using a fixed record
@@ -106,7 +106,7 @@ def submit_spam_posts(post_ids):
                             author=post.author)
 
 
-@shared_task
+@shared_task(ignore_result=True)
 def export_user_data(user_id):
     """Exports user data by ID"""
     try:
@@ -123,7 +123,7 @@ def export_user_data(user_id):
         return
 
 
-@shared_task
+@shared_task(ignore_result=True)
 def delete_update_notifications_task(rev_ids, keep_activity):
     """parameter is list of revision ids"""
     ctype = ContentType.objects.get_for_model(PostRevision)
@@ -150,7 +150,7 @@ def delete_update_notifications_task(rev_ids, keep_activity):
     for user in users:
         user.update_response_counts()
 
-@shared_task
+@shared_task(ignore_result=True)
 def notify_author_of_published_revision_celery_task(revision_id):
     # TODO: move this to ``askbot.mail`` module
     # for answerable email only for now, because
@@ -201,7 +201,7 @@ def notify_author_of_published_revision_celery_task(revision_id):
         email.send([revision.author.email])
 
 
-@shared_task
+@shared_task(ignore_result=True)
 def record_post_update_celery_task(
         post_id, newly_mentioned_user_id_list=None, updated_by_id=None,
         suppress_email=False, timestamp=None, created=False, diff=None):
@@ -228,7 +228,7 @@ def record_post_update_celery_task(
         logger.error(str(traceback.format_exc()).encode('utf-8'))
 
 
-@shared_task
+@shared_task(ignore_result=True)
 def record_question_visit(
         language_code=None, question_post_id=None, update_view_count=False,
         user_id=None):
@@ -266,7 +266,7 @@ def record_question_visit(
                              actor=user,
                              context_object=question_post)
 
-@shared_task()
+@shared_task(ignore_result=True)
 def send_instant_notifications_about_activity_in_post(
         activity_id=None, post_id=None, recipients=None):
 
