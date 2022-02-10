@@ -854,7 +854,7 @@ class Thread(models.Model):
 
         ####################################################################
         self.invalidate_cached_summary_html()
-        if not django_settings.CELERY_ALWAYS_EAGER:
+        if not django_settings.CELERY_TASK_ALWAYS_EAGER:
             self.update_summary_html()  # proactively regenerate thread summary html
         ####################################################################
 

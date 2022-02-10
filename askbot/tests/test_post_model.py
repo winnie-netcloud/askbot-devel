@@ -614,7 +614,7 @@ class ThreadRenderCacheUpdateTests(AskbotTestCase):
         html = self._html_for_question(thread._question_post())
         self.assertEqual(html, thread.get_cached_summary_html())
 
-    @skipIf(django_settings.CELERY_ALWAYS_EAGER == True, 'celery deamon not running')
+    @skipIf(django_settings.CELERY_TASK_ALWAYS_EAGER == True, 'celery deamon not running')
     def test_view_count(self):
         question = self.post_question()
         self.assertEqual(0, question.thread.view_count)

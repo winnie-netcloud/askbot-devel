@@ -814,7 +814,7 @@ class Post(models.Model):
                     for_email = [u for u in notify_sets['for_email'] if u.is_administrator()]
                     notify_sets['for_email'] = for_email
 
-        if not django_settings.CELERY_ALWAYS_EAGER:
+        if not django_settings.CELERY_TASK_ALWAYS_EAGER:
             cache_key = 'instant-notification-%d-%d' % (self.thread.id, updated_by.id)
             if cache.cache.get(cache_key):
                 return

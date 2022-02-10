@@ -12,7 +12,6 @@ import os
 import re
 import urllib.request, urllib.parse, urllib.error
 from functools import partial
-from celery.task import task
 from django.urls import reverse, NoReverseMatch
 from django.core.paginator import Paginator
 from django.db import IntegrityError

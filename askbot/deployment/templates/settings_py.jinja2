@@ -186,8 +186,8 @@ ALLOW_UNICODE_SLUGS = False
 ASKBOT_USE_STACKEXCHANGE_URLS = False #mimic url scheme of stackexchange
 
 #Celery Settings
-BROKER_TRANSPORT = "kombu.transport.memory.Transport"
-CELERY_ALWAYS_EAGER = True
+CELERY_BROKER_TRANSPORT = "kombu.transport.memory.Transport"
+CELERY_TASK_ALWAYS_EAGER = True
 
 CSRF_COOKIE_NAME = '_csrf'
 

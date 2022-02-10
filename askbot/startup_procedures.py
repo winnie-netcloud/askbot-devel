@@ -352,8 +352,6 @@ def test_celery():
     that correct name is used for the setting
     and that a valid value is chosen
     """
-    broker_backend = getattr(django_settings, 'BROKER_BACKEND', None)
-    broker_transport = getattr(django_settings, 'BROKER_TRANSPORT', None)
     delay_time = getattr(django_settings, 'NOTIFICATION_DELAY_TIME', None)
     delay_setting_info = 'The delay is in seconds - used to throttle ' + \
         'instant notifications note that this delay will work only if ' + \
@@ -370,29 +368,6 @@ def test_celery():
         raise AskbotConfigError(
             '\nNOTIFICATION_DELAY_TIME setting must have a numeric value\n' + \
             delay_setting_info
-        )
-
-
-    if (broker_backend is None) and (broker_transport is None):
-        raise AskbotConfigError(
-            "\nPlease add\n"
-            'An appropriate BROKER_TRANSPORT value to settings.py. '
-            'Refer to the Celery project documentation to see what '
-            'values are supported.'
-        )
-
-    if broker_backend and broker_backend != broker_transport:
-        raise AskbotConfigError(
-            "\nPlease rename setting BROKER_BACKEND to BROKER_TRANSPORT\n"
-            "in your settings.py file\n"
-            "If you have both in your settings.py - then\n"
-            "delete the BROKER_BACKEND setting and leave the BROKER_TRANSPORT"
-        )
-
-    if hasattr(django_settings, 'BROKER_BACKEND') and not hasattr(django_settings, 'BROKER_TRANSPORT'):
-        raise AskbotConfigError(
-            "\nPlease rename setting BROKER_BACKEND to BROKER_TRANSPORT\n"
-            "in your settings.py file"
         )
 
 
