@@ -1,14 +1,12 @@
 {% extends "two_column_body.html" %}
 {% import "macros.html" as macros %}
-<!-- template answer_edit.html -->
 {% block title %}{% filter trim %}{{ settings.WORDS_EDIT_ANSWER|escape }}{% endfilter %}{% endblock %}
-{% block page_class %}edit-answer-page{% endblock %}
+{% block layout_class %}edit-answer-page{% endblock %}
 {% block content %}
-<div class="section-title">
-{{ settings.WORDS_EDIT_ANSWER|escape }}
-[<a href="{{ answer.get_absolute_url() }}">{% trans %}back{% endtrans %}</a>]
-</div>
-<div class="ask-body">
+  <h1>
+    {{ settings.WORDS_EDIT_ANSWER|escape }}
+    [<a href="{{ answer.get_absolute_url() }}">{% trans %}back{% endtrans %}</a>]
+  </h1>
   <form id="fmedit" action="{{ url('edit_answer',  answer.id ) }}" method="post" >{{ csrf_input }}
     {% if revision_form.revision.errors %}{{ revision_form.revision.errors.as_ul() }}{% endif %}
     {{ revision_form.revision }}
@@ -32,25 +30,26 @@
     </div>
     {% if form.recaptcha %}
       <div>{{ macros.form_field_with_errors(form.recaptcha) }}</div>
-      <div class="clearfix"></div>
     {% endif %}
     <input
       id="edit_post_form_submit_button"
-      type="submit"
+      class='btn'
+      type='submit'
       value="{% trans %}Save edit{% endtrans %}"
     />&nbsp;
     <input
       type="button"
       value="{% trans %}Cancel{% endtrans %}"
-      class="cancel"
+      class="btn btn-muted"
       onclick="history.back(-1);"
     />
   </form>
-</div>
 {% endblock %}
 
 {% block sidebar %}
-    {% include "widgets/answer_edit_tips.html" %}
+    {% if settings.EDITOR_TYPE == 'markdown' %}
+      {% include "components/markdown_help.html" %}
+    {% endif %}
 {% endblock %}
 
 {% block endjs %}
@@ -62,34 +61,11 @@
     <script src="{{ '/js/utils/toggle.js'|media }}"></script>
     <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
     <script src="{{ '/js/utils/proxy_author_inputs.js'|media }}"></script>
+    <script src="{{ '/js/pages/answer_edit.js'|media }}"></script>
   {% endcompress %}
   {% if settings.EDITOR_TYPE == 'markdown' %}
     {% compress js %}
       {% include "meta/markdown_javascript.html" %}
     {% endcompress %}
   {% endif %}
-  <script type="text/javascript">
-    $(document).ready(function(){
-       $('#editor').TextAreaResizer();
-
-
-       //toggle preview of editor
-       var display = true;
-       var txt = "{% trans %}hide preview{% endtrans %}";
-       $('#pre-collapse').text(txt);
-       $('#pre-collapse').bind('click', function(){
-         txt = display ? "{% trans %}show preview{% endtrans %}" : "{% trans %}hide preview{% endtrans %}";
-         display = !display;
-         $('#previewer').toggle();
-         $('#pre-collapse').text(txt);
-       });
-
-       $('#id_revision').unbind().change(function(){
-         $("#select_revision").val('true');
-         $('#edit_post_form_submit_button').click();
-       });
-
-    });
-  </script>
 {% endblock %}
-<!-- end template answer_edit.html -->
