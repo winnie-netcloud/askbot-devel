@@ -1,0 +1,29 @@
+{% if show_profile_info %}
+  {% set editable=(request.user.is_authenticated
+      and (
+          (request.user == view_user) or request.user.is_admin_or_mod()
+      )
+  ) %}
+  {% set user_about=view_user.get_localized_profile().about %}
+  <div class="user-info-about-text">
+  {% if editable %}
+    <div class="js-editable"
+      id="js-user-about-{{ view_user.pk}}"
+      {# urls below are parsed and parameters added as part of request #}
+      data-get-text-url="{{ url('get_user_description') }}?user_id={{ view_user.pk }}"
+      data-save-text-url="{{ url('set_user_description') }}?user_id={{ view_user.pk }}"
+      data-save-text-param-name="description"
+      data-validated-text-param-name="description_html"
+      data-editor-type="{{ settings.EDITOR_TYPE }}"
+      data-previewer-enabled="false"
+    >
+      <div class="js-editable-content">{{ user_about|convert_text }}</div>
+      <div class="js-editable-controls">
+        <button id="js-edit-btn-user-about-{{ view_user.pk }}" class="btn">{% trans %}edit{% endtrans %}</button>
+      </div>
+    </div>
+  {% else %}
+    {{ user_about|convert_text }}
+  {% endif %}
+  </div>
+{% endif %}

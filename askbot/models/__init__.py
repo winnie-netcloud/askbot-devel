@@ -2717,7 +2717,7 @@ def user_get_status_display(self):
     elif self.is_blocked():
         return _('Blocked User')
     elif self.is_watched():
-        return _('New User')
+        return _('User')
     elif self.is_terminated():
         return _('Account terminated')
     else:

@@ -9204,6 +9204,7 @@ code.hljs {
   font-size: var(--large-font-size);
   height: var(--sort-nav-height);
   padding: 3px 1rem 0 0;
+  margin: 0;
 }
 @media (max-width: 690px) {
   .js-questions-title {
@@ -9783,6 +9784,82 @@ a.badge-page-link {
 .revisions-page .post-update-info {
   display: inline-flex;
   margin: 0;
+}
+
+.user-profile-page h1 {
+  margin-bottom: 0.5rem;
+}
+.user-profile-page h2 {
+  font-size: var(--extra-large-font-size);
+  margin-bottom: 0.5rem;
+}
+.user-profile-page .components--sort-nav {
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  height: auto;
+  line-height: var(--sort-nav-height);
+}
+.user-profile-page .js-editable-content {
+  padding: 0.25rem 0 0;
+}
+
+.user-profile-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+.user-profile-info > * {
+  margin-bottom: 1rem;
+}
+
+.user-info-avatar-block {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-right: 2rem;
+  min-width: 8rem;
+  padding-top: 0.5rem;
+  width: 8rem;
+  --avatar-size: 8rem;
+}
+
+.js-follow-user {
+  margin-top: 0.5rem;
+}
+
+.user-info-table {
+  margin-right: 2rem;
+}
+.user-info-table th, .user-info-table td {
+  text-align: left;
+  padding: 0 1rem 0.3625rem;
+}
+.user-info-table th:first-child, .user-info-table td:first-child {
+  text-transform: capitalize;
+}
+.user-info-table th:nth-child(2) {
+  font-weight: normal;
+}
+
+.user-info-about-text {
+  max-width: 28rem;
+}
+
+.user-profile-answers {
+  margin-bottom: 1rem;
+}
+.user-profile-answers .answer-votes {
+  color: var(--bg-color);
+  background: var(--clr-neutral-50);
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.25rem;
+}
+.user-profile-answers .answer-summary {
+  margin-bottom: 0.25rem;
+}
+.user-profile-answers .answer-summary a {
+  text-decoration: none;
+  color: var(--text-color);
 }
 
 /*# sourceMappingURL=style.css.map */

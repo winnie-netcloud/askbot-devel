@@ -51,6 +51,7 @@
   font-size: var(--large-font-size);
   height: var(--sort-nav-height);
   padding: 3px 1rem 0 0;
+  margin: 0;
   @media(max-width: 690px) {
     display: none;
   }

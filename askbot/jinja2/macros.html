@@ -584,7 +584,7 @@ for the purposes of the AJAX comment editor #}
   />
   {% if hide_rep == False and settings.KARMA_MODE == 'public' %}
     <div class="reputation-badge">
-      {{ user.reputation|humanize_counter }}
+      {{ user.get_localized_profile().get_reputation()|humanize_counter }}
     </div>
   {% endif %}
 </a>
