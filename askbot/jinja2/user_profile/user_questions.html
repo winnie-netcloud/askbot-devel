@@ -1,5 +1,5 @@
 {% import "macros.html" as macros %}
-<div id="questions" class="user-profile-questions">
+<section id="questions" class="user-profile-questions">
   <h2>
     {% set pluralized_item_term=settings.WORDS_QUESTIONS_COUNTABLE_FORMS|py_pluralize(question_count)|capitalize|escape %}
     {% set item_count=question_count %}
@@ -16,4 +16,4 @@
   {% if question_count > page_size %}
     {{ macros.paginator(q_paginator_context) }}
   {% endif %}
-</div>
+</section>

@@ -15,6 +15,15 @@
   .js-editable-content {
     padding: 0.25rem 0 0;
   }
+  section {
+    margin-bottom: 1rem;
+  }
+  .badges-list {
+    & > * {
+      display: inline-block;
+      margin: 0 0.5rem 0.5rem 0;
+    }
+  }
 }
 
 .user-profile-info {
@@ -51,6 +60,20 @@
   }
   th:nth-child(2) {
     font-weight: normal;
+  }
+  .with-upvote-icon,
+  .with-downvote-icon {
+    &::before {
+      margin-right: 0.125rem;
+    }
+    color: var(--bg-color);
+    padding: 0.125rem 0.25rem;
+  }
+  .with-upvote-icon {
+    background: var(--clr-green-40);
+  }
+  .with-downvote-icon {
+    background: var(--clr-danger);
   }
 }
 

@@ -185,6 +185,10 @@ input[type="text"],
   margin-bottom: 0.5rem;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 h1 {
   font-size: var(--extra-large-font-size);
   margin: 0.25rem 0;

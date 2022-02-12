@@ -29,7 +29,7 @@
         {% for group in user_groups %}
           {{ macros.user_group_link(group) }}{% if not loop.last %},{% endif %}
         {% endfor %}
-        <a class="js-add-group">{% trans %}add group{% endtrans %}</a>
+        <a class="js-add-group">({% trans %}edit{% endtrans %})</a>
       </div>
     </td>
   </tr>
@@ -74,5 +74,14 @@
     <td>{% trans %}todays unused votes{% endtrans %}</td>
     <td>{{ votes_today_left }}</td>
   </tr>
+  {% endif %}
+  {% if total_votes %}
+    <tr>
+      <td>{% trans %}votes{% endtrans %}</td>
+      <td>
+        <span class='with-upvote-icon'>{{ up_votes }}</span>
+        <span class='with-downvote-icon'>{{ down_votes }}</span>
+      </td>
+    </tr>
   {% endif %}
 </table>

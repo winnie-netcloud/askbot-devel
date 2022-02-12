@@ -6,6 +6,9 @@
   display: flex;
   overflow: hidden;
   white-space: nowrap;
+  position: sticky;
+  top: var(--forum-header-height);
+  z-index: 100;
   span {
     cursor: default;
   }

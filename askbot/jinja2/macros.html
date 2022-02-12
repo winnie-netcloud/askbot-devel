@@ -1,3 +1,7 @@
+{%- macro used_count(count=0) -%}
+  <span class="used-count">&#215;{{ count }}</span>
+{%- endmacro -%}
+
 {%- macro share(site = None) -%}
   <a class="js-{{ site }}-share with-{{site}}-icon share-btn"
     title="{% trans %}Share this content on {{site}}{% endtrans %}"

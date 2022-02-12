@@ -2,7 +2,7 @@ a.badge-page-link {
   text-decoration: none;
 }
 
-.js-badges-list {
+.badges-list {
   .with-times-icon::before {
     font-size: 0.875rem;
     margin-right: 1px;
@@ -28,6 +28,7 @@ a.badge-page-link {
   display: inline-flex;
   height: var(--badge-height);
   padding: var(--badge-padding);
+  text-decoration: none;
   white-space: nowrap;
   &::before {
     margin-right: 0.25rem;

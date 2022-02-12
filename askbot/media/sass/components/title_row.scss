@@ -7,3 +7,13 @@
     padding-top: 0.125rem;
   }
 }
+
+.tags-page,
+.users-page {
+  .title-row {
+    background: var(--semi-transparent-bg-color);
+    position: sticky;
+    top: var(--forum-header-height);
+    z-index: 100;
+  }
+}
