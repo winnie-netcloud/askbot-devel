@@ -315,6 +315,7 @@ def manage_account(request, subject, context):
     context['backup_file_names'] = subject.get_backup_file_names()
     context['exporting'] = exporting
     context['anon_user_name'] = models.get_name_of_anonymous_user()
+    context['tab_name'] = 'manage_account'
     return render(request, 'user_profile/user_manage_account.html', context)
 
 @decorators.ajax_only

@@ -4,6 +4,7 @@
 @use './layout.scss';
 @use './icons.scss';
 @use './buttons.scss';
+@use './jquery_overrides.scss';
 @use './components/action_link.scss';
 @use './components/avatar.scss';
 @use './components/autocompleter.scss';
@@ -40,6 +41,7 @@
 @use './components/users_list.scss';
 @use './components/badge_info_sidebar.scss';
 @use './components/used_count.scss';
+@use './components/action_status.scss';
 @use './error.scss';
 @use './questions/index.scss';
 @use './questions/questions_header.scss';
@@ -59,3 +61,5 @@
 @use './badge_detail.scss';
 @use './revisions.scss';
 @use './user_profile/user_profile_index.scss';
+@use './user_profile/user_profile_notifications.scss';
+@use './user_profile/subscription_settings.scss';

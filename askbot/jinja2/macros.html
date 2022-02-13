@@ -20,14 +20,16 @@
 {%- endmacro -%}
 
 {%- macro inbox_message_snippet(message) -%}
-<div class="message-details" data-message-id="{{ message.id }}">
+<div class="js-message-details" data-message-id="{{ message.id }}">
+  <div class="message-meta">
     <input type="checkbox" />
     {{ gravatar(message.user, 16, hide_rep=True) }}
     <a class="username" href="{{ message.user.get_absolute_url() }}">{{ message.user.username|escape }}</a>
-    <a class="forum-post-link" href="{{ message.url }}">{{ message.message_type }}</a>
+    <a class="post-link" href="{{ message.url }}">{{ message.message_type }}</a>
     ({{ timeago(message.timestamp) }})
-    {#<div class="snippet">{{ message.snippet }}</div>#}
-    <div class="post-content">{{ message.content }}</div>
+  </div>
+  {#<div class="snippet">{{ message.snippet }}</div>#}
+  <div class="post-content">{{ message.content }}</div>
 </div>
 {%- endmacro -%}
 
