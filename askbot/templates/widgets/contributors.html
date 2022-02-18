@@ -2,8 +2,8 @@
 <div id="contrib-users" class="box">
     <h2 class="contributorback">{% trans %}Contributors{% endtrans %}</h2>
     {% spaceless %}
-    {% for person in contributors %}
-        {{ macros.gravatar(person, 48) }}
+    {% for user_data in contributors %}
+        {{ macros.simple_avatar(user_data) }}
     {% endfor %}
     {% endspaceless %}
 </div>
