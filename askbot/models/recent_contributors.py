@@ -16,6 +16,9 @@ class AvatarsBlockData(object):
     @classmethod
     def get_data(cls):
         """Returns list of (id, avatar_url, username)"""
+        if not askbot_settings.SIDEBAR_MAIN_SHOW_AVATARS:
+            return []
+
         data = cls.get_cached_data()
         if data:
             return data
@@ -47,6 +50,9 @@ class AvatarsBlockData(object):
     def push_user(cls, user):
         """Sets avatar of the `user` first in the list,
         updates the user data"""
+        if not askbot_settings.SIDEBAR_MAIN_SHOW_AVATARS:
+            return
+
         data = cls.get_data()
         user_datum = cls.get_user_datum(data, user)
         if user_datum:
@@ -61,6 +67,9 @@ class AvatarsBlockData(object):
     @classmethod
     def update_user(cls, user):
         """Updates user's avatar, if present"""
+        if not askbot_settings.SIDEBAR_MAIN_SHOW_AVATARS:
+            return
+
         data = cls.get_data()
         user_datum = cls.get_user_datum(data, user)
         if not user_datum:
@@ -81,6 +90,9 @@ class AvatarsBlockData(object):
                 break
             else:
                 data.extend(more_data)
+
+            if not more_data:
+                break
 
         return data[:max_users]
 
@@ -155,4 +167,4 @@ class AvatarsBlockData(object):
         if data:
             max_user_id = data[-1]['id']
             acts = acts.filter(user_id__lt=max_user_id)
-        return list(acts[:askbot_settings.SIDEBAR_MAIN_AVATAR_LIMIT])
+        return list(acts[:2*askbot_settings.SIDEBAR_MAIN_AVATAR_LIMIT])
