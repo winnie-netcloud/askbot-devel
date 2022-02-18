@@ -581,18 +581,25 @@ for the purposes of the AJAX comment editor #}
     {% include "widgets/user_list.html" %}
 {%- endmacro -%}
 
+{%- macro simple_avatar(user_data, size) -%}
+  {% spaceless %}
+    {% set username=user_data['username']|escape %}
+    <a class="js-avatar-box" href="{{ user_data['profile_url'] }}"><img class="js-avatar gravatar" 
+        src="{{ user_data['avatar_url'] }}"
+        title="{{ username }}" 
+        alt="{% trans %}{{username}}'s avatar{% endtrans %}"
+    /></a>
+  {% endspaceless %}
+{%- endmacro -%}
+
 {#todo: rename this to avatar #}
 {%- macro gravatar(user, size) -%}
-{% filter trim %}
-<a class="js-avatar-box"
-    href="{{ user.get_absolute_url() }}"
-><img class="js-avatar gravatar"
-    width="{{size}}" height="{{size}}"
-    src="{{ user.get_avatar_url(size) }}"
-    title="{{user.username|escape}}"
-    alt="{% trans username=user.username|escape %}{{username}} gravatar image{% endtrans %}"
-/></a>
-{% endfilter %}
+    {{ simple_avatar({
+        'id': user.id,
+        'avatar_url': user.get_avatar_url(size),
+        'profile_url': user.get_absolute_url,
+        'username': user.username
+    })}}
 {%- endmacro -%}
 
 {%- macro user_website_link(user, max_display_length=25, force_show=False) -%}

@@ -3297,6 +3297,7 @@ tr.mceLast {
   top: 0;
   background: white;
   padding: 0.25rem 0;
+  z-index: 1;
 }
 .moderation-queue-page .re {
   width: 810px;
@@ -3347,13 +3348,40 @@ tr.mceLast {
 }
 .moderation-queue-page .messages {
   margin-bottom: 14px;
+  z-index: 0;
+}
+.moderation-queue-page .js-message-container {
+  position: relative;
+}
+.moderation-queue-page .js-message-container .js-expander {
+  border-radius: 1rem;
+  border: 1px solid #ccc;
+  bottom: 0;
+  cursor: pointer;
+  display: none;
+  left: 50%;
+  background: white;
+  box-shadow: 0 0 0 0.25rem white;
+  padding: 0 0.25rem;
+  position: absolute;
+  transform: translate(-50%, 50%);
 }
 .moderation-queue-page .message {
-  margin: 12px 0;
+  border-bottom: 1px solid #ccc;
+  margin: 12px 0 24px;
+  max-height: 3rem;
+  overflow: hidden;
+  padding-bottom: 0.5rem;
   transition: background 0.2s ease-in-out;
 }
+.moderation-queue-page .message:last-child {
+  margin-bottom: 0;
+}
+.moderation-queue-page .message.js-expanded {
+  max-height: unset;
+}
 .moderation-queue-page .message.js-selected {
-  background: #fff8c6;
+  background: #fff39a;
   transition: background 0.2s ease-in-out;
 }
 .moderation-queue-page .select-items {
