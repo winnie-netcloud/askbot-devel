@@ -283,6 +283,13 @@ TYPE_ACTIVITY = (
     )
 )
 
+SIDEBAR_AVATARS_BLOCK_ACTIVITY_TYPES = (
+    TYPE_ACTIVITY_ASK_QUESTION,
+    TYPE_ACTIVITY_ANSWER,
+    TYPE_ACTIVITY_UPDATE_QUESTION,
+    TYPE_ACTIVITY_UPDATE_ANSWER
+)
+
 MODERATED_EDIT_ACTIVITY_TYPES = (
     TYPE_ACTIVITY_MODERATED_NEW_POST,
     TYPE_ACTIVITY_MODERATED_POST_EDIT
@@ -407,9 +414,7 @@ VOTE_TYPES_INVALIDATE_CACHE = (
 #
 VOTE_TYPES = {
     VOTE_ACCEPT_ANSWER: ('answer', ),
-
-    VOTE_FAVORITE: None,  # TODO: not handled in the view
-
+    VOTE_FAVORITE: None, #maybe not used
     # args: (post_type, vote_directiom)
     VOTE_UPVOTE_QUESTION: ('question', 'up'),
     VOTE_DOWNVOTE_QUESTION: ('question', 'down'),
@@ -509,7 +514,8 @@ USER_STATUS_CHOICES = (
     ('w', _('watched')), #regular user placed on the moderation watch
     ('s', _('suspended')), #suspended user who cannot post new stuff
     ('b', _('blocked')), #blocked
-    ('t', _('terminated')) #terminated account, personal data deleted, content anonymized and retained
+    #terminated account, personal data deleted, content anonymized and retained
+    ('t', _('terminated'))
 )
 DEFAULT_USER_STATUS = 'w'
 

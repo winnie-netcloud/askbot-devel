@@ -41,6 +41,7 @@ from askbot.forms import ShowTagsForm
 from askbot.forms import ShowQuestionForm
 from askbot.models.post import MockPost
 from askbot.models.tag import Tag
+from askbot.models.recent_contributors import AvatarsBlockData
 from askbot.search.state_manager import SearchState, DummySearchState
 from askbot.startup_procedures import domain_is_bad
 from askbot.templatetags import extra_tags
@@ -107,14 +108,7 @@ def questions(request, **kwargs):
     if tag_list_type == 'cloud': #force cloud to sort by name
         related_tags = sorted(related_tags, key = operator.attrgetter('name'))
 
-    contributors = list(
-        models.Thread.objects.get_thread_contributors(
-                                        thread_list=page.object_list
-                                    ).only(
-                                           'id', 'username',
-                                           'askbot_profile__gravatar'
-                                          )
-                        )
+    contributors = AvatarsBlockData.get_data()
 
     paginator_context = {
         'is_paginated' : (paginator.count > search_state.page_size),
