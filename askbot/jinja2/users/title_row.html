@@ -21,23 +21,23 @@
     {% if settings.KARMA_MODE == 'public' %}
     <a id="sort_reputation"
       href="{{ request.path|escape }}?sort=reputation"
-      {% if tab_id == 'reputation' %}class="js-active"{% endif %}
+      {% if tab_id == 'reputation' %}class="js-selected"{% endif %}
       title="{% trans %}see people with the highest reputation{% endtrans %}"
     >{% trans %}karma{% endtrans %}</a>
     {% endif %}
     <a id="sort_newest"
       href="{{ request.path|escape }}?sort=newest"
-      {% if tab_id == 'newest' %}class="js-active"{% endif %}
+      {% if tab_id == 'newest' %}class="js-selected"{% endif %}
       title="{% trans %}see people who joined most recently{% endtrans %}"
     >{% trans %}recent{% endtrans %}</a>
     <a id="sort_last"
       href="{{ request.path|escape }}?sort=last"
-      {% if tab_id == 'last' %}class="js-active"{% endif %}
+      {% if tab_id == 'last' %}class="js-selected"{% endif %}
       title="{% trans %}see people who joined the site first{% endtrans %}"
     >{% trans %}oldest{% endtrans %}</a>
     <a id="sort_user"
       href="{{ request.path|escape }}?sort=name"
-      {% if tab_id == 'name' %}class="js-active"{% endif %}
+      {% if tab_id == 'name' %}class="js-selected"{% endif %}
       title="{% trans %}see people sorted by name{% endtrans %}"
     >{% trans %}by username{% endtrans %}</a>
   </nav>

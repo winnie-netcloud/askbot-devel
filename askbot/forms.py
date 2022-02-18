@@ -687,7 +687,7 @@ class ChangeUserReputationForm(forms.Form):
 
     user_reputation_delta = forms.IntegerField(
         min_value=1, max_value=32767,
-        label=_('Enter number of points to add or subtract'))
+        label=_('Enter number of points'))
     comment = forms.CharField(label=_('Comment'), max_length=128)
 
     def clean_comment(self):

@@ -768,18 +768,18 @@ for the purposes of the AJAX comment editor #}
 {%- endmacro -%}
 
 {%- macro timeago(datetime_object, action_performed=None) -%}
-    {%- set when='<abbr class="js-timeago" title="'
-                ~ datetime_object.replace(microsecond=0)|add_tz_offset
-                ~ '">'
-                ~ datetime_object.replace(microsecond=0)|add_tz_offset
-                ~ '</abbr>'
-    -%}
-    {%- if action_performed -%}
-        {# action and time can be reversed, depending on language #}
-        {% trans %}{{ action_performed }} {{ when }}{% endtrans %}
-    {%- else -%}
-        {{ when }}
-    {%- endif -%}
+  {%- set when='<abbr class="js-timeago" title="'
+              ~ datetime_object.replace(microsecond=0)|add_tz_offset
+              ~ '">'
+              ~ datetime_object.replace(microsecond=0)|add_tz_offset
+              ~ '</abbr>'
+  -%}
+  {%- if action_performed -%}
+    {# action and time can be reversed, depending on language #}
+    {% trans %}{{ action_performed }} {{ when }}{% endtrans %}
+  {%- else -%}
+    {{ when }}
+  {%- endif -%}
 {%- endmacro -%}
 
 {% macro one_shot_form_js(form=None, submit_button=None) %}

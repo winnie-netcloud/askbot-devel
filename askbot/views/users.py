@@ -899,7 +899,7 @@ def user_recent(request, user, context):
         'activities' : activities
     }
     context.update(data)
-    return render(request, 'user_profile/user_recent.html', context)
+    return render(request, 'user_profile/user_activity.html', context)
 
 #not a view - no direct url route here, called by `user_responses`
 @csrf.csrf_protect

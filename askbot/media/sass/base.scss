@@ -92,6 +92,8 @@ select {
 }
 
 input,
+select,
+textarea,
 .btn {
   border-color: var(--input-border-color);
   border-radius: var(--input-border-radius);
@@ -146,7 +148,12 @@ a.btn {
 }
 
 input[type="text"],
+input[type="number"],
+input[type="submit"],
+input[type="reset"],
+select,
 .btn {
+
   height: var(--input-height);
   font-size: var(--input-font-size);
   padding: 0 var(--input-horizontal-padding);

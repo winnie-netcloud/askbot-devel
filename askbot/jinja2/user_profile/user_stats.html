@@ -7,8 +7,12 @@
 {% endblock %}
 {% block usercontent %}
   {% include "user_profile/user_info.html" %}
-  {% include "user_profile/user_questions.html" %}
-  {% include "user_profile/user_answers.html" %}
+  {% if questions %}
+    {% include "user_profile/user_questions.html" %}
+  {% endif %}
+  {% if top_answers %}
+    {% include "user_profile/user_answers.html" %}
+  {% endif %}
   {% include "user_profile/user_tags.html" %}
   {% if settings.BADGES_MODE == 'public' %}
     {% include "user_profile/user_badges.html" %}

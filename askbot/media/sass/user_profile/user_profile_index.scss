@@ -6,6 +6,9 @@
     font-size: var(--extra-large-font-size);
     margin-bottom: 0.5rem;
   }
+  table {
+    width: 100%;
+  }
   .components--sort-nav {
     margin-bottom: 1rem;
     flex-wrap: wrap;
@@ -51,6 +54,7 @@
 
 .user-info-table {
   margin-right: 2rem;
+  max-width: 20rem;
   th, td {
     text-align: left;
     padding: 0 1rem 0.3625rem;
@@ -66,14 +70,6 @@
     &::before {
       margin-right: 0.125rem;
     }
-    color: var(--bg-color);
-    padding: 0.125rem 0.25rem;
-  }
-  .with-upvote-icon {
-    background: var(--clr-green-40);
-  }
-  .with-downvote-icon {
-    background: var(--clr-danger);
   }
 }
 
@@ -84,9 +80,11 @@
 .user-profile-answers {
   margin-bottom: 1rem;
   .answer-votes {
-    color: var(--bg-color);
-    background: var(--clr-neutral-50);
+    color: var(--clr-danger);
+    background: linear-gradient(to top, var(--clr-danger-pale), var(--bg-color));
+    border: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
     display: inline-block;
+    font-weight: bold;
     padding: 0.25rem 0.5rem;
     margin-right: 0.25rem;
   }
@@ -96,5 +94,8 @@
   .answer-summary a {
     text-decoration: none;
     color: var(--text-color);
+  }
+  .paginator {
+    margin-top: 1rem;
   }
 }

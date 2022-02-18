@@ -1,3 +1,4 @@
+{% if badges %}
 <section id="badges" class="user-stats-badges">
   <h2>{% trans counter=total_badges %}<span class="count">{{counter}}</span> Badge{% pluralize %}<span class="count">{{counter}}</span> Badges{% endtrans %}</h2>
   <div class="badges-list">
@@ -26,3 +27,4 @@
     {% endfor %}
   </div>
 </section>
+{% endif %}

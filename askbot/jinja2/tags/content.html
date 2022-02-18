@@ -2,7 +2,7 @@
 {% include "tags/header.html" %}
 {% if tag_list_type == 'list' %}
   {% if not tags.object_list %}
-    <span>{% trans %}Nothing found{% endtrans %}</span>
+    {% include "tags/no_tags.html" %}
   {% endif %}
   {% if tags.object_list %}
     <ul class='tags'>
@@ -20,7 +20,7 @@
   {% endif %}
 {% else %}
   {% if not tags %}
-    <span>{% trans %}Nothing found{% endtrans %}</span>
+    {% include "tags/no_tags.html" %}
   {% endif %}
   {{ macros.tag_cloud(tags=tags, font_sizes=font_size, search_state=search_state) }}
 {% endif %}

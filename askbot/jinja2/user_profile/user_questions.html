@@ -1,16 +1,22 @@
 {% import "macros.html" as macros %}
 <section id="questions" class="user-profile-questions">
-  <h2>
-    {% set pluralized_item_term=settings.WORDS_QUESTIONS_COUNTABLE_FORMS|py_pluralize(question_count)|capitalize|escape %}
-    {% set item_count=question_count %}
-    {% trans %}<span class="count">{{ item_count }}</span> {{ pluralized_item_term }}{% endtrans %}
-  </h2>
+  {% if questions %}
+    <h2>
+      {% set pluralized_item_term=settings.WORDS_QUESTIONS_COUNTABLE_FORMS|py_pluralize(question_count)|capitalize|escape %}
+      {% set item_count=question_count %}
+      {% trans %}<span class="count">{{ item_count }}</span> {{ pluralized_item_term }}{% endtrans %}
+    </h2>
+  {% endif %}
   <div class="users-questions">
     {% for question in questions %}
       {{ question.thread.get_summary_html(
         search_state=search_state,
         visitor=request.user
       )}}
+    {% else %}
+      <div class="empty-content-box">
+        {% trans %}There are no questions.{% endtrans %}
+      </div>
     {% endfor %}
   </div>
   {% if question_count > page_size %}
