@@ -586,7 +586,7 @@ for the purposes of the AJAX comment editor #}
       title="{{ username }}" 
       alt="{% trans %}{{username}}'s avatar{% endtrans %}"
   />
-  {%- if data['reputation'] and settings.KARMA_MODE == 'public' -%}
+  {%- if user_data['reputation'] and settings.KARMA_MODE == 'public' -%}
     <div class="reputation-badge">
       {{ user_data['reputation']|humanize_counter }}
     </div>

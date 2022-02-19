@@ -75,7 +75,6 @@ def questions(request, **kwargs):
     List of Questions, Tagged questions, and Unanswered questions.
     matching search query or user selection
     """
-    #before = timezone.now()
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
@@ -87,6 +86,7 @@ def questions(request, **kwargs):
     qs, meta_data = models.Thread.objects.run_advanced_search(
                         request_user=request.user, search_state=search_state
                     )
+
     if meta_data['non_existing_tags']:
         search_state = search_state.remove_tags(meta_data['non_existing_tags'])
 
@@ -240,13 +240,15 @@ def questions(request, **kwargs):
             'tab_id' : search_state.sort,
             'tags' : related_tags,
             'tag_list_type' : tag_list_type,
-            'font_size' : extra_tags.get_tag_font_size(related_tags),
             'display_tag_filter_strategy_choices': conf.get_tag_display_filter_strategy_choices(),
             'email_tag_filter_strategy_choices': conf.get_tag_email_filter_strategy_choices(),
             'query_string': search_state.query_string(),
             'search_state': search_state,
             'feed_url': context_feed_url
         }
+
+        if tag_list_type == 'cloud':
+            template_data['font_size'] = extra_tags.get_tag_font_size(related_tags)
 
         extra_context = context.get_extra(
                                     'ASKBOT_QUESTIONS_PAGE_EXTRA_CONTEXT',
@@ -269,9 +271,10 @@ def questions(request, **kwargs):
                 ) % url
                 request.user.message_set.create(message=msg)
 
-        return render(request, 'questions/index.html', template_data)
-        #print timezone.now() - before
-        #return res
+        #before = timezone.now()
+        result = render(request, 'questions/index.html', template_data)
+        #print('pure render time %s' % (timezone.now() - before))
+        return result
 
 
 def get_top_answers(request):
