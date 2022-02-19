@@ -150,6 +150,9 @@ def set_primary(request, user_id=None, extra_context=None, avatar_size=128):
             user.avatar_type = 'a'
             user.clear_avatar_urls()
             user.save()
+            from askbot.models.recent_contributors import AvatarsBlockData
+            AvatarsBlockData.update_user(user)
+
     return redirect_to_show_list(user_id)
 
 
@@ -202,6 +205,8 @@ def delete(request, avatar_id):
             user.avatar_set.update(primary=False)
         user.clear_avatar_urls()
         user.save()
+        from askbot.models.recent_contributors import AvatarsBlockData
+        AvatarsBlockData.update_user(user)
 
     return redirect_to_show_list(user.id)
 

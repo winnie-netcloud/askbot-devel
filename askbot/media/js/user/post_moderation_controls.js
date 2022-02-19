@@ -28,9 +28,10 @@ PostModerationControls.prototype.removeEntries = function (entryIds) {
   for (var i = 0; i < entryIds.length; i++) {
     var id = entryIds[i];
     var elem = this._element.find('.message[data-message-id="' + id + '"]');
-    if (elem.length) {
-      elem.fadeOut('fast', function () {
-        elem.remove();
+    var msgCtr = elem.closest('.js-message-container');
+    if (msgCtr.length) {
+      msgCtr.fadeOut('fast', function () {
+        msgCtr.remove();
       });
     }
   }
@@ -77,7 +78,6 @@ PostModerationControls.prototype.getModHandler = function (action, items, optRea
         selectedEditIds = me.getVisibleEditIds();
       }
     }
-    debugger;
     //@todo: implement undo
     var postData = {
       'edit_ids': selectedEditIds,//revision ids
@@ -220,6 +220,26 @@ PostModerationControls.prototype.setupIntersectionObserver = function () {
   }
 };
 
+PostModerationControls.prototype.setupMessageExpanders = function () {
+  var msgCtrs = $('.js-message-container');
+  var me = this;
+  msgCtrs.each(function(_, item) {
+    var msg = $(item).find('.message');
+    if (msg.prop('scrollHeight') <= msg.prop('clientHeight') + 7) return;
+
+    var expander = $(item).find('.js-expander');
+    expander.show();
+    expander.click(function() {
+      msg.toggleClass('js-expanded')
+      if (msg.hasClass('js-expanded')) {
+        expander.text(gettext('collapse'));
+      } else {
+        expander.text(gettext('expand'));
+      }
+    });
+  });
+};
+
 PostModerationControls.prototype.decorate = function (element) {
   this._element = element;
   this._notification = element.find('.js-action-status');
@@ -249,6 +269,8 @@ PostModerationControls.prototype.decorate = function (element) {
   //delete posts, block users and ips
   button = element.find('.decline-block-users-ips');
   setupButtonEventHandlers(button, this.getModHandler('block', ['posts', 'users', 'ips']));
+
+  this.setupMessageExpanders();
 
   this.setupIntersectionObserver();
 };

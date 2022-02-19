@@ -1,14 +1,9 @@
-{% from "macros.html" import gravatar %}
-
-{#% cache 600 "contributors" contributors language_code %#}
+{% from "macros.html" import simple_avatar %}
 <div id="js-contrib-avatars" class="sidebar-box">
-    <h2>{% trans %}Contributors{% endtrans %}</h2>
-    {% filter trim %}
-    <div class="contrib-avatars">
-      {% for person in contributors %}
-          {{ gravatar(person, 48) }}
-      {% endfor %}
-      {% endfilter %}
-    </div>
+  <h2>{% trans %}Contributors{% endtrans %}</h2>
+  <div class="contrib-avatars">
+    {% for user_data in contributors %}
+      {{ simple_avatar(user_data) }}
+    {% endfor %}
+  </div>
 </div>
-{#% endcache %#}

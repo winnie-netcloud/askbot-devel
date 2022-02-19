@@ -578,23 +578,31 @@ for the purposes of the AJAX comment editor #}
     {% include "components/users_list.html" %}
 {%- endmacro -%}
 
+{# does not call any user methods #}
+{%- macro simple_avatar(user_data) -%}
+  {% set username=user_data['username']|escape %}
+  <a class="js-avatar-box" href="{{ user_data['profile_url'] }}"><img class="js-avatar gravatar" 
+      src="{{ user_data['avatar_url'] }}"
+      title="{{ username }}" 
+      alt="{% trans %}{{username}}'s avatar{% endtrans %}"
+  />
+  {%- if data['reputation'] and settings.KARMA_MODE == 'public' -%}
+    <div class="reputation-badge">
+      {{ user_data['reputation']|humanize_counter }}
+    </div>
+  {%- endif -%}
+  </a>
+{%- endmacro -%}
+
 {#todo: rename this to avatar #}
 {%- macro gravatar(user, size, hide_rep=False) -%}
-{% filter trim %}
-<a class="js-avatar-box" href="{{ user.get_absolute_url() }}">
-  <img class="js-avatar gravatar"
-    src="{{ user.get_avatar_url(size) }}"
-    alt="{{user.username|escape}}"
-    width="{{ size }}"
-    height="{{ size }}"
-  />
-  {% if hide_rep == False and settings.KARMA_MODE == 'public' %}
-    <div class="reputation-badge">
-      {{ user.get_localized_profile().get_reputation()|humanize_counter }}
-    </div>
-  {% endif %}
-</a>
-{% endfilter %}
+  {{ simple_avatar({
+    'id': user.id,
+    'avatar_url': user.get_avatar_url(size),
+    'profile_url': user.get_absolute_url,
+    'username': user.username,
+    'reputation': (not hide_rep) and user.get_localized_profile().get_reputation()
+  })}}
 {%- endmacro -%}
 
 {%- macro anon_avatar(size) -%}

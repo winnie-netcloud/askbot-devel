@@ -3839,6 +3839,9 @@ def record_post_update_activity(
 
     mentioned_ids = [u.id for u in newly_mentioned_users]
 
+    from askbot.models.recent_contributors import AvatarsBlockData
+    AvatarsBlockData.push_user(updated_by)
+
     defer_celery_task(
         tasks.record_post_update_celery_task,
         kwargs = {
