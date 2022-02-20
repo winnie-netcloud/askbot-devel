@@ -43,7 +43,7 @@ except ValueError:
 # function to remind us that it ultimately must go
 def load_templatetags():
   sib_zero  = list(SkinEnvironment.siblings.keys())[0]
-  dummy     = django_jinja.backend.Jinja2.__new__(django_jinja.backend.Jinja2)
+  dummy = django_jinja.backend.Jinja2.__new__(django_jinja.backend.Jinja2)
   dummy.env = SkinEnvironment.siblings[sib_zero]
 
   # this loads the templatetags modules
@@ -80,7 +80,7 @@ def factory(**options):
     # Jinja2 Environments know a concept called "overlays" which cries for
     # consideration here. It may greatly simplify loading templatetags ...
     all_combinations = [ (name,lang) for name in skins for lang in languages ]
-    for name,lang in all_combinations:
+    for name, lang in all_combinations:
         skin_basedir = utils.get_path_to_skin(name)
         options["skin"] = name
         options["language_code"] = lang
