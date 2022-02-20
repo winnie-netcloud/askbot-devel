@@ -599,7 +599,7 @@ for the purposes of the AJAX comment editor #}
     {{ simple_avatar({
         'id': user.id,
         'avatar_url': user.get_avatar_url(size),
-        'profile_url': user.get_absolute_url,
+        'profile_url': user.get_absolute_url(),
         'username': user.username
     })}}
 {%- endmacro -%}
