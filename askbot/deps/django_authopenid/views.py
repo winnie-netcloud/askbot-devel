@@ -849,7 +849,7 @@ def show_signin_view(request,
 
 
     if view_subtype == 'default':
-        page_title = _('Please click any of the icons below to sign in')
+        page_title = _('Click any of the icons below to sign in')
     elif view_subtype == 'email_sent':
         page_title = _('Account recovery email sent')
     elif view_subtype == 'change_openid':

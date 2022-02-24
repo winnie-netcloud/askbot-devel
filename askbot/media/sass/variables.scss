@@ -34,6 +34,9 @@
   --btn-muted-hover-bg: var(--clr-neutral-65);
   --btn-muted-hover-border-color: var(--clr-neutral-60);
 
+  --font-family: 'Source Sans Pro', Arial, sans-serif;
+  --font-weight-normal: 300;
+  --font-weight-bold: 700;
   --fg-color: var(--clr-neutral-20);
   --layout-max-width: 1100px;
   --layout-sidebar-width: 205px;
@@ -54,7 +57,7 @@
   --editor-border: var(--border-width) var(--border-style) var(--editor-border-color);
   --editor-box-shadow: inset 0 0 3px var(--clr-neutral-70);
 
-  --heading-font-weight: bold;
+  --heading-font-weight: var(--font-weight-bold);
 
   --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
@@ -120,7 +123,7 @@
   --search-input-height: 100%;
 
   --sidebar-heading-font-size: var(--large-font-size);
-  --sidebar-heading-font-weight: bold;
+  --sidebar-heading-font-weight: var(--font-weight-bold);
   --sidebar-heading-font-style: normal;
 
   --sort-nav-bg: var(--search-btn-bg-color);

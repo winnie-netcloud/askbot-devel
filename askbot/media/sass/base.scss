@@ -36,7 +36,8 @@ html {
 }
 
 body {
-  font-family: 'Source Sans Pro', Arial, sans-serif;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-normal);
   background: var(--bg-color);
   color: var(--fg-color);
 }
@@ -147,10 +148,11 @@ a.btn {
   }
 }
 
-input[type="text"],
 input[type="number"],
-input[type="submit"],
+input[type="password"],
 input[type="reset"],
+input[type="submit"],
+input[type="text"],
 select,
 .btn {
 
@@ -198,7 +200,7 @@ select,
 
 h1 {
   font-size: var(--extra-large-font-size);
-  margin: 0.25rem 0;
+  margin: 0 0 0.5rem;
 }
 
 input[type="checkbox"],

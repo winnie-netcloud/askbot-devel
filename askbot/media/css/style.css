@@ -374,7 +374,8 @@ html {
 }
 
 body {
-  font-family: "Source Sans Pro", Arial, sans-serif;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-normal);
   background: var(--bg-color);
   color: var(--fg-color);
 }
@@ -477,10 +478,11 @@ a.btn {
   transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
 }
 
-input[type=text],
 input[type=number],
-input[type=submit],
+input[type=password],
 input[type=reset],
+input[type=submit],
+input[type=text],
 select,
 .btn {
   height: var(--input-height);
@@ -527,7 +529,7 @@ select,
 
 h1 {
   font-size: var(--extra-large-font-size);
-  margin: 0.25rem 0;
+  margin: 0 0 0.5rem;
 }
 
 input[type=checkbox],
@@ -630,6 +632,9 @@ option {
   --btn-muted-fg-color: var(--bg-color);
   --btn-muted-hover-bg: var(--clr-neutral-65);
   --btn-muted-hover-border-color: var(--clr-neutral-60);
+  --font-family: "Source Sans Pro", Arial, sans-serif;
+  --font-weight-normal: 300;
+  --font-weight-bold: 700;
   --fg-color: var(--clr-neutral-20);
   --layout-max-width: 1100px;
   --layout-sidebar-width: 205px;
@@ -646,7 +651,7 @@ option {
   --editor-border-color: var(--clr-neutral-60);
   --editor-border: var(--border-width) var(--border-style) var(--editor-border-color);
   --editor-box-shadow: inset 0 0 3px var(--clr-neutral-70);
-  --heading-font-weight: bold;
+  --heading-font-weight: var(--font-weight-bold);
   --input-height: 2rem;
   --input-horizontal-padding: 0.5rem;
   --input-border-radius: var(--border-radius);
@@ -700,7 +705,7 @@ option {
   --search-drop-menu-bg-color: var(--bg-color);
   --search-input-height: 100%;
   --sidebar-heading-font-size: var(--large-font-size);
-  --sidebar-heading-font-weight: bold;
+  --sidebar-heading-font-weight: var(--font-weight-bold);
   --sidebar-heading-font-style: normal;
   --sort-nav-bg: var(--search-btn-bg-color);
   --sort-nav-hover-bg: vac(--clr-neutral-85);
@@ -7749,7 +7754,7 @@ input[type=reset] input[type=button].action-link {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--comment-votes-font-size);
 }
 .js-comment .js-post-upvote-btn::before {
@@ -7978,7 +7983,7 @@ form.repost-comment-as-answer {
   border: 1px solid #888888;
   font-family: trebuchet MS, helvetica, sans-serif;
   font-size: 1em;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .wmd-previewer-toggle {
@@ -8405,7 +8410,7 @@ footer a {
     position: absolute;
     right: -0.5rem;
     top: calc(var(--header-height) - 0.75rem);
-    z-index: 100;
+    z-index: 1000;
   }
   .js-meta-nav ul a {
     margin: 0 0 0.5rem;
@@ -8906,7 +8911,7 @@ code.hljs {
   background: none;
   border: none;
   color: var(--clr-danger-dark);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   position: absolute;
   right: 0.5rem;
   top: 0.575rem;
@@ -9096,7 +9101,8 @@ ul.tags li {
 }
 .title-row h1 {
   font-size: var(--large-font-size);
-  padding-top: 0.125rem;
+  padding-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .tags-page .title-row,
@@ -9329,7 +9335,7 @@ ul.tags li {
 }
 .question-summary-user-info a, .question-summary-user-info a:active, .question-summary-user-info a:visited {
   color: var(--fg-color);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 
@@ -9364,7 +9370,7 @@ ul.tags li {
 .question-views-count .item-count,
 .question-answers-count .item-count,
 .question-votes-count .item-count {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 3px;
 }
 .question-views-count .item-name,
@@ -9905,7 +9911,7 @@ a.badge-page-link {
   background: linear-gradient(to top, var(--clr-danger-pale), var(--bg-color));
   border: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
   display: inline-block;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   padding: 0.25rem 0.5rem;
   margin-right: 0.25rem;
 }
@@ -10061,6 +10067,58 @@ a.badge-page-link {
 .moderate-user-page .change-reputation input[type=text],
 .moderate-user-page .change-reputation select {
   width: 10rem;
+}
+
+.signin-page main,
+.signup-page main {
+  padding: 0.5rem 0 1.5rem;
+}
+.signin-page ul,
+.signup-page ul {
+  list-style: none;
+  display: flex;
+}
+.signin-page li,
+.signup-page li {
+  margin: 0 0.25rem 0.25rem 0;
+}
+.signin-page h2,
+.signup-page h2 {
+  margin-bottom: 0.5rem;
+}
+.signin-page .errorlist,
+.signup-page .errorlist {
+  color: var(--clr-danger-dark);
+  font-size: var(--small-font-size);
+}
+.signin-page .errorlist li,
+.signup-page .errorlist li {
+  margin-bottom: 0.125rem;
+}
+.signin-page .email-recovery-email,
+.signup-page .email-recovery-email {
+  border-right: none;
+}
+.signin-page .login-icons-block,
+.signup-page .login-icons-block {
+  margin-bottom: 0.5rem;
+}
+.signin-page .login-icons.large input,
+.signup-page .login-icons.large input {
+  width: 88px;
+  height: 38px;
+}
+.signin-page .password-login-inputs,
+.signup-page .password-login-inputs {
+  margin-bottom: 0.5rem;
+}
+.signin-page .password-login-inputs input,
+.signup-page .password-login-inputs input {
+  margin-bottom: 0.25rem;
+}
+.signin-page .password-login-inputs .btn,
+.signup-page .password-login-inputs .btn {
+  margin-right: 0.5rem;
 }
 
 /*# sourceMappingURL=style.css.map */

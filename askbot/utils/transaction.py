@@ -17,7 +17,7 @@ class DummyTransaction(object):
 dummy_transaction = DummyTransaction()
 
 def defer_celery_task(task, **task_kwargs):
-    if django_settings.CELERY_TASK_ALWAYS_EAGER:
+    if getattr(django_settings, 'CELERY_TASK_ALWAYS_EAGER', False):
         task.apply(**task_kwargs)
     else:
         from celery import current_task

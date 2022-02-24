@@ -84,7 +84,7 @@
     background: linear-gradient(to top, var(--clr-danger-pale), var(--bg-color));
     border: var(--border-width) var(--border-style) var(--sort-nav-sep-color);
     display: inline-block;
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     padding: 0.25rem 0.5rem;
     margin-right: 0.25rem;
   }

@@ -307,7 +307,7 @@ def manage_account(request, subject, context):
                 request.user.message_set.create(message=user_msg)
             else:
                 defer_celery_task(export_user_data, args=(subject.pk,))
-                if not django_settings.CELERY_TASK_ALWAYS_EAGER:
+                if not getattr(django_settings, 'CELERY_TASK_ALWAYS_EAGER', False):
                     exporting = True
 
     #todo: get backup download link -> context
