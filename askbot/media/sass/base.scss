@@ -84,6 +84,7 @@ abbr {
 }
 
 input,
+textarea,
 select {
   background: var(--input-bg-color);
   color: var(--fg-color);
@@ -148,6 +149,8 @@ a.btn {
   }
 }
 
+input[type="email"],
+input[type="file"],
 input[type="number"],
 input[type="password"],
 input[type="reset"],
@@ -155,10 +158,13 @@ input[type="submit"],
 input[type="text"],
 select,
 .btn {
-
   height: var(--input-height);
   font-size: var(--input-font-size);
   padding: 0 var(--input-horizontal-padding);
+}
+
+input[type="file"] {
+  padding: var(--input-type-file-padding);
 }
 
 .small-font {
@@ -210,4 +216,8 @@ input[type="reset"],
 select,
 option {
   cursor: pointer;
+}
+
+main {
+  padding: var(--main-block-padding);
 }

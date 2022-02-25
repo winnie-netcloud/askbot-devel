@@ -78,6 +78,7 @@
   justify-content: flex-start;
   margin: var(--search-bar-vertical-margin) 0;
   position: relative;
+  width: 100%;
   input[type="text"] {
     border-color: var(--forum-header-input-border-color);
     border-top-right-radius: 0;

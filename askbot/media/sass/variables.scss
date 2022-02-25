@@ -67,6 +67,7 @@
   --input-border-color: var(--clr-highlight-pale-75);
   --input-bg-color: var(--bg-color);
   --input-font-size: 1rem;
+  --input-type-file-padding: 3px 0.25rem 0;
 
   --error-popup-padding: 1rem 1rem 1.3625rem;
   --error-popup-border-radius: var(--border-radius);
@@ -230,6 +231,8 @@
   --info-box-font-size: 1rem;
   --info-box-padding: 0.5rem 0.75rem 0.75rem;
   --info-box-margin: 0 0 1rem;
+
+  --main-block-padding: 0;
 
   --new-answer-form-title-margin: 0 0 0.75rem;
 

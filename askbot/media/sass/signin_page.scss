@@ -1,4 +1,5 @@
 .signin-page,
+.verify-email-page,
 .signup-page {
   main {
     padding: 0.5rem 0 1.5rem;
@@ -46,5 +47,19 @@
     .btn {
       margin-right: 0.5rem;
     }
+  }
+}
+
+.verify-email-page {
+  .info-box {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  input[type="text"] {
+    border-right: 0;
+  }
+  form {
+    display: flex;
+    flex-wrap: nowrap;
   }
 }

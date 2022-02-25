@@ -1,4 +1,3 @@
-<!-- template footer.html -->
 <footer>
   <div class="content-wrapper">
     {% if settings.APP_COPYRIGHT or settings.USE_LICENSE %}
@@ -23,15 +22,21 @@
       </div>
     {% endif %}
     <div class="footer-row" >
-      <a href="{{ url('about') }}">{% trans %}about{% endtrans %}</a><span class="link-separator"> |</span>
+      {% if settings.FORUM_ABOUT.strip() %}
+        <a href="{{ url('about') }}">{% trans %}about{% endtrans %}</a><span class="link-separator"> |</span>
+      {% endif %}
       <a href="{{ url('faq') }}">{% trans %}faq{% endtrans %}</a><span class="link-separator"> |</span>
       <a href="{{ url('help') }}" title="{% trans %}help{% endtrans %}">{% trans %}help{% endtrans %}</a>
       <span class="link-separator"> |</span>
-      <a href="{{ url('privacy') }}">{% trans %}privacy policy{% endtrans %}</a><span class="link-separator"> |</span>
-      <a href="{{ url('terms') }}">{% trans %}terms of service{% endtrans %}</a>
+      {% if settings.FORUM_PRIVACY.strip() %}
+        <a href="{{ url('privacy') }}">{% trans %}privacy policy{% endtrans %}</a><span class="link-separator"> |</span>
+      {% endif %}
+      {% if settings.TERMS.strip() %}
+        <a href="{{ url('terms') }}">{% trans %}terms of service{% endtrans %}</a>
+        <span class="link-separator"> |</span>
+      {% endif %}
       {% set feedback_mode = settings.FEEDBACK_MODE %}
       {% if feedback_mode == 'open' or (feedback_mode == 'auth-only' and request.user.is_authenticated) %}
-      <span class="link-separator"> |</span>
       <a
           {% if settings.FEEDBACK_SITE_URL %}
               href="{{settings.FEEDBACK_SITE_URL}}"
@@ -54,4 +59,3 @@
     </div>
   </div>
 </footer>
-<!-- end template footer.html -->

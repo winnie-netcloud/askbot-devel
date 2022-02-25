@@ -423,11 +423,13 @@ abbr {
 }
 
 input,
+textarea,
 select {
   background: var(--input-bg-color);
   color: var(--fg-color);
 }
 input:focus,
+textarea:focus,
 select:focus {
   outline: none;
 }
@@ -478,6 +480,8 @@ a.btn {
   transition: color var(--transition-timing) var(--transition-function), background var(--transition-timing) var(--transition-function), var(--transition-timing) var(--transition-function);
 }
 
+input[type=email],
+input[type=file],
 input[type=number],
 input[type=password],
 input[type=reset],
@@ -488,6 +492,10 @@ select,
   height: var(--input-height);
   font-size: var(--input-font-size);
   padding: 0 var(--input-horizontal-padding);
+}
+
+input[type=file] {
+  padding: var(--input-type-file-padding);
 }
 
 .small-font {
@@ -539,6 +547,10 @@ input[type=reset],
 select,
 option {
   cursor: pointer;
+}
+
+main {
+  padding: var(--main-block-padding);
 }
 
 :root {
@@ -660,6 +672,7 @@ option {
   --input-border-color: var(--clr-highlight-pale-75);
   --input-bg-color: var(--bg-color);
   --input-font-size: 1rem;
+  --input-type-file-padding: 3px 0.25rem 0;
   --error-popup-padding: 1rem 1rem 1.3625rem;
   --error-popup-border-radius: var(--border-radius);
   --error-popup-bg: var(--clr-danger-dark);
@@ -798,6 +811,7 @@ option {
   --info-box-font-size: 1rem;
   --info-box-padding: 0.5rem 0.75rem 0.75rem;
   --info-box-margin: 0 0 1rem;
+  --main-block-padding: 0;
   --new-answer-form-title-margin: 0 0 0.75rem;
   --wmd-margin: 0.5rem 0 0;
   --wmd-button-size: 1.5rem;
@@ -8170,6 +8184,7 @@ footer a {
   justify-content: flex-start;
   margin: var(--search-bar-vertical-margin) 0;
   position: relative;
+  width: 100%;
 }
 .js-search-bar input[type=text] {
   border-color: var(--forum-header-input-border-color);
@@ -9181,6 +9196,32 @@ ul.tags li {
   margin: 0 auto 0.5rem;
 }
 
+.about-page main,
+.faq-page main,
+.help-page main,
+.privacy-page main,
+.terms-page main {
+  padding: 0.5rem 0 1rem;
+}
+.about-page h2,
+.faq-page h2,
+.help-page h2,
+.privacy-page h2,
+.terms-page h2 {
+  font-size: var(--large-font-size);
+}
+.about-page h2, .about-page p,
+.faq-page h2,
+.faq-page p,
+.help-page h2,
+.help-page p,
+.privacy-page h2,
+.privacy-page p,
+.terms-page h2,
+.terms-page p {
+  margin: 0 0 0.5rem;
+}
+
 .error-page main {
   display: flex;
   flex-direction: column;
@@ -10069,56 +10110,119 @@ a.badge-page-link {
   width: 10rem;
 }
 
+.user-profile-page ul.avatars {
+  list-style: none;
+}
+.user-profile-page ul.avatars li {
+  margin: 0 1rem 1rem 0;
+}
+.user-profile-page ul.avatars img {
+  margin-bottom: 0.5rem;
+}
+.user-profile-page ul.avatars .avatar-primary-label,
+.user-profile-page ul.avatars input[type=submit] {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+.user-profile-page ul.avatars input[type=file] {
+  margin-bottom: 0.5rem;
+}
+.user-profile-page .avatars {
+  display: flex;
+}
+.user-profile-page .avatar-label {
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 0.5rem;
+}
+
 .signin-page main,
+.verify-email-page main,
 .signup-page main {
   padding: 0.5rem 0 1.5rem;
 }
 .signin-page ul,
+.verify-email-page ul,
 .signup-page ul {
   list-style: none;
   display: flex;
 }
 .signin-page li,
+.verify-email-page li,
 .signup-page li {
   margin: 0 0.25rem 0.25rem 0;
 }
 .signin-page h2,
+.verify-email-page h2,
 .signup-page h2 {
   margin-bottom: 0.5rem;
 }
 .signin-page .errorlist,
+.verify-email-page .errorlist,
 .signup-page .errorlist {
   color: var(--clr-danger-dark);
   font-size: var(--small-font-size);
 }
 .signin-page .errorlist li,
+.verify-email-page .errorlist li,
 .signup-page .errorlist li {
   margin-bottom: 0.125rem;
 }
 .signin-page .email-recovery-email,
+.verify-email-page .email-recovery-email,
 .signup-page .email-recovery-email {
   border-right: none;
 }
 .signin-page .login-icons-block,
+.verify-email-page .login-icons-block,
 .signup-page .login-icons-block {
   margin-bottom: 0.5rem;
 }
 .signin-page .login-icons.large input,
+.verify-email-page .login-icons.large input,
 .signup-page .login-icons.large input {
   width: 88px;
   height: 38px;
 }
 .signin-page .password-login-inputs,
+.verify-email-page .password-login-inputs,
 .signup-page .password-login-inputs {
   margin-bottom: 0.5rem;
 }
 .signin-page .password-login-inputs input,
+.verify-email-page .password-login-inputs input,
 .signup-page .password-login-inputs input {
   margin-bottom: 0.25rem;
 }
 .signin-page .password-login-inputs .btn,
+.verify-email-page .password-login-inputs .btn,
 .signup-page .password-login-inputs .btn {
   margin-right: 0.5rem;
+}
+
+.verify-email-page .info-box {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+.verify-email-page input[type=text] {
+  border-right: 0;
+}
+.verify-email-page form {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.feedback-page div {
+  margin-bottom: 0.5rem;
+}
+.feedback-page .error {
+  color: var(--clr-danger);
+}
+.feedback-page input[type=checkbox] {
+  position: relative;
+  bottom: -0.125rem;
+  margin-left: 0.125rem;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -38,10 +38,11 @@ def generic_view(request, template=None, context=None):
         return tpl.render()
     return render(request, template, context)
 
-def markdown_flatpage(request, setting_name=None):
+def markdown_flatpage(request, page_class='', setting_name=None):
     value = getattr(askbot_settings, setting_name)
     content = markdown_input_converter(value)
     context = {'content': content,
+               'page_class': page_class,
                'title': askbot_settings.get_description(setting_name)}
     return generic_view(request, template='askbot_flatpage.html', context=context)
 
@@ -114,6 +115,7 @@ def feedback(request):
         raise Http404
 
     form = None
+    data = {}
 
     if request.method == "POST":
         form = FeedbackForm(user=request.user, data=request.POST)

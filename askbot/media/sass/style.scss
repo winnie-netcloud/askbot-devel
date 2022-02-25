@@ -43,6 +43,7 @@
 @use './components/badge_info_sidebar.scss';
 @use './components/used_count.scss';
 @use './components/action_status.scss';
+@use './components/flat_pages.scss';
 @use './error.scss';
 @use './questions/index.scss';
 @use './questions/questions_header.scss';
@@ -69,4 +70,6 @@
 @use './user_profile/user_profile_tables.scss';
 @use './user_profile/user_profile_votes.scss';
 @use './user_profile/moderate_user.scss';
+@use './user_profile/avatars_page.scss';
 @use './signin_page.scss';
+@use './feedback_page.scss';
