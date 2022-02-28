@@ -43,9 +43,4 @@ urlpatterns += [
     )
 ]
 
-if 'rosetta' in settings.INSTALLED_APPS:
-    urlpatterns += [
-                    url(r'^rosetta/', include('rosetta.urls')),
-                ]
-
 handler500 = 'askbot.views.error.internal_error'

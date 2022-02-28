@@ -17,7 +17,7 @@ class OidcProtocol:
     OpenId Connect protocol authentication"""
     #pylint: disable=too-many-instance-attributes
 
-    def __init__(self,
+    def __init__(self, # pylint: disable=too-many-arguments
                  client_id=None,
                  client_secret=None,
                  provider_url=None,

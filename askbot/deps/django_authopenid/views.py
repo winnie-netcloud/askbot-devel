@@ -1418,15 +1418,11 @@ def signout(request):
 
     url : /signout/"
     """
-    logging.debug('')
     try:
-        logging.debug('deleting openid session var')
         del request.session['openid']
     except KeyError:
-        logging.debug('failed')
         pass
     logout(request)
-    logging.debug('user logged out')
     return HttpResponseRedirect(get_next_url(request))
 
 XRDF_TEMPLATE = """<?xml version='1.0' encoding='UTF-8'?>

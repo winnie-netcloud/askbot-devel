@@ -1,4 +1,5 @@
 """Views for the OpenID Connect - OIDC protocol"""
+from django.conf import settings as django_settings
 from django.contrib.auth import authenticate
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
@@ -11,7 +12,11 @@ from askbot.utils.html import site_url
 
 def complete_oidc_signin(request): #pylint: disable=too-many-return-statements
     """Callback for the OIDC authentication"""
-    provider_name = request.session.pop('provider_name')
+    try:
+        provider_name = request.session.pop('provider_name')
+    except KeyError:
+        provider_name = django_settings.OIDC_LOGIN_PROVIDER_NAME
+
     try:
         oidc = get_protocol(provider_name)
     except Exception as error: # pylint: disable=broad-except
