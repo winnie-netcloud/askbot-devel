@@ -37,11 +37,11 @@ def complete_oidc_signin(request): #pylint: disable=too-many-return-statements
     if not token_info.get("token_type"):
         return HttpResponseBadRequest("Unsupported token type. Should be 'Bearer'.")
 
-    access_token = token_info["access_token"]
     id_token = token_info["id_token"]
 
-    if not oidc.is_access_token_valid(access_token):
-        return HttpResponseBadRequest("Access token is invalid")
+    #access_token = token_info["access_token"]
+    #if not oidc.is_access_token_valid(access_token):
+    #    return HttpResponseBadRequest("Access token is invalid")
 
     auth_csrf_token = request.session.pop('auth_csrf_token')
     if not oidc.is_id_token_valid(id_token, auth_csrf_token):
