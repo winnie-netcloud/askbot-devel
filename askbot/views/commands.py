@@ -750,7 +750,7 @@ def set_tag_filter_strategy(request):
         assert(filter_value in allowed_values_dict)
         request.user.email_tag_filter_strategy = filter_value
     request.user.save()
-    return HttpResponse('', content_type="application/json")
+    return HttpResponse('{}', content_type="application/json") #curly braces required to make jquery happy
 
 
 @login_required
