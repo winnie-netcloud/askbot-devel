@@ -27,7 +27,9 @@
     {% endif %}
     {% if request.user.is_authenticated and request.user.is_administrator() %}
     <li>
-      <a class="with-settings-icon" href="{{ url('satchmo_site_settings') }}">{% trans %}settings{% endtrans %}</a>
+      <a class="with-settings-icon" href="{{ url('satchmo_site_settings') }}">
+        {% trans %}settings{% endtrans %}
+      </a>
     </li>
     {% endif %}
   </ul>
