@@ -488,10 +488,24 @@ input[type=reset],
 input[type=submit],
 input[type=text],
 select,
+textarea,
+.btn {
+  font-size: var(--input-font-size);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-normal);
+  padding: 0 var(--input-horizontal-padding);
+}
+
+input[type=email],
+input[type=file],
+input[type=number],
+input[type=password],
+input[type=reset],
+input[type=submit],
+input[type=text],
+select,
 .btn {
   height: var(--input-height);
-  font-size: var(--input-font-size);
-  padding: 0 var(--input-horizontal-padding);
 }
 
 input[type=file] {
@@ -551,6 +565,10 @@ option {
 
 main {
   padding: var(--main-block-padding);
+}
+
+body:not(.tags-page):not(.questions-page):not(.users-page) main {
+  padding-top: 0.5rem;
 }
 
 :root {
@@ -10135,6 +10153,31 @@ a.badge-page-link {
   text-align: center;
   font-weight: var(--font-weight-bold);
   margin: 0 0 0.5rem;
+}
+
+.edit-user-profile-page main {
+  margin-bottom: 1rem;
+  --avatar-size: 128px;
+}
+.edit-user-profile-page td {
+  text-align: left;
+  padding-bottom: 0.25rem;
+}
+.edit-user-profile-page td:first-child {
+  padding-right: 1rem;
+}
+.edit-user-profile-page table {
+  margin-bottom: 0.25rem;
+}
+.edit-user-profile-page table input:not([type=checkbox]),
+.edit-user-profile-page table select,
+.edit-user-profile-page table textarea {
+  width: 100%;
+}
+.edit-user-profile-page .avatar {
+  display: inline-block;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .signin-page main,

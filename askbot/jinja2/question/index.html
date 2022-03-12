@@ -11,7 +11,7 @@
 {% block forejs %}
   {% include "question/head_javascript.html" %}
 {% endblock %}
-{% block layout_class %}question-detail-page{% endblock %}
+{% block layout_class %}{{ super() }} question-detail-page{% endblock %}
 {% block content %}
   {% if 'QUESTION_PAGE_TOP_BANNER'|show_block_to(request.user) %}
     <div class="banner">{{ settings.QUESTION_PAGE_TOP_BANNER|safe }}</div>

@@ -157,10 +157,24 @@ input[type="reset"],
 input[type="submit"],
 input[type="text"],
 select,
+textarea,
+.btn {
+  font-size: var(--input-font-size);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-normal);
+  padding: 0 var(--input-horizontal-padding);
+}
+
+input[type="email"],
+input[type="file"],
+input[type="number"],
+input[type="password"],
+input[type="reset"],
+input[type="submit"],
+input[type="text"],
+select,
 .btn {
   height: var(--input-height);
-  font-size: var(--input-font-size);
-  padding: 0 var(--input-horizontal-padding);
 }
 
 input[type="file"] {
@@ -220,4 +234,8 @@ option {
 
 main {
   padding: var(--main-block-padding);
+}
+
+body:not(.tags-page):not(.questions-page):not(.users-page) main {
+  padding-top: 0.5rem;
 }

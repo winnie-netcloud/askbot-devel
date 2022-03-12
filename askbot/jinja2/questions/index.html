@@ -5,7 +5,7 @@
   {% include "questions/custom_head_javascript.html" ignore missing %}
 {% endblock %}
 {% block title %}{% filter trim %}{% trans %}Questions{% endtrans %}{% endfilter %}{% endblock %}
-{% block page_class %}questions-page{% endblock %}
+{% block layout_class %}{{ super() }} questions-page{% endblock %}
 {% block content %}
   {% include "questions/questions_header.html" %}
   {% if questions_count > 0 %}

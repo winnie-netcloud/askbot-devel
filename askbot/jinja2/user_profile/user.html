@@ -12,12 +12,11 @@
     {% if request.user.is_authenticated and request.user.pk == view_user.pk and settings.USE_ASKBOT_LOGIN_SYSTEM %}
       {% set next_jwt=encode_jwt({'next_url': settings.LOGOUT_REDIRECT_URL}) %}
       (<a class="logout-link" href="{{ settings.LOGOUT_URL }}?next={{ next_jwt }}">{% trans %}sign out{% endtrans %}</a>
-        {% if settings.USE_ASKBOT_LOGIN_SYSTEM and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
+        {%- if settings.USE_ASKBOT_LOGIN_SYSTEM and settings.ALLOW_ADD_REMOVE_LOGIN_METHODS %}
         | <a href="{{ settings.LOGIN_URL }}?next={{ encode_jwt({'next_url': settings.LOGIN_URL}) }}">
-            {% trans %}manage logins{% endtrans %}
+            {% trans %}manage logins{% endtrans -%}
           </a>
-        {% endif -%}
-      )
+        {%- endif -%})
     {% endif %}
   </h1>
   {% include "user_profile/user_tabs.html" %}
@@ -66,9 +65,6 @@
   <script src="{{ '/jslib/editor.js'|media }}"></script>
   <script src="{{ '/js/utils/toggle.js'|media }}"></script>
   <script src="{{ '/js/utils/unordered_list.js'|media }}"></script>
-  <script src="{{ '/js/utils/expander_toggle.js'|media }}"></script>
-  <script src="{{ '/js/editors/wmd_expander_toggle.js'|media }}"></script>
-  <script src="{{ '/js/editors/wmd.js'|media }}"></script>
   <script src="{{ '/js/editors/simple_editor.js'|media }}"></script>
   <script src="{{ '/js/editors/tinymce.js'|media }}"></script>
   <script src="{{ '/js/utils/editable.js'|media }}"></script>
