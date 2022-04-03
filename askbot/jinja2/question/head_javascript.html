@@ -234,6 +234,9 @@
     }
 
     function maybeRemoveEditBtns(postId, isWiki) {
+      var isAuthor = isAuthorOfPost(postId);
+      if (isAuthor && !data.userIsReadOnly) return;
+
       var enoughRep = (data.userReputation >= {{settings.MIN_REP_TO_EDIT_OTHERS_POSTS}} ||
         (isWiki && data.userReputation >= {{ settings.MIN_REP_TO_EDIT_WIKI }}));
 
