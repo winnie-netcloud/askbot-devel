@@ -238,7 +238,7 @@ def not_authenticated(func):
     he/she is already logged in."""
     def decorated(request, *args, **kwargs):
         if request.user.is_authenticated:
-            return HttpResponseRedirect(get_next_url(request))
+            return HttpResponseRedirect(get_next_url(request) or '/')
         return func(request, *args, **kwargs)
     return decorated
 
@@ -1387,7 +1387,7 @@ def signup_with_password(request):
                 )
                 login(request, user)
                 cleanup_post_register_session(request)
-                return HttpResponseRedirect(get_next_url(request))
+                return HttpResponseRedirect(get_next_url(request) or '/')
             else:
                 email_verifier = UserEmailVerifier(key=generate_random_key())
                 email_verifier.value = {'username': username,
